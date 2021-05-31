@@ -1,9 +1,6 @@
 package com.dns.polinsight.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
+@ToString
 public class User implements UserDetails, Serializable {
 
 
@@ -39,12 +37,9 @@ public class User implements UserDetails, Serializable {
 
   private String name;
 
-
-  @OneToMany
-  @Enumerated(EnumType.STRING)
-  private List<UserType> type = new ArrayList<>();
-
-  private List<SimpleGrantedAuthority> rolse = new ArrayList<>();
+  @Column(name = "role")
+  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
+  private List<UserRole> rolse = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,32 +48,32 @@ public class User implements UserDetails, Serializable {
 
   @Override
   public String getPassword() {
-    return null;
+    return this.password;
   }
 
   @Override
   public String getUsername() {
-    return null;
+    return this.email;
   }
 
   @Override
   public boolean isAccountNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return false;
+    return true;
   }
 
   @Override
   public boolean isEnabled() {
-    return false;
+    return true;
   }
 
 }

@@ -4,27 +4,42 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserServlce {
 
   private final UserRepository repository;
 
+
+  @PostConstruct
+  public void testUserInit() {
+    User user = User.builder()
+                    .email("root")
+                    .password(new BCryptPasswordEncoder().encode("root"))
+                    .build();
+
+    repository.save(user);
+    log.info("user created: " + user.toString());
+  }
+
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return repository.findUserByEmail(username).orElseThrow();
+    return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
   /*
    * Simple CRUD
    * */
-
   @Override
   public List<User> findAll() {
     return repository.findAll();
