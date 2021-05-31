@@ -1,0 +1,19 @@
+server :
+  port : 8080
+  servlet :
+    context-path : /
+  error :
+    path : /error
+
+spring :
+  datasource :
+    username : root
+    password : root
+    url : JDBC:Mariadb://localhost:3308/polinsight
+    driver-class-name : org.mariadb.jdbc.Driver
+  security :
+    oauth2 :
+      client :
+        provider :
+        registration :
+
