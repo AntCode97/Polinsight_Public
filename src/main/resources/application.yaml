@@ -18,24 +18,32 @@ spring :
     password :          root
     url :               jdbc:mariadb://localhost:3308/polinsight
     driver-class-name : org.mariadb.jdbc.Driver
+
   jpa :
     show-sql : true
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
+
+    data :
+      mongodb :
+        host :     localhost
+        password : 27017
+        database : polinsight
+
   security :
     oauth2 :
       registration :
         google :
-          clientId :            61528740066-savt6auv1dqdqkcp6pdk7trt331g82rq.apps.googleusercontent.com
-          clientSecret :        hkPHfzaZes8H1erMhOtZYtRr
+          clientId :
+          clientSecret :
           redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
           scope :
             - email
             - profile
         naver :
           clientName :               naver
-          clientId :                 q8ipGp6TSzmlPEvCzZ8P
-          clientSecret :             c5XcAtIluy
+          clientId :
+          clientSecret :
           authorization-grant-type : authorization_code
           redirectUriTemplate :      "{baseUrl}/oauth2/callback/{registrationId}"
           scope :
@@ -43,7 +51,7 @@ spring :
             - profile_image
         kakao :
           clientName :                   kakao
-          clientId :                     a83f63075460d19c3b586dad41d0032e
+          clientId :
           authorization-grant-type :     authorization_code
           redirectUriTemplate :          "{baseUrl}/oauth2/callback/{registrationId}"
           client-authentication-method : POST
