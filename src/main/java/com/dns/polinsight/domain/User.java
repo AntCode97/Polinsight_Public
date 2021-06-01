@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
 @Table(name = "user", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "email")
+    @UniqueConstraint(columnNames = {"email"})
 })
 public class User implements UserDetails, Serializable {
 
@@ -42,11 +42,11 @@ public class User implements UserDetails, Serializable {
 
   @Column(name = "role")
   @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
-  private List<UserRole> rolse = new ArrayList<>();
+  private List<UserRole> roles = new ArrayList<>();
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return rolse.stream().map(auth -> new SimpleGrantedAuthority(auth.toString())).collect(Collectors.toList());
+    return roles.stream().map(auth -> new SimpleGrantedAuthority(auth.toString())).collect(Collectors.toSet());
   }
 
   @Override
