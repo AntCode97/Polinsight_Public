@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserServlce extends UserDetailsService {
+public interface UserService extends UserDetailsService {
   //  Simple User CRUD
 
   List<User> findAll();
