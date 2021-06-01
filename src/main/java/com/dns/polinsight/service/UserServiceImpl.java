@@ -20,18 +20,6 @@ public class UserServiceImpl implements UserServlce {
 
   private final UserRepository repository;
 
-
-  @PostConstruct
-  public void testUserInit() {
-    User user = User.builder()
-                    .email("root")
-                    .password(new BCryptPasswordEncoder().encode("root"))
-                    .build();
-
-    repository.save(user);
-    log.info("user created: " + user.toString());
-  }
-
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));

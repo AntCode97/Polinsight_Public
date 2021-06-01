@@ -1,9 +1,16 @@
 server :
   port : 8080
   servlet :
-    context-path : /
+    context-path :             /
+    encoding :
+      charset : UTF-8
+    application-display-name : PolInsight
+    session :
+      cookie :
+        http-only : true
   error :
     path : /templates/error
+
 
 spring :
   datasource :
@@ -15,8 +22,49 @@ spring :
     show-sql : true
     hibernate :
       ddl-auto : create-drop
-#  security :
-#    oauth2 :
-#      client :
-#        provider :
-#        registration :
+  security :
+    oauth2 :
+      registration :
+        google :
+          clientId :            61528740066-savt6auv1dqdqkcp6pdk7trt331g82rq.apps.googleusercontent.com
+          clientSecret :        hkPHfzaZes8H1erMhOtZYtRr
+          redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
+          scope :
+            - email
+            - profile
+        naver :
+          clientName :               naver
+          clientId :                 q8ipGp6TSzmlPEvCzZ8P
+          clientSecret :             c5XcAtIluy
+          authorization-grant-type : authorization_code
+          redirectUriTemplate :      "{baseUrl}/oauth2/callback/{registrationId}"
+          scope :
+            - email
+            - profile_image
+        kakao :
+          clientName :                   kakao
+          clientId :                     a83f63075460d19c3b586dad41d0032e
+          authorization-grant-type :     authorization_code
+          redirectUriTemplate :          "{baseUrl}/oauth2/callback/{registrationId}"
+          client-authentication-method : POST
+          scope :
+            - account_email
+            - profile
+      provider :
+        google :
+        naver :
+          authorizationUri :
+          tokenUri :
+          userInfoUri :
+          user-name-attribute :
+        kakao :
+          authorizationUri :
+          tokenUri :
+          userInfoUri :
+          user-name-attribute :
+  mvc :
+    static-path-pattern : /static/**
+  web :
+    resources :
+      static-locations : classpath:/static/
+      add-mappings :     true

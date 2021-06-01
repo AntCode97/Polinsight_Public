@@ -26,13 +26,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http
           .authorizeRequests()
+          .antMatchers("/static/**").permitAll()
           .antMatchers("/login","/signup", "/index","/", "/404", "/signup").permitAll()
           .anyRequest().authenticated()
         .and()
           .formLogin()
-//          .loginPage("/login")
-//          .usernameParameter("email")
-//          .passwordParameter("password")
+          .loginPage("/login")
+          .usernameParameter("email")
+          .passwordParameter("password")
           .successForwardUrl("/index")
           .failureForwardUrl("/signup")
         .and()

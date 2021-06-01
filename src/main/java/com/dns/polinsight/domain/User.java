@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "user", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "email")
+})
 public class User implements UserDetails, Serializable {
 
 
@@ -28,7 +31,7 @@ public class User implements UserDetails, Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-
+  @Column(name = "email")
   private String email;
 
 

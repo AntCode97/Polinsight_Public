@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/css/login_btn.css">
 </head>
 <body>
 <div>
@@ -22,34 +23,23 @@
                 </label>
             </div>
             <div>
-                <button onclick="goBack()">돌아가기</button>
+                <button>회원 가입</button>
                 <input type="submit" value="로그인"/>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </div>
         </form>
 
         <br/>
-        <div onclick="">
-            <button>카카오 로그인</button>
+        <div class="login_btn">
+            <img alt="login button" src="static/assets/kakao_login/ko/kakao_login_large_wide.png"/>
         </div>
-        <div onclick="">
-            <button>네이버 로그인</button>
+        <div class="login_btn">
+            <img alt="login button" src="static/assets/naver_kr/btnW_완성형.png"/>
         </div>
-        <div onclick="">
-            <button>구글 로그인</button>
-
+        <div class="login_btn">
+            <img alt="login button" src="static/assets/google/2x/btn_google_signin_light_normal_web@2x.png"/>
         </div>
     </fieldset>
 </div>
 </body>
-<script>
-  const goBack = (e) => {
-    e.preventDefault();
-    history.back();
-  }
-  const loginHandler = (e) => {
-    e.preventDefault();
-    console.log("user login attempt")
-  }
-</script>
 </html>
