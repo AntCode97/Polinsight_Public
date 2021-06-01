@@ -15,10 +15,17 @@ public class HomeController {
     return mv;
   }
 
-  @RequestMapping(value = "/signup", method = {RequestMethod.POST, RequestMethod.GET})
+  @RequestMapping(value = "/signup", method = {RequestMethod.GET})
   public ModelAndView signUp() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("signup");
+    return mv;
+  }
+
+  @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET})
+  public ModelAndView loginSuccess() {
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("loginSuccess");
     return mv;
   }
 
