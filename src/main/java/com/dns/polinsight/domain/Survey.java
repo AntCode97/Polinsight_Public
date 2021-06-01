@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 @ToString
@@ -19,7 +19,7 @@ public class Survey implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Enumerated
+  @Enumerated(EnumType.STRING)
   private SurveyType type;
 
 
