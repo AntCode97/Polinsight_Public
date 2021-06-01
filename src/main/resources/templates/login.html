@@ -9,7 +9,7 @@
 <div>
     <fieldset style="width: 30%;">
         <legend>로그인 하기</legend>
-        <form action="/login" method="post">
+        <form action="/dologin" method="post">
             <div>
                 <label>
                     ID:
@@ -19,11 +19,13 @@
             <div>
                 <label>
                     PW:
-                    <input name="password" type="password"/>
+                    <input name="pw" type="password"/>
                 </label>
             </div>
             <div>
-                <button>회원 가입</button>
+                <button onclick="location.href='/signup'">
+                    회원 가입
+                </button>
                 <input type="submit" value="로그인"/>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </div>
@@ -31,13 +33,13 @@
 
         <br/>
         <div class="login_btn">
-            <img alt="login button" src="static/assets/kakao_login/ko/kakao_login_large_wide.png"/>
+            <img alt="login button" src="/static/assets/kakao_login/ko/kakao_login_medium_narrow.png"/>
         </div>
         <div class="login_btn">
-            <img alt="login button" src="static/assets/naver_kr/btnW_완성형.png"/>
+            <img alt="login button" src="/static/assets/naver_kr/btnG_완성형.png"/>
         </div>
         <div class="login_btn">
-            <img alt="login button" src="static/assets/google/2x/btn_google_signin_light_normal_web@2x.png"/>
+            <img alt="login button" src="/static/assets/google/1x/btn_google_signin_light_normal_web.png"/>
         </div>
     </fieldset>
 </div>
