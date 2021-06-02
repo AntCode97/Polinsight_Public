@@ -7,10 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Entity
 @Getter
@@ -40,13 +38,16 @@ public class User implements UserDetails, Serializable {
 
   private String name;
 
+
+  private String picture;
+
   @Column(name = "role")
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
-  private List<UserRole> roles = new ArrayList<>();
+  //  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
+  private UserRole role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles.stream().map(auth -> new SimpleGrantedAuthority(auth.toString())).collect(Collectors.toSet());
+    return Collections.singleton(new SimpleGrantedAuthority(role.name()));
   }
 
   @Override
@@ -77,6 +78,12 @@ public class User implements UserDetails, Serializable {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  public User update(String name, String picture) {
+    this.name = name;
+    this.picture = picture;
+    return this;
   }
 
 }

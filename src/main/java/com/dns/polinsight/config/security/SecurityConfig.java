@@ -1,5 +1,6 @@
 package com.dns.polinsight.config.security;
 
+import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final LogoutSuccessHandler logoutSuccessHandler;
 
+  private final CustomOAuth2Service customOAuth2Service;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(service).passwordEncoder(passwordEncoder());
@@ -39,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .anyRequest().authenticated()
         .and()
           .formLogin()
-            .loginPage("/login")
+            .loginPage("/loginpage")
             .loginProcessingUrl("/dologin")
             .usernameParameter("email")
             .passwordParameter("pw")
@@ -49,7 +52,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logout()
               .logoutUrl("/dologout")
               .logoutSuccessHandler(logoutSuccessHandler)
-
+        .and()
+            .oauth2Login()
+              .loginPage("/loginpage")
+              .successHandler(successHandler)
+              .userInfoEndpoint()
+                .userService(customOAuth2Service)
 //          .oauth2Login()
 //        .and()
 

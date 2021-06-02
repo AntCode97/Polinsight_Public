@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 
 @Slf4j
 @RestController
@@ -24,7 +23,7 @@ public class UserController {
 
   private final PasswordEncoder passwordEncoder;
 
-  @GetMapping("/login")
+  @GetMapping("/loginpage")
   public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("login");
@@ -38,7 +37,7 @@ public class UserController {
                        .email(user.getEmail())
                        .password(passwordEncoder.encode(user.getPassword()))
                        .name(user.getName())
-                       .roles(Collections.singletonList(UserRole.USER))  // TODO: 2021-06-01
+                       .role(UserRole.USER)  // TODO: 2021-06-01
                        .build());
 
       response.sendRedirect("/");
