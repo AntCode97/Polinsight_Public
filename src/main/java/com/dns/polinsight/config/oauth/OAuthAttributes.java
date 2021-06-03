@@ -38,10 +38,10 @@ public class OAuthAttributes {
     switch (registrationId) {
       case "google":
         return ofGoogle(userNameAttributeName, attributes);
-      case "Naver":
+      case "naver":
         return ofNaver("id", attributes);
-      case "kakao":
-        //        return ofKakao(userNameAttributeName, attributes);
+      //      case "kakao":
+      //        return ofKakao(userNameAttributeName, attributes);
     }
 
     return null;

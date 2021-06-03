@@ -8,7 +8,7 @@
 </body>
 <fieldset>
     <legend>회원 가입</legend>
-    <form action="/signup" method="post">
+    <form action="/signup" method="post" id="signupForm">
         <div>
             <label>
                 이메일
@@ -39,4 +39,29 @@
         </div>
     </form>
 </fieldset>
+<!--Validation Library-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const signup_form = document.getElementById('signupForm');
+  signup_form.validate({
+    rule: {
+      id: {
+        required: true,
+        remote: {
+          url: "",
+          type: "POST",
+          data: {}
+        }
+      },
+      password: {
+        required: true
+      },
+      passwordConfirm: {required: true}
+    }
+  })
+  const input_validate = () => {
+
+  }
+</script>
 </html>

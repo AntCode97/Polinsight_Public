@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .cors().disable()
           .authorizeRequests()
           .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
-          .antMatchers("/login","/signup", "/index","/", "/404","loginSuccess" ).permitAll()
+          .antMatchers("/login","/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
           .anyRequest().authenticated()
         .and()
           .formLogin()

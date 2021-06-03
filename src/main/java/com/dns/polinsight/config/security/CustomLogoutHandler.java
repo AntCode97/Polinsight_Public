@@ -16,8 +16,13 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     //    세션 초기화
     request.getSession().invalidate();
+
     // TODO: 2021-06-01 : OAuth2 로그아웃 기능 구현
     response.sendRedirect("/");
+  }
+
+  public void oAuth2UserLogout(HttpServletRequest request) {
+
   }
 
 }

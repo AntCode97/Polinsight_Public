@@ -47,4 +47,9 @@ public class UserController {
     }
   }
 
+  @PostMapping()
+  public void userLogOut() {
+
+  }
+
 }

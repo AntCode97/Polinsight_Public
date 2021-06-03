@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,10 @@ public class HomeController {
   private final HttpSession session;
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(Model model) {
-    SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-    if (sessionUser != null) {
-      model.addAttribute("userName", sessionUser.getName());
+  public ModelAndView home(Model model, @LoginUser SessionUser user) {
+
+    if (user != null) {
+      model.addAttribute("userName", user.getName());
     }
     ModelAndView mv = new ModelAndView();
     mv.setViewName("index");
