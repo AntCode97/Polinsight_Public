@@ -1,5 +1,6 @@
 package com.dns.polinsight.config.oauth;
 
+import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
 import lombok.Builder;
@@ -22,26 +23,30 @@ public class OAuthAttributes {
 
   private String picture;
 
+  private SocialType social;
+
   @Builder
-  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
+  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, SocialType social) {
     this.attributes = attributes;
     this.nameAttributeKey = nameAttributeKey;
     this.name = name;
     this.email = email;
     this.picture = picture;
+    this.social = social;
   }
 
   public static OAuthAttributes of(String registrationId,
                                    String userNameAttributeName,
                                    Map<String, Object> attributes) {
     log.info("registration ID: " + registrationId);
+
     switch (registrationId) {
       case "google":
         return ofGoogle(userNameAttributeName, attributes);
       case "naver":
         return ofNaver("id", attributes);
-      //      case "kakao":
-      //        return ofKakao(userNameAttributeName, attributes);
+      case "kakao":
+        return ofKakao(userNameAttributeName, attributes);
     }
 
     return null;
@@ -56,19 +61,21 @@ public class OAuthAttributes {
                           .picture((String) attributes.get("profile_image"))
                           .attributes(response)
                           .nameAttributeKey(userNameAttributeName)
+                          .social(SocialType.GOOGLE)
                           .build();
   }
 
-  //  private static OAuthAttributes ofKakao(String userNameAttributeName,
-  //                                         Map<String, Object> attributes) {
-  //    return OAuthAttributes.builder()
-  //                          .name((String) attributes.get("name"))
-  //                          .email((String) attributes.get("email"))
-  //                          .picture((String) attributes.get("picture"))
-  //                          .attributes(attributes)
-  //                          .nameAttributeKey(userNameAttributeName)
-  //                          .build();
-  //  }
+  private static OAuthAttributes ofKakao(String userNameAttributeName,
+                                         Map<String, Object> attributes) {
+    return OAuthAttributes.builder()
+                          .name((String) attributes.get("name"))
+                          .email((String) attributes.get("email"))
+                          .picture((String) attributes.get("picture"))
+                          .attributes(attributes)
+                          .nameAttributeKey(userNameAttributeName)
+                          .social(SocialType.KAKAO)
+                          .build();
+  }
 
   private static OAuthAttributes ofNaver(String userNameAttributeName,
                                          Map<String, Object> attributes) {
@@ -78,6 +85,7 @@ public class OAuthAttributes {
                           .picture((String) attributes.get("picture"))
                           .attributes(attributes)
                           .nameAttributeKey(userNameAttributeName)
+                          .social(SocialType.NAVER)
                           .build();
   }
 
@@ -85,6 +93,7 @@ public class OAuthAttributes {
     return User.builder()
                .name(name)
                .email(email)
+               .social(social)
                .role(UserRole.USER)
                .build();
   }
