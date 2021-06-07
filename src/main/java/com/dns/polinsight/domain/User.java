@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,7 @@ public class User implements UserDetails, Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
   @Column(name = "email")
   private String email;
 
@@ -41,9 +43,15 @@ public class User implements UserDetails, Serializable {
 
   private String picture;
 
+  @NotNull
   @Column(name = "role")
   //  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
   private UserRole role;
+
+
+  @NotNull
+  @Column(name = "social")
+  private SocialType social;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

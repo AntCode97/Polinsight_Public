@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.service.UserService;
@@ -37,19 +38,14 @@ public class UserController {
                        .email(user.getEmail())
                        .password(passwordEncoder.encode(user.getPassword()))
                        .name(user.getName())
-                       .role(UserRole.USER)  // TODO: 2021-06-01
+                       .role(UserRole.USER)
+                       .social(SocialType.OWN)
                        .build());
 
       response.sendRedirect("/");
     } catch (IOException e) {
       e.printStackTrace();
-      // TODO: 2021-06-02 : Alert Error to user
     }
-  }
-
-  @PostMapping()
-  public void userLogOut() {
-
   }
 
 }
