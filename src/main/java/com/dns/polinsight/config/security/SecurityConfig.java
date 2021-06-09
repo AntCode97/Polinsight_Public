@@ -4,6 +4,7 @@ import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .cors().disable()
           .authorizeRequests()
           .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
+          .antMatchers(HttpMethod.OPTIONS).permitAll()  // preflight 허용
           .antMatchers("/login","/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
           .anyRequest().authenticated()
         .and()
@@ -52,15 +54,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logout()
               .logoutUrl("/dologout")
               .logoutSuccessHandler(logoutSuccessHandler)
+              .deleteCookies("JSESSIONID")
+              .clearAuthentication(true)
+              .invalidateHttpSession(true)
         .and()
             .oauth2Login()
               .loginPage("/loginpage")
               .successHandler(successHandler)
               .userInfoEndpoint()
                 .userService(customOAuth2Service)
-//          .oauth2Login()
-//        .and()
-
+          .and()
     ;
     // @formatter:on
   }

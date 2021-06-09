@@ -47,7 +47,7 @@ public class UserController {
     }
   }
 
-  @PostMapping()
+  @PostMapping("/logout")
   public void userLogOut() {
 
   }
