@@ -2,8 +2,10 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +40,10 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET})
-  public ModelAndView loginSuccess() {
+  public ModelAndView loginSuccess(HttpSession session) {
     ModelAndView mv = new ModelAndView();
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+    session.setAttribute("user", new SessionUser(user));
     mv.setViewName("loginSuccess");
     return mv;
   }

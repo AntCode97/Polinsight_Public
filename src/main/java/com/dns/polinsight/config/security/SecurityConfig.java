@@ -4,7 +4,6 @@ import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,8 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .cors().disable()
           .authorizeRequests()
           .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
-          .antMatchers(HttpMethod.OPTIONS).permitAll()  // preflight 허용
-          .antMatchers("/login","/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
+          .antMatchers("/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
           .anyRequest().authenticated()
         .and()
           .formLogin()
@@ -58,12 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .clearAuthentication(true)
               .invalidateHttpSession(true)
         .and()
-            .oauth2Login()
-              .loginPage("/loginpage")
-              .successHandler(successHandler)
-              .userInfoEndpoint()
-                .userService(customOAuth2Service)
-          .and()
+          .httpBasic().disable()
+          .oauth2Login()
+            .loginPage("/loginpage")
+            .successHandler(successHandler)
+            .userInfoEndpoint()
+            .userService(customOAuth2Service)
     ;
     // @formatter:on
   }
@@ -71,6 +69,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CustomAuthProccessingFilter customAuthProccessingFilter() {
+    CustomAuthProccessingFilter filter = new CustomAuthProccessingFilter("/dologin");
+    filter.setAuthenticationManager(authManager());
+
+    return filter;
+  }
+
+  @Bean
+  public CustomAuthManager authManager() {
+    return new CustomAuthManager(service);
   }
 
 }
