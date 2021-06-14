@@ -6,14 +6,18 @@ import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -52,6 +56,20 @@ public class UserController {
   @PostMapping("/logout")
   public void userLogOut() {
 
+  }
+
+  @GetMapping("/user/{email}")
+  public ResponseEntity<Map<String, Object>> findUserByEmail(@PathVariable("email") String email) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      map.put("user", service.findUserByEmail(User.builder().email(email).build()));
+    } catch (RuntimeException e) {
+      e.getMessage();
+      // NOTE 2021/06/12 : 아무것도 없는 응답을 보냄
+      return ResponseEntity.noContent().build();
+    }
+
+    return ResponseEntity.ok(map);
   }
 
 }

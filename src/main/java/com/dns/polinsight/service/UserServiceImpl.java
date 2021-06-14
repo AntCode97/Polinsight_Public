@@ -50,5 +50,10 @@ public class UserServiceImpl implements UserService {
     return repository.save(user);
   }
 
+  @Override
+  public User findUserByEmail(User user) throws UsernameNotFoundException {
+    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
+  }
+
 
 }

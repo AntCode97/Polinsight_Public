@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -19,10 +19,13 @@
             <div>
                 <label>
                     PW:
-                    <input name="pw" type="password"/>
+                    <input name="password" type="password"/>
                 </label>
             </div>
             <div>
+                <button onclick="window.history.back()">
+                    돌아가기
+                </button>
                 <button onclick="location.href='/signup'">
                     회원 가입
                 </button>

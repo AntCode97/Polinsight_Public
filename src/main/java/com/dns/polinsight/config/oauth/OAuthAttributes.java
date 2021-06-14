@@ -25,6 +25,7 @@ public class OAuthAttributes {
 
   private SocialType social;
 
+
   @Builder
   public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, SocialType social) {
     this.attributes = attributes;
@@ -38,15 +39,13 @@ public class OAuthAttributes {
   public static OAuthAttributes of(String registrationId,
                                    String userNameAttributeName,
                                    Map<String, Object> attributes) {
-    log.info("registration ID: " + registrationId);
-
     switch (registrationId) {
       case "google":
         return ofGoogle(userNameAttributeName, attributes);
       case "naver":
         return ofNaver("id", attributes);
       case "kakao":
-        return ofKakao(userNameAttributeName, attributes);
+        return ofKakao("id", attributes);
     }
 
     return null;
@@ -67,10 +66,12 @@ public class OAuthAttributes {
 
   private static OAuthAttributes ofKakao(String userNameAttributeName,
                                          Map<String, Object> attributes) {
+    Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+    Map<String, Object> profiles = (Map<String, Object>) kakao_account.get("profile");
     return OAuthAttributes.builder()
-                          .name((String) attributes.get("name"))
-                          .email((String) attributes.get("email"))
-                          .picture((String) attributes.get("picture"))
+                          .name((String) profiles.get("nickname")) // 카카오는 닉네임만 제공, 실명이 필요하다면 따로 받아야 함
+                          .email((String) kakao_account.get("email"))
+                          .picture((String) profiles.get("profile_image_url"))
                           .attributes(attributes)
                           .nameAttributeKey(userNameAttributeName)
                           .social(SocialType.KAKAO)
@@ -79,15 +80,17 @@ public class OAuthAttributes {
 
   private static OAuthAttributes ofNaver(String userNameAttributeName,
                                          Map<String, Object> attributes) {
+    Map<String, Object> response = (Map<String, Object>) attributes.get("response");
     return OAuthAttributes.builder()
-                          .name((String) attributes.get("name"))
-                          .email((String) attributes.get("email"))
-                          .picture((String) attributes.get("picture"))
-                          .attributes(attributes)
+                          .name((String) response.get("name"))
+                          .email((String) response.get("email"))
+                          .picture((String) response.get("profile_image"))
+                          .attributes(response)
                           .nameAttributeKey(userNameAttributeName)
                           .social(SocialType.NAVER)
                           .build();
   }
+
 
   public User toEntity() {
     return User.builder()

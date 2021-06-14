@@ -16,7 +16,6 @@ import java.util.Collections;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
@@ -86,6 +85,19 @@ public class User implements UserDetails, Serializable {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "id=" + id +
+        ", email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        ", name='" + name + '\'' +
+        ", picture='" + picture + '\'' +
+        ", role=" + role +
+        ", social=" + social +
+        '}';
   }
 
   public User update(String name, String picture) {

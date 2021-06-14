@@ -38,12 +38,10 @@ public class CustomOAuth2Service implements OAuth2UserService<OAuth2UserRequest,
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
     String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-    log.info("Registration ID: " + registrationId);
-
     OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
     User user = saveOrUpdate(attributes);
-    httpSession.setAttribute("user", new SessionUser(user));
+    httpSession.setAttribute("user", new SessionUser(user));  // NOTE 2021/06/12 : 사용자 정보 저장하고 불러와서 세션에 저장
 
     return new DefaultOAuth2User(
         Collections.singleton(new SimpleGrantedAuthority(user.getRole().name())),
@@ -55,7 +53,6 @@ public class CustomOAuth2Service implements OAuth2UserService<OAuth2UserRequest,
   private User saveOrUpdate(OAuthAttributes attributes) {
     User user = repository.findUserByEmail(attributes.getEmail())
                           .map(entity -> entity.update(attributes.getName(), attributes.getPicture())).orElse(attributes.toEntity());
-
     return repository.save(user);
 
   }

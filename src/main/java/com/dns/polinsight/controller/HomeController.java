@@ -40,10 +40,10 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET})
-  public ModelAndView loginSuccess(HttpSession session) {
+  public ModelAndView loginSuccess(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
-    session.setAttribute("user", new SessionUser(user));
+//    User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//    session.setAttribute("user", new SessionUser(user));
     mv.setViewName("loginSuccess");
     return mv;
   }
