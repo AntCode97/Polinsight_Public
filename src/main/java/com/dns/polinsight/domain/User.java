@@ -42,9 +42,10 @@ public class User implements UserDetails, Serializable {
 
   private String picture;
 
+  private Long point;
+
   @NotNull
   @Column(name = "role")
-  //  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
   private UserRole role;
 
 
@@ -87,18 +88,6 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
-  @Override
-  public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        ", name='" + name + '\'' +
-        ", picture='" + picture + '\'' +
-        ", role=" + role +
-        ", social=" + social +
-        '}';
-  }
 
   public User update(String name, String picture) {
     this.name = name;

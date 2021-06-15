@@ -23,11 +23,25 @@
         <input type="password">
     </label>
     <label>
-        포인트
-        <input type="number">
+        적립금
+        <input type="number" readonly th:value="${session.user.point}">
     </label>
-    <button>변경하기</button>
+    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>
+    <button onclick="userInfoUpdate">변경하기</button>
     <button></button>
 </div>
+<script>
+  import http from "../static/js/http";
+
+  const userInfoUpdate = e => {
+    http.post("/")
+        .then(res=>{
+          alert("회원 정보가 업데이트 되었습니다.")
+        })
+        .catch(err=>{
+          alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
+        })
+  }
+</script>
 </body>
 </html>

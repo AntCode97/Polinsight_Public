@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
-@Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -22,5 +22,7 @@ public class Survey implements Serializable {
   @Enumerated(EnumType.STRING)
   private SurveyType type;
 
+
+  private List<SurveyQuestion> question;
 
 }
