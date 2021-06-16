@@ -22,10 +22,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     session.setAttribute("userName", authentication.getName());
-
-    System.out.println(authentication.getPrincipal().toString());
-
-    response.sendRedirect("/loginSuccess");
+    session.setMaxInactiveInterval(3600); // 현재 유저에 대한 세션 시간을 5분으로 설정정
+   response.sendRedirect("/loginSuccess");
   }
 
 }

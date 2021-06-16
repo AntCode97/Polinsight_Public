@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -53,12 +50,16 @@ public class UserController {
     }
   }
 
-  @PostMapping("/logout")
-  public void userLogOut() {
-
+  @PostMapping("/deleteaccount")
+  public ModelAndView deleteUser(User user) {
+    ModelAndView mv = new ModelAndView();
+    service.deleteUser(user);
+    mv.setViewName("index");
+    return mv;
   }
 
   @GetMapping("/user/{email}")
+  @CrossOrigin("*") // 비동기 이메일 검증을 위한 cors 처리
   public ResponseEntity<Map<String, Object>> findUserByEmail(@PathVariable("email") String email) {
     Map<String, Object> map = new HashMap<>();
     try {

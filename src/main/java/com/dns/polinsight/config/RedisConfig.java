@@ -11,7 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 //@Configuration
 // TODO: 2021-06-03 :설정 완료 해야함
-public class RedisConfig {
+public class RedisConfig{
 
   @Value("${spring.redis.host}")
   public String host;
@@ -36,5 +36,6 @@ public class RedisConfig {
     configuration.setPort(port);
     return new LettuceConnectionFactory(configuration);
   }
+
 
 }

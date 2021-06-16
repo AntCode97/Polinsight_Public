@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .csrf().disable()
           .cors().disable()
           .authorizeRequests()
-          .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
+          .antMatchers("/static/**", "/swagger-ui/**").permitAll()  // 정적 리소스 접근 허가
           .antMatchers("/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
           .anyRequest().authenticated()
         .and()
