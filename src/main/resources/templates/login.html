@@ -127,7 +127,6 @@
             .login_btn_wrap > .btn-primary {
                 width: 100%;
                 font-weight: bold;
-                box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
             }
 
             .sns_btn_wrap a {
@@ -138,7 +137,6 @@
                 background-position: center;
                 background-repeat: no-repeat;
                 background-image: url("/img/icons/kakao_login_large_wide.png");
-                box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
                 border-radius: 2px;
             }
 
@@ -213,14 +211,14 @@
                                 <div class="err_content">
 <!--                                        로그인 중 문제가 발생했습니다.아이디 및 비밀번호를 확인하거나 계정을 생성하십시오.-->
                                 </div>
-                                <form class="frm_login" onsubmit="return false;">
+                                <form class="frm_login" onsubmit="return false">
                                         <div class="input_div">
-                                                <p>아이디</p>
-                                                <input type="text" class="login_input" id="login_id" name="user_id" placeholder="아이디를 입력해 주세요" required>
+                                                <p>이메일</p>
+                                                <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required>
                                         </div>
                                         <div class="input_div">
                                                 <p>비밀번호</p>
-                                                <input type="password" class="login_input" id="login_pw" name="pw" placeholder="비밀번호를 입력해 주세요" required>
+                                                <input type="password" class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required>
                                                 <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
                                         </div>
                                         <div class="login_btn_wrap">
@@ -229,7 +227,6 @@
                                 </form>
                                 <p class="login_or">또는</p>
                                 <div class="sns_btn_wrap">
-<!--                                        <p>SNS 간편 로그인</p>-->
                                         <div>
                                                 <a href="#"></a>
                                         </div>
@@ -264,6 +261,10 @@
                 $(this).html('<i class="fas fa-eye-slash"></i>')
                     .css('color', '#AAA');
             }
+        });
+
+        $(document).on('click', '#btn-login', function(){
+           alert('zz');
         });
     });
 </script>
