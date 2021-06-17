@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>폴인사이트</title>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
               integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
@@ -19,7 +20,7 @@
                 padding-bottom: 50px;
             }
             .modal_content {
-                width: 484px;
+                width: 50%;
                 background-color: white;
                 border-radius: 2px;
                 overflow: hidden;
@@ -44,11 +45,11 @@
 
             .login_logo_text {
                 margin-top: -50px;
-                width: 400px;
+                max-width: 30rem;
             }
 
             .login_content {
-                width: 400px;
+                width: 25rem;
                 margin: 0 auto;
                 text-align: center;
             }
@@ -131,7 +132,7 @@
 
             .sns_btn_wrap a {
                 display: block;
-                width: 400px;
+                width: 25rem;
                 height: 51px;
                 background-size: cover;
                 background-position: center;
@@ -195,6 +196,17 @@
                 border: 1px solid transparent;
                 outline: none;
             }
+
+            @media (min-width: 320px) and (max-width: 480px) {
+                .modal_content { width: 95%; }
+                .login_logo_text { width: 100%; margin-top: -20px; }
+                .login_content { width: 100%; }
+                .sns_btn_wrap a { max-width: 22.27rem;}
+            }
+            @media (max-width: 32.01rem) {
+                .modal_login { min-width: 20rem; }
+            }
+
         </style>
 </head>
 <body>
@@ -263,8 +275,8 @@
             }
         });
 
+        // 로그인버튼 클릭시 Submit 동작
         $(document).on('click', '#btn-login', function(){
-           alert('zz');
         });
     });
 </script>
