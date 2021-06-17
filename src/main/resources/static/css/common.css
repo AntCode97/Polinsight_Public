@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 14px;
-    color: #2F3138;
+    color: #69666d;
 }
 ul {
     margin: 0;
@@ -69,7 +69,7 @@ button.btn-primary {
     color: white;
 }
 button.btn-primary:hover {
-    background-color: #040000;
+    background-color: #2b90d9;
     border-color: transparent;
 }
 button.btn-support {
