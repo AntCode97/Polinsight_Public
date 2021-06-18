@@ -202,11 +202,8 @@
                 .login_logo_text { width: 100%; margin-top: -20px; }
                 .login_content { width: 100%; }
                 .sns_btn_wrap a { max-width: 22.27rem;}
-            }
-            @media (max-width: 32.01rem) {
                 .modal_login { min-width: 20rem; }
             }
-
         </style>
 </head>
 <body>
@@ -220,9 +217,7 @@
                                         class="under">회원가입 하기</span></a></div>
                         </div>
                         <div class="login_content">
-                                <div class="err_content">
-<!--                                        로그인 중 문제가 발생했습니다.아이디 및 비밀번호를 확인하거나 계정을 생성하십시오.-->
-                                </div>
+                                <div class="err_content"></div>
                                 <form class="frm_login" onsubmit="return false">
                                         <div class="input_div">
                                                 <p>이메일</p>
@@ -275,8 +270,29 @@
             }
         });
 
-        // 로그인버튼 클릭시 Submit 동작
+        // 로그인버튼 클릭시 비동기 처리
         $(document).on('click', '#btn-login', function(){
+                var email  = $('#login_id').val();
+                var pwd  = $('#login_pw').val();
+
+                $.ajax({
+                        url: '/login/in',
+                        type: 'POST',
+                        data: 'email='+email+'&password='+pwd,
+                        success: function(data) {
+                            console.log(data);
+                            if(0) { // 로그인 실패
+                                $('.err_content').css('display', 'block')
+                                                 .text('로그인 중 문제가 발생했습니다.아이디 및 비밀번호를 확인하거나 계정을 생성하십시오.');
+                            } else if(data == 1) { // 로그인 성공
+                                console.log('로그인 성공');
+                                location.reload(); // 새로고침
+                            }
+                        },
+                        error: function() {
+                            alert('System Error:/');
+                        }
+                });
         });
     });
 </script>
