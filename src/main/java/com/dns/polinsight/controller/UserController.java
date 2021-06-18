@@ -1,5 +1,7 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.oauth.LoginUser;
+import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
@@ -71,6 +73,20 @@ public class UserController {
     }
 
     return ResponseEntity.ok(map);
+  }
+
+
+  @GetMapping("/mypage")
+  public ModelAndView myPage(@LoginUser SessionUser user) {
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("mypage");
+    mv.addObject("user", service.findUserByEmail(User.builder()
+                                                     .email(user.getEmail())
+                                                     .name(user.getName())
+                                                     .picture(user.getPicture())
+                                                     .social(user.getType())
+                                                     .build()));
+    return mv;
   }
 
 }

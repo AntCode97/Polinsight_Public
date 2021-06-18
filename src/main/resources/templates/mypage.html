@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <script src="js/http.js" type="module" defer></script>
     <title>Title</title>
 </head>
 <body>
@@ -24,23 +25,27 @@
     </label>
     <label>
         적립금
-        <input type="number" readonly th:value="${session.user.point}">
+        <!--        <input type="number" readonly th:value="${session.user.point}">-->
     </label>
-    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>
-    <button onclick="userInfoUpdate">변경하기</button>
-    <button></button>
+    <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
+    <button th:onclick="userInfoUpdate()">변경하기</button>
+    <button th:onclick="goHome()">돌아가기</button>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  import http from "../static/js/http";
 
-  const userInfoUpdate = e => {
+  const userInfoUpdate = () => {
     http.post("/")
-        .then(res=>{
+        .then(res => {
           alert("회원 정보가 업데이트 되었습니다.")
         })
-        .catch(err=>{
+        .catch(err => {
           alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
         })
+  }
+
+  const goHome = () => {
+    window.history.back();
   }
 </script>
 </body>

@@ -4,7 +4,7 @@ import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ public class HomeController {
   private final HttpSession session;
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(Model model, @LoginUser SessionUser user) {
+  public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
       mv.addObject("user", user);
@@ -29,7 +29,7 @@ public class HomeController {
     return mv;
   }
 
-  @RequestMapping(value = "/signup", method = {RequestMethod.GET})
+  @GetMapping("/signup")
   public ModelAndView signUp() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("signup");
@@ -43,5 +43,6 @@ public class HomeController {
     mv.setViewName("loginSuccess");
     return mv;
   }
+
 
 }
