@@ -30,46 +30,6 @@ spring :
         password : 27017
         database : polinsight
 
-  security :
-    oauth2 :
-      registration :
-        google :
-          clientId :
-          clientSecret :
-          redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
-          scope :
-            - email
-            - profile
-        naver :
-          clientName :               naver
-          clientId :
-          clientSecret :
-          authorization-grant-type : authorization_code
-          redirectUriTemplate :      "{baseUrl}/oauth2/callback/{registrationId}"
-          scope :
-            - email
-            - profile_image
-        kakao :
-          clientName :                   kakao
-          clientId :
-          authorization-grant-type :     authorization_code
-          redirectUriTemplate :          "{baseUrl}/oauth2/callback/{registrationId}"
-          client-authentication-method : POST
-          scope :
-            - account_email
-            - profile
-      provider :
-        google :
-        naver :
-          authorizationUri :
-          tokenUri :
-          userInfoUri :
-          user-name-attribute :
-        kakao :
-          authorizationUri :
-          tokenUri :
-          userInfoUri :
-          user-name-attribute :
   mvc :
     static-path-pattern : /static/**
   web :

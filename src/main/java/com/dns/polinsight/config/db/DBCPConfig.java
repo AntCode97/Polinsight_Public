@@ -1,4 +1,4 @@
-package com.dns.polinsight.config;
+package com.dns.polinsight.config.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

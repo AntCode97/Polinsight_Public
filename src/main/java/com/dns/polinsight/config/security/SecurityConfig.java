@@ -36,16 +36,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
           .csrf().disable()
           .cors().disable()
-          .authorizeRequests()
-          .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
-          .antMatchers("/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
-          .anyRequest().authenticated()
+          .authorizeRequests().anyRequest().permitAll()
+//          .antMatchers("/static/**").permitAll()  // 정적 리소스 접근 허가
+//          .antMatchers("/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
+//          .anyRequest().authenticated()
         .and()
           .formLogin()
             .loginPage("/loginpage")
             .loginProcessingUrl("/dologin")
             .usernameParameter("email")
-            .passwordParameter("pw")
+//            .passwordParameter("pw")
             .successHandler(successHandler)
             .failureForwardUrl("/signup")
         .and()

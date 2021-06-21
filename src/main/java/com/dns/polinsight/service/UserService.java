@@ -12,7 +12,9 @@ public interface UserService extends UserDetailsService {
 
   User save(User user);
 
-  User find(User user);
+  User findByEmail(User user);
+
+  User findById(User user);
 
   void deleteUser(User user);
 

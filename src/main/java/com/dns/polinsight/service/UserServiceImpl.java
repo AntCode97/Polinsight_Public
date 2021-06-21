@@ -36,7 +36,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User find(User user) {
+  public User findByEmail(User user) {
+    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException("Could not found user" + user.getEmail()));
+  }
+
+  @Override
+  public User findById(User user) {
     return repository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
   }
 

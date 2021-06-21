@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div>
-
+    <span>Original: </span>
+    <span th:text="${session}"></span>
+<!--<th:block th:if="${#session.islogin} == false">-->
+<!--    <span>없음</span>-->
+<!--</th:block>-->
+<!--<th:block th:if="${#session.islogin} == true">-->
+<!--    <span>있음</span>-->
+<!--</th:block>-->
 </div>
 </body>
 </html>
