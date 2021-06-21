@@ -11,6 +11,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+//@ConfigurationProperties(prefix = "spring.redis")
 public class RedisConfig {
 
   @Value("${spring.redis.host}")
@@ -32,6 +33,7 @@ public class RedisConfig {
   @Bean
   public RedisConnectionFactory redisConnectionFactory() {
     RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+
     configuration.setHostName(host);
     configuration.setPort(port);
     return new LettuceConnectionFactory(configuration);

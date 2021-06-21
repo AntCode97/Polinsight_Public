@@ -7,6 +7,7 @@ import java.util.Optional;
 
 
 public interface SurveyService {
+
   Survey save(Survey survey);
 
   List<Survey> findAll();
@@ -16,4 +17,5 @@ public interface SurveyService {
   Optional<Survey> update(Survey survey);
 
   void delete(Survey survey);
+
 }

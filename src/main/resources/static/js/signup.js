@@ -18,13 +18,13 @@ const passwordChecker = e => {
   const cfm = e.target.value // pw confirm의 값
   const msg = document.getElementsByName("pwmsg")
 
- if( pw !== cfm){
-  // TODO : 다르다는 메시지 띄우기
-   msg.style.visibility = visible;
- } else{
-   // 띄웟던 메시지 지우기
-   msg.style.visibility = hidden;
- }
+  if (pw !== cfm) {
+    // TODO : 다르다는 메시지 띄우기
+    msg.style.visibility = visible;
+  } else {
+    // 띄웟던 메시지 지우기
+    msg.style.visibility = hidden;
+  }
 }
 
 // NOTE 2021/06/12 : 다수의 요청이 들어와도 0.2초에 한번씩만 api call이 일어남

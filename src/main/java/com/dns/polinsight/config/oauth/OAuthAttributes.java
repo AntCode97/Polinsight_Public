@@ -13,17 +13,17 @@ import java.util.Map;
 @Getter
 public class OAuthAttributes {
 
-  private Map<String, Object> attributes;
+  private final Map<String, Object> attributes;
 
-  private String nameAttributeKey;
+  private final String nameAttributeKey;
 
-  private String name;
+  private final String name;
 
-  private String email;
+  private final String email;
 
-  private String picture;
+  private final String picture;
 
-  private SocialType social;
+  private final SocialType social;
 
 
   @Builder

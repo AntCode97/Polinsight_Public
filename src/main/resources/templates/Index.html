@@ -7,11 +7,11 @@
 <body>
 <h1>Index Page</h1>
 <th:block th:if="${session.user} == null">
-    <a role="button" href="/loginpage">로그인</a>
-    <a role="button" href="/signup">회원가입</a>
+    <a href="/loginpage" role="button">로그인</a>
+    <a href="/signup" role="button">회원가입</a>
 </th:block>
 <th:block th:unless="${session.user} == null">
-    <a th:text="${session.user}?${session.user.name}:'guest'" role="button" href="/mypage"></a>
+    <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'"></a>
     <a href="/dologout">logout</a>
 </th:block>
 

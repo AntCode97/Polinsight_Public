@@ -11,14 +11,14 @@ import java.io.Serializable;
 public class SessionUser implements Serializable {
 
   @NotNull
-  private String name;
+  private final String name;
 
   //  @Email // TODO: 2021/06/09  주석 해제 필요
-  private String email;
+  private final String email;
 
-  private String picture;
+  private final String picture;
 
-  private SocialType type;
+  private final SocialType type;
 
   public SessionUser(User user) {
     this.name = user.getName();

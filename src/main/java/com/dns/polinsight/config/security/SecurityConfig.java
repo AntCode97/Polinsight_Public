@@ -4,11 +4,10 @@ import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,16 +27,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final CustomOAuth2Service customOAuth2Service;
 
+  @Value("${custom.permission.resources}")
+  private String[] staticResources;
+
+  @Value("${custom.permission.admin}")
+  private String[] permitAdmin;
+
+  @Value("${custom.permission.template}")
+  private String[] templates;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(service).passwordEncoder(passwordEncoder());
   }
 
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-//    static 자원들은 신경쓰지 않음 --> security filter chain을 거치지 않음
-    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-  }
+  //  @Override
+  //  public void configure(WebSecurity web) throws Exception {
+  //    //    static 자원들은 신경쓰지 않음 --> security filter chain을 거치지 않음
+  //    // but 문제 발생 소지 많음
+  //    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  //  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -46,8 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .csrf().disable()
           .cors().disable()
           .authorizeRequests()
-          .antMatchers("/swagger-ui/**").hasAuthority(UserRole.ADMIN.name())  // Swagger 접근 허가
-          .antMatchers("/signup", "/index","/", "/404","loginSuccess", "/loginpage" ).permitAll()
+          .antMatchers(staticResources).permitAll()
+          .antMatchers(permitAdmin).hasAuthority(UserRole.ADMIN.name())  // Swagger 접근 허가
+          .antMatchers(templates ).permitAll()
           .anyRequest().authenticated()
         .and()
           .formLogin()

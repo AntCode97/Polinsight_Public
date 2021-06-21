@@ -21,7 +21,7 @@ public class DBCPConfig {
     config.setUsername("root");
     config.setPassword("root");
     config.setLeakDetectionThreshold(30000);
-    config.setMaximumPoolSize(100);
+    config.setMaximumPoolSize(200);
     config.setJdbcUrl(mariadb_URL);
     return new HikariDataSource(config);
   }

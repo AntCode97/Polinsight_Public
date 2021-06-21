@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 //@Configuration
 public class MongoDBConfig {
 
-//  private final String dbName = "polinsight";
+  //  private final String dbName = "polinsight";
 
   @Value("${spring.data.mongodb.uri}")
   private String mongoUri;

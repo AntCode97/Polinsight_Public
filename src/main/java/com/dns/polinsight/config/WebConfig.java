@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-  static String[] resourceLocations= {"classpath:/templates/","classpath:/static/"};
+  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/"};
 
   private final LoginUserArgumentResolver loginUserArgumentResolver;
 

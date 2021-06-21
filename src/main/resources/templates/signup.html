@@ -7,31 +7,35 @@
 <body>
 <fieldset>
     <legend>회원 가입</legend>
-    <form action="/signup" method="post" id="signupForm">
+    <form action="/signup" id="signupfrm" method="post">
         <div>
             <label>
                 이메일
-                <input type="text" name="email"/>
+                <input id="email" name="email" type="text"/>
+                <span>*</span>
+                <div id="emailmsg" class="err_color" style="display:none;">Email을 정확히 입력해주세요.</div>
             </label>
         </div>
         <div>
             <label>
                 비밀번호
-                <input type="password" name="password"/>
+                <input class="pwinput" id="password" name="password" type="password"/>
+                <span>*</span>
             </label>
         </div>
         <div>
             <label>
                 비밀번호 확인
-<!--                todo : 실시간 변경감지 하도록, 현재는 blur시에만-->
-                <input onchange="passwordChecker()" type="password" id="pwconfirm"/>
+                <input class="pwinput" id="pwconfirm" type="password"/>
+                <span>*</span>
             </label>
-            <div id="pwmsg" style="color:red; display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</div>
+            <div class="err_color" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</div>
         </div>
         <div>
             <label>
                 이름
-                <input type="text" name="name"/>
+                <input name="name" type="text"/>
+                <span>*</span>
             </label>
         </div>
         <div>
@@ -43,22 +47,9 @@
                 </select>
             </label>
         </div>
-        <!--        <div>-->
-        <!--            <fieldset>-->
-        <!--                <legend>회원 타입</legend>-->
-        <!--                <label>-->
-        <!--                    <input name="type" type="radio" value="user"/>-->
-        <!--                    일반-->
-        <!--                </label>-->
-        <!--                <label>-->
-        <!--                    <input name="type" type="radio" value="pannel"/>-->
-        <!--                    패널-->
-        <!--                </label>-->
-        <!--            </fieldset>-->
-        <!--        </div>-->
         <div>
             <input onclick="window.history.back()" type="button" value="돌아가기">
-            <input type="submit" value="회원가입">
+            <input id="frmsubmit" type="submit" value="회원가입">
         </div>
     </form>
 </fieldset>
@@ -66,50 +57,72 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-  // import validator from '../static/js/signup'
-  // NOTE 2021/06/12 : 반응형의 구현이 안되는 듯하다
-  // const signup_form = document.getElementById('signupForm');
-  // signup_form.validate({
-  //   rule: {
-  //     email: {
-  //       required: true,
-  //       remote: {
-  //         url: "",
-  //         type: "POST",
-  //         data: {}
-  //       }
-  //     },
-  //     password: {
-  //       required: true
-  //     },
-  //     pwConfirm: {
-  //       required: true,
-  //       equalTo: "input[name='password']"
-  //     }
-  //   }
-  // })
 
-  // NOTE 2021/06/12 : pwconfirm의 내용이 바뀔때마다 체크
-  const passwordChecker = e => {
+  const passwordChecker = () => {
 
-    const pw = document.getElementById("password").value
-    const cfm = document.getElementById("pwconfirm").value
-    const msg = document.getElementById("pwmsg")
+    const passwordValue = $("#password").val();
+    const confirmValue = $("#pwconfirm").val();
+    const msg = $("#pwmsg")
 
-    console.log("pw:", pw)
-    console.log("cfm:", cfm)
 
-    if (pw !== cfm) {
-      msg.style.display = "block";
+    if (passwordValue !== confirmValue) {
+      if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
+        msg.css("display", "block");
+      }
     } else {
-      msg.style.display = "none";
+      msg.css("display", "none");
     }
-
-    console.log(msg.style)
   }
 
+  const emailChecker = () => {
+    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const emailValue = $("#email").val();
+    const msg = $("#emailmsg")
+
+    if (emailValue.match(regex) != null) {
+      msg.css("display", "none");
+      debounceCallEmailCheck(emailValue);   // NOTE : 여기에서는 작동이 안됨
+    } else {
+      msg.css("display", "block");
+    }
+
+
+  }
+
+  const checkNotNull = () => {
+// NOTE: 필수 입력값 검사
+    $("#signupfrm").find().each()
+
+  }
+
+  const enterSubmit = key => {
+
+    if (checkNotNull()) {
+      if (key.keyCode === 13) {
+        $("#signupfrm").submit()
+      }
+    }
+  }
+
+  const debounceCallEmailCheck = _.debounce(email => {
+    axios.get("http://localhost:8080/user/" + email)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+  }, 200)
+
+  $(document).ready(() => {
+    $(".pwinput").on("change keydown keyup paste", passwordChecker);
+
+    $("#email").on("change keydown paste", emailChecker);
+
+    $("input").keydown(enterSubmit)
+  })
 
 </script>
 </body>

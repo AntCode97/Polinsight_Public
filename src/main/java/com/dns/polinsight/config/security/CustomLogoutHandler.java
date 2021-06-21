@@ -1,5 +1,8 @@
 package com.dns.polinsight.config.security;
 
+import com.dns.polinsight.object.ResponseObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,12 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
     request.getSession().invalidate();
 
     // TODO: 2021/06/12 Kakao OAuth2 로그아웃 기능 요청 구현?? -- 생각 필요
+    response.setStatus(HttpStatus.OK.value());
+    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder()
+                                                                                   .statuscode(HttpStatus.OK.value())
+                                                                                   .data("logout success")
+                                                                                   .build()));
+    response.flushBuffer();
     response.sendRedirect("/");
   }
 
