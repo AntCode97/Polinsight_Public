@@ -255,7 +255,7 @@
                         <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
                     </div>
                     <div class="login_btn_wrap">
-                        <button class="btn-primary btn-effect" id="btn-login" type="submit">로그인 하기</button>
+                        <button class="btn-primary btn-effect" id="btn-login">로그인 하기</button>
                     </div>
                 </form>
                 <p class="login_or">또는</p>
@@ -264,7 +264,7 @@
                         <a href="/oauth2/authorization/kakao"></a>
                     </div>
                 </div>
-                <div class="qnapw"><a href="">비밀번호 찾기</a></div>
+                <div class="qnapw"><a href="/findpassword">비밀번호 찾기</a></div>
             </div>
         </div>
     </div>
@@ -311,7 +311,6 @@
             $('.err_content').css('display', 'block')
                 .text('로그인 중 문제가 발생했습니다.아이디 및 비밀번호를 확인하거나 계정을 생성하십시오.');
           } else { // 로그인 성공
-            console.log('로그인 성공');
             window.location.href = "/"
           }
         },

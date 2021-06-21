@@ -20,4 +20,9 @@ public interface UserService extends UserDetailsService {
 
   User findUserByEmail(User user);
 
+
+  User changePwd(User user);
+
+
+
 }

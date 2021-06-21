@@ -1,12 +1,12 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.exception.BoardNotFoundException;
 import com.dns.polinsight.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
-  public Optional<Board> find(Board board) {
-    return repository.findById(board.getId());
+  public Board find(Board board) {
+    return repository.findById(board.getId()).orElseThrow(BoardNotFoundException::new);
   }
 
   @Override

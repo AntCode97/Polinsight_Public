@@ -1,72 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>폴인사이트</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .login_input {
+            width: 100%;
+            outline: none;
+            border: none;
+            border-bottom: 1.5px solid #dde0ea;
+            color: #343236;
+            padding: 8px 0px;
+            height: 43px;
+            font-size: 16px;
+        }
+
+        .login_btn_wrap > .btn-primary {
+            width: 100%;
+            font-weight: bold;
+            float: left;
+        }
+
+        .btn-effect {
+            padding: 12px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            outline: none;
+        }
+
+        .login_content {
+            width: 25rem;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .modal_content {
+            width: 50%;
+            background-color: white;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .modal_wrap {
+            height: 100vh;
+            display: flex;
+            align-items: center;            justify-content: center;
+        }
+
+        .input_div {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input_div > label > p {
+            font-size: 16px;
+            text-align: left;
+            color: #a5dff9;
+        }
+    </style>
 </head>
 <body>
-<fieldset>
-    <legend>회원 가입</legend>
-    <form action="/signup" id="signupfrm" method="post">
-        <div>
-            <label>
-                이메일
-                <input id="email" name="email" type="text"/>
-                <span>*</span>
-                <div id="emailmsg" class="err_color" style="display:none;">Email을 정확히 입력해주세요.</div>
-            </label>
-        </div>
-        <div>
-            <label>
-                비밀번호
-                <input class="pwinput" id="password" name="password" type="password"/>
-                <span>*</span>
-            </label>
-        </div>
-        <div>
-            <label>
-                비밀번호 확인
-                <input class="pwinput" id="pwconfirm" type="password"/>
-                <span>*</span>
-            </label>
-            <div class="err_color" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</div>
-        </div>
-        <div>
-            <label>
-                이름
-                <input name="name" type="text"/>
-                <span>*</span>
-            </label>
-        </div>
-        <div>
-            <label>
-                회원 타입
-                <select>
-                    <option>일반</option>
-                    <option>패널</option>
-                </select>
-            </label>
-        </div>
-        <div>
-            <input onclick="window.history.back()" type="button" value="돌아가기">
-            <input id="frmsubmit" type="submit" value="회원가입">
-        </div>
-    </form>
-</fieldset>
+<div class="modal_wrap">
+    <div class="modal_content">
+        <fieldset>
+            <legend>회원 가입</legend>
+            <div class="login_content">
+                <form action="/signup" id="signupfrm" method="post">
+                    <div class="input_div">
+                        <label for="email">
+                            <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
+                        </label>
+                        <input class="login_input" id="email" name="email" type="text" required placeholder="이메일"/>
+                        <span id="emailmsg" class="err_msg" style="display:none;">이메일을 정확히 입력해주세요.</span>
+                    </div>
+                    <div class="input_div">
+                        <label for="password">
+                            <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
+                        </label>
+                        <input class="pwinput login_input" id="password" name="password" type="password" required placeholder="패스워드"/>
+                    </div>
+                    <div class="input_div">
+                        <label for="pwconfirm">
+                            <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
+                        </label>
+                        <input class="pwinput login_input" id="pwconfirm" type="password" required placeholder="패스워드 확인"/>
+                        <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
+                    </div>
+                    <div class="input_div">
+                        <label for="inputname">
+                            <p><i class="fas fa-user"></i>이름</p>
+                        </label>
+                        <input class="login_input" id="inputname" name="name" type="text" required placeholder="이름"/>
+                    </div>
+                    <div class="input_div">
+                        <label for="usertype">
+                            <p>회원 타입</p>
+                        </label>
+                        <select id="usertype">
+                            <option selected>일반</option>
+                            <option>패널</option>
+                        </select>
+                    </div>
+                    <div class="login_btn_wrap">
+
+                        <button class="btn-primary btn-effect" onclick="window.history.back()"><p>돌아가기<i class="fas fa-arrow-left"></i></p></button>
+                    </div>
+                    <div class="login_btn_wrap">
+                        <button class="btn-primary btn-effect" id="frmsubmit">회원 가입<i class="fas fa-sign-in-alt"></i></button>
+                    </div>
+
+                </form>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
 <!--Validation Library-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 
+  // 비밀번호 확인 검증
   const passwordChecker = () => {
-
     const passwordValue = $("#password").val();
     const confirmValue = $("#pwconfirm").val();
     const msg = $("#pwmsg")
-
-
     if (passwordValue !== confirmValue) {
       if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
         msg.css("display", "block");
@@ -76,52 +146,84 @@
     }
   }
 
+  // 필수 입력값 검사
+  const checkNotNull = () => {
+    let result = true
+    $("#signupfrm").find('input').each(function (item) {
+      let input = $(this)
+      let label = input.prev()
+      let inputValue = input.val()
+      if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {
+        input.focus()    // 입력이 안된 사항으로 포커싱
+        input.val('') // 값 초기화
+        alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+        result = false
+        return false;   // $.each를 break
+      }
+    })
+
+    return result;
+  }
+
+
+  const debounceCallEmailCheck = _.debounce(email => {
+    axios.get("http://localhost:8080/user/" + email)
+        .then(res => {
+          if (res.data === "" || res.data === null || res.data === undefined || res.data === "undefined") {
+            // 응답 data가 비어있으면 아이디가 없는 것 ==> 사용 가능한 이메일
+
+          }
+        })
+        .catch(err => {
+          console.log("error")
+          console.log(err)
+        })
+  }, 200)
+
   const emailChecker = () => {
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     const emailValue = $("#email").val();
     const msg = $("#emailmsg")
 
-    if (emailValue.match(regex) != null) {
+    if (emailValue === "") {
       msg.css("display", "none");
-      debounceCallEmailCheck(emailValue);   // NOTE : 여기에서는 작동이 안됨
     } else {
-      msg.css("display", "block");
-    }
-
-
-  }
-
-  const checkNotNull = () => {
-// NOTE: 필수 입력값 검사
-    $("#signupfrm").find().each()
-
-  }
-
-  const enterSubmit = key => {
-
-    if (checkNotNull()) {
-      if (key.keyCode === 13) {
-        $("#signupfrm").submit()
+      if (emailValue.match(regex) != null) {
+        msg.css("display", "none");
+        debounceCallEmailCheck(emailValue);
+      } else {
+        msg.css("display", "block");
       }
+
     }
   }
 
-  const debounceCallEmailCheck = _.debounce(email => {
-    axios.get("http://localhost:8080/user/" + email)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-  }, 200)
+  $(window).ready(() => {
+    // 에러 메시지 숨김처리 및 텍스트 색 지정
+    $("#signupfrm").find(".err_msg").each(function () {
+      $(this).css("display", "none");
+      $(this).css("color", "red");
+    })
+
+    $(document).on('focus', '.login_input', function () {
+      $(this).css('border-bottom', '1.5px solid #4C99CF');
+    });
+
+    $(document).on('blur', '.login_input', function () {
+      $(this).css('border-bottom', '1.5px solid #dde0ea');
+    });
+  })
 
   $(document).ready(() => {
     $(".pwinput").on("change keydown keyup paste", passwordChecker);
-
-    $("#email").on("change keydown paste", emailChecker);
-
-    $("input").keydown(enterSubmit)
+    $("#email").on("change keydown keyup paste", emailChecker);
+    $("#frmsubmit").on('click', function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      if (checkNotNull()) {
+        $(this).submit()
+      }
+    })
   })
 
 </script>

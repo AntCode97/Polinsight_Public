@@ -5,9 +5,11 @@ import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
+import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +29,6 @@ public class UserController {
 
   private final PasswordEncoder passwordEncoder;
 
-  @GetMapping("/loginpage")
-  public ModelAndView login() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("login");
-    return mv;
-  }
 
   @PostMapping("/signup")
   public void userSignUp(User user, HttpServletResponse response) {
@@ -88,5 +84,21 @@ public class UserController {
                                                      .build()));
     return mv;
   }
+
+  @PostMapping("/findpwd")
+  public ResponseEntity<?> findPwd() {
+    // NOTE 2021-06-21 0021 : 패스워드를 바꾸는 방향으로 유도
+    ResponseObject obj = ResponseObject.builder()
+                                       .statuscode(HttpStatus.OK.value())
+                                       .msg("password changed")
+                                       .build();
+    return ResponseEntity.ok(obj);
+  }
+
+  @PostMapping("/chngepwd")
+  public ResponseEntity<?> changePwd() {
+    return ResponseEntity.ok(null);
+  }
+
 
 }

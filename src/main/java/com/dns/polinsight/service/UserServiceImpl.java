@@ -63,5 +63,10 @@ public class UserServiceImpl implements UserService {
     return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
   }
 
+  @Override
+  public User changePwd(User user) {
+    return null;
+  }
+
 
 }

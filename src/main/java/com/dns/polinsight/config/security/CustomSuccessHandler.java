@@ -17,12 +17,14 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    response.setStatus(HttpStatus.OK.value());
     response.getWriter().write(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(ResponseObject.builder()
                                                                                                                     .statuscode(HttpStatus.OK.value())
                                                                                                                     .data(1)
-                                                                                                                    .msg("success")
+                                                                                                                    .msg("login success")
                                                                                                                     .build()));
 
+    response.sendRedirect("/");
   }
 
 }
