@@ -5,7 +5,6 @@
     <title>Title</title>
 </head>
 <body>
-</body>
 <fieldset>
     <legend>회원 가입</legend>
     <form action="/signup" method="post" id="signupForm">
@@ -23,9 +22,11 @@
         </div>
         <div>
             <label>
-                확인
-                <input type="password" name="pwconfirm"/>
+                비밀번호 확인
+<!--                todo : 실시간 변경감지 하도록, 현재는 blur시에만-->
+                <input onchange="passwordChecker()" type="password" id="pwconfirm"/>
             </label>
+            <div id="pwmsg" style="color:red; display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</div>
         </div>
         <div>
             <label>
@@ -34,38 +35,82 @@
             </label>
         </div>
         <div>
-            <input name="type" type="radio" value="user"/>
-            <input name="type" type="radio" value="pannel"/>
+            <label>
+                회원 타입
+                <select>
+                    <option>일반</option>
+                    <option>패널</option>
+                </select>
+            </label>
         </div>
+        <!--        <div>-->
+        <!--            <fieldset>-->
+        <!--                <legend>회원 타입</legend>-->
+        <!--                <label>-->
+        <!--                    <input name="type" type="radio" value="user"/>-->
+        <!--                    일반-->
+        <!--                </label>-->
+        <!--                <label>-->
+        <!--                    <input name="type" type="radio" value="pannel"/>-->
+        <!--                    패널-->
+        <!--                </label>-->
+        <!--            </fieldset>-->
+        <!--        </div>-->
         <div>
-            <input onclick="history.go(-1)" type="button" value="돌아가기">
+            <input onclick="window.history.back()" type="button" value="돌아가기">
             <input type="submit" value="회원가입">
         </div>
     </form>
 </fieldset>
 <!--Validation Library-->
-<script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  const signup_form = document.getElementById('signupForm');
-  signup_form.validate({
-    rule: {
-      id: {
-        required: true,
-        remote: {
-          url: "",
-          type: "POST",
-          data: {}
-        }
-      },
-      password: {
-        required: true
-      },
-      passwordConfirm: {required: true}
-    }
-  })
-  const input_validate = () => {
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 
+<script>
+  // import validator from '../static/js/signup'
+  // NOTE 2021/06/12 : 반응형의 구현이 안되는 듯하다
+  // const signup_form = document.getElementById('signupForm');
+  // signup_form.validate({
+  //   rule: {
+  //     email: {
+  //       required: true,
+  //       remote: {
+  //         url: "",
+  //         type: "POST",
+  //         data: {}
+  //       }
+  //     },
+  //     password: {
+  //       required: true
+  //     },
+  //     pwConfirm: {
+  //       required: true,
+  //       equalTo: "input[name='password']"
+  //     }
+  //   }
+  // })
+
+  // NOTE 2021/06/12 : pwconfirm의 내용이 바뀔때마다 체크
+  const passwordChecker = e => {
+
+    const pw = document.getElementById("password").value
+    const cfm = document.getElementById("pwconfirm").value
+    const msg = document.getElementById("pwmsg")
+
+    console.log("pw:", pw)
+    console.log("cfm:", cfm)
+
+    if (pw !== cfm) {
+      msg.style.display = "block";
+    } else {
+      msg.style.display = "none";
+    }
+
+    console.log(msg.style)
   }
+
+
 </script>
+</body>
 </html>

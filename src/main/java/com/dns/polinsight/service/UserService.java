@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
 
   User update(User user);
 
+  User findUserByEmail(User user);
+
 }

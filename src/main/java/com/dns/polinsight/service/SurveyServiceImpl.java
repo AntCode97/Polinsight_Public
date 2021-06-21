@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ public class SurveyServiceImpl implements SurveyService {
     return null;
   }
 
+  @Cacheable
   @Override
   public List<Survey> findAll() {
     return null;
   }
 
+  @Cacheable
   @Override
   public Survey findById(Survey survey) {
     return null;

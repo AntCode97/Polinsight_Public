@@ -5,6 +5,7 @@ import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
    * Simple CRUD
    * */
   @Override
+  @Cacheable
   public List<User> findAll() {
     return repository.findAll();
   }
@@ -36,12 +38,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User findByEmail(User user) {
-    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UserNotFoundException("Could not found user" + user.getEmail()));
-  }
-
-  @Override
-  public User findById(User user) {
+  @Cacheable
+  public User find(User user) {
     return repository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
   }
 
@@ -53,6 +51,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public User update(User user) {
     return repository.save(user);
+  }
+
+  @Override
+  public User findUserByEmail(User user) throws UsernameNotFoundException {
+    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
   }
 
 

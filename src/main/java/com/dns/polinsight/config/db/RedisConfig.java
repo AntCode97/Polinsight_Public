@@ -2,6 +2,7 @@ package com.dns.polinsight.config.db;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -9,8 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-//@Configuration
-// TODO: 2021-06-03 :설정 완료 해야함
+@Configuration
 public class RedisConfig {
 
   @Value("${spring.redis.host}")
@@ -36,5 +36,6 @@ public class RedisConfig {
     configuration.setPort(port);
     return new LettuceConnectionFactory(configuration);
   }
+
 
 }

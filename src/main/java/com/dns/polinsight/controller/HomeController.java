@@ -2,11 +2,9 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,20 +19,17 @@ public class HomeController {
 
   private final HttpSession session;
 
-  private final UserService service;
-
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(Model model, @LoginUser SessionUser user) {
-
-    if (user != null) {
-      model.addAttribute("userName", user.getName());
-    }
+  public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
+    if (user != null) {
+      mv.addObject("user", user);
+    }
     mv.setViewName("index");
     return mv;
   }
 
-  @RequestMapping(value = "/signup", method = {RequestMethod.GET})
+  @GetMapping("/signup")
   public ModelAndView signUp() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("signup");
@@ -42,21 +37,12 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/loginSuccess", method = {RequestMethod.GET})
-  public ModelAndView loginSuccess(HttpSession session) {
+  public ModelAndView loginSuccess(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
-//    User user = (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
-//    session.setAttribute("user", new SessionUser(user));
+    session.setAttribute("user", user);
     mv.setViewName("loginSuccess");
     return mv;
   }
 
-  @PostMapping(value = "/mypage")
-  public ModelAndView myPage() {
-    ModelAndView mv = new ModelAndView();
-//    mv.addObject("user", service.find(user));
-
-    mv.setViewName("mypage");
-    return mv;
-  }
 
 }

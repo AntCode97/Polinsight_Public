@@ -16,7 +16,6 @@ import java.util.Collections;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
@@ -43,9 +42,10 @@ public class User implements UserDetails, Serializable {
 
   private String picture;
 
+  private Long point;
+
   @NotNull
   @Column(name = "role")
-  //  @ElementCollection(fetch = FetchType.EAGER, targetClass = UserRole.class)
   private UserRole role;
 
 
@@ -87,6 +87,7 @@ public class User implements UserDetails, Serializable {
   public boolean isEnabled() {
     return true;
   }
+
 
   public User update(String name, String picture) {
     this.name = name;

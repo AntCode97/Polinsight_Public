@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/static/css/login_btn.css">
+    <link rel="stylesheet" th:href="@{/css/login_btn.css}">
 </head>
 <body>
 <div>
@@ -23,23 +23,26 @@
                 </label>
             </div>
             <div>
-                <button onclick="location.href='/signup'">
+                <button onclick="window.history.back()">
+                    돌아가기
+                </button>
+                <button onclick="location.href='/signup'"> <!--TODO: 수정 필요-->
                     회원 가입
                 </button>
                 <input type="submit" value="로그인"/>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <!--                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
             </div>
         </form>
 
         <br/>
-        <a href="/oauth2/authorization/kakao"  role="button">
-            <img class="kakao_btn"  alt="login button" src="/static/assets/kakao_login/ko/kakao_login_medium_narrow.png"/>
+        <a href="/oauth2/authorization/kakao" class="login_btn" role="button">
+            <img alt="login button" src="/assets/kakao_login/ko/kakao_login_medium_narrow.png"/>
         </a>
-        <a href="/oauth2/authorization/naver"  role="button">
-            <img class="naver_btn" alt="login button" src="/static/assets/naver_kr/btnG_완성형.png"/>
+        <a href="/oauth2/authorization/naver" class="login_btn" role="button">
+            <img alt="login button" src="/assets/naver_kr/btnG_완성형.png"/>
         </a>
-        <a  href="/oauth2/authorization/google" role="button">
-            <img class="google_btn" alt="login button" src="/static/assets/google/1x/btn_google_signin_light_normal_web.png"/>
+        <a class="login_btn" href="/oauth2/authorization/google" role="button">
+            <img alt="login button" src="/assets/google/1x/btn_google_signin_light_normal_web.png"/>
         </a>
     </fieldset>
 </div>

@@ -1,19 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <script src="js/http.js" type="module" defer></script>
     <title>Title</title>
 </head>
 <body>
 <div>
-    <span>Original: </span>
-    <span th:text="${session}"></span>
-<!--<th:block th:if="${#session.islogin} == false">-->
-<!--    <span>없음</span>-->
-<!--</th:block>-->
-<!--<th:block th:if="${#session.islogin} == true">-->
-<!--    <span>있음</span>-->
-<!--</th:block>-->
+    <label>
+        이름
+        <input type="text">
+    </label>
+    <label>
+        이메일
+        <input type="email">
+    </label>
+    <label>
+        비밀번호
+        <input type="password">
+    </label>
+    <label>
+        비밀번호 확인
+        <input type="password">
+    </label>
+    <label>
+        적립금
+        <!--        <input type="number" readonly th:value="${session.user.point}">-->
+    </label>
+    <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
+    <button th:onclick="userInfoUpdate()">변경하기</button>
+    <button th:onclick="goHome()">돌아가기</button>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+  const userInfoUpdate = () => {
+    http.post("/")
+        .then(res => {
+          alert("회원 정보가 업데이트 되었습니다.")
+        })
+        .catch(err => {
+          alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
+        })
+  }
+
+  const goHome = () => {
+    window.history.back();
+  }
+</script>
 </body>
 </html>
