@@ -8,7 +8,7 @@
 <h1>Index Page</h1>
 <th:block th:if="${session.user} == null">
     <a role="button" href="/loginpage">로그인</a>
-    <a role="button" href="/signup">회원가입</a>
+    <a role="button" href="/qsignup">회원가입</a>
 </th:block>
 <th:block th:unless="${session.user} == null">
     <a th:text="${session.user}?${session.user.name}:'guest'" role="button" href="/mypage"></a>
