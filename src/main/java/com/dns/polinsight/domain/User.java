@@ -8,8 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +45,10 @@ public class User implements UserDetails, Serializable {
   private String picture;
 
   private Long point;
+
+  @OneToMany(mappedBy = "user") //누구에 의해서 매핑되는가,
+  private List<Board> boards = new ArrayList<>();
+
 
   @NotNull
   @Column(name = "role")

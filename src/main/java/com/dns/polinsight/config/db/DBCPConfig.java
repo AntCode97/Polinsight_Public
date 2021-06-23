@@ -18,12 +18,14 @@ public class DBCPConfig {
   public DataSource hikariDataSource() {
     HikariConfig config = new HikariConfig();
     config.setPoolName("Test-DBCPPool");
-    config.setUsername("root");
-    config.setPassword("root");
+    config.setUsername("pol");
+    config.setPassword("1234");
     config.setLeakDetectionThreshold(30000);
     config.setMaximumPoolSize(200);
     config.setJdbcUrl(mariadb_URL);
-    return new HikariDataSource(config);
+    HikariDataSource dataSource = new HikariDataSource(config);
+    System.out.println(dataSource.toString());
+    return dataSource;
   }
 
 
