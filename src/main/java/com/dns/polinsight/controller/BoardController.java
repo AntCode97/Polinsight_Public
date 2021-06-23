@@ -1,17 +1,16 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.domain.Board;
-import com.dns.polinsight.service.BoardService;
+import com.dns.polinsight.service.BoardServiceImpl;
+import com.dns.polinsight.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Local;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Controller
@@ -20,7 +19,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class BoardController {
 
-  private final BoardService boardService;
+  private final UserServiceImpl userService;
+  private final BoardServiceImpl boardService;
 
   @GetMapping("/boards/new")
   public String createForm(Model model){
@@ -28,13 +28,20 @@ public class BoardController {
     return "boards/createBoardForm";
   }
 
+  //TODO: 로그인한 유저 가져와서 넣기
   @PostMapping("/boards/new")
-  public String create(@Validated BoardForm form, BindingResult result){
+  public String create(BoardForm boardForm, BindingResult result){
+    System.out.println(boardForm.toString());
+    System.out.println(boardForm.getContent() + boardForm.getTitle());
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
     LocalDateTime registeredAt = LocalDateTime.now();
-    Board board = new Board().builder().title(form.getTitle()).searchcontent(form.getContent()).viewcontent(form.getContent()).
+
+//    List<User> users = userService.findAll();
+
+
+    Board board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(boardForm.getContent()).
             registeredAt(registeredAt).build();
     boardService.saveOrUpdate(board);
 
@@ -43,8 +50,16 @@ public class BoardController {
 
   @GetMapping("/boards")
   public String list(Model model){
+    List<Board> boards = boardService.findAll();
+    model.addAttribute("boards", boards);
+    return "/boards/boardList";
+  }
 
-    return "boards/board";
+  @GetMapping("/boards/{boardId}")
+  public String content(@PathVariable("boardId") Long boardId, Model model){
+    Board board = boardService.findOne(boardId);
+    model.addAttribute("board", board);
+    return "/boards/board";
   }
 
 

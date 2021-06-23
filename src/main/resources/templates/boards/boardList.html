@@ -142,19 +142,22 @@
                         <div>
                             <div class="articleList">
                                 <div>
-                                    <table th:object="${board}" class="-tblList">
+                                    <table class="-tblList">
                                         <thead>
                                             <tr class="onlyPC">
-                                                <th th:text="${board.id}" width="50" height="36"></th>
-                                                <th th:text="${board.title}"  width="300"></th>
-                                                <th width="90">관리자</th>
-                                                <th th:text="${board.registeredAt}" width="140"></th>
+                                                <th width="50" height="36"> 번호 </th>
+                                                <th width="300">제목</th>
+                                                <th width="90">등록자</th>
+                                                <th width="140">등록일</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <tr >
-                                                <td th:text="${board.viewcontent}"width="140" class="onlyPC"></td>
+                                            <tr th:each="board : ${boards}">
+                                                <td th:text="${board.id}" width="50" height="34" class="onlyPC"></td>
+                                                <td  width="300" height="34" class="-alignLeft -fdSubject"><a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a></td>                                         </td>
+                                                <td  width="90" class="onlyPC">관리자</td>
+                                                <td th:text="${board.registeredAt}"width="140" class="onlyPC"></td>
                                             </tr>
 
                                         </tbody>

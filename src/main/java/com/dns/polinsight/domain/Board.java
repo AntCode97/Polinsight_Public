@@ -26,7 +26,7 @@ public class Board {
   private String searchcontent;
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
   private User user;
 

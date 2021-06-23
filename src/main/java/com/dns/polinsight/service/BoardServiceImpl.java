@@ -19,6 +19,11 @@ public class BoardServiceImpl implements BoardService {
     return repository.findAll();
   }
 
+
+  public Board findOne(Long boardId){
+    return repository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+  }
+
   @Override
   public Board find(Board board) {
     return repository.findById(board.getId()).orElseThrow(BoardNotFoundException::new);
