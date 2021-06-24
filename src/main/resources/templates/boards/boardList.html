@@ -166,6 +166,41 @@
                             </div>
                         </div>
 
+                        <nav style="text-align: center;">
+                            <ul class="pagination"
+                                th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
+                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+                                <li>
+                                    <a th:href="@{/boards(page=1)}" aria-label="First">
+                                        <span aria-hidden="true">First</span>
+                                    </a>
+                                </li>
+
+                                <li th:class="${boards.first} ? 'disabled'">
+                                    <a th:href="${boards.first} ? '#' :@{/boards(page=${boards.number})}" aria-label="Previous">
+                                        <span aria-hidden="true">&lt;</span>
+                                    </a>
+                                </li>
+
+                                <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active'">
+                                    <a th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+                                </li>
+
+                                <li th:class="${boards.last} ? 'disabled'">
+                                    <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+                                        <span aria-hidden="true">&gt;</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+                                        <span aria-hidden="true">Last</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+
                         <div>
                             <div class="-btnPageLink">
                                 <div><span class="LF_page_link_current"><b>1</b></span>

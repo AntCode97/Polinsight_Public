@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class BoardForm {
 
-
+    private Long id;
     private String title;
 
     private String content;

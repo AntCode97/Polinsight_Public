@@ -32,4 +32,12 @@ public class Board {
 
   private LocalDateTime registeredAt;
 
+  public void update(String title, String content, LocalDateTime registeredAt){
+    this.title = title;
+    this.searchcontent = content;
+    this.viewcontent = content;
+    this.registeredAt =registeredAt;
+  }
+
+
 }

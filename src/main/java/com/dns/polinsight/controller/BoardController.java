@@ -5,6 +5,9 @@ import com.dns.polinsight.service.BoardServiceImpl;
 import com.dns.polinsight.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,8 +52,9 @@ public class BoardController {
   }
 
   @GetMapping("/boards")
-  public String list(Model model){
-    List<Board> boards = boardService.findAll();
+  public String list(@PageableDefault Pageable pageable, Model model){
+    Page<Board> boards = boardService.getBoardList(pageable);
+//    List<Board> boards = boardService.findAll();
     model.addAttribute("boards", boards);
     return "/boards/boardList";
   }
@@ -60,6 +64,37 @@ public class BoardController {
     Board board = boardService.findOne(boardId);
     model.addAttribute("board", board);
     return "/boards/board";
+  }
+  @GetMapping("/boards/{boardId}/edit")
+  public String updateBoardForm(@PathVariable("boardId") Long boardId, Model model){
+    Board board = boardService.findOne(boardId);
+    BoardForm boardForm = new BoardForm();
+    boardForm.setId(board.getId());
+    boardForm.setContent(board.getSearchcontent());
+    boardForm.setTitle(board.getTitle());
+    LocalDateTime registeredAt = LocalDateTime.now();
+    boardForm.setRegisteredAt(registeredAt);
+    model.addAttribute("boardForm", boardForm);
+    return "/boards/updateBoardForm";
+  }
+
+  @PostMapping("/boards/{boardId}/edit")
+  public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardForm") BoardForm boardForm){
+    System.out.println("게시글 수정!" + boardId);
+    Board board = boardService.findOne(boardId);
+    LocalDateTime registeredAt = LocalDateTime.now();
+    boardForm.setRegisteredAt(registeredAt);
+    boardService.update(boardId, boardForm);
+
+
+    return "redirect:/boards/{boardId}";
+  }
+
+  @GetMapping("/boards/{boardId}/delete")
+  public String delete(@PathVariable("boardId") Long boardId, Model model){
+    Board board = boardService.findOne(boardId);
+    boardService.delete(board);
+    return  "redirect:/boards";
   }
 
 
