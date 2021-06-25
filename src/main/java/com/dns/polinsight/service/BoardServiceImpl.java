@@ -61,9 +61,23 @@ public class BoardServiceImpl implements BoardService {
 //  }
   public Page<Board> getBoardList(Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-    pageable = PageRequest.of(page, 10); // <- Sort 추가
+    pageable = PageRequest.of(page, 10, Sort.by("id")); // <- Sort 추가
 
     return repository.findAll(pageable);
   }
+
+  public Page<Board> searchTitle(String title, Pageable pageable){
+
+    Page<Board> boards = repository.findByTitle(title, pageable);
+    return boards;
+
+  };
+
+  public Page<Board> searchContent(String searchcontent, Pageable pageable){
+
+    Page<Board> boards = repository.findBySearchcontent(searchcontent, pageable);
+    return boards;
+
+  };
 
 }

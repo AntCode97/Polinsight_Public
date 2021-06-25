@@ -1,6 +1,7 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.BoardServiceImpl;
 import com.dns.polinsight.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +53,23 @@ public class BoardController {
   }
 
   @GetMapping("/boards")
-  public String list(@PageableDefault Pageable pageable, Model model){
+  public String list(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
     Page<Board> boards = boardService.getBoardList(pageable);
+//    List<Board> boards = boardService.findAll();
+    model.addAttribute("boards", boards);
+    return "/boards/boardList";
+  }
+
+  @GetMapping("/boards/search")
+  public String search(@RequestParam String searchKind, @RequestParam String searchValue, @ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
+    System.out.println(searchKind+ searchValue);
+    Page<Board> boards;
+    if(searchKind.equals("TITLE")){
+      boards = boardService.searchTitle(searchValue, pageable);
+    } else{
+      boards = boardService.searchContent(searchValue, pageable);
+    }
+
 //    List<Board> boards = boardService.findAll();
     model.addAttribute("boards", boards);
     return "/boards/boardList";

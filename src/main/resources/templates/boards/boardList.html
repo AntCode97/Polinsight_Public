@@ -116,27 +116,25 @@
     <div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
         <div class="ABA-container-box-1200">
             <div id="AB_contents">
-                <form id="TCBOARD_jobopening_LIST_index192" name="TCBOARD_jobopening_LIST_index192" method="post"
-                    action="kwa-jobopening" enctype="multipart/form-data" vi=""
-                    submit-func="return TCBOARD_jobopening_LIST_index192_submit(this, &quot;&quot;);">
 
                     <div class="ABA-content-box bdList">
                         <div>
-                            <div class="-bdSchWrap">
+                            <form th:action="@{/boards/search}" th:object="${boardSearch}" class="-bdSchWrap" method="get">
                                 <div><select name="SCH_category_1" class="AB-select onlyPC AB-move-url"
-                                        rel="kwa-jobopening?SCH_category_1=">
+                                        >
                                         <option value="" selected="">분류선택</option>
                                         <option value="A">공지</option>
                                         <option value="B">이벤트</option>
-                                    </select><select name="search_item" class="AB-select admin-width-d onlyPC">
-                                        <option value="A">통합검색</option>
-                                        <option value="subject">제목</option>
+                                    </select><select th:field="*{searchKind}" name="search_item" class="AB-select admin-width-d onlyPC">
+                                        <option th:value="TITLE" th:text="제목"></option>
+                                        <option th:value="CONTENT" th:text="내용"></option>
                                     </select>
+                                    <input th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
                                     <input type="submit" name="submit_OK" value="검색하기" id="AB_btn_submit_sch"
                                         class="btn-tpl btn-round-03 btn-pattern-B08 btn-size-08 btn-b" data-cbk=""
                                         data-cbk-time="100" data-cbk-a="" data-overlay="Y">
                                 </div>
-                            </div>
+                            </form>
                         </div>
 
                         <div>
@@ -220,7 +218,7 @@
 
 
                     </div>
-                </form>
+
             </div>
         </div>
     </div>
