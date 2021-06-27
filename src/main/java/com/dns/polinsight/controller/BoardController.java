@@ -9,6 +9,13 @@ import com.dns.polinsight.storage.StorageService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.IOUtils;
+
+
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +27,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,11 +53,7 @@ public class BoardController {
   public String createForm(Model model) throws IOException {
     model.addAttribute("boardForm", new BoardForm());
 
-//    //파일 리스트 보여줄 때
-//    model.addAttribute("files", storageService.loadAll().map(
-//            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
-//                    "serveFile", path.getFileName().toString()).build().toUri().toString())
-//            .collect(Collectors.toList()));
+
 
     return "boards/createBoardForm";
   }
@@ -69,10 +73,20 @@ public class BoardController {
 
 //    List<User> users = userService.findAll();
 //    System.out.println("GETNAME" +boardForm.getFile().getName() +"getOriginalFilename" + boardForm.getFile().getOriginalFilename() );
-    Board board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(boardForm.getContent()).
-            registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).build();
+
+    String viewcontent = boardForm.getContent().replace("\r\n","<br>");
+    System.out.println(viewcontent);
+    Board board;
+    if(!boardForm.getFile().isEmpty()){
+      board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
+              registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).build();
+      storageService.store(boardForm.getFile());
+    }else{
+      board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
+              registeredAt(registeredAt).boardType(boardForm.getBoardType()).build();
+    }
+
     boardService.saveOrUpdate(board);
-    storageService.store(boardForm.getFile());
     redirectAttributes.addFlashAttribute("message",
             "You successfully uploaded " + boardForm.getFile().getOriginalFilename() + "!");
 
@@ -106,6 +120,11 @@ public class BoardController {
   @GetMapping("/boards/{boardId}")
   public String content(@PathVariable("boardId") Long boardId, Model model){
     Board board = boardService.findOne(boardId);
+    //파일 리스트 보여줄 때
+    model.addAttribute("files", storageService.loadAll().map(
+            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
+                    "serveFile", path.getFileName().toString()).build().toUri().toString())
+            .collect(Collectors.toList()));
     model.addAttribute("board", board);
     return "/boards/board";
   }
@@ -118,6 +137,26 @@ public class BoardController {
     boardForm.setTitle(board.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     boardForm.setRegisteredAt(registeredAt);
+
+
+    try{
+      File file = new File(board.getFilePath());
+      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
+      InputStream input = new FileInputStream(file);
+      OutputStream os = fileItem.getOutputStream();
+      IOUtils.copy(input, os);
+      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+      boardForm.setFile(multipartFile);
+      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
+
+    }catch (IOException ex){
+      System.out.println(ex);
+    }
+
+
+
+
+
     model.addAttribute("boardForm", boardForm);
     return "/boards/updateBoardForm";
   }

@@ -110,6 +110,18 @@
             border-radius: 5px 5px 5px 5px;
             border:1px solid black;
         }
+        a.registerButton{
+            display: block;
+            text-align:center;
+            line-height:200%;
+            width:100px;
+            height:30px;
+            font-size: 15px;
+            color: black;
+            border-radius: 5px 5px 5px 5px;
+            border:1px solid black;
+        }
+
         
     </style>
 </head>
@@ -173,9 +185,9 @@
             </form>
 
         </div>
-
+        <div class="register">
         <a class="registerButton" th:object="${boardForm}" role="link" th:href="@{/boards/{id}/delete (id=*{id})}">삭제</a>
-
+        <div>
 
     </div>
 </body>

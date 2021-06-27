@@ -22,13 +22,13 @@ public class PolinsightApplication {
     SpringApplication.run(PolinsightApplication.class, args);
   }
 
-  @Bean
-  CommandLineRunner init(StorageService storageService) {
-    return (args) -> {
-      storageService.deleteAll();
-      storageService.init();
-    };
-  }
+//  @Bean
+//  CommandLineRunner init(StorageService storageService) {
+//    return (args) -> {
+//      //storageService.deleteAll();
+//      storageService.init();
+//    };
+//  }
 
 
 

@@ -153,8 +153,13 @@
                                         </thead>
 
                                         <tbody>
+                                        <ul>
+                                            <li th:each="file : ${files}">
+                                                <a th:href="${file}" th:text="${file}" />
+                                            </li>
+                                        </ul>
                                             <tr >
-                                                <td th:text="${board.viewcontent}"width="140" class="onlyPC"></td>
+                                                <td th:utext="${board.viewcontent}" width="140" class="onlyPC"></td>
                                             </tr>
                                             <td>
                                                 <a th:href="@{/boards/{id}/edit (id=${board.id})}" role="button">수정</a>
