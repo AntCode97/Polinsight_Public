@@ -137,7 +137,11 @@
                 </div>
                 <div class="information_name">
                     <div class="informationSubject"><b>작성자</b></div>
-                    <span>관리자</span>
+                    <th:block th:unless="${session.user} == null">
+    <span th:text="${session.user}?${session.user.name}:'guest'" ></span>
+
+</th:block>
+                    </span>
                 </div>
                 <div class="information_category">
                     <div class="informationSubject"><b>분류</b></div>

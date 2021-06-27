@@ -147,7 +147,10 @@
                                             <tr class="onlyPC">
                                                 <th th:text="${board.id}" width="50" height="36"></th>
                                                 <th th:text="${board.title}"  width="300"></th>
-                                                <th width="90">관리자</th>
+                                                <th width="90"><th:block th:unless="${session.user} == null">
+                                                    <span th:text="${session.user}?${session.user.name}:'guest'" ></span>
+
+                                                </th:block></th>
                                                 <th th:text="${board.registeredAt}" width="140"></th>
                                             </tr>
                                         </thead>

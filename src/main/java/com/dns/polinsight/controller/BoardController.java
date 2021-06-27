@@ -1,6 +1,9 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.oauth.LoginUser;
+import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.BoardServiceImpl;
 import com.dns.polinsight.service.UserServiceImpl;
@@ -50,9 +53,11 @@ public class BoardController {
 
 
   @GetMapping("/boards/new")
-  public String createForm(Model model) throws IOException {
+  public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardForm", new BoardForm());
-
+    if (user != null) {
+      model.addAttribute("user", user);
+    }
 
 
     return "boards/createBoardForm";
@@ -60,33 +65,44 @@ public class BoardController {
 
 
 
-  //TODO: 로그인한 유저 가져와서 넣기
+
   @PostMapping("/boards/new")
-  public String create(BoardForm boardForm, BindingResult result, RedirectAttributes redirectAttributes){
+  public String create(BoardForm boardForm, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user){
 //    System.out.println(boardForm.toString());
 //    System.out.println(boardForm.getContent() + boardForm.getTitle());
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
     LocalDateTime registeredAt = LocalDateTime.now();
+    String viewcontent = boardForm.getContent().replace("\r\n","<br>");
+
+
+    if (user != null) {
+
+      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      //TODO: 관리자 역활인지 확인하는 로직 추가해야함
+
+      Board board;
+      if(!boardForm.getFile().isEmpty()){
+        board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
+                registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).user(admin).build();
+        storageService.store(boardForm.getFile());
+      }else{
+        board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).user(admin).viewcontent(viewcontent).
+                registeredAt(registeredAt).boardType(boardForm.getBoardType()).build();
+      }
+      boardService.saveOrUpdate(board);
+    }
 
 
 //    List<User> users = userService.findAll();
 //    System.out.println("GETNAME" +boardForm.getFile().getName() +"getOriginalFilename" + boardForm.getFile().getOriginalFilename() );
 
-    String viewcontent = boardForm.getContent().replace("\r\n","<br>");
-    System.out.println(viewcontent);
-    Board board;
-    if(!boardForm.getFile().isEmpty()){
-      board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
-              registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).build();
-      storageService.store(boardForm.getFile());
-    }else{
-      board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
-              registeredAt(registeredAt).boardType(boardForm.getBoardType()).build();
-    }
 
-    boardService.saveOrUpdate(board);
+
+
+
+
     redirectAttributes.addFlashAttribute("message",
             "You successfully uploaded " + boardForm.getFile().getOriginalFilename() + "!");
 
@@ -118,18 +134,22 @@ public class BoardController {
   }
 
   @GetMapping("/boards/{boardId}")
-  public String content(@PathVariable("boardId") Long boardId, Model model){
+  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user){
     Board board = boardService.findOne(boardId);
     //파일 리스트 보여줄 때
     model.addAttribute("files", storageService.loadAll().map(
             path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
                     "serveFile", path.getFileName().toString()).build().toUri().toString())
             .collect(Collectors.toList()));
+    if (user != null) {
+      model.addAttribute("user", user);
+    }
     model.addAttribute("board", board);
     return "/boards/board";
   }
+
   @GetMapping("/boards/{boardId}/edit")
-  public String updateBoardForm(@PathVariable("boardId") Long boardId, Model model){
+  public String updateBoardForm(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user){
     Board board = boardService.findOne(boardId);
     BoardForm boardForm = new BoardForm();
     boardForm.setId(board.getId());
@@ -138,6 +158,9 @@ public class BoardController {
     LocalDateTime registeredAt = LocalDateTime.now();
     boardForm.setRegisteredAt(registeredAt);
 
+    if (user != null) {
+      model.addAttribute("user", user);
+    }
 
     try{
       File file = new File(board.getFilePath());
