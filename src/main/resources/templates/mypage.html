@@ -9,44 +9,67 @@
 <div>
     <label>
         이름
-        <input type="text">
+        <input type="text" th:value="${session.user.name}">
     </label>
     <label>
         이메일
-        <input type="email">
+        <input id="email" type="email" th:value="${session.user.email}">
     </label>
     <label>
         비밀번호
-        <input type="password">
+        <input type="password" id="pwd">
     </label>
     <label>
         비밀번호 확인
-        <input type="password">
+        <input type="password" id="pwdcfm">
     </label>
     <label>
         적립금
-        <!--        <input type="number" readonly th:value="${session.user.point}">-->
+        <input type="number" readonly th:value="${session.user.point}">
     </label>
     <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
-    <button th:onclick="userInfoUpdate()">변경하기</button>
-    <button th:onclick="goHome()">돌아가기</button>
+    <button th:onclick="chkInput()">변경하기</button>
+    <button th:onclick="window.history.back()">돌아가기</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+  const userInfoUpdate = (password) => {
+    const userInfo = new FormData();
+    userInfo.append('email', $("#email").val())
+    userInfo.append('password', password)
 
-  const userInfoUpdate = () => {
-    http.post("/")
+    axios.post("/", userInfo)
         .then(res => {
+          console.log(res)
           alert("회원 정보가 업데이트 되었습니다.")
         })
         .catch(err => {
+          console.log(err)
           alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
         })
   }
 
-  const goHome = () => {
-    window.history.back();
+  const chkInput = () => {
+    const pwd = $("#pwd")
+    const pwdcfm = $("#pwdcfm")
+
+    if (pwdcfm === "" || pwdcfm === undefined || pwdcfm === null || pwdcfm === "undefined") {
+      return
+    }
+
+    if (pwd === "" || pwd === undefined || pwd === null || pwd === "undefined") {
+      return
+    }
+
+    if (pwd === pwdcfm) {
+      // throttle userInfoUpdate
+      _.throttle(userInfoUpdate(pwd), 200)
+    }
   }
+
+
 </script>
 </body>
 </html>

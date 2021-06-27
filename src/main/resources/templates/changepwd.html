@@ -68,6 +68,14 @@
             text-align: left;
             color: #a5dff9;
         }
+
+        .vaild {
+            color: #00CC00;
+        }
+
+        .invalid {
+            color: #FF0000;
+        }
     </style>
 </head>
 <body>
@@ -78,36 +86,39 @@
                 <label for="pwd">
                     <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
                 </label>
-                <input id="pwd" type="password" class="login_input" required placeholder="패스워드">
+                <input id="pwd" type="password" class="pwdinput" required placeholder="패스워드">
             </div>
             <div class="input_div">
-                <label for="pwdconfirm">
+                <label for="pwdcfm">
                     <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
                 </label>
-                <input id="pwdconfirm" type="password" class="login_input" required placeholder="패스워드 확인">
+                <input id="pwdcfm" type="password" class="pwdinput" required placeholder="패스워드 확인">
                 <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
             </div>
 
             <div class="login_btn_wrap">
-                <!--                <button class="btn-primary btn-effect"></button>-->
+                <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
                 <button class="btn-primary btn-effect" id="btn_submit">변경하기</button>
             </div>
         </form>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:inline="javascript">
 
   const passwordChecker = () => {
     const passwordValue = $("#pwd").val();
-    const confirmValue = $("#pwdconfirm").val();
+    const confirmValue = $("#pwdcfm").val();
     const msg = $("#pwmsg")
     if (passwordValue !== confirmValue) {
       if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
-        msg.css("display", "block");
+        // msg.css("display", "block");
+        msg.text("패스워드가 일치하지 않습니다. 확인해주세요.").removeClass("valid").addClass("invalid")
       }
     } else {
-      msg.css("display", "none");
+      // msg.css("display", "none");
+      msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
     }
   }
 
@@ -119,9 +130,23 @@
       $(this).css('border-bottom', '1.5px solid #dde0ea');
     });
 
+    $('.pwdinput').on('change keydown keyup paste', passwordChecker);
+
     $("#btn_submit").on('click', function () {
-      $(this).submit() // NOTE 2021-06-22 0022 : 비동기로 변경?
-      window.location.replace("/")
+      // $(this).submit()
+      const userInfo = new FormData();  // NOTE 2021-06-28 0028 : 데이터 넣기
+
+      // 비동기
+      axios.post('http://localhost:8080/', userInfo)
+          .then(res => {
+            console.log(res)
+            window.location.replace("/")
+          })
+          .catch(err => {
+            console.log(err)
+            alert("패스워드 변경 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.")
+          })
+
     })
   })
 </script>

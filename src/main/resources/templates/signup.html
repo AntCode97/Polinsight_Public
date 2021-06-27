@@ -53,7 +53,8 @@
         .modal_wrap {
             height: 100vh;
             display: flex;
-            align-items: center;            justify-content: center;
+            align-items: center;
+            justify-content: center;
         }
 
         .input_div {
@@ -67,6 +68,14 @@
             font-size: 16px;
             text-align: left;
             color: #a5dff9;
+        }
+
+        .invalid {
+            color: #FF0000;
+        }
+
+        .vaild {
+            color: #00CC00;
         }
     </style>
 </head>
@@ -82,7 +91,7 @@
                             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
                         </label>
                         <input class="login_input" id="email" name="email" type="text" required placeholder="이메일"/>
-                        <span id="emailmsg" class="err_msg" style="display:none;">이메일을 정확히 입력해주세요.</span>
+                        <span id="emailmsg"></span>
                     </div>
                     <div class="input_div">
                         <label for="password">
@@ -95,7 +104,7 @@
                             <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
                         </label>
                         <input class="pwinput login_input" id="pwconfirm" type="password" required placeholder="패스워드 확인"/>
-                        <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
+                        <span class="err_msg" id="pwmsg"></span>
                     </div>
                     <div class="input_div">
                         <label for="inputname">
@@ -137,13 +146,16 @@
     const passwordValue = $("#password").val();
     const confirmValue = $("#pwconfirm").val();
     const msg = $("#pwmsg")
-    if (passwordValue !== confirmValue) {
-      if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
-        msg.css("display", "block");
+
+
+    if (passwordValue === confirmValue) {
+      // 공백 제거
+      if (confirmValue.replace(/\s/g, "").length >= 8 && passwordValue.replace(/\s/g, "").length >= 8) {
+        msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
+        return
       }
-    } else {
-      msg.css("display", "none");
     }
+    msg.text("올바른 패스워드를 입력해주세요.").removeClass("valid").addClass("invalid")
   }
 
   // 필수 입력값 검사
@@ -186,24 +198,19 @@
     const msg = $("#emailmsg")
 
     if (emailValue === "") {
-      msg.css("display", "none");
+      msg.text("").removeClass("valid").addClass("invalid")
     } else {
       if (emailValue.match(regex) != null) {
-        msg.css("display", "none");
+        msg.text("사용 가능한 이메일입니다.").removeClass("invalid").addClass("valid")
         debounceCallEmailCheck(emailValue);
       } else {
-        msg.css("display", "block");
+        msg.text("올바른 이메일을 입력해주세요").removeClass("valid").addClass("invalid")
       }
 
     }
   }
 
   $(window).ready(() => {
-    // 에러 메시지 숨김처리 및 텍스트 색 지정
-    $("#signupfrm").find(".err_msg").each(function () {
-      $(this).css("display", "none");
-      $(this).css("color", "red");
-    })
 
     $(document).on('focus', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #4C99CF');
