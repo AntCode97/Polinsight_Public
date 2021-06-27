@@ -15,19 +15,6 @@
     </style>
 </head>
 <body>
-<h1>Index Page</h1>
-<th:block th:if="${session.user} == null">
-    <a role="button" href="/loginpage">로그인</a>
-    <a role="button" href="/signup">회원가입</a>
-</th:block>
-<th:block th:unless="${session.user} == null">
-    <a th:text="${session.user}?${session.user.name}:'guest'" role="button" href="/mypage"></a>
-    <a href="/dologout">logout</a>
-</th:block>
-
-<div>
-
-</div>
 <div class="carasel_wrap">
     <img src="/img/banner/banner01.jpg" class="bg_image"/>
 </div>

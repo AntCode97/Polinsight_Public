@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,6 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository repository;
 
-  private final BCryptPasswordEncoder passwordEncoder;
 
   @Override
   public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -72,7 +70,7 @@ public class UserServiceImpl implements UserService {
   public User changePwd(User user) {
     // NOTE 2021-06-23 0023 : 해시 발급, 해시 저장
     // NOTE 2021-06-23 0023 : Bcrypt 이용 - 넣을 데이터는??
-    passwordEncoder.encode(user.getEmail());
+//    passwordEncoder.encode(user.getEmail());
     return null;
   }
 
