@@ -4,17 +4,30 @@ import com.dns.polinsight.domain.Board;
 import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.BoardServiceImpl;
 import com.dns.polinsight.service.UserServiceImpl;
+import com.dns.polinsight.storage.StorageFileNotFoundException;
+import com.dns.polinsight.storage.StorageService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -25,32 +38,47 @@ public class BoardController {
 
   private final UserServiceImpl userService;
   private final BoardServiceImpl boardService;
+  private final StorageService storageService;
+
 
   @GetMapping("/boards/new")
-  public String createForm(Model model){
+  public String createForm(Model model) throws IOException {
     model.addAttribute("boardForm", new BoardForm());
+
+//    //파일 리스트 보여줄 때
+//    model.addAttribute("files", storageService.loadAll().map(
+//            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
+//                    "serveFile", path.getFileName().toString()).build().toUri().toString())
+//            .collect(Collectors.toList()));
+
     return "boards/createBoardForm";
   }
 
+
+
   //TODO: 로그인한 유저 가져와서 넣기
   @PostMapping("/boards/new")
-  public String create(BoardForm boardForm, BindingResult result){
-    System.out.println(boardForm.toString());
-    System.out.println(boardForm.getContent() + boardForm.getTitle());
+  public String create(BoardForm boardForm, BindingResult result, RedirectAttributes redirectAttributes){
+//    System.out.println(boardForm.toString());
+//    System.out.println(boardForm.getContent() + boardForm.getTitle());
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
     LocalDateTime registeredAt = LocalDateTime.now();
 
+
 //    List<User> users = userService.findAll();
-
-
+//    System.out.println("GETNAME" +boardForm.getFile().getName() +"getOriginalFilename" + boardForm.getFile().getOriginalFilename() );
     Board board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(boardForm.getContent()).
-            registeredAt(registeredAt).build();
+            registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).build();
     boardService.saveOrUpdate(board);
+    storageService.store(boardForm.getFile());
+    redirectAttributes.addFlashAttribute("message",
+            "You successfully uploaded " + boardForm.getFile().getOriginalFilename() + "!");
 
     return "redirect:/boards";
   }
+
 
   @GetMapping("/boards")
   public String list(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
@@ -61,13 +89,13 @@ public class BoardController {
   }
 
   @GetMapping("/boards/search")
-  public String search(@RequestParam String searchKind, @RequestParam String searchValue, @ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
-    System.out.println(searchKind+ searchValue);
+  public String search(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
+    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue() );
     Page<Board> boards;
-    if(searchKind.equals("TITLE")){
-      boards = boardService.searchTitle(searchValue, pageable);
+    if(boardSearch.getSearchType() .equals("TITLE")){
+      boards = boardService.searchTitle(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
     } else{
-      boards = boardService.searchContent(searchValue, pageable);
+      boards = boardService.searchContent(boardSearch.getSearchValue(),boardSearch.getBoardType(), pageable);
     }
 
 //    List<Board> boards = boardService.findAll();
@@ -112,6 +140,25 @@ public class BoardController {
     boardService.delete(board);
     return  "redirect:/boards";
   }
+
+
+  //파일 클릭했을 때, 다운로드할 수 있게 함
+  @GetMapping("/files/{filename:.+}")
+  @ResponseBody
+  public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+
+    Resource file = storageService.loadAsResource(filename);
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+            "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+  }
+
+
+
+  @ExceptionHandler(StorageFileNotFoundException.class)
+  public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+    return ResponseEntity.notFound().build();
+  }
+
 
 
 //  @GetMapping("/board")

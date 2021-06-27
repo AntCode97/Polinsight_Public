@@ -37,6 +37,10 @@ spring :
     properties:
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 102400KB
+      max-request-size: 102400KB
 
   security :
     oauth2 :

@@ -2,6 +2,7 @@ package com.dns.polinsight;
 
 import com.dns.polinsight.domain.Board;
 import com.dns.polinsight.repository.BoardRepository;
+import com.dns.polinsight.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,17 @@ public class PolinsightApplication {
   public static void main(String[] args) {
     SpringApplication.run(PolinsightApplication.class, args);
   }
+
+  @Bean
+  CommandLineRunner init(StorageService storageService) {
+    return (args) -> {
+      storageService.deleteAll();
+      storageService.init();
+    };
+  }
+
+
+
   //게시판 쿼리 테스트
 //  @Bean
 //  public CommandLineRunner initData(BoardRepository boardRepository) {

@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.controller.BoardForm;
 import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.BoardType;
 import com.dns.polinsight.exception.BoardNotFoundException;
 import com.dns.polinsight.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -66,16 +67,16 @@ public class BoardServiceImpl implements BoardService {
     return repository.findAll(pageable);
   }
 
-  public Page<Board> searchTitle(String title, Pageable pageable){
+  public Page<Board> searchTitle(String title, BoardType boardType, Pageable pageable){
 
-    Page<Board> boards = repository.findByTitle(title, pageable);
+    Page<Board> boards = repository.findByTitle(title, boardType, pageable);
     return boards;
 
   };
 
-  public Page<Board> searchContent(String searchcontent, Pageable pageable){
+  public Page<Board> searchContent(String searchcontent,BoardType boardType, Pageable pageable){
 
-    Page<Board> boards = repository.findBySearchcontent(searchcontent, pageable);
+    Page<Board> boards = repository.findBySearchcontent(searchcontent,boardType, pageable);
     return boards;
 
   };

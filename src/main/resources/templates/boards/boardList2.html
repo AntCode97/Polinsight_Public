@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 
 <head>
     <style type="text/css">
@@ -116,54 +116,88 @@
     <div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
         <div class="ABA-container-box-1200">
             <div id="AB_contents">
-                <form id="TCBOARD_jobopening_LIST_index192" name="TCBOARD_jobopening_LIST_index192" method="post"
-                    action="kwa-jobopening" enctype="multipart/form-data" vi=""
-                    submit-func="return TCBOARD_jobopening_LIST_index192_submit(this, &quot;&quot;);">
 
                     <div class="ABA-content-box bdList">
                         <div>
-                            <div class="-bdSchWrap">
+                            <form th:action="@{/boards/search}" th:object="${boardSearch}" class="-bdSchWrap" method="get">
                                 <div><select name="SCH_category_1" class="AB-select onlyPC AB-move-url"
-                                        rel="kwa-jobopening?SCH_category_1=">
+                                        >
                                         <option value="" selected="">분류선택</option>
                                         <option value="A">공지</option>
                                         <option value="B">이벤트</option>
-                                    </select><select name="search_item" class="AB-select admin-width-d onlyPC">
-                                        <option value="A">통합검색</option>
-                                        <option value="subject">제목</option>
+                                    </select><select th:field="*{searchKind}" name="search_item" class="AB-select admin-width-d onlyPC">
+                                        <option th:value="TITLE" th:text="제목"></option>
+                                        <option th:value="CONTENT" th:text="내용"></option>
                                     </select>
+                                    <input th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
                                     <input type="submit" name="submit_OK" value="검색하기" id="AB_btn_submit_sch"
                                         class="btn-tpl btn-round-03 btn-pattern-B08 btn-size-08 btn-b" data-cbk=""
                                         data-cbk-time="100" data-cbk-a="" data-overlay="Y">
                                 </div>
-                            </div>
+                            </form>
                         </div>
 
                         <div>
                             <div class="articleList">
                                 <div>
-                                    <table th:object="${board}" class="-tblList">
+                                    <table class="-tblList">
                                         <thead>
                                             <tr class="onlyPC">
-                                                <th th:text="${board.id}" width="50" height="36"></th>
-                                                <th th:text="${board.title}"  width="300"></th>
-                                                <th width="90">관리자</th>
-                                                <th th:text="${board.registeredAt}" width="140"></th>
+                                                <th width="50" height="36"> 번호 </th>
+                                                <th width="300">제목</th>
+                                                <th width="90">등록자</th>
+                                                <th width="140">등록일</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <tr >
-                                                <td th:text="${board.viewcontent}"width="140" class="onlyPC"></td>
+                                            <tr th:each="board : ${boards}">
+                                                <td th:text="${board.id}" width="50" height="34" class="onlyPC"></td>
+                                                <td  width="300" height="34" class="-alignLeft -fdSubject"><a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a></td>                                         </td>
+                                                <td  width="90" class="onlyPC">관리자</td>
+                                                <td th:text="${board.registeredAt}"width="140" class="onlyPC"></td>
                                             </tr>
-                                            <td>
-                                                <a th:href="@{/boards/{id}/edit (id=${board.id})}" role="button">수정</a>
-                                            </td>
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+
+                        <nav style="text-align: center;">
+                            <ul class="pagination"
+                                th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
+                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+                                <li>
+                                    <a th:href="@{/boards(page=1)}" aria-label="First">
+                                        <span aria-hidden="true">First</span>
+                                    </a>
+                                </li>
+
+                                <li th:class="${boards.first} ? 'disabled'">
+                                    <a th:href="${boards.first} ? '#' :@{/boards(page=${boards.number})}" aria-label="Previous">
+                                        <span aria-hidden="true">&lt;</span>
+                                    </a>
+                                </li>
+
+                                <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active'">
+                                    <a th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+                                </li>
+
+                                <li th:class="${boards.last} ? 'disabled'">
+                                    <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+                                        <span aria-hidden="true">&gt;</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+                                        <span aria-hidden="true">Last</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
 
                         <div>
                             <div class="-btnPageLink">
@@ -184,7 +218,7 @@
 
 
                     </div>
-                </form>
+
             </div>
         </div>
     </div>

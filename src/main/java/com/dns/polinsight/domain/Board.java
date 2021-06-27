@@ -32,6 +32,10 @@ public class Board {
 
   private LocalDateTime registeredAt;
 
+  private String filePath;
+
+  private BoardType boardType;
+
   public void update(String title, String content, LocalDateTime registeredAt){
     this.title = title;
     this.searchcontent = content;
