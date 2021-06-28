@@ -2,14 +2,14 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Board;
-import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.*;
 import com.dns.polinsight.repository.BoardSearch;
+import com.dns.polinsight.service.AttachService;
+import com.dns.polinsight.service.AttachServiceImpl;
 import com.dns.polinsight.service.BoardServiceImpl;
 import com.dns.polinsight.service.UserServiceImpl;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.*;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,11 +51,12 @@ public class BoardController {
   private final UserServiceImpl userService;
   private final BoardServiceImpl boardService;
   private final StorageService storageService;
+  private final AttachServiceImpl attachService;
 
 
   @GetMapping("/boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
-    model.addAttribute("boardForm", new BoardForm());
+    model.addAttribute("boardDTO", new BoardDTO());
     if (user != null) {
       model.addAttribute("user", user);
     }
@@ -67,44 +69,32 @@ public class BoardController {
 
 
   @PostMapping("/boards/new")
-  public String create(BoardForm boardForm, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user){
-//    System.out.println(boardForm.toString());
-//    System.out.println(boardForm.getContent() + boardForm.getTitle());
+  public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user) {
+//    System.out.println(boardDTO.toString());
+//    System.out.println(boardDTO.getContent() + boardDTO.getTitle());
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
     LocalDateTime registeredAt = LocalDateTime.now();
-    String viewcontent = boardForm.getContent().replace("\r\n","<br>");
-
+    String viewcontent = boardDTO.getContent().replace("\r\n", "<br>");
+    boardDTO.setViewcontent(viewcontent);
 
     if (user != null) {
-
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
       //TODO: 관리자 역활인지 확인하는 로직 추가해야함
 
-      Board board;
-      if(!boardForm.getFile().isEmpty()){
-        board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).viewcontent(viewcontent).
-                registeredAt(registeredAt).filePath("./upload-dir/"+boardForm.getFile().getOriginalFilename()).boardType(boardForm.getBoardType()).user(admin).build();
-        storageService.store(boardForm.getFile());
-      }else{
-        board = new Board().builder().title(boardForm.getTitle()).searchcontent(boardForm.getContent()).user(admin).viewcontent(viewcontent).
-                registeredAt(registeredAt).boardType(boardForm.getBoardType()).build();
-      }
-      boardService.saveOrUpdate(board);
-    }
-
-
-//    List<User> users = userService.findAll();
-//    System.out.println("GETNAME" +boardForm.getFile().getName() +"getOriginalFilename" + boardForm.getFile().getOriginalFilename() );
+      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      boardDTO.setUser(admin);
+      boardDTO.setRegisteredAt(LocalDateTime.now());
+      Board board = boardService.addBoard(boardDTO);
+      boardDTO.setId(board.getId());
+      attachService.addAttach(boardDTO);
 
 
 
-
-
+  }
 
     redirectAttributes.addFlashAttribute("message",
-            "You successfully uploaded " + boardForm.getFile().getOriginalFilename() + "!");
+            "You successfully uploaded " + boardDTO.getFiles() + "!");
 
     return "redirect:/boards";
   }
@@ -137,10 +127,11 @@ public class BoardController {
   public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user){
     Board board = boardService.findOne(boardId);
     //파일 리스트 보여줄 때
-    model.addAttribute("files", storageService.loadAll().map(
-            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
-                    "serveFile", path.getFileName().toString()).build().toUri().toString())
-            .collect(Collectors.toList()));
+//    model.addAttribute("files", storageService.loadAll().map(
+//            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
+//                    "serveFile", path.getFileName().toString()).build().toUri().toString())
+//            .collect(Collectors.toList()));
+    model.addAttribute("files", attachService.findFiles(boardId));
     if (user != null) {
       model.addAttribute("user", user);
     }
@@ -149,49 +140,56 @@ public class BoardController {
   }
 
   @GetMapping("/boards/{boardId}/edit")
-  public String updateBoardForm(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user){
+  public String updateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user){
     Board board = boardService.findOne(boardId);
-    BoardForm boardForm = new BoardForm();
-    boardForm.setId(board.getId());
-    boardForm.setContent(board.getSearchcontent());
-    boardForm.setTitle(board.getTitle());
+    BoardDTO boardDTO = new BoardDTO();
+    boardDTO.setId(board.getId());
+    boardDTO.setContent(board.getSearchcontent());
+    boardDTO.setViewcontent(board.getViewcontent());
+    boardDTO.setAttaches(board.getAttaches());
+    boardDTO.setUser(board.getUser());
+    boardDTO.setTitle(board.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
-    boardForm.setRegisteredAt(registeredAt);
+    boardDTO.setRegisteredAt(registeredAt);
 
     if (user != null) {
       model.addAttribute("user", user);
     }
 
-    try{
-      File file = new File(board.getFilePath());
-      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
-      InputStream input = new FileInputStream(file);
-      OutputStream os = fileItem.getOutputStream();
-      IOUtils.copy(input, os);
-      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-      boardForm.setFile(multipartFile);
-      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
-
-    }catch (IOException ex){
-      System.out.println(ex);
-    }
-
-
-
+//    try{
+//      File file = new File(board.getFilePath());
+//      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
+//      InputStream input = new FileInputStream(file);
+//      OutputStream os = fileItem.getOutputStream();
+//      IOUtils.copy(input, os);
+//      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+//      boardDTO.setFile(multipartFile);
+//      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
+//
+//    }catch (IOException ex){
+//      System.out.println(ex);
+//    }
+//
 
 
-    model.addAttribute("boardForm", boardForm);
+    model.addAttribute("boardDTO", boardDTO);
     return "/boards/updateBoardForm";
   }
 
   @PostMapping("/boards/{boardId}/edit")
-  public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardForm") BoardForm boardForm){
-    System.out.println("게시글 수정!" + boardId);
-    Board board = boardService.findOne(boardId);
-    LocalDateTime registeredAt = LocalDateTime.now();
-    boardForm.setRegisteredAt(registeredAt);
-    boardService.update(boardId, boardForm);
+  public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user){
 
+    System.out.println("게시글 수정!" + boardId);
+
+
+    User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+    boardDTO.setUser(admin);
+
+    boardDTO.setId(boardId);
+    boardDTO.setRegisteredAt(LocalDateTime.now());
+    String viewcontent = boardDTO.getContent().replace("\r\n", "<br>");
+    boardDTO.setViewcontent(viewcontent);
+    boardService.addBoard(boardDTO);
 
     return "redirect:/boards/{boardId}";
   }

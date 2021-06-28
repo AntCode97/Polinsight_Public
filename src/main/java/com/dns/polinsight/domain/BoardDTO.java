@@ -1,4 +1,4 @@
-package com.dns.polinsight.controller;
+package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.BoardType;
 import com.dns.polinsight.domain.User;
@@ -8,9 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter
-public class BoardForm {
+public class BoardDTO {
 
     private Long id;
     private String title;
@@ -18,8 +19,10 @@ public class BoardForm {
     private BoardType boardType;
 
     private String content;
-
+    private String viewcontent;
+    private User user;
     private LocalDateTime registeredAt;
 
-    private MultipartFile file;
+    private List<Attach> attaches;
+    private List<MultipartFile> files;
 }

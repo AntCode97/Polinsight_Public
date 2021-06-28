@@ -32,7 +32,7 @@ public class PolinsightApplication {
 
 
 
-  //게시판 쿼리 테스트
+////  게시판 쿼리 테스트
 //  @Bean
 //  public CommandLineRunner initData(BoardRepository boardRepository) {
 //    return args ->

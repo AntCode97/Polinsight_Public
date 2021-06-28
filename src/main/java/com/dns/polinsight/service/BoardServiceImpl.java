@@ -1,9 +1,11 @@
 package com.dns.polinsight.service;
 
-import com.dns.polinsight.controller.BoardForm;
+import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.BoardDTO;
 import com.dns.polinsight.domain.BoardType;
 import com.dns.polinsight.exception.BoardNotFoundException;
+import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
   private final BoardRepository repository;
+  private final AttachRepository attachRepository;
 
   @Override
   public List<Board> findAll() {
@@ -36,14 +39,23 @@ public class BoardServiceImpl implements BoardService {
     return repository.findById(board.getId()).orElseThrow(BoardNotFoundException::new);
   }
 
-  @Override
-  public Board saveOrUpdate(Board board) {
+
+  public Board addBoard(BoardDTO boardDTO) {
+    Board board = Board.builder(boardDTO).build();
+
     return repository.save(board);
   }
+
+//  @Override
+//  public Board saveOrUpdate(Board board) {
+//    return repository.save(board);
+//  }
+
+
   @Transactional
-  public Long update(Long id, BoardForm boardForm){
+  public Long update(Long id, BoardDTO boardDTO){
     Board board = repository.findById(id).orElseThrow(BoardNotFoundException::new);
-    board.update(boardForm.getTitle(), boardForm.getContent(), boardForm.getRegisteredAt());
+    board.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getRegisteredAt());
     return board.getId();
 
 
@@ -51,6 +63,12 @@ public class BoardServiceImpl implements BoardService {
 
   @Override
   public void delete(Board board) {
+    List<Attach> attaches = attachRepository.findByBoardId(board.getId());
+    for (Attach attach:
+         attaches) {
+      attachRepository.delete(attach);
+    }
+
     repository.delete(board);
   }
 

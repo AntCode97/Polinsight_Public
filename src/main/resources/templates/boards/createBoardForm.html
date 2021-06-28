@@ -130,7 +130,7 @@
 
         <div class="board">
 
-            <form class=information th:action="@{/boards/new}" th:object="${boardForm}" method="post" enctype="multipart/form-data">
+            <form class=information th:action="@{/boards/new}" th:object="${boardDTO}" method="post" enctype="multipart/form-data">
                 <div class="information_title">
                     <div class="informationSubject"><b>제목</b></div>
                     <span><input th:field="*{title}" type="text" maxlength="255" style="width:800px;height:20px" placeholder="제목을 입력하세요."></span>
@@ -157,12 +157,12 @@
                 </div>
                 <div class=information_file>
                     <div class="informationSubject"><b>첨부파일</b></div>
-                        <input th:field="*{file}" accept="*" type="file" style="margin-top:8px">
-                    <ul>
-                        <li th:each="file : ${files}">
-                            <a th:href="${file}" th:text="${file}" />
-                        </li>
-                    </ul>
+                        <input multiple="multiple" th:field="*{files}" accept="*" type="file" style="margin-top:8px">
+<!--                    <ul>-->
+<!--                        <li th:each="file : ${files}">-->
+<!--                            <a th:href="${file}" th:text="${file}" />-->
+<!--                        </li>-->
+<!--                    </ul>-->
                    
                 </div>
 

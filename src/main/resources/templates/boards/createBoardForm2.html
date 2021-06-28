@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:action="@{/boards/new}" th:object="${boardForm}" method="post" enctype="multipart/form-data">
+<form th:action="@{/boards/new}" th:object="${boardDTO}" method="post" enctype="multipart/form-data">
     <label th:for="title">제목</label>
     <input type="text" th:field="*{title}" placeholder="제목을 입력하세요.">
     <label th:for="content">내용</label>
