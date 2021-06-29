@@ -11,8 +11,10 @@ server :
   error :
     path : /templates/error
 
-
 spring :
+  session :
+    store-type : redis
+
   datasource :
     username :          root
     password :          root
@@ -24,11 +26,15 @@ spring :
     hibernate :
       ddl-auto : update
 
-    data :
-      mongodb :
-        host :     localhost
-        password : 27017
-        database : polinsight
+  data :
+    mongodb :
+      host :     localhost
+      password : root
+      database : polinsight
+
+  redis :
+    host : localhost
+    port : 6379
 
   mvc :
     static-path-pattern : /static/**
@@ -36,3 +42,41 @@ spring :
     resources :
       static-locations : classpath:/static/
       add-mappings :     true
+
+  mail :
+    host :  # smtp address
+    port :  # smtp port
+    username :  # smtp 등록 계정
+    password :  # smtp 등록 계정의 패스워드
+    properties :
+      mail :
+        smtp :
+          auth : true
+          starttls :
+            enable : true
+  security :
+    oauth2 :
+      client :
+        registration :
+          kakao :
+            client-name :                  Kakao
+            client-id :                    3f9fc6c7c1b07e9181061f800d659bdf
+            client-secret :                7FDxfbG3gBUMwoAGRT29usEyUEI0Fq6n
+            authorization-grant-type :     authorization_code
+            redirect-uri :                 "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-authentication-method : POST
+            scope :
+              - profile
+              - account_email
+        provider :
+          kakao :
+            authorization-uri :   https://kauth.kakao.com/oauth/authorize
+            token-uri :           https://kauth.kakao.com/oauth/token
+            user-info-uri :       https://kapi.kakao.com/v2/user/me
+            user-name-attribute : id
+
+custom :
+  permission :
+    resources : /css/**, /js/**, /img/**
+    admin :     /swagger-ui/**
+    template :  /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword
