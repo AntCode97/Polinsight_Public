@@ -170,6 +170,7 @@
                     <ul>
                         <li th:each="file : ${files}">
                             <a th:href="${file}" th:text="${file}" />
+                            <a th:href="@{/boards/{id}/{file}/delete (id=*{id}, file=${file.name})}"> ❌</a>
                         </li>
                     </ul>
                    

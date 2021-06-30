@@ -151,6 +151,8 @@ public class BoardController {
     LocalDateTime registeredAt = LocalDateTime.now();
     boardDTO.setRegisteredAt(registeredAt);
 
+    model.addAttribute("files", attachService.findFiles(boardId));
+
     if (user != null) {
       model.addAttribute("user", user);
     }
@@ -189,6 +191,7 @@ public class BoardController {
     boardDTO.transViewcontent();
 
     boardService.addBoard(boardDTO);
+    attachService.addAttach(boardDTO);
 
     return "redirect:/boards/{boardId}";
   }
@@ -196,13 +199,15 @@ public class BoardController {
   @GetMapping("/boards/{boardId}/delete")
   public String delete(@PathVariable("boardId") Long boardId, Model model){
     Board board = boardService.findOne(boardId);
+    attachService.deleteAttaches(boardId);
     boardService.delete(board);
     return  "redirect:/boards";
   }
 
 
+
   //파일 클릭했을 때, 다운로드할 수 있게 함
-  @GetMapping("/files/{filename:.+}")
+  @GetMapping("/boards/upload-dir/{filename:.+}")
   @ResponseBody
   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
@@ -220,7 +225,14 @@ public class BoardController {
 
 
 
+  @GetMapping("/boards/{boardId}/{file}/delete")
+  public String deleteFile(@PathVariable("boardId") Long boardId, @PathVariable("file") String filename, Model model){
 
+    List<Attach> attach = attachService.findByname(filename);
+    attachService.delete(attach.get(0));
+
+    return  "redirect:/boards/{boardId}/edit";
+  }
 
 
 //  @GetMapping("/board")

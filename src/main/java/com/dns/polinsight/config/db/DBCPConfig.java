@@ -18,8 +18,8 @@ public class DBCPConfig {
   public DataSource hikariDataSource() {
     HikariConfig config = new HikariConfig();
     config.setPoolName("Test-DBCPPool");
-    config.setUsername("pol");
-    config.setPassword("1234");
+    config.setUsername("root");
+    config.setPassword("159753");
     config.setLeakDetectionThreshold(30000);
     config.setMaximumPoolSize(200);
     config.setJdbcUrl(mariadb_URL);

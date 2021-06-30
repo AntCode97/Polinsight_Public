@@ -16,4 +16,6 @@ public interface AttachRepository extends JpaRepository<Attach, Long> {
             countQuery = "SELECT COUNT(a.id) FROM Attach a WHERE a.board.id = :boardId"
     )
     List<Attach> findByBoardId(Long boardId);
+
+    List<Attach> findByFilename(String filename);
 }
