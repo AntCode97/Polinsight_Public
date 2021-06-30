@@ -25,4 +25,11 @@ public class BoardDTO {
 
     private List<Attach> attaches;
     private List<MultipartFile> files;
+
+    public void transViewcontent(){
+
+        String viewcontent = this.content.replace("\r\n", "<br>");
+        viewcontent = viewcontent.replace(" ", "&nbsp;");
+        this.viewcontent = viewcontent;
+    }
 }

@@ -76,8 +76,7 @@ public class BoardController {
       return "boards/createBoardForm";
     }
     LocalDateTime registeredAt = LocalDateTime.now();
-    String viewcontent = boardDTO.getContent().replace("\r\n", "<br>");
-    boardDTO.setViewcontent(viewcontent);
+    boardDTO.transViewcontent();
 
     if (user != null) {
       //TODO: 관리자 역활인지 확인하는 로직 추가해야함
@@ -187,8 +186,8 @@ public class BoardController {
 
     boardDTO.setId(boardId);
     boardDTO.setRegisteredAt(LocalDateTime.now());
-    String viewcontent = boardDTO.getContent().replace("\r\n", "<br>");
-    boardDTO.setViewcontent(viewcontent);
+    boardDTO.transViewcontent();
+
     boardService.addBoard(boardDTO);
 
     return "redirect:/boards/{boardId}";
@@ -218,6 +217,9 @@ public class BoardController {
   public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
     return ResponseEntity.notFound().build();
   }
+
+
+
 
 
 
