@@ -77,6 +77,10 @@
         .vaild {
             color: #00CC00;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -112,14 +116,8 @@
                         </label>
                         <input class="login_input" id="inputname" name="name" type="text" required placeholder="이름"/>
                     </div>
-                    <div class="input_div">
-                        <label for="usertype">
-                            <p>회원 타입</p>
-                        </label>
-                        <select id="usertype">
-                            <option selected>일반</option>
-                            <option>패널</option>
-                        </select>
+                    <div class="hidden">
+                        <input type="text" value="일반">
                     </div>
                     <div class="login_btn_wrap">
 
@@ -223,7 +221,9 @@
 
   $(document).ready(() => {
     $(".pwinput").on("change keydown keyup paste", passwordChecker);
+
     $("#email").on("change keydown keyup paste", emailChecker);
+
     $("#frmsubmit").on('click', function (e) {
       e.preventDefault()
       e.stopPropagation()

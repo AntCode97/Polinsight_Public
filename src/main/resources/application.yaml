@@ -13,22 +13,20 @@ server :
 
 
 spring :
-  datasource :
-    username :          root
-    password :          root
-    url :               jdbc:mariadb://localhost:3308/polinsight
-    driver-class-name : org.mariadb.jdbc.Driver
+#  datasource :
+#    username :          root
+#    password :          root
+#    url :               jdbc:mariadb://localhost:3308/polinsight
+#    driver-class-name : org.mariadb.jdbc.Driver
 
   jpa :
     show-sql : true
     hibernate :
       ddl-auto : update
 
-    data :
-      mongodb :
-        host :     localhost
-        password : 27017
-        database : polinsight
+#  data :
+#    mongodb :
+#    uri: mongo://localhost:27017/polinsight
 
   mvc :
     static-path-pattern : /static/**
