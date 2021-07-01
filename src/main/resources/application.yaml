@@ -12,93 +12,108 @@ server :
     path : /templates/error
 
 spring :
-  profiles :
-    group :
-      ff :  common, first
-      ss : common, second
+  <<<<<<< HEAD
+profiles :
+  group :
+    ff : common, first
+    ss : common, second
 
 ---
-spring:
+spring :
   session :
     store-type : redis  # redis를 세션 저장소로 사용
 
   redis :
     host : redis
     port : 6379
+  =======
+#  datasource :
+#    username :          root
+#    password :          root
+#    url :               jdbc:mariadb://localhost:3308/polinsight
+#    driver-class-name : org.mariadb.jdbc.Driver
+  >>>>>>> 575d3f9cc5162696e935f8b87559368c54b033c4
 
-  jpa :
-    show-sql : true
-    hibernate :
-      ddl-auto : update
+jpa :
+  show-sql : true
+  hibernate :
+    ddl-auto : update
 
-  security :
-    oauth2 :
-      client :
-        provider :
-          #          google :
-          naver :
-            authorization-uri :   https://nid.naver.com/oauth2.0/authorize
-            token_uri :           https://nid.naver.com/oauth2.0/token
-            user-info-uri :       https://openapi.naver.com/v1/nid/me
-            user-name-attribute : response # 네이버에서 반환하는 데이터 구조를 보면 알 수 있음
-          kakao :
-            authorization-uri :   https://kauth.kakao.com/oauth/authorize
-            token-uri :           https://kauth.kakao.com/oauth/token
-            user-info-uri :       https://kapi.kakao.com/v2/user/me
-            user-name-attribute : id
-        registration :
-          google :
-            clientId :            61528740066-719taq23e9rhlg15k3srr5sd2nm20kgq.apps.googleusercontent.com
-            clientSecret :        0c0jJjvKxeACkG9ZWM3GWTQu
-            redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
-            scope :
-              - email
-              - profile
-          naver :
-            client-name :              Naver
-            client-id :                j0J7LuyWcfHKCF_IQLdn
-            client-secret :            _UEdUG089J
-            authorization-grant-type : authorization_code
-            redirect-uri :             "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope :
-              - name
-              - email
-              - profile_image
-          kakao :
-            client-name :                  Kakao
-            client-id :                    3f9fc6c7c1b07e9181061f800d659bdf
-            client-secret :                7FDxfbG3gBUMwoAGRT29usEyUEI0Fq6n
-            authorization-grant-type :     authorization_code
-            redirect-uri :                 "{baseUrl}/login/oauth2/code/{registrationId}"
-            client-authentication-method : POST
-            scope :
-              - profile
-              - account_email
-  mvc :
-    static-path-pattern : /static/**
-  web :
-    resources :
-      static-locations : classpath:/static/
-      add-mappings :     true
-  banner :
-    location : classpath:banner-dev.txt
-  cache :
-    type : redis
+  <<<<<<< HEAD
+security :
+  oauth2 :
+    client :
+      provider :
+        #          google :
+        naver :
+          authorization-uri :   https://nid.naver.com/oauth2.0/authorize
+          token_uri :           https://nid.naver.com/oauth2.0/token
+          user-info-uri :       https://openapi.naver.com/v1/nid/me
+          user-name-attribute : response # 네이버에서 반환하는 데이터 구조를 보면 알 수 있음
+        kakao :
+          authorization-uri :   https://kauth.kakao.com/oauth/authorize
+          token-uri :           https://kauth.kakao.com/oauth/token
+          user-info-uri :       https://kapi.kakao.com/v2/user/me
+          user-name-attribute : id
+      registration :
+        google :
+          clientId :            61528740066-719taq23e9rhlg15k3srr5sd2nm20kgq.apps.googleusercontent.com
+          clientSecret :        0c0jJjvKxeACkG9ZWM3GWTQu
+          redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
+          scope :
+            - email
+            - profile
+        naver :
+          client-name :              Naver
+          client-id :                j0J7LuyWcfHKCF_IQLdn
+          client-secret :            _UEdUG089J
+          authorization-grant-type : authorization_code
+          redirect-uri :             "{baseUrl}/login/oauth2/code/{registrationId}"
+          scope :
+            - name
+            - email
+            - profile_image
+        kakao :
+          client-name :                  Kakao
+          client-id :                    3f9fc6c7c1b07e9181061f800d659bdf
+          client-secret :                7FDxfbG3gBUMwoAGRT29usEyUEI0Fq6n
+          authorization-grant-type :     authorization_code
+          redirect-uri :                 "{baseUrl}/login/oauth2/code/{registrationId}"
+          client-authentication-method : POST
+          scope :
+            - profile
+            - account_email
+  =======
+#  data :
+#    mongodb :
+#    uri: mongo://localhost:27017/polinsight
 
-  mail :
-    host :  # smtp address
-    port :  # smtp port
-    username :  # smtp 등록 계정
-    password :  # smtp 등록 계정의 패스워드
-    properties :
-      mail :
-        smtp :
-          auth : true
-          starttls :
-            enable : true
-  config :
-    activate :
-      on-profile : common
+  >>>>>>> 575d3f9cc5162696e935f8b87559368c54b033c4
+mvc :
+  static-path-pattern : /static/**
+web :
+  resources :
+    static-locations : classpath:/static/
+    add-mappings :     true
+banner :
+  location : classpath:banner-dev.txt
+cache :
+  type : redis
+
+mail :
+  host :  # smtp address
+  port :  # smtp port
+  username :  # smtp 등록 계정
+  password :  # smtp 등록 계정의 패스워드
+  properties :
+    mail :
+      smtp :
+        auth : true
+        starttls :
+          enable : true
+config :
+  activate :
+    on-profile : common
 
 custom :
   permission :
@@ -116,12 +131,12 @@ spring :
 
   data :
     mongodb :
-      uri: jdbc:mongodb://mongo_first:27017/polinsight
+      uri : jdbc:mongodb://mongo_first:27017/polinsight
 
   config :
     activate :
       on-profile : first
-nick_name: first_profile
+nick_name : first_profile
 
 ---
 spring :
@@ -133,9 +148,9 @@ spring :
 
   data :
     mongodb :
-      uri: mongodb://polinsight_mongo_second:27017/polinsight
+      uri : mongodb://polinsight_mongo_second:27017/polinsight
 
   config :
     activate :
       on-profile : second
-nick_name: second_profile
+nick_name : second_profile
