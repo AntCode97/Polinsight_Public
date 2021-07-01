@@ -2,7 +2,13 @@ FROM openjdk:11
 
 USER root
 
-ARG JAR_FILE=build/libs/*.jar
+RUN ["chmod +x ./gradlew"]
+
+RUN ["./gradlew clean"]
+
+RUN ["./gradlew build"]
+
+ARG JAR_FILE=build/libs/polinsight-0.0.1.jar
 
 COPY ${JAR_FILE} app.jar
 
