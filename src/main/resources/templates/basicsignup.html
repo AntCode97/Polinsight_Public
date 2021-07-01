@@ -182,6 +182,14 @@
     }
   }
 
+  /*
+  * 길이 10~16
+  * 영문 대, 소문자, 특수문자
+  * */
+  const passwordValueChecker = pwd => {
+    return !!pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\\]\\[/\\'\\"\\\\\\']{10,16}/);
+  }
+
   // 비밀번호 확인 검증
   const passwordChecker = () => {
     const passwordValue = $("#password").val();
