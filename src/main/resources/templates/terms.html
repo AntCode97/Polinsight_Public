@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div>
+    <h2>회원 약관</h2>
+    <div>
+        <textarea th:text="${terms}" readonly>
+
+        </textarea>
+    </div>
+    <div>
+        <input id="agreement" type="checkbox"> 동의합니다.<br>
+    </div>
+    <div>
+        <button onclick="window.location.back()">돌아가기</button>
+        <button id="agree_btn">진행 하기</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+  const isChkAgreement = () => {
+    return $("#agreement").is(':checked');
+
+  }
+
+  $(function () {
+    $("#agree_btn").on('click', e => {
+      if (isChkAgreement()) {
+        location.assign("/signup")
+      } else {
+        alert("약관에 모두 동의하셔야 합니다.")
+      }
+    })
+  })
+</script>
+</body>
+</html>
