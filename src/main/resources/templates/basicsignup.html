@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
         .login_input {
-            width: 80%;
+            width: 70%;
             outline: none;
             border: none;
             border-bottom: 1.5px solid #dde0ea;
@@ -95,8 +95,8 @@
                             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
                         </label>
                         <input class="login_input" id="email" name="email" type="text" required placeholder="이메일" style="display: inline-block;"/>
-                        @
-                        <select id="email_domain" style="display: inline-block;">
+                        <span style="margin: 2px; text-align: center; font-weight: bolder;">@</span>
+                        <select class="login_input" id="email_domain" style="text-align: center; text-align-last: center; display: inline-block;">
                             <option>-- 선택 --</option>
                             <option value="naver.com">naver.com</option>
                             <option value="gmail.com">gmail.com</option>
@@ -274,8 +274,7 @@
     }
   }
 
-  $(window).ready(() => {
-
+  $(function () {
     $(document).on('focus', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #4C99CF');
     });
@@ -283,9 +282,7 @@
     $(document).on('blur', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #dde0ea');
     });
-  })
 
-  $(document).ready(() => {
     $(".pwinput").on("change keydown keyup paste", passwordChecker);
 
     $("#email").on("change keydown keyup paste", emailChecker);
@@ -301,7 +298,7 @@
       if (checkNotNull()) {
         if ($("input[name='is_panel']:checked").val() === 'panel_signup') {
 // 패널 정보 추가 페이지로, 정보는 서버로 보내고 sendRedirect로 추가 정보 받기
-
+          axios.post().then().catch()
         } else {
           $(this).submit()
         }

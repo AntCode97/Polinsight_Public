@@ -6,7 +6,10 @@ import com.dns.polinsight.service.PageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -18,10 +21,10 @@ public class PageController {
 
   private final PageService service;
 
-  @GetMapping("/alert")
-  public ModelAndView aa(){
+  @GetMapping("/wholesign")
+  public ModelAndView wholeSignUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("module/alerts");
+    mv.setViewName("whoesignup");
     return mv;
   }
 
