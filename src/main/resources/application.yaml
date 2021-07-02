@@ -1,3 +1,5 @@
+
+
 server :
   port : 8080
   servlet :
@@ -36,3 +38,5 @@ spring :
     resources :
       static-locations : classpath:/static/
       add-mappings :     true
+  profiles
+    group :

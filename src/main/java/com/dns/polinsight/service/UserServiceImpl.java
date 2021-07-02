@@ -40,12 +40,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User findUserById(User user) {
-    return repository.findUserById(user.getId()).orElseThrow(UserNotFoundException::new);
+    return repository.findUserByUid(user.getUid()).orElseThrow(UserNotFoundException::new);
   }
 
   @Cacheable
   public User find(User user) {
-    return repository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
+    return repository.findById(user.getUid()).orElseThrow(UserNotFoundException::new);
   }
 
   @Override

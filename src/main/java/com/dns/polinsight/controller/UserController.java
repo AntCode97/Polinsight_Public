@@ -2,7 +2,6 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
@@ -38,7 +37,6 @@ public class UserController {
                        .password(passwordEncoder.encode(user.getPassword()))
                        .name(user.getName())
                        .role(UserRole.USER)
-                       .social(SocialType.OWN)
                        .build());
 
       response.sendRedirect("/");
@@ -80,7 +78,6 @@ public class UserController {
                                                      .email(user.getEmail())
                                                      .name(user.getName())
                                                      .picture(user.getPicture())
-                                                     .social(user.getType())
                                                      .build()));
     return mv;
   }

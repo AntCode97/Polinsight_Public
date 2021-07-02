@@ -27,7 +27,11 @@ public class User implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long uid;
+
+  @NotNull
+  @Column(name = "id")
+  private String id;
 
   @NotNull
   @Column(name = "email")
@@ -48,10 +52,6 @@ public class User implements UserDetails, Serializable {
   @Column(name = "role")
   private UserRole role;
 
-
-  @NotNull
-  @Column(name = "social")
-  private SocialType social;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -92,6 +92,11 @@ public class User implements UserDetails, Serializable {
   public User update(String name, String picture) {
     this.name = name;
     this.picture = picture;
+    return this;
+  }
+
+  public User pointUpdate(Long point) {
+    this.point = point;
     return this;
   }
 
