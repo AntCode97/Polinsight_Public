@@ -18,6 +18,13 @@ public class PageController {
 
   private final PageService service;
 
+  @GetMapping("/alert")
+  public ModelAndView aa(){
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("module/alerts");
+    return mv;
+  }
+
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
   public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();

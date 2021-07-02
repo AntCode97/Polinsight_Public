@@ -5,20 +5,48 @@
     <style type="text/css">
         .alert {
             z-index: 999;
-            /*float: right;*/
-            width: 100px;
-            right: 30px;
+            right: -100px;
             top: 30px;
             height: 30px;
             position: absolute;
             border: solid black 0.3px;
+            /*display: none;*/
+            width: 100px;
         }
 
+        .go {
+            /*display: block;*/
+            transform: translateX(-100px);
+            transition-duration: 0.7s;
+        }
     </style>
 </head>
 <body>
 <div class="alert" th:fragment="frag_alert(msg)">
-    <p th:text="${msg}"></p>
+    <!--    <p th:text="${msg}"></p>-->
+    <p id="msg">test</p>
 </div>
+<div class="almsg"></div>
+<button id="btn">알람 띄우기</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  // const btnClick = () => {
+  //   const alertObj = ;
+  //   console.log(alertObj)
+  //   // $("#msg").text(alertObj.getAttribute("class"))
+  //   $(".almsg").text()
+  //   alertObj.addClass("go")
+  //
+  // }
+
+  $(function () {
+    $("#btn").on('click', ()=>{
+      $(".alert").addClass('go')
+      setTimeout(()=>{
+        $(".alert").removeClass('go')
+      }, 2000)
+    });
+  })
+</script>
 </body>
 </html>
