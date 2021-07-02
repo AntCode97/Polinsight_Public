@@ -151,7 +151,7 @@
                                                     <span th:text="${session.user}?${session.user.name}:'guest'" ></span>
 
                                                 </th:block></th>
-                                                <th th:text="${board.registeredAt}" width="140"></th>
+                                                <th th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width="140"></th>
                                             </tr>
                                         </thead>
 
