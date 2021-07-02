@@ -102,9 +102,10 @@ spring :
 
 custom :
   permission :
-    resources : /css/**, /js/**, /img/**
-    admin :     /swagger-ui/**
-    template :  /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms
+    resources :  /css/**, /js/**, /img/**
+    admin :
+    template :   /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms
+    swagger-ui : /swagger-resources/**, /swagger-ui.html, /v2/api-docs,/webjars/**, /swagger-ui/**, /api-docs
 
 ---
 spring :

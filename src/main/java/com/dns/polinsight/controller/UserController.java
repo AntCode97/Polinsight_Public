@@ -6,11 +6,13 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.Session;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "user", description = "사용자 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +47,15 @@ public class UserController {
       e.printStackTrace();
       // TODO: 2021-06-02 : Alert Error to user
     }
+  }
+
+  @PostMapping("/singup/panel")
+  public ModelAndView panelSignup(User user, Session session, HttpServletResponse response) {
+    ModelAndView mv = new ModelAndView();
+    session.setAttribute("userSignUpInfo", user);
+    mv.setViewName("panelsignup");
+    return mv;
+
   }
 
   @PostMapping("/deleteaccount")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>폴인사이트</title>
     <meta charset="UTF-8">
@@ -173,13 +173,19 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-  const editHyphen = phone => {
-    const inHyphen = "//([0-9]{2,3})-([0-9]{3,4})-([0-9]{4})//";
-    if (phone.match(inHyphen)) {
-      return phone.replace(/([0-9]{2,3})-([0-9]{3,4})-([0-9]{4})/, "$1$2$3")
+  const editHyphen = e => {
+    console.log(e)
+    const phone = $("#phone")
+    const phoneValue = phone.val()
+    let ret = "";
+    if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
+      ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
     } else {
-      return phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
+      phoneValue.substring(0, 11)
+      ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
     }
+    phone.val(ret)
+    return ret;
   }
 
   /*
@@ -274,8 +280,10 @@
     $(".pwinput").on("change keydown keyup paste", passwordChecker);
 
     $("#email").on("change keydown keyup paste", emailChecker);
-
-    $("#phone").on("blur", editHyphen);
+    // 유저 전화번호
+    $("#phone").on("blur focus", editHyphen);
+    // 추천인 전화번호
+    $("#phone_rec_user").on("blur focus", editHyphen);
 
     $("#frmsubmit").on('click', function (e) {
       e.preventDefault()
@@ -287,7 +295,6 @@
 
         } else {
           $(this).submit()
-
         }
       }
     })
