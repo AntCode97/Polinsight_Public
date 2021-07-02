@@ -204,7 +204,12 @@
                         <tbody>
                         <tr class="first" th:each="board : ${boards}">
                             <td width="50" th:text="${board.id}">&nbsp;</td>
-                            <td width="950"> <a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a></td>
+                            <td width="950"> <a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
+                            <span th:if="${board.newBoard}">
+                                 New!
+                            </span>
+                            </td>
+
                             <td width="80" th:text="${board.user.name}"></td>
                             <td width="120" th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
 

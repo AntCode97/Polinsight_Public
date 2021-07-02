@@ -103,6 +103,7 @@ public class BoardController {
   public String list(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model){
     Page<Board> boards = boardService.getBoardList(pageable);
 //    List<Board> boards = boardService.findAll();
+    boardService.renewBoard();
     model.addAttribute("boards", boards);
     return "/boards/boardList";
   }

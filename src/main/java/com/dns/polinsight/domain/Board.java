@@ -39,6 +39,7 @@ public class Board {
   @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
   private List<Attach> attaches = new ArrayList<>();
 
+  private Boolean newBoard;
 
   public static BoardBuilder builder(BoardDTO boardDTO){
     return BoardBuilder()
@@ -54,13 +55,24 @@ public class Board {
 
 
 
-  //TODO: 게시글 업데이트도 포함해야함
-  public void update(String title, String content, LocalDateTime registeredAt){
-    this.title = title;
-    this.searchcontent = content;
-    this.viewcontent = content;
-    this.registeredAt =registeredAt;
+//  //TODO: 게시글 업데이트도 포함해야함
+//  public void update(String title, String content, LocalDateTime registeredAt){
+//    this.title = title;
+//    this.searchcontent = content;
+//    this.viewcontent = content;
+//    this.registeredAt =registeredAt;
+//  }
+
+  public void setNewBoard(Boolean time){
+    if(time){
+      this.newBoard = true;
+    }
+    else
+    {
+      this.newBoard = false;
+    }
   }
+
 
 
 }

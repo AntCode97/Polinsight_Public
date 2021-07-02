@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,20 +48,36 @@ public class BoardServiceImpl implements BoardService {
     return repository.save(board);
   }
 
+  @Transactional
+  public void renewBoard() {
+    List<Board> boards = this.findAll();
+    for (Board board : boards
+    ) {
+      LocalDateTime writeTime = board.getRegisteredAt();
+      LocalDateTime now = LocalDateTime.now();
+      Duration duration = Duration.between(writeTime, now);
+      if (duration.getSeconds() < 3600 * 12) {
+        board.setNewBoard(true);
+      } else {
+        board.setNewBoard(false);
+      }
+    }
+  }
+
+
 //  @Override
 //  public Board saveOrUpdate(Board board) {
 //    return repository.save(board);
 //  }
 
 
-  @Transactional
-  public Long update(Long id, BoardDTO boardDTO){
-    Board board = repository.findById(id).orElseThrow(BoardNotFoundException::new);
-    board.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getRegisteredAt());
-    return board.getId();
-
-
-  }
+//  @Transactional
+//  public Long update(Long id, BoardDTO boardDTO){
+//    Board board = repository.findById(id).orElseThrow(BoardNotFoundException::new);
+//    board.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getRegisteredAt());
+//    return board.getId();
+//
+//  }
 
   @Override
   public void delete(Board board) {
@@ -68,7 +86,6 @@ public class BoardServiceImpl implements BoardService {
          attaches) {
       attachRepository.delete(attach);
     }
-
     repository.delete(board);
   }
 
@@ -98,5 +115,6 @@ public class BoardServiceImpl implements BoardService {
     return boards;
 
   };
+
 
 }
