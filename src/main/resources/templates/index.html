@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="layout/header"></th:block>
+<th:block th:include="module/common"/>
+<th:block th:include="layout/header"/>
+
 <head>
     <style type="text/css">
         .carasel_wrap {
@@ -13,6 +15,7 @@
             height: 80vh;
         }
     </style>
+    <th:block th:include="module/alerts :: alert_css"/>
 </head>
 <body>
 <div class="carasel_wrap">

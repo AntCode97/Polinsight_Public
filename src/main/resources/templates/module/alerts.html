@@ -1,49 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+>
 <head>
     <meta charset="UTF-8">
-    <style type="text/css">
-        .alert {
-            z-index: 999;
-            right: -100px;
-            top: 30px;
-            height: 30px;
-            position: absolute;
-            border: solid black 0.3px;
-            /*display: none;*/
-            width: 100px;
-        }
+    <th:block th:fragment="alert_css">
+        <style type="text/css">
+            .hidden {
+                z-index: 999;
+                right: -100px;
+                top: 30px;
+                height: 30px;
+                position: absolute;
+                border: solid black 0.3px;
+                display: none;
+                width: 100px;
+            }
 
-        .go {
-            /*display: block;*/
-            transform: translateX(-100px);
-            transition-duration: 0.7s;
-        }
-    </style>
+            .show {
+                display: block;
+                transform: translateX(-100px);
+                transition-duration: 0.7s;
+            }
+        </style>
+    </th:block>
 </head>
 <body>
-<div class="alert" th:fragment="frag_alert(msg)">
-    <!--    <p th:text="${msg}"></p>-->
-    <p id="msg">test</p>
+<div class="hidden" th:fragment="frag_alert(msg)">
+    <p th:text="${msg}"></p>
 </div>
-<div class="almsg"></div>
-<button id="btn">알람 띄우기</button>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-  // const btnClick = () => {
-  //   const alertObj = ;
-  //   console.log(alertObj)
-  //   // $("#msg").text(alertObj.getAttribute("class"))
-  //   $(".almsg").text()
-  //   alertObj.addClass("go")
-  //
-  // }
-
+<button th:fragment="btn" id="alert_btn">알람 띄우기</button>
+<script th:fragment="noti_script">
   $(function () {
-    $("#btn").on('click', ()=>{
-      $(".alert").addClass('go')
-      setTimeout(()=>{
-        $(".alert").removeClass('go')
+    $("#alert_btn").on('click', () => {
+      $(".alert").addClass('show')
+      setTimeout(() => {
+        $(".alert").removeClass('show')
       }, 2000)
     });
   })

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common"/>
+<th:block th:include="layout/header"/>
 <head>
     <title>폴인사이트</title>
     <meta charset="UTF-8">
@@ -10,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
         .login_input {
-            width: 100%;
+            width: 80%;
             outline: none;
             border: none;
             border-bottom: 1.5px solid #dde0ea;
@@ -43,7 +45,7 @@
         }
 
         .modal_content {
-            width: 50%;
+            width: 70%;
             background-color: white;
             border-radius: 2px;
             overflow: hidden;
@@ -78,9 +80,7 @@
             color: #00CC00;
         }
 
-        .hidden {
-            display: none;
-        }
+
     </style>
 </head>
 <body>
@@ -90,13 +90,13 @@
             <legend>회원 가입</legend>
             <div class="login_content">
                 <form action="/signup" id="signupfrm" method="post">
-                    <div class="input_div">
+                    <div class="input_div" style="text-align: center">
                         <label for="email">
                             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
                         </label>
-                        <input class="login_input" id="email" name="email" type="text" required placeholder="이메일" style="display: inline;"/>
+                        <input class="login_input" id="email" name="email" type="text" required placeholder="이메일" style="display: inline-block;"/>
                         @
-                        <select id="email_domain" style="display: inline;">
+                        <select id="email_domain" style="display: inline-block;">
                             <option>-- 선택 --</option>
                             <option value="naver.com">naver.com</option>
                             <option value="gmail.com">gmail.com</option>
@@ -109,7 +109,7 @@
                             <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
                         </label>
                         <input class="pwinput login_input" id="password" name="password" type="password" required placeholder="패스워드"/>
-                        <span>영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
+                        <p>영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</p>
                     </div>
                     <div class="input_div">
                         <label for="pwconfirm">
@@ -120,20 +120,23 @@
                     </div>
                     <div class="input_div">
                         <label for="inputname">
-                            <p><i class="fas fa-user"></i>이름</p>
+                            <p><i class="fas fa-user"></i>&nbsp;이름</p>
                         </label>
                         <input class="login_input" id="inputname" name="name" type="text" required placeholder="이름"/>
                     </div>
-                    <div>
-                        휴대전화
-                        <input id="phone" type="tel" placeholder="휴대전화">
+                    <div class="input_div">
+                        <label for="phone"><p><i class="fas fa-phone"></i>&nbsp;휴대전화</p></label>
+                        <input class="login_input" id="phone" type="tel" placeholder="휴대전화" required>
+                        <button id="phone_chk">인증</button>
+                        <br/>
                         <span>'-' 없이 입력해주세요.</span>
-                        <button>인증</button>
                     </div>
-                    <div>
-                        추천인 휴대전화
-                        <input id="phone_rec_user" type="number" placeholder="추천인 휴대전화">
-                        <button>확인</button>
+                    <div class="input_div">
+                        <label for="phone_rec_user"><p><i class="fas fa-phone"></i>&nbsp;추천인 휴대전화</p></label>
+                        <input class="login_input" id="phone_rec_user" type="number" placeholder="추천인 휴대전화">
+                        <button id="phone_rec_user_chk">확인</button>
+                        <br/>
+                        <span>'-' 없이 입력해주세요.</span>
                     </div>
                     <div class="hidden">
                         <input type="text" value="일반">
@@ -149,17 +152,23 @@
         </fieldset>
         <div>
             <div>
-                <p>폴인사이트의 패널이 된다면?</p>
-                <p>
-                    폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.
-                    참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.
-                    폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.
-                    패널로 가입하시겠습니까?
+                <p style="text-align: center">
+                    <span style="font-size: 1.7rem; font-weight: bolder">폴인사이트의 패널이 된다면?</span><br/>
+                    폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.<br/>
+                    참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.<br/>
+                    폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.<br/>
+                    <span style="font-weight: bolder">패널로 가입하시겠습니까?</span>
+                    <br/>
+                    <br/>
                 </p>
             </div>
-            <div>
-                <input name="is_panel" value="panel_signup" style="display: inline" type="radio">가입하고 혜택받기<br>
-                <input name="is_panel" value="normal_signup" style="display: inline" type="radio">일반 회원으로 계속<br>
+            <div style="text-align: center">
+                <div style="margin: auto; width: 30%; justify-content: center; display: inline-block ">
+                    <input name="is_panel" value="panel_signup" type="radio">가입하고 혜택받기<br>
+                </div>
+                <div style="margin: auto; width: 30%; justify-content: center; display: inline-block ">
+                    <input name="is_panel" value="normal_signup" type="radio">일반 회원으로 계속<br>
+                </div>
             </div>
             <div class="login_btn_wrap">
                 <button class="btn-primary btn-effect" id="frmsubmit">회원 가입<i class="fas fa-sign-in-alt"></i></button>
@@ -203,7 +212,7 @@
     const msg = $("#pwmsg")
 
 
-    if (passwordValue === confirmValue) {
+    if (passwordValue === confirmValue && passwordValueChecker(passwordValue)) {
       // 공백 제거
       if (confirmValue.replace(/\s/g, "").length >= 8 && passwordValue.replace(/\s/g, "").length >= 8) {
         msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")

@@ -37,6 +37,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     /* Swagger */
     implementation "io.springfox:springfox-boot-starter:3.0.0"
+    /* LayOut*/
+    implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
