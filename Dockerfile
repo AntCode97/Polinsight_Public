@@ -2,18 +2,18 @@ FROM openjdk:11
 
 USER root
 
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=build/libs/polinsight-0.0.1.jar
+
+# working directory
+WORKDIR /app
 
 COPY ${JAR_FILE} app.jar
 
 LABEL title="PolInsight"
 
-LABEL version="0.1"
-
 LABEL description="polinsight web project"
 
-# default profile = prod
-ENV profile="prod"
+ENV profile="default"
 
 EXPOSE 8080
 

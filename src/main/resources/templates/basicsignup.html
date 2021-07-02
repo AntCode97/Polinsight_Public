@@ -77,6 +77,10 @@
         .vaild {
             color: #00CC00;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -90,7 +94,14 @@
                         <label for="email">
                             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
                         </label>
-                        <input class="login_input" id="email" name="email" type="text" required placeholder="이메일"/>
+                        <input class="login_input" id="email" name="email" type="text" required placeholder="이메일" style="display: inline;"/>
+                        @
+                        <select id="email_domain" style="display: inline;">
+                            <option>-- 선택 --</option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="kakao.com">kakao.com</option>
+                        </select>
                         <span id="emailmsg"></span>
                     </div>
                     <div class="input_div">
@@ -98,6 +109,7 @@
                             <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
                         </label>
                         <input class="pwinput login_input" id="password" name="password" type="password" required placeholder="패스워드"/>
+                        <span>영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
                     </div>
                     <div class="input_div">
                         <label for="pwconfirm">
@@ -112,26 +124,47 @@
                         </label>
                         <input class="login_input" id="inputname" name="name" type="text" required placeholder="이름"/>
                     </div>
-                    <div class="input_div">
-                        <label for="usertype">
-                            <p>회원 타입</p>
-                        </label>
-                        <select id="usertype">
-                            <option selected>일반</option>
-                            <option>패널</option>
-                        </select>
+                    <div>
+                        휴대전화
+                        <input id="phone" type="tel" placeholder="휴대전화">
+                        <span>'-' 없이 입력해주세요.</span>
+                        <button>인증</button>
+                    </div>
+                    <div>
+                        추천인 휴대전화
+                        <input id="phone_rec_user" type="number" placeholder="추천인 휴대전화">
+                        <button>확인</button>
+                    </div>
+                    <div class="hidden">
+                        <input type="text" value="일반">
                     </div>
                     <div class="login_btn_wrap">
 
                         <button class="btn-primary btn-effect" onclick="window.history.back()"><p>돌아가기<i class="fas fa-arrow-left"></i></p></button>
                     </div>
-                    <div class="login_btn_wrap">
-                        <button class="btn-primary btn-effect" id="frmsubmit">회원 가입<i class="fas fa-sign-in-alt"></i></button>
-                    </div>
+
 
                 </form>
             </div>
         </fieldset>
+        <div>
+            <div>
+                <p>폴인사이트의 패널이 된다면?</p>
+                <p>
+                    폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.
+                    참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.
+                    폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.
+                    패널로 가입하시겠습니까?
+                </p>
+            </div>
+            <div>
+                <input name="is_panel" value="panel_signup" style="display: inline" type="radio">가입하고 혜택받기<br>
+                <input name="is_panel" value="normal_signup" style="display: inline" type="radio">일반 회원으로 계속<br>
+            </div>
+            <div class="login_btn_wrap">
+                <button class="btn-primary btn-effect" id="frmsubmit">회원 가입<i class="fas fa-sign-in-alt"></i></button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -140,6 +173,22 @@
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+  const editHyphen = phone => {
+    const inHyphen = "//([0-9]{2,3})-([0-9]{3,4})-([0-9]{4})//";
+    if (phone.match(inHyphen)) {
+      return phone.replace(/([0-9]{2,3})-([0-9]{3,4})-([0-9]{4})/, "$1$2$3")
+    } else {
+      return phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
+    }
+  }
+
+  /*
+  * 길이 10~16
+  * 영문 대, 소문자, 특수문자
+  * */
+  const passwordValueChecker = pwd => {
+    return !!pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\\]\\[/\\'\\"\\\\\\']{10,16}/);
+  }
 
   // 비밀번호 확인 검증
   const passwordChecker = () => {
@@ -223,12 +272,23 @@
 
   $(document).ready(() => {
     $(".pwinput").on("change keydown keyup paste", passwordChecker);
+
     $("#email").on("change keydown keyup paste", emailChecker);
+
+    $("#phone").on("blur", editHyphen);
+
     $("#frmsubmit").on('click', function (e) {
       e.preventDefault()
       e.stopPropagation()
+      // 필수 값이 모두 채워져 있는지 확인
       if (checkNotNull()) {
-        $(this).submit()
+        if ($("input[name='is_panel']:checked").val() === 'panel_signup') {
+// 패널 정보 추가 페이지로, 정보는 서버로 보내고 sendRedirect로 추가 정보 받기
+
+        } else {
+          $(this).submit()
+
+        }
       }
     })
   })
