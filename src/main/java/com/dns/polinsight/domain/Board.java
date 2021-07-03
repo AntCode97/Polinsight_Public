@@ -15,6 +15,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
+  @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
+  private List<Attach> attaches = new ArrayList<>();
+
   @Id
   @Column(name = "bno")
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,9 +37,6 @@ public class Board {
   private LocalDateTime registeredAt;
 
   private BoardType boardType;
-
-  @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
-  private List<Attach> attaches = new ArrayList<>();
 
   private Boolean newBoard;
 
@@ -62,11 +62,7 @@ public class Board {
   //  }
 
   public void setNewBoard(Boolean time) {
-    if (time) {
-      this.newBoard = true;
-    } else {
-      this.newBoard = false;
-    }
+    this.newBoard = time;
   }
 
 

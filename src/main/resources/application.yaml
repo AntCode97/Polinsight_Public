@@ -17,9 +17,12 @@ server :
   error :
     path : /templates/error
 
+
 spring :
-  session :
-    store-type : redis
+  servlet :
+    multipart :
+      max-file-size :    102400KB
+      max-request-size : 102400KB
 
   security :
     oauth2 :
@@ -90,6 +93,10 @@ spring :
     activate :
       on-profile : common
 
+file:
+  upload:
+    baseLocation: "./upload-dir/"
+
 custom :
   permission :
     resources :  /css/**, /js/**, /img/**
@@ -116,6 +123,8 @@ spring :
   jpa :
     hibernate :
       ddl-auto : update
+    properties :
+      format_sql : true
 
   redis :
     host : localhost
@@ -126,12 +135,15 @@ spring :
     activate :
       on-profile : dev
 
+
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
     show-sql : true
   banner :
     location : banner-dev.txt
+  session :
+    store-type : none
 
 ---
 spring :
@@ -140,7 +152,10 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
     show-sql : true
   banner :
     location : banner-prod.txt
+
+  session :
+    store-type : redis

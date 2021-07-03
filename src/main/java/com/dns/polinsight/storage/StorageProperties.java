@@ -7,17 +7,17 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.yaml")
 public class StorageProperties {
 
-    /**s
-     * Folder location for storing files
-     */
-    private String location = "upload-dir";
+  /**
+   * s Folder location for storing files
+   */
+  private String location = "upload-dir";
 
-    public String getLocation() {
-        return location;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
 }

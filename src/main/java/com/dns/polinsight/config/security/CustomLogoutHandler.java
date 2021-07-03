@@ -1,7 +1,5 @@
 package com.dns.polinsight.config.security;
 
-import com.dns.polinsight.object.ResponseObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -19,11 +17,12 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
-    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder()
-                                                                                   .statuscode(HttpStatus.OK.value())
-                                                                                   .msg("logout success")
-                                                                                   .build()));
     response.sendRedirect("/");
+    //    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder()
+    //                                                                                   .statuscode(HttpStatus.OK.value())
+    //                                                                                   .msg("logout success")
+    //                                                                                   .build()));
+
   }
 
 }

@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style type="text/css">
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style type="text/css">
 
-    </style>
+  </style>
 </head>
 <body>
 <div>
-    <h2>회원 약관</h2>
-    <div>
-        <textarea th:text="${terms}" readonly>
+  <h2>회원 약관</h2>
+  <div>
+        <textarea readonly th:text="${terms}">
 
         </textarea>
-    </div>
-    <div>
-        <input id="agreement" type="checkbox"> 동의합니다.<br>
-    </div>
-    <div>
-        <button onclick="window.location.back()">돌아가기</button>
-        <button id="agree_btn">진행 하기</button>
-    </div>
+  </div>
+  <div>
+    <input id="agreement" type="checkbox"> 동의합니다.<br>
+  </div>
+  <div>
+    <button onclick="window.location.back()">돌아가기</button>
+    <button id="agree_btn">진행 하기</button>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

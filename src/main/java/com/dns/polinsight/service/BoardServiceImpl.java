@@ -8,6 +8,7 @@ import com.dns.polinsight.exception.BoardNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,15 +25,18 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
   private final BoardRepository repository;
+
   private final AttachRepository attachRepository;
 
+  @Cacheable
   @Override
   public List<Board> findAll() {
     return repository.findAll();
   }
 
 
-  public Board findOne(Long boardId){
+  @Override
+  public Board findOne(Long boardId) {
     return repository.findById(boardId).orElseThrow(BoardNotFoundException::new);
   }
 
@@ -42,59 +46,31 @@ public class BoardServiceImpl implements BoardService {
   }
 
 
+  @Override
   public Board addBoard(BoardDTO boardDTO) {
-    Board board = Board.builder(boardDTO).build();
-
-    return repository.save(board);
+    return repository.save(Board.builder(boardDTO).build());
   }
 
   @Transactional
+  @Override
   public void renewBoard() {
     List<Board> boards = this.findAll();
-    for (Board board : boards
-    ) {
+    for (Board board : boards) {
       LocalDateTime writeTime = board.getRegisteredAt();
       LocalDateTime now = LocalDateTime.now();
       Duration duration = Duration.between(writeTime, now);
-      if (duration.getSeconds() < 3600 * 12) {
-        board.setNewBoard(true);
-      } else {
-        board.setNewBoard(false);
-      }
+      board.setNewBoard(duration.getSeconds() < 3600 * 12);
     }
   }
-
-
-//  @Override
-//  public Board saveOrUpdate(Board board) {
-//    return repository.save(board);
-//  }
-
-
-//  @Transactional
-//  public Long update(Long id, BoardDTO boardDTO){
-//    Board board = repository.findById(id).orElseThrow(BoardNotFoundException::new);
-//    board.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getRegisteredAt());
-//    return board.getId();
-//
-//  }
 
   @Override
   public void delete(Board board) {
     List<Attach> attaches = attachRepository.findByBoardId(board.getId());
-    for (Attach attach:
-         attaches) {
-      attachRepository.delete(attach);
-    }
+    attaches.forEach(attachRepository::delete);
     repository.delete(board);
   }
 
-//  public Page<Board> getBoardList(Pageable pageable) {
-//    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1); // page는 index 처럼 0부터 시작
-//    pageable = PageRequest.of(page, 10, new Sort(Sort.Direction.DESC, "id"));
-//
-//    return repository.findAll(pageable);
-//  }
+  @Override
   public Page<Board> getBoardList(Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.by("id")); // <- Sort 추가
@@ -102,19 +78,16 @@ public class BoardServiceImpl implements BoardService {
     return repository.findAll(pageable);
   }
 
-  public Page<Board> searchTitle(String title, BoardType boardType, Pageable pageable){
+  @Override
+  public Page<Board> searchTitle(String title, BoardType boardType, Pageable pageable) {
+    return repository.findByTitle(title, boardType, pageable);
 
-    Page<Board> boards = repository.findByTitle(title, boardType, pageable);
-    return boards;
+  }
 
-  };
+  @Override
+  public Page<Board> searchContent(String searchcontent, BoardType boardType, Pageable pageable) {
+    return repository.findBySearchcontent(searchcontent, boardType, pageable);
 
-  public Page<Board> searchContent(String searchcontent,BoardType boardType, Pageable pageable){
-
-    Page<Board> boards = repository.findBySearchcontent(searchcontent,boardType, pageable);
-    return boards;
-
-  };
-
+  }
 
 }

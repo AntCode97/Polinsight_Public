@@ -18,7 +18,7 @@ public class SessionUser implements Serializable {
   @NotNull
   private final String name;
 
-  private final String id;
+  private final Long id;
 
   @Email
   private final String email;
@@ -31,11 +31,11 @@ public class SessionUser implements Serializable {
   private final Long point;
 
   public SessionUser(User user) {
-    this.name = user.getName();
     this.id = user.getId();
-    this.point = user.getPoint();
-    this.role = user.getRole();
     this.email = user.getEmail();
+    this.role = user.getRole();
+    this.name = user.getName();
+    this.point = user.getPoint();
     this.picture = user.getPicture();
   }
 

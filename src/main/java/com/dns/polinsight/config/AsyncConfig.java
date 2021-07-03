@@ -28,7 +28,7 @@ public class AsyncConfig {
 
   public class HandlingExecutor implements AsyncTaskExecutor {
 
-    private AsyncTaskExecutor executor;
+    private final AsyncTaskExecutor executor;
 
     public HandlingExecutor(AsyncTaskExecutor executor) {
       this.executor = executor;

@@ -29,6 +29,7 @@ public class PageController {
   }
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
+  //  public ModelAndView home() {
   public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {

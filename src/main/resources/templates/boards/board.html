@@ -1,202 +1,191 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
-    <style type="text/css">
-        .-tblList thead th{
-            color: #454545;
-            font-weight: bold;
-            letter-spacing: -0.5px;
-            text-align: center;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid rgb(0, 0, 0);
-            border-top: 1px solid rgb(0, 0, 0);
-            padding: 7px 5px 8px 5px;
-            margin:0px;
-            font-size: 14px;
-            border-collapse: collapse;
-            position: relative;
-            font-family: "맑은 고딕", malgun gothic, dotum;
-            display: table-cell;
-            border-spacing: 0;
-            vertical-align: inherit;
-        }
+  <style type="text/css">
+    .-tblList thead th {
+      color: #454545;
+      font-weight: bold;
+      letter-spacing: -0.5px;
+      text-align: center;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid rgb(0, 0, 0);
+      border-top: 1px solid rgb(0, 0, 0);
+      padding: 7px 5px 8px 5px;
+      margin: 0px;
+      font-size: 14px;
+      border-collapse: collapse;
+      position: relative;
+      /*font-family: "맑은 고딕", malgun gothic, dotum;*/
+      display: table-cell;
+      border-spacing: 0;
+      vertical-align: inherit;
+    }
 
-        .caption{
-            padding-bottom: 50px;
-            font-size: 30px;
-            font-family: "맑은 고딕", malgun gothic, dotum;
-            text-align: center;
-            border-bottom: 1px solid rgb(0, 0, 0);
-        }
+    .caption {
+      padding-bottom: 50px;
+      font-size: 30px;
+      /*font-family: "맑은 고딕", malgun gothic, dotum;*/
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+    }
 
-        .-btnPageLink {
-            text-align: center;
-            padding: 15px 0;
-        }
+    .-btnPageLink {
+      text-align: center;
+      padding: 15px 0;
+    }
 
-        .btn-tpl {
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0 4px;
-            -webkit-appearance: none;
-            box-sizing: border-box;
-            cursor: pointer;
-            white-space: nowrap;
-            border-radius: 3px;
-            font-weight: bold;
-            letter-spacing: -1px;
-            background: #4C4C4C;
-            border: 1px solid #4C4C4C;
-            text-shadow: #292929 0 0 1px;
-            color: #fff;
-        }
+    .btn-tpl {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 4px;
+      -webkit-appearance: none;
+      box-sizing: border-box;
+      cursor: pointer;
+      white-space: nowrap;
+      border-radius: 3px;
+      font-weight: bold;
+      letter-spacing: -1px;
+      background: #4C4C4C;
+      border: 1px solid #4C4C4C;
+      text-shadow: #292929 0 0 1px;
+      color: #fff;
+    }
 
-        [class*="LF_page_link"] {
-            display: inline-block;
-            min-width: 27px;
-            height: 25px;
-            box-sizing: border-box;
-        }
+    [class*="LF_page_link"] {
+      display: inline-block;
+      min-width: 27px;
+      height: 25px;
+      box-sizing: border-box;
+    }
 
-        [class*="bdList"] .-bdSchWrap {
-            text-align: left;
-            background-color: #fff;
-            padding: 10px 30px;
-            margin-bottom: 30px;
-            position: relative;
-        }
+    [class*="bdList"] .-bdSchWrap {
+      text-align: left;
+      background-color: #fff;
+      padding: 10px 30px;
+      margin-bottom: 30px;
+      position: relative;
+    }
 
-        .AB-select {
-            background-image: url(icon_select_arrow_m.png);
-            background-position: right center;
-            background-repeat: no-repeat;
-            background-color: #fff;
-            background-size: 21px;
-            padding-right: 17px;
-            padding-left: 2px;
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-    </style>
+    .AB-select {
+      background-image: url(icon_select_arrow_m.png);
+      background-position: right center;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      background-size: 21px;
+      padding-right: 17px;
+      padding-left: 2px;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+  </style>
 </head>
 
 <body class="PC">
-    <div class="ABA-wrap-box AB-cr">
-        <div class="ABA-container-box">
-            <div class="ABA-content-box">
-                <div>
-                    <div class="GNB-color-02 LNB-h LNB-tab" style="margin-bottom:5px;">
-                        <div class="ABA-lnb-box" id="ABA-lnb-104500">
+<div class="ABA-wrap-box AB-cr">
+  <div class="ABA-container-box">
+    <div class="ABA-content-box">
+      <div>
+        <div class="GNB-color-02 LNB-h LNB-tab" style="margin-bottom:5px;">
+          <div class="ABA-lnb-box" id="ABA-lnb-104500">
 
-                            <div class="ABA-body-lnb">
-                                <div class="lnb-2dph">
-                                    <div class="ABA-bglnb-left"></div>
-                                    <ul class="ABA-lnb">
-                                        <li id="AB-lnb-104500-1" class="AB-first AB-current-lnb AB-child"><a
-                                                href="kwa-jobopening" class="">공지사항<span class="AB-lleft"></span><span
-                                                    class="AB-rleft"></span></a></li>
-                                        <li id="AB-lnb-104500-2" class="AB-last"><a href="kwa-1258837"
-                                                class="">문의사항<span class="AB-lleft"></span><span
-                                                    class="AB-rleft"></span></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+            <div class="ABA-body-lnb">
+              <div class="lnb-2dph">
+                <div class="ABA-bglnb-left"></div>
+                <ul class="ABA-lnb">
+                  <li class="AB-first AB-current-lnb AB-child" id="AB-lnb-104500-1">
+                    <a class="" href="@{/boards}">공지사항<span class="AB-lleft"></span> <span class="AB-rleft"></span></a>
+                  </li>
+                  <li class="AB-last" id="AB-lnb-104500-2">
+                    <a class="" href="">문의사항<span class="AB-lleft"></span> <span class="AB-rleft"></span> </a>
+                  </li>
+                </ul>
+              </div>
             </div>
+
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <div class="caption">채용공고</div>
-
-    <div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
-        <div class="ABA-container-box-1200">
-            <div id="AB_contents">
-                <form id="TCBOARD_jobopening_LIST_index192" name="TCBOARD_jobopening_LIST_index192" method="post"
-                    action="kwa-jobopening" enctype="multipart/form-data" vi=""
-                    submit-func="return TCBOARD_jobopening_LIST_index192_submit(this, &quot;&quot;);">
-
-                    <div class="ABA-content-box bdList">
-                        <div>
-                            <div class="-bdSchWrap">
-                                <div><select name="SCH_category_1" class="AB-select onlyPC AB-move-url"
-                                        rel="kwa-jobopening?SCH_category_1=">
-                                        <option value="" selected="">분류선택</option>
-                                        <option value="A">공지</option>
-                                        <option value="B">이벤트</option>
-                                    </select><select name="search_item" class="AB-select admin-width-d onlyPC">
-                                        <option value="A">통합검색</option>
-                                        <option value="subject">제목</option>
-                                    </select>
-                                    <input type="submit" name="submit_OK" value="검색하기" id="AB_btn_submit_sch"
-                                        class="btn-tpl btn-round-03 btn-pattern-B08 btn-size-08 btn-b" data-cbk=""
-                                        data-cbk-time="100" data-cbk-a="" data-overlay="Y">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="articleList">
-                                <div>
-                                    <table th:object="${board}" class="-tblList">
-                                        <thead>
-                                            <tr class="onlyPC">
-                                                <th th:text="${board.id}" width="50" height="36"></th>
-                                                <th th:text="${board.title}"  width="300"></th>
-                                                <th width="90"><th:block th:unless="${session.user} == null">
-                                                    <span th:text="${session.user}?${session.user.name}:'guest'" ></span>
-
-                                                </th:block></th>
-                                                <th th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width="140"></th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                        <ul>
-                                            <li th:each="file : ${files}">
-                                                <a th:href="${file}" th:text="${file}" />
-                                            </li>
-                                        </ul>
-                                            <tr >
-                                                <td th:utext="${board.viewcontent}" width="140" class="onlyPC"></td>
-                                            </tr>
-                                            <td>
-                                                <a th:href="@{/boards/{id}/edit (id=${board.id})}" role="button">수정</a>
-                                            </td>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="-btnPageLink">
-                                <div><span class="LF_page_link_current"><b>1</b></span>
-                                    <!--   <a href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2"
-                                        class="LF_page_link">2</a>&nbsp;-->
-                                    <a href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2"
-                                        class="LF_page_link_next_page">
-                                        <img src="C:\Users\HAPPY\Desktop\설문 웹페이지 사업\list_next.gif" border="0"
-                                            align="center" class="LF_page_link_next_page_img" alt="다음 페이지로 이동"></a>
-                                    <a href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2"
-                                        class="LF_page_link_last_page"><img
-                                            src="C:\Users\HAPPY\Desktop\설문 웹페이지 사업\last_page.gif" border="0"
-                                            align="center" class="LF_page_link_last_page_img" alt="마지막 페이지로 이동"></a>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </form>
+<div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
+  <div class="ABA-container-box-1200">
+    <div id="AB_contents">
+      <form action="kwa-jobopening" enctype="multipart/form-data" id="TCBOARD_jobopening_LIST_index192" method="post" name="TCBOARD_jobopening_LIST_index192"
+            submit-func="return TCBOARD_jobopening_LIST_index192_submit(this, &quot;&quot;);" vi="">
+        <div class="ABA-content-box bdList">
+          <div>
+            <div class="-bdSchWrap">
+              <div><select class="AB-select onlyPC AB-move-url" name="SCH_category_1"
+                           rel="kwa-jobopening?SCH_category_1=">
+                <option selected="" value="">분류선택</option>
+                <option value="A">공지</option>
+                <option value="B">이벤트</option>
+              </select><select class="AB-select admin-width-d onlyPC" name="search_item">
+                <option value="A">통합검색</option>
+                <option value="subject">제목</option>
+              </select>
+                <input type="text" />
+                <input class="btn-tpl btn-round-03 btn-pattern-B08 btn-size-08 btn-b" data-cbk="" data-cbk-a="" data-cbk-time="100"
+                       data-overlay="Y" id="AB_btn_submit_sch"
+                       name="submit_OK" type="submit" value="검색하기">
+              </div>
             </div>
-        </div>
-    </div>
+          </div>
 
+          <div>
+            <div class="articleList">
+              <div>
+                <table class="-tblList" th:object="${board}">
+                  <thead>
+                  <tr class="onlyPC">
+                    <th height="36" th:text="${board.id}" width="50"></th>
+                    <th th:text="${board.title}" width="300"></th>
+                    <th width="90">
+                      <th:block th:unless="${session.user} == null">
+                        <span th:text="${session.user}?${session.user.name}:'guest'"></span>
+
+                      </th:block>
+                    </th>
+                    <th th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width="140"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <ul>
+                    <li th:each="file : ${files}">
+                      <a th:href="${file}" th:text="${file}" />
+                    </li>
+                  </ul>
+                  <tr>
+                    <td class="onlyPC" th:utext="${board.viewcontent}" width="140"></td>
+                  </tr>
+                  <td>
+                    <a role="button" th:href="@{/boards/{id}/edit (id=${board.id})}">수정</a>
+                  </td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="-btnPageLink">
+              <div><span class="LF_page_link_current"><b>1</b></span>
+                <a class="LF_page_link_next_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">
+                  <img align="center" alt="다음 페이지로 이동" border="0" class="LF_page_link_next_page_img" src="/static/img/board/list_next.png"></a>
+                <a class="LF_page_link_last_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">
+                  <img align="center" alt="마지막 페이지로 이동" border="0" class="LF_page_link_last_page_img" src="/static/img/board/last_page.png"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 </body>
-
 </html>

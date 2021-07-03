@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -28,6 +31,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final LogoutSuccessHandler logoutSuccessHandler;
 
   private final CustomOAuth2Service customOAuth2Service;
+
+  private final AuthenticationFailureHandler failureHandler;
+
+  /* 인증 실패 처리 */
+  private final AuthenticationEntryPoint entryPoint;
+
+  /* 인가 실패 처리 */
+  private final AccessDeniedHandler deniedHandler;
 
   @Value("${custom.permission.resources}")
   private String[] staticResources;
@@ -66,13 +77,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers(swagger ).permitAll()
           .anyRequest().authenticated()
         .and()
+          .exceptionHandling()
+          .authenticationEntryPoint(entryPoint)
+          .accessDeniedHandler(deniedHandler)
+        .and()
           .formLogin()
             .loginPage("/loginpage")
             .loginProcessingUrl("/dologin")
             .usernameParameter("email")
             .passwordParameter("password")
             .successHandler(successHandler)
-            .failureForwardUrl("/signup")
+            .failureHandler(failureHandler)
         .and()
             .logout()
               .logoutUrl("/dologout")

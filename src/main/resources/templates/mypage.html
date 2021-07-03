@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <script defer src="js/http.js" type="module"></script>
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <script defer src="js/http.js" type="module"></script>
+  <title>Title</title>
 </head>
 <body>
 <div>
-    <label>
-        이름
-        <input type="text" th:value="${session.user.name}">
-    </label>
-    <label>
-        아이디
-        <input id="email" type="email" th:value="${session.user.email}">
-    </label>
-    <label>
-        비밀번호
-        <input type="password" id="pwd">
-    </label>
-    <label>
-        비밀번호 확인
-        <input type="password" id="pwdcfm">
-    </label>
-    <label>
-        적립금
-        <input type="number" readonly th:value="${session.user.point}">
-    </label>
-    <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
-    <button th:onclick="chkInput()">변경하기</button>
-    <button th:onclick="window.history.back()">돌아가기</button>
+  <label>
+    이름
+    <input th:value="${session.user.name}" type="text">
+  </label>
+  <label>
+    아이디
+    <input id="email" th:value="${session.user.email}" type="email">
+  </label>
+  <label>
+    비밀번호
+    <input id="pwd" type="password">
+  </label>
+  <label>
+    비밀번호 확인
+    <input id="pwdcfm" type="password">
+  </label>
+  <label>
+    적립금
+    <input readonly th:value="${session.user.point}" type="number">
+  </label>
+  <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
+  <button th:onclick="chkInput()">변경하기</button>
+  <button th:onclick="window.history.back()">돌아가기</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>

@@ -1,182 +1,182 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="module/common"/>
-<th:block th:include="layout/header"/>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style type="text/css">
-        .row {
-        }
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style type="text/css">
+    .row {
+    }
 
-        .col {
-            display: inline-block;
-            border: solid black 0.5px;
-        }
+    .col {
+      display: inline-block;
+      border: solid black 0.5px;
+    }
 
-        .col > option {
-            display: inline;
-            float: left;
-        }
+    .col > option {
+      display: inline;
+      float: left;
+    }
 
-        form > div {
-            border: solid black 0.5px;
-        }
+    form > div {
+      border: solid black 0.5px;
+    }
 
-        .date {
-            display: inline-block;
-        }
+    .date {
+      display: inline-block;
+    }
 
-        .center {
-            margin: auto;
-            width: 150px;
-        }
-    </style>
+    .center {
+      margin: auto;
+      width: 150px;
+    }
+  </style>
 </head>
 <body>
 <h1>패널 가입</h1>
 <form id="addfrm">
-    <div>
-        <span>성별</span>
-        <input type="radio" name="gender" value="남성">남성
-        <input type="radio" name="gender" value="여성">여성
+  <div>
+    <span>성별</span>
+    <input name="gender" type="radio" value="남성">남성
+    <input name="gender" type="radio" value="여성">여성
+  </div>
+  <div class="date">
+    <span class="col">생년월일</span>
+    <div class="col">
+      <select id="year" name="year">
+        <option>--선택--</option>
+      </select> 년
     </div>
-    <div class="date">
-        <span class="col">생년월일</span>
+    <div class="col">
+      <select id="month" name="month">
+        <option>--선택--</option>
+      </select> 월
+    </div>
+    <div class="col">
+      <select id="day" name="day">
+        <option>--선택--</option>
+      </select> 일
+    </div>
+    <input checked name="birth" type="radio" value="양력">양력
+    <input name="birth" type="radio" value="음력">음력
+  </div>
+  <div>
+    <span>최종 학력</span>
+    <select id="edu" name="edu">
+      <option>--선택--</option>
+      <option value="high">고졸 이하(재학 포함)</option>
+      <option value="inuniversity">대학 재학</option>
+      <option value="university">대학교 졸업(수료 포함)</option>
+      <option value="graduate">대학원 이상</option>
+    </select>
+  </div>
+  <div>
+    <span>결혼 여부</span>
+    <input checked name="marry" type="radio" value="미혼">미혼
+    <input name="marry" type="radio" value="기혼">기혼
+  </div>
+  <div>
+    <span>직업</span>
+    <select id="jobs" name="jobs">
+      <option>--선택--</option>
+      <option value="">학생</option>
+      <option value="">경영직</option>
+      <option value="">공무</option>
+      <option value="">회사원</option>
+      <option value="">자영업</option>
+      <option value="">생산기술직</option>
+      <option value="">예술인</option>
+      <option value="">프리랜서</option>
+      <option value="">무직</option>
+      <option value="">기타</option>
+    </select>
+  </div>
+  <div>
+    <span>직종</span>
+    <select id="industry" name="industry">
+      <option>--선택--</option>
+      <option value="">제조업</option>
+      <option value="">건설업(인테리어 포함)</option>
+      <option value="">부동산업</option>
+      <option value="">임대•대여업</option>
+      <option value="">도매 및 소매업(유통업)</option>
+      <option value="">음식업•외식업</option>
+      <option value="">운수•여객•숙박업</option>
+      <option value="">여가 관련 서비스업</option>
+      <option value="">방송•언론•출판</option>
+      <option value="">정보통신업</option>
+      <option value="">금융업</option>
+      <option value="">교육 서비스업</option>
+      <option value="">의료•보건•사회복지</option>
+      <option value="">시장조사•컨설팅•광고대행업</option>
+      <option value="">기타</option>
+    </select>
+  </div>
+  <!--관심 분야-->
+  <div class="row">
+    <div class="col">관심 분야</div>
+    <div class="col">
+      <div class="row">
+        <div class="col">건강•헬스케어</div>
         <div class="col">
-            <select name="year" id="year">
-                <option>--선택--</option>
-            </select> 년
+          <input type="checkbox" value="">건강일반<br>
+          <input type="checkbox" value="">건강식품<br>
+          <input type="checkbox" value="">다이어트<br>
+          <input type="checkbox" value="">심리건강<br>
         </div>
+      </div>
+      <div class="row">
+        <div class="col">문화예술•여가•스포츠</div>
         <div class="col">
-            <select name="month" id="month">
-                <option>--선택--</option>
-            </select> 월
+          <input type="checkbox">대중문화<br>
+          <input type="checkbox">음악<br>
+          <input type="checkbox">미술<br>
+          <input type="checkbox">공연•축제<br>
+          <input type="checkbox">여행<br>
+          <input type="checkbox">생활문화<br>
+          <input type="checkbox">장르예술<br>
+          <input type="checkbox">레저활동<br>
+          <input type="checkbox">생활체육<br>
         </div>
+      </div>
+      <div class="row">
+        <div class="col">경제•경영</div>
         <div class="col">
-            <select name="day" id="day">
-                <option>--선택--</option>
-            </select> 일
+          <input type="checkbox" value="">제테크<br>
+          <input type="checkbox" value="">창업<br>
+          <input type="checkbox" value="">사회적 경제<br>
         </div>
-        <input type="radio" name="birth" value="양력" checked>양력
-        <input type="radio" name="birth" value="음력">음력
-    </div>
-    <div>
-        <span>최종 학력</span>
-        <select name="edu" id="edu">
-            <option>--선택--</option>
-            <option value="high">고졸 이하(재학 포함)</option>
-            <option value="inuniversity">대학 재학</option>
-            <option value="university">대학교 졸업(수료 포함)</option>
-            <option value="graduate">대학원 이상</option>
-        </select>
-    </div>
-    <div>
-        <span>결혼 여부</span>
-        <input type="radio" name="marry" value="미혼" checked>미혼
-        <input type="radio" name="marry" value="기혼">기혼
-    </div>
-    <div>
-        <span>직업</span>
-        <select name="jobs" id="jobs">
-            <option>--선택--</option>
-            <option value="">학생</option>
-            <option value="">경영직</option>
-            <option value="">공무</option>
-            <option value="">회사원</option>
-            <option value="">자영업</option>
-            <option value="">생산기술직</option>
-            <option value="">예술인</option>
-            <option value="">프리랜서</option>
-            <option value="">무직</option>
-            <option value="">기타</option>
-        </select>
-    </div>
-    <div>
-        <span>직종</span>
-        <select name="industry" id="industry">
-            <option>--선택--</option>
-            <option value="">제조업</option>
-            <option value="">건설업(인테리어 포함)</option>
-            <option value="">부동산업</option>
-            <option value="">임대•대여업</option>
-            <option value="">도매 및 소매업(유통업)</option>
-            <option value="">음식업•외식업</option>
-            <option value="">운수•여객•숙박업</option>
-            <option value="">여가 관련 서비스업</option>
-            <option value="">방송•언론•출판</option>
-            <option value="">정보통신업</option>
-            <option value="">금융업</option>
-            <option value="">교육 서비스업</option>
-            <option value="">의료•보건•사회복지</option>
-            <option value="">시장조사•컨설팅•광고대행업</option>
-            <option value="">기타</option>
-        </select>
-    </div>
-    <!--관심 분야-->
-    <div class="row">
-        <div class="col">관심 분야</div>
+      </div>
+      <div class="row">
+        <div class="col">사회•복지</div>
         <div class="col">
-            <div class="row">
-                <div class="col">건강•헬스케어</div>
-                <div class="col">
-                    <input value="" type="checkbox">건강일반<br>
-                    <input value="" type="checkbox">건강식품<br>
-                    <input value="" type="checkbox">다이어트<br>
-                    <input value="" type="checkbox">심리건강<br>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">문화예술•여가•스포츠</div>
-                <div class="col">
-                    <input type="checkbox">대중문화<br>
-                    <input type="checkbox">음악<br>
-                    <input type="checkbox">미술<br>
-                    <input type="checkbox">공연•축제<br>
-                    <input type="checkbox">여행<br>
-                    <input type="checkbox">생활문화<br>
-                    <input type="checkbox">장르예술<br>
-                    <input type="checkbox">레저활동<br>
-                    <input type="checkbox">생활체육<br>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">경제•경영</div>
-                <div class="col">
-                    <input type="checkbox" value="">제테크<br>
-                    <input type="checkbox" value="">창업<br>
-                    <input type="checkbox" value="">사회적 경제<br>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">사회•복지</div>
-                <div class="col">
-                    <input type="checkbox" value="">사회•복지일반 <br>
-                    <input type="checkbox" value="">아동•청소년 <br>
-                    <input type="checkbox" value="">여성 <br>
-                    <input type="checkbox" value="">청년<br>
-                    <input type="checkbox" value="">노인 <br>
-                    <input type="checkbox" value="">장애인 <br>
-                    <input type="checkbox" value="">다문화 <br>
-                    <input type="checkbox" value="">민주인권 <br>
-                    <input type="checkbox" value="">노동인권<br>
-                    <input type="checkbox" value="">자원봉사<br>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">교육</div>
-                <div class="col">
-                    <input type="checkbox" value="lifetime">평생교육<br>
-                    <input type="checkbox" value="high">초·중·고등교육<br>
-                    <input type="checkbox" value="univ">대학교육<br>
-                </div>
-            </div>
+          <input type="checkbox" value="">사회•복지일반 <br>
+          <input type="checkbox" value="">아동•청소년 <br>
+          <input type="checkbox" value="">여성 <br>
+          <input type="checkbox" value="">청년<br>
+          <input type="checkbox" value="">노인 <br>
+          <input type="checkbox" value="">장애인 <br>
+          <input type="checkbox" value="">다문화 <br>
+          <input type="checkbox" value="">민주인권 <br>
+          <input type="checkbox" value="">노동인권<br>
+          <input type="checkbox" value="">자원봉사<br>
         </div>
+      </div>
+      <div class="row">
+        <div class="col">교육</div>
+        <div class="col">
+          <input type="checkbox" value="lifetime">평생교육<br>
+          <input type="checkbox" value="high">초·중·고등교육<br>
+          <input type="checkbox" value="univ">대학교육<br>
+        </div>
+      </div>
     </div>
-    <div class="center">
-        <input th:onclick="window.location.back()" type="button" value="돌아 가기">
-        <input type="submit" value="가입 하기">
-    </div>
+  </div>
+  <div class="center">
+    <input th:onclick="window.location.back()" type="button" value="돌아 가기">
+    <input type="submit" value="가입 하기">
+  </div>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

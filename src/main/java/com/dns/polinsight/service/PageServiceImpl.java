@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 public class PageServiceImpl implements PageService {
 
   @Override
-//  @Cacheable
+  //  @Cacheable
   public String getTerms() throws IOException {
     ClassPathResource resource = new ClassPathResource("static/assets/Terms.txt");
     BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));

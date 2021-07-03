@@ -2,288 +2,295 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <style>
-        .web {
-            margin: auto;
-            width: 1200px;
-        }
-        
-        img{
-            margin-left:-2px;
-            margin-right:-2px;
-            padding:0;
-        }
-        
-        .sub-main{
-            height:50px;
-            padding-bottom: 0px;
-            border-bottom:1px solid #EFEEEC;
-        }
+  <style>
+    .web {
+      margin: auto;
+      width: 1200px;
+    }
 
-        ul li{
-            list-style-type:none;
-            float:left;
-        }
+    img {
+      margin-left: -2px;
+      margin-right: -2px;
+      padding: 0;
+    }
 
-        .sub-main li{
-            width:150px;
-            height: 100%;
-            font-size:20px;
-            color:white;
-            text-align: center;
-            line-height: 250%;
-        }
+    .sub-main {
+      height: 50px;
+      padding-bottom: 0px;
+      border-bottom: 1px solid #EFEEEC;
+    }
 
-        .notice{
-            background-color: #1A2738;
-            border:1px solid #1A2738;
-        }
+    ul li {
+      list-style-type: none;
+      float: left;
+    }
 
-        .qna{
-            background-color: #EFEEEC;
-            border:1px solid #EFEEEC;
-        }
+    .sub-main li {
+      width: 150px;
+      height: 100%;
+      font-size: 20px;
+      color: white;
+      text-align: center;
+      line-height: 250%;
+    }
 
-        .sub-main-name {
-            width: 1200px;
-            padding-top: 50px;
-            padding-bottom: 50px;
-            margin-bottom: 50px;
-            font-size: 25px;
-            text-align: center;
-            border-bottom: 1px solid rgb(0, 0, 0);
-        }
+    .notice {
+      background-color: #1A2738;
+      border: 1px solid #1A2738;
+    }
 
-        .button {
+    .qna {
+      background-color: #EFEEEC;
+      border: 1px solid #EFEEEC;
+    }
 
-            margin-bottom: 20px;
-        }
+    .sub-main-name {
+      width: 1200px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      font-size: 25px;
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+    }
 
-        .select {
-            height: 25px;
-        }
+    .button {
 
-        .btn-search {
-            height: 25px;
-            color: white;
-            background: black;
-            border-radius: 5px 5px 5px 5px;
-        }
+      margin-bottom: 20px;
+    }
 
-        .tblList {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
+    .select {
+      height: 25px;
+    }
 
-        .tblList thead th {
-            background-color: #EFEEEC;
-            border-top: 1px solid rgb(0, 0, 0);
-            border-bottom: 1px solid rgb(0, 0, 0);
-            padding-left: 20px;
-        }
+    .btn-search {
+      height: 25px;
+      color: white;
+      background: black;
+      border-radius: 5px 5px 5px 5px;
+    }
 
-        .tblList tbody td {
-            padding-left: 20px;
-            height:50px;
-            border-bottom:2px solid #EFEEEC;
-        }
+    .tblList {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
 
-        .writeButton{
-            margin-top:20px;
-            float:right;
-        }
+    .tblList thead th {
+      background-color: #EFEEEC;
+      border-top: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+      padding-left: 20px;
+    }
 
-        .write{
-            text-align:center;
-            line-height:200%;
-            width:100px;
-            height:30px;
-            font-size: 15px;
-            color: black;
-            border-radius: 5px 5px 5px 5px;
-            border:1px solid black;
-        }
+    .tblList tbody td {
+      padding-left: 20px;
+      height: 50px;
+      border-bottom: 2px solid #EFEEEC;
+    }
 
-        .page-button {
-            margin-top: 50px;
-            vertical-align: middle;
-            text-align: center;
-        }
+    .writeButton {
+      margin-top: 20px;
+      float: right;
+    }
 
-        .current-page{
-            margin-right:5px;
-            margin-left:5px;
-        }
+    .write {
+      text-align: center;
+      line-height: 200%;
+      width: 100px;
+      height: 30px;
+      font-size: 15px;
+      color: black;
+      border-radius: 5px 5px 5px 5px;
+      border: 1px solid black;
+    }
 
-        .button {
-            vertical-align: text-top;
-            min-width: 25px;
-            height: 25px;
-        }
+    .page-button {
+      margin-top: 50px;
+      vertical-align: middle;
+      text-align: center;
+    }
 
-        .disabled{
-            opacity: 0;
-            color: #6c757d;
-            pointer-events: none;
-            background-color: #fff;
-            border-color: #dee2e6;
-            text-decoration: none;
-        }
-        .active {
-            font-size: 19px;
-            font-weight: bold;
-            margin-left: 2px;
-            margin-right: 2px;
-            z-index: 3;
-            color: #2F3138;
-            text-decoration: none;
-        }
-        .not-active {
-            margin-left: 2px;
-            margin-right: 2px;
-            z-index: 3;
-            color: #2F3138;
-            text-decoration: none;
-        }
-        a {
-            text-decoration: none;
-        }
-        a:hover{
-            color:dodgerblue;
-            text-decoration: underline;
-        }
-    </style>
+    .current-page {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
+    .button {
+      vertical-align: text-top;
+      min-width: 25px;
+      height: 25px;
+    }
+
+    .disabled {
+      opacity: 0;
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
+      text-decoration: none;
+    }
+
+    .active {
+      font-size: 19px;
+      font-weight: bold;
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    .not-active {
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: dodgerblue;
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body class="PC">
-    <div class="web">
-        <div class="sub-main">
-            <span></span>
-            <ul>
-                <li class="notice">공지사항</li>
-                <li class="qna">문의사항</li>
-            </ul>
-        </div>
+<div class="web">
+  <div class="sub-main">
+    <span></span>
+    <ul>
+      <li class="notice">공지사항</li>
+      <li class="qna">문의사항</li>
+    </ul>
+  </div>
 
-        <div class="sub-main-name"><b>공지사항</b></div>
+  <div class="sub-main-name"><b>공지사항</b></div>
 
-        <div class="board">
-            <div class="button">
-                <form th:action="@{/boards/search}" th:object="${boardSearch}"  method="get">
+  <div class="board">
+    <div class="button">
+      <form method="get" th:action="@{/boards/search}" th:object="${boardSearch}">
 
-                    <select th:field="*{boardType}" class="select">
-                        <optgroup label="분류 선택">
-                        <option value="NOTICE">공지</option>
-                        <option value="EVENT">이벤트</option>
-                        </optgroup>
-                    </select>
+        <select class="select" th:field="*{boardType}">
+          <optgroup label="분류 선택">
+            <option value="NOTICE">공지</option>
+            <option value="EVENT">이벤트</option>
+          </optgroup>
+        </select>
 
-                    <select th:field="*{searchType}" name="search_item" class="select">
-                        <optgroup label="통합검색">
-                        <option th:value="TITLE" th:text="제목"></option>
-                        <option th:value="CONTENT" th:text="내용"></option>
-                        </optgroup>
-                    </select>
-                    <input th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
-                    <input type="submit" name="submit_OK" value="검색하기" class="btn-search">
-                </form>
-            </div>
+        <select class="select" name="search_item" th:field="*{searchType}">
+          <optgroup label="통합검색">
+            <option th:text="제목" th:value="TITLE"></option>
+            <option th:text="내용" th:value="CONTENT"></option>
+          </optgroup>
+        </select>
+        <input placeholder="검색어를 입력하세요" th:field="*{searchValue}" type="text">
+        <input class="btn-search" name="submit_OK" type="submit" value="검색하기">
+      </form>
+    </div>
 
-            <div class="post-list">
-                <div>
-                    <table class="tblList">
-                        <thead>
-                            <tr align="left">
-                                <th width="50" height="36"> 번호 </th>
-                                <th width="900">제목</th>
-                                <th width="80">등록자</th>
-                                <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
-                            </tr>
-                        </thead>
+    <div class="post-list">
+      <div>
+        <table class="tblList">
+          <thead>
+          <tr align="left">
+            <th height="36" width="50"> 번호</th>
+            <th width="900">제목</th>
+            <th width="80">등록자</th>
+            <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
+          </tr>
+          </thead>
 
-                        <tbody>
-                        <tr class="first" th:each="board : ${boards}">
-                            <td width="50" th:text="${board.id}">&nbsp;</td>
-                            <td width="950"> <a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
-                            <span th:if="${board.newBoard}">
+          <tbody>
+          <tr class="first" th:each="board : ${boards}">
+            <td th:text="${board.id}" width="50">&nbsp;</td>
+            <td width="950"><a th:href="@{/boards/{id} (id=${board.id})}" th:text="${board.title}"></a>
+              <span th:if="${board.newBoard}">
                                  New!
                             </span>
-                            </td>
+            </td>
 
-                            <td width="80" th:text="${board.user.name}"></td>
-                            <td width="120" th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
+            <td th:text="${board.user.name}" width="80"></td>
+            <td th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width="120"></td>
 
-                        </tr>
+          </tr>
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="writeButton">
-            <div class=write><a href="/boards/new"> <b>글쓰기</b> </a> </div>
-        </div>
-
-            <div class="page-button"
-                th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
-                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-                    <a th:href="@{/boards(page=1)}" aria-label="First">
-                        <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
-                    </a>
-
-
-                    <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
-                        <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
-                    </a>
-
-                    <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
-
-
-                    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
-                        <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
-                    </a>
-
-
-                    <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
-                        <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
-                    </a>
-            </div>
-
-<!--        <ul class="page-button"-->
-<!--            th:with="start=${T(Math).floor(boards.number/10)*10 + 1},-->
-<!--                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">-->
-<!--            <li>-->
-<!--                <a th:href="@{/boards(page=1)}" aria-label="First">-->
-<!--                    <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            <li th:class="${boards.first} ? 'disabled'">-->
-<!--                <a th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">-->
-<!--                    <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            <li class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " >-->
-<!--                <a th:text="${page}" th:href="@{/boards(page=${page})}"></a>-->
-<!--            </li>-->
-
-<!--            <li th:class="${boards.last} ? 'disabled'">-->
-<!--                <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">-->
-<!--                    <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            <li>-->
-<!--                <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">-->
-<!--                    <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-
-
-
-
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
+
+  <div class="writeButton">
+    <a href="/boards/new">
+      <div class=write>
+        <b>글쓰기</b>
+      </div>
+    </a>
+  </div>
+
+  <div class="page-button"
+       th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
+                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+    <a aria-label="First" th:href="@{/boards(page=1)}">
+      <span aria-hidden="true"><img alt="처음 페이지로 이동" class="button" src="/img/board/first_page.png"></span>
+    </a>
+
+
+    <a aria-label="Previous" th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}">
+      <img alt="이전 페이지로 이동" class="button" src="/img/board/list_prev.png">
+    </a>
+
+    <a class="current-page" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:each="page: ${#numbers.sequence(start, last)}" th:href="@{/boards(page=${page})}"
+       th:text="${page}"></a>
+
+
+    <a aria-label="Next" th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}">
+      <img alt="다음 페이지로 이동" class="button" src="/img/board/list_next.png">
+    </a>
+
+
+    <a aria-label="Last" th:href="@{/boards(page=${boards.totalPages})}">
+      <img alt="마지막 페이지로 이동" class="button" src="/img/board/last_page.png">
+    </a>
+  </div>
+
+  <!--        <ul class="page-button"-->
+  <!--            th:with="start=${T(Math).floor(boards.number/10)*10 + 1},-->
+  <!--                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">-->
+  <!--            <li>-->
+  <!--                <a th:href="@{/boards(page=1)}" aria-label="First">-->
+  <!--                    <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>-->
+  <!--                </a>-->
+  <!--            </li>-->
+
+  <!--            <li th:class="${boards.first} ? 'disabled'">-->
+  <!--                <a th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">-->
+  <!--                    <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">-->
+  <!--                </a>-->
+  <!--            </li>-->
+
+  <!--            <li class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " >-->
+  <!--                <a th:text="${page}" th:href="@{/boards(page=${page})}"></a>-->
+  <!--            </li>-->
+
+  <!--            <li th:class="${boards.last} ? 'disabled'">-->
+  <!--                <a th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">-->
+  <!--                    <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">-->
+  <!--                </a>-->
+  <!--            </li>-->
+
+  <!--            <li>-->
+  <!--                <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">-->
+  <!--                    <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">-->
+  <!--                </a>-->
+  <!--            </li>-->
+  <!--        </ul>-->
+
+
+</div>
 </body>

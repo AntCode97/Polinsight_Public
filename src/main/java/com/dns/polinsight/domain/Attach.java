@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,26 +15,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Attach {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bno")
-    @NotNull
-    private Board board;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "bno")
+  @NotNull
+  private Board board;
 
-    private Long fileSize;
+  private Long fileSize;
 
-    private String filename;
+  private String filename;
 
-    private String originalName;
+  private String originalName;
 
-    private String filePath;
-
-
-
+  private String filePath;
 
 
 }

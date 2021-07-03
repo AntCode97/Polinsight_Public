@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
+
   /*
    * Simple CRUD
    * */
@@ -40,12 +41,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User findUserById(User user) {
-    return repository.findUserByUid(user.getUid()).orElseThrow(UserNotFoundException::new);
+    return repository.findUserById(user.getId()).orElseThrow(UserNotFoundException::new);
   }
 
   @Cacheable
   public User find(User user) {
-    return repository.findById(user.getUid()).orElseThrow(UserNotFoundException::new);
+    return repository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
   }
 
   @Override
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
   public User changePwd(User user) {
     // NOTE 2021-06-23 0023 : 해시 발급, 해시 저장
     // NOTE 2021-06-23 0023 : Bcrypt 이용 - 넣을 데이터는??
-//    passwordEncoder.encode(user.getEmail());
+    //    passwordEncoder.encode(user.getEmail());
     return null;
   }
 

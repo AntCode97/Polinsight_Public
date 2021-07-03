@@ -1,107 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-          rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <style>
-        .login_input {
-            width: 100%;
-            outline: none;
-            border: none;
-            border-bottom: 1.5px solid #dde0ea;
-            color: #343236;
-            padding: 8px 0px;
-            height: 43px;
-            font-size: 16px;
-        }
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <style>
+    .login_input {
+      width: 100%;
+      outline: none;
+      border: none;
+      border-bottom: 1.5px solid #dde0ea;
+      color: #343236;
+      padding: 8px 0px;
+      height: 43px;
+      font-size: 16px;
+    }
 
-        .login_btn_wrap > .btn-primary {
-            width: 100%;
-            font-weight: bold;
-            float: left;
-        }
+    .login_btn_wrap > .btn-primary {
+      width: 100%;
+      font-weight: bold;
+      float: left;
+    }
 
-        .btn-effect {
-            padding: 12px;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 2px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            outline: none;
-        }
+    .btn-effect {
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      outline: none;
+    }
 
-        .login_content {
-            width: 25rem;
-            margin: 0 auto;
-            text-align: center;
-        }
+    .login_content {
+      width: 25rem;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        .modal_content {
-            width: 50%;
-            background-color: white;
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 0 auto;
-        }
+    .modal_content {
+      width: 50%;
+      background-color: white;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
 
-        .modal_wrap {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .modal_wrap {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .input_div {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 20px;
-        }
+    .input_div {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-        .input_div > label > p {
-            font-size: 16px;
-            text-align: left;
-            color: #a5dff9;
-        }
+    .input_div > label > p {
+      font-size: 16px;
+      text-align: left;
+      color: #a5dff9;
+    }
 
-        .vaild {
-            color: #00CC00;
-        }
+    .vaild {
+      color: #00CC00;
+    }
 
-        .invalid {
-            color: #FF0000;
-        }
-    </style>
+    .invalid {
+      color: #FF0000;
+    }
+  </style>
 </head>
 <body>
 <div>
-    <div>
-        <form action="/changepwd" method="post">
-            <div class="input_div">
-                <label for="pwd">
-                    <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
-                </label>
-                <input id="pwd" type="password" class="pwdinput" required placeholder="패스워드">
-            </div>
-            <div class="input_div">
-                <label for="pwdcfm">
-                    <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
-                </label>
-                <input id="pwdcfm" type="password" class="pwdinput" required placeholder="패스워드 확인">
-                <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
-            </div>
+  <div>
+    <form action="/changepwd" method="post">
+      <div class="input_div">
+        <label for="pwd">
+          <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
+        </label>
+        <input class="pwdinput" id="pwd" placeholder="패스워드" required type="password">
+      </div>
+      <div class="input_div">
+        <label for="pwdcfm">
+          <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
+        </label>
+        <input class="pwdinput" id="pwdcfm" placeholder="패스워드 확인" required type="password">
+        <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
+      </div>
 
-            <div class="login_btn_wrap">
-                <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
-                <button class="btn-primary btn-effect" id="btn_submit">변경하기</button>
-            </div>
-        </form>
-    </div>
+      <div class="login_btn_wrap">
+        <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
+        <button class="btn-primary btn-effect" id="btn_submit">변경하기</button>
+      </div>
+    </form>
+  </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

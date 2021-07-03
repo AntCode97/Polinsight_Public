@@ -23,20 +23,13 @@ import java.util.List;
 })
 public class User implements UserDetails, Serializable {
 
-
   private static final long serialVersionUID = 7723866521224716971L;
-
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long uid;
+  private Long id;
 
   @NotNull
-  @Column(name = "id")
-  private String id;
-
-  @NotNull
-  @Column(name = "email")
   private String email;
 
 
@@ -50,8 +43,8 @@ public class User implements UserDetails, Serializable {
 
   private Long point;
 
-  @OneToMany(mappedBy = "user") //누구에 의해서 매핑되는가,
-  private List<Board> boards = new ArrayList<>();
+  @OneToMany(mappedBy = "user")
+  private final List<Board> boards = new ArrayList<>();
 
 
   @NotNull

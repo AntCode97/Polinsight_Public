@@ -2,33 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-    <meta charset="UTF-8">
-    <th:block th:fragment="alert_css">
-        <style type="text/css">
-            .hidden {
-                z-index: 999;
-                right: -100px;
-                top: 30px;
-                height: 30px;
-                position: absolute;
-                border: solid black 0.3px;
-                display: none;
-                width: 100px;
-            }
+  <meta charset="UTF-8">
+  <th:block th:fragment="alert_css">
+    <style type="text/css">
+      .hidden {
+        z-index: 999;
+        right: -100px;
+        top: 30px;
+        height: 30px;
+        position: absolute;
+        border: solid black 0.3px;
+        display: none;
+        width: 100px;
+      }
 
-            .show {
-                display: block;
-                transform: translateX(-100px);
-                transition-duration: 0.7s;
-            }
-        </style>
-    </th:block>
+      .show {
+        display: block;
+        transform: translateX(-100px);
+        transition-duration: 0.7s;
+      }
+    </style>
+  </th:block>
 </head>
 <body>
 <div class="hidden" th:fragment="frag_alert(msg)">
-    <p th:text="${msg}"></p>
+  <p th:text="${msg}"></p>
 </div>
-<button th:fragment="btn" id="alert_btn">알람 띄우기</button>
+<button id="alert_btn" th:fragment="btn">알람 띄우기</button>
 <script th:fragment="noti_script">
   $(function () {
     $("#alert_btn").on('click', () => {
