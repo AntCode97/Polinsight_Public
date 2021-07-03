@@ -40,6 +40,10 @@ dependencies {
     /* LayOut*/
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
 
+    //file upload
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'

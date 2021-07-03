@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        .web {
+            margin: auto;
+            width: 1200px;
+        }
+
+        img {
+            margin-left: -2px;
+            margin-right: -2px;
+            padding: 0;
+        }
+
+        .sub-main {
+            height: 50px;
+            padding-bottom: 0px;
+            border-bottom: 1px solid #EFEEEC;
+        }
+
+        ul li {
+            list-style-type: none;
+            float: left;
+        }
+
+        .sub-main li {
+            width: 150px;
+            height: 100%;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            line-height: 250%;
+        }
+
+        .notice {
+            background-color: #1A2738;
+            border: 1px solid #1A2738;
+        }
+
+        .qna {
+            background-color: #EFEEEC;
+            border: 1px solid #EFEEEC;
+        }
+
+        .sub-main-name {
+            width: 1200px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            margin-bottom: 50px;
+            font-size: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+
+        .writeBoard{
+            font-size:25px;
+            display: flex;
+            height:40px;
+            border-bottom: 2px solid black;
+            margin-bottom: 20px;
+        }
+
+        .information{
+            height: 150px;
+            padding-bottom: 15px;
+        }
+
+        .information_title, .information_name, .information_category, .information_file{
+            display: flex;
+            border-top: 1px solid rgb(0, 0, 0);
+            border-bottom: 1px solid rgb(0, 0, 0);
+            line-height: 40px;
+        }
+
+        .informationSubject{
+            width:100px;
+            height:40px;
+            background-color: #EFEEEC;
+            text-align: center;
+            font-size: 15px;
+            margin-right:20px;
+        }
+
+        .letter{
+            margin-top:20px;
+            width:1000px;
+        }
+
+        textarea{
+            resize: none;
+            width:1000px;
+            margin-left:100px;
+        }
+
+        .register{
+            margin-top:20px;
+            margin-bottom: 20px;
+            float:right;
+        }
+
+        .registerButton{
+            text-align:center;
+            line-height:200%;
+            width:100px;
+            height:30px;
+            font-size: 15px;
+            color: black;
+            border-radius: 5px 5px 5px 5px;
+            border:1px solid black;
+        }
+        
+    </style>
+</head>
+
+<body class="PC">
+    <div class="web">
+        <div class="sub-main">
+            <span></span>
+            <ul>
+                <li class="notice">공지사항</li>
+                <li class="qna">문의사항</li>
+            </ul>
+        </div>
+
+        <div class="sub-main-name"><b>공지사항</b></div>
+
+        <div class="writeBoard">공지사항 작성</div>
+
+        <div class="board">
+
+            <form class=information th:action="@{/boards/new}" th:object="${boardDTO}" method="post" enctype="multipart/form-data">
+                <div class="information_title">
+                    <div class="informationSubject"><b>제목</b></div>
+                    <span><input th:field="*{title}" type="text" maxlength="255" style="width:800px;height:20px" placeholder="제목을 입력하세요."></span>
+                </div>
+                <div class="information_name">
+                    <div class="informationSubject"><b>작성자</b></div>
+                    <th:block th:unless="${session.user} == null">
+    <span th:text="${session.user}?${session.user.name}:'guest'" ></span>
+
+</th:block>
+                    </span>
+                </div>
+                <div class="information_category">
+                    <div class="informationSubject"><b>분류</b></div>
+                    <span>
+                                          <select th:field="*{boardType}" maxlength="20" style="width:70px;height:25px">
+                        <optgroup label="분류 선택">
+                        <option value="NOTICE">공지</option>
+                        <option value="EVENT">이벤트</option>
+                        </optgroup>
+                    </select>
+
+                    </span>
+                </div>
+                <div class=information_file>
+                    <div class="informationSubject"><b>첨부파일</b></div>
+                        <input multiple="multiple" th:field="*{files}" accept="*" type="file" style="margin-top:8px">
+<!--                    <ul>-->
+<!--                        <li th:each="file : ${files}">-->
+<!--                            <a th:href="${file}" th:text="${file}" />-->
+<!--                        </li>-->
+<!--                    </ul>-->
+                   
+                </div>
+
+
+            <div class="letter">
+                <!--글 에디터-->
+                <textarea th:field="*{content}" rows="30" placeholder="내용을 입력하세요" ></textarea>
+            </div>
+            <div class="register">
+                <input class="registerButton" type="submit" value="등록"></input>
+            </div>
+            </form>
+        </div>
+
+
+
+
+    </div>
+</body>

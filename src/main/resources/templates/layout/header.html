@@ -90,6 +90,7 @@
 
         .dropdown_element:hover {
             text-decoration: underline;
+            cursor: pointer;
             color: #4C99CF;
         }
 
@@ -162,13 +163,13 @@
             </ul>
             <ul class="navi_box">
                 <li>
-                    <a th:href="@{/}">Research</a>
+                    <a th:href="@{/}">Boards</a>
                     <div class="dropdown" style="left: 314.5px;">
                         <div class="dropdown_box">
-                            <a th:href="@{/}" class="dropdown_element">Contents01</a>
-                            <a th:href="@{/}" class="dropdown_element">Contents01</a>
-                            <a th:href="@{/}" class="dropdown_element">Contents03</a>
-                            <a th:href="@{/}" class="dropdown_element">Contents04</a>
+                            <a th:href="@{/boards}" class="dropdown_element">공지 사항</a>
+                            <a th:onclick="alert('준비 중 입니다.')" class="dropdown_element">이벤트</a>
+                            <a th:onclick="alert('준비 중 입니다.')" class="dropdown_element">FAQ</a>
+                            <a th:onclick="alert('준비 중 입니다.')" class="dropdown_element">Q & A</a>
                         </div>
                     </div>
                 </li>

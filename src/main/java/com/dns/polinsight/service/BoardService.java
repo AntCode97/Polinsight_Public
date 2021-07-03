@@ -10,7 +10,7 @@ public interface BoardService {
 
   Board find(Board board);
 
-  Board saveOrUpdate(Board board);
+//  Board saveOrUpdate(Board board);
 
   void delete(Board board);
 

@@ -1,8 +1,8 @@
 spring :
   profiles :
     group :
-      dev :  common, db
-      prod : common, db
+      dev :  common, db, dev
+      prod : common, db, prod
 ---
 server :
   port : 8080
@@ -20,15 +20,6 @@ server :
 spring :
   session :
     store-type : redis
-
-  redis :
-    host : localhost
-    port : 6379
-
-  jpa :
-    show-sql : true
-    hibernate :
-      ddl-auto : update
 
   security :
     oauth2 :
@@ -80,8 +71,7 @@ spring :
     resources :
       static-locations : classpath:/static/
       add-mappings :     true
-  banner :
-    location : classpath:banner-dev.txt
+
   cache :
     type : redis
 
@@ -104,7 +94,7 @@ custom :
   permission :
     resources :  /css/**, /js/**, /img/**
     admin :
-    template :   /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms, /alert, /wholesign
+    template :   /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms, /alert, /wholesign, /boards/**
     swagger-ui : /swagger-resources/**, /swagger-ui.html, /v2/api-docs,/webjars/**, /swagger-ui/**, /api-docs
 
 ---
@@ -122,3 +112,35 @@ spring :
   config :
     activate :
       on-profile : db
+
+  jpa :
+    hibernate :
+      ddl-auto : update
+
+  redis :
+    host : localhost
+    port : 6379
+---
+spring :
+  config :
+    activate :
+      on-profile : dev
+
+  jpa :
+    hibernate :
+      ddl-auto : create-drop
+    show-sql : true
+  banner :
+    location : banner-dev.txt
+
+---
+spring :
+  config :
+    activate :
+      on-profile : prod
+  jpa :
+    hibernate :
+      ddl-auto : create-drop
+    show-sql : true
+  banner :
+    location : banner-prod.txt
