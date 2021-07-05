@@ -96,7 +96,8 @@
             <span style="margin: 2px; text-align: center; font-weight: bolder;">@</span>
             <select class="login_input" name="domain" id="email_domain" style="text-align: center; text-align-last: center; display: inline-block;" required>
               <optgroup label="도메인">
-                <option value="naver.com" selected>naver.com</option>
+                <option value="null" selected>-- 선택 --</option>
+                <option value="naver.com">naver.com</option>
                 <option value="gmail.com">gmail.com</option>
                 <option value="kakao.com">kakao.com</option>
               </optgroup>
@@ -241,7 +242,8 @@
   // 필수 입력값 검사
   const checkNotNull = () => {
     let result = true
-    $("#signupfrm").find('input').each(function (item) {
+    const form = $("form")
+    form.find('input').each(function (item) {
       let input = $(this)
       let label = input.prev()
       let inputValue = input.val()
@@ -253,6 +255,13 @@
         return false;   // $.each를 break
       }
     })
+
+    const domainValue = $('select[name=domain] option:selected').val()
+    if (domainValue === "null") {
+      $('select[name=domain]').focus()
+      alert('이메일 주소는 필수 입력 사항입니다.')
+      result = false;
+    }
 
     return result;
   }
@@ -266,9 +275,9 @@
         })
   }, 200)
 
-  const emailChecker = () => {
+  const emailChecker = (e) => {
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const emailValue = $("#email").val();
+    const emailValue = $("input[name=email]").val();
     const emailDomain = $("#email_domain").val();
     const email = emailValue + '@' + emailDomain;
     const msg = $("#emailmsg")
@@ -277,10 +286,11 @@
       msg.text("").removeClass("valid").addClass("invalid")
     } else {
       if (email.match(regex) != null) {
-        let test = 'adfadfasdasd98900109';
         debounceCallEmailCheck(email, function (status) {
               if (status === 204) {
                 msg.text("사용 가능한 이메일입니다.").removeClass("invalid").addClass("valid")
+              } else {
+                msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("valid").addClass("invalid")
               }
             }
         )
@@ -309,34 +319,38 @@
     //   $('#' + e.target.id).val('')
     // })
 
-    $("#email").on("keypress paste", emailChecker);
+    $("#email").on("change keyup paste", emailChecker);
+    $("select[name=domain]").on('change', () => {
+      if ($('input[name=email]').val().length > 0) {
+        emailChecker()
+      }
+    });
 
     // 유저 전화번호
-    $("#phone").on("blur focus", editHyphen);
+    $("#phone").on("blur focus", editHyphen).on('keypress', (e) => {
+      let keycode = e.keyCode
+      if (!(48 <= keycode && keycode <= 57)) {
+        e.preventDefault();
+        e.returnValue = false;
+        alert('숫자만 입력 가능합니다.')
+      }
+    });
+
     // 추천인 전화번호
-    $("#phone_rec_user").on("blur focus", editHyphen);
+    $("#phone_rec_user").on("blur focus", editHyphen).on('keypress', (e) => {
+      let keycode = e.keyCode
+      if (!(48 <= keycode && keycode <= 57)) {
+        e.preventDefault();
+        e.returnValue = false;
+        alert('숫자만 입력 가능합니다.')
+      }
+    });
 
     $("#frmsubmit").on('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
       // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
       if (checkNotNull()) {
-        // if ($("input[name='ispanel']:checked").val() === 'true') {
-        //   // TODO: 패널 정보 추가 페이지로, 정보는 서버로 보내고 sendRedirect로 추가 정보 받기
-        //   let info = new FormData()
-        //   info.append("email", $("input[name='email']").val())
-        //   info.append("domain", $("select[name='domain']").val())
-        //   info.append("password", $("input[name='password']").val())
-        //   info.append("name", $("input[name='name']").val())
-        //   info.append("phone", $("input[name='phone']").val())
-        //   info.append("recommend", $("input[name='recommend']").val())
-        //   info.append("ispanel", true)
-        //   axios.post("http://localhost:8080/signup", info)
-        //       .then(a => console.log(a))
-        //       .catch(a => console.log(a))
-        // } else {
-        // }
-        // ==> 여기서 보내자
         $("#signupfrm").submit()
       }
     })
