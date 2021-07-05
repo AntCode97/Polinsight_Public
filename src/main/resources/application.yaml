@@ -101,7 +101,7 @@ custom :
   permission :
     resources :  /css/**, /js/**, /img/**
     admin :
-    template :   /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**
+    template :   /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel
 #    swagger-ui : /swagger-resources/**, /swagger-ui.html, /v2/api-docs,/webjars/**, /swagger-ui/**, /api-docs
 
 ---

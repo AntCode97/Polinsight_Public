@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<!--<html xmlns:th="http://www.thymeleaf.org" lang="ko">-->
-<!--<th:block th:include="module/common" />-->
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <meta charset="UTF-8">
   <style>
@@ -41,7 +41,8 @@
 </head>
 <body class="web" style="position: absolute; left: 10px; top: 100px; float: left;">
 <!--<th:block th:include="layout/header" />-->
-<h1>패널 가입</h1>
+<h1>추가 정보 입력</h1>
+<p class="center" style="text-align: center">패널 가입을 위한 추가정보를 입력해주세요.</p>
 <div class="more">
   <form id="addfrm">
     <div>
@@ -287,66 +288,69 @@
     </div>
     <div class="center">
       <input th:onclick="window.location.back()" type="button" value="돌아 가기">
-      <input type="submit" value="가입 하기">
+      <input name="panel_signup" type="submit" value="가입 하기">
     </div>
   </form>
 </div>
 </body>
-<!--<script type="text/javascript" th:inline="javascript">-->
-<!--  const onSubmit = () => {-->
-<!--    let data = new FormData()-->
-<!--    axios.post('', data)-->
-<!--        .then(res => {-->
-<!--          console.log(res)-->
-<!--        })-->
-<!--        .catch(err => {-->
-<!--          console.log(err)-->
-<!--        })-->
-<!--  }-->
+<script type="text/javascript" th:inline="javascript">
+  const onSubmit = () => {
+    let data = new FormData()
+    axios.post('', data)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+  }
 
-<!--  const setDateValue = () => {-->
-<!--    let today = new Date();-->
-<!--    $(".date").find('select').each((idx, obj) => {-->
+  const setDateValue = () => {
+    let today = new Date();
+    $(".date").find('select').each((idx, obj) => {
 
-<!--      switch (obj.name) {-->
-<!--        case "year":-->
-<!--          for (let i = 1930; i < today.getFullYear(); i++) {-->
-<!--            $(obj).append($("<option></option>").attr("value", i).text(i))-->
-<!--          }-->
-<!--          break;-->
-<!--        case "month":-->
-<!--          for (let i = 1; i < 13; i++) {-->
-<!--            $(obj).append($("<option></option>").attr("value", i).text(i))-->
-<!--          }-->
-<!--          break;-->
-<!--      }-->
-<!--    })-->
-<!--  }-->
+      switch (obj.name) {
+        case "year":
+          for (let i = 1930; i < today.getFullYear(); i++) {
+            $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+        case "month":
+          for (let i = 1; i < 13; i++) {
+            $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+      }
+    })
+  }
 
-<!--  const setDay = () => {-->
-<!--    $("#day").find("option").empty();    // 초기화-->
-<!--    let month = $("#month option:selected").text()   // 월에 선택된 옵션 값 가져오기-->
-<!--    $("#day").append($("<option selected></option>").text("&#45;&#45;선택&#45;&#45;"))-->
-<!--    if (month === 2) {-->
-<!--      for (let i = 1; i <= 28; i++) {-->
-<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
-<!--      }-->
-<!--    } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) { // 1, 3, 5, 7, 8, 10,12-->
-<!--      for (let i = 1; i <= 31; i++) {-->
-<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
-<!--      }-->
-<!--    } else {-->
-<!--      for (let i = 1; i <= 30; i++) {-->
-<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
-<!--      }-->
-<!--    }-->
-<!--  }-->
+  const setDay = () => {
+    const day = $("#day")
+    day.find("option").empty();    // 초기화
+    let month = $("#month option:selected").text()   // 월에 선택된 옵션 값 가져오기
+    day.append($("<option selected></option>").text("--선택--"))
+    if (month === 2) {
+      for (let i = 1; i <= 28; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) { // 1, 3, 5, 7, 8, 10,12
+      for (let i = 1; i <= 31; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else {
+      for (let i = 1; i <= 30; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    }
+  }
 
-<!--  $(function () {-->
-<!--    console.log("??????????????")-->
-<!--    setDateValue()-->
-<!--    $("#month").on('change', setDay)-->
-<!--  })-->
-<!--</script>-->
+  $(function () {
+    setDateValue()
+    $("#month").on('change', setDay)
 
+    $("input[name=panel_signup]").on('click', (e) => {
+
+    })
+  })
+</script>
 </html>
