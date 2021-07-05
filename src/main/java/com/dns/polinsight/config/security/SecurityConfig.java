@@ -49,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Value("${custom.permission.template}")
   private String[] templates;
 
-  @Value("${custom.permission.swagger-ui}")
-  private String[] swagger;
+//  @Value("${custom.permission.swagger-ui}")
+//  private String[] swagger;
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers(staticResources).permitAll()
           .antMatchers(permitAdmin).hasAuthority(UserRole.ADMIN.name())  // Swagger 접근 허가
           .antMatchers(templates ).permitAll()
-          .antMatchers(swagger ).permitAll()
+//          .antMatchers(swagger ).permitAll()
           .anyRequest().authenticated()
         .and()
           .exceptionHandling()

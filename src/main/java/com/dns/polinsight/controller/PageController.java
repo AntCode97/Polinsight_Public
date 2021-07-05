@@ -24,12 +24,11 @@ public class PageController {
   @GetMapping("/wholesign")
   public ModelAndView wholeSignUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("whoesignup");
+    mv.setViewName("wholesignup");
     return mv;
   }
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  //  public ModelAndView home() {
   public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
@@ -77,6 +76,13 @@ public class PageController {
     } catch (IOException e) {
       mv.setViewName("5xx");
     }
+    return mv;
+  }
+
+  @GetMapping("/panel")
+  public ModelAndView panelSignUp() {
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("panel");
     return mv;
   }
 

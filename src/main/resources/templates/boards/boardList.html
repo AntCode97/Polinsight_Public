@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<!--리프레시 할 경우, 원래 리스트 띄워지도록 하기-->
 <html xmlns:th="http://www.thymeleaf.org">
-
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <style>
     .web {
@@ -168,9 +170,7 @@
       <li class="qna">문의사항</li>
     </ul>
   </div>
-
   <div class="sub-main-name"><b>공지사항</b></div>
-
   <div class="board">
     <div class="button">
       <form method="get" th:action="@{/boards/search}" th:object="${boardSearch}">
@@ -189,9 +189,13 @@
           </optgroup>
         </select>
         <input placeholder="검색어를 입력하세요" th:field="*{searchValue}" type="text">
-        <input class="btn-search" name="submit_OK" type="submit" value="검색하기">
+        <!--비동기로 변경 필요-->
+
+        <!--        <input class="btn-search" name="submit_OK" type="submit" value="검색하기">-->
+        <input th:onclick="'javascript: boardSearch()'" value="테스트 폼" type="button" />
       </form>
     </div>
+    <button th:onclick="'javascript: boardSearch()'">테스트 검색</button>
 
     <div class="post-list">
       <div>
@@ -294,3 +298,6 @@
 
 </div>
 </body>
+<script type="text/javascript" th:src="@{/js/http.js}"></script>
+<script type="text/javascript" th:src="@{/js/test.js}"></script>
+</html>

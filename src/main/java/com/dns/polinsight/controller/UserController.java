@@ -2,8 +2,8 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.SignupDTO;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,30 +27,27 @@ public class UserController {
 
   private final UserService service;
 
+  private final HttpSession session;
+
   private final PasswordEncoder passwordEncoder;
 
   @PostMapping("/signup")
-  public void userSignUp(User user, HttpServletResponse response) {
-    try {
-      service.save(User.builder()
-                       .email(user.getEmail())
-                       .password(passwordEncoder.encode(user.getPassword()))
-                       .name(user.getName())
-                       .role(UserRole.USER)
-                       .build());
-
-      response.sendRedirect("/");
-    } catch (IOException e) {
-      e.printStackTrace();
-      // TODO: 2021-06-02 : Alert Error to user
-    }
+  public ModelAndView userSignUp(SignupDTO signupDTO, HttpServletResponse response) {
+    System.out.println(signupDTO.toString());
+    ModelAndView mv = new ModelAndView();
+    session.setAttribute("panel_signup", signupDTO.toUser());
+    if (signupDTO.isIspanel()) {
+      mv.setViewName("redirect:/panelsignup");
+    } else
+      mv.setViewName("index");
+    return mv;
   }
 
   @PostMapping("/singup/panel")
   public ModelAndView panelSignup(User user, Session session, HttpServletResponse response) {
     ModelAndView mv = new ModelAndView();
     session.setAttribute("userSignUpInfo", user);
-    mv.setViewName("panelsignup");
+    mv.setViewName("panel");
     return mv;
 
   }

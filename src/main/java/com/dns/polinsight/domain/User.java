@@ -21,9 +21,13 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
+@ToString
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
+
+  @OneToMany(mappedBy = "user")
+  private final List<Board> boards = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +36,17 @@ public class User implements UserDetails, Serializable {
   @NotNull
   private String email;
 
-
   private String password;
-
 
   private String name;
 
-
   private String picture;
 
+  private String phone;
+
+  private String recommend;
+
   private Long point;
-
-  @OneToMany(mappedBy = "user")
-  private final List<Board> boards = new ArrayList<>();
-
 
   @NotNull
   @Column(name = "role")
