@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 
 @Entity
 @NoArgsConstructor
@@ -20,6 +21,7 @@ public class Point {
 
   private Long uid;
 
+  @Email
   private String email;
 
   private Long pointValue;

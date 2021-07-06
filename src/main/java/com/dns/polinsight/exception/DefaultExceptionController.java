@@ -1,21 +1,24 @@
 package com.dns.polinsight.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class DefaultExceptionController {
 
   @ExceptionHandler(PointNotUpdateException.class)
-  public ModelAndView pointNotUpdateHandler(Exception e) {
-    ModelAndView mv = new ModelAndView();
+  public ResponseEntity<?> pointNotUpdateHandler(Exception e) {
+    Map<String, Object> map = new HashMap<>();
     log.info("User don't get point caused: " + e);
-    mv.addObject("code", 8000);
-    mv.addObject("msg", e.getMessage());
-    return mv;
+    map.put("code", 8000);
+    map.put("msg", e.getMessage());
+    return ResponseEntity.ok(map);
   }
 
 }

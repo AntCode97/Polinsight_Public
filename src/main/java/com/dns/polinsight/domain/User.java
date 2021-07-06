@@ -6,7 +6,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,18 +37,25 @@ public class User implements UserDetails, Serializable {
   private Long id;
 
   @NotNull
+  @Email
   private String email;
 
+  @Size(min = 10, max = 16)
   private String password;
 
   private String name;
 
   private String picture;
 
+
+  @Size(min = 11, max = 11)
   private String phone;
 
+  @Size(min = 11, max = 11)
   private String recommend;
 
+
+  @Min(0)
   private Long point;
 
   @NotNull

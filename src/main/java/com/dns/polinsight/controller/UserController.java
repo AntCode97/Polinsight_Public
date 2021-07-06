@@ -4,7 +4,6 @@ import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.SignupDTO;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.session.Session;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -46,7 +44,6 @@ public class UserController {
 
   @PostMapping("/signup")
   public ModelAndView userSignUp(SignupDTO signupDTO, HttpServletResponse response) {
-    System.out.println(signupDTO.toString());
     ModelAndView mv = new ModelAndView();
     session.setAttribute("panel_signup", signupDTO.toUser());
     if (signupDTO.isIspanel()) {

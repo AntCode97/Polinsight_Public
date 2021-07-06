@@ -1,9 +1,9 @@
 package com.dns.polinsight.domain;
 
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,13 @@ public class Board {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotNull
   private String title;
 
+  @NotNull
   private String searchcontent;
 
+  @NotNull
   private String viewcontent;
 
   @ManyToOne(fetch = FetchType.LAZY)
