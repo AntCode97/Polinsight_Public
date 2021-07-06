@@ -2,34 +2,38 @@ package com.dns.polinsight.config.oauth;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 @Getter
 @Setter
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+//@RequiredArgsConstructor
 public class SessionUser implements Serializable {
 
   @NotNull
   private String name;
 
   @NotNull
+  @Positive
   private Long id;
 
-  @Email
+  @NotNull
+  @Email(message = "이메일 형식이 다릅니다.")
   private String email;
 
   private String picture;
 
   private UserRole role;
 
+  @PositiveOrZero
   private Long point;
 
   public SessionUser(User user) {

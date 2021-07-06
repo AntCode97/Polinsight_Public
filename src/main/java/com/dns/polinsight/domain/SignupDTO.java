@@ -2,8 +2,8 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,22 +13,26 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class SignupDTO {
 
-  @Email
+  @NotEmpty
   private String email;
 
+  @NotEmpty
   private String domain;
 
-  @NotNull
+  @NotEmpty
   private String password;
 
-  @NotNull
+  @NotEmpty
   private String name;
 
-  @NotNull
+  @NotEmpty
+  @Size(min = 11, max = 11)
   private String phone;
 
+  @Size(min = 11, max = 11)
   private String recommend;
 
+  @NotEmpty
   private boolean ispanel;
 
 

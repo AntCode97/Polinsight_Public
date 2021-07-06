@@ -3,6 +3,8 @@ package com.dns.polinsight.domain;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,17 +15,21 @@ import java.util.List;
 @AllArgsConstructor
 public class BoardDTO {
 
+  @Positive
   private Long id;
 
   private String title;
 
+  @NotNull
   private BoardType boardType;
 
   private String content;
 
   private String viewcontent;
 
+  @NotNull
   private User user;
+
 
   private LocalDateTime registeredAt;
 

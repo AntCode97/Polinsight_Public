@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,16 +33,16 @@ public class UserController {
 
   private final PasswordEncoder passwordEncoder;
 
-//  @PostConstruct
-//  public void saveUserDate() {
-//    service.save(User.builder()
-//                     .email("albaneo0724@gmail.com")
-//                     .name("alban")
-//                     .password(passwordEncoder.encode("!@##$%QWERT"))
-//                     .role(UserRole.ADMIN)
-//                     .phone("010-1234-5678")
-//                     .build());
-//  }
+  //  @PostConstruct
+  //  public void saveUserDate() {
+  //    service.save(User.builder()
+  //                     .email("albaneo0724@gmail.com")
+  //                     .name("alban")
+  //                     .password(passwordEncoder.encode("!@##$%QWERT"))
+  //                     .role(UserRole.ADMIN)
+  //                     .phone("010-1234-5678")
+  //                     .build());
+  //  }
 
   @PostMapping("/signup")
   public ModelAndView userSignUp(SignupDTO signupDTO, HttpServletResponse response) {
@@ -54,7 +56,7 @@ public class UserController {
   }
 
   @PostMapping("/singup/panel")
-  public ModelAndView panelSignup(User user, Session session, HttpServletResponse response) {
+  public ModelAndView panelSignup(@Valid @RequestBody User user, Session session, HttpServletResponse response) {
     ModelAndView mv = new ModelAndView();
     session.setAttribute("userSignUpInfo", user);
     mv.setViewName("panel");
@@ -63,7 +65,7 @@ public class UserController {
   }
 
   @PostMapping("/deleteaccount")
-  public ModelAndView deleteUser(User user) {
+  public ModelAndView deleteUser(@Valid @RequestBody User user) {
     ModelAndView mv = new ModelAndView();
     service.deleteUser(user);
     mv.setViewName("index");
@@ -72,7 +74,7 @@ public class UserController {
 
   @GetMapping("/user/{email}")
   @CrossOrigin("*") // 비동기 이메일 검증을 위한 cors 처리
-  public ResponseEntity<Map<String, Object>> findUserByEmail(@PathVariable("email") String email) {
+  public ResponseEntity<Map<String, Object>> findUserByEmail(@Valid @Email @PathVariable("email") String email) {
     Map<String, Object> map = new HashMap<>();
     try {
       map.put("user", service.findUserByEmail(User.builder().email(email).build()));
@@ -87,7 +89,7 @@ public class UserController {
 
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@LoginUser SessionUser user) {
+  public ModelAndView myPage(@Valid @LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("mypage");
     mv.addObject("user", service.findUserByEmail(User.builder()

@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,13 +34,14 @@ public class User implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @PositiveOrZero
   private Long id;
 
   @NotNull
-  @Email
+  @Email(message = "이메일의 형식이 다릅니다.")
   private String email;
 
-  @Size(min = 10, max = 16)
+  @Size(min = 10, max = 16, message = "패스워드 길이가 맞지 않습니다.")
   private String password;
 
   private String name;
@@ -55,7 +56,7 @@ public class User implements UserDetails, Serializable {
   private String recommend;
 
 
-  @Min(0)
+  @PositiveOrZero
   private Long point;
 
   @NotNull

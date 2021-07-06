@@ -3,7 +3,9 @@ package com.dns.polinsight.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +23,16 @@ public class Board {
   @Id
   @Column(name = "bno")
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @PositiveOrZero
   private Long id;
 
-  @NotNull
+  @NotEmpty
   private String title;
 
-  @NotNull
+  @NotEmpty
   private String searchcontent;
 
-  @NotNull
+  @NotEmpty
   private String viewcontent;
 
   @ManyToOne(fetch = FetchType.LAZY)
