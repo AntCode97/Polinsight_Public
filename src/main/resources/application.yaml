@@ -101,7 +101,7 @@ custom :
   permission :
     resources : /css/**, /js/**, /img/**
     admin :
-    template :  /signup, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel, /point**
+    template :  /signup, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards**, /panel, /point**
 
 ---
 spring :
@@ -152,7 +152,7 @@ spring :
   jpa :
     hibernate :
       ddl-auto : update
-    show-sql : true
+
   banner :
     location : banner-prod.txt
 

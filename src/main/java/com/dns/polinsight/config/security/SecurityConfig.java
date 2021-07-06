@@ -74,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers(staticResources).permitAll()
           .antMatchers(permitAdmin).hasAuthority(UserRole.ADMIN.name())  // Swagger 접근 허가
           .antMatchers(templates ).permitAll()
-//          .antMatchers(swagger ).permitAll()
           .anyRequest().authenticated()
         .and()
           .exceptionHandling()

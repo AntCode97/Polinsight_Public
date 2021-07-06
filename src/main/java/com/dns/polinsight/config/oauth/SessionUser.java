@@ -42,7 +42,7 @@ public class SessionUser implements Serializable {
     this.role = user.getRole();
     this.name = user.getName();
     this.point = user.getPoint();
-    this.picture = user.getPicture();
+    //    this.picture = user.getPicture();
   }
 
   public SessionUser of(User user) {
@@ -51,7 +51,7 @@ public class SessionUser implements Serializable {
     this.role = user.getRole();
     this.name = user.getName();
     this.point = user.getPoint();
-    this.picture = user.getPicture();
+    //    this.picture = user.getPicture();
     return this;
   }
 

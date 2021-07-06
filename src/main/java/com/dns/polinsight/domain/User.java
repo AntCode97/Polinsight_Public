@@ -46,9 +46,6 @@ public class User implements UserDetails, Serializable {
 
   private String name;
 
-  private String picture;
-
-
   @Size(min = 11, max = 11)
   private String phone;
 
@@ -102,7 +99,7 @@ public class User implements UserDetails, Serializable {
 
   public User update(String name, String picture) {
     this.name = name;
-    this.picture = picture;
+//    this.picture = picture;
     return this;
   }
 

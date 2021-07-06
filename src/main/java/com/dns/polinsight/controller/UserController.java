@@ -80,7 +80,6 @@ public class UserController {
       map.put("user", service.findUserByEmail(User.builder().email(email).build()));
     } catch (RuntimeException e) {
       e.getMessage();
-      // NOTE 2021/06/12 : 아무것도 없는 응답을 보냄
       return ResponseEntity.noContent().build();
     }
 
@@ -95,7 +94,7 @@ public class UserController {
     mv.addObject("user", service.findUserByEmail(User.builder()
                                                      .email(user.getEmail())
                                                      .name(user.getName())
-                                                     .picture(user.getPicture())
+                                                     //                                                     .picture(user.getPicture())
                                                      .build()));
     return mv;
   }
