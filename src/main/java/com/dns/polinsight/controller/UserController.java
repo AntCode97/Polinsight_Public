@@ -45,7 +45,7 @@ public class UserController {
   //  }
 
   @PostMapping("/signup")
-  public ModelAndView userSignUp(SignupDTO signupDTO, HttpServletResponse response) {
+  public ModelAndView userSignUp(SignupDTO signupDTO) {
     ModelAndView mv = new ModelAndView();
     session.setAttribute("panel_signup", signupDTO.toUser());
     if (signupDTO.isIspanel()) {

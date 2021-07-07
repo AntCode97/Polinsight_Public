@@ -100,20 +100,20 @@ file :
 custom :
   permission :
     resources : /css/**, /js/**, /img/**
-    admin :
-    template :  /signup, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel, /point**
+    admin : /signup
+    template :  /join, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel, /point**, /denied
 
 ---
 spring :
   datasource :
     username :          root
     password :          root
-    url :               jdbc:mariadb://localhost:3306/polinsight
+    url :               jdbc:mariadb://168.131.148.45:23306/polinsight
     driver-class-name : org.mariadb.jdbc.Driver
 
   data :
     mongodb :
-      uri : mongodb://localhost:27017/polinsight
+      uri : mongodb://168.131.148.45:27017/polinsight
 
   jpa :
     hibernate :
@@ -122,8 +122,8 @@ spring :
       format_sql : true
 
   redis :
-    host : localhost
-    port : 6379
+    host : 168.131.148.45
+    port : 26379
 
   config :
     activate :

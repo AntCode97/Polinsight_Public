@@ -1,11 +1,13 @@
 package com.dns.polinsight.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.List;
 @Builder(builderMethodName = "BoardBuilder")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+public class Board implements Serializable {
+
+  private static final long serialVersionUID = 5170758413872517587L;
 
   @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
   private List<Attach> attaches = new ArrayList<>();
@@ -37,6 +41,7 @@ public class Board {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
+  @JsonIgnore
   @NotNull
   private User user;
 

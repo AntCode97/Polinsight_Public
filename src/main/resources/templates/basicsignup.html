@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <th:block th:include="module/common" />
-<!--<th:block th:include="layout/header" />-->
+<th:block th:include="layout/header" />
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title></title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <style type="text/css">
-    @import url('common.css');
+    /*@import url('@{/common.css}');*/
 
     .register_wrap {
       width: 1000px;
@@ -101,6 +101,11 @@
       color: red;
     }
 
+    .correct_msg {
+      color: greenyellow;
+      display: inline-block;
+    }
+
     .no_need {
       background-image: url('') !important;
     }
@@ -159,6 +164,49 @@
       font-size: 16px;
       font-weight: bold;
     }
+
+    .popup_overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .popup_box {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      width: 550px;
+      transform: translate(-50%, -50%);
+      box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.35);
+      background-color: white;
+    }
+
+    .popup_box .popup_content {
+      padding: 50px;
+      font-size: 14px;
+      word-break: break-word;
+      color: #666;
+    }
+
+    .popup_box .popup_btn {
+      position: relative;
+      margin: auto;
+      width: 100px;
+      height: 40px;
+      background: #5d5d5d;
+      color: white;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 40px;
+    }
+
+    .popup_btn:hover {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -183,14 +231,14 @@
                 <span>@</span>
                 <select name="domain" id="email_domain" required>
                   <optgroup label="도메인">
-                    <option value="null" selected>-- 선택 --</option>
+                    <!--                    <option value="null" selected>&#45;&#45; 선택 &#45;&#45;</option>-->
                     <option value="naver.com">naver.com</option>
                     <option value="gmail.com">gmail.com</option>
                     <option value="kakao.com">kakao.com</option>
                   </optgroup>
                 </select>
-                <span class="err_msg">중복 된 이메일입니다.</span>
-                <span class="info_msg"></span>
+                <span id="email_msg"></span>
+                <!--                <span class="info_msg"></span>-->
               </div>
             </li>
             <li>
@@ -201,7 +249,7 @@
               </div>
               <div class="right_content">
                 <input id="password" name="password" required type="password" minlength="10" maxlength="16" />
-                <span class="err_msg">올바른 비밀번호를 입력하세요.</span>
+                <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
                 <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
               </div>
             </li>
@@ -213,7 +261,7 @@
               </div>
               <div class="right_content">
                 <input id="pwconfirm" required type="password" minlength="10" maxlength="16" />
-                <span class="err_msg">비밀번호가 일치하지 않습니다.</span>
+                <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
                 <span class="info_msg" id="pwmsg"></span>
               </div>
             </li>
@@ -223,7 +271,7 @@
               </div>
               <div class="right_content">
                 <input class="login_input" id="user_name" name="name" required type="text" />
-                <span class="err_msg">이름을 입력해주세요.</span>
+                <!--                <span>이름을 입력해주세요.</span>-->
                 <span class="info_msg"></span>
               </div>
             </li>
@@ -234,7 +282,7 @@
               <div class="right_content">
                 <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
                 <!--                <button id="phone_chk">인증</button>-->
-                <span class="err_msg">휴대전화를 입력해 주세요</span>
+                <!--                <span>휴대전화를 입력해 주세요</span>-->
                 <span class="info_msg">(- 없이 입력해주세요.)</span>
               </div>
             </li>
@@ -245,7 +293,6 @@
               <div class="right_content">
                 <input class="login_input" id="phone_rec_user" name="recommend" type="tel" maxlength="11">
                 <!--                <button id="phone_rec_user_chk">확인</button>-->
-                <span class="err_msg"></span>
                 <span class="info_msg">(- 없이 입력해주세요.)</span>
               </div>
             </li>
@@ -279,6 +326,19 @@
           <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+<div class="popup_overlay">
+  <div class="popup_box">
+    <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
+      <i class="fas fa-times"></i>
+    </div>
+    <div class="popup_content">
+      <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
+    </div>
+    <div class="popup_btn">
+      확인
     </div>
   </div>
 </div>
@@ -335,11 +395,11 @@
       if (passwordValue !== "" && confirmValue !== "") {
         if (passwordValue === confirmValue) {
           if (passwordValueChecker(passwordValue)) {
-            msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
+            msg.text("사용 가능한 패스워드 입니다.").removeClass("err_msg").addClass("correct_msg")
             return
           }
         }
-        msg.text("올바른 패스워드를 입력해주세요.").removeClass("valid").addClass("invalid")
+        msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("erro_msg")
       }
     }
   }
@@ -347,8 +407,7 @@
   // 필수 입력값 검사
   const checkNotNull = () => {
     let result = true
-    const form = $("form")
-    form.find('input').each(function (item) {
+    $("form").find('input').each(function (item) {
       let input = $(this)
       let label = input.prev()
       let inputValue = input.val()
@@ -385,22 +444,22 @@
     const emailValue = $("input[name=email]").val();
     const emailDomain = $("#email_domain").val();
     const email = emailValue + '@' + emailDomain;
-    const msg = $("#emailmsg")
+    const msg = $("#email_msg")
 
-    if (email === "") {
-      msg.text("").removeClass("valid").addClass("invalid")
+    if (emailValue === "") {
+      msg.text("").removeClass("correct_msg").addClass("err_msg")
     } else {
       if (email.match(regex) != null) {
         debounceCallEmailCheck(email, function (status) {
               if (status === 204) {
-                msg.text("사용 가능한 이메일입니다.").removeClass("invalid").addClass("valid")
+                msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
               } else {
-                msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("valid").addClass("invalid")
+                msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
               }
             }
         )
       } else {
-        msg.text("올바른 이메일을 입력해주세요").removeClass("valid").addClass("invalid")
+        msg.text("올바른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
       }
 
     }
@@ -425,7 +484,7 @@
     // })
 
     $("#email").on("change keyup paste", emailChecker);
-    $("select[name=domain]").on('change', () => {
+    $("#email_domain").on('change', () => {
       if ($('input[name=email]').val().length > 0) {
         emailChecker()
       }
@@ -450,6 +509,22 @@
         alert('숫자만 입력 가능합니다.')
       }
     });
+
+    $("input[name=ispanel]").on('click', (e) => {
+      if (e.target.value === "false") {
+        // 가입 안했을때의 경고창
+        // alert('폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.')
+        $(".popup_overlay").css('display', 'block')
+        return
+      }
+    })
+
+    $("#popup_close_btn").on('click', (e) => {
+      $(".popup_overlay").css('display', 'none')
+    })
+    $(".popup_btn").on('click', (e) => {
+      $(".popup_overlay").css('display', 'none')
+    })
 
     $("#frmsubmit").on('click', (e) => {
       e.preventDefault()

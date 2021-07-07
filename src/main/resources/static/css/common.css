@@ -19,6 +19,8 @@ body {
     padding: 0;
     font-size: 14px;
     color: #69666d;
+    position: absolute;
+    top: 80px;
 }
 
 ul {

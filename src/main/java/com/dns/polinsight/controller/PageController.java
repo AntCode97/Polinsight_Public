@@ -52,7 +52,7 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/signup")
+  @GetMapping("/join")
   public ModelAndView signUp() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("basicsignup");
@@ -67,12 +67,12 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/terms")
+  @GetMapping("/signup")
   public ModelAndView terms() {
     ModelAndView mv = new ModelAndView();
     try {
       mv.addObject("terms", service.getTerms());
-      mv.setViewName("terms");
+      mv.setViewName("signupterms");
     } catch (IOException e) {
       mv.setViewName("5xx");
     }
@@ -83,6 +83,13 @@ public class PageController {
   public ModelAndView panelSignUp() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("panel");
+    return mv;
+  }
+
+  @GetMapping("/denied")
+  public ModelAndView deniedHandler() {
+    ModelAndView mv = new ModelAndView();
+    mv.setViewName("/error/denied_page");
     return mv;
   }
 

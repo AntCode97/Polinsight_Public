@@ -1,5 +1,6 @@
 package com.dns.polinsight.config.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
 
@@ -18,7 +20,11 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-    request.getRequestDispatcher("/").forward(request, response);
+    log.info("entry Point-----------------------------------------");
+    // 에러가 발생하였을 때, 인덱스 페이지로 리다이렉팅
+//    request.getRequestDispatcher("/").forward(request, response);
+    request.getRequestDispatcher("/405").forward(request, response);
+
   }
 
 }

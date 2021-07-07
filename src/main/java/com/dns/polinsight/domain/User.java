@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,7 @@ public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "user")
   private final List<Board> boards = new ArrayList<>();
 
