@@ -543,13 +543,16 @@
       e.stopPropagation()
       // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
       if (checkNotNull()) {
-        let info = getFormData()
+        const info = getFormData()
         info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
 
         axios.post('/signup', info)
             .then(res => {
+              console.log('ispanel', info['ispanel'])
+              console.log("response", res)
               if (res.data.code === 200) {
                 if (info['ispanel']) {
+                  location.replace('/panel')
                 } else {
                   alert('일반 유저 가입 성공!')
                   location.replace('/')
@@ -559,6 +562,7 @@
               }
             })
             .catch(err => {
+              console.log("Error resposne", err)
               alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
             })
       }

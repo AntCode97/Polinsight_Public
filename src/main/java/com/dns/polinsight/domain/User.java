@@ -1,21 +1,20 @@
 package com.dns.polinsight.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,6 +29,9 @@ public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
 
+  /*
+   * 유저 기본정보 클래스
+   * */
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   private final List<Board> boards = new ArrayList<>();
@@ -39,43 +41,18 @@ public class User implements UserDetails, Serializable {
   @PositiveOrZero
   private Long id;
 
-  @NotNull
-  @UniqueElements
-  @Email(message = "이메일의 형식이 다릅니다.")
   private String email;
 
-  @Size(min = 10, max = 16, message = "패스워드 길이가 맞지 않습니다.")
   private String password;
 
   private String name;
 
-  private String picture;
-
-  //  @Enumerated(EnumType.STRING) ???????R
-  private Gender gender;
-
-  //  @Temporal(TemporalType.DATE)
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date birth;
-
-  private String birthType;
 
   @Size(min = 11, max = 11)
   private String phone;
 
   @Size(min = 11, max = 11)
   private String recommend;
-
-  private String education;
-
-  private boolean marry;
-
-  private String job;
-
-  private String industry;
-
-  @ElementCollection
-  private List<String> favorite;
 
   @PositiveOrZero
   private Long point;
@@ -84,6 +61,8 @@ public class User implements UserDetails, Serializable {
   @Column(name = "role")
   private UserRole role;
 
+  @OneToOne
+  private Additional additional;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -120,19 +99,13 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
-
   public User update(String name, String picture) {
     this.name = name;
-    this.picture = picture;
     return this;
   }
 
-  public User pointUpdate(Long point) {
-    this.point = point;
-    return this;
-  }
-
-  public User addMoreInfo() {
+  public User update(Additional additional) {
+    this.additional = additional;
     return this;
   }
 

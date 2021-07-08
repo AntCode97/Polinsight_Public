@@ -4,7 +4,6 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.UserRole;
 import lombok.*;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -26,7 +25,7 @@ public class SessionUser implements Serializable {
   private Long id;
 
   @NotNull
-  @Email(message = "이메일 형식이 다릅니다.")
+//  @Email(message = "이메일 형식이 다릅니다.")
   private String email;
 
   private String picture;
@@ -42,7 +41,6 @@ public class SessionUser implements Serializable {
     this.role = user.getRole();
     this.name = user.getName();
     this.point = user.getPoint();
-    this.picture = user.getPicture();
   }
 
   public SessionUser of(User user) {
@@ -51,7 +49,6 @@ public class SessionUser implements Serializable {
     this.role = user.getRole();
     this.name = user.getName();
     this.point = user.getPoint();
-    this.picture = user.getPicture();
     return this;
   }
 

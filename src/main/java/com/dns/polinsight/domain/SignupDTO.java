@@ -29,19 +29,7 @@ public class SignupDTO {
   @Size(min = 11, max = 11)
   private String recommend;
 
-  @NotEmpty
-  private Boolean ispanel;
+  private boolean ispanel;
 
-
-  public User toUser() {
-    return User.builder()
-               .email(this.email)
-               .name(this.name)
-               .password(this.password)
-               .phone(this.phone)
-               .recommend(this.recommend)
-               .role(this.ispanel ? UserRole.PANEL : UserRole.USER)
-               .build();
-  }
 
 }
