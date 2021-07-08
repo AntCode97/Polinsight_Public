@@ -19,10 +19,8 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
    * */
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-
-    log.info("entry Point-----------------------------------------");
     // 에러가 발생하였을 때, 인덱스 페이지로 리다이렉팅
-//    request.getRequestDispatcher("/").forward(request, response);
+    request.setAttribute("msg", "로그인 먼저 해주세요");
     request.getRequestDispatcher("/405").forward(request, response);
 
   }

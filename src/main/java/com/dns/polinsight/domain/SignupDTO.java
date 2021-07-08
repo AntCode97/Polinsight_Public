@@ -17,9 +17,6 @@ public class SignupDTO {
   private String email;
 
   @NotEmpty
-  private String domain;
-
-  @NotEmpty
   private String password;
 
   @NotEmpty
@@ -33,16 +30,17 @@ public class SignupDTO {
   private String recommend;
 
   @NotEmpty
-  private boolean ispanel;
+  private Boolean ispanel;
 
 
   public User toUser() {
     return User.builder()
-               .email(this.email + "@" + this.domain)
+               .email(this.email)
                .name(this.name)
                .password(this.password)
                .phone(this.phone)
                .recommend(this.recommend)
+               .role(this.ispanel ? UserRole.PANEL : UserRole.USER)
                .build();
   }
 

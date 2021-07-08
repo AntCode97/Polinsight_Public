@@ -11,11 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.session.Session;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -45,22 +43,35 @@ public class UserController {
   //  }
 
   @PostMapping("/signup")
-  public ModelAndView userSignUp(SignupDTO signupDTO) {
-    ModelAndView mv = new ModelAndView();
-    session.setAttribute("panel_signup", signupDTO.toUser());
-    if (signupDTO.isIspanel()) {
-      mv.setViewName("redirect:/panel");
-    } else
-      mv.setViewName("index");
-    return mv;
+  public ResponseEntity<Map<String, Object>> userSignUp(@Valid SignupDTO signupDTO) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      User user = service.save(signupDTO.toUser());
+      session.setAttribute("user", user);
+      if (signupDTO.getIspanel()) {
+        map.put("code", 200);
+        map.put("msg", "need more info for panel signup");
+      } else {
+        map.put("code", 200);
+        map.put("msg", "normal user signup success");
+      }
+    } catch (Exception e) {
+      map.put("code", 6000);
+    }
+    return ResponseEntity.ok(map);
   }
 
-  @PostMapping("/singup/panel")
-  public ModelAndView panelSignup(@Valid @RequestBody User user, Session session, HttpServletResponse response) {
-    ModelAndView mv = new ModelAndView();
-    session.setAttribute("userSignUpInfo", user);
-    mv.setViewName("panel");
-    return mv;
+  @PostMapping("/moreinfo")
+  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody User user, HttpSession session) {
+    System.out.println(user.toString());
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("msg", "success");
+    map.put("code", 200);
+    // TODO: 2021/07/08 write User.class -> SessionUser.class translation method
+    session.setAttribute("user", user);
+
+    return ResponseEntity.ok(map);
 
   }
 
@@ -80,7 +91,6 @@ public class UserController {
       map.put("user", service.findUserByEmail(User.builder().email(email).build()));
     } catch (RuntimeException e) {
       e.getMessage();
-      // NOTE 2021/06/12 : 아무것도 없는 응답을 보냄
       return ResponseEntity.noContent().build();
     }
 

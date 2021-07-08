@@ -21,13 +21,6 @@ public class PageController {
 
   private final PageService service;
 
-  @GetMapping("/wholesign")
-  public ModelAndView wholeSignUp() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("wholesignup");
-    return mv;
-  }
-
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
   public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
@@ -89,7 +82,7 @@ public class PageController {
   @GetMapping("/denied")
   public ModelAndView deniedHandler() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("/error/denied_page");
+    mv.setViewName("denied");
     return mv;
   }
 

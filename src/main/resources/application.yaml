@@ -100,9 +100,8 @@ file :
 custom :
   permission :
     resources : /css/**, /js/**, /img/**
-    admin : /signup
-    template :  /join, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel, /point**, /denied
-
+    admin :
+    template :  /signup,/join, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards/**, /panel, /point**, /denied, /moreinfo
 ---
 spring :
   datasource :

@@ -23,7 +23,8 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     log.info("access denied handler: -------------------");
     /*
-     * 인증이 안된 유저의 접근 불가 처리
+     * 인가 거부 처리
+     * Access Denied
      * */
     response.setStatus(HttpStatus.FORBIDDEN.value());
 

@@ -248,19 +248,19 @@
                 </label>
               </div>
               <div class="right_content">
-                <input id="password" name="password" required type="password" minlength="10" maxlength="16" />
+                <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
                 <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
                 <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
               </div>
             </li>
             <li>
               <div class="left_content">
-                <label for="pwconfirm">
+                <label for="pwdconfirm">
                   비밀번호 확인
                 </label>
               </div>
               <div class="right_content">
-                <input id="pwconfirm" required type="password" minlength="10" maxlength="16" />
+                <input class="pwdinput" name="pwdcfm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
                 <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
                 <span class="info_msg" id="pwmsg"></span>
               </div>
@@ -288,10 +288,10 @@
             </li>
             <li>
               <div class="left_content">
-                <label for="phone_rec_user">추천인 휴대전화</label>
+                <label for="recommend">추천인 휴대전화</label>
               </div>
               <div class="right_content">
-                <input class="login_input" id="phone_rec_user" name="recommend" type="tel" maxlength="11">
+                <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
                 <!--                <button id="phone_rec_user_chk">확인</button>-->
                 <span class="info_msg">(- 없이 입력해주세요.)</span>
               </div>
@@ -345,8 +345,7 @@
 </body>
 <script>
   const editHyphen = e => {
-    const phone = $("#phone")
-    const phoneValue = phone.val()
+    const phoneValue = e.target.value
     let ret = "";
     if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
       ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
@@ -354,7 +353,7 @@
       phoneValue.substring(0, 11)
       ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
     }
-    phone.val(ret)
+    e.target.value = ret
     return ret;
   }
 
@@ -368,28 +367,23 @@
 
   // 비밀번호 확인 검증
   const passwordChecker = (e) => {
-    if (e.type !== "change") {
-      // scape input check
-      let keycode = e.keyCode
-      if (keycode === 32 || keycode === 9) {
-        e.preventDefault()
-        e.returnValue = false;
-        alert("공백은 입력할 수 없습니다.")
-        return;
-      } else if (keycode === 20) {
-        // NOTE : capslock이 켜져있습니다 띄우기
-      }
-    }
+    if (e.target.value === "") return;
+    const keycode = e.keyCode;
 
-    const keycode = e.keyCode
-    const originKeyValue = e.originalEvent.key;
+    // if (keycode === 32 || keycode === 9) {
+    //   e.preventDefault()
+    //   e.returnValue = false;
+    //   alert("공백은 입력할 수 없습니다.")
+    //   return;
+    // } else
+    let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
+
     /* 숫자, 소문자, 대문자, 특수문자 */
-    if ((48 <= keycode && keycode <= 47) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) || originKeyValue.match(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi) !==
-        null) {
-
-
+    // else
+    if ((48 <= keycode && keycode <= 57) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) ||
+        re.test(e.originalEvent.key)) {
       const passwordValue = $("#password").val();
-      const confirmValue = $("#pwconfirm").val();
+      const confirmValue = $("#pwdconfirm").val();
       const msg = $("#pwmsg")
 
       if (passwordValue !== "" && confirmValue !== "") {
@@ -399,7 +393,7 @@
             return
           }
         }
-        msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("erro_msg")
+        msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("err_msg")
       }
     }
   }
@@ -409,7 +403,7 @@
     let result = true
     $("form").find('input').each(function (item) {
       let input = $(this)
-      let label = input.prev()
+      let label = input.prev('label')
       let inputValue = input.val()
       if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {
         input.focus()    // 입력이 안된 사항으로 포커싱
@@ -465,6 +459,23 @@
     }
   }
 
+  const getFormData = () => {
+    let basicInfo = {}
+    const form = $('form')
+    form.find('input').each((idx, item) => {
+      if (item.name === 'phone' || item.name === 'recommend') {
+        basicInfo[item.name] = item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3");
+      } else if (item.name !== 'pwdcfm') {
+        basicInfo[item.name] = item.value;
+      }
+    })
+    form.find('select').each((idx, item) => {
+      basicInfo['email'] += '@' + $(item).val()
+    })
+    console.log(basicInfo)
+    return basicInfo
+  }
+
   $(function () {
     $(document).on('focus', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #4C99CF');
@@ -474,10 +485,12 @@
       $(this).css('border-bottom', '1.5px solid #dde0ea');
     });
 
-    $(".pwinput").on("keypress", passwordChecker).on("paste", e => {
-      e.preventDefault()
-      alert("붙여넣기는 사용하실 수 없습니다.")
-    });
+    $(".pwdinput")
+        .on("keyup change", passwordChecker)
+        .on("paste", e => {
+          e.preventDefault()
+          alert("붙여넣기는 사용하실 수 없습니다.")
+        });
     // .on('click', e => {
     //   /*입력폼 클릭시 입력값 삭제*/
     //   $('#' + e.target.id).val('')
@@ -501,7 +514,7 @@
     });
 
     // 추천인 전화번호
-    $("#phone_rec_user").on("blur focus", editHyphen).on('keypress', (e) => {
+    $("#recommend").on("blur focus", editHyphen).on('keypress', (e) => {
       let keycode = e.keyCode
       if (!(48 <= keycode && keycode <= 57)) {
         e.preventDefault();
@@ -515,7 +528,6 @@
         // 가입 안했을때의 경고창
         // alert('폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.')
         $(".popup_overlay").css('display', 'block')
-        return
       }
     })
 
@@ -531,9 +543,30 @@
       e.stopPropagation()
       // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
       if (checkNotNull()) {
-        $("#signupfrm").submit()
+        let info = getFormData()
+        info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
+
+        axios.post('/signup', info)
+            .then(res => {
+              if (res.data.code === 200) {
+                if (info['ispanel']) {
+                } else {
+                  alert('일반 유저 가입 성공!')
+                  location.replace('/')
+                }
+              } else {
+                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+              }
+            })
+            .catch(err => {
+              alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+            })
       }
     })
+
+    // if (keycode === 20) {
+    //   // TODO : capslock이 켜져있습니다 띄우기 --> 문서 열때
+    // }
   })
 
 </script>
