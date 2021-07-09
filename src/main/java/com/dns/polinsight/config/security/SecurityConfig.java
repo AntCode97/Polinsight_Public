@@ -1,8 +1,8 @@
 package com.dns.polinsight.config.security;
 
 import com.dns.polinsight.config.oauth.CustomOAuth2Service;
-import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -57,13 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(service).passwordEncoder(passwordEncoder());
   }
 
-  //  @Override
-  //  public void configure(WebSecurity web) throws Exception {
-  //    //    static 자원들은 신경쓰지 않음 --> security filter chain을 거치지 않음
-  //    // but 문제 발생 소지 많음
-  //    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-  //  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     // @formatter:off
@@ -72,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .cors().disable()
           .authorizeRequests()
           .antMatchers(staticResources).permitAll()
-          .antMatchers(permitAdmin).hasRole(UserRole.ADMIN.name())  // Swagger 접근 허가
+          .antMatchers(permitAdmin).hasRole(UserRoleType.ADMIN.name())  // Swagger 접근 허가
           .antMatchers(templates ).permitAll()
 //          .antMatchers(swagger ).permitAll()
           .anyRequest().authenticated()
@@ -82,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
         .and()
           .formLogin()
-            .loginPage("/loginpage")
+            .loginPage("/login")
             .loginProcessingUrl("/dologin")
             .usernameParameter("email")
             .passwordParameter("password")
@@ -101,8 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/loginpage")
             .successHandler(successHandler)
             .userInfoEndpoint()
-            .userService(customOAuth2Service)
-    ;
+            .userService(customOAuth2Service);
     // @formatter:on
   }
 

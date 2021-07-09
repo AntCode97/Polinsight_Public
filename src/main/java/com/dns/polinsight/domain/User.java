@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,8 +60,9 @@ public class User implements UserDetails, Serializable {
 
   @NotNull
   @Column(name = "role")
-  private UserRole role;
+  private UserRoleType role;
 
+  @JoinColumn(name = "additional_id")
   @OneToOne
   private Additional additional;
 

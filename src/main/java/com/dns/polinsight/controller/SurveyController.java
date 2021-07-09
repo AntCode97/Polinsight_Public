@@ -28,22 +28,21 @@ import java.util.List;
 public class SurveyController {
 
 
-  private final SurveyService service;
+  private final SurveyService surveyService;
 
   @Value("${custom.api.url}")
   private String baseURL;
 
-  @GetMapping
+  @GetMapping("/surveys")
   public ModelAndView getSurveyById(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView();
     Long id = Long.parseLong(request.getParameter("surveyId"));
     mv.setViewName("");
-    mv.addObject("survey", service.findById(Survey.builder()
-                                                  .id(id)
-                                                  .build()));
+    mv.addObject("survey", surveyService.findById(Survey.builder()
+                                                        .id(id)
+                                                        .build()));
 
     return mv;
-
   }
 
   /*
@@ -60,7 +59,6 @@ public class SurveyController {
    * 서베이몽키에서 데이터를 파싱해 보여줌
    * 서베이 몽키에서 작성한 설문 리스트
    * */
-  @GetMapping
   public ModelAndView getSurveyListFromSM(HttpSession session, String requestURL) throws MalformedURLException, URISyntaxException {
     ModelAndView mv = new ModelAndView();
     session.setAttribute("survyes", new RestTemplate().exchange(baseURL + requestURL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Survey>>() {}));

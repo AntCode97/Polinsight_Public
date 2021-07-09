@@ -36,6 +36,5 @@ public class AuthExeptionController {
     mv.addObject("code", 6001);
     return mv;
   }
-
-//  @ExceptionHandler(AccessDenied)
+  
 }

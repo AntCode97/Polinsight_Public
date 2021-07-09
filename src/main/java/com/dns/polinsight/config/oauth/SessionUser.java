@@ -1,7 +1,7 @@
 package com.dns.polinsight.config.oauth;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -14,8 +14,9 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor
 public class SessionUser implements Serializable {
+
+  private static final long serialVersionUID = -1652804180922488046L;
 
   @NotNull
   private String name;
@@ -25,12 +26,11 @@ public class SessionUser implements Serializable {
   private Long id;
 
   @NotNull
-//  @Email(message = "이메일 형식이 다릅니다.")
   private String email;
 
   private String picture;
 
-  private UserRole role;
+  private UserRoleType role;
 
   @PositiveOrZero
   private Long point;

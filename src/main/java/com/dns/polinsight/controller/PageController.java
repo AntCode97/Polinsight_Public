@@ -31,14 +31,17 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/findpassword")
+  /*
+   * 비밀번호 찾기 기능
+   * */
+  @GetMapping("/findpwd")
   public ModelAndView findpassword() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("findpwd");
     return mv;
   }
 
-  @GetMapping("/loginpage")
+  @GetMapping("/login")
   public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("login");
@@ -54,6 +57,7 @@ public class PageController {
 
   @GetMapping("/changepassword/{hash}")
   public ModelAndView changePassword(@PathVariable(name = "hash") String hash) {
+    /*등록한 메일 주소로 전달한 페이지에서, 비밀번호 변경 클릭 시 리다이렉팅 될 주소*/
     // NOTE 2021-06-23 0023 : 해시가 우리 서버에서 발급한게 맞는지 확인한다
     ModelAndView mv = new ModelAndView();
     mv.setViewName("changepwd");

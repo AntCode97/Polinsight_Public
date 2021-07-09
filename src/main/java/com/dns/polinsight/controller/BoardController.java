@@ -9,6 +9,8 @@ import com.dns.polinsight.service.BoardService;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
+import com.dns.polinsight.types.SearchType;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -44,7 +46,7 @@ public class BoardController {
   @GetMapping("/boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
-    if (user != null && user.getRole() == UserRole.ADMIN) {
+    if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //      model.addAttribute("user", user);
       return "boards/createBoardForm";
     }
@@ -63,7 +65,7 @@ public class BoardController {
     boardDTO.transViewcontent();
 
     // NOTE 2021-07-04 0004 : 관리자 확인 로직 추가
-    if (user != null && user.getRole() == UserRole.ADMIN) {
+    if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //TODO: 관리자 역활인지 확인하는 로직 추가해야함
       User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
       boardDTO.setUser(admin);

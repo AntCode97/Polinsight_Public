@@ -227,7 +227,7 @@
                 </label>
               </div>
               <div class="right_content">
-                <input id="email" name="email" required type="email" />
+                <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
                 <span>@</span>
                 <select name="domain" id="email_domain" required>
                   <optgroup label="도메인">
@@ -434,7 +434,8 @@
   }, 200)
 
   const emailChecker = (e) => {
-    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    /* 5 ~ 20자 제한 */
+    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     const emailValue = $("input[name=email]").val();
     const emailDomain = $("#email_domain").val();
     const email = emailValue + '@' + emailDomain;

@@ -1,7 +1,7 @@
 package com.dns.polinsight.repository;
 
-import com.dns.polinsight.domain.BoardType;
-import com.dns.polinsight.domain.SearchType;
+import com.dns.polinsight.types.BoardType;
+import com.dns.polinsight.types.SearchType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -3,7 +3,7 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Board;
 import com.dns.polinsight.domain.BoardDTO;
-import com.dns.polinsight.domain.BoardType;
+import com.dns.polinsight.types.BoardType;
 import com.dns.polinsight.exception.BoardNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.BoardRepository;

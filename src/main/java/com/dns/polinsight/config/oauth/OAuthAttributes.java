@@ -1,7 +1,7 @@
 package com.dns.polinsight.config.oauth;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +88,7 @@ public class OAuthAttributes {
     return User.builder()
                .name(name)
                .email(email)
-               .role(UserRole.USER)
+               .role(UserRoleType.USER)
                .build();
   }
 

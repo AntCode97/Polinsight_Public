@@ -5,10 +5,11 @@ import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Additional;
 import com.dns.polinsight.domain.SignupDTO;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.AdditionalService;
+import com.dns.polinsight.service.EmailService;
 import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
@@ -35,6 +38,8 @@ public class UserController {
 
   private final HttpSession session;
 
+  private final EmailService emailService;
+
   private final PasswordEncoder passwordEncoder;
 
   @PostConstruct
@@ -43,7 +48,7 @@ public class UserController {
                          .email("test@gmail.com")
                          .name("TEST_NAME")
                          .password(passwordEncoder.encode("!@#$%QWERT"))
-                         .role(UserRole.ADMIN)
+                         .role(UserRoleType.ADMIN)
                          .phone("01012345678")
                          .build());
   }
@@ -58,7 +63,7 @@ public class UserController {
                                        .phone(signupDTO.getPhone())
                                        .password(passwordEncoder.encode(signupDTO.getPassword()))
                                        .recommend(signupDTO.getRecommend())
-                                       .role(UserRole.USER)
+                                       .role(UserRoleType.USER)
                                        .build());
       session.setAttribute("user", new SessionUser(user));
       if (signupDTO.isIspanel()) {
@@ -129,8 +134,17 @@ public class UserController {
   }
 
   @PostMapping("/findpwd")
-  public ResponseEntity<?> findPwd() {
-    // NOTE 2021-06-21 0021 : 패스워드를 바꾸는 방향으로 유도
+  public ResponseEntity<?> findPwd(HttpServletRequest request) throws MessagingException {
+    /*
+     *  메일 서비스 필요
+     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
+     * 해시값을 저장한 페이지를 리턴한다
+     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
+     * */
+
+    String emal = request.getParameter("email");
+    String name = request.getParameter("name");
+    emailService.sendMail("to", "subject", "body");
     ResponseObject obj = ResponseObject.builder()
                                        .statuscode(HttpStatus.OK.value())
                                        .msg("password changed")
@@ -140,7 +154,27 @@ public class UserController {
 
   @PostMapping("/chngepwd")
   public ResponseEntity<?> changePwd() {
-    return ResponseEntity.ok(null);
+    /*
+     * 비밀번호 변경 처리 후 리다이렉팅
+     * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
+     * */
+    String hash = "";
+    String userName = "";
+    String userEmail = "";
+    // passwordChangeService.get();
+    // PassworDTO 생성??
+    Map<String, Object> map = new HashMap<>();
+
+    try {
+      userService.update(User.builder().build()); // DB 업데이트할 유저 객체 넣기
+      map.put("code", 200);
+      map.put("msg", "유저의 비밀번호가 변경되었습니다.");
+    } catch (Exception e) {
+      map.put("code", 201);
+      map.put("msg", "there is something worng");
+    }
+
+    return ResponseEntity.ok(map);
   }
 
 

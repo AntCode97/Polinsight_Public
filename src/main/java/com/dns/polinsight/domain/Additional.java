@@ -1,6 +1,6 @@
 package com.dns.polinsight.domain;
 
-import com.nimbusds.openid.connect.sdk.claims.Gender;
+import com.dns.polinsight.types.GenderType;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,13 +21,14 @@ public class Additional {
   @Column(name = "id", nullable = false)
   private Long id;
 
+  @JoinColumn(name = "user_id")
   @OneToOne
   private User user;
 
   /*
    * 추가정보 클래스
    * */
-  private Gender gender;
+  private GenderType gender;
 
   private String education;
 
