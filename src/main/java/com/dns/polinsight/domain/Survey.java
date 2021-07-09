@@ -22,4 +22,9 @@ public class Survey implements Serializable {
 
   private Long surveyId;
 
+  /*
+   * 설문 완료시 지급할 포인트 수치
+   * */
+  private Long point;
+
 }

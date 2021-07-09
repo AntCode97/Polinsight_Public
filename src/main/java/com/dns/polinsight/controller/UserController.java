@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -42,16 +41,16 @@ public class UserController {
 
   private final PasswordEncoder passwordEncoder;
 
-  @PostConstruct
-  public void saveUserDate() {
-    userService.save(User.builder()
-                         .email("test@gmail.com")
-                         .name("TEST_NAME")
-                         .password(passwordEncoder.encode("!@#$%QWERT"))
-                         .role(UserRoleType.ADMIN)
-                         .phone("01012345678")
-                         .build());
-  }
+  //  @PostConstruct
+  //  public void saveUserDate() {
+  //    userService.save(User.builder()
+  //                         .email("test@gmail.com")
+  //                         .name("TEST_NAME")
+  //                         .password(passwordEncoder.encode("!@#$%QWERT"))
+  //                         .role(UserRoleType.ADMIN)
+  //                         .phone("01012345678")
+  //                         .build());
+  //  }
 
   @PostMapping("/signup")
   public ResponseEntity<Map<String, Object>> userSignUp(@RequestBody SignupDTO signupDTO) {
@@ -65,7 +64,7 @@ public class UserController {
                                        .recommend(signupDTO.getRecommend())
                                        .role(UserRoleType.USER)
                                        .build());
-      session.setAttribute("user", new SessionUser(user));
+      session.setAttribute("basic_user", new SessionUser(user));
       if (signupDTO.isIspanel()) {
         map.put("code", 200);
         map.put("msg", "need more info for panel signup");
@@ -83,20 +82,30 @@ public class UserController {
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody Additional additional, @LoginUser SessionUser sessionUser, HttpSession session) {
-
+  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody Additional additional, HttpSession session) {
+    //    session.invalidate();
+    SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
+    sessionUser = SessionUser.builder()
+                             .email(sessionUser.getEmail())
+                             .role(UserRoleType.PANEL)
+                             .name(sessionUser.getName())
+                             .point(sessionUser.getPoint())
+                             .build();
+    session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    //    user = User.builder().id(user.getId()).role(UserRoleType.PANEL).build();
+    // 유저 객체 정보 업데이트
     additional.update(user);
-    user.update(additional);
-    userService.save(user);
+    user = user.update(additional).update(sessionUser);
+    // 업데이트된 정보 저장
+    // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
     additionalService.save(additional);
+    userService.save(user);
+
     Map<String, Object> map = new HashMap<>();
     map.put("msg", "success");
     map.put("code", 200);
-    session.setAttribute("user", sessionUser);
-
     return ResponseEntity.ok(map);
-
   }
 
   @PostMapping("/deleteaccount")
@@ -123,13 +132,10 @@ public class UserController {
 
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@LoginUser SessionUser user) {
+  public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("mypage");
-    mv.addObject("user", userService.findUserByEmail(User.builder()
-                                                         .email(user.getEmail())
-                                                         .name(user.getName())
-                                                         .build()));
+    mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
     return mv;
   }
 

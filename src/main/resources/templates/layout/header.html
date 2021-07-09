@@ -193,6 +193,7 @@
       <th:block th:unless="${session.user} == null">
         <!--                <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'">MY PAGE</a>-->
         <a href="/mypage" role="button" th:text="${session.user.name}==null?'guest':${session.user.name}">MY PAGE</a>
+        <span></span>
         <a href="/dologout" th:onclick="logout_process">LOGOUT</a>
       </th:block>
     </div>

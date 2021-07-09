@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SessionUser implements Serializable {
 
   private static final long serialVersionUID = -1652804180922488046L;

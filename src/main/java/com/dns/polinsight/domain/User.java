@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -8,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
-@ToString
+@ToString(exclude = "boards")
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
@@ -35,7 +35,7 @@ public class User implements UserDetails, Serializable {
    * */
   @JsonIgnore
   @OneToMany(mappedBy = "user")
-  private final List<Board> boards = new ArrayList<>();
+  private List<Board> boards = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,13 +58,16 @@ public class User implements UserDetails, Serializable {
   @PositiveOrZero
   private Long point;
 
-  @NotNull
-  @Column(name = "role")
   private UserRoleType role;
 
-  @JoinColumn(name = "additional_id")
   @OneToOne
+  @JsonIgnore
+  @JoinColumn(name = "additional_id")
   private Additional additional;
+
+  public void setBoards(List<Board> boards) {
+    this.boards = boards;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -101,8 +104,11 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
-  public User update(String name, String picture) {
-    this.name = name;
+  public User update(SessionUser sessionUser) {
+    this.name = sessionUser.getName();
+    this.email = sessionUser.getEmail();
+    this.role = sessionUser.getRole();
+    this.point = sessionUser.getPoint() == null ? 0 : sessionUser.getPoint();
     return this;
   }
 

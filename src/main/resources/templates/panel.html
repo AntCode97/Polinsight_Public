@@ -47,11 +47,11 @@
         <td colspan="2">성별</td>
         <td>
           <label>
-            <input name="gender" type="radio" value="남성" checked>
+            <input name="gender" type="radio" value="MALE" checked>
             남성
           </label>
           <label>
-            <input name="gender" type="radio" value="여성">
+            <input name="gender" type="radio" value="FEMALE">
             여성
           </label>
         </td>
@@ -106,7 +106,7 @@
       <tr>
         <td colspan="2">직업</td>
         <td>
-          <select id="jobs" name="job" required>
+          <select id="job" name="job" required>
             <option>--선택--</option>
             <option value="학생">학생</option>
             <option value="경영직">경영직</option>
@@ -290,7 +290,7 @@
       </tr>
       <tr>
         <td colspan="3" style="text-align: center;">
-          <input th:onclick="window.location.back()" type="button" value="돌아 가기">
+          <input th:onclick="location.back()" type="button" value="돌아 가기">
           <input name="panel_signup" type="button" value="가입 하기">
         </td>
       </tr>
@@ -383,7 +383,7 @@
       info['birthType'] = $('input[name=birthtype]').val()
       info['education'] = $('select[name=edu]').val()
       info['marry'] = $('input[name=marry]').val()
-      info['job'] = $('select[name=jobs]').val()
+      info['job'] = $('select[name=job]').val()
       info['industry'] = $('select[name=industry]').val()
       info['favorite'] = []
       $('input[name=favorite]:checked').each((idx, item) => {
