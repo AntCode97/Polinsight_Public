@@ -48,7 +48,6 @@ public class User implements UserDetails, Serializable {
 
   private String name;
 
-
   @Size(min = 11, max = 11)
   private String phone;
 
