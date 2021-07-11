@@ -2,11 +2,14 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.SocialType;
+import com.dns.polinsight.domain.Additional;
+import com.dns.polinsight.domain.SignupDTO;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
 import com.dns.polinsight.object.ResponseObject;
+import com.dns.polinsight.service.AdditionalService;
+import com.dns.polinsight.service.EmailService;
 import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,8 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,46 +31,99 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-  private final UserService service;
+  private final UserService userService;
+
+  private final AdditionalService additionalService;
+
+  private final HttpSession session;
+
+  private final EmailService emailService;
 
   private final PasswordEncoder passwordEncoder;
 
+  //  @PostConstruct
+  //  public void saveUserDate() {
+  //    userService.save(User.builder()
+  //                         .email("test@gmail.com")
+  //                         .name("TEST_NAME")
+  //                         .password(passwordEncoder.encode("!@#$%QWERT"))
+  //                         .role(UserRoleType.ADMIN)
+  //                         .phone("01012345678")
+  //                         .build());
+  //  }
 
   @PostMapping("/signup")
-  public void userSignUp(User user, HttpServletResponse response) {
+  public ResponseEntity<Map<String, Object>> userSignUp(@RequestBody SignupDTO signupDTO) {
+    Map<String, Object> map = new HashMap<>();
     try {
-      service.save(User.builder()
-                       .email(user.getEmail())
-                       .password(passwordEncoder.encode(user.getPassword()))
-                       .name(user.getName())
-                       .role(UserRole.USER)
-                       .social(SocialType.OWN)
-                       .build());
-
-      response.sendRedirect("/");
-    } catch (IOException e) {
-      e.printStackTrace();
-      // TODO: 2021-06-02 : Alert Error to user
+      User user = userService.save(User.builder()
+                                       .email(signupDTO.getEmail())
+                                       .name(signupDTO.getName())
+                                       .phone(signupDTO.getPhone())
+                                       .password(passwordEncoder.encode(signupDTO.getPassword()))
+                                       .recommend(signupDTO.getRecommend())
+                                       .role(UserRoleType.USER)
+                                       .build());
+      session.setAttribute("basic_user", new SessionUser(user));
+      if (signupDTO.isIspanel()) {
+        map.put("code", 200);
+        map.put("msg", "need more info for panel signup");
+      } else {
+        map.put("code", 200);
+        map.put("msg", "normal user signup success");
+      }
+    } catch (Exception e) {
+      log.error("basic singup error: {}", e.getMessage());
+      map.put("code", 6000);
+      map.put("msg", "there is something wrong");
     }
+    return ResponseEntity.ok(map);
+  }
+
+  @PostMapping("/moreinfo")
+  @Transactional
+  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody Additional additional, HttpSession session) {
+    //    session.invalidate();
+    SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
+    sessionUser = SessionUser.builder()
+                             .email(sessionUser.getEmail())
+                             .role(UserRoleType.PANEL)
+                             .name(sessionUser.getName())
+                             .point(sessionUser.getPoint())
+                             .build();
+    session.invalidate();
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    //    user = User.builder().id(user.getId()).role(UserRoleType.PANEL).build();
+    // 유저 객체 정보 업데이트
+    additional.update(user);
+    user = user.update(additional).update(sessionUser);
+    // 업데이트된 정보 저장
+    // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
+    additionalService.save(additional);
+    userService.save(user);
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("msg", "success");
+    map.put("code", 200);
+    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/deleteaccount")
-  public ModelAndView deleteUser(User user) {
+  public ModelAndView deleteUser(@RequestBody User user) {
     ModelAndView mv = new ModelAndView();
-    service.deleteUser(user);
+    userService.deleteUser(user);
     mv.setViewName("index");
     return mv;
   }
 
   @GetMapping("/user/{email}")
   @CrossOrigin("*") // 비동기 이메일 검증을 위한 cors 처리
-  public ResponseEntity<Map<String, Object>> findUserByEmail(@PathVariable("email") String email) {
+  public ResponseEntity<Map<String, Object>> findUserByEmail(@Email @PathVariable("email") String email) {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("user", service.findUserByEmail(User.builder().email(email).build()));
+      map.put("user", userService.findUserByEmail(User.builder().email(email).build()));
     } catch (RuntimeException e) {
       e.getMessage();
-      // NOTE 2021/06/12 : 아무것도 없는 응답을 보냄
       return ResponseEntity.noContent().build();
     }
 
@@ -73,21 +132,25 @@ public class UserController {
 
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@LoginUser SessionUser user) {
+  public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("mypage");
-    mv.addObject("user", service.findUserByEmail(User.builder()
-                                                     .email(user.getEmail())
-                                                     .name(user.getName())
-                                                     .picture(user.getPicture())
-                                                     .social(user.getType())
-                                                     .build()));
+    mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
     return mv;
   }
 
   @PostMapping("/findpwd")
-  public ResponseEntity<?> findPwd() {
-    // NOTE 2021-06-21 0021 : 패스워드를 바꾸는 방향으로 유도
+  public ResponseEntity<?> findPwd(HttpServletRequest request) throws MessagingException {
+    /*
+     *  메일 서비스 필요
+     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
+     * 해시값을 저장한 페이지를 리턴한다
+     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
+     * */
+
+    String emal = request.getParameter("email");
+    String name = request.getParameter("name");
+    emailService.sendMail("to", "subject", "body");
     ResponseObject obj = ResponseObject.builder()
                                        .statuscode(HttpStatus.OK.value())
                                        .msg("password changed")
@@ -97,7 +160,27 @@ public class UserController {
 
   @PostMapping("/chngepwd")
   public ResponseEntity<?> changePwd() {
-    return ResponseEntity.ok(null);
+    /*
+     * 비밀번호 변경 처리 후 리다이렉팅
+     * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
+     * */
+    String hash = "";
+    String userName = "";
+    String userEmail = "";
+    // passwordChangeService.get();
+    // PassworDTO 생성??
+    Map<String, Object> map = new HashMap<>();
+
+    try {
+      userService.update(User.builder().build()); // DB 업데이트할 유저 객체 넣기
+      map.put("code", 200);
+      map.put("msg", "유저의 비밀번호가 변경되었습니다.");
+    } catch (Exception e) {
+      map.put("code", 201);
+      map.put("msg", "there is something worng");
+    }
+
+    return ResponseEntity.ok(map);
   }
 
 

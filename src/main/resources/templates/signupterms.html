@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .terms_wrap {
+      width: 1200px;
+      height: 500px;
+      margin: auto;
+
+    }
+
+    .terms_box {
+      width: 100%;
+      height: 100%;
+    }
+
+    .terms_content {
+      width: 80%;
+      height: 60%;
+      margin: auto;
+    }
+
+    .terms_btn_wrap {
+      width: 80%;
+      margin: auto;
+    }
+
+    .terms_btn {
+      text-align: center;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<div class="terms_wrap">
+  <div class="terms_box">
+    <label>
+      <h2>회원 약관</h2>
+      <textarea class="terms_content" readonly th:text="${terms}">
+
+      </textarea>
+    </label>
+    <div class="terms_btn_wrap">
+      <div>
+        <label for="agreement">
+          <input id="agreement" type="checkbox"> 동의합니다.
+        </label>
+      </div>
+      <button class="terms_btn" onclick="location.back()">돌아가기</button>
+      <button class="terms_btn" id="agree_btn">진행 하기</button>
+    </div>
+  </div>
+</div>
+<script>
+
+  const isChkAgreement = () => {
+    return $("#agreement").is(':checked');
+
+  }
+
+  $(function () {
+    $("#agree_btn").on('click', e => {
+      if (isChkAgreement()) {
+        location.assign("/join")
+      } else {
+        alert("약관에 모두 동의하셔야 합니다.")
+      }
+    })
+  })
+</script>
+</body>
+</html>

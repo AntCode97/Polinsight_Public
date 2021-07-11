@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <style type="text/css">
+    /*@import url('@{/common.css}');*/
+
+    .register_wrap {
+      width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .register_title {
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    .register_title > h1 {
+      font-size: 25px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .register_contents_wrap > form > p {
+      color: black;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .register_contents {
+      border-top: 1px solid #ddd;
+    }
+
+    .register_contents > ul > li {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .left_content {
+      flex: 1.5;
+    }
+
+    .right_content {
+      flex: 8.5;
+    }
+
+    .left_content > label {
+      font-weight: bold;
+      padding: 0 15px;
+      overflow: hidden;
+      line-height: 18px;
+      cursor: pointer;
+      background: url('imgs/icon_required_input.png') right center no-repeat;
+    }
+
+    .right_content > input {
+      border: 1px solid #ddd;
+      color: #333;
+      font-size: 14px;
+      width: 300px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+    }
+
+    .right_content > select {
+      border: 1px solid #ddd;
+      color: #333;
+      font-size: 14px;
+      width: 200px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+      text-align: center;
+      text-align-last: center;
+      display: inline-block;
+    }
+
+    .info_msg, .err_msg {
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0 5px;
+    }
+
+    .info_msg {
+      color: #a9a9a9;
+    }
+
+    .err_msg {
+      color: red;
+    }
+
+    .correct_msg {
+      color: greenyellow;
+      display: inline-block;
+    }
+
+    .no_need {
+      background-image: url('') !important;
+    }
+
+    .pannel_info_contents {
+      width: 800px;
+      margin: 40px auto 30px;
+      background-color: #EEE;
+      padding: 15px 0;
+      border-radius: 20px;
+    }
+
+    .pannel_info_contents > * {
+      color: black;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .pannel_info_contents > h1 {
+      font-size: 22px;
+    }
+
+    .pannel_info_contents > p {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .pannel_select {
+      margin: 0 auto;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .radio_wrap > label {
+      font-size: 16px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .btn_wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    .btn_submit {
+      background-color: #192739;
+      color: white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 7px 45px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .popup_overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .popup_box {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      width: 550px;
+      transform: translate(-50%, -50%);
+      box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.35);
+      background-color: white;
+    }
+
+    .popup_box .popup_content {
+      padding: 50px;
+      font-size: 14px;
+      word-break: break-word;
+      color: #666;
+    }
+
+    .popup_box .popup_btn {
+      position: relative;
+      margin: auto;
+      width: 100px;
+      height: 40px;
+      background: #5d5d5d;
+      color: white;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 40px;
+    }
+
+    .popup_btn:hover {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="register_wrap">
+  <div class="register_box">
+    <div class="register_title">
+      <h1>회원 가입</h1>
+    </div>
+    <div class="register_contents_wrap">
+      <form action="/signup" id="signupfrm" method="post">
+        <p>기본정보</p>
+        <div class="register_contents">
+          <ul>
+            <li>
+              <div class="left_content">
+                <label for="email">
+                  아이디(이메일)
+                </label>
+              </div>
+              <div class="right_content">
+                <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
+                <span>@</span>
+                <select name="domain" id="email_domain" required>
+                  <optgroup label="도메인">
+                    <!--                    <option value="null" selected>&#45;&#45; 선택 &#45;&#45;</option>-->
+                    <option value="naver.com">naver.com</option>
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="kakao.com">kakao.com</option>
+                  </optgroup>
+                </select>
+                <span id="email_msg"></span>
+                <!--                <span class="info_msg"></span>-->
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="password">
+                  비밀번호
+                </label>
+              </div>
+              <div class="right_content">
+                <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
+                <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
+                <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="pwdconfirm">
+                  비밀번호 확인
+                </label>
+              </div>
+              <div class="right_content">
+                <input class="pwdinput" name="pwdcfm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
+                <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
+                <span class="info_msg" id="pwmsg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="user_name">이름</label>
+              </div>
+              <div class="right_content">
+                <input class="login_input" id="user_name" name="name" required type="text" />
+                <!--                <span>이름을 입력해주세요.</span>-->
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="phone">휴대전화</label>
+              </div>
+              <div class="right_content">
+                <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
+                <!--                <button id="phone_chk">인증</button>-->
+                <!--                <span>휴대전화를 입력해 주세요</span>-->
+                <span class="info_msg">(- 없이 입력해주세요.)</span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="recommend">추천인 휴대전화</label>
+              </div>
+              <div class="right_content">
+                <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
+                <!--                <button id="phone_rec_user_chk">확인</button>-->
+                <span class="info_msg">(- 없이 입력해주세요.)</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pannelinfo_msg_wrap">
+          <div class="pannel_info_contents">
+            <h1>폴인사이트의 패널이 된다면?</h1>
+            <p>폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.</p>
+            <p>참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.</p>
+            <p>폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.</p>
+            <p>패널로 가입하시겠습니까?</p>
+          </div>
+          <div class="pannel_select">
+            <div class="radio_wrap">
+              <label>
+                <input name="ispanel" type="radio" value="true">
+                가입하고 혜택받기
+              </label>
+            </div>
+            <div class="radio_wrap">
+              <label>
+                <input name="ispanel" type="radio" value="false">
+                가입 안함
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="btn_wrap">
+          <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="popup_overlay">
+  <div class="popup_box">
+    <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
+      <i class="fas fa-times"></i>
+    </div>
+    <div class="popup_content">
+      <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
+    </div>
+    <div class="popup_btn">
+      확인
+    </div>
+  </div>
+</div>
+</body>
+<script>
+  const editHyphen = e => {
+    const phoneValue = e.target.value
+    let ret = "";
+    if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
+      ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
+    } else {
+      phoneValue.substring(0, 11)
+      ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
+    }
+    e.target.value = ret
+    return ret;
+  }
+
+  /*
+  * 길이 10~16
+  * 영문 대, 소문자, 특수문자
+  * */
+  const passwordValueChecker = pwd => {
+    return pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\]\[/\'\"\\\']{10,16}/) !== null;
+  }
+
+  // 비밀번호 확인 검증
+  const passwordChecker = (e) => {
+    if (e.target.value === "") return;
+    const keycode = e.keyCode;
+
+    // if (keycode === 32 || keycode === 9) {
+    //   e.preventDefault()
+    //   e.returnValue = false;
+    //   alert("공백은 입력할 수 없습니다.")
+    //   return;
+    // } else
+    let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
+
+    /* 숫자, 소문자, 대문자, 특수문자 */
+    // else
+    if ((48 <= keycode && keycode <= 57) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) ||
+        re.test(e.originalEvent.key)) {
+      const passwordValue = $("#password").val();
+      const confirmValue = $("#pwdconfirm").val();
+      const msg = $("#pwmsg")
+
+      if (passwordValue !== "" && confirmValue !== "") {
+        if (passwordValue === confirmValue) {
+          if (passwordValueChecker(passwordValue)) {
+            msg.text("사용 가능한 패스워드 입니다.").removeClass("err_msg").addClass("correct_msg")
+            return
+          }
+        }
+        msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("err_msg")
+      }
+    }
+  }
+
+  // 필수 입력값 검사
+  const checkNotNull = () => {
+    let result = true
+    $("form").find('input').each(function (item) {
+      let input = $(this)
+      let label = input.prev('label')
+      let inputValue = input.val()
+      if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {
+        input.focus()    // 입력이 안된 사항으로 포커싱
+        input.val('') // 값 초기화
+        alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+        result = false
+        return false;   // $.each를 break
+      }
+    })
+
+    const domainValue = $('select[name=domain] option:selected').val()
+    if (domainValue === "null") {
+      $('select[name=domain]').focus()
+      alert('이메일 주소는 필수 입력 사항입니다.')
+      result = false;
+    }
+
+    return result;
+  }
+
+
+  const debounceCallEmailCheck = _.debounce((email, callback) => {
+    axios.get("http://localhost:8080/user/" + email)
+        .then(res => callback(res.status))
+        .catch(err => {
+          console.log("error", err)
+        })
+  }, 200)
+
+  const emailChecker = (e) => {
+    /* 5 ~ 20자 제한 */
+    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const emailValue = $("input[name=email]").val();
+    const emailDomain = $("#email_domain").val();
+    const email = emailValue + '@' + emailDomain;
+    const msg = $("#email_msg")
+
+    if (emailValue === "") {
+      msg.text("").removeClass("correct_msg").addClass("err_msg")
+    } else {
+      if (email.match(regex) != null) {
+        debounceCallEmailCheck(email, function (status) {
+              if (status === 204) {
+                msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
+              } else {
+                msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
+              }
+            }
+        )
+      } else {
+        msg.text("올바른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
+      }
+
+    }
+  }
+
+  const getFormData = () => {
+    let basicInfo = {}
+    const form = $('form')
+    form.find('input').each((idx, item) => {
+      if (item.name === 'phone' || item.name === 'recommend') {
+        basicInfo[item.name] = item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3");
+      } else if (item.name !== 'pwdcfm') {
+        basicInfo[item.name] = item.value;
+      }
+    })
+    form.find('select').each((idx, item) => {
+      basicInfo['email'] += '@' + $(item).val()
+    })
+    console.log(basicInfo)
+    return basicInfo
+  }
+
+  $(function () {
+    $(document).on('focus', '.login_input', function () {
+      $(this).css('border-bottom', '1.5px solid #4C99CF');
+    });
+
+    $(document).on('blur', '.login_input', function () {
+      $(this).css('border-bottom', '1.5px solid #dde0ea');
+    });
+
+    $(".pwdinput")
+        .on("keyup change", passwordChecker)
+        .on("paste", e => {
+          e.preventDefault()
+          alert("붙여넣기는 사용하실 수 없습니다.")
+        });
+    // .on('click', e => {
+    //   /*입력폼 클릭시 입력값 삭제*/
+    //   $('#' + e.target.id).val('')
+    // })
+
+    $("#email").on("change keyup paste", emailChecker);
+    $("#email_domain").on('change', () => {
+      if ($('input[name=email]').val().length > 0) {
+        emailChecker()
+      }
+    });
+
+    // 유저 전화번호
+    $("#phone").on("blur focus", editHyphen).on('keypress', (e) => {
+      let keycode = e.keyCode
+      if (!(48 <= keycode && keycode <= 57)) {
+        e.preventDefault();
+        e.returnValue = false;
+        alert('숫자만 입력 가능합니다.')
+      }
+    });
+
+    // 추천인 전화번호
+    $("#recommend").on("blur focus", editHyphen).on('keypress', (e) => {
+      let keycode = e.keyCode
+      if (!(48 <= keycode && keycode <= 57)) {
+        e.preventDefault();
+        e.returnValue = false;
+        alert('숫자만 입력 가능합니다.')
+      }
+    });
+
+    $("input[name=ispanel]").on('click', (e) => {
+      if (e.target.value === "false") {
+        // 가입 안했을때의 경고창
+        // alert('폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.')
+        $(".popup_overlay").css('display', 'block')
+      }
+    })
+
+    $("#popup_close_btn").on('click', (e) => {
+      $(".popup_overlay").css('display', 'none')
+    })
+    $(".popup_btn").on('click', (e) => {
+      $(".popup_overlay").css('display', 'none')
+    })
+
+    $("#frmsubmit").on('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
+      if (checkNotNull()) {
+        const info = getFormData()
+        info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
+
+        axios.post('/signup', info)
+            .then(res => {
+              console.log('ispanel', info['ispanel'])
+              console.log("response", res)
+              if (res.data.code === 200) {
+                if (info['ispanel']) {
+                  alert('패널 가입을 위해서는 추가정보가 필요합니다.')
+                  location.replace('/panel')
+                } else {
+                  alert('일반 유저 가입 성공!')
+                  location.replace('/')
+                }
+              } else {
+                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+              }
+            })
+            .catch(err => {
+              console.log("Error resposne", err)
+              alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+            })
+      }
+    })
+
+    // if (keycode === 20) {
+    //   // TODO : capslock이 켜져있습니다 띄우기 --> 문서 열때
+    // }
+  })
+
+</script>
+
+</html>

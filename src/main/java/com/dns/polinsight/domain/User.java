@@ -1,12 +1,16 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.types.UserRoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,43 +25,48 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
+@ToString(exclude = "boards")
 public class User implements UserDetails, Serializable {
-
 
   private static final long serialVersionUID = 7723866521224716971L;
 
+  /*
+   * 유저 기본정보 클래스
+   * */
+  @JsonIgnore
+  @OneToMany(mappedBy = "user")
+  private List<Board> boards = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @PositiveOrZero
   private Long id;
 
-  @NotNull
-  @Column(name = "email")
   private String email;
-
 
   private String password;
 
-
   private String name;
 
+  @Size(min = 11, max = 11)
+  private String phone;
 
-  private String picture;
+  @Size(min = 11, max = 11)
+  private String recommend;
 
+  @PositiveOrZero
   private Long point;
 
-  @OneToMany(mappedBy = "user") //누구에 의해서 매핑되는가,
-  private List<Board> boards = new ArrayList<>();
+  private UserRoleType role;
 
+  @OneToOne
+  @JsonIgnore
+  @JoinColumn(name = "additional_id")
+  private Additional additional;
 
-  @NotNull
-  @Column(name = "role")
-  private UserRole role;
-
-
-  @NotNull
-  @Column(name = "social")
-  private SocialType social;
+  public void setBoards(List<Board> boards) {
+    this.boards = boards;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -94,10 +103,16 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
+  public User update(SessionUser sessionUser) {
+    this.name = sessionUser.getName();
+    this.email = sessionUser.getEmail();
+    this.role = sessionUser.getRole();
+    this.point = sessionUser.getPoint() == null ? 0 : sessionUser.getPoint();
+    return this;
+  }
 
-  public User update(String name, String picture) {
-    this.name = name;
-    this.picture = picture;
+  public User update(Additional additional) {
+    this.additional = additional;
     return this;
   }
 

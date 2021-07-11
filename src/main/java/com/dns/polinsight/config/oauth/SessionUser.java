@@ -1,30 +1,56 @@
 package com.dns.polinsight.config.oauth;
 
-import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
-import lombok.Getter;
+import com.dns.polinsight.types.UserRoleType;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class SessionUser implements Serializable {
 
+  private static final long serialVersionUID = -1652804180922488046L;
+
   @NotNull
-  private final String name;
+  private String name;
 
-  //  @Email // TODO: 2021/06/09  주석 해제 필요
-  private final String email;
+  @NotNull
+  @Positive
+  private Long id;
 
-  private final String picture;
+  @NotNull
+  private String email;
 
-  private final SocialType type;
+  private String picture;
+
+  private UserRoleType role;
+
+  @PositiveOrZero
+  private Long point;
 
   public SessionUser(User user) {
-    this.name = user.getName();
+    this.id = user.getId();
     this.email = user.getEmail();
-    this.picture = user.getPicture();
-    this.type = user.getSocial();
+    this.role = user.getRole();
+    this.name = user.getName();
+    this.point = user.getPoint();
+  }
+
+  public SessionUser of(User user) {
+    this.id = user.getId();
+    this.email = user.getEmail();
+    this.role = user.getRole();
+    this.name = user.getName();
+    this.point = user.getPoint();
+    return this;
   }
 
 }

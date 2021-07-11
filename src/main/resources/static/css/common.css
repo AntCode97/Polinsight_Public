@@ -19,6 +19,8 @@ body {
     padding: 0;
     font-size: 14px;
     color: #69666d;
+    position: absolute;
+    top: 80px;
 }
 
 ul {
@@ -164,7 +166,7 @@ button.btn-big {
     border: 0px;
     display: none;
     outline: none;
-    background-color: #303751;
+    background-color: #182838;
     box-shadow: 0px 7px 5px 0px rgb(0 0 0 / 21%);
 }
 
@@ -208,4 +210,20 @@ button.btn-big {
 
 .box-shadow {
     box-shadow: 5px 5px 25px 0 rgb(46 61 73 / 20%);
+}
+
+.hidden {
+    display: none;
+    /*clip: rect(0 0 0 0);*/
+    /*margin: -1px;*/
+    /*width: 1px;*/
+    /*height: 1px;*/
+    /*overflow: hidden;*/
+}
+
+.more {
+    display: block;
+    /*width: 55px;*/
+    /*height: 16px;*/
+
 }

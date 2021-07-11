@@ -1,8 +1,7 @@
 package com.dns.polinsight.config.oauth;
 
-import com.dns.polinsight.domain.SocialType;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.UserRole;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +22,13 @@ public class OAuthAttributes {
 
   private final String picture;
 
-  private final SocialType social;
-
-
   @Builder
-  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture, SocialType social) {
+  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
     this.attributes = attributes;
     this.nameAttributeKey = nameAttributeKey;
     this.name = name;
     this.email = email;
     this.picture = picture;
-    this.social = social;
   }
 
   public static OAuthAttributes of(String registrationId,
@@ -60,7 +55,6 @@ public class OAuthAttributes {
                           .picture((String) attributes.get("profile_image"))
                           .attributes(response)
                           .nameAttributeKey(userNameAttributeName)
-                          .social(SocialType.GOOGLE)
                           .build();
   }
 
@@ -74,7 +68,6 @@ public class OAuthAttributes {
                           .picture((String) profiles.get("profile_image_url"))
                           .attributes(attributes)
                           .nameAttributeKey(userNameAttributeName)
-                          .social(SocialType.KAKAO)
                           .build();
   }
 
@@ -87,7 +80,6 @@ public class OAuthAttributes {
                           .picture((String) response.get("profile_image"))
                           .attributes(response)
                           .nameAttributeKey(userNameAttributeName)
-                          .social(SocialType.NAVER)
                           .build();
   }
 
@@ -96,8 +88,7 @@ public class OAuthAttributes {
     return User.builder()
                .name(name)
                .email(email)
-               .social(social)
-               .role(UserRole.USER)
+               .role(UserRoleType.USER)
                .build();
   }
 

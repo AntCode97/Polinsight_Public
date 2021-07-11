@@ -1,276 +1,281 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>폴인사이트</title>
-    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-          rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <style type="text/css">
-        /* 모달 로그인 창 */
-        .modal_wrap {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>폴인사이트</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <style>
+    /* 모달 로그인 창 */
+    .modal_wrap {
+      height: 100vh;
+      width: 100vw;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -80px;
+    }
 
-        .modal_login {
-            padding-bottom: 50px;
-        }
+    .modal_login {
+      padding-bottom: 50px;
+    }
 
-        .modal_content {
-            width: 50%;
-            background-color: white;
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 0 auto;
-        }
+    .modal_content {
+      width: 100%;
+      background-color: white;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
 
-        .login_close > button:hover {
-            color: #EBA444;
-        }
+    .login_close > button:hover {
+      color: #EBA444;
+    }
 
-        .login_logo > img {
-            max-width: 100px;
-            vertical-align: middle;
-        }
+    .login_logo > img {
+      max-width: 100px;
+      vertical-align: middle;
+    }
 
-        .login_title {
-            margin: 0 auto;
-            text-align: center;
-        }
+    .login_title {
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        .login_title > a {
-            display: block;
-        }
+    .login_title > a {
+      display: block;
+    }
 
-        .login_logo_text {
-            margin-top: -50px;
-            max-width: 30rem;
-        }
+    .login_logo_text {
+      margin-top: -50px;
+      max-width: 30rem;
+    }
 
-        .login_content {
-            width: 25rem;
-            margin: 0 auto;
-            text-align: center;
-        }
+    .login_content {
+      width: 25rem;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-        .err_content {
-            margin: 8px 0;
-            padding: 15px;
-            font-size: 15px;
-            text-align: left;
-            line-height: 20px;
-            /*background-color: #faebeb;*/
-            color: #521822;
-            display: block;
-        }
+    .err_content {
+      margin: 8px 0;
+      padding: 15px;
+      font-size: 15px;
+      text-align: left;
+      line-height: 20px;
+      /*background-color: #faebeb;*/
+      color: #521822;
+      display: block;
+    }
 
-        input::placeholder {
-            color: #BBBBBB;
-            font-size: 14px;
-        }
+    input::placeholder {
+      color: #BBBBBB;
+      font-size: 14px;
+    }
 
-        .input_div {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 20px;
-        }
+    .input_div {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-        .input_div > p {
-            font-size: 16px;
-            text-align: left;
-            color: #a5dff9;
-        }
+    .input_div > p {
+      font-size: 16px;
+      text-align: left;
+      color: #a5dff9;
+    }
 
-        .login_input {
-            width: 100%;
-            outline: none;
-            border: none;
-            border-bottom: 1.5px solid #dde0ea;
-            color: #343236;
-            padding: 8px 0px;
-            height: 43px;
-            font-size: 16px;
-        }
+    .login_input {
+      width: 100%;
+      outline: none;
+      border: none;
+      border-bottom: 1.5px solid #dde0ea;
+      color: #343236;
+      padding: 8px 0px;
+      height: 43px;
+      font-size: 16px;
+    }
 
-        .pw_eye {
-            position: absolute;
-            color: #AAA;
-            font-size: 17px;
-            bottom: 0px;
-            right: 7px;
-            cursor: pointer;
-            height: 43px;
-            line-height: 45px;
-            width: 30px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-        }
+    .pw_eye {
+      position: absolute;
+      color: #AAA;
+      font-size: 17px;
+      bottom: 0px;
+      right: 7px;
+      cursor: pointer;
+      height: 43px;
+      line-height: 45px;
+      width: 30px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+    }
 
-        .qnapw {
-            margin: 15px 5px 0;
-            text-align: right;
-            padding-left: 5px;
-            text-decoration: underline;
-            font-weight: bold;
-            color: #a9abb7;
-        }
+    .qnapw {
+      margin: 15px 5px 0;
+      text-align: right;
+      padding-left: 5px;
+      text-decoration: underline;
+      font-weight: bold;
+      color: #a9abb7;
+    }
 
-        .qnapw > a {
-            font-size: 14px;
-            letter-spacing: 0.8px;
-        }
+    .qnapw > a {
+      font-size: 14px;
+      letter-spacing: 0.8px;
+    }
 
-        .qnapw > a:hover {
-            text-decoration: underline;
-        }
+    .qnapw > a:hover {
+      text-decoration: underline;
+    }
 
-        .login_btn_wrap {
-            margin-top: 30px;
-        }
+    .login_btn_wrap {
+      margin-top: 30px;
+    }
 
-        .login_btn_wrap > .btn-primary {
-            width: 100%;
-            font-weight: bold;
-        }
+    .login_btn_wrap > .btn-primary {
+      width: 100%;
+      font-weight: bold;
+    }
 
-        .sns_btn_wrap a {
-            display: block;
-            width: 25rem;
-            height: 51px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-image: url("/img/icons/kakao_login_large_wide.png");
-            border-radius: 2px;
-        }
+    .sns_btn_wrap a {
+      display: block;
+      width: 25rem;
+      height: 51px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url("/img/icons/kakao_login_large_wide.png");
+      border-radius: 2px;
+    }
 
-        .login_or {
-            margin: 16px 0;
-            font-size: 14px;
-            overflow: hidden;
-            text-align: center;
-            font-weight: bold;
-        }
+    .login_or {
+      margin: 16px 0;
+      font-size: 14px;
+      overflow: hidden;
+      text-align: center;
+      font-weight: bold;
+    }
 
-        .btn-kakao {
-            cursor: pointer;
-            width: 100%;
-        }
+    .btn-kakao {
+      cursor: pointer;
+      width: 100%;
+    }
 
-        .privacy-info > span {
-            font-size: 11px;
-            color: rgb(142, 142, 142);
-            letter-spacing: .2px;
-        }
+    .privacy-info > span {
+      font-size: 11px;
+      color: rgb(142, 142, 142);
+      letter-spacing: .2px;
+    }
 
-        .privacy-info > span > a {
-            font-weight: bold;
-        }
+    .privacy-info > span > a {
+      font-weight: bold;
+    }
 
-        .login_line {
-            margin: 10px auto;
-            width: 110px;
-            border: 0.5px solid rgb(222, 222, 222);
-        }
+    .login_line {
+      margin: 10px auto;
+      width: 110px;
+      border: 0.5px solid rgb(222, 222, 222);
+    }
 
-        .join_request_text {
-            text-align: center;
-            margin-top: -30px;
-        }
+    .join_request_text {
+      text-align: center;
+      margin-top: -30px;
+    }
 
-        .join_request_text > a {
-            margin-left: 5px;
-            color: rgb(51, 51, 51);
-            font-weight: bold;
-            font-size: 14px;
-        }
+    .join_request_text > a {
+      margin-left: 5px;
+      color: rgb(51, 51, 51);
+      font-weight: bold;
+      font-size: 14px;
+    }
 
-        .sns_btn_wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .sns_btn_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .btn-effect {
-            padding: 12px;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 2px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            outline: none;
-        }
+    .btn-effect {
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      outline: none;
+    }
 
-        @media (min-width: 320px) and (max-width: 480px) {
-            .modal_content {
-                width: 95%;
-            }
+    @media (min-width: 320px) and (max-width: 480px) {
+      .modal_content {
+        width: 95%;
+      }
 
-            .login_logo_text {
-                width: 100%;
-                margin-top: -20px;
-            }
+      .login_logo_text {
+        width: 100%;
+        margin-top: -20px;
+      }
 
-            .login_content {
-                width: 100%;
-            }
+      .login_content {
+        width: 100%;
+      }
 
-            .sns_btn_wrap a {
-                max-width: 22.27rem;
-            }
+      .sns_btn_wrap a {
+        max-width: 22.27rem;
+      }
 
-            .modal_login {
-                min-width: 20rem;
-            }
-        }
-    </style>
+      .modal_login {
+        min-width: 20rem;
+      }
+    }
+  </style>
 </head>
 <body>
 <div class="modal_wrap">
-    <div class="modal_content">
-        <div class="modal_login">
-            <div class="login_title"><a th:href="@{/}"><img class="login_logo_text"
-                                                            src="/img/logo/logo_color.png"/></a></div>
-            <div class="join_request">
-                <div class="join_request_text"><a th:href="@{/signup}">아직 회원이 아니신가요? <span
-                        class="under">회원가입 하기</span></a></div>
-            </div>
-            <div class="login_content">
-                <div class="err_content"></div>
-                <form class="frm_login" onsubmit="return false">
-                    <div class="input_div">
-                        <p>이메일</p>
-                        <input class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required type="email">
-                    </div>
-                    <div class="input_div">
-                        <p>비밀번호</p>
-                        <input class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required type="password">
-                        <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
-                    </div>
-                    <div class="login_btn_wrap">
-                        <button class="btn-primary btn-effect" id="btn-login">로그인 하기</button>
-                    </div>
-                </form>
-                <p class="login_or">또는</p>
-                <div class="sns_btn_wrap">
-                    <div>
-                        <a href="/oauth2/authorization/kakao"></a>
-                    </div>
-                </div>
-                <div class="qnapw"><a href="/findpassword">비밀번호 찾기</a></div>
-            </div>
+  <div class="modal_content">
+    <div class="modal_login">
+      <div class="login_title"><a th:href="@{/}"><img class="login_logo_text"
+                                                      src="/img/logo/logo_color.png" /></a></div>
+      <div class="join_request">
+        <div class="join_request_text">
+          <a th:href="@{/signup}">아직 회원이 아니신가요?
+            <span class="under">회원가입 하기</span>
+          </a>
         </div>
+      </div>
+      <div class="login_content">
+        <div class="err_content"></div>
+        <form class="frm_login" action="/dologin" method="post">
+          <div class="input_div">
+            <p>이메일</p>
+            <input class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required type="email">
+          </div>
+          <div class="input_div">
+            <p>비밀번호</p>
+            <input class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required type="password">
+            <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
+          </div>
+          <div class="login_btn_wrap">
+            <input type="submit" class="btn-primary btn-effect" id="btn-login" value="로그인 하기" />
+          </div>
+        </form>
+        <p class="login_or">또는</p>
+        <div class="sns_btn_wrap">
+          <div>
+            <a href="/oauth2/authorization/kakao"></a>
+          </div>
+        </div>
+        <div class="qnapw"><a href="/findpwd">비밀번호 찾기</a></div>
+      </div>
     </div>
+  </div>
 </div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script th:inline="javascript">
   $(function () {
     // 로그인 input(id, pw)에 focus 되면 테두리색 변경
@@ -295,30 +300,6 @@
             .css('color', '#AAA');
       }
     });
-
-    // 로그인버튼 클릭시 비동기 처리
-    $(document).on('click', '#btn-login', function () {
-      var email = $('#login_id').val();
-      var pwd = $('#login_pw').val();
-
-      $.ajax({
-        url: '/dologin',
-        type: 'POST',
-        data: 'email=' + email + '&password=' + pwd,
-        success: function (data) {
-          data = JSON.parse(data)
-          if (data.data !== 1) { // 로그인 실패
-            $('.err_content').css('display', 'block')
-                .text('로그인 중 문제가 발생했습니다.아이디 및 비밀번호를 확인하거나 계정을 생성하십시오.');
-          } else { // 로그인 성공
-            window.location.href = "/"
-          }
-        },
-        error: function () {
-          alert('System Error:/');
-        }
-      });
-    });
-  });
+  })
 </script>
 </html>

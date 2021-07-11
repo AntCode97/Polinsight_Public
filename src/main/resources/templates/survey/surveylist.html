@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .survey_list_wrap {
+
+    }
+
+    .survey_list {
+
+    }
+
+    .survey_card_wrap {
+
+    }
+
+    .survey_card {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+    }
+
+    .survey_card > .point {
+      position: relative;
+      bottom: 3px;
+      right: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="survey_list_wrap">
+  <div class="survey_list">
+    <!--서베이 리스트가 들어갈 공간-->
+  </div>
+</div>
+</body>
+<script>
+  const getSurveyList = () => {
+    axios.get('')
+        .then(res => {
+          console.log(res)
+          if (res.data.code === 200) {
+            //  리스트 업데이트
+          }
+        })
+        .catch(err => console.log(err))
+  }
+
+  const cardClickEventHandler = (e) => {
+
+  }
+
+  $(function () {
+    getSurveyList();
+  })
+</script>
+</html>

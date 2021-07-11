@@ -2,9 +2,10 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.List;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,10 +20,11 @@ public class Survey implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Enumerated(EnumType.STRING)
-  private SurveyType type;
+  private Long surveyId;
 
-
-  private List<SurveyQuestion> question;
+  /*
+   * 설문 완료시 지급할 포인트 수치
+   * */
+  private Long point;
 
 }

@@ -36,9 +36,11 @@ public class CustomAuthProvider implements AuthenticationProvider {
 
     try {
       user = (User) service.loadUserByUsername(name);
-
+      System.out.println("-------------------------------------------------\n" + user.toString() + "\n-------------------------------------------------");
       if (!passwordEncoder.matches(password, user.getPassword())) {
-        throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        log.info("비밀번호 일치하지 않음------------------------------------------------------");
+        log.info("------------------------------------------------------");
+        //        throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
       }
       authorities = user.getAuthorities();
     } catch (UsernameNotFoundException e) {
@@ -46,6 +48,7 @@ public class CustomAuthProvider implements AuthenticationProvider {
       throw new UsernameNotFoundException(e.getMessage());
     } catch (BadCredentialsException e) {
       log.info(e.toString());
+      log.info("------------------------------ Auth Provier -----------------------------");
       throw new BadCredentialsException(e.getMessage());
     } catch (Exception e) {
       log.info(e.toString());

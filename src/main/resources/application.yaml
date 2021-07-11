@@ -1,59 +1,28 @@
+spring :
+  profiles :
+    group :
+      dev :  common, db, dev
+      prod : common, db, prod
+---
 server :
   port : 8080
   servlet :
     context-path :             /
     encoding :
       charset : UTF-8
-    application-display-name : PolInsight
+    application-display-name : dnslab_polinsight
     session :
       cookie :
         http-only : true
   error :
     path : /templates/error
 
+
 spring :
-
-#  redis:
-#    host: 168.131.148.45
-#    port: 26379
-  redis:
-    host: localhost
-    port: 6379
-
-#  datasource:
-#    username: root
-#    password: root
-#    url: jdbc:mariadb://168.131.148.45:23308/polinsight
-#    driver-class-name: org.mariadb.jdbc.Driver
-  datasource:
-    username: root
-    password: 159753
-    url: jdbc:mariadb://localhost:3306/polinsight
-    driver-class-name: org.mariadb.jdbc.Driver
-
-
-  jpa :
-    show-sql : true
-    hibernate :
-      ddl-auto : update
-
-    data :
-      mongodb :
-        host :     localhost
-        password : 27017
-        database : polinsight
-#    data:
-#      mongodb:
-#        host: 168.131.148.45
-#        password: 27017
-#        database: polinsight
-    properties:
-      hibernate:
-        format_sql: true
-  servlet:
-    multipart:
-      max-file-size: 102400KB
-      max-request-size: 102400KB
+  servlet :
+    multipart :
+      max-file-size :    102400KB
+      max-request-size : 102400KB
 
   security :
     oauth2 :
@@ -72,16 +41,16 @@ spring :
             user-name-attribute : id
         registration :
           google :
-            clientId :            61528740066-719taq23e9rhlg15k3srr5sd2nm20kgq.apps.googleusercontent.com
-            clientSecret :        0c0jJjvKxeACkG9ZWM3GWTQu
+            clientId :            dda
+            clientSecret :        dd
             redirectUriTemplate : "{baseUrl}/oauth2/callback/{registrationId}"
             scope :
               - email
               - profile
           naver :
             client-name :              Naver
-            client-id :                j0J7LuyWcfHKCF_IQLdn
-            client-secret :            _UEdUG089J
+            client-id :                dd
+            client-secret :            dd
             authorization-grant-type : authorization_code
             redirect-uri :             "{baseUrl}/login/oauth2/code/{registrationId}"
             scope :
@@ -90,24 +59,105 @@ spring :
               - profile_image
           kakao :
             client-name :                  Kakao
-            client-id :                    3f9fc6c7c1b07e9181061f800d659bdf
-            client-secret :                7FDxfbG3gBUMwoAGRT29usEyUEI0Fq6n
+            client-id :                    dd
+            client-secret :                dd
             authorization-grant-type :     authorization_code
             redirect-uri :                 "{baseUrl}/login/oauth2/code/{registrationId}"
             client-authentication-method : POST
             scope :
               - profile
               - account_email
+
   mvc :
     static-path-pattern : /static/**
   web :
     resources :
       static-locations : classpath:/static/
       add-mappings :     true
-  banner :
-    location : classpath:banner-dev.txt
+
+  cache :
+    type : redis
+
+  mail :
+    host :  # smtp address
+    port :  # smtp port
+    username :  # smtp 등록 계정
+    password :  # smtp 등록 계정의 패스워드
+    properties :
+      mail :
+        smtp :
+          auth : true
+          starttls :
+            enable : true
+  config :
+    activate :
+      on-profile : common
+
+file :
+  upload :
+    baseLocation : "./upload-dir/"
+
 custom :
   permission :
     resources : /css/**, /js/**, /img/**
-    admin :     /swagger-ui/**
-    template :  /signup, /index, /, /404, loginSuccess, /loginpage, /user/**, /findpassword
+    admin :
+    template :  /signup,/join, /index, /, /404, /loginSuccess, /login, /user/**, /findpwd, /terms, /wholesign, /boards/**, /panel, /point**, /denied, /moreinfo, /dologin
+  api :
+    url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
+    accessToken : ""
+---
+spring :
+  datasource :
+    username :          root
+    password :          159753
+    url :               jdbc:mariadb://localhost:3306/polinsight
+    driver-class-name : org.mariadb.jdbc.Driver
+
+  data :
+    mongodb :
+      uri : mongodb://localhost:27017/polinsight
+
+  jpa :
+    hibernate :
+      ddl-auto : update
+    properties :
+      format_sql : true
+
+  redis :
+    host : localhost
+    port : 6379
+
+  config :
+    activate :
+      on-profile : db
+---
+spring :
+  config :
+    activate :
+      on-profile : dev
+
+
+  jpa :
+    hibernate :
+      ddl-auto : update
+    show-sql : true
+
+  banner :
+    location : banner-dev.txt
+  session :
+    store-type : none
+
+---
+spring :
+  config :
+    activate :
+      on-profile : prod
+  jpa :
+    hibernate :
+      ddl-auto : update
+
+  banner :
+    location : banner-prod.txt
+
+  session :
+    store-type : redis

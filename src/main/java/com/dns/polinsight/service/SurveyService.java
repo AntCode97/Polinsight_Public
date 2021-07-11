@@ -18,4 +18,6 @@ public interface SurveyService {
 
   void delete(Survey survey);
 
+  List<Survey> getSurveyListFromSM();
+
 }

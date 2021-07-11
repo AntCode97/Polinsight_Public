@@ -1,234 +1,235 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>폴인사이트</title>
-  <link rel="shortcut icon" href="favicon.ico">
-  <style type="text/css">
-    .header_wrap {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: transparent;
-      background-color: #182838;
-      z-index: 9999;
-    }
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>폴인사이트</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+        .header_wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: transparent;
+            z-index: 9999;
+        }
 
-    .header_box {
-      width: 1200px;
-      height: 80px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
-    }
+        .header_box {
+            width: 1200px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
 
-    .header_logo a {
-      display: inline-block;
-      background-image: url("/img/logo/logo_text.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      width: 300px;
-      height: 80px;
-      background-size: cover;
-    }
+        .header_logo a {
+            display: inline-block;
+            background-image: url("/img/logo/logo_text.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 300px;
+            height: 80px;
+            background-size: cover;
+        }
 
-    .header_container_navi {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-    }
+        .header_container_navi {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
 
-    .navi_box > li > a {
-      font-size: 18px;
-      display: block;
-      line-height: 80px;
-      padding: 0 40px;
-    }
+        .navi_box > li > a {
+            font-size: 18px;
+            display: block;
+            line-height: 80px;
+            padding: 0 40px;
+        }
 
-    .navi_box > li:hover > a {
-      color: #4C99CF;
-    }
+        .navi_box > li:hover > a {
+            color: #4C99CF;
+        }
 
-    .navi_box > li:hover .dropdown {
-      height: 47px;
-    }
+        .navi_box > li:hover .dropdown {
+            height: 47px;
+        }
 
-    .dropdown {
-      transition: 0.2s;
-      position: absolute;
-      top: 80px;
-      display: block;
-      background-color: #FFFFFF;
-      overflow: hidden;
-      height: 0;
-    }
+        .dropdown {
+            transition: 0.2s;
+            position: absolute;
+            top: 80px;
+            display: block;
+            background-color: #FFFFFF;
+            overflow: hidden;
+            height: 0;
+        }
 
-    .dropdown_box {
-      display: flex;
-      align-items: center;
-      padding: 0 5px;
-      justify-content: space-between;
-      border: 1px solid #d4d4d4;
-    }
+        .dropdown_box {
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            justify-content: space-between;
+            border: 1px solid #d4d4d4;
+        }
 
-    .dropdown_element {
-      display: inline-block;
-      font-size: 14px;
-      color: #777;
-      font-weight: normal;
-      padding: 0 15px;
-      line-height: 45px;
-    }
+        .dropdown_element {
+            display: inline-block;
+            font-size: 14px;
+            color: #777;
+            font-weight: normal;
+            padding: 0 15px;
+            line-height: 45px;
+        }
 
-    .dropdown_element:hover {
-      text-decoration: underline;
-      cursor: pointer;
-      color: #4C99CF;
-    }
+        .dropdown_element:hover {
+            text-decoration: underline;
+            cursor: pointer;
+            color: #4C99CF;
+        }
 
-    .header_container_login {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .header_container_login {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .header_container_login {
-      padding: 0 20px;
-      margin-left: 25px;
-    }
+        .header_container_login {
+            padding: 0 20px;
+            margin-left: 25px;
+        }
 
-    .header_container_login > a {
-      font-size: 18px;
-    }
+        .header_container_login > a {
+            font-size: 18px;
+        }
 
-    .header_container_login > a:hover {
-      color: #4C99CF;
-    }
+        .header_container_login > a:hover {
+            color: #4C99CF;
+        }
 
-    .header_container_login > span {
-      display: inline-block;
-      width: 0.2px;
-      height: 15px;
-      background: white;
-      margin: 0 10px;
-    }
+        .header_container_login > span {
+            display: inline-block;
+            width: 0.2px;
+            height: 15px;
+            background: white;
+            margin: 0 10px;
+        }
 
-  </style>
+    </style>
 
 </head>
 <body>
 <button class="top-btn btn-circle">
-  <i class="fas fa-arrow-up"></i>
-  <span>TOP</span>
+    <i class="fas fa-arrow-up"></i>
+    <span>TOP</span>
 </button>
 <div class="header_wrap">
-  <div class="header_box">
-    <div class="header_container_logo">
-      <div class="header_logo"><a th:href="@{/}"></a></div>
+    <div class="header_box">
+        <div class="header_container_logo">
+            <div class="header_logo"><a th:href="@{/}"></a></div>
+        </div>
+        <div class="header_container_navi">
+            <ul class="navi_box">
+                <li>
+                    <a th:href="@{/}">Company</a>
+                    <div class="dropdown" style="left: 0px;">
+                        <div class="dropdown_box">
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">인사말</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">연혁</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">설립목적</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">오시는길</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navi_box">
+                <li>
+                    <a th:href="@{/}">Pol's Insight</a>
+                    <div class="dropdown" style="left: 160.5px;">
+                        <div class="dropdown_box">
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navi_box">
+                <li>
+                    <a th:href="@{/boards}">Boards</a>
+                    <div class="dropdown" style="left: 314.5px;">
+                        <div class="dropdown_box">
+                            <a class="dropdown_element" th:href="@{/boards}">공지 사항</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">이벤트</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">FAQ</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">Q & A</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navi_box">
+                <li>
+                    <a th:href="@{/}">Research</a>
+                    <div class="dropdown" style="right: 0px;">
+                        <div class="dropdown_box">
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
+                            <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="header_container_login">
+            <th:block th:if="${session.user} == null">
+                <a th:href="@{/login}">LOGIN</a>
+                <span></span>
+                <a th:href="@{/signup}">JOIN</a>
+            </th:block>
+            <th:block th:unless="${session.user} == null">
+                <!--                <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'">MY PAGE</a>-->
+                <a href="/mypage" role="button" th:text="${session.user.name}==null?'guest':${session.user.name}">MY PAGE</a>
+                <span></span>
+                <a href="/dologout" th:onclick="logout_process">LOGOUT</a>
+            </th:block>
+        </div>
     </div>
-    <div class="header_container_navi">
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/}">Company</a>
-          <div class="dropdown" style="left: 0px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">인사말</a>
-              <a class="dropdown_element" th:href="@{/}">연혁</a>
-              <a class="dropdown_element" th:href="@{/}">설립목적</a>
-              <a class="dropdown_element" th:href="@{/}">오시는길</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/}">Pol's Insight</a>
-          <div class="dropdown" style="left: 160.5px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/boards}">Boards</a>
-          <div class="dropdown" style="left: 314.5px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/boards}">공지 사항</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">이벤트</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">FAQ</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">Q & A</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/}">Research</a>
-          <div class="dropdown" style="right: 0px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="header_container_login">
-      <th:block th:if="${session.user} == null">
-        <a th:href="@{/loginpage}">LOGIN</a>
-        <span></span>
-        <a th:href="@{/signup}">JOIN</a>
-      </th:block>
-      <th:block th:unless="${session.user} == null">
-        <!--                <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'">MY PAGE</a>-->
-        <a href="/mypage" role="button" th:text="${session.user.name}==null?'guest':${session.user.name}">MY PAGE</a>
-        <a href="/dologout" th:onclick="logout_process">LOGOUT</a>
-      </th:block>
-    </div>
-  </div>
 </div>
 </body>
 <script th:inline="javascript">
-  const logout_process = e => {
-    axios.get("/dologout")
+    const logout_process = e => {
+        axios.get("/dologout")
             .then(res => {
-              console.log("로그아웃 성공")
-              window.location.href = "/"
+                console.log("로그아웃 성공")
+                window.location.href = "/"
             })
             .catch(err => {
-              console.log("로그아웃 중 에러 발생")
-              console.log(err)
+                console.log("로그아웃 중 에러 발생")
+                console.log(err)
             })
-  }
+    }
 
-  $(function () {
-    // Scroll TOP버튼 생성 및 TOP으로 이동
-    // + header 디자인 그림자 추가
-    $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-                .css('background-color', '#182838');
-      } else {
-        $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
-      }
+    $(function () {
+        // Scroll TOP버튼 생성 및 TOP으로 이동
+        // + header 디자인 그림자 추가
+        $(window).scroll(function () { // 스크롤이 움직이면
+            if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+                $('.top-btn').fadeIn().css("display", "flex");
+                $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+                    .css('background-color', '#182838');
+            } else {
+                $('.top-btn').fadeOut();
+                $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+            }
+        });
+
+        $('.top-btn').click(function () {
+            $('html, body').animate({scrollTop: 0}, 800);
+        });
     });
-    $('.top-btn').click(function () {
-      $('html, body').animate({scrollTop: 0}, 800);
-    });
-  });
 </script>
 </html>

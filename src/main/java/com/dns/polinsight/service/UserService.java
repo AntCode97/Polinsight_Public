@@ -23,6 +23,6 @@ public interface UserService extends UserDetailsService {
 
   User changePwd(User user);
 
-
+  void sendEmail();
 
 }
