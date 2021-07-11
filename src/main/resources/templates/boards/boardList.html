@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<!--리프레시 할 경우, 원래 리스트 띄워지도록 하기-->
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="module/common" />
 <th:block th:include="layout/header" />
 <head>
   <style>
     .web {
-        margin: auto;
-        width: 1200px;
+      margin: auto;
+      width: 1200px;
     }
 
     img {
@@ -57,7 +56,6 @@
     }
 
     .button {
-
       margin-bottom: 20px;
     }
 
@@ -163,13 +161,13 @@
 
 <body>
 <div class="web">
-<!--  <div class="sub-main">-->
-<!--    <span></span>-->
-<!--    <ul>-->
-<!--      <li class="notice">공지사항</li>-->
-<!--      <li class="qna">문의사항</li>-->
-<!--    </ul>-->
-<!--  </div>-->
+  <!--  <div class="sub-main">-->
+  <!--    <span></span>-->
+  <!--    <ul>-->
+  <!--      <li class="notice">공지사항</li>-->
+  <!--      <li class="qna">문의사항</li>-->
+  <!--    </ul>-->
+  <!--  </div>-->
   <div class="sub-main-name"><b>공지사항</b></div>
   <div class="board">
     <div class="button">
@@ -228,15 +226,16 @@
       </div>
     </div>
   </div>
-
-  <div class="writeButton">
+  <div class="writeButton" th:if="${session.user.role.equals('ADMIN')}">
+    <h1 th:text="${session.user.role}" style="color: red; font-size: 14px;"></h1>
+  </div>
+  <div class="writeButton" th:if="${session.user.role.equals('ADMIN')}">
     <a href="/boards/new">
       <div class=write>
         <b>글쓰기</b>
       </div>
     </a>
   </div>
-
   <div class="page-button"
        th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
                     last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">

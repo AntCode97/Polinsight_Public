@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.types.BoardType;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

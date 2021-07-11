@@ -1,20 +1,16 @@
 package com.dns.polinsight.config.oauth;
 
-import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
 
 /*
  * OAuth2를 이용한 소셜 로그인 성공 후의 처리를 위한 클래스
@@ -40,21 +36,21 @@ public class CustomOAuth2Service implements OAuth2UserService<OAuth2UserRequest,
 
     OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-    User user = saveOrUpdate(attributes);
-    httpSession.setAttribute("user", new SessionUser(user));  // NOTE 2021/06/12 : 사용자 정보 저장하고 불러와서 세션에 저장
-
-    return new DefaultOAuth2User(
-        Collections.singleton(new SimpleGrantedAuthority(user.getRole().name())),
-        attributes.getAttributes(),
-        attributes.getNameAttributeKey()
-    );
+    //    User user = saveOrUpdate(attributes);
+    //    httpSession.setAttribute("user", new SessionUser(user));  // NOTE 2021/06/12 : 사용자 정보 저장하고 불러와서 세션에 저장
+    return null;
+    //    return new DefaultOAuth2User(
+    //        Collections.singleton(new SimpleGrantedAuthority(user.getRole().name())),
+    //        attributes.getAttributes(),
+    //        attributes.getNameAttributeKey()
+    //    );
   }
 
-  private User saveOrUpdate(OAuthAttributes attributes) {
-    User user = repository.findUserByEmail(attributes.getEmail())
-                          .map(entity -> entity.update(attributes.getName(), attributes.getPicture())).orElse(attributes.toEntity());
-    return repository.save(user);
-
-  }
+  //  private User saveOrUpdate(OAuthAttributes attributes) {
+  //    User user = repository.findUserByEmail(attributes.getEmail())
+  //                          .map(entity -> entity.update(attributes.getName())).orElse(attributes.toEntity());
+  //    return repository.save(user);
+  //
+  //  }
 
 }

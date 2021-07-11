@@ -5,14 +5,13 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>폴인사이트</title>
   <link rel="shortcut icon" href="favicon.ico">
-  <style type="text/css">
+  <style>
     .header_wrap {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       background-color: transparent;
-      background-color: #182838;
       z-index: 9999;
     }
 
@@ -137,10 +136,10 @@
           <a th:href="@{/}">Company</a>
           <div class="dropdown" style="left: 0px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">인사말</a>
-              <a class="dropdown_element" th:href="@{/}">연혁</a>
-              <a class="dropdown_element" th:href="@{/}">설립목적</a>
-              <a class="dropdown_element" th:href="@{/}">오시는길</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">인사말</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">연혁</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">설립목적</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">오시는길</a>
             </div>
           </div>
         </li>
@@ -150,10 +149,10 @@
           <a th:href="@{/}">Pol's Insight</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>
@@ -176,10 +175,10 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="right: 0px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>
@@ -187,13 +186,14 @@
     </div>
     <div class="header_container_login">
       <th:block th:if="${session.user} == null">
-        <a th:href="@{/loginpage}">LOGIN</a>
+        <a th:href="@{/login}">LOGIN</a>
         <span></span>
         <a th:href="@{/signup}">JOIN</a>
       </th:block>
       <th:block th:unless="${session.user} == null">
         <!--                <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'">MY PAGE</a>-->
         <a href="/mypage" role="button" th:text="${session.user.name}==null?'guest':${session.user.name}">MY PAGE</a>
+        <span></span>
         <a href="/dologout" th:onclick="logout_process">LOGOUT</a>
       </th:block>
     </div>
@@ -226,6 +226,7 @@
         $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
       }
     });
+
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });

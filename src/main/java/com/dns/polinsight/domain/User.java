@@ -1,13 +1,14 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.types.UserRoleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -24,24 +25,25 @@ import java.util.List;
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
-@ToString
+@ToString(exclude = "boards")
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
 
+  /*
+   * 유저 기본정보 클래스
+   * */
+  @JsonIgnore
   @OneToMany(mappedBy = "user")
-  private final List<Board> boards = new ArrayList<>();
+  private List<Board> boards = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @PositiveOrZero
   private Long id;
 
-  @NotNull
-  @Email(message = "이메일의 형식이 다릅니다.")
   private String email;
 
-  @Size(min = 10, max = 16, message = "패스워드 길이가 맞지 않습니다.")
   private String password;
 
   private String name;
@@ -52,14 +54,19 @@ public class User implements UserDetails, Serializable {
   @Size(min = 11, max = 11)
   private String recommend;
 
-
   @PositiveOrZero
   private Long point;
 
-  @NotNull
-  @Column(name = "role")
-  private UserRole role;
+  private UserRoleType role;
 
+  @OneToOne
+  @JsonIgnore
+  @JoinColumn(name = "additional_id")
+  private Additional additional;
+
+  public void setBoards(List<Board> boards) {
+    this.boards = boards;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,15 +103,16 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
-
-  public User update(String name, String picture) {
-    this.name = name;
-//    this.picture = picture;
+  public User update(SessionUser sessionUser) {
+    this.name = sessionUser.getName();
+    this.email = sessionUser.getEmail();
+    this.role = sessionUser.getRole();
+    this.point = sessionUser.getPoint() == null ? 0 : sessionUser.getPoint();
     return this;
   }
 
-  public User pointUpdate(Long point) {
-    this.point = point;
+  public User update(Additional additional) {
+    this.additional = additional;
     return this;
   }
 

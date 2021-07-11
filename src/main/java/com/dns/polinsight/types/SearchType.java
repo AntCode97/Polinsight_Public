@@ -1,4 +1,4 @@
-package com.dns.polinsight.domain;
+package com.dns.polinsight.types;
 
 public enum SearchType {
   TITLE, CONTENT
