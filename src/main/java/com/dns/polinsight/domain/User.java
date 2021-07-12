@@ -78,6 +78,10 @@ public class User implements UserDetails, Serializable {
     return this.password;
   }
 
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
   @Override
   public String getUsername() {
     return this.email;

@@ -131,14 +131,14 @@
     $("#btn_submit").on('click', function () {
       // $(this).submit()
       const userInfo = {}  // NOTE 2021-06-28 0028 : 데이터 넣기
-
+      userInfo['newpassword'] = $("#pwd").val()
       // 비동기
       axios.post('http://localhost:8080/', userInfo)
           .then(res => {
             console.log(res)
             if (res.data.code === 200) {
-
-              window.location.replace("/")
+              alert('패스워드 변경 완료!')
+              window.location.replace("/login")
             }
           })
           .catch(err => {

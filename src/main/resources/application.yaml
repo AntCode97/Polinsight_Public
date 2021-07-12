@@ -17,12 +17,13 @@ server :
   error :
     path : /templates/error
 
-
 spring :
   servlet :
     multipart :
       max-file-size :    102400KB
       max-request-size : 102400KB
+
+
 
   security :
     oauth2 :
@@ -101,10 +102,29 @@ custom :
   permission :
     resources : /css/**, /js/**, /img/**
     admin :
-    template :  /signup,/join, /index, /, /404, /loginSuccess, /login, /user/**, /findpwd, /terms, /wholesign, /boards/**, /panel, /point**, /denied, /moreinfo, /dologin
+    template :  /signup,/join, /index, /, /404, /loginSuccess, /login, /user/**, /findpwd, /terms, /wholesign, /boards/**, /panel, /point**, /denied, /moreinfo, /dologin, /actuator**, /h2
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : ""
+
+
+management :
+  endpoints :
+    enabled-by-default : true
+    web :
+      exposure :
+        include : "*"
+    jmx :
+      exposure :
+        include : health, info
+  endpoint :
+    info :
+      enabled : true
+    health :
+      show-components : always
+      show-details :    always
+
+
 ---
 spring :
   datasource :
@@ -136,16 +156,29 @@ spring :
     activate :
       on-profile : dev
 
-
   jpa :
     hibernate :
       ddl-auto : update
     show-sql : true
 
+
   banner :
     location : banner-dev.txt
   session :
     store-type : none
+  h2 :
+    console :
+      enabled : true
+      path :    /h2
+      settings :
+        web-admin-password : admin
+  devtools :
+    restart :
+      poll-interval : 1s
+  datasource :
+    url :      jdbc:h2:mem:polinsight
+    username : root
+    password : root
 
 ---
 spring :

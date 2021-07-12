@@ -6,6 +6,7 @@ import com.dns.polinsight.domain.Additional;
 import com.dns.polinsight.domain.SignupDTO;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.object.ResponseObject;
+import com.dns.polinsight.repository.ChangePwdRepository;
 import com.dns.polinsight.service.AdditionalService;
 import com.dns.polinsight.service.EmailService;
 import com.dns.polinsight.service.UserService;
@@ -20,9 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,16 +46,7 @@ public class UserController {
 
   private final PasswordEncoder passwordEncoder;
 
-  //  @PostConstruct
-  //  public void saveUserDate() {
-  //    userService.save(User.builder()
-  //                         .email("test@gmail.com")
-  //                         .name("TEST_NAME")
-  //                         .password(passwordEncoder.encode("!@#$%QWERT"))
-  //                         .role(UserRoleType.ADMIN)
-  //                         .phone("01012345678")
-  //                         .build());
-  //  }
+  private final ChangePwdRepository pwdRepository;
 
   @PostMapping("/signup")
   public ResponseEntity<Map<String, Object>> userSignUp(@RequestBody SignupDTO signupDTO) {
@@ -140,17 +136,26 @@ public class UserController {
   }
 
   @PostMapping("/findpwd")
-  public ResponseEntity<?> findPwd(HttpServletRequest request) throws MessagingException {
+  public ResponseEntity<?> findPwd(HttpServletRequest request) throws MessagingException, NoSuchAlgorithmException {
     /*
      *  메일 서비스 필요
      *  등록한 주소로 메일 리다이렉팅 할 메일 전달
      * 해시값을 저장한 페이지를 리턴한다
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
+    //    템플릿 작성에 필요한 변수들을 담는 객체
+    Map<String, Object> variables = new HashMap<>();
 
-    String emal = request.getParameter("email");
+    String email = request.getParameter("email");
     String name = request.getParameter("name");
-    emailService.sendMail("to", "subject", "body");
+    String hash = userService.getHash(email, name);
+
+    //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
+    variables.put("date", LocalDateTime.now());
+    variables.put("hash", hash);
+    variables.put("callback", "/changepassword");
+    emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 안내 메일입니다.", variables);
+    // TODO: 2021-07-12 해시는 따로 저장
     ResponseObject obj = ResponseObject.builder()
                                        .statuscode(HttpStatus.OK.value())
                                        .msg("password changed")
@@ -158,30 +163,43 @@ public class UserController {
     return ResponseEntity.ok(obj);
   }
 
-  @PostMapping("/chngepwd")
-  public ResponseEntity<?> changePwd() {
+  @PostMapping("/changepwd")
+  public ResponseEntity<?> changePwd(HttpServletRequest request, @LoginUser SessionUser sessionUser, HttpSession session) {
     /*
      * 비밀번호 변경 처리 후 리다이렉팅
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
-    String hash = "";
-    String userName = "";
-    String userEmail = "";
-    // passwordChangeService.get();
-    // PassworDTO 생성??
     Map<String, Object> map = new HashMap<>();
-
     try {
-      userService.update(User.builder().build()); // DB 업데이트할 유저 객체 넣기
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      user.setPassword(passwordEncoder.encode(request.getParameter("newpassword")));
+      userService.update(user); // DB 업데이트할 유저 객체 넣기
       map.put("code", 200);
-      map.put("msg", "유저의 비밀번호가 변경되었습니다.");
+      map.put("msg", "비밀번호 변경 완료");
     } catch (Exception e) {
       map.put("code", 201);
       map.put("msg", "there is something worng");
     }
 
+    session.invalidate();
     return ResponseEntity.ok(map);
   }
 
+  @GetMapping("/changepassword")
+  public void changePassword(@RequestParam(name = "hash") String hash,
+                             @RequestParam(name = "email") String email,
+                             @RequestParam(name = "name") String name,
+                             HttpSession session,
+                             HttpServletResponse response
+  ) throws NoSuchAlgorithmException, IOException {
+    /*등록한 메일 주소로 전달한 페이지에서, 비밀번호 변경 클릭 시 리다이렉팅 될 주소*/
+    // NOTE 2021-06-23 0023 : 해시가 우리 서버에서 발급한게 맞는지 확인한다
+    log.info("callback url executed ---\n{}", String.format("%1$20s\n%1$20s\n%1$20s", "hash: " + hash, "email: " + email, "name: " + name));
+    if (hash.equals(userService.getHash(email, name))) {
+      session.setAttribute("user", new SessionUser().of(userService.findUserByEmail(User.builder().email(email).build())));
+      response.sendRedirect("/changepwd");
+    }
+    response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+  }
 
 }

@@ -30,13 +30,12 @@ public class SurveyServiceImpl implements SurveyService {
     return null;
   }
 
-  @Cacheable
+  @Cacheable(cacheNames = "allSurveys")
   @Override
   public List<Survey> findAll() {
     return null;
   }
 
-  @Cacheable
   @Override
   public Survey findById(Survey survey) {
     return null;
@@ -54,8 +53,10 @@ public class SurveyServiceImpl implements SurveyService {
 
   @Cacheable(cacheNames = "surveyList")
   public List<Survey> getSurveyListFromSM() {
-    // TODO: 2021-07-09 : 헤더ㅔㅇ 엑세스토큰 넣기
-    return (List<Survey>) new RestTemplate().exchange(baseURL + "surveys", HttpMethod.GET, null, new ParameterizedTypeReference<List<Survey>>() {});
+    // TODO: 2021-07-09 : 헤더에 엑세스토큰 넣기
+    List<Survey> surveys = (List<Survey>) new RestTemplate().exchange(baseURL + "surveys", HttpMethod.GET, null, new ParameterizedTypeReference<List<Survey>>() {});
+    mongoTemplate.save(surveys);
+    return surveys;
   }
 
 }

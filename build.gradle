@@ -41,6 +41,8 @@ dependencies {
     /* LayOut*/
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
 
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     //file upload
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-fileupload:commons-fileupload:1.4'
@@ -50,6 +52,8 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    runtimeOnly 'com.h2database:h2'
 
     // test
     implementation 'org.junit.jupiter:junit-jupiter'
