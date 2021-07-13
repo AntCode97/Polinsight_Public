@@ -2,7 +2,7 @@ FROM openjdk:11
 
 USER root
 
-ARG JAR_FILE=build/libs/app.jar
+ARG JAR_FILE=./build/libs/app.jar
 
 # working directory
 WORKDIR /app
@@ -19,4 +19,4 @@ ENV profile="prod"
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Dspring.profiles.active=${profile}","-jar", "${JAR_FILE}"]
+ENTRYPOINT ["java","-Dspring.profiles.active=${profile}","-jar", "app.jar"]
