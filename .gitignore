@@ -442,6 +442,9 @@ build
 application-dev.yaml
 
 ##UPLOAD Files
-**/upload-dir/
+**/upload_dir/
+**/app_log/
+*.out
+
 
 # End of https://www.toptal.com/developers/gitignore/api/java,java-web,code-java,intellij,intellij+iml,intellij+all,eclipse,maven,gradle,windows,linux,macos,git
