@@ -118,7 +118,7 @@ custom :
       - /findpwd
       - /terms
       - /wholesign
-      - /boards/**
+      - /boards**
       - /panel
       - /point**
       - /denied
@@ -126,6 +126,7 @@ custom :
       - /dologin
       - /actuator**
       - /h2**
+      - /board**
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : ""

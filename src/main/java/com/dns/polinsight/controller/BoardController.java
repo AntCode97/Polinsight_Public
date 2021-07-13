@@ -2,7 +2,9 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.BoardDTO;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.BoardService;
@@ -10,7 +12,6 @@ import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
 import com.dns.polinsight.types.SearchType;
-import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -80,7 +81,7 @@ public class BoardController {
 
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + boardDTO.getFiles() + "!");
 
-    return "redirect:/boards";
+    return "redirect:boards";
   }
 
 
