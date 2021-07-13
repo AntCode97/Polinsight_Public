@@ -31,18 +31,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     log.info("Credentials: {}", authentication.getCredentials());
     log.info("Authority: {}", authentication.getAuthorities());
     log.info("Details: {}", authentication.getDetails());
-    session.setAttribute("user_name", authentication.getPrincipal()); // 사용자 정보 세션에 저장
-
+    session.setAttribute("email", authentication.getPrincipal()); // 사용자 정보 세션에 저장
+    session.setMaxInactiveInterval(5 * 60); // 세션 만료시간 5분
     response.setStatus(HttpStatus.OK.value());
     session.setAttribute("user", new SessionUser(repository.findUserByEmail(authentication.getName()).get()));
     response.sendRedirect("/");
-    //    response.getWriter().write(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(ResponseObject.builder()
-    //                                                                                                                    .statuscode(HttpStatus.OK.value())
-    //                                                                                                                    .data(1)
-    //                                                                                                                    .msg("login success")
-    //                                                                                                                    .build()));
-
-
   }
 
 
