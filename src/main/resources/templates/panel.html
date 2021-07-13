@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<head>
+  <meta charset="UTF-8">
+  <style>
+    table {
+      width: 100%;
+    }
+
+    th, td {
+      border-top: 1px solid black;
+      text-align: center;
+    }
+
+    tr > td:first-child {
+      font-weight: bold;
+    }
+
+    tr > td:last-child {
+
+    }
+
+    h1 {
+      text-align: center;
+      margin: auto;
+      width: 1200px;
+    }
+
+    .center {
+      margin: 0 auto;
+      width: 1200px;
+      display: block;
+      text-align: center;
+    }
+  </style>
+  <title>POLINSIGHT</title>
+</head>
+<body>
+<h1>추가 정보 입력</h1>
+<p class="center" style="text-align: center">패널 가입을 위한 추가정보를 입력해주세요.</p>
+<div class="center">
+  <form id="addfrm" method="post" action="/moreinfo">
+    <table>
+      <tr>
+        <td colspan="2">성별</td>
+        <td>
+          <label>
+            <input name="gender" type="radio" value="MALE" checked>
+            남성
+          </label>
+          <label>
+            <input name="gender" type="radio" value="FEMALE">
+            여성
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">생년월일</td>
+        <td>
+          <select id="year" name="year">
+            <option>--선택--</option>
+          </select><label for="year"> 년</label>
+          <select id="month" name="month">
+            <option>--선택--</option>
+          </select><label for="month"> 월</label>
+          <select id="day" name="day">
+            <option>--선택--</option>
+          </select><label for="day"> 일</label>
+          <label>
+            <input checked name="birthtype" type="radio" value="양력">
+            양력
+          </label>
+          <label>
+            <input name="birthtype" type="radio" value="음력">
+            음력
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">최종 학력</td>
+        <td>
+          <select id="edu" name="edu" required>
+            <option>--선택--</option>
+            <option value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
+            <option value="대학 재학">대학 재학</option>
+            <option value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
+            <option value="대학원 이상">대학원 이상</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">결혼 여부</td>
+        <td>
+          <label>
+            <input checked name="marry" type="radio" value="false">
+            미혼
+          </label>
+          <label>
+            <input name="marry" type="radio" value="true">
+            기혼
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">직업</td>
+        <td>
+          <select id="job" name="job" required>
+            <option>--선택--</option>
+            <option value="학생">학생</option>
+            <option value="경영직">경영직</option>
+            <option value="공무">공무</option>
+            <option value="회사원">회사원</option>
+            <option value="자영업">자영업</option>
+            <option value="생산기술직">생산기술직</option>
+            <option value="예술인">예술인</option>
+            <option value="프리랜서">프리랜서</option>
+            <option value="무직">무직</option>
+            <option value="기타">기타</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">직종</td>
+        <td>
+          <select id="industry" name="industry" required>
+            <option>--선택--</option>
+            <option value="제조업">제조업</option>
+            <option value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
+            <option value="부동산업">부동산업</option>
+            <option value="임대•대여업">임대•대여업</option>
+            <option value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
+            <option value="음식업•외식업">음식업•외식업</option>
+            <option value="운수•여객•숙박업">운수•여객•숙박업</option>
+            <option value="여가 관련 서비스업">여가 관련 서비스업</option>
+            <option value="방송•언론•출판">방송•언론•출판</option>
+            <option value="정보통신업">정보통신업</option>
+            <option value="금융업">금융업</option>
+            <option value="교육 서비스업">교육 서비스업</option>
+            <option value="의료•보건•사회복지">의료•보건•사회복지</option>
+            <option value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
+            <option value="기타">기타</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+    <!--관심 분야-->
+    <table>
+      <tr>
+        <td rowspan="6">관심 분야</td>
+      </tr>
+
+      <tr>
+        <td>건강•헬스케어</td>
+        <td class="chkbox">
+          <label>
+            <input name="favorite" type="checkbox" value="건강일반">
+            건강일반
+          </label>건강일반<br>
+          <label>
+            <input name="favorite" type="checkbox" value="건강식품">
+            건강식품
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="다이어트">
+            다이어트
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="심리건강">
+            심리건강
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>문화예술•여가•스포츠</td>
+        <td>
+          <label>
+            <input name="favorite" type="checkbox" value="대중문화">
+            대중문화
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="음악">
+            음악
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="미술">
+            미술
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="공연•축제">
+            공연•축제
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="여행">
+            여행
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="생활문화">
+            생활문화
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="장르예술">
+            장르예술
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="레저활동">
+            레저활동
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="생활체육">
+            생활체육
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: center; ">경제•경영</td>
+        <td>
+          <label>
+            <input name="favorite" style="display: inline-block" type="checkbox" value="제테크">
+            제테크
+          </label>
+          <label>
+            <input name="favorite" style="display: inline-block" type="checkbox" value="창업">
+            창업
+          </label>
+          <label>
+            <input name="favorite" style="display: inline-block" type="checkbox" value="사회적 경제">
+            사회적 경제
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>사회•복지</td>
+        <td>
+          <label>
+            <input name="favorite" type="checkbox" value="사회•복지일반">
+            사회•복지일반
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="아동•청소년">
+            아동•청소년
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="청년">
+            청년
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="노인">
+            노인
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="장애인">
+            장애인
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="다문화">
+            다문화
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="민주인권">
+            민주인권
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="노동인권">
+            노동인권
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="자원봉사">
+            자원봉사
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>교육</td>
+        <td>
+          <label>
+            <input name="favorite" type="checkbox" value="평생교육">
+            평생교육
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="초·중·고등교육">
+            초·중·고등교육
+          </label>
+          <label>
+            <input name="favorite" type="checkbox" value="대학교육">
+            대학교육
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align: center;">
+          <input th:onclick="location.back()" type="button" value="돌아 가기">
+          <input name="panel_signup" type="button" value="가입 하기">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+</body>
+<script>
+  const setDateValue = () => {
+    let today = new Date();
+    $('select').each((idx, obj) => {
+      switch (obj.name) {
+        case "year":
+          for (let i = 1930; i < today.getFullYear(); i++) {
+            if (i === today.getFullYear() - 20) {
+              $(obj).append($("<option selected></option>").attr("value", i).text(i))
+            } else
+              $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+        case "month":
+          for (let i = 1; i < 13; i++) {
+            $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+          // case 'day':
+          //   console.log(obj)
+          //   obj.attr('readonly', true)
+      }
+    })
+  }
+
+  const setDay = (e) => {
+    const day = $("#day")
+    day.find("option").remove();    // 초기화
+    let month = e.target.value * 1
+    day.append($("<option selected></option>").text("--선택--"))
+    if (month === 2) {
+      for (let i = 1; i <= 28; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) { // 1, 3, 5, 7, 8, 10,12
+      for (let i = 1; i <= 31; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else {
+      for (let i = 1; i <= 30; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    }
+    // day.prop('readonly', false)
+  }
+
+  const makeDateFormat = () => {
+    let month = $('select[name=month]').val();
+    let day = $('select[name=day]').val();
+    return $('select[name=year]').val() + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day)
+  }
+
+  const checkRequiredValue = (info) => {
+    let chk = true;
+    $('select :checked').each((idx, item) => {
+          if (item.value === '--선택--') {
+            chk = false;
+            return false;
+          }
+        }
+    )
+
+    if (!chk) return false;
+
+    if (info['favorite'].length === 0) {
+      alert('관심 분야는 하나 이상 선택하셔야 합니다.')
+      chk = false;
+    }
+    return chk;
+  }
+
+  $(function () {
+    setDateValue()
+    $("#month").on('change', setDay)
+
+    $("input[name=panel_signup]").on('click', e => {
+      e.preventDefault()
+      e.returnValue = false
+
+      const info = {}
+      info['birth'] = makeDateFormat();
+      info['gender'] = $('input[name=gender]').val()
+      info['birthType'] = $('input[name=birthtype]').val()
+      info['education'] = $('select[name=edu]').val()
+      info['marry'] = $('input[name=marry]').val()
+      info['job'] = $('select[name=job]').val()
+      info['industry'] = $('select[name=industry]').val()
+      info['favorite'] = []
+      $('input[name=favorite]:checked').each((idx, item) => {
+        info['favorite'].push(item.value);
+      })
+
+      if (checkRequiredValue(info)) {
+        // 데이터 전달 후 확인까지
+        axios.post('/moreinfo', info)
+            .then(res => {
+              console.log(res)
+              if (res.data.code === 200) {
+                alert("패널 가입이 성공적으로 완료되었습니다.")
+              }
+            })
+            .catch(err => {
+              console.log(err)
+              alert('가입 중 문제가 발생하였습니다.\n관리자에게 문의해주세요.')
+            })
+        location.href='/' +
+            ''
+
+      }
+
+    })
+  })
+</script>
+</html>
