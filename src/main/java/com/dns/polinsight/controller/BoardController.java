@@ -2,7 +2,9 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.BoardDTO;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.BoardService;
@@ -10,7 +12,6 @@ import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
 import com.dns.polinsight.types.SearchType;
-import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -80,7 +81,7 @@ public class BoardController {
 
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + boardDTO.getFiles() + "!");
 
-    return "redirect:/boards";
+    return "redirect:boards";
   }
 
 
@@ -90,7 +91,7 @@ public class BoardController {
     //    List<Board> boards = boardService.findAll();
     boardService.renewBoard();
     model.addAttribute("boards", boards);
-    return "/boards/boardList";
+    return "boards/boardList";
   }
 
   @GetMapping("/boards/search")
@@ -103,7 +104,7 @@ public class BoardController {
       boards = boardService.searchContent(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
     }
     model.addAttribute("boards", boards);
-    return "/boards/boardList";
+    return "boards/boardList";
   }
 
   @GetMapping("/boards/{boardId}")
@@ -118,7 +119,7 @@ public class BoardController {
     //      model.addAttribute("user", user);
     //    }
     model.addAttribute("board", boardService.findOne(boardId));
-    return "/boards/board";
+    return "boards/board";
   }
 
   @GetMapping("/boards/{boardId}/edit")
@@ -157,7 +158,7 @@ public class BoardController {
 
 
     model.addAttribute("boardDTO", boardDTO);
-    return "/boards/updateBoardForm";
+    return "boards/updateBoardForm";
   }
 
   @PostMapping("/boards/{boardId}/edit")
@@ -172,7 +173,7 @@ public class BoardController {
     boardService.addBoard(boardDTO);
     attachService.addAttach(boardDTO);
 
-    return "redirect:/boards/{boardId}";
+    return "redirect:boards/{boardId}";
   }
 
   @GetMapping("/boards/{boardId}/delete")
@@ -180,7 +181,7 @@ public class BoardController {
     Board board = boardService.findOne(boardId);
     attachService.deleteAttaches(boardId);
     boardService.delete(board);
-    return "redirect:/boards";
+    return "redirect:boards";
   }
 
 
@@ -204,7 +205,7 @@ public class BoardController {
   @GetMapping("/boards/{boardId}/{file}/delete")
   public String deleteFile(@PathVariable("boardId") Long boardId, @PathVariable("file") String filename, Model model) {
     attachService.delete(attachService.findByname(filename).get(0));
-    return "redirect:/boards/" + boardId + "/edit";
+    return "redirect:boards/" + boardId + "/edit";
   }
 
 }
