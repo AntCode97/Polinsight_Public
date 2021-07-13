@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <title>폴인사이트</title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/css/common.css}">
   <style>
     .login_input {
-      width: 100%;
+      width: 50%;
       outline: none;
       border: none;
       border-bottom: 1.5px solid #dde0ea;
@@ -43,8 +41,8 @@
     }
 
     .modal_content {
-      width: 50%;
-      background-color: white;
+      width: 50vw;
+      border: 1px solid black;
       border-radius: 2px;
       overflow: hidden;
       margin: 0 auto;
@@ -52,9 +50,19 @@
 
     .modal_wrap {
       height: 100vh;
+      width: 100vw;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .modal_btn {
+      display: inline-block;
+    }
+
+    .modal_btn_wrap {
+      width: 100%;
+      text-align: center;
     }
 
     .input_div {
@@ -76,38 +84,33 @@
 <div class="modal_wrap">
   <div class="modal_content">
     <div class="modal_login">
-      <form action="">
+      <form action="/findpwd" method="post">
         <div class="input_div">
           <label for="input_email">
             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
           </label>
-          <input class="login_input" id="input_email" placeholder="이메일" required type="text">
+          <input name="email" class="login_input" id="input_email" placeholder="이메일" required type="text">
           <span class="err_msg" id="emailmsg" style="display:none;">이메일을 정확히 입력해주세요.</span>
         </div>
         <div class="input_div">
           <label for="input_name">
             <p><i class="fas fa-user"></i>&nbsp;이름</p>
           </label>
-          <input class="login_input" id="input_name" placeholder="이름" required type="text">
+          <input name="name" class="login_input" id="input_name" placeholder="이름" required type="text">
         </div>
-        <!--                <div class="input_div">-->
-        <!--                    <label for="">-->
-        <!--                        <p><i></i></p>-->
-        <!--                    </label>-->
-        <!--                    <input class="login_input" type="text" required placeholder="">-->
-        <!--                </div>-->
-        <div>
-          <button class="btn-primary btn-effect" onclick="window.history.back()">돌아가기&nbsp;</button>
-          <button class="btn-primary btn-effect" id="btn_submit">찾기&nbsp;<i class="fas fa-search"></i></button>
+        <div class="modal_btn_wrap">
+          <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
+          <button id="submit_btn" class="modal_btn btn-primary btn-effect" th:onclick="alert('이메일로 확인코드를 전송하였습니다. 확인해주세요.')">
+            &nbsp;<i class="fas fa-search">찾기</i>
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
   const emailChecker = () => {
-    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     const emailValue = $("#input_email").val();
     const msg = $("#emailmsg")
 
@@ -133,9 +136,8 @@
 
     $("#input_email").on("change keydown keyup paste", emailChecker);
 
-    $("#btn_submit").on('click', function () {
-      $(this).submit()
-      alert("이메일로 확인코드를 전송하였습니다. 확인해주세요.")
+    $("#submit_btn").on('click', () => {
+      alert('패스워드 변경을 위한 이메일을 보냈습니다.\n확인 해주세요.')
     })
   })
 </script>

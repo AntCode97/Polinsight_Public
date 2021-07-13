@@ -3,7 +3,7 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Board;
 import com.dns.polinsight.domain.BoardDTO;
-import com.dns.polinsight.domain.BoardType;
+import com.dns.polinsight.types.BoardType;
 import com.dns.polinsight.exception.BoardNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.BoardRepository;
@@ -70,10 +70,10 @@ public class BoardServiceImpl implements BoardService {
     repository.delete(board);
   }
 
-  @Override
+
   public Page<Board> getBoardList(Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
-    pageable = PageRequest.of(page, 10, Sort.by("id")); // <- Sort 추가
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
 
     return repository.findAll(pageable);
   }

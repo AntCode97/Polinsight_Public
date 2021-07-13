@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/css/common.css}">
   <style>
     .login_input {
       width: 100%;
@@ -84,13 +82,13 @@
     <form action="/changepwd" method="post">
       <div class="input_div">
         <label for="pwd">
-          <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
+          <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
         </label>
         <input class="pwdinput" id="pwd" placeholder="패스워드" required type="password">
       </div>
       <div class="input_div">
         <label for="pwdcfm">
-          <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
+          <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
         </label>
         <input class="pwdinput" id="pwdcfm" placeholder="패스워드 확인" required type="password">
         <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
@@ -103,8 +101,6 @@
     </form>
   </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:inline="javascript">
 
   const passwordChecker = () => {
@@ -134,13 +130,16 @@
 
     $("#btn_submit").on('click', function () {
       // $(this).submit()
-      const userInfo = new FormData();  // NOTE 2021-06-28 0028 : 데이터 넣기
-
+      const userInfo = {}  // NOTE 2021-06-28 0028 : 데이터 넣기
+      userInfo['newpassword'] = $("#pwd").val()
       // 비동기
       axios.post('http://localhost:8080/', userInfo)
           .then(res => {
             console.log(res)
-            window.location.replace("/")
+            if (res.data.code === 200) {
+              alert('패스워드 변경 완료!')
+              window.location.replace("/login")
+            }
           })
           .catch(err => {
             console.log(err)

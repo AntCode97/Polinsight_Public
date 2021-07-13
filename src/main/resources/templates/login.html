@@ -7,13 +7,17 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>폴인사이트</title>
   <link rel="stylesheet" th:href="@{/css/common.css}">
-  <style type="text/css">
+  <style>
     /* 모달 로그인 창 */
     .modal_wrap {
       height: 100vh;
+      width: 100vw;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: absolute;
+      top: -80px;
     }
 
     .modal_login {
@@ -21,7 +25,7 @@
     }
 
     .modal_content {
-      width: 50%;
+      width: 100%;
       background-color: white;
       border-radius: 2px;
       overflow: hidden;
@@ -238,8 +242,11 @@
       <div class="login_title"><a th:href="@{/}"><img class="login_logo_text"
                                                       src="/img/logo/logo_color.png" /></a></div>
       <div class="join_request">
-        <div class="join_request_text"><a th:href="@{/signup}">아직 회원이 아니신가요? <span
-            class="under">회원가입 하기</span></a></div>
+        <div class="join_request_text">
+          <a th:href="@{/signup}">아직 회원이 아니신가요?
+            <span class="under">회원가입 하기</span>
+          </a>
+        </div>
       </div>
       <div class="login_content">
         <div class="err_content"></div>
@@ -263,7 +270,7 @@
             <a href="/oauth2/authorization/kakao"></a>
           </div>
         </div>
-        <div class="qnapw"><a href="/findpassword">비밀번호 찾기</a></div>
+        <div class="qnapw"><a href="/findpwd">비밀번호 찾기</a></div>
       </div>
     </div>
   </div>
@@ -293,27 +300,6 @@
             .css('color', '#AAA');
       }
     });
-
-    // 로그인버튼 클릭시 비동기 처리
-    // $(document).on('click', '#btn-login', function () {
-    //   var email = $('#login_id').val();
-    //   var pwd = $('#login_pw').val();
-    //   let info = new FormData()
-    //   info.append('email', email)
-    //   info.append('password', pwd)
-    //
-    //   axios.post("/dologin", info)
-    //       .then(res => {
-    //         /*<![CDATA[*/
-    //         alert("[[${session}]]")
-    //         /*]]>*/
-    //         window.location.href = "/"
-    //       })
-    //       .catch(err => {
-    //         alert('로그인 중 오류가 발생하였습니다.')
-    //         console.log(err)
-    //       })
-    // });
-  });
+  })
 </script>
 </html>

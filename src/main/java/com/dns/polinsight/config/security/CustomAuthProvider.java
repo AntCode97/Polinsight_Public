@@ -48,6 +48,7 @@ public class CustomAuthProvider implements AuthenticationProvider {
       throw new UsernameNotFoundException(e.getMessage());
     } catch (BadCredentialsException e) {
       log.info(e.toString());
+      log.info("------------------------------ Auth Provier -----------------------------");
       throw new BadCredentialsException(e.getMessage());
     } catch (Exception e) {
       log.info(e.toString());

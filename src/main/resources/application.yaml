@@ -17,7 +17,6 @@ server :
   error :
     path : /templates/error
 
-
 spring :
   servlet :
     multipart :
@@ -99,10 +98,54 @@ file :
 
 custom :
   permission :
-    resources : /css/**, /js/**, /img/**
-    admin :
-    template :  /signup, /index, /, /404, /loginSuccess, /loginpage, /user/**, /findpassword, /terms, /wholesign, /boards**, /panel, /point**
+    resources :
+      - /css/**
+      - /js/**
+      - /img/**
 
+    admin :
+      - /admin/**
+
+    template :
+      - /
+      - /signup
+      - /join
+      - /index
+      - /error/**
+      - /loginSuccess
+      - /login
+      - /user/**
+      - /findpwd
+      - /terms
+      - /wholesign
+      - /boards/**
+      - /panel
+      - /point**
+      - /denied
+      - /moreinfo
+      - /dologin
+      - /actuator**
+      - /h2**
+  api :
+    url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
+    accessToken : ""
+
+
+management :
+  endpoints :
+    enabled-by-default : true
+    web :
+      exposure :
+        include : "*"
+    jmx :
+      exposure :
+        include : health, info
+  endpoint :
+    info :
+      enabled : true
+    health :
+      show-components : always
+      show-details :    always
 ---
 spring :
   datasource :
@@ -114,12 +157,6 @@ spring :
   data :
     mongodb :
       uri : mongodb://localhost:27017/polinsight
-
-  jpa :
-    hibernate :
-      ddl-auto : update
-    properties :
-      format_sql : true
 
   redis :
     host : localhost
@@ -133,16 +170,22 @@ spring :
   config :
     activate :
       on-profile : dev
-
-
   jpa :
     hibernate :
-      ddl-auto : update
-  #    show-sql : true
+      ddl-auto : create-drop
+    properties :
+      format_sql : true
+    show-sql :     true
+    generate-ddl : true
   banner :
     location : banner-dev.txt
+
   session :
     store-type : none
+
+  devtools :
+    restart :
+      poll-interval : 1s
 
 ---
 spring :

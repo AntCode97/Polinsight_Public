@@ -1,55 +1,118 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <script defer src="js/http.js" type="module"></script>
-  <title>Title</title>
+  <style>
+    .mypage_modal_container {
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+
+    .mypage_modal_content {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .rtop_btn {
+      cursor: pointer;
+      position: fixed;
+      right: 50px;
+      top: 50px;
+      border: 1px solid black;
+    }
+  </style>
 </head>
 <body>
-<div>
-  <label>
-    이름
-    <input th:value="${session.user.name}" type="text">
-  </label>
-  <label>
-    아이디
-    <input id="email" th:value="${session.user.email}" type="email">
-  </label>
-  <label>
-    비밀번호
-    <input id="pwd" type="password">
-  </label>
-  <label>
-    비밀번호 확인
-    <input id="pwdcfm" type="password">
-  </label>
-  <label>
-    적립금
-    <input readonly th:value="${session.user.point}" type="number">
-  </label>
-  <!--    <label>회원 타입<input readonly th:value="${session.user.social}" type="text"></label>-->
-  <button th:onclick="chkInput()">변경하기</button>
-  <button th:onclick="window.history.back()">돌아가기</button>
+<div class="mypage_modal_container">
+  <div class="mypage_modal_content">
+    <div>
+      <label>
+        이름
+        <input th:value="${session.user.name}" type="text">
+      </label>
+    </div>
+    <div>
+      <label>
+        아이디
+        <input id="email" th:value="${session.user.email}" type="email">
+      </label>
+    </div>
+    <div>
+      <label>
+        비밀번호
+        <input id="pwd" type="password">
+      </label>
+      <span>비밀번호를 변경하고 싶으시면 작성 후 확인버튼을 눌러주세요</span>
+    </div>
+    <div>
+      <label>
+        비밀번호 확인
+        <input id="pwdcfm" type="password">
+      </label>
+    </div>
+    <!--수정 필요-->
+    <!--    <div>-->
+    <!--      <label>-->
+    <!--        관심사-->
+    <!--        <input name="point" readonly th:value="${session.user.additional.favorite}">-->
+    <!--      </label>-->
+    <!--    </div>-->
+    <div>
+      <label>
+        회원 타입
+        <input readonly th:value="${session.user.role}" type="text">
+      </label>
+    </div>
+    <div>
+      <label>
+        포인트
+        <input name="point" readonly th:value="${session.user.point}" type="number">
+      </label>
+    </div>
+    <th:block th:if="${session.user.point >= 10000}">
+      <div>
+        <form action="">
+          <div style="display: inline-block">
+            <input type="submit" value="지급 요청">
+          </div>
+        </form>
+      </div>
+    </th:block>
+    <div>
+      <button th:onclick="chkInput()">변경하기</button>
+      <!--      <button th:onclick="window.history.back()">돌아가기</button>-->
+    </div>
+  </div>
+  <div class="rtop_btn">
+    <label for="deluser">
+      <input id="deluser" value="회원 탈퇴" type="button" th:onclick="alert('준비 중 입니다.')">
+    </label>
+  </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
   const userInfoUpdate = (password) => {
-    const userInfo = new FormData();
-    userInfo.append('email', $("#email").val())
-    userInfo.append('password', password)
+    const userInfo = {}
+    userInfo['email'] = $("#email").val()
+    userInfo['password'] = password;
 
     axios.post("/", userInfo)
         .then(res => {
           console.log(res)
           alert("회원 정보가 업데이트 되었습니다.")
+          // 어디로 이동하게 할까??
+          location.replace("/")
         })
         .catch(err => {
           console.log(err)
           alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
         })
   }
+
 
   const chkInput = () => {
     const pwd = $("#pwd")

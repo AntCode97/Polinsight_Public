@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 public class PageServiceImpl implements PageService {
 
   @Override
-  //  @Cacheable
+  @Cacheable(cacheNames = "terms")
   public String getTerms() throws IOException {
     ClassPathResource resource = new ClassPathResource("static/assets/Terms.txt");
     BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()));
