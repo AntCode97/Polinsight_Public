@@ -9,6 +9,8 @@ WORKDIR /app
 
 RUN mkdir "upload_dir"
 
+RUN mkdir "logs"
+
 COPY ${JAR_FILE} app.jar
 
 LABEL title="PolInsight"
