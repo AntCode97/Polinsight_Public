@@ -59,6 +59,7 @@ public class User implements UserDetails, Serializable {
   @Builder.Default
   private Long point = 0L;
 
+  @Enumerated(EnumType.STRING)
   private UserRoleType role;
 
   @OneToOne
