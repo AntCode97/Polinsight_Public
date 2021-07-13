@@ -19,7 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@Builder()
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "user", uniqueConstraints = {
@@ -35,6 +35,7 @@ public class User implements UserDetails, Serializable {
    * */
   @JsonIgnore
   @OneToMany(mappedBy = "user")
+  @Builder.Default
   private List<Board> boards = new ArrayList<>();
 
   @Id
@@ -55,7 +56,8 @@ public class User implements UserDetails, Serializable {
   private String recommend;
 
   @PositiveOrZero
-  private Long point;
+  @Builder.Default
+  private Long point = 0L;
 
   private UserRoleType role;
 

@@ -23,8 +23,6 @@ spring :
       max-file-size :    102400KB
       max-request-size : 102400KB
 
-
-
   security :
     oauth2 :
       client :
@@ -100,9 +98,34 @@ file :
 
 custom :
   permission :
-    resources : /css/**, /js/**, /img/**
+    resources :
+      - /css/**
+      - /js/**
+      - /img/**
+
     admin :
-    template :  /signup,/join, /index, /, /404, /loginSuccess, /login, /user/**, /findpwd, /terms, /wholesign, /boards/**, /panel, /point**, /denied, /moreinfo, /dologin, /actuator**, /h2
+      - /admin/**
+
+    template :
+      - /
+      - /signup
+      - /join
+      - /index
+      - /error/**
+      - /loginSuccess
+      - /login
+      - /user/**
+      - /findpwd
+      - /terms
+      - /wholesign
+      - /boards/**
+      - /panel
+      - /point**
+      - /denied
+      - /moreinfo
+      - /dologin
+      - /actuator**
+      - /h2**
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : ""
@@ -123,8 +146,6 @@ management :
     health :
       show-components : always
       show-details :    always
-
-
 ---
 spring :
   datasource :
@@ -136,12 +157,6 @@ spring :
   data :
     mongodb :
       uri : mongodb://localhost:27017/polinsight
-
-  jpa :
-    hibernate :
-      ddl-auto : update
-    properties :
-      format_sql : true
 
   redis :
     host : localhost
@@ -155,30 +170,22 @@ spring :
   config :
     activate :
       on-profile : dev
-
   jpa :
     hibernate :
-      ddl-auto : update
-    show-sql : true
-
-
+      ddl-auto : create-drop
+    properties :
+      format_sql : true
+    show-sql :     true
+    generate-ddl : true
   banner :
     location : banner-dev.txt
+
   session :
     store-type : none
-  h2 :
-    console :
-      enabled : true
-      path :    /h2
-      settings :
-        web-admin-password : admin
+
   devtools :
     restart :
       poll-interval : 1s
-  datasource :
-    url :      jdbc:h2:mem:polinsight
-    username : root
-    password : root
 
 ---
 spring :

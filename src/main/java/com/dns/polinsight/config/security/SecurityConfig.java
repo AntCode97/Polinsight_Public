@@ -4,7 +4,6 @@ import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,17 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   /* 인가 실패 처리 */
   private final AccessDeniedHandler deniedHandler;
 
-  @Value("${custom.permission.resources}")
-  private String[] staticResources;
-
-  @Value("${custom.permission.admin}")
-  private String[] permitAdmin;
-
-  @Value("${custom.permission.template}")
-  private String[] templates;
-
-  //  @Value("${custom.permission.swagger-ui}")
-  //  private String[] swagger;
+  private final PathPermission permission;
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -64,9 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .csrf().disable()
           .cors().disable()
           .authorizeRequests()
-          .antMatchers(staticResources).permitAll()
-          .antMatchers(permitAdmin).hasRole(UserRoleType.ADMIN.name())  // Swagger 접근 허가
-          .antMatchers(templates ).permitAll()
+          .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
+          .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasRole(UserRoleType.ADMIN.name())  // Swagger 접근 허가
+          .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
           .anyRequest().authenticated()
         .and()
           .formLogin()
