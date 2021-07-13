@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<head>
+  <title>폴인사이트</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        rel="stylesheet">
+  <!--    <link rel="stylesheet" th:href="@{/css/common.css}">-->
+  <style>
+    .login_input {
+      width: 70%;
+      outline: none;
+      border: none;
+      border-bottom: 1.5px solid #dde0ea;
+      color: #343236;
+      padding: 8px 0px;
+      height: 43px;
+      font-size: 16px;
+    }
+
+    .login_btn_wrap > .btn-primary {
+      width: 100%;
+      font-weight: bold;
+      float: left;
+    }
+
+    .btn-effect {
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .login_content {
+      width: 25rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .modal_content {
+      width: 70%;
+      background-color: white;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .modal_wrap {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input_div {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input_div > label > p {
+      font-size: 16px;
+      text-align: left;
+      color: #a5dff9;
+    }
+
+    .invalid {
+      color: #FF0000;
+    }
+
+    .vaild {
+      color: #00CC00;
+    }
+
+    /*
+    basing
+    *********************************
+    panel
+    */
+    .row {
+    }
+
+    .col {
+      display: inline-block;
+      border: solid black 0.5px;
+    }
+
+    .col > option {
+      display: inline;
+      float: left;
+    }
+
+    form > div {
+      border: solid black 0.5px;
+    }
+
+    .date {
+      display: inline-block;
+    }
+
+    .center {
+      margin: auto;
+      width: 150px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="modal_wrap">
+  <div class="modal_content">
+    <fieldset>
+      <legend>회원 가입</legend>
+      <div class="login_content">
+        <form action="/signup" id="signupfrm" method="post">
+          <div class="input_div" style="text-align: center">
+            <label for="email">
+              <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
+            </label>
+            <input class="login_input" id="email" name="email" placeholder="이메일" required style="display: inline-block;" type="text" />
+            <span style="margin: 2px; text-align: center; font-weight: bolder;">@</span>
+            <select class="login_input" id="email_domain" style="text-align: center; text-align-last: center; display: inline-block;">
+              <option>-- 선택 --</option>
+              <option value="naver.com">naver.com</option>
+              <option value="gmail.com">gmail.com</option>
+              <option value="kakao.com">kakao.com</option>
+            </select>
+            <span id="emailmsg"></span>
+          </div>
+          <div class="input_div">
+            <label for="password">
+              <p><i class="fas fa-lock"></i>&nbsp;패스워드</p>
+            </label>
+            <input class="pwinput login_input" id="password" name="password" placeholder="패스워드" required type="password" />
+            <p>영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</p>
+          </div>
+          <div class="input_div">
+            <label for="pwconfirm">
+              <p><i class="fas fa-lock"></i>&nbsp;패스워드 확인</p>
+            </label>
+            <input class="pwinput login_input" id="pwconfirm" placeholder="패스워드 확인" required type="password" />
+            <span class="err_msg" id="pwmsg"></span>
+          </div>
+          <div class="input_div">
+            <label for="inputname">
+              <p><i class="fas fa-user"></i>&nbsp;이름</p>
+            </label>
+            <input class="login_input" id="inputname" name="name" placeholder="이름" required type="text" />
+          </div>
+          <div class="input_div">
+            <label for="phone"><p><i class="fas fa-phone"></i>&nbsp;휴대전화</p></label>
+            <input class="login_input" id="phone" placeholder="휴대전화" required type="tel">
+            <button id="phone_chk">인증</button>
+            <br />
+            <span>'-' 없이 입력해주세요.</span>
+          </div>
+          <div class="input_div">
+            <label for="phone_rec_user"><p><i class="fas fa-phone"></i>&nbsp;추천인 휴대전화</p></label>
+            <input class="login_input" id="phone_rec_user" placeholder="추천인 휴대전화" type="number">
+            <button id="phone_rec_user_chk">확인</button>
+            <br />
+            <span>'-' 없이 입력해주세요.</span>
+          </div>
+          <div class="hidden">
+            <input type="text" value="일반">
+          </div>
+          <div class="login_btn_wrap">
+
+            <button class="btn-primary btn-effect" onclick="window.history.back()"><p>돌아가기<i class="fas fa-arrow-left"></i></p></button>
+          </div>
+
+
+        </form>
+      </div>
+    </fieldset>
+    <div>
+      <div>
+        <p style="text-align: center">
+          <span style="font-size: 1.7rem; font-weight: bolder">폴인사이트의 패널이 된다면?</span><br />
+          폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.<br />
+          참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.<br />
+          폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.<br />
+          <span style="font-weight: bolder">패널로 가입하시겠습니까?</span>
+          <br />
+          <br />
+        </p>
+      </div>
+      <div style="text-align: center">
+        <div style="margin: auto; width: 30%; justify-content: center; display: inline-block ">
+          <input name="is_panel" type="radio" value="panel_signup">가입하고 혜택받기<br>
+        </div>
+        <div style="margin: auto; width: 30%; justify-content: center; display: inline-block ">
+          <input name="is_panel" type="radio" value="normal_signup">일반 회원으로 계속<br>
+        </div>
+      </div>
+      <div class="login_btn_wrap">
+        <button class="btn-primary btn-effect" id="continue">회원 가입<i class="fas fa-sign-in-alt"></i></button>
+      </div>
+    </div>
+  </div>
+  <!--
+  basign signup
+  ***********************************************************************************************
+  panel signup
+  -->
+
+  <div class="more" id="panel_info">
+    <form id="addfrm">
+      <div>
+        <span>성별</span>
+        <input name="gender" type="radio" value="남성">남성
+        <input name="gender" type="radio" value="여성">여성
+      </div>
+      <div class="date">
+        <span class="col">생년월일</span>
+        <div class="col">
+          <select id="year" name="year">
+            <option>--선택--</option>
+          </select> 년
+        </div>
+        <div class="col">
+          <select id="month" name="month">
+            <option>--선택--</option>
+          </select> 월
+        </div>
+        <div class="col">
+          <select id="day" name="day">
+            <option>--선택--</option>
+          </select> 일
+        </div>
+        <input checked name="birth" type="radio" value="양력">양력
+        <input name="birth" type="radio" value="음력">음력
+      </div>
+      <div>
+        <span>최종 학력</span>
+        <select id="edu" name="edu">
+          <option>--선택--</option>
+          <option value="high">고졸 이하(재학 포함)</option>
+          <option value="inuniversity">대학 재학</option>
+          <option value="university">대학교 졸업(수료 포함)</option>
+          <option value="graduate">대학원 이상</option>
+        </select>
+      </div>
+      <div>
+        <span>결혼 여부</span>
+        <input checked name="marry" type="radio" value="미혼">미혼
+        <input name="marry" type="radio" value="기혼">기혼
+      </div>
+      <div>
+        <span>직업</span>
+        <select id="jobs" name="jobs">
+          <option>--선택--</option>
+          <option value="">학생</option>
+          <option value="">경영직</option>
+          <option value="">공무</option>
+          <option value="">회사원</option>
+          <option value="">자영업</option>
+          <option value="">생산기술직</option>
+          <option value="">예술인</option>
+          <option value="">프리랜서</option>
+          <option value="">무직</option>
+          <option value="">기타</option>
+        </select>
+      </div>
+      <div>
+        <span>직종</span>
+        <select id="industry" name="industry">
+          <option>--선택--</option>
+          <option value="">제조업</option>
+          <option value="">건설업(인테리어 포함)</option>
+          <option value="">부동산업</option>
+          <option value="">임대•대여업</option>
+          <option value="">도매 및 소매업(유통업)</option>
+          <option value="">음식업•외식업</option>
+          <option value="">운수•여객•숙박업</option>
+          <option value="">여가 관련 서비스업</option>
+          <option value="">방송•언론•출판</option>
+          <option value="">정보통신업</option>
+          <option value="">금융업</option>
+          <option value="">교육 서비스업</option>
+          <option value="">의료•보건•사회복지</option>
+          <option value="">시장조사•컨설팅•광고대행업</option>
+          <option value="">기타</option>
+        </select>
+      </div>
+      <!--관심 분야-->
+      <div class="row">
+        <div class="col">관심 분야</div>
+        <div class="col">
+          <div class="row">
+            <div class="col">건강•헬스케어</div>
+            <div class="col">
+              <input type="checkbox" value="">건강일반<br>
+              <input type="checkbox" value="">건강식품<br>
+              <input type="checkbox" value="">다이어트<br>
+              <input type="checkbox" value="">심리건강<br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">문화예술•여가•스포츠</div>
+            <div class="col">
+              <input type="checkbox">대중문화<br>
+              <input type="checkbox">음악<br>
+              <input type="checkbox">미술<br>
+              <input type="checkbox">공연•축제<br>
+              <input type="checkbox">여행<br>
+              <input type="checkbox">생활문화<br>
+              <input type="checkbox">장르예술<br>
+              <input type="checkbox">레저활동<br>
+              <input type="checkbox">생활체육<br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">경제•경영</div>
+            <div class="col">
+              <input type="checkbox" value="">제테크<br>
+              <input type="checkbox" value="">창업<br>
+              <input type="checkbox" value="">사회적 경제<br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">사회•복지</div>
+            <div class="col">
+              <input type="checkbox" value="">사회•복지일반 <br>
+              <input type="checkbox" value="">아동•청소년 <br>
+              <input type="checkbox" value="">여성 <br>
+              <input type="checkbox" value="">청년<br>
+              <input type="checkbox" value="">노인 <br>
+              <input type="checkbox" value="">장애인 <br>
+              <input type="checkbox" value="">다문화 <br>
+              <input type="checkbox" value="">민주인권 <br>
+              <input type="checkbox" value="">노동인권<br>
+              <input type="checkbox" value="">자원봉사<br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">교육</div>
+            <div class="col">
+              <input type="checkbox" value="lifetime">평생교육<br>
+              <input type="checkbox" value="high">초·중·고등교육<br>
+              <input type="checkbox" value="univ">대학교육<br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="center">
+        <input th:onclick="window.location.back()" type="button" value="돌아 가기">
+        <input type="submit" value="가입 하기">
+      </div>
+    </form>
+  </div>
+</div>
+<!--<script>-->
+<!--  const editHyphen = e => {-->
+<!--    console.log(e)-->
+<!--    const phone = $("#phone")-->
+<!--    const phoneValue = phone.val()-->
+<!--    let ret = "";-->
+<!--    if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {-->
+<!--      ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")-->
+<!--    } else {-->
+<!--      phoneValue.substring(0, 11)-->
+<!--      ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")-->
+<!--    }-->
+<!--    phone.val(ret)-->
+<!--    return ret;-->
+<!--  }-->
+
+<!--  /*-->
+<!--  * 길이 10~16-->
+<!--  * 영문 대, 소문자, 특수문자-->
+<!--  * */-->
+<!--  const passwordValueChecker = pwd => {-->
+<!--    return !!pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\\]\\[/\\'\\"\\\\\\']{10,16}/);-->
+<!--  }-->
+
+<!--  // 비밀번호 확인 검증-->
+<!--  const passwordChecker = () => {-->
+<!--    const passwordValue = $("#password").val();-->
+<!--    const confirmValue = $("#pwconfirm").val();-->
+<!--    const msg = $("#pwmsg")-->
+
+
+<!--    if (passwordValue === confirmValue && passwordValueChecker(passwordValue)) {-->
+<!--      // 공백 제거-->
+<!--      if (confirmValue.replace(/\s/g, "").length >= 8 && passwordValue.replace(/\s/g, "").length >= 8) {-->
+<!--        msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")-->
+<!--        return-->
+<!--      }-->
+<!--    }-->
+<!--    msg.text("올바른 패스워드를 입력해주세요.").removeClass("valid").addClass("invalid")-->
+<!--  }-->
+
+<!--  // 필수 입력값 검사-->
+<!--  const checkNotNull = () => {-->
+<!--    let result = true-->
+<!--    $("#signupfrm").find('input').each(function (item) {-->
+<!--      let input = $(this)-->
+<!--      let label = input.prev()-->
+<!--      let inputValue = input.val()-->
+<!--      if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {-->
+<!--        input.focus()    // 입력이 안된 사항으로 포커싱-->
+<!--        input.val('') // 값 초기화-->
+<!--        alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")-->
+<!--        result = false-->
+<!--        return false;   // $.each를 break-->
+<!--      }-->
+<!--    })-->
+
+<!--    return result;-->
+<!--  }-->
+
+
+<!--  const debounceCallEmailCheck = _.debounce(email => {-->
+<!--    axios.get("http://localhost:8080/user/" + email)-->
+<!--        .then(res => {-->
+<!--          if (res.data === "" || res.data === null || res.data === undefined || res.data === "undefined") {-->
+<!--            // 응답 data가 비어있으면 아이디가 없는 것 ==> 사용 가능한 이메일-->
+
+<!--          }-->
+<!--        })-->
+<!--        .catch(err => {-->
+<!--          console.log("error")-->
+<!--          console.log(err)-->
+<!--        })-->
+<!--  }, 200)-->
+
+<!--  const emailChecker = () => {-->
+<!--    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;-->
+<!--    const emailValue = $("#email").val();-->
+<!--    const msg = $("#emailmsg")-->
+
+<!--    if (emailValue === "") {-->
+<!--      msg.text("").removeClass("valid").addClass("invalid")-->
+<!--    } else {-->
+<!--      if (emailValue.match(regex) != null) {-->
+<!--        msg.text("사용 가능한 이메일입니다.").removeClass("invalid").addClass("valid")-->
+<!--        debounceCallEmailCheck(emailValue);-->
+<!--      } else {-->
+<!--        msg.text("올바른 이메일을 입력해주세요").removeClass("valid").addClass("invalid")-->
+<!--      }-->
+
+<!--    }-->
+<!--  }-->
+
+<!--  $(function () {-->
+<!--    $(document).on('focus', '.login_input', function () {-->
+<!--      $(this).css('border-bottom', '1.5px solid #4C99CF');-->
+<!--    });-->
+
+<!--    $(document).on('blur', '.login_input', function () {-->
+<!--      $(this).css('border-bottom', '1.5px solid #dde0ea');-->
+<!--    });-->
+
+<!--    $(".pwinput").on("change keydown keyup paste", passwordChecker);-->
+
+<!--    $("#email").on("change keydown keyup paste", emailChecker);-->
+<!--    // 유저 전화번호-->
+<!--    $("#phone").on("blur focus", editHyphen);-->
+<!--    // 추천인 전화번호-->
+<!--    $("#phone_rec_user").on("blur focus", editHyphen);-->
+
+
+<!--    /*-->
+<!--    * 패널로 가입하시를 눌렀는지 확인하고-->
+<!--    *-->
+<!--    * */-->
+<!--    $("#continue").on('click', function (e) {-->
+<!--      // 필수 값이 모두 채워져 있는지 확인-->
+<!--      if (checkNotNull()) {-->
+<!--        if ($("input[name='is_panel']:checked").val() === 'panel_signup') {-->
+<!--          // panel 정보 가입받는 화면 보이게 하기-->
+<!--          $("#panel_info").addClass("more").removeClass("hidden")-->
+<!--        } else {-->
+<!--          $(this).submit()-->
+<!--        }-->
+<!--      }-->
+<!--    })-->
+
+<!--    setDateValue()-->
+<!--    $("#month").on('change', setDay)-->
+<!--  })-->
+
+<!--  const onSubmit = () => {-->
+<!--    let data = new FormData()-->
+<!--    axios.post('', data)-->
+<!--        .then(res => {-->
+<!--          console.log(res)-->
+<!--        })-->
+<!--        .catch(err => {-->
+<!--          console.log(err)-->
+<!--        })-->
+<!--  }-->
+
+<!--  const setDateValue = () => {-->
+<!--    let today = new Date();-->
+<!--    $(".date").find('select').each((idx, obj) => {-->
+
+<!--      switch (obj.name) {-->
+<!--        case "year":-->
+<!--          for (let i = 1930; i < today.getFullYear(); i++) {-->
+<!--            $(obj).append($("<option></option>").attr("value", i).text(i))-->
+<!--          }-->
+<!--          break;-->
+<!--        case "month":-->
+<!--          for (let i = 1; i < 13; i++) {-->
+<!--            $(obj).append($("<option></option>").attr("value", i).text(i))-->
+<!--          }-->
+<!--          break;-->
+<!--      }-->
+<!--    })-->
+<!--  }-->
+
+<!--  const setDay = () => {-->
+<!--    $("#day").find("option").empty();    // 초기화-->
+<!--    let month = $("#month option:selected").text()   // 월에 선택된 옵션 값 가져오기-->
+<!--    $("#day").append($("<option selected></option>").text("&#45;&#45;선택&#45;&#45;"))-->
+<!--    if (month === 2) {-->
+<!--      for (let i = 1; i <= 28; i++) {-->
+<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
+<!--      }-->
+<!--    } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) { // 1, 3, 5, 7, 8, 10,12-->
+<!--      for (let i = 1; i <= 31; i++) {-->
+<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
+<!--      }-->
+<!--    } else {-->
+<!--      for (let i = 1; i <= 30; i++) {-->
+<!--        $("#day").append($("<option></option>").attr("value", i).text(i))-->
+<!--      }-->
+<!--    }-->
+<!--  }-->
+<!--</script>-->
+</body>
+</html>

@@ -46,11 +46,13 @@ public class BoardController {
   @GetMapping("/boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
-    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-      //      model.addAttribute("user", user);
-      return "boards/createBoardForm";
-    }
-    return "index";
+//    if (user != null && user.getRole() == UserRoleType.ADMIN) {
+//      //      model.addAttribute("user", user);
+//      return "boards/createBoardForm";
+//    }
+//    return "index";
+    //로그인이 안되서 일단 이렇게 진행
+    return "boards/createBoardForm";
   }
 
 
@@ -65,7 +67,8 @@ public class BoardController {
     boardDTO.transViewcontent();
 
     // NOTE 2021-07-04 0004 : 관리자 확인 로직 추가
-    if (user != null && user.getRole() == UserRoleType.ADMIN) {
+//    if (user != null && user.getRole() == UserRoleType.ADMIN) {
+    if (user != null) {
       //TODO: 관리자 역활인지 확인하는 로직 추가해야함
       User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
       boardDTO.setUser(admin);
