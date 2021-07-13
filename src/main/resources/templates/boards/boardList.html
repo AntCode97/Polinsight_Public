@@ -8,40 +8,40 @@
       width: 1200px;
     }
 
-    img{
-      margin-left:-2px;
-      margin-right:-2px;
-      padding:0;
+    img {
+      margin-left: -2px;
+      margin-right: -2px;
+      padding: 0;
     }
 
-    .sub-main{
-      height:50px;
+    .sub-main {
+      height: 50px;
       padding-bottom: 0px;
-      border-bottom:1px solid #EFEEEC;
+      border-bottom: 1px solid #EFEEEC;
     }
 
-    ul li{
-      list-style-type:none;
-      float:left;
+    ul li {
+      list-style-type: none;
+      float: left;
     }
 
-    .sub-main li{
-      width:150px;
+    .sub-main li {
+      width: 150px;
       height: 100%;
-      font-size:20px;
-      color:white;
+      font-size: 20px;
+      color: white;
       text-align: center;
       line-height: 250%;
     }
 
-    .notice{
+    .notice {
       background-color: #1A2738;
-      border:1px solid #1A2738;
+      border: 1px solid #1A2738;
     }
 
-    .qna{
+    .qna {
       background-color: #EFEEEC;
-      border:1px solid #EFEEEC;
+      border: 1px solid #EFEEEC;
     }
 
     .sub-main-name {
@@ -84,24 +84,24 @@
 
     .tblList tbody td {
       padding-left: 20px;
-      height:50px;
-      border-bottom:2px solid #EFEEEC;
+      height: 50px;
+      border-bottom: 2px solid #EFEEEC;
     }
 
-    .writeButton{
-      margin-top:20px;
-      float:right;
+    .writeButton {
+      margin-top: 20px;
+      float: right;
     }
 
-    .write{
-      text-align:center;
-      line-height:200%;
-      width:100px;
-      height:30px;
+    .write {
+      text-align: center;
+      line-height: 200%;
+      width: 100px;
+      height: 30px;
       font-size: 15px;
       color: black;
       border-radius: 5px 5px 5px 5px;
-      border:1px solid black;
+      border: 1px solid black;
     }
 
     .page-button {
@@ -110,9 +110,9 @@
       text-align: center;
     }
 
-    .current-page{
-      margin-right:5px;
-      margin-left:5px;
+    .current-page {
+      margin-right: 5px;
+      margin-left: 5px;
     }
 
     .button {
@@ -121,7 +121,7 @@
       height: 25px;
     }
 
-    .disabled{
+    .disabled {
       opacity: 0;
       color: #6c757d;
       pointer-events: none;
@@ -129,6 +129,7 @@
       border-color: #dee2e6;
       text-decoration: none;
     }
+
     .active {
       font-size: 19px;
       font-weight: bold;
@@ -138,6 +139,7 @@
       color: #2F3138;
       text-decoration: none;
     }
+
     .not-active {
       margin-left: 2px;
       margin-right: 2px;
@@ -145,11 +147,13 @@
       color: #2F3138;
       text-decoration: none;
     }
+
     a {
       text-decoration: none;
     }
-    a:hover{
-      color:dodgerblue;
+
+    a:hover {
+      color: dodgerblue;
       text-decoration: underline;
     }
   </style>
@@ -169,7 +173,7 @@
 
   <div class="board">
     <div class="button">
-      <form th:action="@{/boards/search}" th:object="${boardSearch}"  method="get">
+      <form th:action="@{/boards/search}" th:object="${boardSearch}" method="get">
 
         <select th:field="*{boardType}" class="select">
           <optgroup label="분류 선택">
@@ -194,7 +198,7 @@
         <table class="tblList">
           <thead>
           <tr align="left">
-            <th width="50" height="36"> 번호 </th>
+            <th width="50" height="36"> 번호</th>
             <th width="900">제목</th>
             <th width="80">등록자</th>
             <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
@@ -204,7 +208,7 @@
           <tbody>
           <tr class="first" th:each="board : ${boards}">
             <td width="50" th:text="${board.id}">&nbsp;</td>
-            <td width="950"> <a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
+            <td width="950"><a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
               <span th:if="${board.newBoard}">
                                  New!
                             </span>
@@ -222,7 +226,7 @@
   </div>
 
   <div class="writeButton">
-    <div class=write><a href="/boards/new"> <b>글쓰기</b> </a> </div>
+    <div class=write><a href="/boards/new"> <b>글쓰기</b> </a></div>
   </div>
 
   <div class="page-button"
@@ -233,11 +237,12 @@
     </a>
 
 
-    <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+    <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
       <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
     </a>
 
-    <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+    <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+       th:href="@{/boards(page=${page})}"></a>
 
 
     <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
@@ -281,8 +286,6 @@
   <!--                </a>-->
   <!--            </li>-->
   <!--        </ul>-->
-
-
 
 
 </div>
