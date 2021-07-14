@@ -2,6 +2,7 @@ package com.dns.polinsight.domain;
 
 import com.dns.polinsight.types.BoardType;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class BoardDTO {
   @Positive
   private Long id;
 
+  @NotNull
   private String title;
 
   @NotNull
@@ -31,7 +33,7 @@ public class BoardDTO {
   @NotNull
   private User user;
 
-
+  @CreatedDate
   private LocalDateTime registeredAt;
 
   private List<Attach> attaches;
@@ -39,10 +41,7 @@ public class BoardDTO {
   private List<MultipartFile> files;
 
   public void transViewcontent() {
-
-    String viewcontent = this.content.replace("\r\n", "<br>");
-    viewcontent = viewcontent.replace(" ", "&nbsp;");
-    this.viewcontent = viewcontent;
+    this.viewcontent = this.content.replaceAll("\r\n", "<br>").replaceAll(" ", "&nbsp;");
   }
 
 }

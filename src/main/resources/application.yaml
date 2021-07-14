@@ -92,6 +92,15 @@ spring :
     activate :
       on-profile : common
 
+  output:
+    ansi :
+      enabled : always
+
+logging:
+  file:
+    name : ./polinsight_logs.log
+
+
 file :
   upload :
     baseLocation : "./upload_dir/"
@@ -127,6 +136,7 @@ custom :
       - /actuator**
       - /h2**
       - /board**
+      - /api/**
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
@@ -192,7 +202,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
     properties :
       format_sql : true
     show-sql :     true
@@ -208,7 +218,7 @@ spring :
       poll-interval : 1s
 
 server :
-  port : 8081
+  port : 8080
   servlet :
     session :
       timeout : 5m

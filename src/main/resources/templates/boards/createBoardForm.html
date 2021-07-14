@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <style>
     .web {
@@ -132,37 +133,31 @@
 
     <form class=information enctype="multipart/form-data" method="post" th:action="@{/boards/new}" th:object="${boardDTO}">
       <div class="information_title">
-        <div class="informationSubject"><b>제목</b></div>
-        <span><input maxlength="255" placeholder="제목을 입력하세요." style="width:800px;height:20px" th:field="*{title}" type="text"></span>
+        <div class="informationSubject">
+          <b>제목</b>
+        </div>
+        <span>
+          <input maxlength="255" placeholder="제목을 입력하세요." style="width:800px;height:20px" th:field="*{title}" type="text">
+        </span>
       </div>
       <div class="information_name">
         <div class="informationSubject"><b>작성자</b></div>
-        <th:block th:unless="${session.user} == null">
-          <span th:text="${session.user}?${session.user.name}:'guest'"></span>
-        </th:block>
-        </span>
+        <span th:text="${session.user.name}"></span>
       </div>
       <div class="information_category">
         <div class="informationSubject"><b>분류</b></div>
-        <span>
-                    <select maxlength="20" style="width:70px;height:25px" th:field="*{boardType}">
-                        <optgroup label="분류 선택">
-                        <option value="NOTICE">공지</option>
-                        <option value="EVENT">이벤트</option>
-                        </optgroup>
-                    </select>
-
-                    </span>
+        <div>
+          <select maxlength="20" style="width:70px;height:25px" th:field="*{boardType}">
+            <optgroup label="분류 선택">
+              <option value="NOTICE">공지</option>
+              <option value="EVENT">이벤트</option>
+            </optgroup>
+          </select>
+        </div>
       </div>
       <div class=information_file>
         <div class="informationSubject"><b>첨부파일</b></div>
         <input accept="*" multiple="multiple" style="margin-top:8px" th:field="*{files}" type="file">
-        <!--                    <ul>-->
-        <!--                        <li th:each="file : ${files}">-->
-        <!--                            <a th:href="${file}" th:text="${file}" />-->
-        <!--                        </li>-->
-        <!--                    </ul>-->
-
       </div>
 
 

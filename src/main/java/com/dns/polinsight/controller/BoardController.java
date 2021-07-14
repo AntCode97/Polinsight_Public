@@ -11,7 +11,9 @@ import com.dns.polinsight.service.BoardService;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
+import com.dns.polinsight.types.BoardType;
 import com.dns.polinsight.types.SearchType;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -26,8 +28,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -47,11 +54,11 @@ public class BoardController {
   @GetMapping("/boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
-//    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-//      //      model.addAttribute("user", user);
-//      return "boards/createBoardForm";
-//    }
-//    return "index";
+    //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
+    //      //      model.addAttribute("user", user);
+    //      return "boards/createBoardForm";
+    //    }
+    //    return "index";
     //로그인이 안되서 일단 이렇게 진행
     return "boards/createBoardForm";
   }
@@ -60,17 +67,13 @@ public class BoardController {
   @PostMapping("/boards/new")
   public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user) {
     log.info("Result: " + result + ", data: " + boardDTO.toString());
-    // NOTE 2021-07-04 0004 : BindingResult??
+
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
 
     boardDTO.transViewcontent();
-
-    // NOTE 2021-07-04 0004 : 관리자 확인 로직 추가
-//    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-    if (user != null) {
-      //TODO: 관리자 역활인지 확인하는 로직 추가해야함
+    if (user != null && user.getRole() == UserRoleType.ADMIN) {
       User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
       boardDTO.setUser(admin);
       boardDTO.setRegisteredAt(LocalDateTime.now());
@@ -81,7 +84,7 @@ public class BoardController {
 
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + boardDTO.getFiles() + "!");
 
-    return "redirect:boards";
+    return "redirect:/boards";
   }
 
 
@@ -105,6 +108,24 @@ public class BoardController {
     }
     model.addAttribute("boards", boards);
     return "boards/boardList";
+  }
+
+  @GetMapping("/api/board/search")
+  public ResponseEntity<Map<String, Object>> asyncBoardSearch(HttpServletRequest request, @PageableDefault Pageable pageable) {
+    Map<String, Object> map = new HashMap<>();
+    String type = request.getParameter("type");
+    String cls = request.getParameter("classify");
+    String keyword = request.getParameter("keyword");
+
+    List<Board> boards;
+    if (type.equals(SearchType.TITLE.name())) {
+      boards = boardService.searchTitle(keyword, BoardType.valueOf(cls), pageable).get().collect(Collectors.toList());
+      map.put("data", boards);
+    } else {
+      boards = boardService.searchContent(keyword, BoardType.valueOf(cls), pageable).get().collect(Collectors.toList());
+      map.put("data", boards);
+    }
+    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/boards/{boardId}")
@@ -173,7 +194,7 @@ public class BoardController {
     boardService.addBoard(boardDTO);
     attachService.addAttach(boardDTO);
 
-    return "redirect:boards/{boardId}";
+    return "redirect:/boards/{boardId}";
   }
 
   @GetMapping("/boards/{boardId}/delete")
@@ -181,7 +202,7 @@ public class BoardController {
     Board board = boardService.findOne(boardId);
     attachService.deleteAttaches(boardId);
     boardService.delete(board);
-    return "redirect:boards";
+    return "redirect:/boards";
   }
 
 
@@ -205,7 +226,7 @@ public class BoardController {
   @GetMapping("/boards/{boardId}/{file}/delete")
   public String deleteFile(@PathVariable("boardId") Long boardId, @PathVariable("file") String filename, Model model) {
     attachService.delete(attachService.findByname(filename).get(0));
-    return "redirect:boards/" + boardId + "/edit";
+    return "redirect:/boards/" + boardId + "/edit";
   }
 
 }

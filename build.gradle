@@ -45,9 +45,10 @@ dependencies {
     implementation "io.springfox:springfox-boot-starter:3.0.0"
     /* LayOut*/
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
-
+    /* actuator */
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
+    /* Batch */
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
     //file upload
     implementation 'commons-io:commons-io:2.6'
     implementation 'commons-fileupload:commons-fileupload:1.4'

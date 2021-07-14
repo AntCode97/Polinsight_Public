@@ -7,20 +7,20 @@ import com.dns.polinsight.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -59,11 +59,13 @@ public class SurveyController {
    * 서베이몽키에서 데이터를 파싱해 보여줌
    * 서베이 몽키에서 작성한 설문 리스트
    * */
-  public ModelAndView getSurveyListFromSM(HttpSession session, String requestURL) throws MalformedURLException, URISyntaxException {
-    ModelAndView mv = new ModelAndView();
-    session.setAttribute("survyes", new RestTemplate().exchange(baseURL + requestURL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Survey>>() {}));
-    mv.setViewName("survey/surveylist");
-    return mv;
+  public ResponseEntity<Map<String, Object>> getSurveyListFromSM(HttpSession session, String requestURL) throws MalformedURLException, URISyntaxException {
+    Map<String, Object> map = new HashMap<>();
+    List<Survey> surveys = null;
+    //    session.setAttribute("survyes", );
+    map.put("data", surveys);
+    //    mv.setViewName("survey/surveylist");
+    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/survey/point/{survey_id}")
@@ -72,6 +74,21 @@ public class SurveyController {
     List<Survey> surveys = null;
     mv.addObject("surveys", surveys);
     return mv;
+  }
+
+  @GetMapping("/surveys/sync")
+  public ResponseEntity<Map<String, Object>> surveySyncWithSM() {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      surveyService.getSurveysWithSchedular();
+      map.put("data", "sync success");
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
   }
 
 }

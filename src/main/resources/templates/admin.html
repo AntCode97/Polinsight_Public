@@ -7,4 +7,42 @@
 <body>
 
 </body>
+<script>
+  const syncSurveyList = () => {
+    axios.get('/survey/sync')
+        .then(alert('동기화 성공'))
+        .catch(alert('동기화 실패'))
+  }
+
+  const updateUserPoints = () => {
+
+  }
+
+  const getDataAsExcel = () => {
+
+  }
+
+  const deleteSurveyFromSurveyList = () => {
+  }
+
+  const setPointToSurvey = () => {
+
+  }
+
+  const deleteUser = () => {
+    axios.delete('/user', {
+      data: {}
+    })
+  }
+
+  const getAllUsers = () => {
+    axios.get('/users')
+        .then()
+        .catch()
+  }
+
+  const successPointPayment = () => {
+
+  }
+</script>
 </html>

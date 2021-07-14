@@ -1,7 +1,6 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.types.BoardType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@ToString
 @Getter
 @Builder(builderMethodName = "BoardBuilder")
 @AllArgsConstructor
@@ -41,9 +41,8 @@ public class Board implements Serializable {
   @NotEmpty
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id")
-  @JsonIgnore
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
 

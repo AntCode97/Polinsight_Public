@@ -107,12 +107,19 @@ public class UserController {
     return ResponseEntity.ok(map);
   }
 
-  @PostMapping("/deleteaccount")
-  public ModelAndView deleteUser(@RequestBody User user) {
-    ModelAndView mv = new ModelAndView();
-    userService.deleteUser(user);
-    mv.setViewName("index");
-    return mv;
+  @DeleteMapping("/user")
+  public ResponseEntity<Map<String, Object>> deleteUser(@RequestBody User user) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      userService.deleteUser(user);
+      map.put("data", user.getEmail() + " has deleted");
+      map.put("msg", user.getEmail() + " has deleted");
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("error", null);
+      map.put("msg", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/user/{email}")
@@ -136,6 +143,25 @@ public class UserController {
     mv.setViewName("mypage");
     mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
     return mv;
+  }
+
+  @PostMapping("/update")
+  public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestBody User user, HttpSession session) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      String password = passwordEncoder.encode(user.getPassword());
+      user = userService.findUserByEmail(user);
+      user.setPassword(password);
+      userService.update(user);
+      map.put("data", "user info has updated");
+      session.invalidate();
+      session.setAttribute("user", new SessionUser().of(user));
+      log.info("User '{}' has requested change password", user.getEmail());
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("error", "there is something wrong");
+    }
+    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/findpwd")
@@ -205,6 +231,9 @@ public class UserController {
     response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
   }
 
+  /*
+   * 테스트용 유저 데이터
+   * */
   @PostConstruct
   public void initUserData() {
     List<User> list = new ArrayList<>();

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <style>
@@ -45,14 +45,14 @@
     <div>
       <label>
         비밀번호
-        <input id="pwd" type="password">
+        <input id="pwd" type="password" value="">
       </label>
-      <span>비밀번호를 변경하고 싶으시면 작성 후 확인버튼을 눌러주세요</span>
+      <span class="info">비밀번호를 변경하고 싶으시면 작성 후 확인버튼을 눌러주세요</span>
     </div>
     <div>
       <label>
         비밀번호 확인
-        <input id="pwdcfm" type="password">
+        <input id="pwdcfm" type="password" value="">
       </label>
     </div>
     <!--수정 필요-->
@@ -84,7 +84,7 @@
       </div>
     </th:block>
     <div>
-      <button th:onclick="chkInput()">변경하기</button>
+      <button id="modi" th:onclick="chkInput()">변경하기</button>
       <!--      <button th:onclick="window.history.back()">돌아가기</button>-->
     </div>
   </div>
@@ -115,23 +115,41 @@
 
 
   const chkInput = () => {
-    const pwd = $("#pwd")
-    const pwdcfm = $("#pwdcfm")
+    const pwdValue = $("#pwd").val()
+    const pwdcfmValue = $("#pwdcfm").val()
 
-    if (pwdcfm === "" || pwdcfm === undefined || pwdcfm === null || pwdcfm === "undefined") {
+    if (pwdcfmValue === "" || pwdcfmValue === undefined || pwdcfmValue === null || pwdcfmValue === "undefined") {
       return
     }
 
-    if (pwd === "" || pwd === undefined || pwd === null || pwd === "undefined") {
+    if (pwdValue === "" || pwdValue === undefined || pwdValue === null || pwdValue === "undefined") {
       return
     }
 
-    if (pwd === pwdcfm) {
-      // throttle userInfoUpdate
+    if (pwdValue === pwdcfmValue) {
       _.throttle(userInfoUpdate(pwd), 200)
     }
   }
 
+  const deleteUserRequest = (e) => {
+    const userinfo = {}
+    axios.post('/deleteuser', userinfo)
+        .then(res => {
+          alert('회원 탈퇴 성공')
+          location.replace("/")
+        })
+        .catch(
+            err => {
+              console.log(err)
+              alert('회원 탈퇴 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.')
+            }
+        );
+  }
+
+  $(function () {
+    $('#deluser').on('click', deleteUserRequest);
+    $('#modi').on('click', chkInput);
+  })
 
 </script>
 </body>
