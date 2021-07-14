@@ -418,6 +418,7 @@ $RECYCLE.BIN/
 ### Gradle ###
 .gradle
 build/
+.gradle/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -433,6 +434,8 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
+/build/
+!gradle/wrapper/gradle-wrapper.jar
 
 ## TEST ##
 **/test/

@@ -67,10 +67,11 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   /*
-   * 한시간마다 서베이몽키에 접근해, 서베이 목록 수집
+   * 매 한시간마다 서베이몽키에 접근해, 서베이 목록 수집
+   * // TODO: 2021-07-15  : 데이터 파싱 및 저장 필요
    * */
-  @Scheduled(cron = "0 0 0/1 * * *")
   @Override
+  @Scheduled(cron = "0 0 0/1 * * *")
   public void getSurveysWithSchedular() {
     log.info("scheduler start");
     HttpHeaders header = new HttpHeaders();
