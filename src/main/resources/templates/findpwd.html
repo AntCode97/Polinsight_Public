@@ -7,22 +7,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
-    .login_input {
-      width: 50%;
-      outline: none;
-      border: none;
-      border-bottom: 1.5px solid #dde0ea;
-      color: #343236;
-      padding: 8px 0px;
-      height: 43px;
-      font-size: 16px;
-    }
 
-    .login_btn_wrap > .btn-primary {
-      width: 100%;
-      font-weight: bold;
-      float: left;
-    }
 
     .btn-effect {
       padding: 12px;
@@ -32,12 +17,6 @@
       cursor: pointer;
       border: 1px solid transparent;
       outline: none;
-    }
-
-    .login_content {
-      width: 25rem;
-      margin: 0 auto;
-      text-align: center;
     }
 
     .modal_content {
@@ -56,26 +35,26 @@
       justify-content: center;
     }
 
-    .modal_btn {
-      display: inline-block;
-    }
-
     .modal_btn_wrap {
       width: 100%;
       text-align: center;
     }
 
-    .input_div {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
+    .modal_btn_wrap > .modal_btn {
+      width: 30%;
+      font-weight: bold;
+      float: left;
+      display: inline-block;
+      border: .5px solid black;
     }
 
-    .input_div > label > p {
-      font-size: 16px;
-      text-align: left;
-      color: #a5dff9;
+    .input_div {
+    }
+
+    .input_div > input {
+      border: none;
+      border-bottom: 1px solid lightgray;
+      width: 80%;
     }
   </style>
 </head>
@@ -89,14 +68,14 @@
           <label for="input_email">
             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
           </label>
-          <input name="email" class="login_input" id="input_email" placeholder="이메일" required type="text">
+          <input name="email" class="login_input" id="input_email" required type="text">
           <span class="err_msg" id="emailmsg" style="display:none;">이메일을 정확히 입력해주세요.</span>
         </div>
         <div class="input_div">
           <label for="input_name">
             <p><i class="fas fa-user"></i>&nbsp;이름</p>
           </label>
-          <input name="name" class="login_input" id="input_name" placeholder="이름" required type="text">
+          <input name="name" class="login_input" id="input_name" required type="text">
         </div>
         <div class="modal_btn_wrap">
           <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
