@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div>
+  <div>
+    <textarea cols="30" readonly rows="10"></textarea>
+    <label>
+      <input class="agree" type="checkbox">
+      약관에 동의합니다.
+    </label>
+
+    <br />
+
+    <textarea cols="30" readonly rows="10"></textarea>
+    <label>
+      <input class="agree" type="checkbox">
+      약관에 동의합니다.
+    </label>
+  </div>
+  <div>
+    <label for="allchk">
+      <input id="allchk" type="checkbox">
+      전체 동의
+    </label>
+  </div>
+  <div>
+    <button id="cancle">취소</button>
+    <button id="next">다음</button>
+  </div>
+</div>
+<script>
+  const chkAgreeBox = e => {
+    console.log($('.agree:checked').length)
+    return $('.agree:checked').length === 2
+    // location.replace('/moreinfo')
+
+  }
+
+  $(function () {
+    $("#allchk").on('change', () => {
+      $('.agree').each(function () {
+        if ($("#allchk").is(":checked"))
+          $(this).prop('checked', true)
+        else
+          $(this).prop('checked', false)
+      })
+    })
+
+    $("#cancle").on('click', function () {
+      location.replace("/")
+    })
+    $("#next").on('click', function () {
+      if (chkAgreeBox())
+        location.replace("/panel")
+      else
+        alert("필수 동의 항목을 모두 체크해주세요")
+    })
+  })
+</script>
+</body>
+</html>

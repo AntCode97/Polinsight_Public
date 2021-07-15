@@ -226,10 +226,9 @@
       </th:block>
       <th:block th:unless="${session.user} == null">
         <!-- 유저 로그인 -->
-        <a th:href="@{/dologout}">LOGOUT</a>
         <!-- <span></span> -->
         <th:block th:unless="${ session.user.role.name() == 'ADMIN'}">
-          <a th:href="@{/mypage}">MYPAGE</a>4
+          <a th:href="@{/mypage}">MYPAGE</a>
         </th:block>
         <!-- 관리자 로그인 -->
         <!--      <a th:href="@{/dologout}">LOGOUT</a>-->
@@ -237,6 +236,7 @@
         <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
           <a th:href="@{/admin}">ADMIN</a>
         </th:block>
+        <a th:href="@{/dologout}">LOGOUT</a>
       </th:block>
     </div>
   </div>

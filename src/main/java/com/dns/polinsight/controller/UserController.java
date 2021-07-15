@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +28,7 @@ import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -229,43 +226,6 @@ public class UserController {
       response.sendRedirect("/changepwd");
     }
     response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-  }
-
-  /*
-   * 테스트용 유저 데이터
-   * */
-  @PostConstruct
-  public void initUserData() {
-    List<User> list = new ArrayList<>();
-    list.add(User.builder()
-                 .email("testadmin@gmail.com")
-                 .password(passwordEncoder.encode("!@#$%QWERT"))
-                 .name("test.admin")
-                 .point(987654321L)
-                 .role(UserRoleType.ADMIN)
-                 .build());
-    list.add(User.builder()
-                 .email("testuser@gmail.com")
-                 .password(passwordEncoder.encode("!@#$%QWERT"))
-                 .name("test.user")
-                 .point(100L)
-                 .role(UserRoleType.PANEL)
-                 .build());
-    list.add(User.builder()
-                 .email("test22user@gmail.com")
-                 .password(passwordEncoder.encode("!@#$%QWERT"))
-                 .name("test22.user")
-                 .role(UserRoleType.PANEL)
-                 .build());
-
-
-    list.forEach(user -> {
-      try {
-        userService.findUserByEmail(user);
-      } catch (Exception e) {
-        userService.save(user);
-      }
-    });
   }
 
 }

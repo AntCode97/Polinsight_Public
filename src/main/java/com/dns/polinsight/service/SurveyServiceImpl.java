@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -71,12 +70,14 @@ public class SurveyServiceImpl implements SurveyService {
    * // TODO: 2021-07-15  : 데이터 파싱 및 저장 필요
    * */
   @Override
-  @Scheduled(cron = "0 0 0/1 * * *")
+  // TODO: 2021-07-16 : 주석 제거 필요 
+  //  @Scheduled(cron = "0 0 0/1 * * *")
   public void getSurveysWithSchedular() {
     log.info("scheduler start");
     HttpHeaders header = new HttpHeaders();
     header.setBearerAuth(accessToken);
-    List<Survey> surveys = (List<Survey>) new RestTemplate().exchange(baseURL + "/surveys", HttpMethod.GET, new HttpEntity<>(header), new ParameterizedTypeReference<List<Survey>>() {});
+    List<Survey> surveys = (List<Survey>) new RestTemplate().exchange(baseURL + "/surveys", HttpMethod.GET, new HttpEntity<>(header), new ParameterizedTypeReference<List<Survey>>() {}); // parsing
+    // error
     mongoTemplate.save(surveys);
     log.info("scheduler end");
   }

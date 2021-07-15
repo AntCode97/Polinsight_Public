@@ -83,7 +83,7 @@ public class PageController {
 
   @GetMapping("/panelagreement")
   public ModelAndView panelAgreement(){
-    return new ModelAndView("member/panelagree");
+    return new ModelAndView("member/pagree");
   }
 
 }
