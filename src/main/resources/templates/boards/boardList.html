@@ -122,6 +122,10 @@
       height: 25px;
     }
 
+    tbody > tr:hover {
+      background-color: #EFEEEC;
+    }
+
     .disabled {
       opacity: 0;
       color: #6c757d;
@@ -175,7 +179,6 @@
   <div class="board">
     <div class="button">
       <form th:action="@{/boards/search}" th:object="${boardSearch}" method="get">
-
         <select th:field="*{boardType}" class="select" name="classify" id="classify">
           <optgroup label="분류 선택">
             <option selected value="NOTICE">공지</option>
@@ -190,7 +193,7 @@
           </optgroup>
         </select>
         <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
-        <input type="submit" name="submit_OK" value="검색하기" class="btn-search">
+        <input id="search_btn" type="submit" name="submit_OK" value="검색하기" class="btn-search">
       </form>
     </div>
 
@@ -199,10 +202,10 @@
         <table class="tblList">
           <thead>
           <tr align="left">
-            <th width="50" height="36"> 번호</th>
-            <th width="900">제목</th>
-            <th width="80">등록자</th>
-            <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
+            <th width="50" height="36" style="text-align: center"> 번호</th>
+            <th width="900" style="text-align: center">제목</th>
+            <th width="80" style="text-align: center">등록자</th>
+            <th width="120" style="text-align: center">등록일</th>
           </tr>
           </thead>
 
@@ -232,6 +235,7 @@
       <div class="writeButton">
         <div class=write><a href="/boards/new"> <b>글쓰기</b> </a></div>
       </div>
+      기
     </th:block>
   </th:block>
 
@@ -317,8 +321,7 @@
     const searchType = $("#type").val()
     const classify = $('#classify').val()
     const keyword = $("#searchinput").val()
-    console.log(searchType)
-    console.log(classify)
+
     // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
     axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
         .then(res => {
@@ -334,8 +337,9 @@
         })
   }
 
-  // $(function () {
-  //   $("#searchinput").on('change keyup', asyncFindBoard)
-  // })
+
+  $(function () {
+    $("#searchinput").on('change keyup', asyncFindBoard)
+  })
 </script>
 </html>

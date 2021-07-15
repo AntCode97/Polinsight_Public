@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="module/common" />
-<th:block th:include="layout/header" />
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}">
-  <style>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        crossorigin="anonymous">
+  <style type="text/css">
+    @import url("@{/css/common.css}");
     /* 모달 로그인 창 */
     .modal_wrap {
       height: 100vh;
-      width: 100vw;
-      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: absolute;
-      top: -80px;
     }
 
     .modal_login {
@@ -25,7 +22,7 @@
     }
 
     .modal_content {
-      width: 100%;
+      width: 50%;
       background-color: white;
       border-radius: 2px;
       overflow: hidden;
@@ -42,7 +39,7 @@
     }
 
     .login_title {
-      margin: 0 auto;
+      margin: 0 auto -40px;
       text-align: center;
     }
 
@@ -120,14 +117,18 @@
       margin: 15px 5px 0;
       text-align: right;
       padding-left: 5px;
-      text-decoration: underline;
-      font-weight: bold;
       color: #a9abb7;
     }
 
     .qnapw > a {
       font-size: 14px;
       letter-spacing: 0.8px;
+    }
+
+    .qnapw > a:first-child {
+      padding-right: 10px;
+      margin-right: 10px;
+      border-right: 1px solid #dadada;
     }
 
     .qnapw > a:hover {
@@ -150,7 +151,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-image: url("/img/icons/kakao_login_large_wide.png");
+      background-image: url("img/icons/kakao_login_large_wide.png");
       border-radius: 2px;
     }
 
@@ -239,67 +240,34 @@
 <div class="modal_wrap">
   <div class="modal_content">
     <div class="modal_login">
-      <div class="login_title"><a th:href="@{/}"><img class="login_logo_text"
-                                                      src="/img/logo/logo_color.png" /></a></div>
-      <div class="join_request">
-        <div class="join_request_text">
-          <a th:href="@{/signup}">아직 회원이 아니신가요?
-            <span class="under">회원가입 하기</span>
-          </a>
-        </div>
+      <div class="login_title">
+        <a th:href="@{/}">
+          <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" />
+        </a>
       </div>
       <div class="login_content">
         <div class="err_content"></div>
         <form class="frm_login" action="/dologin" method="post">
           <div class="input_div">
             <p>이메일</p>
-            <input class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required type="email">
+            <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required>
           </div>
           <div class="input_div">
             <p>비밀번호</p>
-            <input class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required type="password">
+            <input type="password" class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required>
             <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
           </div>
           <div class="login_btn_wrap">
-            <input type="submit" class="btn-primary btn-effect" id="btn-login" value="로그인 하기" />
+            <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
           </div>
         </form>
-        <p class="login_or">또는</p>
-        <div class="sns_btn_wrap">
-          <div>
-            <a href="/oauth2/authorization/kakao"></a>
-          </div>
+        <div class="qnapw">
+          <a th:href="@{/signup}">회원가입</a>
+          <a th:href="@{/findpwd}">아이디/비밀번호 찾기</a>
         </div>
-        <div class="qnapw"><a href="/findpwd">비밀번호 찾기</a></div>
       </div>
     </div>
   </div>
 </div>
 </body>
-<script th:inline="javascript">
-  $(function () {
-    // 로그인 input(id, pw)에 focus 되면 테두리색 변경
-    $(document).on('focus', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #4C99CF');
-    });
-    $(document).on('blur', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #dde0ea');
-    });
-
-    // LOGIN Modal창 암호 보이기 or 숨기기
-    $(document).on('click', '.pw_eye', function () {
-      var code = $(this).prev().attr('type');
-
-      if (code === 'password') {
-        $(this).prev().attr('type', 'text');
-        $(this).html('<i class="fas fa-eye"></i>')
-            .css('color', '#666');
-      } else {
-        $(this).prev().attr('type', 'password');
-        $(this).html('<i class="fas fa-eye-slash"></i>')
-            .css('color', '#AAA');
-      }
-    });
-  })
-</script>
 </html>

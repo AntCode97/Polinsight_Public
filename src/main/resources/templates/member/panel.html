@@ -1,580 +1,659 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <style type="text/css">
-      @import url('common.css');
-      .register_wrap {
-        width: 1000px;
-        margin: 0 auto;
-        position: relative;
-      }
-      .register_title {
-        color: black;
-      }
-      .register_title > h1 {
-        font-size: 25px;
-        font-weight: bold;
-        text-align: center;
-      }
-      .register_contents_wrap { margin-top: 20px;}
-      .register_contents_wrap p {
-        color: black;
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 8px;
-      }
-      .register_contents {
-        border-top: 1px solid #ddd;
-      }
-      .register_contents > ul > li {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-      }
-      .left_content {
-        flex: 1.5;
-      }
-      .right_content {
-        flex: 8.5;
-      }
-      .left_content > label {
-        font-weight: bold;
-        padding: 0 15px;
-        overflow: hidden;
-        line-height: 18px;
-        cursor: pointer;
-        background: url('imgs/icon_required_input.png') right center no-repeat;
-      }
-      .right_content > input {
-        color: #333;
-        font-size: 14px;
-        margin: 0 3px;
-        outline: none;
-      }
-      .info_msg, .err_msg {
-        font-size: 12px;
-        font-weight: normal;
-        padding: 0 5px;
-      }
-      .info_msg {color: #a9a9a9;}
-      .err_msg {color: red;}
-      .no_need { background-image: url('')!important;}
-      .pannel_info_contents {
-        width: 800px;
-        margin: 40px auto 30px;
-        background-color: #EEE;
-        padding: 15px 0;
-        border-radius: 20px;
-      }
-      .pannel_info_contents > * {
-        color: black;
-        text-align: center;
-        margin-bottom: 15px;
-      }
-      .pannel_info_contents > h1 {
-        font-size: 22px;
-      }
-      .pannel_info_contents > p {
-        font-size: 16px;
-        font-weight: normal;
-      }
-      .pannel_select {
-        margin: 0 auto;
-        width: 300px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .radio_wrap > label {
-        font-size: 16px;
-        font-weight: bold;
-        color: black;
-      }
-      .btn_wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 30px;
-      }
-      .btn_submit {
-        background-color: #4C99CF;
-        color: white;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 7px 45px;
-        font-size: 16px;
-        font-weight: bold;
-      }
-      .right_content > label, .right_content > label > input {
-        cursor: pointer;
-      }
-      .text_input {
-        width: 300px;
-        height: 32px;
-        border: 1px solid #ddd;
-      }
-      .right_content > select {
-        width: 80px;
-        height: 32px;
-      }
-      #edu { width: 170px;}
-      #jobs { width: 120px;}
-      #industry { width: 200px;}
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        crossorigin="anonymous">
+  <style type="text/css">
+    @import url('common.css');
 
-      .introduce {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-      }
-      .introduce > .left_content {
-        flex: 2;
-      }
-      .introduce > .right_content {
-        flex: 8;
-      }
-      .introduce:nth-child(1) {
-        padding-top: 0;
-      }
-      .introduce:nth-child(5) {
-        padding-bottom: 0;
-        border: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="register_wrap">
-      <form action="" method="POST">
-      <div class="register_box">
-        <div class="register_title"><h1>패널가입</h1></div>
-        <div class="register_contents_wrap">
-            <p>추가정보</p>
-            <div class="register_contents">
-              <ul>
-                <li>
-                  <div class="left_content">
-                    <label for="user_sex">성별</label>
-                  </div>
-                  <div class="right_content">
-                    <label>
-                      <input name="gender" type="radio" value="남성">
-                      남성
-                    </label>
-                    <label>
-                      <input name="gender" type="radio" value="여성">
-                      여성
-                    </label>
-                    <span class="err_msg">성별을 선택해주세요.</span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="year">생년월일</label>
-                  </div>
-                  <div class="right_content">
-                    <select id="year" name="year">
-                      <option>선택</option>
-                    </select><label for="year"> 년</label>
-                    <select id="month" name="month">
-                      <option>선택</option>
-                    </select><label for="month"> 월</label>
-                    <select id="day" name="day">
-                      <option>선택</option>
-                    </select><label for="day"> 일</label>
-                    <label>
-                      <input checked name="birth" type="radio" value="양력">
-                      양력
-                    </label>
-                    <label>
-                      <input name="birth" type="radio" value="음력">
-                      음력
-                    </label>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="city">거주지</label>
-                  </div>
-                  <div class="right_content">
-                    <select id="city" name="city">
-                      <option>시도</option>
-                    </select>
-                    <select id="gu" name="gu">
-                      <option>시군구</option>
-                    </select>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="edu">최종학력</label>
-                  </div>
-                  <div class="right_content">
-                    <select id="edu" name="edu">
-                      <option>선택</option>
-                      <option value="high">고졸 이하(재학 포함)</option>
-                      <option value="inuniversity">대학 재학</option>
-                      <option value="university">대학교 졸업(수료 포함)</option>
-                      <option value="graduate">대학원 이상</option>
-                    </select>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="">결혼여부</label>
-                  </div>
-                  <div class="right_content">
-                    <label>
-                      <input checked name="marry" type="radio" value="미혼">
-                      미혼
-                    </label>
-                    <label>
-                      <input name="marry" type="radio" value="기혼">
-                      기혼
-                    </label>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="jobs">직업</label>
-                  </div>
-                  <div class="right_content">
-                    <select id="jobs" name="jobs">
-                      <option>선택</option>
-                      <option value="">학생</option>
-                      <option value="">경영직</option>
-                      <option value="">공무</option>
-                      <option value="">회사원</option>
-                      <option value="">자영업</option>
-                      <option value="">생산기술직</option>
-                      <option value="">예술인</option>
-                      <option value="">프리랜서</option>
-                      <option value="">무직</option>
-                      <option value="">기타</option>
-                    </select>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
+    .register_wrap {
+      width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
 
-                <li>
-                  <div class="left_content">
-                    <label for="industry">직종</label>
-                  </div>
-                  <div class="right_content">
-                    <select id="industry" name="industry">
-                      <option>선택</option>
-                      <option value="">제조업</option>
-                      <option value="">건설업(인테리어 포함)</option>
-                      <option value="">부동산업</option>
-                      <option value="">임대•대여업</option>
-                      <option value="">도매 및 소매업(유통업)</option>
-                      <option value="">음식업•외식업</option>
-                      <option value="">운수•여객•숙박업</option>
-                      <option value="">여가 관련 서비스업</option>
-                      <option value="">방송•언론•출판</option>
-                      <option value="">정보통신업</option>
-                      <option value="">금융업</option>
-                      <option value="">교육 서비스업</option>
-                      <option value="">의료•보건•사회복지</option>
-                      <option value="">시장조사•컨설팅•광고대행업</option>
-                      <option value="">기타</option>
-                    </select>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
+    .register_title {
+      color: black;
+    }
 
-                <li>
-                  <div class="left_content">
-                    <label for="">관심분야</label>
-                  </div>
-                  <div class="right_content">
-                    <div class="type_box">
-                      <div class="introduce">
-                        <div class="left_content">
-                          <label for="" class="no_need">건강, 헬스케어</label>
-                        </div>
-                        <div class="right_content">
-                          <label>
-                            <input type="checkbox" value="">
-                            건강일반
-                          </label>
-                          <label>
-                            <input type="checkbox" value="">
-                            건강식품
-                          </label>
-                          <label>
-                            <input type="checkbox" value="">
-                            다이어트
-                          </label>
-                          <label>
-                            <input type="checkbox" value="">
-                            심리건강
-                          </label>
-                        </div>
-                      </div>
+    .register_title > h1 {
+      font-size: 25px;
+      font-weight: bold;
+      text-align: center;
+    }
 
-                      <div class="introduce">
-                        <div class="left_content">
-                          <label for="" class="no_need">문화예술, 여가, 스포츠</label>
-                        </div>
-                        <div class="right_content">
-                          <label>
-                            <input type="checkbox">
-                            대중문화
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            음악
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            미술
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            공연•축제
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            여행
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            생활문화
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            장르예술
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            레저활동
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            생활체육
-                          </label>
-                        </div>
-                      </div>
+    .register_contents_wrap {
+      margin-top: 20px;
+    }
 
-                      <div class="introduce">
-                        <div class="left_content">
-                          <label for="" class="no_need">경제, 경영</label>
-                        </div>
-                        <div class="right_content">
-                          <label>
-                            <input type="checkbox">
-                            재테크
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            창업
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            사회적경제
-                          </label>
-                        </div>
-                      </div>
+    .register_contents_wrap p {
+      color: black;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
 
-                      <div class="introduce">
-                        <div class="left_content">
-                          <label for="" class="no_need">사회, 복지</label>
-                        </div>
-                        <div class="right_content">
-                          <label>
-                            <input type="checkbox">
-                            사회, 복지일반
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            아동, 청소년
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            여성
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            청년
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            노인
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            장애인
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            다문화
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            민주인권
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            노동인권
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            자원봉사
-                          </label>
-                        </div>
-                      </div>
+    .register_contents {
+      border-top: 1px solid #ddd;
+    }
 
-                      <div class="introduce">
-                        <div class="left_content">
-                          <label for="" class="no_need">교육</label>
-                        </div>
-                        <div class="right_content">
-                          <label>
-                            <input type="checkbox">
-                            평생교육
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            초,중,고등학교
-                          </label>
-                          <label>
-                            <input type="checkbox">
-                            대학교육
-                          </label>
-                        </div>
-                      </div>
+    .register_contents > ul > li {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .left_content {
+      flex: 1.5;
+    }
+
+    .right_content {
+      flex: 8.5;
+    }
+
+    .left_content > label {
+      font-weight: bold;
+      padding: 0 15px;
+      overflow: hidden;
+      line-height: 18px;
+      cursor: pointer;
+      background: url('imgs/icon_required_input.png') right center no-repeat;
+    }
+
+    .right_content > input {
+      color: #333;
+      font-size: 14px;
+      margin: 0 3px;
+      outline: none;
+    }
+
+    .info_msg, .err_msg {
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0 5px;
+    }
+
+    .info_msg {
+      color: #a9a9a9;
+    }
+
+    .err_msg {
+      color: red;
+    }
+
+    .no_need {
+      background-image: url('') !important;
+    }
+
+    .pannel_info_contents {
+      width: 800px;
+      margin: 40px auto 30px;
+      background-color: #EEE;
+      padding: 15px 0;
+      border-radius: 20px;
+    }
+
+    .pannel_info_contents > * {
+      color: black;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .pannel_info_contents > h1 {
+      font-size: 22px;
+    }
+
+    .pannel_info_contents > p {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .pannel_select {
+      margin: 0 auto;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .radio_wrap > label {
+      font-size: 16px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .btn_wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    .btn_submit {
+      background-color: #4C99CF;
+      color: white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 7px 45px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .right_content > label, .right_content > label > input {
+      cursor: pointer;
+    }
+
+    .text_input {
+      width: 300px;
+      height: 32px;
+      border: 1px solid #ddd;
+    }
+
+    .right_content > select {
+      width: 80px;
+      height: 32px;
+    }
+
+    #edu {
+      width: 170px;
+    }
+
+    #jobs {
+      width: 120px;
+    }
+
+    #industry {
+      width: 200px;
+    }
+
+    .introduce {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .introduce > .left_content {
+      flex: 2;
+    }
+
+    .introduce > .right_content {
+      flex: 8;
+    }
+
+    .introduce:nth-child(1) {
+      padding-top: 0;
+    }
+
+    .introduce:nth-child(5) {
+      padding-bottom: 0;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div class="register_wrap">
+  <form id="addfrm" action="/moreinfo" method="POST">
+    <div class="register_box">
+      <div class="register_title"><h1>패널가입</h1></div>
+      <div class="register_contents_wrap">
+        <p>추가정보</p>
+        <div class="register_contents">
+          <ul>
+            <li>
+              <div class="left_content">
+                <label>성별</label>
+              </div>
+              <div class="right_content">
+                <label>
+                  <input name="gender" type="radio" value="MALE">
+                  남성
+                </label>
+                <label>
+                  <input name="gender" type="radio" value="FEMALE">
+                  여성
+                </label>
+                <span class="err_msg">성별을 선택해주세요.</span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="year">생년월일</label>
+              </div>
+              <div class="right_content">
+                <select id="year" name="year">
+                  <option>선택</option>
+                </select><label for="year"> 년</label>
+                <select id="month" name="month">
+                  <option>선택</option>
+                </select><label for="month"> 월</label>
+                <select id="day" name="day">
+                  <option>선택</option>
+                </select><label for="day"> 일</label>
+                <label>
+                  <input checked name="birthtype" type="radio" value="양력">
+                  양력
+                </label>
+                <label>
+                  <input name="birthtype" type="radio" value="음력">
+                  음력
+                </label>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="city">거주지</label>
+              </div>
+              <div class="right_content">
+                <select id="city" name="city">
+                  <option>시도</option>
+                </select>
+                <select id="gu" name="gu">
+                  <option>시군구</option>
+                </select>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="edu">최종학력</label>
+              </div>
+              <div class="right_content">
+                <select id="edu" name="edu" required>
+                  <option>선택</option>
+                  <option value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
+                  <option value="대학 재학">대학 재학</option>
+                  <option value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
+                  <option value="대학원 이상">대학원 이상</option>
+                </select>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label>결혼여부</label>
+              </div>
+              <div class="right_content">
+                <label>
+                  <input checked name="marry" type="radio" value="false">
+                  미혼
+                </label>
+                <label>
+                  <input name="marry" type="radio" value="true">
+                  기혼
+                </label>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+            <li>
+              <div class="left_content">
+                <label for="job">직업</label>
+              </div>
+              <div class="right_content">
+                <select id="job" name="job" required>
+                  <option>선택</option>
+                  <option value="학생">학생</option>
+                  <option value="경영직">경영직</option>
+                  <option value="공무">공무</option>
+                  <option value="회사원">회사원</option>
+                  <option value="자영업">자영업</option>
+                  <option value="생산기술직">생산기술직</option>
+                  <option value="예술인">예술인</option>
+                  <option value="프리랜서">프리랜서</option>
+                  <option value="무직">무직</option>
+                  <option value="기타">기타</option>
+                </select>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+
+            <li>
+              <div class="left_content">
+                <label for="industry">직종</label>
+              </div>
+              <div class="right_content">
+                <select id="industry" name="industry">
+                  <option>선택</option>
+                  <option value="제조업">제조업</option>
+                  <option value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
+                  <option value="부동산업">부동산업</option>
+                  <option value="임대•대여업">임대•대여업</option>
+                  <option value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
+                  <option value="음식업•외식업">음식업•외식업</option>
+                  <option value="운수•여객•숙박업">운수•여객•숙박업</option>
+                  <option value="여가 관련 서비스업">여가 관련 서비스업</option>
+                  <option value="방송•언론•출판">방송•언론•출판</option>
+                  <option value="정보통신업">정보통신업</option>
+                  <option value="금융업">금융업</option>
+                  <option value="교육 서비스업">교육 서비스업</option>
+                  <option value="의료•보건•사회복지">의료•보건•사회복지</option>
+                  <option value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
+                  <option value="기타">기타</option>
+                </select>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+
+            <li>
+              <div class="left_content">
+                <label>관심분야</label>
+              </div>
+              <div class="right_content">
+                <div class="type_box">
+                  <div class="introduce">
+                    <div class="left_content">
+                      <label class="no_need">건강, 헬스케어</label>
                     </div>
-                    <span class="err_msg"></span>
-                    <span class="info_msg"></span>
+                    <div class="right_content">
+                      <label>
+                        <input type="checkbox" value="건강일반">
+                        건강일반
+                      </label>
+                      <label>
+                        <input type="checkbox" value="건강식품">
+                        건강식품
+                      </label>
+                      <label>
+                        <input type="checkbox" value="다이어트">
+                        다이어트
+                      </label>
+                      <label>
+                        <input type="checkbox" value="심리건강">
+                        심리건강
+                      </label>
+                    </div>
                   </div>
-                </li>
-              </ul>
-            </div>
-            <div class="pannel_info_msg_wrap"></div>
-          </form>
-        </div>
-      </div>
 
-      <div class="register_box">
-        <div class="register_contents_wrap">
-            <p>수신동의</p>
-            <div class="register_contents">
-              <ul>
-                <li>
-                  <div class="left_content">
-                    <label for="" class="no_need">SMS 수신동의</label>
+                  <div class="introduce">
+                    <div class="left_content">
+                      <label for="" class="no_need">문화예술, 여가, 스포츠</label>
+                    </div>
+                    <div class="right_content">
+                      <label>
+                        <input name="favorite" type="checkbox" value="대중문화">
+                        대중문화
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="음악">
+                        음악
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="미술">
+                        미술
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="공연•축제">
+                        공연•축제
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="여행">
+                        여행
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="생활문화">
+                        생활문화
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="장르예술">
+                        장르예술
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="레저활동">
+                        레저활동
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="생활체육">
+                        생활체육
+                      </label>
+                    </div>
                   </div>
-                  <div class="right_content">
-                    <label>
-                      <input name="gender" type="radio" value="y">
-                      동의함
-                    </label>
-                    <label>
-                      <input name="gender" type="radio" value="n">
-                      동의안함
-                    </label>
-                    <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
 
-                <li>
-                  <div class="left_content">
-                    <label for="" class="no_need">이메일 수신동의</label>
+                  <div class="introduce">
+                    <div class="left_content">
+                      <label class="no_need">경제, 경영</label>
+                    </div>
+                    <div class="right_content">
+                      <label>
+                        <input name="favorite" type="checkbox" value="제테크">
+                        제테크
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="창업">
+                        창업
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="사회적 경제">
+                        사회적 경제
+                      </label>
+                    </div>
                   </div>
-                  <div class="right_content">
-                    <label >
-                      <input name="gender" type="radio" value="y">
-                      동의함
-                    </label>
-                    <label>
-                      <input name="gender" type="radio" value="n">
-                      동의안함
-                    </label>
-                    <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
-                    <span class="info_msg"></span>
+
+                  <div class="introduce">
+                    <div class="left_content">
+                      <label class="no_need">사회, 복지</label>
+                    </div>
+                    <div class="right_content">
+                      <label>
+                        <input name="favorite" type="checkbox" value="사회•복지일반">
+                        사회•복지일반
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="아동•청소년">
+                        아동•청소년
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="청년">
+                        청년
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="노인">
+                        노인
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="장애인">
+                        장애인
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="다문화">
+                        다문화
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="민주인권">
+                        민주인권
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="노동인권">
+                        노동인권
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="자원봉사">
+                        자원봉사
+                      </label>
+                    </div>
                   </div>
-                </li>
-              </ul>
-            </div>
-          <div class="btn_wrap"><button class="btn_submit" type="submit">JOIN US</button></div>
+
+                  <div class="introduce">
+                    <div class="left_content">
+                      <label class="no_need">교육</label>
+                    </div>
+                    <div class="right_content">
+                      <label>
+                        <input name="favorite" type="checkbox" value="평생교육">
+                        평생교육
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="초·중·고등교육">
+                        초·중·고등교육
+                      </label>
+                      <label>
+                        <input name="favorite" type="checkbox" value="대학교육">
+                        대학교육
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <span class="err_msg"></span>
+                <span class="info_msg"></span>
+              </div>
+            </li>
+          </ul>
         </div>
+        <div class="pannel_info_msg_wrap"></div>
       </div>
-      </form>
     </div>
-  </body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    const setDateValue = () => {
-      let today = new Date();
-      $(".date").find('select').each((idx, obj) => {
+  </form>
+</div>
+</div>
 
-        switch (obj.name) {
-          case "year":
-            for (let i = 1930; i < today.getFullYear(); i++) {
-              $(obj).append($("<option></option>").attr("value", i).text(i))
-            }
-            break;
-          case "month":
-            for (let i = 1; i < 13; i++) {
-              $(obj).append($("<option></option>").attr("value", i).text(i))
-            }
-            break;
-        }
-      })
-    }
+<div class="register_box">
+  <div class="register_contents_wrap">
+    <p>수신동의</p>
+    <div class="register_contents">
+      <ul>
+        <li>
+          <div class="left_content">
+            <label for="" class="no_need">SMS 수신동의</label>
+          </div>
+          <div class="right_content">
+            <label>
+              <input name="gender" type="radio" value="y">
+              동의함
+            </label>
+            <label>
+              <input name="gender" type="radio" value="n">
+              동의안함
+            </label>
+            <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
+            <span class="info_msg"></span>
+          </div>
+        </li>
 
-    const setDay = (e) => {
-      const day = $("#day")
-      day.find("option").remove();    // 초기화
-      let month = e.target.value * 1
-      day.append($("<option selected></option>").text("--선택--"))
-      if (month === 2) {
-        for (let i = 1; i <= 28; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
-      } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
-        for (let i = 1; i <= 31; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
-      } else {
-        for (let i = 1; i <= 30; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
+        <li>
+          <div class="left_content">
+            <label class="no_need">이메일 수신동의</label>
+          </div>
+          <div class="right_content">
+            <label>
+              <input name="gender" type="radio" value="y">
+              동의함
+            </label>
+            <label>
+              <input name="gender" type="radio" value="n">
+              동의안함
+            </label>
+            <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
+            <span class="info_msg"></span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="btn_wrap">
+      <button name="panel_signup" class="btn_submit" type="submit">JOIN US</button>
+    </div>
+  </div>
+</div>
+</form>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+  const setDateValue = () => {
+    let today = new Date();
+    $(".date").find('select').each((idx, obj) => {
+
+      switch (obj.name) {
+        case "year":
+          for (let i = 1930; i < today.getFullYear(); i++) {
+            $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+        case "month":
+          for (let i = 1; i < 13; i++) {
+            $(obj).append($("<option></option>").attr("value", i).text(i))
+          }
+          break;
+      }
+    })
+  }
+
+  const setDay = (e) => {
+    const day = $("#day")
+    day.find("option").remove();    // 초기화
+    let month = e.target.value * 1
+    day.append($("<option selected></option>").text("선택"))
+    if (month === 2) {
+      for (let i = 1; i <= 28; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+      for (let i = 1; i <= 31; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
+      }
+    } else {
+      for (let i = 1; i <= 30; i++) {
+        day.append($("<option></option>").attr("value", i).text(i))
       }
     }
+  }
 
-    const checkRequiredValue = () => {
+  const checkRequiredValue = () => {
 
-    }
+  }
 
-    $(function () {
-      setDateValue()
-      $("#month").on('change', setDay)
+  $(function () {
+    setDateValue()
+    $("#month").on('change', setDay)
 
-      $("input[name=panel_signup]").on('click', (e) => {
-        if (checkRequiredValue()) {
-          $('form').submit()
-        }
+    $("button[name=panel_signup]").on('click', e => {
+      e.preventDefault()
+      e.returnValue = false
+
+      const info = {}
+      info['birth'] = makeDateFormat();
+      info['gender'] = $('input[name=gender]').val()
+      info['birthType'] = $('input[name=birthtype]').val()
+      info['education'] = $('select[name=edu]').val()
+      info['marry'] = $('input[name=marry]').val()
+      info['job'] = $('select[name=job]').val()
+      info['industry'] = $('select[name=industry]').val()
+      info['favorite'] = []
+      $('input[name=favorite]:checked').each((idx, item) => {
+        info['favorite'].push(item.value);
       })
+
+      if (checkRequiredValue(info)) {
+        // 데이터 전달 후 확인까지
+        axios.post('/moreinfo', info)
+            .then(res => {
+              console.log(res)
+              if (res.data.code === 200) {
+                alert("패널 가입이 성공적으로 완료되었습니다.")
+              }
+            })
+            .catch(err => {
+              console.log(err)
+              alert('가입 중 문제가 발생하였습니다.\n관리자에게 문의해주세요.')
+            })
+        location.href='/' +
+            ''
+
+      }
+
     })
-  </script>
+  })
+</script>
 </html>

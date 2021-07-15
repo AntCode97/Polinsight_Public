@@ -140,7 +140,7 @@ public class UserController {
   @GetMapping("/mypage")
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("mypage");
+    mv.setViewName("member/mypage");
     mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
     return mv;
   }

@@ -13,7 +13,7 @@ public class AdminController {
 
   @GetMapping("/admin")
   public ModelAndView goAdminPage() {
-    return new ModelAndView("admin");
+    return new ModelAndView("admin/admin");
   }
 
 

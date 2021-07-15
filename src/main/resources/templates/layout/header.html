@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="stylesheet" th:href="@{/css/css_reset.css}">
-  <style>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        crossorigin="anonymous">
+  <style type="text/css">
+    @import url("/css/common.css");
+
     .header_wrap {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       background-color: transparent;
+      /*background-color: #182838;*/
       z-index: 9999;
     }
 
@@ -27,13 +32,15 @@
     }
 
     .header_logo a {
-      display: inline-block;
-      background-image: url("/img/logo/logo_text.png");
-      background-repeat: no-repeat;
-      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 300px;
       height: 80px;
-      background-size: cover;
+    }
+
+    .header_logo img {
+      width: 150px;
     }
 
     .header_container_navi {
@@ -65,7 +72,7 @@
       display: block;
       background-color: #FFFFFF;
       overflow: hidden;
-      height: 0;
+      height: 0px;
     }
 
     .dropdown_box {
@@ -87,7 +94,6 @@
 
     .dropdown_element:hover {
       text-decoration: underline;
-      cursor: pointer;
       color: #4C99CF;
     }
 
@@ -118,6 +124,27 @@
       margin: 0 10px;
     }
 
+    /* 배너이미지 */
+    .carasel_wrap::before {
+      content: '';
+      background-color: #444;
+      opacity: 0.4;
+      width: 100%;
+      height: 50vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .carasel_wrap {
+      width: 100%;
+      height: 50vh;
+      position: relative;
+      overflow: hidden;
+      background-image: url('img/banner/banner01.jpg');
+      background-position: center, center;
+      background-size: cover;
+    }
   </style>
 
 </head>
@@ -129,44 +156,48 @@
 <div class="header_wrap">
   <div class="header_box">
     <div class="header_container_logo">
-      <div class="header_logo"><a th:href="@{/}"></a></div>
+      <div class="header_logo">
+        <a href="/">
+          <img th:src="@{/img/logo/logo.png}" alt="로고" />
+        </a>
+      </div>
     </div>
     <div class="header_container_navi">
       <ul class="navi_box">
         <li>
-          <a th:href="@{/}">Company</a>
+          <a href="/">Company</a>
           <div class="dropdown" style="left: 0px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">인사말</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">연혁</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">설립목적</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">오시는길</a>
+              <a th:href="@{/}" class="dropdown_element">인사말</a>
+              <a th:href="@{/}" class="dropdown_element">연혁</a>
+              <a th:href="@{/}" class="dropdown_element">설립목적</a>
+              <a th:href="@{/}" class="dropdown_element">오시는길</a>
             </div>
           </div>
         </li>
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/}">Pol's Insight</a>
+          <a th:href="@{/}">Business</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/}" class="dropdown_element">Contents03</a>
+              <a th:href="@{/}" class="dropdown_element">Contents04</a>
             </div>
           </div>
         </li>
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/boards}">Boards</a>
+          <a th:href="@{/boards}">Board</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/boards}">공지 사항</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">이벤트</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">FAQ</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')">Q & A</a>
+              <a th:href="@{/boards}" class="dropdown_element">Board</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/}" class="dropdown_element">Contents03</a>
+              <a th:href="@{/}" class="dropdown_element">Contents04</a>
             </div>
           </div>
         </li>
@@ -176,39 +207,44 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="right: 0px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:onclick="alert('준비 중 입니다.')" th:href="@{/}">Contents04</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/}" class="dropdown_element">Contents03</a>
+              <a th:href="@{/}" class="dropdown_element">Contents04</a>
             </div>
           </div>
         </li>
       </ul>
     </div>
+
     <div class="header_container_login">
       <th:block th:if="${session.user} == null">
+        <!-- 비로그인 -->
         <a th:href="@{/login}">LOGIN</a>
         <span></span>
         <a th:href="@{/signup}">JOIN</a>
       </th:block>
       <th:block th:unless="${session.user} == null">
-        <!--                <a href="/mypage" role="button" th:text="${session.user}?${session.user.name}:'guest'">MY PAGE</a>-->
-        <a href="/mypage" role="button" th:text="${session.user.name}==null?'guest':${session.user.name}">MY PAGE</a>
-        <span></span>
-        <a href="/dologout" th:onclick="logout_process">LOGOUT</a>
+        <!-- 유저 로그인 -->
+        <a th:href="@{/dologout}">LOGOUT</a>
+        <!-- <span></span> -->
+        <th:block th:unless="${ session.user.role.name() == 'ADMIN'}">
+          <a th:href="@{/mypage}">MYPAGE</a>4
+        </th:block>
+        <!-- 관리자 로그인 -->
+        <!--      <a th:href="@{/dologout}">LOGOUT</a>-->
+        <!-- <span></span> -->
+        <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
+          <a th:href="@{/admin}">ADMIN</a>
+        </th:block>
       </th:block>
     </div>
   </div>
 </div>
-<th:block th:unless="${session.user} == null">
-  <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
-    <div>
-      <a href="/admin">
-        관리자 페이지
-      </a>
-    </div>
-  </th:block>
-</th:block>
+
+<!-- 배너이미지 -->
+<div class="carasel_wrap"></div>
+
 </body>
 <script th:inline="javascript">
   const logout_process = e => {
@@ -222,7 +258,6 @@
           console.log(err)
         })
   }
-
   $(function () {
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가
@@ -230,13 +265,12 @@
       if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
         $('.top-btn').fadeIn().css("display", "flex");
         $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#182838');
+            .css('background-color', '#192739');
       } else {
         $('.top-btn').fadeOut();
         $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
       }
     });
-
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });

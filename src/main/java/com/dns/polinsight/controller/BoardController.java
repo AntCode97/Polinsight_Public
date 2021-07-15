@@ -50,7 +50,6 @@ public class BoardController {
 
   private final AttachService attachService;
 
-
   @GetMapping("/boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
@@ -84,7 +83,7 @@ public class BoardController {
 
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + boardDTO.getFiles() + "!");
 
-    return "redirect:/boards";
+    return "redirect:boards";
   }
 
 
@@ -129,7 +128,8 @@ public class BoardController {
   }
 
   @GetMapping("/boards/{boardId}")
-  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
+  public String content(@PathVariable("boardId") Long boardId, Model model) {
+    log.info("board id : {}", boardId);
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,

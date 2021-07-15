@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <style type="text/css">
-    /*@import url('@{/common.css}');*/
+    @import url('/css/common.css');
 
     .register_wrap {
       width: 1000px;
@@ -554,7 +554,7 @@
               if (res.data.code === 200) {
                 if (info['ispanel']) {
                   alert('패널 가입을 위해서는 추가정보가 필요합니다.')
-                  location.replace('/panel')
+                  location.replace('/panelagreement')
                 } else {
                   alert('일반 유저 가입 성공!')
                   location.replace('/')

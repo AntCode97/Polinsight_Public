@@ -36,24 +36,23 @@ public class PageController {
   @GetMapping("/findpwd")
   public ModelAndView findpassword() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("findpwd");
+    mv.setViewName("member/findpwd");
     return mv;
   }
 
   @GetMapping("/login")
   public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("login");
+    mv.setViewName("member/login");
     return mv;
   }
 
   @GetMapping("/join")
   public ModelAndView signUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("basicsignup");
+    mv.setViewName("member/basicsignup");
     return mv;
   }
-
 
 
   @GetMapping("/signup")
@@ -61,7 +60,7 @@ public class PageController {
     ModelAndView mv = new ModelAndView();
     try {
       mv.addObject("terms", service.getTerms());
-      mv.setViewName("signupterms");
+      mv.setViewName("member/signupterms");
     } catch (IOException e) {
       mv.setViewName("5xx");
     }
@@ -71,7 +70,7 @@ public class PageController {
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("panel");
+    mv.setViewName("member/panel");
     return mv;
   }
 
@@ -80,6 +79,11 @@ public class PageController {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("denied");
     return mv;
+  }
+
+  @GetMapping("/panelagreement")
+  public ModelAndView panelAgreement(){
+    return new ModelAndView("member/panelagree");
   }
 
 }
