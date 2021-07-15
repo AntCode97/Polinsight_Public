@@ -176,21 +176,21 @@
     <div class="button">
       <form th:action="@{/boards/search}" th:object="${boardSearch}" method="get">
 
-        <select th:field="*{boardType}" class="select">
+        <select th:field="*{boardType}" class="select" name="classify" id="classify">
           <optgroup label="분류 선택">
-            <option value="NOTICE">공지</option>
+            <option selected value="NOTICE">공지</option>
             <option value="EVENT">이벤트</option>
           </optgroup>
         </select>
 
-        <select th:field="*{searchType}" name="search_item" class="select">
+        <select th:field="*{searchType}" name="search_item" class="select" id="type">
           <optgroup label="통합검색">
-            <option th:value="TITLE" th:text="제목"></option>
+            <option selected th:value="TITLE" th:text="제목"></option>
             <option th:value="CONTENT" th:text="내용"></option>
           </optgroup>
         </select>
-        <input th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
-        <input type="submit" name="submit_OK" value="검색하기" class="btn-search">
+        <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
+        <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
       </form>
     </div>
 
@@ -292,7 +292,74 @@
   <!--                </a>-->
   <!--            </li>-->
   <!--        </ul>-->
-
-
 </div>
 </body>
+<script>
+  const makeTemplate = (board) => {
+    console.log(board)
+    let template = '';
+    template += '<tr class="first">'
+    template += '<td width="50">' + board.id + '</td>'
+    template += '<td width="950">'
+    template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
+    if (board.newBoard === true)
+      template += '<span>New!</span>'
+    template += '</td>'
+    template += '<td width="80">' + board.user.name + '</td>'
+    template += '<td width="120">' + board.registeredAt + '</td>'
+    template += '</tr>'
+    return template
+  }
+
+  const asyncFindBoard = (e) => {
+    e.preventDefault();
+    e.returnValue = false;
+    const searchType = $("#type").val()
+    const classify = $('#classify').val()
+    const keyword = $("#searchinput").val()
+    console.log(searchType)
+    console.log(classify)
+    // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
+    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+            .then(res => {
+              const boards = res.data.data
+              const body = $('tbody')
+              body.empty()
+              for (idx in boards) {
+                body.append(makeTemplate(boards[idx]))
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  }
+
+
+  $("#submit_OK").on('click', function (e){
+    e.preventDefault();
+    e.returnValue = false;
+    const searchType = $("#type").val()
+    const classify = $('#classify').val()
+    const keyword = $("#searchinput").val()
+    console.log(searchType)
+    console.log(classify)
+    // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
+    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+            .then(res => {
+              const boards = res.data.data
+              const body = $('tbody')
+              body.empty()
+              for (idx in boards) {
+                body.append(makeTemplate(boards[idx]))
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })});
+
+
+  // $(function () {
+  //   $("#searchinput").on('change keyup', asyncFindBoard)
+  // })
+</script>
+</html>

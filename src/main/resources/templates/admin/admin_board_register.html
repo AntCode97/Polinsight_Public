@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style type="text/css">
+      @import url('common.css');
+      .admin_wrap {
+        position: relative;
+        top: 0;
+        height: 100vh;
+        color: #3c4858;
+      }
+
+      .admin_sidebar, .admin_sidebar_wrap, .admin_main{
+        transition-property: top, bottom, width;
+        transition-duration: .2s, .2s, .35s;
+        transition-timing-function: linear, linear, ease;
+      }
+
+      .admin_sidebar {
+        background-color: #191919;
+        height: 100%;
+        max-height: 100%;
+
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        width: 260px;
+        box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      }
+      .admin_logo {
+        padding: 15px 0;
+        margin: 0;
+        display: block;
+        position: relative;
+        z-index: 4;
+      }
+      .admin_logo:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 15px;
+        height: 1px;
+        width: calc(100% - 30px);
+        background-color: hsla(0, 0%, 71%, .3);
+      }
+      .logo-mini {
+        color: white;
+        transition: all .3s linear;
+
+        opacity: 1;
+        float: left;
+        width: 30px;
+        text-align: center;
+        margin-left: 23px;
+        margin-right: 15px;
+      }
+      .simple-text {
+        text-transform: uppercase;
+        padding: 5px 0;
+        display: inline-block;
+        font-size: 18px;
+        white-space: nowrap;
+        font-weight: 400;
+        line-height: 30px;
+        overflow: hidden;
+      }
+      .logo-normal {
+        display: block;
+        opacity: 1;
+        transform: translateZ(0);
+        color: white;
+      }
+      .admin_sidebar_wrap {
+        position: relative;
+        height: calc(100vh - 75px);
+        width: 260px;
+        z-index: 4;
+        padding-bottom: 30px;
+      }
+      .ps {
+        overflow: hidden!important;
+        overflow-anchor: none;
+        touch-action: auto;
+      }
+      .admin_user {
+        padding-bottom: 20px;
+        margin: 20px auto 0;
+        position: relative;
+      }
+      .admin_user_photo {
+        width: 34px;
+        height: 34px;
+        overflow: hidden;
+        float: left;
+        z-index: 5;
+        margin-right: 11px;
+        border-radius: 50%;
+        margin-left: 23px;
+        box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      }
+      .user-info > a {
+        color: white;
+        font-size: 14px;
+        line-height: 18px;
+        display: block;
+        padding: 8px 15px;
+        white-space: nowrap;
+      }
+      .username {
+        display: block;
+        line-height: 18px;
+        font-size: 14px;
+      }
+      .admin_user:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 15px;
+        height: 1px;
+        width: calc(100% - 30px);
+        background-color: hsla(0, 0%, 71%, .3);
+      }
+      .admin_nav {
+        margin-top: 15px;
+        display: block;
+        flex-wrap: wrap;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+      }
+      .nav_link {
+        color: white;
+        margin: 10px 15px 0;
+        border-radius: 3px;
+        padding: .5rem 10px;
+        text-transform: capitalize;
+        font-size: 13px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        transition: all .15s ease-in;
+      }
+      .nav_link > i {
+        font-size: 20px;
+        margin-right: 15px;
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+        vertical-align: middle;
+      }
+      .nav_link > p {
+        width: 100%;
+        margin: 0;
+        line-height: 30px;
+        font-size: 14px;
+        position: relative;
+        display: block;
+        height: auto;
+        white-space: nowrap;
+      }
+      .nav-item:hover > a {
+        background-color: hsla(0, 0%, 78%, .2);
+        box-shadow: none;
+      }
+      .nav_link > p > i {
+        position: absolute;
+        right: 6px;
+        vertical-align: middle;
+        line-height: 30px;
+      }
+      .nav_dropdown {
+        padding-left: 40px;
+      }
+      .collapse-show {
+        height: 0;
+        overflow: hidden;
+      }
+      .admin_main {
+        height: 100%;
+        max-height: 100%;
+        width: calc(100% - 260px);
+        float: right;
+        position: relative;
+      }
+      .admin_main_header {
+        width: 100%;
+        background-color: white;
+        height: 51px;
+        border-bottom: 1px solid #DDDDDD;
+        box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+      .admin_main_contents {
+        height: 100%;
+        background-color: #fafafa;
+      }
+      .contents_title {
+        font-size: 1rem;
+      }
+      .right_menu > ul{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .right_menu > ul > li {
+        position: relative;
+      }
+      a.header_menu_item {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 20px;
+        cursor: pointer;
+        border-radius: 50%;
+        border: 1.5px solid transparent;
+      }
+      .right_menu > ul > li:hover > a {
+        border: 1.5px solid #dddddd;
+        box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+      }
+      .right_menu > ul > li:hover > .dropdown_user {
+        display: block;
+      }
+      .header_menu_item > i {
+        font-size: 15px;
+      }
+      .dropdown_user {
+        position: absolute;
+        right: 0;
+        background-color: white;
+        width: 160px;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
+        border: 1.5px solid #dddddd;
+        padding: 5px 0;
+        z-index: 9999;
+        display: none;
+      }
+      .dropdown_user > a {
+        margin: 0 5px;
+        padding: 10px 24px;
+        display: block;
+        border-radius: 2px;
+      }
+      .dropdown_user > a:hover {
+        color: white;
+        background-color: #3885CA;
+        box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
+      }
+      .admin_main_contents {
+        width: 100%;
+        padding: 20px 40px 40px;
+      }
+      .contents_title > a > i {
+        font-size: .9rem;
+        margin-right: 5px;
+      }
+      .contents_title > a {
+        position: relative;
+      }
+      .next-link{padding-left: 20px;}
+      .next-link::before {
+        content: '';
+        background-image: url('imgs/dot_depth.gif');
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        width: 10px;
+        height: 15px;
+      }
+
+      /* 여기까지 전체적인 레이아웃 */
+      /* 게시글판 디자인 */
+      /* 여기까지 전체적인 레이아웃 */
+      .main_item {
+        color: #000;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 10px 0 20px;
+        border-bottom: 1px dashed #dadada;
+      }
+
+      #metop_container {
+          justify-content: center;
+          align-items: center;
+      }
+      .metop_board_card {
+          width: 100%;
+          margin: 30px 0;
+          padding: 40px 30px 20px 30px;
+          border-radius: 2px;
+          background: white;
+          border-top: 3px solid mediumseagreen;
+          box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
+          0 3px 1px -2px rgba(0,0,0,.2),
+          0 1px 5px 0 rgba(0,0,0,.12);
+          position: relative;
+      }
+      /* 카드 제목 */
+      .register_top_wrap {
+          border-top: 2px solid #7c7c7c;
+      }
+      .register_bottom_wrap {
+          border-top: 1px solid #dadada;
+      }
+      .input_wrap {
+          align-items: center;
+          margin-bottom: 15px;
+      }
+      .uploadedList {
+          padding: 15px 0px 0px 0px;
+          display: flex;
+      }
+      .uploadedList  > li {
+          border-radius: 2px;
+          margin-right: 5px;
+          box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+      }
+      .board_div {
+          width: 100%;
+          height: 100%;
+          background-color: #eee;
+          border-bottom: 1px solid #dadada;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+      }
+      /* 작성자 */
+
+      .board_div b {
+          font-size: 16px;
+      }
+      .board_div > span {
+          font-size: 14px;
+      }
+
+      .board_span {
+          display: block;
+          overflow: hidden;
+          padding: 9px 20px;
+          flex: 7;
+          background-color: #fff;
+      }
+      .board_writer {
+          display: inline-block;
+          font-size: 16px;
+          line-height: 30px;
+      }
+      .board_type > option {
+          cursor: pointer;
+      }
+      .board_input {
+          width: 100%;
+          border: 1px solid #dadada;
+          font-size: 15px;
+          outline: none;
+          height: 30px;
+      }
+      .board_content {
+          width: 100%;
+          height: 300px;
+          border: 1px solid #dadada;
+          outline: none;
+          resize: none;
+          font-size: 14px;
+      }
+      .textarea_div {
+          align-items: flex-start;
+      }
+      .textarea_div > label {
+          margin-top: 10px;
+      }
+      .form-group > label {
+          margin-top: 10px;
+      }
+      .form-group .board_div{
+          border: 1.5px dashed #dadada;
+          text-align: center;
+          height: 150px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #515151;
+          font-size: 15px;
+      }
+      /* 등록/취소 버튼 */
+      .btn_wrap {
+          border: 0;
+          border-radius: 0;
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 15px 10px 15px;
+          background-color: #fff;
+      }
+      .insert_btn { margin-right: -15px; width: 80px;}
+      .cancel_btn { margin-left: -15px; width: 80px;}
+
+      .board_content_wrap {
+          width: 100%;
+          height: 100%;
+      }
+      div#smart_editor2 {
+          width: 1040px!important;
+      }
+      .err_msg_wrap {
+          text-align: left;
+          display: none;
+      }
+      .err_msg {
+          color: #d95339;
+          font-size: 14px;
+          display: block;
+      }
+      .board_div > label {
+          position: relative;
+          padding-left: 30px;
+          padding: 9px 15px 9px 25px;
+          background-color: #eee;
+          width: 150px;
+          font-size: 16px;
+          display: block;
+          line-height: 30px;
+      }
+
+      .board_div > label > span {
+          position: absolute;
+          color: #d95339;
+          font-size: 20px;
+          left: 10px;
+          top: 9px;
+      }
+      #board_writer {
+          width: 150px;
+      }
+
+      .size_limit_msg {
+          color: #999;
+      }
+      .file_wrap {
+        border: 1px solid #dadada;
+      }
+      .file_item > label {
+        display: block;
+        width: 100px;
+        text-align: center;
+      }
+      .file_item > div {
+        padding: 9px 10px;
+        background-color: #fff;
+        flex: 7;
+        display: flex;
+        align-items: center;
+      }
+      .file_item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: #eee;
+      }
+      .btn-add, .btn-remove {
+        cursor: pointer;
+        width: 60px;
+        outline: none;
+        padding: 5px 7px;
+        margin-right: 5px;
+      }
+      .btn-remove {
+        border: 1px solid tomato;
+        background-color: #fff;
+        color: tomato;
+      }
+      .other_file_item {border-top: 1px solid #dadada;}
+      .board_select {width: 150px; cursor: pointer; }
+      .board_file {cursor: pointer;}
+    </style>
+  </head>
+  <body>
+    <div class="admin_wrap">
+      <!-- 관리자페이지 사이드바 -->
+      <div class="admin_sidebar ps">
+        <!-- 사이드바 로고 -->
+        <div class="admin_logo">
+          <a href="/" class="simple-text logo-mini">CC</a>
+          <a href="/" class="simple-text logo-normal">POLINSIGHT</a>
+        </div>
+
+        <div class="admin_sidebar_wrap ps">
+          <!-- 관리자 계정 정보 -->
+          <div class="admin_user">
+            <div class="admin_user_photo">
+              <img src="circle_loppy.png" alt="user_img" style="width: 100%;"/>
+            </div>
+            <div class="user-info">
+              <a class="username">
+                <span>관리자 </span>
+              </a>
+            </div>
+          </div>
+          <!-- 네비게이션 -->
+          <ul class="admin_nav">
+            <li class="nav-item nav_action">
+              <a href="#" class="nav_link">
+                <i class="fas fa-th-large"></i>
+                <p>대시보드</p>
+              </a>
+            </li>
+
+            <li class="nav-item nav_action">
+              <a href="#" class="nav_link">
+                <i class="fas fa-user-friends"></i>
+                <p>
+                  회원관리
+                  <i class="fas fa-caret-down arrow"></i>
+                </p>
+              </a>
+            </li>
+            <div class="collapse-show">
+                <ul class="admin_nav">
+                  <li class="nav-item">
+                    <a href="#" class="nav_link">
+                      <p class="nav_dropdown">회원목록</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav_link">
+                      <p class="nav_dropdown">이메일보내기</p>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+
+            <li class="nav-item nav_action">
+              <a href="#" class="nav_link">
+                <i class="fas fa-clipboard-list"></i>
+                <p>
+                  게시글관리
+                  <i class="fas fa-caret-down arrow"></i>
+                </p>
+              </a>
+            </li>
+            <div class="collapse-show">
+                <ul class="admin_nav">
+                  <li class="nav-item">
+                    <a href="#" class="nav_link">
+                      <p class="nav_dropdown">공지사항</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav_link">
+                      <p class="nav_dropdown">자료실</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav_link">
+                      <p class="nav_dropdown">Q&A</p>
+                    </a>
+                  </li>
+                </ul>
+            </div>
+
+            <li class="nav-item nav_action">
+              <a href="#" class="nav_link">
+                <i class="fas fa-door-open"></i>
+                <p>EXIT</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
+      <div class="admin_main ps">
+        <div class="admin_main_header">
+          <div class="contents_title">
+            <a href="#"><i class="fas fa-user-lock"></i> Admin</a>
+            <a href="#" class="next-link">게시글관리</a>
+            <a href="#" class="next-link">공지사항</a>
+          </div>
+
+          <div class="right_menu">
+            <ul>
+              <li>
+                <a class="header_menu_item"><i class="fas fa-user"></i></a>
+                <div class="dropdown_user">
+                  <a href="">정보수정</a>
+                  <a href="/dologout">로그아웃</a>
+                </div>
+              </li>
+              <li>
+                <a href="/" class="header_menu_item"><i class="fas fa-door-open"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="admin_main_contents">
+          <div class="admin_main_contents_category">
+            <div class="admin_main_contents_item">
+              <p class="main_item">공지사항</p>
+            </div>
+          </div>
+
+          <section>
+            <div id="metop_container">
+                <div class="metop_inner">
+                    <div class="metop_board_wrap">
+                        <div class="metop_board_card">
+                            <form id="frm_board" th:action="@{/admin2/boards/new}" th:object="${boardDTO}" method="POST" enctype="multipart/form-data">
+                                <div class="input_wrap register_top_wrap">
+                                    <div class="board_div">
+                                        <label for="board_title"><span>*</span>게시판</label>
+                                        <span class="board_span">
+                                          <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{boardType}" autofocus required>
+                                            <option value="none">선택</option>
+                                            <option value="NOTICE">공지사항</option>
+                                            <option value="EVENT">자료실</option>
+                                          </select>
+                                          <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후 변경이 불가능합니다.)</span>
+                                          <div class="err_msg_wrap err_title"><span class="err_msg">게시판 타입을 선택해주세요.:(</span></div>
+                                        </span>
+                                    </div>
+                                    <div class="board_div">
+                                        <label for="board_title"><span>*</span>제목</label>
+                                        <span class="board_span">
+                      										<input type="text" class="board_input focus_input" name="title" id="board_title" th:field="*{title}" required />
+                                          <div class="err_msg_wrap err_title"><span class="err_msg">제목을 입력해주세요:(</span></div>
+                      									</span>
+                                    </div>
+                                    <div class="board_div" id="writer_div">
+                                        <label for="board_title"><span>*</span>작성자</label>
+                                        <span  class="board_span">
+                                          <input type="text" class="board_input board_writer" name="writer" id="board_writer" value="관리자" readonly />
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- 게시글 내용 등록(스마트에디터) -->
+                                <div class="input_wrap textarea_div">
+                                    <div class="board_content_wrap">
+                                        <textarea id="board_content" name="viewcontent" class="board_content focus_input" th:field="*{content}" style="width: 100%;"></textarea>
+                                        <div class="err_msg_wrap err_info"><span class="err_msg">내용을 입력해주세요:(</span></div>
+                                    </div>
+                                </div>
+
+                                <!-- 게시글 첨부파일 등록 -->
+                                <div class="input_wrap register_bottom_wrap">
+                                    <div class="board_div">
+                                        <label for="board_title">파일첨부</label>
+                                        <div class="board_span">
+                                          <div class="file_wrap">
+                                            <div class="file_item">
+                                              <label for="">첨부파일#1</label>
+                                              <div class="">
+                                                <input type="file" class="board_file" name="file" th:field="*{files}" />
+                                                <button type="button" class="btn-add btn-basic">+ 추가</button>
+                                                <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(업로드 허용용량은 100MB입니다)</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                      									</div>
+                                    </div>
+
+                                </div>
+
+                                <!-- 취소 & 등록 버튼 -->
+                                <div class="input_wrap">
+                                    <div class="board_div btn_wrap">
+                  										<span>
+                  											<button type="button" class="btn btn-basic cancel_btn">취소</button>
+                  										</span>
+
+                                    </div>
+
+                                </div>
+                                <span>
+                  											<button type="button" class="btn btn-green insert_btn"
+                                                                    onclick="document.getElementById('frm_board').submit();"
+                                                            >등록</button>
+                  										</span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    $(function() {
+      $('.nav_action').click(function() {
+        var value = $(this).find('.arrow').attr('class');
+        if(value == 'fas fa-caret-down arrow') {
+          $(this).next('div').css('height', '100%');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
+        }else if(value == 'fas fa-caret-up arrow') {
+          $(this).next('div').css('height', '0');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
+        }
+      });
+
+      $('.btn-add').click(function() {
+        var filecnt = $('.file_item').length;
+        var html = '<div class="file_item other_file_item">' +
+                     '<label for="">첨부파일#'+ (filecnt+1) +'</label>' +
+                     '<div class="">' +
+                       '<input type="file" class="board_file" name="file" />' +
+                       '<button type="button" class="btn-remove" data-num="'+ (filecnt+1) +'">- 제거</button>' +
+                       '<span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(업로드 허용용량은 100MB입니다)</span>' +
+                     '</div>' +
+                   '</div>';
+        $('.file_wrap').append(html);
+      });
+    });
+    $(document).on('click', '.btn-remove', function(){
+      var num = $(this).attr('data-num');
+      $('.file_item').eq(num-1).css('border', 'none').empty();
+    });
+  </script>
+</html>
