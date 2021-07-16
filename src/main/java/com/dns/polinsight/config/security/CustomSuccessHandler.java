@@ -34,7 +34,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     session.setAttribute("email", authentication.getPrincipal()); // 사용자 정보 세션에 저장
     session.setMaxInactiveInterval(5 * 60); // 세션 만료시간 5분
     response.setStatus(HttpStatus.OK.value());
-    session.setAttribute("user", new SessionUser(repository.findUserByEmail(authentication.getName()).get()));
+    SessionUser sessionUser = new SessionUser(repository.findUserByEmail(authentication.getName()).get());
+    System.out.println("----------------------------------------------------------");
+    System.out.println(sessionUser.toString());
+    System.out.println("----------------------------------------------------------");
+    session.setAttribute("user", sessionUser);
     response.sendRedirect("/");
   }
 
