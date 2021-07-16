@@ -3,7 +3,7 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Board;
-import com.dns.polinsight.domain.BoardDTO;
+import com.dns.polinsight.domain.dto.BoardDTO;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.BoardSearch;
 import com.dns.polinsight.service.AttachService;

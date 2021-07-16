@@ -3,7 +3,7 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Additional;
-import com.dns.polinsight.domain.SignupDTO;
+import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.repository.ChangePwdRepository;

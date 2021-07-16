@@ -1,7 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
-import com.dns.polinsight.domain.BoardDTO;
+import com.dns.polinsight.domain.dto.BoardDTO;
 
 import java.io.File;
 import java.util.List;

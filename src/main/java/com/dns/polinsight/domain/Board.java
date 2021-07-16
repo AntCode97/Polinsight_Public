@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.BoardDTO;
 import com.dns.polinsight.types.BoardType;
 import lombok.*;
 

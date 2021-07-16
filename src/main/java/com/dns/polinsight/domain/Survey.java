@@ -2,8 +2,6 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
@@ -17,10 +15,15 @@ public class Survey implements Serializable {
   private static final long serialVersionUID = -4701183897615758658L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private String id;
 
   private Long surveyId;
+
+  private String title;
+
+  private String nickname;
+
+  private String href;
 
   /*
    * 설문 완료시 지급할 포인트 수치

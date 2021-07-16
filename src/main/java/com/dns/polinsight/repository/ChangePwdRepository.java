@@ -1,6 +1,6 @@
 package com.dns.polinsight.repository;
 
-import com.dns.polinsight.domain.ChangePwdDto;
+import com.dns.polinsight.domain.dto.ChangePwdDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +33,7 @@ public class SurveyController {
   @GetMapping("/surveys")
   public ModelAndView getSurveyById(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView();
-    Long id = Long.parseLong(request.getParameter("surveyId"));
+    String id = request.getParameter("surveyId");
     mv.setViewName("");
     mv.addObject("survey", surveyService.findById(Survey.builder()
                                                         .id(id)
@@ -80,8 +77,23 @@ public class SurveyController {
   public ResponseEntity<Map<String, Object>> surveySyncWithSM() {
     Map<String, Object> map = new HashMap<>();
     try {
-      surveyService.getSurveysWithSchedular();
-      map.put("data", "sync success");
+      map.put("data", surveyService.getSurveyListAndSyncWithScheduler());
+      map.put("msg", "sync and save success");
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @PutMapping("/survey")
+  public ResponseEntity<Map<String, Object>> surveyInfoUpdate(Survey survey) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      surveyService.update(survey);
+      map.put("data", "");
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();

@@ -1,5 +1,7 @@
-package com.dns.polinsight.domain;
+package com.dns.polinsight.domain.dto;
 
+import com.dns.polinsight.domain.Attach;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.BoardType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
