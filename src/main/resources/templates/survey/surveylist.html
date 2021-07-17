@@ -1,117 +1,104 @@
-<!DOCTYPE html>
-<th:block th:include="module/common" />
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <style>
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
+<th:block>
+  <div class="main_survey_list_wrap">
+    <div class="main_survey_list_title">
+      <p>진행중인 <span class="pol_color">온라인조사</span></p>
+      <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
+    </div>
+    <div class="search_survey_wrap">
+      <div>
 
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
-    .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-    }
-
-    .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
-    }
-
-    .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .survey_run {
-      color: #4C99CF;
-    }
-
-    .survey_stop {
-      color: #000;
-    }
-  </style>
-</head>
-<body>
-<div class="main_survey_list_wrap">
-  <div class="main_survey_list_title">
-    <p>진행중인 <span class="pol_color">온라인조사</span></p>
-    <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
+        <select name="survey_search_option" id="survey_search_option">
+          <option value="title" selected>제목</option>
+          <option value="point">포인트</option>
+          <!--          <option value="end_date">종료일</option>-->
+        </select>
+      </div>
+      <div class="search_input_wrap">
+        <input name="searchInput" placeholder="설문 제목으로 검색" type="text">
+      </div>
+      <div class="search_btn_wrap">
+        <button id="survey_search_btn" value="">🔍찾기</button>
+      </div>
+    </div>
     <div class="main_survey_box">
-
     </div>
   </div>
-</div>
-</body>
-<script>
-  const makeSurveyCard = (survey) => {
-    let template = '<div class=\"main_survey_item bg_color_item_white\">';
-    if (survey.isRun)
-      template += '<p className="survey_run">진행중</p>'
-    else
-      template += '<p className="survey_stop">조사완료</p>'
-    template += '<p className="survey_title">' + survey.title + '</p>'
-    template += '<p className="survey_point">' + survey.point + 'P 지급</p>'
-    template += '<p className="survey_date">~ ' + survey.enddate + '</p>'
-    template += '</div>'
-    return template;
-  }
-  const getSurveyList = () => {
-    axios.get('')
-        .then(res => {
-          console.log(res)
-          if (res.data.code === 200) {
-            //  리스트 업데이트
+  </body>
+  <script>
+
+    const makeSurveyCard = (survey) => {
+      let template = ""
+      if (survey.isRun) {
+        template += '<div class=\"main_survey_item bg_color_item_white\">';
+        template += '<p class="survey_run">진행중</p>'
+      } else {
+        template += '<div class="main_survey_item bg_color_item_gray">';
+        template += '<p class="survey_stop">조사완료</p>'
+      }
+      template += '<p class="survey_title">' + survey.title + '</p>'
+      template += '<p class="survey_point">' + !survey.point ? `지정 안됨</p>` : `${survey.point}+ P</p>`
+      template += '<p class="survey_date">' + !survey.endAt ? `지정 안됨</p>` : `~ ${survey.endAt}</p>`
+      template += '</div>'
+      return template;
+    }
+    const makeSurveyCardList = (surveyList) => {
+      const survey_box = $(".main_survey_box");
+      let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
+      survey_box.append('<div class="main_survey_item_wrap"></div>')
+      for (idx in surveyList) {
+        if (idx % 3 !== 0) {
+          item_wrap.append(makeSurveyCard(surveyList[idx]))
+        } else {
+          survey_box.append('<div class="main_survey_item_wrap"></div>')
+          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
+          item_wrap.append(makeSurveyCard(surveyList[idx]))
+        }
+      }
+    }
+
+    const getSurveyList = () => {
+      axios.get('/api/surveys')
+          .then(res => {
+            if (res.data.data !== null) {
+              surveys = res.data.data
+              makeSurveyCardList(surveys)
+            }
+          })
+          .catch(err => console.log(err))
+    }
+
+
+    const asyncSurveySearch = () => {
+      // 서베이 요소 비우기
+      const survey_box = $('.main_survey_box')
+      const input = $('input[name=searchInput]')
+      survey_box.empty()
+      // 검색 타입 가져오기
+      const searchType = $('.survey_search_option').val()
+      if (!input) {
+        // 아무것도 입력이 없을 때
+        makeSurveyCardList(surveys)
+      } else {
+        const filteredSurveys = surveys.filter(s => {
+          if (searchType === 'title') {
+            return s.title.match(input.val())
+          } else if (searchType === 'point') {
+            return s.point >= (input.val() * 1)
+          } else if (searchType === 'end_date') {
           }
         })
-        .catch(err => console.log(err))
-  }
 
-  const cardClickEventHandler = (e) => {
+        makeSurveyCardList(filteredSurveys)
+      }
+    }
 
-  }
+    const cardClickEventHandler = (e) => {
 
-  $(function () {
-    getSurveyList();
-  })
-</script>
-</html>
+    }
+
+    $(function () {
+      getSurveyList();
+      // $('input[name=searchInput]').on('change', asyncSurveySearch)
+    })
+  </script>
+</th:block>

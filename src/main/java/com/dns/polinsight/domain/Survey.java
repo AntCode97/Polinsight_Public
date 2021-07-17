@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +25,14 @@ public class Survey implements Serializable {
   private String nickname;
 
   private String href;
+
+  private LocalDateTime createdAt;
+
+  private LocalDateTime modifiedAt;
+
+  private LocalDateTime endAt;
+
+  private String preview;
 
   /*
    * 설문 완료시 지급할 포인트 수치

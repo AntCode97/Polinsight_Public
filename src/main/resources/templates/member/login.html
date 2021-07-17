@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        crossorigin="anonymous">
-  <style type="text/css">
-    @import url("@{/css/common.css}");
+  <style>
+    /*@import url("@{/css/common.css}");*/
     /* 모달 로그인 창 */
     .modal_wrap {
       height: 100vh;

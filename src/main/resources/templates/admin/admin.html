@@ -5,7 +5,11 @@
   <title>Title</title>
 </head>
 <body>
+<th:block th:include="admin/admin_sidebar" />
 <h1>Admin Page</h1>
+<button id="syncSurveyList">서베이몽키와 동기화</button>
+<button id="getExcelBtn">서베이몽키와 동기화</button>
+
 </body>
 <script>
   const syncSurveyList = () => {
@@ -15,7 +19,7 @@
   }
 
   const updateUserPoints = () => {
-
+    const checkedUpdateUser = $("input[name=check]:checked")
   }
 
   const getDataAsExcel = () => {
@@ -44,5 +48,10 @@
   const successPointPayment = () => {
 
   }
+
+  $(function () {
+    $("#syncSurveyList").on('click', syncSurveyList)
+    $("#getExcelBtn").on('click', getDataAsExcel)
+  })
 </script>
 </html>

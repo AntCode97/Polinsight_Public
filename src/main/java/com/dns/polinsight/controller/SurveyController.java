@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +35,22 @@ public class SurveyController {
     mv.addObject("survey", surveyService.findById(Survey.builder()
                                                         .id(id)
                                                         .build()));
-
     return mv;
+  }
+
+  @GetMapping("/api/surveys")
+  public ResponseEntity<Map<String, Object>> getAllSurveys() {
+    Map<String, Object> map = new HashMap<>();
+
+    try {
+      map.put("data", surveyService.findAll());
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
   }
 
   /*
@@ -50,19 +61,6 @@ public class SurveyController {
     /*
      * 해시 발급 등 유저 맞춤 데이터 생성
      * */
-  }
-
-  /*
-   * 서베이몽키에서 데이터를 파싱해 보여줌
-   * 서베이 몽키에서 작성한 설문 리스트
-   * */
-  public ResponseEntity<Map<String, Object>> getSurveyListFromSM(HttpSession session, String requestURL) throws MalformedURLException, URISyntaxException {
-    Map<String, Object> map = new HashMap<>();
-    List<Survey> surveys = null;
-    //    session.setAttribute("survyes", );
-    map.put("data", surveys);
-    //    mv.setViewName("survey/surveylist");
-    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/survey/point/{survey_id}")
@@ -78,6 +76,7 @@ public class SurveyController {
     Map<String, Object> map = new HashMap<>();
     try {
       map.put("data", surveyService.getSurveyListAndSyncWithScheduler());
+      map.put("code", 200);
       map.put("msg", "sync and save success");
       map.put("error", null);
     } catch (Exception e) {
@@ -88,10 +87,15 @@ public class SurveyController {
     return ResponseEntity.ok(map);
   }
 
+  /*
+   * 서베이 수정
+   * TODO: 2021/07/17
+   * */
   @PutMapping("/survey")
   public ResponseEntity<Map<String, Object>> surveyInfoUpdate(Survey survey) {
     Map<String, Object> map = new HashMap<>();
     try {
+      survey = surveyService.findById(survey);
       surveyService.update(survey);
       map.put("data", "");
       map.put("error", null);
