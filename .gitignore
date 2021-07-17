@@ -455,3 +455,4 @@ application-dev.yaml
 
 
 # End of https://www.toptal.com/developers/gitignore/api/java,java-web,code-java,intellij,intellij+iml,intellij+all,eclipse,maven,gradle,windows,linux,macos,git
+/.gradle/
