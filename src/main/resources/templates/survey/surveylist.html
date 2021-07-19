@@ -61,7 +61,11 @@
           .then(res => {
             if (res.data.data !== null) {
               surveys = res.data.data
-              makeSurveyCardList(surveys)
+              if (surveys.length > 0) {
+                makeSurveyCardList(surveys)
+              } else {
+
+              }
             }
           })
           .catch(err => console.log(err))
