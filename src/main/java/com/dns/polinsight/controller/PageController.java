@@ -77,12 +77,12 @@ public class PageController {
   @GetMapping("/denied")
   public ModelAndView deniedHandler() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("denied");
+    mv.setViewName("error/denied");
     return mv;
   }
 
   @GetMapping("/panelagreement")
-  public ModelAndView panelAgreement(){
+  public ModelAndView panelAgreement() {
     return new ModelAndView("member/pagree");
   }
 

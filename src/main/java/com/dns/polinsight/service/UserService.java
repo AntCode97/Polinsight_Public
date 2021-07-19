@@ -22,14 +22,13 @@ public interface UserService extends UserDetailsService {
   User findUserByEmail(User user);
 
 
-//  /*
-//   * 이메일, 이름만 넘어옴
-//   * */
-//  @Transactional
-//  User changeUserPassword(String email, String newPassword);
+  //  /*
+  //   * 이메일, 이름만 넘어옴
+  //   * */
+  //  @Transactional
+  //  User changeUserPassword(String email, String newPassword);
 
-  void sendEmail();
 
-  String getHash(String email, String username) throws NoSuchAlgorithmException;
+  String makeHashForChangePassword(String email, String username) throws NoSuchAlgorithmException;
 
 }
