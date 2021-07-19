@@ -82,18 +82,15 @@ public class UserServiceImpl implements UserService {
   //  }
 
   @Override
-  public void sendEmail() {
-
-  }
-
-  @Override
-  public String getHash(String email, String username) throws NoSuchAlgorithmException {
+  public String makeHashForChangePassword(String email, String username) throws NoSuchAlgorithmException {
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     digest.reset();
     digest.update(salt.getBytes(StandardCharsets.UTF_8));
     digest.update(email.getBytes(StandardCharsets.UTF_8));
     digest.update(username.getBytes(StandardCharsets.UTF_8));
-    return String.format("%0128x", new BigInteger(1, digest.digest()));
+    String createdHash = String.format("%0128x", new BigInteger(1, digest.digest()));
+
+    return createdHash;
   }
 
 }

@@ -78,10 +78,10 @@ spring :
     type : redis
 
   mail :
-    host :  # smtp address
-    port :  # smtp port
-    username :  # smtp 등록 계정
-    password :  # smtp 등록 계정의 패스워드
+    host :     smtp.gmail.com # smtp address
+    port :     587 # smtp port
+    username : jnudnslab@gmail.com # smtp 등록 계정
+    password : dnslab@3438 # smtp 등록 계정의 패스워드
     properties :
       mail :
         smtp :
@@ -114,7 +114,7 @@ custom :
       - favicon.ico
 
     admin :
-#      - /admin/**
+    #      - /admin/**
 
     template :
       - /
@@ -143,10 +143,12 @@ custom :
       - /panelagreement
       - /surveys/**
       - /admin/**
+      - /test/**
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
-
+  callback :
+    base : "http://localhost:8080/"
 
 management :
   endpoints :

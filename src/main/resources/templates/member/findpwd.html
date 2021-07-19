@@ -63,7 +63,7 @@
 <div class="modal_wrap">
   <div class="modal_content">
     <div class="modal_login">
-      <form action="/findpwd" method="post">
+      <form th:action="@{/findpwd}" method="POST">
         <div class="input_div">
           <label for="input_email">
             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
@@ -79,7 +79,7 @@
         </div>
         <div class="modal_btn_wrap">
           <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
-          <button id="submit_btn" class="modal_btn btn-primary btn-effect" th:onclick="alert('이메일로 확인코드를 전송하였습니다. 확인해주세요.')">
+          <button id="submit_btn" class="modal_btn btn-primary btn-effect">
             &nbsp;<i class="fas fa-search">찾기</i>
           </button>
         </div>
@@ -116,7 +116,7 @@
     $("#input_email").on("change keydown keyup paste", emailChecker);
 
     $("#submit_btn").on('click', () => {
-      alert('패스워드 변경을 위한 이메일을 보냈습니다.\n확인 해주세요.')
+      alert('등록하신 이메일로 패스워드 변경을 위한 이메일을 보냈습니다.\n확인 해주세요.')
     })
   })
 </script>
