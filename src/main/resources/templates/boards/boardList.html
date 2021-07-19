@@ -247,9 +247,11 @@
       <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
     </a>
 
-    <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
-       th:href="@{/boards(page=${page})}"></a>
 
+    <a th:if="${boardSearch.getBoardType()} !=null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+       th:href="@{/boards/search(page=${page}-1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>
+    <a th:if="${boardSearch.getBoardType()} ==null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+       th:href="@{/boards(page=${page})}"></a>
 
     <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
       <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
@@ -317,8 +319,7 @@
     const searchType = $("#type").val()
     const classify = $('#classify').val()
     const keyword = $("#searchinput").val()
-    console.log(searchType)
-    console.log(classify)
+
     // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
     axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
             .then(res => {
@@ -335,31 +336,12 @@
   }
 
 
-  $("#submit_OK").on('click', function (e){
-    e.preventDefault();
-    e.returnValue = false;
-    const searchType = $("#type").val()
-    const classify = $('#classify').val()
-    const keyword = $("#searchinput").val()
-    console.log(searchType)
-    console.log(classify)
-    // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
-    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
-            .then(res => {
-              const boards = res.data.data
-              const body = $('tbody')
-              body.empty()
-              for (idx in boards) {
-                body.append(makeTemplate(boards[idx]))
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            })});
-
-
   // $(function () {
   //   $("#searchinput").on('change keyup', asyncFindBoard)
   // })
+
+  // function movePage(uri, queryString) {
+  //   location.href = uri + queryString;
+  // }
 </script>
 </html>

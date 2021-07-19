@@ -11,6 +11,7 @@ import com.dns.polinsight.service.BoardService;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageFileNotFoundException;
 import com.dns.polinsight.storage.StorageService;
+import com.dns.polinsight.types.BoardType;
 import com.dns.polinsight.types.SearchType;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -136,18 +144,29 @@ public class BoardController {
 
 
   @GetMapping("boards")
-  public String list(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model) {
+  public String list(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
+                     Model model) {
     Page<Board> boards = boardService.getBoardList(pageable);
     //    List<Board> boards = boardService.findAll();
     boardService.renewBoard();
-    model.addAttribute("boards", boards);
+
+
+    if(boardSearch.getBoardType() !=null){
+      model.addAttribute("boardSearch", boardSearch);
+    }
+    System.out.println(boardSearch.toString());
+
+
     return "boards/boardList";
   }
 
 
 
+
+
   @GetMapping("/boards/search")
-  public String search(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model) {
+  public String search(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
+                       Model model) {
     //    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue());
     Page<Board> boards;
     if (boardSearch.getSearchType() == SearchType.TITLE) {
@@ -156,6 +175,15 @@ public class BoardController {
       boards = boardService.searchContent(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
     }
     model.addAttribute("boards", boards);
+
+
+    if(boardSearch.getBoardType() !=null){
+      model.addAttribute("boardSearch", boardSearch);
+    }
+    System.out.println(boardSearch.toString());
+
+
+
     return "boards/boardList";
   }
 
@@ -296,6 +324,29 @@ public class BoardController {
     attachService.deleteAttaches(boardId);
     boardService.delete(board);
     return "redirect:/admin2/boards";
+  }
+
+  @GetMapping("/api/board/search")
+  public ResponseEntity<Map<String, Object>> asyncBoardSearch(HttpServletRequest request, @PageableDefault Pageable pageable) {
+    System.out.println("Hi");
+    Map<String, Object> map = new HashMap<>();
+    String type = request.getParameter("type");
+    String cls = request.getParameter("classify");
+    String keyword = request.getParameter("keyword");
+
+    List<Board>  boards;
+    if (type.equals(SearchType.TITLE.name())) {
+      boards = boardService.searchTitle(keyword, BoardType.valueOf(cls), pageable).get().collect(Collectors.toList());
+      //boards = boardService.searchTitle(keyword, BoardType.valueOf(cls), pageable);
+
+      map.put("data", boards);
+    } else {
+      boards = boardService.searchContent(keyword, BoardType.valueOf(cls), pageable).get().collect(Collectors.toList());
+      //boards = boardService.searchContent(keyword, BoardType.valueOf(cls), pageable);
+
+      map.put("data", boards);
+    }
+    return ResponseEntity.ok(map);
   }
 
 

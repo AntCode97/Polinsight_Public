@@ -620,5 +620,48 @@
       }
     });
   });
+
+  const makeTemplate = (board) => {
+    console.log(board)
+    let template = '';
+    template += '<tr class="first">'
+    template += '<td width="50">' + board.id + '</td>'
+    template += '<td width="950">'
+    template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
+    if (board.newBoard === true)
+      template += '<span>New!</span>'
+    template += '</td>'
+    template += '<td width="80">' + board.user.name + '</td>'
+    template += '<td width="120">' + board.registeredAt + '</td>'
+    template += '</tr>'
+    return template
+  }
+
+  const asyncFindBoard = (e) => {
+    e.preventDefault();
+    e.returnValue = false;
+    const searchType = $("#type").val()
+    const classify = $('#classify').val()
+    const keyword = $("#searchinput").val()
+
+    // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
+    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+            .then(res => {
+              const boards = res.data.data
+              const body = $('tbody')
+              body.empty()
+              for (idx in boards) {
+                body.append(makeTemplate(boards[idx]))
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  }
+
+
+  $(function () {
+    $("#searchinput").on('change keyup', asyncFindBoard)
+  })
 </script>
 </html>
