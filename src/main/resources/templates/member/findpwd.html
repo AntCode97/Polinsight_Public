@@ -79,7 +79,9 @@
         </div>
         <div class="modal_btn_wrap">
           <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
-          <button id="submit_btn" class="modal_btn btn-primary btn-effect">
+          <button
+              th:onclick="alert('패스워드를 찾기 위한 이메일을 보냈습니다. 확인 해주세요.')"
+              type="submit" id="submit_btn" class="modal_btn btn-primary btn-effect">
             &nbsp;<i class="fas fa-search">찾기</i>
           </button>
         </div>
@@ -115,9 +117,6 @@
 
     $("#input_email").on("change keydown keyup paste", emailChecker);
 
-    $("#submit_btn").on('click', () => {
-      alert('등록하신 이메일로 패스워드 변경을 위한 이메일을 보냈습니다.\n확인 해주세요.')
-    })
   })
 </script>
 </body>

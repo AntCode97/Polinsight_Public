@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
 <body>
 <h1>Access Denied</h1>
+<h3 th:text="${session.msg}"></h3>
 </body>
 </html>

@@ -96,7 +96,7 @@
 
       <div class="login_btn_wrap">
         <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
-        <button class="btn-primary btn-effect" id="btn_submit">변경하기</button>
+        <button type="submit" class="btn-primary btn-effect" id="btn_submit">변경하기</button>
       </div>
     </form>
   </div>
@@ -128,25 +128,25 @@
 
     $('.pwdinput').on('change keydown keyup paste', passwordChecker);
 
-    $("#btn_submit").on('click', function () {
-      // $(this).submit()
-      const userInfo = {}  // NOTE 2021-06-28 0028 : 데이터 넣기
-      userInfo['newpassword'] = $("#pwd").val()
-      // 비동기
-      axios.post('http://localhost:8080/', userInfo)
-          .then(res => {
-            console.log(res)
-            if (res.data.code === 200) {
-              alert('패스워드 변경 완료!')
-              window.location.replace("/login")
-            }
-          })
-          .catch(err => {
-            console.log(err)
-            alert("패스워드 변경 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.")
-          })
-
-    })
+    // $("#btn_submit").on('click', function () {
+    //   // $(this).submit()
+    //   const userInfo = {}  // NOTE 2021-06-28 0028 : 데이터 넣기
+    //   userInfo['newpwd'] = $("#pwd").val()
+    //   // 비동기
+    //   axios.post('http://localhost:8080/', userInfo)
+    //       .then(res => {
+    //         console.log(res)
+    //         if (res.data.code === 200) {
+    //           alert('패스워드 변경 완료!')
+    //           window.location.replace("/login")
+    //         }
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //         alert("패스워드 변경 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.")
+    //       })
+    //
+    // })
   })
 </script>
 </body>

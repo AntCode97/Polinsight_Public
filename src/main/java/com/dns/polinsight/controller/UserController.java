@@ -6,7 +6,6 @@ import com.dns.polinsight.domain.Additional;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
-import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.service.AdditionalService;
 import com.dns.polinsight.service.ChangePasswordService;
 import com.dns.polinsight.service.EmailService;
@@ -15,7 +14,6 @@ import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -164,7 +160,10 @@ public class UserController {
   }
 
   @PostMapping("/findpwd")
-  public ResponseEntity<?> findPwd(HttpServletRequest request, @Value("${custom.callback.base}") String callbackBase) throws MessagingException, NoSuchAlgorithmException {
+  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
+                              @RequestParam(name = "email") String email,
+                              @RequestParam(name = "name") String name) throws MessagingException,
+                                                                               NoSuchAlgorithmException {
     /*
      *  메일 서비스 필요
      *  등록한 주소로 메일 리다이렉팅 할 메일 전달
@@ -172,68 +171,88 @@ public class UserController {
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
     //    템플릿 작성에 필요한 변수들을 담는 객체
+    ModelAndView mv = new ModelAndView("index");
     Map<String, Object> variables = new HashMap<>();
-
-
-    String email = request.getParameter("email");
-    String name = request.getParameter("name");
     String hash = userService.makeHashForChangePassword(email, name);
     changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
     //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
     variables.put("date", LocalDateTime.now());
     variables.put("hash", hash);
-    variables.put("callback", callbackBase + "/changepassword");
-    emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 안내 메일입니다.", variables);
-    // TODO: 2021-07-12 해시는 따로 저장
-    ResponseObject obj = ResponseObject.builder()
-                                       .statuscode(HttpStatus.OK.value())
-                                       .msg("password changed")
-                                       .build();
-    return ResponseEntity.ok(obj);
+    variables.put("name", name);
+    variables.put("email", email);
+    variables.put("callback", callbackBase + "/chpwd");
+    emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    return mv;
+  }
+
+  @GetMapping("/changepwd")
+  public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
+    ModelAndView mv = new ModelAndView("member/changepwd");
+    log.info(sessionUser.toString());
+
+
+    if (session.getAttribute("user") == null) {
+      return new ModelAndView("redirect:/denied");
+    }
+    return mv;
   }
 
   @PostMapping("/changepwd")
-  public ResponseEntity<?> changePwd(HttpServletRequest request, @LoginUser SessionUser sessionUser, HttpSession session) {
+  public ModelAndView changePwd(@LoginUser SessionUser sessionUser,
+                                HttpSession session,
+                                @RequestAttribute(name = "pwd") String newPassword) {
     /*
      * 비밀번호 변경 처리 후 리다이렉팅
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
     Map<String, Object> map = new HashMap<>();
+    log.info("New Password: {}", String.format("%20s", newPassword));
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.setPassword(passwordEncoder.encode(request.getParameter("newpassword")));
+      user.setPassword(passwordEncoder.encode(newPassword));
       userService.update(user); // DB 업데이트할 유저 객체 넣기
-      map.put("code", 200);
-      map.put("msg", "비밀번호 변경 완료");
+      //      map.put("code", 200);
+      //      map.put("msg", "비밀번호 변경 완료");
     } catch (Exception e) {
-      map.put("code", 201);
-      map.put("msg", "there is something worng");
+      //      map.put("code", 201);
+      //      map.put("msg", "there is something worng");
     }
 
     session.invalidate();
-    return ResponseEntity.ok(map);
+    ModelAndView mv = new ModelAndView("redirect:/index");
+    return mv;
   }
 
-  @GetMapping("/changepassword")
-  public ModelAndView changePassword(@RequestParam(name = "hash") String hash,
-                                     @RequestParam(name = "email") String email,
-                                     @RequestParam(name = "name") String name,
-                                     HttpSession session,
-                                     HttpServletResponse response
-  ) throws NoSuchAlgorithmException, IOException {
+  @GetMapping("/chpwd/{hash}/{name}/{email}")
+  public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
+                                     @PathVariable(name = "email") String email,
+                                     @PathVariable(name = "name") String name,
+                                     ModelAndView mv,
+                                     HttpSession session
+  ) {
     /*등록한 메일 주소로 전달한 페이지에서, 비밀번호 변경 클릭 시 리다이렉팅 될 주소*/
-    ModelAndView mv = new ModelAndView("redirect:changepwd");
-    log.info("callback url executed ---\n{}{}{}",
-        String.format("%1$20s", "hash: " + hash),
-        String.format("%1$20s", "email: " + email),
-        String.format("%1$20s", "name: " + name)
-    );
+    //    log.info("callback url executed ---\n{}{}{}",
+    //        String.format("%1$20s", "hash: " + hash),
+    //        String.format("%1$20s", "email: " + email),
+    //        String.format("%1$20s", "name: " + name)
+    //    );
+    mv.clear();
+    mv = new ModelAndView("redirect:/changepwd");
+    try {
+      if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(email).getHash())) {
+        // 받은 해시와 저장된 해시가 다르면 접근 거부
+        throw new IllegalAccessException();
+      }
+      session.setAttribute("user", new SessionUser().of(userService.findUserByEmail(User.builder().email(email).build())));
 
-    if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(email).getHash())) {
-      // 받은 해시와 저장된 해시가 다르면 접근 거부
-      return new ModelAndView("redirect:error/denied");
+    } catch (Exception e) {
+      e.printStackTrace();
+      session.invalidate();
+      ModelAndView errMav = new ModelAndView("redirect:error/denied");
+      errMav.addObject("msg", e.getCause());
+      return errMav;
     }
-    session.setAttribute("user", new SessionUser().of(userService.findUserByEmail(User.builder().email(email).build())));
+
     return mv;
   }
 

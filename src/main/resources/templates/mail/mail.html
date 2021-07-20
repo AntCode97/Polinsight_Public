@@ -21,10 +21,12 @@ style 속성만 적용 됨
 <div class="wrap">
   <p>
     <span th:text="${name}"></span>이 메일은 비밀번호를 변경하기 위한 이메일입니다.<br />
-                                   비밀번호 변경 요청을 하지 않았을 경우 메일은 무시해주세요.<br />
-                                   비밀번호를 변경하시려면 아래의 링크를 클릭해주세요.</br>
+                                   비밀번호 변경 요청을 하지 않았을 경우 메일은 삭제해주세요.<br />
+                                   비밀번호를 변경하시려면 아래의 링크를 클릭해주세요.
   </p>
-  <h4 th:text="|${callback}/${hash}/${name}|"></h4>
+  <a th:href="|${callback}/${hash}/${name}/${email}|">폴인사이트 비밀번호 변경하기</a>
+  <br />
+  <span th:text="|메일 발송 시각 : ${date}|"></span>
 </div>
 </body>
 </html>

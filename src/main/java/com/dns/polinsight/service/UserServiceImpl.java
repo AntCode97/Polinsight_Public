@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,30 +66,17 @@ public class UserServiceImpl implements UserService {
     return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
   }
 
-  //  /*
-  //   * 이메일, 이름만 넘어옴
-  //   * */
-  //  @Override
-  //  @Transactional
-  //  public User changeUserPassword(String email, String newPassword) {
-  //    // NOTE 2021-06-23 0023 : 해시 발급, 해시 저장
-  //    // NOTE 2021-06-23 0023 : Bcrypt 이용 - 넣을 데이터는??
-  //    //    passwordEncoder.encode(user.getEmail());
-  //    User user = this.findUserByEmail(User.builder().email(email).build());
-  //    user.setPassword(passwordEncoder.encode(newPassword));
-  //    return repository.save(user);
-  //  }
-
   @Override
   public String makeHashForChangePassword(String email, String username) throws NoSuchAlgorithmException {
-    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    MessageDigest digest = MessageDigest.getInstance("SHA-1");
     digest.reset();
     digest.update(salt.getBytes(StandardCharsets.UTF_8));
     digest.update(email.getBytes(StandardCharsets.UTF_8));
     digest.update(username.getBytes(StandardCharsets.UTF_8));
-    String createdHash = String.format("%0128x", new BigInteger(1, digest.digest()));
-
-    return createdHash;
+    StringBuilder sb = new StringBuilder();
+    for (byte b : digest.digest())
+      sb.append(String.format("%02x", b));
+    return sb.toString();
   }
 
 }

@@ -30,9 +30,6 @@ public class PageController {
     return mv;
   }
 
-  /*
-   * 비밀번호 찾기 기능
-   * */
   @GetMapping("/findpwd")
   public ModelAndView findpassword() {
     ModelAndView mv = new ModelAndView();
