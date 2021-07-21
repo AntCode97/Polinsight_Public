@@ -1,6 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Point;
+import com.dns.polinsight.domain.PointRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

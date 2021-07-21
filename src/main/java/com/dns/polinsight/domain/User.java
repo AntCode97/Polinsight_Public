@@ -19,13 +19,13 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder()
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})
 })
-@ToString(exclude = "boards")
+@ToString
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
@@ -36,6 +36,7 @@ public class User implements UserDetails, Serializable {
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   @Builder.Default
+  @ToString.Exclude
   private List<Board> boards = new ArrayList<>();
 
   @Id
@@ -65,6 +66,7 @@ public class User implements UserDetails, Serializable {
   @OneToOne
   @JsonIgnore
   @JoinColumn(name = "additional_id")
+  @ToString.Exclude
   private Additional additional;
 
   public void setBoards(List<Board> boards) {

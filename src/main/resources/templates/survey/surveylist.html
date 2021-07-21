@@ -26,6 +26,7 @@
   </body>
   <script>
 
+    // TODO: Survey Title에 콜백 주소 넣어서 클릭하면 링크로
     const makeSurveyCard = (survey) => {
       let template = ""
       if (survey.isRun) {
@@ -65,7 +66,7 @@
               if (surveys.length > 0) {
                 makeSurveyCardList(surveys)
               } else {
-
+// TODO: 진행중인 조사가 없습니다.
               }
             }
           })
@@ -98,7 +99,12 @@
     }
 
     const cardClickEventHandler = (e) => {
-
+      e.preventDefault()
+      e.returnValue = false;
+      const clickedSurveyTitle = e.target.value
+      if (confirm(clickedSurveyTitle + ' 설문을 진행하시겠습니까?')) {
+// 서버에 서베이 정보 + 유저 정보 저장 ==> 이후 관리자 및 마이페이지에서 목록 조회 가능
+      }
     }
 
     $(function () {

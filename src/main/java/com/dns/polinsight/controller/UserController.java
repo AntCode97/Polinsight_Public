@@ -6,10 +6,7 @@ import com.dns.polinsight.domain.Additional;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
-import com.dns.polinsight.service.AdditionalService;
-import com.dns.polinsight.service.ChangePasswordService;
-import com.dns.polinsight.service.EmailService;
-import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +35,13 @@ public class UserController {
 
   private final AdditionalService additionalService;
 
+  private final PointService pointService;
+
   private final HttpSession session;
 
   private final EmailService emailService;
+
+  private final SurveyService surveyService;
 
   private final PasswordEncoder passwordEncoder;
 
@@ -117,8 +118,11 @@ public class UserController {
     return ResponseEntity.ok(map);
   }
 
+  /*
+   * 회원 가입 시, 사용 할 수 있는 이메일인지 검증하기 위한 메소드
+   * */
   @GetMapping("/user/{email}")
-  @CrossOrigin("*") // 비동기 이메일 검증을 위한 cors 처리
+  @CrossOrigin("*")
   public ResponseEntity<Map<String, Object>> findUserByEmail(@Email @PathVariable("email") String email) {
     Map<String, Object> map = new HashMap<>();
     try {
@@ -130,7 +134,6 @@ public class UserController {
 
     return ResponseEntity.ok(map);
   }
-
 
   @GetMapping("/mypage")
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
@@ -171,17 +174,20 @@ public class UserController {
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
     //    템플릿 작성에 필요한 변수들을 담는 객체
-    ModelAndView mv = new ModelAndView("index");
-    Map<String, Object> variables = new HashMap<>();
-    String hash = userService.makeHashForChangePassword(email, name);
-    changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
-    //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
-    variables.put("date", LocalDateTime.now());
-    variables.put("hash", hash);
-    variables.put("name", name);
-    variables.put("email", email);
-    variables.put("callback", callbackBase + "/chpwd");
-    emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    ModelAndView mv = new ModelAndView("redirect:/index");
+
+    if (userService.isExistUser(email)) {
+      Map<String, Object> variables = new HashMap<>();
+      String hash = userService.makeHashForChangePassword(email, name);
+      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
+      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
+      variables.put("date", LocalDateTime.now());
+      variables.put("hash", hash);
+      variables.put("name", name);
+      variables.put("email", email);
+      variables.put("callback", callbackBase + "/chpwd");
+      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    }
     return mv;
   }
 
@@ -200,13 +206,12 @@ public class UserController {
   @PostMapping("/changepwd")
   public ModelAndView changePwd(@LoginUser SessionUser sessionUser,
                                 HttpSession session,
-                                @RequestAttribute(name = "pwd") String newPassword) {
+                                @RequestParam(name = "pwd") String newPassword) {
     /*
      * 비밀번호 변경 처리 후 리다이렉팅
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
-    Map<String, Object> map = new HashMap<>();
-    log.info("New Password: {}", String.format("%20s", newPassword));
+    session.invalidate();
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
       user.setPassword(passwordEncoder.encode(newPassword));
@@ -218,7 +223,6 @@ public class UserController {
       //      map.put("msg", "there is something worng");
     }
 
-    session.invalidate();
     ModelAndView mv = new ModelAndView("redirect:/index");
     return mv;
   }
@@ -257,13 +261,45 @@ public class UserController {
   }
 
   // TODO: 2021-07-19 수정 필요
-  @GetMapping("/req/point/{userid}/{point}")
-  public ResponseEntity<Map<String, Object>> requestPointCalcFromUser(@PathVariable(name = "userid") String userid,
-                                                                      @PathVariable(name = "point") Long pint) {
+  @PostMapping("/api/point/{point}")
+  public ResponseEntity<Map<String, Object>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
+                                                                      @PathVariable(name = "point") Long point) {
     /*
-     * 포인트 발급 요청 로그 남기기 --> 관리자 페이지에서 보여줄 것
+     * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
      * */
     Map<String, Object> map = new HashMap<>();
+    try {
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+
+      map.put("data",.addUserPointRequest(user.getId(), point));
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("/api/point/{userid}")
+  public ResponseEntity<Map<String, Object>> getPointRequestList(@PathVariable(name = "userid") Long userid) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      map.put("data", pointService.getUserPointRequest(userid));
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("/api/user/participate")
+  public ResponseEntity<Map<String, Object>> participateSurveyList(@LoginUser SessionUser sessionUser) {
+    Map<String, Object> map = new HashMap<>();
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    //    surveyService.
     return ResponseEntity.ok(map);
   }
 

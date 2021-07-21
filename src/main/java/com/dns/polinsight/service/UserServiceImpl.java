@@ -1,5 +1,6 @@
 package com.dns.polinsight.service;
 
+import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.repository.UserRepository;
@@ -24,10 +25,14 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
+  public boolean isExistUser(String email) {
+    return repository.existsUserByEmail(email);
+  }
+
+  @Override
   public User loadUserByUsername(String username) throws UsernameNotFoundException {
     return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
-
 
   /*
    * Simple CRUD
@@ -43,6 +48,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public User update(User user) {
+    return repository.saveAndFlush(user);
+  }
+
+  @Override
   public User findUserById(User user) {
     return repository.findUserById(user.getId()).orElseThrow(UserNotFoundException::new);
   }
@@ -54,11 +64,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteUser(User user) {
     repository.delete(user);
-  }
-
-  @Override
-  public User update(User user) {
-    return repository.save(user);
   }
 
   @Override
@@ -78,5 +83,4 @@ public class UserServiceImpl implements UserService {
       sb.append(String.format("%02x", b));
     return sb.toString();
   }
-
 }

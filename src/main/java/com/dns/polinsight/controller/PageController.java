@@ -38,7 +38,7 @@ public class PageController {
   }
 
   @GetMapping("/login")
-  public ModelAndView login() {
+  public ModelAndView login(ModelAndView mav) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/login");
     return mv;

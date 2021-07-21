@@ -49,7 +49,7 @@ public class PointController {
     if (point.getHash().equals(point.getHash())) {
       // 포인트 적립
       map.put("msg", "success");
-      map.put("data", userService.update(user));
+      map.put("data", userService.save(user));
     } else {
       // 포인트 적립 실패
       // 실패 로그 작성
