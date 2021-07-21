@@ -46,13 +46,14 @@
       let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
       survey_box.append('<div class="main_survey_item_wrap"></div>')
       for (idx in surveyList) {
-        if (idx % 3 !== 0) {
-          item_wrap.append(makeSurveyCard(surveyList[idx]))
-        } else {
-          survey_box.append('<div class="main_survey_item_wrap"></div>')
-          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-          item_wrap.append(makeSurveyCard(surveyList[idx]))
-        }
+        if (!!surveyList[idx].point)
+          if (idx % 3 !== 0) {
+            item_wrap.append(makeSurveyCard(surveyList[idx]))
+          } else {
+            survey_box.append('<div class="main_survey_item_wrap"></div>')
+            item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
+            item_wrap.append(makeSurveyCard(surveyList[idx]))
+          }
       }
     }
 
