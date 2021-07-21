@@ -344,6 +344,17 @@
 </div>
 </body>
 <script>
+  const phoneNumberChecker = () => {
+    const recommend = $('input[name=recommend]')
+    const myPhone = $('input[name=phone]')
+
+    if (!myPhone.val() || !recommend.val()) // 공백/undefined/null 체크
+      return
+
+    if (recommend.val() === myPhone.val())
+      return false;
+  }
+
   const editHyphen = e => {
     const phoneValue = e.target.value
     let ret = "";
@@ -405,7 +416,7 @@
       let input = $(this)
       let label = input.prev('label')
       let inputValue = input.val()
-      if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {
+      if ($(this).prop('required') && !!inputValue) {
         input.focus()    // 입력이 안된 사항으로 포커싱
         input.val('') // 값 초기화
         alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")

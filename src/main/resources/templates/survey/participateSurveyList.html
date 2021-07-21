@@ -1,0 +1,44 @@
+<th:block>
+  <div>
+    <div class="survey_wrap">
+      <div class="survey_item">
+
+      </div>
+    </div>
+  </div>
+  <script>
+
+    const makeSurveyViewTemplate = survey => {
+      let template = ''
+      // 서베이 참여일 추가 필요
+      template += `<p>${survey.title}</p>`
+      template += `<p>${survey.point}</p>`
+      return template;
+    }
+
+    const makeSurveyListView = (surveys) => {
+      const surveyWrap = $('.survey_wrap')
+
+      for (survey of surveys) {
+        surveyWrap.append(makeSurveyViewTemplate(survey))
+      }
+    }
+
+    const getParticipateSurveyList = () => {
+      axios.get('/api/survey/participate')
+          .then(res => {
+            let surveys = res.data
+            makeSurveyListView(surveys)
+          })
+          .catch(err => {
+            console.log(err)
+            alert('참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요.')
+          })
+    }
+
+    $(function () {
+      getParticipateSurveyList();
+    })
+
+  </script>
+</th:block>
