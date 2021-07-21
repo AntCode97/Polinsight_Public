@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.types.SurveyProgressType;
 import lombok.*;
 
 import javax.persistence.Id;
@@ -34,9 +35,8 @@ public class Survey implements Serializable {
 
   private String preview;
 
-  /*
-   * 설문 완료시 지급할 포인트 수치
-   * */
   private Long point;
+
+  private SurveyProgressType progressType;
 
 }

@@ -3,6 +3,7 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Additional;
+import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
@@ -206,25 +207,16 @@ public class UserController {
   @PostMapping("/changepwd")
   public ModelAndView changePwd(@LoginUser SessionUser sessionUser,
                                 HttpSession session,
-                                @RequestParam(name = "pwd") String newPassword) {
+                                @RequestParam(name = "pwd") String newPassword) throws Exception {
     /*
      * 비밀번호 변경 처리 후 리다이렉팅
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
     session.invalidate();
-    try {
-      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.setPassword(passwordEncoder.encode(newPassword));
-      userService.update(user); // DB 업데이트할 유저 객체 넣기
-      //      map.put("code", 200);
-      //      map.put("msg", "비밀번호 변경 완료");
-    } catch (Exception e) {
-      //      map.put("code", 201);
-      //      map.put("msg", "there is something worng");
-    }
-
-    ModelAndView mv = new ModelAndView("redirect:/index");
-    return mv;
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userService.update(user); // DB 업데이트할 유저 객체 넣기
+    return new ModelAndView("redirect:/index");
   }
 
   @GetMapping("/chpwd/{hash}/{name}/{email}")
@@ -234,12 +226,6 @@ public class UserController {
                                      ModelAndView mv,
                                      HttpSession session
   ) {
-    /*등록한 메일 주소로 전달한 페이지에서, 비밀번호 변경 클릭 시 리다이렉팅 될 주소*/
-    //    log.info("callback url executed ---\n{}{}{}",
-    //        String.format("%1$20s", "hash: " + hash),
-    //        String.format("%1$20s", "email: " + email),
-    //        String.format("%1$20s", "name: " + name)
-    //    );
     mv.clear();
     mv = new ModelAndView("redirect:/changepwd");
     try {
@@ -271,7 +257,7 @@ public class UserController {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
 
-      map.put("data",.addUserPointRequest(user.getId(), point));
+      map.put("data", pointService.addUserPointRequest(user.getId(), point));
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();
@@ -296,10 +282,33 @@ public class UserController {
   }
 
   @GetMapping("/api/user/participate")
-  public ResponseEntity<Map<String, Object>> participateSurveyList(@LoginUser SessionUser sessionUser) {
+  public ResponseEntity<Map<String, Object>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) {
     Map<String, Object> map = new HashMap<>();
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    //    surveyService.
+    try {
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      map.put("data", surveyService.getUserParticipateSurvey(user));
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @PostMapping("/api/survey/participate")
+  public ResponseEntity<Map<String, Object>> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      user.setParticipateSurvey(user.getParticipateSurvey() + "," + survey.getId());
+      map.put("data", userService.update(user));
+      map.put("error", null);
+    } catch (Exception e) {
+      e.printStackTrace();
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
     return ResponseEntity.ok(map);
   }
 

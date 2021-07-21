@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -63,7 +65,7 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   @Cacheable(cacheNames = "surveyList")
   @Scheduled(cron = "0 0 0/1 * * *")
-  public List<Survey> getSurveyListAndSyncWithScheduler() throws Exception {
+  public List<Survey> getSurveyListAndSyncPerHour() throws Exception {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
     HttpHeaders header = new HttpHeaders();
     header.setBearerAuth(accessToken);
@@ -83,6 +85,16 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyList;
   }
 
+  @Override
+  public List<Survey> getUserParticipateSurvey(User user) {
+    // TODO: 2021-07-21 수정 필요
+    StringTokenizer st = new StringTokenizer(user.getParticipateSurvey());
+    List<Survey> list = new ArrayList<>();
+    while (st.hasMoreTokens()) {
+      list.add(this.findById(Survey.builder().id(st.nextToken()).build()));
+    }
+    return list;
+  }
 
 
   /*

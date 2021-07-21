@@ -75,7 +75,7 @@ public class SurveyController {
   public ResponseEntity<Map<String, Object>> surveySyncWithSM() {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", surveyService.getSurveyListAndSyncWithScheduler());
+      map.put("data", surveyService.getSurveyListAndSyncPerHour());
       map.put("code", 200);
       map.put("msg", "sync and save success");
       map.put("error", null);

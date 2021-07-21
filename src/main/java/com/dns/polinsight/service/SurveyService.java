@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.User;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public interface SurveyService {
   /*
    * 매 한시간마다 서베이몽키에 접근해, 서베이 목록 수집
    * */
-  List<Survey> getSurveyListAndSyncWithScheduler() throws Exception;
+  List<Survey> getSurveyListAndSyncPerHour() throws Exception;
+
+
+  List<Survey> getUserParticipateSurvey(User user);
 
 }

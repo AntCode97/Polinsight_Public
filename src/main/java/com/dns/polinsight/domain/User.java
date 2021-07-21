@@ -69,6 +69,19 @@ public class User implements UserDetails, Serializable {
   @ToString.Exclude
   private Additional additional;
 
+  // TODO: 2021-07-21 : 설문 클릭 시, 콤마로 구분지어 서베이 아이디 저장
+  private String participateSurvey;
+
+  /*이메일 수신 동의 여부*/
+  private Boolean isEmailReceive;
+
+  /*문자 수신 동의 여부*/
+  private Boolean isSMSReceive;
+
+  public void setParticipateSurvey(String participateSurvey) {
+    this.participateSurvey = participateSurvey;
+  }
+
   public void setBoards(List<Board> boards) {
     this.boards = boards;
   }
