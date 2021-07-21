@@ -16,7 +16,7 @@ public class AuthExeptionController {
 
   @ExceptionHandler(BadCredentialsException.class)
   public ModelAndView handleBadCredential(HttpServletRequest request, HttpServletResponse response, Exception e) {
-    ModelAndView mv = new ModelAndView();
+    ModelAndView mv = new ModelAndView("redirect:/login");
     logExceptionInfo(e);
     mv.addObject("msg", e.getMessage());
     mv.addObject("code", 6000);

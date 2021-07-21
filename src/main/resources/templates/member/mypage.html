@@ -70,11 +70,17 @@
     </div>
     <div>
       <label>
-        포인트
+        보유 포인트
         <input name="point" readonly th:value="${session.user.point}" type="number">
       </label>
     </div>
     <th:block th:if="${session.user.point >= 10000}">
+      <div>
+        <label>
+          요청 할 포인트
+          <select name="reqpoint"></select>
+        </label>
+      </div>
       <div>
         <form action="">
           <div style="display: inline-block">
@@ -146,9 +152,25 @@
         );
   }
 
+  const requestPointToCash = () => {
+
+  }
+
+  const init = () => {
+    const amount_point = $('input[name=point]').val();
+    if (amount_point >= 10000) {
+      let selbox = $('select[name=reqpoint]')
+      for (var i = 1; i <= parseInt(amount_point/10000); i++) {
+        selbox.append($('<option></option>').attr("value", i*10000).text(i*10000))
+      }
+    }
+  }
+
   $(function () {
+    init()
     $('#deluser').on('click', deleteUserRequest);
     $('#modi').on('click', chkInput);
+
   })
 
 </script>

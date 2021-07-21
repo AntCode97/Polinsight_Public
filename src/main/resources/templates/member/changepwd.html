@@ -18,7 +18,7 @@
     }
 
     .login_btn_wrap > .btn-primary {
-      width: 100%;
+      width: 30%;
       font-weight: bold;
       float: left;
     }
@@ -31,27 +31,6 @@
       cursor: pointer;
       border: 1px solid transparent;
       outline: none;
-    }
-
-    .login_content {
-      width: 25rem;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .modal_content {
-      width: 50%;
-      background-color: white;
-      border-radius: 2px;
-      overflow: hidden;
-      margin: 0 auto;
-    }
-
-    .modal_wrap {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .input_div {
@@ -79,18 +58,18 @@
 <body>
 <div>
   <div>
-    <form th:action="@{/changepwd}" method="post">
+    <form th:action="@{/changepwd}" method="POST">
       <div class="input_div">
-        <label for="pwd">
+        <label>
           <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
+          <input class="pwdinput" name="pwd" placeholder="패스워드" required type="password">
         </label>
-        <input class="pwdinput" id="pwd" placeholder="패스워드" required type="password">
       </div>
       <div class="input_div">
-        <label for="pwdcfm">
+        <label>
           <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
+          <input class="pwdinput" placeholder="패스워드 확인" required type="password">
         </label>
-        <input class="pwdinput" id="pwdcfm" placeholder="패스워드 확인" required type="password">
         <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
       </div>
 
@@ -109,11 +88,9 @@
     const msg = $("#pwmsg")
     if (passwordValue !== confirmValue) {
       if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
-        // msg.css("display", "block");
         msg.text("패스워드가 일치하지 않습니다. 확인해주세요.").removeClass("valid").addClass("invalid")
       }
     } else {
-      // msg.css("display", "none");
       msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
     }
   }
@@ -126,27 +103,9 @@
       $(this).css('border-bottom', '1.5px solid #dde0ea');
     });
 
-    $('.pwdinput').on('change keydown keyup paste', passwordChecker);
+    $('.pwdinput').on('keyup', passwordChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
 
-    // $("#btn_submit").on('click', function () {
-    //   // $(this).submit()
-    //   const userInfo = {}  // NOTE 2021-06-28 0028 : 데이터 넣기
-    //   userInfo['newpwd'] = $("#pwd").val()
-    //   // 비동기
-    //   axios.post('http://localhost:8080/', userInfo)
-    //       .then(res => {
-    //         console.log(res)
-    //         if (res.data.code === 200) {
-    //           alert('패스워드 변경 완료!')
-    //           window.location.replace("/login")
-    //         }
-    //       })
-    //       .catch(err => {
-    //         console.log(err)
-    //         alert("패스워드 변경 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.")
-    //       })
-    //
-    // })
+
   })
 </script>
 </body>
