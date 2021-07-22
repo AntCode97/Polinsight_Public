@@ -79,11 +79,12 @@
       overflow: hidden;
       position: relative;
       margin-bottom: 20px;
+      text-align: left;
     }
 
-    .input_div > p {
+    .input_div > label {
       font-size: 16px;
-      text-align: left;
+      display: block;
       color: #a5dff9;
     }
 
@@ -249,12 +250,16 @@
         <div class="err_content"></div>
         <form class="frm_login" th:action="@{/dologin}" method="post">
           <div class="input_div">
-            <p>이메일</p>
-            <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
+            <label>
+              이메일
+              <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
+            </label>
           </div>
           <div class="input_div">
-            <p>비밀번호</p>
-            <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
+            <label>
+              비밀번호
+              <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
+            </label>
             <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
           </div>
           <div class="login_btn_wrap">
@@ -270,4 +275,33 @@
   </div>
 </div>
 </body>
+<script>
+  const login = e => {
+    e.preventDefault()
+    e.returnValue = false
+    axios.post('/dologin', null, {
+          params: {
+            email: $('input[name=email]').val().trim(),
+            password: $('input[name=password]').val().trim()
+          }
+        })
+        .then(res => {
+          if (res.data.msg === 'success') {
+            // alert('로그인 성공')
+            location.replace('/')
+          } else {
+            alert('로그인 실패\n아이디와 비밀번호를 확인해주세요.')
+            location.replace('/login')
+          }
+        })
+        .catch(err => {
+          alert('로그인 중 에러가 발생하였습니다.\n다시 시도해주세요')
+          location.replace('/login')
+        })
+  }
+
+  $(function () {
+    $('form').on('submit', login)
+  })
+</script>
 </html>

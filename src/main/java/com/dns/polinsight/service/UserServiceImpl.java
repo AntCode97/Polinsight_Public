@@ -1,6 +1,5 @@
 package com.dns.polinsight.service;
 
-import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.repository.UserRepository;
@@ -34,9 +33,6 @@ public class UserServiceImpl implements UserService {
     return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
-  /*
-   * Simple CRUD
-   * */
   @Override
   public List<User> findAll() {
     return repository.findAll();
@@ -83,4 +79,5 @@ public class UserServiceImpl implements UserService {
       sb.append(String.format("%02x", b));
     return sb.toString();
   }
+
 }

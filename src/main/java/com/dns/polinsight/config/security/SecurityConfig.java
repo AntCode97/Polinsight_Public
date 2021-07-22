@@ -17,6 +17,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -78,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .clearAuthentication(true)
               .invalidateHttpSession(true)
         .and()
+          .addFilterBefore(customAuthProccessingFilter(), BasicAuthenticationFilter.class)
           .httpBasic().disable()
           .oauth2Login()
             .loginPage("/login")

@@ -19,15 +19,10 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-
+    request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
-    response.sendRedirect("/");
-    response.getWriter().write(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(ResponseObject.builder()
-                                                                                                                    .statuscode(HttpStatus.OK.value())
-                                                                                                                    .msg("login failed")
-                                                                                                                    .data(exception.getMessage())
-                                                                                                                    .build()));
-    exception.printStackTrace();
+    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder().msg("failed").build()).trim());
+    System.out.println("로그인 실패");
   }
 
 }
