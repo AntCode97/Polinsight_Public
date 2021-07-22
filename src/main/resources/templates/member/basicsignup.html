@@ -381,12 +381,6 @@
     if (e.target.value === "") return;
     const keycode = e.keyCode;
 
-    // if (keycode === 32 || keycode === 9) {
-    //   e.preventDefault()
-    //   e.returnValue = false;
-    //   alert("공백은 입력할 수 없습니다.")
-    //   return;
-    // } else
     let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
 
     /* 숫자, 소문자, 대문자, 특수문자 */
@@ -415,7 +409,7 @@
     $("form").find('input').each(function (item) {
       let input = $(this)
       let label = input.prev('label')
-      let inputValue = input.val()
+      let inputValue = input.val().trim()
       if ($(this).prop('required') && !!inputValue) {
         input.focus()    // 입력이 안된 사항으로 포커싱
         input.val('') // 값 초기화
@@ -425,8 +419,8 @@
       }
     })
 
-    const domainValue = $('select[name=domain] option:selected').val()
-    if (domainValue === "null") {
+    const domainValue = $('select[name=domain] option:selected').val().trim()
+    if (!domainValue) {
       $('select[name=domain]').focus()
       alert('이메일 주소는 필수 입력 사항입니다.')
       result = false;
@@ -447,12 +441,12 @@
   const emailChecker = (e) => {
     /* 5 ~ 20자 제한 */
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const emailValue = $("input[name=email]").val();
-    const emailDomain = $("#email_domain").val();
+    const emailValue = $("input[name=email]").val().trim();
+    const emailDomain = $("#email_domain").val().trim();
     const email = emailValue + '@' + emailDomain;
     const msg = $("#email_msg")
 
-    if (emailValue === "") {
+    if (!emailValue) {
       msg.text("").removeClass("correct_msg").addClass("err_msg")
     } else {
       if (email.match(regex) != null) {
@@ -482,9 +476,8 @@
       }
     })
     form.find('select').each((idx, item) => {
-      basicInfo['email'] += '@' + $(item).val()
+      basicInfo['email'] += '@' + $(item).val().trim()
     })
-    console.log(basicInfo)
     return basicInfo
   }
 
@@ -510,7 +503,7 @@
 
     $("#email").on("change keyup paste", emailChecker);
     $("#email_domain").on('change', () => {
-      if ($('input[name=email]').val().length > 0) {
+      if ($('input[name=email]').val().trim().length > 0) {
         emailChecker()
       }
     });

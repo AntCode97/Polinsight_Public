@@ -91,8 +91,11 @@
     </th:block>
     <div>
       <button id="modi" th:onclick="chkInput()">변경하기</button>
-      <!--      <button th:onclick="window.history.back()">돌아가기</button>-->
     </div>
+  </div>
+  <div>
+    <h2>참여한 설문 목록</h2>
+    <th:block th:include="survey/participateSurveyList" />
   </div>
   <div class="rtop_btn">
     <label for="deluser">
@@ -106,7 +109,7 @@
     userInfo['email'] = $("#email").val()
     userInfo['password'] = password;
 
-    axios.post("/", userInfo)
+    axios.post("/update", userInfo)
         .then(res => {
           console.log(res)
           alert("회원 정보가 업데이트 되었습니다.")
@@ -121,17 +124,12 @@
 
 
   const chkInput = () => {
-    const pwdValue = $("#pwd").val()
-    const pwdcfmValue = $("#pwdcfm").val()
+    const pwdValue = $("#pwd").val().trim()
+    const pwdcfmValue = $("#pwdcfm").val().trim()
 
-    if (pwdcfmValue === "" || pwdcfmValue === undefined || pwdcfmValue === null || pwdcfmValue === "undefined") {
+    if (!pwdcfmValue || !pwdValue) {
       return
     }
-
-    if (pwdValue === "" || pwdValue === undefined || pwdValue === null || pwdValue === "undefined") {
-      return
-    }
-
     if (pwdValue === pwdcfmValue) {
       _.throttle(userInfoUpdate(pwd), 200)
     }
@@ -160,8 +158,8 @@
     const amount_point = $('input[name=point]').val();
     if (amount_point >= 10000) {
       let selbox = $('select[name=reqpoint]')
-      for (var i = 1; i <= parseInt(amount_point/10000); i++) {
-        selbox.append($('<option></option>').attr("value", i*10000).text(i*10000))
+      for (var i = 1; i <= parseInt(amount_point / 10000); i++) {
+        selbox.append($('<option></option>').attr("value", i * 10000).text(i * 10000))
       }
     }
   }

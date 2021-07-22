@@ -83,8 +83,11 @@
 <script th:inline="javascript">
 
   const passwordChecker = () => {
-    const passwordValue = $("#pwd").val();
-    const confirmValue = $("#pwdcfm").val();
+    const passwordValue = $("#pwd").val().trim();
+    const confirmValue = $("#pwdcfm").val().trim();
+    if (!passwordValue || !confirmValue)
+      return
+
     const msg = $("#pwmsg")
     if (passwordValue !== confirmValue) {
       if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
