@@ -24,4 +24,8 @@ public interface SurveyService {
 
   List<Survey> getUserParticipateSurvey(User user);
 
+  void deleteSurveyById(Long surveyId);
+
+  List<Survey> findSurveyByRgex(String regex);
+
 }

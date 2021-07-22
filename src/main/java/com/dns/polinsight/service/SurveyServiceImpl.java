@@ -4,7 +4,7 @@ import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.SurveyMonkeyDTO;
 import com.dns.polinsight.exception.SurveyNotFoundException;
-import com.dns.polinsight.repository.MongoSurveyRepository;
+import com.dns.polinsight.repository.SurveyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SurveyServiceImpl implements SurveyService {
 
-  private final MongoSurveyRepository surveyRepository;
+  private final SurveyRepository surveyRepository;
 
   @Value("${custom.api.accessToken}")
   private String accessToken;
@@ -42,7 +42,7 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.save(survey);
   }
 
-  @Cacheable(cacheNames = "allSurveys")
+  @Cacheable(cacheNames = "surveyList")
   @Override
   public List<Survey> findAll() {
     return surveyRepository.findAll();
@@ -80,7 +80,14 @@ public class SurveyServiceImpl implements SurveyService {
                                                                             .createdAt(LocalDateTime.parse(objmap.get("date_created")))
                                                                             .modifiedAt(LocalDateTime.parse(objmap.get("date_modified")))
                                                                             .build()).map(SurveyMonkeyDTO::toSurvey).collect(Collectors.toList());
-    surveyList.forEach(surveyRepository::save);
+    surveyList = surveyList.parallelStream().map(survey -> {
+      survey.getStatus().setProgressType(survey.getEndAt());
+      survey.getStatus().setSurvey(survey);
+      return survey;
+    }).collect(Collectors.toList());
+
+    surveyRepository.saveAllAndFlush(surveyList);
+
     log.info("survey sync success");
     return surveyList;
   }
@@ -91,7 +98,7 @@ public class SurveyServiceImpl implements SurveyService {
     StringTokenizer st = new StringTokenizer(user.getParticipateSurvey());
     List<Survey> list = new ArrayList<>();
     while (st.hasMoreTokens()) {
-      list.add(this.findById(Survey.builder().id(st.nextToken()).build()));
+      list.add(this.findById(Survey.builder().id(Long.parseLong(st.nextToken())).build()));
     }
     return list;
   }
@@ -106,8 +113,22 @@ public class SurveyServiceImpl implements SurveyService {
     sb.append("/details");
 
     Survey survey = null;
-    new RestTemplate().exchange(baseURL + sb.toString(), HttpMethod.GET, header, Map.class);
+    new RestTemplate().exchange(baseURL + sb, HttpMethod.GET, header, Map.class);
     return survey;
+  }
+
+  @Override
+  public void deleteSurveyById(Long surveyId) {
+    surveyRepository.delete(Survey.builder().id(surveyId).build());
+  }
+
+  @Override
+  public List<Survey> findSurveyByRgex(String regex) {
+    if (regex.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+      return surveyRepository.findSurveysByEndAtLessThan(LocalDateTime.parse(regex));
+    } else {
+      return surveyRepository.findSurveysByTitleLike(regex);
+    }
   }
 
 }

@@ -13,7 +13,7 @@
 </body>
 <script>
   const syncSurveyList = () => {
-    axios.get('/survey/sync')
+    axios.get('/api/survey/sync')
         .then(alert('동기화 성공'))
         .catch(alert('동기화 실패'))
   }

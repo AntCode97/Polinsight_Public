@@ -13,6 +13,8 @@ public interface UserService extends UserDetailsService {
 
   List<User> findAll();
 
+  void deleteUserByEmail(String email);
+
   User save(User user);
 
   User update(User user);

@@ -1,0 +1,89 @@
+<th:block>
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">회원 검색</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="board-search">
+        <div class="form-search">
+          <div class="tbl-search">
+            <div class="box-search">
+              <input name="adminfinduserby" type="text" />
+              <button name="adminfinduser_btn" type="submit">찾기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-table">
+        <div class="board-row board-th">
+          <span>번호</span>
+          <span>아이디(이메일)</span>
+          <!--          <span>비밀번호</span>-->
+          <span>이름</span>
+          <span>휴대전화</span>
+          <span>유형</span>
+          <span>회원관리</span>
+        </div>
+        <!--        <div class="board-row">-->
+        <!--          <span></span>-->
+        <!--          <span></span>-->
+        <!--          <span></span>-->
+        <!--          <span></span>-->
+        <!--          <span></span>-->
+        <!--          <span></span>-->
+        <!--          <span><button class="btn_udel btn-warn">삭제</button></span>-->
+        <!--        </div>-->
+      </div>
+    </div>
+  </div>
+  <script>
+    const adminMakeUserSearchResults = (users) => {
+      const table = $('div.scroll-table');
+      table.remove('div.board-row')
+      let idx = 1;
+      for (user of users) {
+        let template = `<div class="board-row">`
+        template += `<span>${idx++}</span>`
+        template += `<span>${user.email}</span>`
+        template += `<span>${user.name}</span>`
+        template += `<span>${user.phone}</span>`
+        template += `<span>${user.role}</span>`
+        template += `<span><button class="btn_udel btn-warn">삭제</button></span>`
+        template += `</div>`
+        table.append(template);
+      }
+    }
+
+    const userDeleteButtonClickHandler = e => {
+      e.preventDefault()
+      e.returnValue = false
+      if (confirm('정말로 해당 유저를 삭제하시겠습니까?')) {
+        // TODO : 유저 삭제 기능 구현
+      }
+    }
+
+    const adminFindUser = e => {
+      e.preventDefault();
+      e.returnValue = false;
+      let regex = $('input[name=adminfinduserby]').val().trim()
+      axios.get('/api/user/find/' + regex)
+          .then(res => {
+            console.log(res);
+            adminMakeUserSearchResults(res.data)
+          })
+          .catch(err => {
+            alert('에러 발생')
+            console.log(err);
+          })
+    }
+
+    $(function () {
+      $('button[name=adminfinduser_btn]').on('click', adminFindUser)
+      $('button.btn_udel').on('click', userDeleteButtonClickHandler)
+    })
+  </script>
+</th:block>

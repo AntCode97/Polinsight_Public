@@ -1,0 +1,81 @@
+<th:block>
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">회원 목록</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="board-search">
+        <div class="util-search">총 <strong>?</strong>명의 회원이 있습니다.</div>
+      </div>
+
+      <div class="scroll-table">
+        <div class="board-row board-th">
+          <span>번호</span>
+          <span>아이디(이메일)</span>
+          <!--          <span>비밀번호</span>-->
+          <span>이름</span>
+          <span>휴대전화</span>
+          <span>유형</span>
+        </div>
+        <div class="board-row">
+          <span>1</span>
+          <span>admin@polinsight.com</span>
+          <!--          <span>password1234</span>-->
+          <span>관리자</span>
+          <span>01012345678</span>
+          <span>일반</span>
+        </div>
+      </div>
+      <!--TODO : 수정 필요-->
+      <div class="page-button"
+           th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
+        <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+    </a> -->
+        <a href="#"><i class="fas fa-angle-double-left"></i></a>
+        <a href="#" class="main-page">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#"><i class="fas fa-angle-double-right"></i></a>
+        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+        <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+    </a>
+    <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+        <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
+    </a> -->
+        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+        <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+    </a> -->
+      </div>
+    </div>
+  </div>
+  <script>
+    const makeAdminMemberListTemplate = (memberInfo) => {
+
+      let template = `<div className="board-row">`
+      template += `<span>${memberInfo.id}</span>`
+      template += `<span>${memberInfo.email}</span>`
+      template += `<span>${memberInfo.name}</span>`
+      template += `<span>${memberInfo.phone}</span>`
+      template += `<span>${memberInfo.role}</span>`
+      template += `</div>`
+      return template;
+    }
+    const getMemberList = () => {
+      axios.get()
+          .then(res => {
+            for (member of res.data)
+              makeAdminMemberListTemplate(member)
+          })
+          .catch()
+    }
+
+    $(function () {
+      getMemberList()
+    })
+  </script>
+</th:block>

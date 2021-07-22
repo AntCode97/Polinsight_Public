@@ -299,7 +299,7 @@
 </div>
 </body>
 <script>
-  const makeTemplate = (board) => {
+  const makeBoardListTemplate = (board) => {
     console.log(board)
     let template = '';
     template += '<tr class="first">'
@@ -329,7 +329,7 @@
           const body = $('tbody')
           body.empty()
           for (idx in boards) {
-            body.append(makeTemplate(boards[idx]))
+            body.append(makeBoardListTemplate(boards[idx]))
           }
         })
         .catch(err => {

@@ -22,7 +22,6 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
     request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
     response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder().msg("failed").build()).trim());
-    System.out.println("로그인 실패");
   }
 
 }

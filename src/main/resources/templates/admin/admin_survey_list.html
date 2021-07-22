@@ -1,0 +1,91 @@
+<th:block th:include="admin/admin_sidebar" />
+<th:block>
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">설문 목록</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="board-search">
+        <div class="util-search">총 <strong>?</strong>개의 설문이 있습니다.</div>
+      </div>
+
+      <div class="scroll-table">
+        <div class="board-row board-th">
+          <span>번호</span>
+          <span>설문 이름</span>
+          <span>지급 포인트</span>
+          <span>설문 기간</span>
+          <span>진행 상태</span>
+          <span>참여자 수</span>
+          <span>공지사항 관리</span>
+        </div>
+        <!--        <div class="board-row">-->
+        <!--          <span>1</span>-->
+        <!--          <span>폴인사이트 설문</span>-->
+        <!--          <span>100p</span>-->
+        <!--          <span>~ 2021-7-17</span>-->
+        <!--          <span>진행 중</span>-->
+        <!--          <span>5</span>-->
+        <!--        </div>-->
+      </div>
+
+      <div class="page-button"
+           th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
+        <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+    </a> -->
+        <a href="#"><i class="fas fa-angle-double-left"></i></a>
+        <a href="#" class="main-page">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#"><i class="fas fa-angle-double-right"></i></a>
+        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+        <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+    </a>
+    <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+        <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
+    </a> -->
+        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+        <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+    </a> -->
+      </div>
+    </div>
+  </div>
+  <script>
+    const adminMakeSurveySearchResults = surveys => {
+      const table = $('div.scroll-table');
+      table.remove('div.board-row')
+      let idx = 1;
+      for (survey of surveys) {
+        let template = `<div class="board-row">`
+        template += `<span>${idx++}</span>`// 번호
+        template += `<span>${survey.point}</span>`// 설문 이름
+        template += `<span>${survey.name}</span>`// 지급 포인트
+        template += `<span>${survey.phone}</span>` // 설문 기간
+        template += `<span>${survey.role}</span>`// 진행 상태
+        template += `<span>${survey.status.count}</span>`// 참여자 수
+        template += `<span><button class="btn_udel btn-warn">삭제</button></span>`
+        template += `</div>`
+        table.append(template);
+      }
+    }
+    const adminGetAllSurveys = () => {
+      axios.get('/api/surveys')
+          .then(res => {
+            console.log(res)
+            adminMakeSurveySearchResults(res.data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    }
+
+    $(function () {
+      adminGetAllSurveys()
+    })
+  </script>
+</th:block>

@@ -15,12 +15,14 @@ import java.time.LocalDateTime;
 public class PointRequest {
 
   @Id
-  Long id;
+  private Long id;
 
-  Long uid;
+  private Long uid;
 
-  Long requestPoint;
+  private Long requestPoint;
 
-  LocalDateTime requestedAt;
+  private LocalDateTime requestedAt;
+
+  private String account;
 
 }

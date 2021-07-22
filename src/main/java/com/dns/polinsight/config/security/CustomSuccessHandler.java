@@ -32,7 +32,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     SessionUser sessionUser = new SessionUser(repository.findUserByEmail(authentication.getName()).get());
     request.getSession().setAttribute("user", sessionUser);
     response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder().msg("success").build()).trim());
-    System.out.println("로그인 성공");
   }
 
 

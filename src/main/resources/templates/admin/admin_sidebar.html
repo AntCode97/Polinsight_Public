@@ -527,14 +527,7 @@
       <!-- 네비게이션 -->
       <ul class="admin_nav">
         <li class="nav-item nav_action">
-          <a href="#" class="nav_link">
-            <i class="fas fa-th-large"></i>
-            <p>대시보드</p>
-          </a>
-        </li>
-
-        <li class="nav-item nav_action">
-          <a href="#" class="nav_link">
+          <a th:href="@{admin/admin_member_list}" class="nav_link">
             <i class="fas fa-user-friends"></i>
             <p>
               회원관리
@@ -545,23 +538,28 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a href="#" class="nav_link">
-                <p class="nav_dropdown">회원목록</p>
+              <a th:href="@{admin/admin_member_list}" class="nav_link">
+                <p class="nav_dropdown">회원 목록</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav_link">
-                <p class="nav_dropdown">이메일보내기</p>
+              <a th:href="@{admin/admin_member_search}" class="nav_link">
+                <p class="nav_dropdown">회원 검색</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{admin/admin_member_add}" class="nav_link">
+                <p class="nav_dropdown">회원 등록</p>
               </a>
             </li>
           </ul>
         </div>
 
         <li class="nav-item nav_action">
-          <a href="#" class="nav_link">
+          <a th:href="@{admin/admin_board_list}" class="nav_link">
             <i class="fas fa-clipboard-list"></i>
             <p>
-              게시글관리
+              공지사항
               <i class="fas fa-caret-down arrow"></i>
             </p>
           </a>
@@ -569,18 +567,37 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a href="#" class="nav_link">
-                <p class="nav_dropdown">공지사항</p>
+              <a th:href="@{admin/admin_board_list}" class="nav_link">
+                <p class="nav_dropdown">공지사항 목록</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav_link">
-                <p class="nav_dropdown">자료실</p>
+              <a th:href="@{admin/admin_board_add}" class="nav_link">
+                <p class="nav_dropdown">공지사항 등록</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <li class="nav-item nav_action">
+          <a th:href="@{admin/admin_survey_list}" class="nav_link">
+            <i class="fas fa-list"></i>
+            <p>
+              설문 관리
+              <i class="fas fa-caret-down arrow"></i>
+            </p>
+          </a>
+        </li>
+        <div class="collapse-show">
+          <ul class="admin_nav">
+            <li class="nav-item">
+              <a th:href="@{admin/admin_survey_list}" class="nav_link">
+                <p class="nav_dropdown">설문 목록</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav_link">
-                <p class="nav_dropdown">Q&A</p>
+              <a th:href="@{admin/admin_survey_point}" class="nav_link">
+                <p class="nav_dropdown">설문 완료 회원 포인트 지급</p>
               </a>
             </li>
           </ul>
