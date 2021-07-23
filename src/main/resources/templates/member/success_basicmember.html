@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style type="text/css">
+      @import url('common.css');
+      .register_success_wrap {
+        width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        color: black;
+        font-size: 16px;
+      }
+      .register_success_box {
+        display: flex;
+        justify-contents: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .register_success_box > * {margin: 7px 0;}
+
+      .success_icon { font-size: 28px; }
+      .success_title > h1{ font-size: 22px; font-weight: normal; padding-bottom: 35px; }
+      .success_item_box { background-color: #ECECEC; display: inline-block; padding: 20px 50px; border-radius: 10px; text-align: center; }
+      .success_item_box > div:nth-child(1) { padding-bottom: 7px; }
+      .btn_move {
+        color: white;
+        cursor: pointer;
+        background-color: #182838;
+        padding: 7px 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register_success_wrap">
+      <div class="register_success_box">
+        <div class="success_icon"><i class="fas fa-check-circle" style="color: #4C99CF;"></i></div>
+        <div class="success_title"><h1>회원가입 완료!</h1></div>
+        <div>환영합니다.</div>
+        <div><span>000</span>님은 <strong>'일반회원'</strong>이십니다.</div>
+        <div class="success_item_box">
+          <div>일반회원은 조사참여가 제한됩니다.</div>
+          <div>패널가입 하시고 온라인조사에 참여해주세요!</div>
+        </div>
+        <a th:href="@{}" class="btn_move">패널가입 바로가기</a>
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  </script>
+</html>
