@@ -108,10 +108,20 @@ public class SurveyServiceImpl implements SurveyService {
    * get details for custom variables
    * */
   private Survey getSurveyDetails(Survey basicSurvey, HttpEntity<Object> header) {
+    // 서베이 아이디를 통해 서베이의 자세한 정보를 가져오고
+    // 가져온 데이터를 이용해, 어떠한 커스텀 변수가 있는지 확인한다 - 문제 갯수, 응답 횟수 까지 알 수 있음
     String apiUrl = "/surveys/" + basicSurvey.getSurveyId() + "/details";
     Survey survey = null;
-    new RestTemplate().exchange(baseURL + apiUrl, HttpMethod.GET, header, Map.class);
+    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + apiUrl, HttpMethod.GET, header, Map.class);
+    List<Map<String, String>> tmp = (List<Map<String, String>>) res.getBody();
     return survey;
+  }
+
+  private long getTotalResponse(Long surveyId, HttpEntity<Object> header) {
+    String api = "/surveys/" + surveyId + "/responses/bulk";  // 설문에 참여한 사람 수, 참여한 사람들 데이터까지 모두 가져올 수 있음
+    // 가져온 데이터에서 커스텀 변수를 통해 사용자와 매칭 하고 이를 이용해서 누가 어떤 설문을 완료했는지 기록할 수 있다.
+    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + api, HttpMethod.GET, header, Map.class);
+    return Long.parseLong(String.valueOf(res.getBody().get("total")));
   }
 
   @Override
