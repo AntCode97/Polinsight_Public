@@ -25,10 +25,9 @@ public class SurveyController {
   @GetMapping("/surveys")
   public ModelAndView getSurveyById(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView();
-    String id = request.getParameter("surveyId");
     mv.setViewName("");
     mv.addObject("survey", surveyService.findById(Survey.builder()
-                                                        .id(id)
+                                                        .id(Long.parseLong(request.getParameter("surveyId")))
                                                         .build()));
     return mv;
   }

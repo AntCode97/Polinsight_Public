@@ -101,7 +101,7 @@ public class ApiController {
   public ResponseEntity<Map<String, Object>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex) {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", surveyService.find);
+      map.put("data", surveyService.findSurveyByRgex(regex));
       map.put("error", null);
     } catch (Exception e) {
       map.put("data", null);
