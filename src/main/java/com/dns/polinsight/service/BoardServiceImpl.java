@@ -90,4 +90,9 @@ public class BoardServiceImpl implements BoardService {
 
   }
 
+  @Override
+  public void upViewCnt(Board board) {
+    repository.upViewCnt(board);
+  }
+
 }

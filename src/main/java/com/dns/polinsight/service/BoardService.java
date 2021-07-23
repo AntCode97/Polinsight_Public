@@ -28,4 +28,6 @@ public interface BoardService {
 
   Page<Board> searchContent(String searchcontent, BoardType boardType, Pageable pageable);
 
+  void upViewCnt(Board board);
+
 }

@@ -58,9 +58,16 @@ public class BoardController {
     Page<Board> boards = boardService.getBoardList(pageable);
     //    List<Board> boards = boardService.findAll();
     boardService.renewBoard();
+
     model.addAttribute("boards", boards);
-    return "admin/admin_board_list";
+    if(boardSearch.getBoardType() !=null){
+      model.addAttribute("boardSearch", boardSearch);
+    }
+    return "admin/boards";
   }
+
+
+
 
   @GetMapping("admin2/boards/new")
   public String adminCreateForm(Model model, @LoginUser SessionUser user) throws IOException {
@@ -102,8 +109,28 @@ public class BoardController {
     return "redirect:/admin2/boards";
   }
 
+  @GetMapping("admin2/boards/search")
+  public String adminsearch(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
+                            Model model) {
+    //    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue());
+    Page<Board> boards;
+    if (boardSearch.getSearchType() == SearchType.TITLE) {
+      boards = boardService.searchTitle(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
+    } else {
+      boards = boardService.searchContent(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
+    }
+    model.addAttribute("boards", boards);
 
-  @GetMapping("/boards/new")
+
+    if(boardSearch.getBoardType() !=null){
+      model.addAttribute("boardSearch", boardSearch);
+    }
+    System.out.println(boardSearch.toString());
+
+    return "boards/boardList";
+  }
+
+  @GetMapping("boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
 //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -116,7 +143,7 @@ public class BoardController {
   }
 
 
-  @PostMapping("/boards/new")
+  @PostMapping("boards/new")
   public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user) {
     log.info("Result: " + result + ", data: " + boardDTO.toString());
     // NOTE 2021-07-04 0004 : BindingResult??
@@ -182,10 +209,9 @@ public class BoardController {
     }
     System.out.println(boardSearch.toString());
 
-
-
     return "boards/boardList";
   }
+
 
   @GetMapping("/boards/{boardId}")
   public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
@@ -198,7 +224,9 @@ public class BoardController {
     //    if (user != null) {
     //      model.addAttribute("user", user);
     //    }
-    model.addAttribute("board", boardService.findOne(boardId));
+    Board findBoard = boardService.findOne(boardId);
+    boardService.upViewCnt(findBoard);
+    model.addAttribute("board", findBoard);
     return "boards/board";
   }
 
@@ -346,6 +374,7 @@ public class BoardController {
 
       map.put("data", boards);
     }
+
     return ResponseEntity.ok(map);
   }
 

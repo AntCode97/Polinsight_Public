@@ -566,7 +566,7 @@
           </div>
           <div class="board-row" th:each="board : ${boards}">
             <span th:text="${board.id}"></span>
-            <a href="th:href="@{/boards/{id} (id=${board.id})}"" class="board-title" ><strong th:text="${board.title}"></strong></a>
+            <a th:href="@{/boards/{id} (id=${board.id})}"" class="board-title" ><strong th:text="${board.title}"></strong></a>
             <span th:if="${board.newBoard}">
                                  New!
                             </span>
@@ -587,6 +587,7 @@
           <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/admin2/boards(page=${boards.number})}"><i class="fas fa-angle-double-left"></i></a>
           <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'main-page': 'not-active' " th:text="${page}"
              th:href="@{/admin2/boards(page=${page})}">1</a>
+
 
           <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/admin2/boards(page=${boards.number + 2})}"><i class="fas fa-angle-double-right"></i></a>
           <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">

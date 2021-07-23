@@ -53,6 +53,8 @@ public class Board implements Serializable {
 
   private Boolean newBoard;
 
+  private int viewcnt;
+
   public static BoardBuilder builder(BoardDTO boardDTO) {
     return BoardBuilder()
         .id(boardDTO.getId())
@@ -62,7 +64,8 @@ public class Board implements Serializable {
         .user(boardDTO.getUser())
         .registeredAt(boardDTO.getRegisteredAt())
         .boardType(boardDTO.getBoardType())
-        .attaches(boardDTO.getAttaches());
+        .attaches(boardDTO.getAttaches())
+            .viewcnt(0);
   }
 
 
