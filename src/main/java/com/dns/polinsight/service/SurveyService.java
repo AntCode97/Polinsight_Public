@@ -3,6 +3,7 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -26,6 +27,8 @@ public interface SurveyService {
 
   void deleteSurveyById(Long surveyId);
 
-  List<Survey> findSurveyByRgex(String regex);
+  List<Survey> findSurveysByEndDate(LocalDateTime endDate);
+
+  List<Survey> findSurveysByTitleRegex(String titleRegex);
 
 }

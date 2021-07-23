@@ -3,7 +3,9 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.service.SurveyService;
+import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.util.Map;
 public class SurveyController {
 
   private final SurveyService surveyService;
+
+  private final UserService userService;
 
   @GetMapping("/surveys")
   public ModelAndView getSurveyById(HttpServletRequest request) {
@@ -50,11 +54,12 @@ public class SurveyController {
   /*
    * 서베이 몽키로 리다이렉팅
    * */
-  @GetMapping("/survey")
-  public void redirectToSurvey(@LoginUser SessionUser sessionUser) {
-    /*
-     * 해시 발급 등 유저 맞춤 데이터 생성
-     * */
+  @GetMapping("/survey/{surveyId}")
+  public void redirectToSurvey(@LoginUser SessionUser sessionUser, @PathVariable(name = "surveyId") Long surveyId) {
+    Survey userSelectedSurvey = surveyService.findById(Survey.builder().id(surveyId).build());
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    // 해시 발급 및 서베이 포인트와 결합하여 저장
+
   }
 
   @PostMapping("/survey/point/{survey_id}")

@@ -2,10 +2,7 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -26,17 +23,19 @@ public class Survey implements Serializable {
 
   private String title;
 
-  private String nickname;
+//  private String nickname;
 
-  private String href;
+//  private String href;
 
+  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime createdAt;
 
-  private LocalDateTime modifiedAt;
+//  private LocalDateTime modifiedAt;
 
+  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime endAt;
 
-  private String preview;
+//  private String preview;
 
   private Long point;
 

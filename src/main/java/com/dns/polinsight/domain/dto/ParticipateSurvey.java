@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -24,6 +26,7 @@ public class ParticipateSurvey implements Serializable {
 
   private String surveyId;
 
+  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime participatedAt;
 
 }

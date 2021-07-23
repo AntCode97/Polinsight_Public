@@ -16,13 +16,13 @@ public class SurveyMonkeyDTO {
 
   private String title;
 
-  private String nickname;
+  //  private String nickname;
 
-  private String href;
+  //  private String href;
 
   private LocalDateTime createdAt;
 
-  private LocalDateTime modifiedAt;
+  //  private LocalDateTime modifiedAt;
 
   private String preview;
 
@@ -30,11 +30,11 @@ public class SurveyMonkeyDTO {
     return Survey.builder()
                  .surveyId(this.id)
                  .title(this.title)
-                 .nickname(this.nickname)
-                 .href(this.href)
+                 //                 .nickname(this.nickname)
+                 //                 .href(this.href)
                  .createdAt(this.createdAt)
-                 .modifiedAt(this.modifiedAt)
-                 .preview(this.preview)
+                 //                 .modifiedAt(this.modifiedAt)
+                 //                 .preview(this.preview)
                  .build();
   }
 

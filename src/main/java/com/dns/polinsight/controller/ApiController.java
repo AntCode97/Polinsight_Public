@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,10 +99,14 @@ public class ApiController {
   }
 
   @GetMapping("/survey/{regex}")
-  public ResponseEntity<Map<String, Object>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex) {
+  public ResponseEntity<Map<String, Object>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, String type /*검색 타입*/) {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", surveyService.findSurveyByRgex(regex));
+      if (type.equals("title")) {
+        map.put("data", surveyService.findSurveysByTitleRegex(regex));
+      } else {
+        map.put("data", surveyService.findSurveysByEndDate(LocalDateTime.parse(regex)));
+      }
       map.put("error", null);
     } catch (Exception e) {
       map.put("data", null);

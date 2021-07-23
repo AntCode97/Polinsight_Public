@@ -47,6 +47,7 @@ public class Board implements Serializable {
   @NotNull
   private User user;
 
+  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime registeredAt;
 
   private BoardType boardType;

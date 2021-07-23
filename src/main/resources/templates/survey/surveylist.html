@@ -29,16 +29,17 @@
     const makeSurveyCard = (survey) => {
       let template = ""
       if (survey.isRun) {
-        template += '<div class=\"main_survey_item bg_color_item_white\">';
-        template += '<p class="survey_run">진행중</p>'
+        template += `<div class="main_survey_item bg_color_item_white">`;
+        template += `<p class="survey_run">진행중</p>`
       } else {
-        template += '<div class="main_survey_item bg_color_item_gray">';
-        template += '<p class="survey_stop">조사완료</p>'
+        template += `<div class="main_survey_item bg_color_item_gray">`;
+        template += `<p class="survey_stop">조사완료</p>`
       }
-      template += '<p class="survey_title">' + survey.title + '</p>'
-      template += '<p class="survey_point">' + !survey.point ? `지정 안됨</p>` : `${survey.point}+ P</p>`
-      template += '<p class="survey_date">' + !survey.endAt ? `지정 안됨</p>` : `~ ${survey.endAt}</p>`
-      template += '</div>'
+      template += `<p class="survey_title">${survey.title}</p>`
+      template += `<p class="survey_point"> ${!survey.point ? '지정 안됨' : survey.point + P}</p>`
+      template += `<p class="survey_date"> ${!survey.endAt ? '지정 안됨' : ~survey.endAt}</p>`
+      template += `<input type="hidden" value="${survey.id}" />`
+      template += `</div>`
       return template;
     }
     const makeSurveyCardList = (surveyList) => {
@@ -109,6 +110,16 @@
     $(function () {
       getSurveyList();
       // $('input[name=searchInput]').on('change', asyncSurveySearch)
+
+      // 동적으로 생성된 설문 목록에 이벤트 할당
+      $(document).on('click', 'main_survey_item bg_color_item_white', function () {
+        const selectedSurvey = $(this)
+        const selectedSurveyId = selectedSurvey.children('input[type=hidden]').val()
+
+        axios.get('')
+            .then()
+            .catch()
+      })
     })
   </script>
 </th:block>

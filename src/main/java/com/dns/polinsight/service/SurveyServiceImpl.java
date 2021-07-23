@@ -75,10 +75,10 @@ public class SurveyServiceImpl implements SurveyService {
     List<Survey> surveyList = tmplist.stream().map(objmap -> SurveyMonkeyDTO.builder()
                                                                             .id(Long.valueOf(objmap.get("id")))
                                                                             .title(objmap.get("title"))
-                                                                            .nickname(objmap.get("nickname"))
-                                                                            .href(objmap.get("href"))
+                                                                            //                                                                            .nickname(objmap.get("nickname"))
+                                                                            //                                                                            .href(objmap.get("href"))
                                                                             .createdAt(LocalDateTime.parse(objmap.get("date_created")))
-                                                                            .modifiedAt(LocalDateTime.parse(objmap.get("date_modified")))
+                                                                            //                                                                            .modifiedAt(LocalDateTime.parse(objmap.get("date_modified")))
                                                                             .build()).map(SurveyMonkeyDTO::toSurvey).collect(Collectors.toList());
     surveyList = surveyList.parallelStream().map(survey -> {
       survey.getStatus().setProgressType(survey.getEndAt());
@@ -108,12 +108,9 @@ public class SurveyServiceImpl implements SurveyService {
    * get details for custom variables
    * */
   private Survey getSurveyDetails(Survey basicSurvey, HttpEntity<Object> header) {
-    StringBuffer sb = new StringBuffer("/surveys/");
-    sb.append(basicSurvey.getSurveyId());
-    sb.append("/details");
-
+    String apiUrl = "/surveys/" + basicSurvey.getSurveyId() + "/details";
     Survey survey = null;
-    new RestTemplate().exchange(baseURL + sb, HttpMethod.GET, header, Map.class);
+    new RestTemplate().exchange(baseURL + apiUrl, HttpMethod.GET, header, Map.class);
     return survey;
   }
 
@@ -123,12 +120,13 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public List<Survey> findSurveyByRgex(String regex) {
-    if (regex.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
-      return surveyRepository.findSurveysByEndAtLessThan(LocalDateTime.parse(regex));
-    } else {
-      return surveyRepository.findSurveysByTitleLike(regex);
-    }
+  public List<Survey> findSurveysByEndDate(LocalDateTime endDate) {
+    return surveyRepository.findSurveysByEndAtLessThan(endDate);
+  }
+
+  @Override
+  public List<Survey> findSurveysByTitleRegex(String titleRegex) {
+    return surveyRepository.findSurveysByTitleLike(titleRegex);
   }
 
 }

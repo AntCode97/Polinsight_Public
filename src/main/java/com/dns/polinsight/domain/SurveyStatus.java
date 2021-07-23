@@ -6,18 +6,29 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class SurveyStatus implements Serializable {
 
   private static final long serialVersionUID = 4634709298238240835L;
+
+  @ElementCollection
+  @Builder.Default
+  private final Map<String, String> variables = new HashMap<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "id")
+  private final List<User> participant = new ArrayList<>();
 
   @Id
   private Long id;
@@ -30,7 +41,6 @@ public class SurveyStatus implements Serializable {
   @OneToOne(mappedBy = "status")
   @Setter
   private Survey survey;
-
 
   public void setProgressType(LocalDateTime endDateTime) {
     int cmp = LocalDateTime.now().compareTo(endDateTime);
