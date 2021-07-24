@@ -21,11 +21,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,6 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,9 +86,11 @@ public class BoardController {
 
 
   @PostMapping("admin2/boards/new")
-  public String adminCreate(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user) {
+  public String adminCreate(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
     log.info("Result: " + result + ", data: " + boardDTO.toString());
-    // NOTE 2021-07-04 0004 : BindingResult??
+
+    boardDTO.setFiles(Arrays.asList(file));
+      // NOTE 2021-07-04 0004 : BindingResult??
 
     if (result.hasErrors()) {
       return "admin/admin_board_register";
@@ -229,6 +234,22 @@ public class BoardController {
     model.addAttribute("board", findBoard);
     return "boards/board";
   }
+  @GetMapping("admin2/boards/{boardId}")
+  public String adminContent(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
+    //파일 리스트 보여줄 때
+    //    model.addAttribute("files", storageService.loadAll().map(
+    //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
+    //                    "serveFile", path.getFileName().toString()).build().toUri().toString())
+    //            .collect(Collectors.toList()));
+    model.addAttribute("files", attachService.findFiles(boardId));
+    //    if (user != null) {
+    //      model.addAttribute("user", user);
+    //    }
+    Board findBoard = boardService.findOne(boardId);
+    boardService.upViewCnt(findBoard);
+    model.addAttribute("board", findBoard);
+    return "boards/board";
+  }
 
   @GetMapping("/boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
@@ -281,7 +302,7 @@ public class BoardController {
     boardService.addBoard(boardDTO);
     attachService.addAttach(boardDTO);
 
-    return "redirect:boards/{boardId}";
+    return "redirect:/boards/{boardId}";
   }
 
   @GetMapping("admin2/boards/{boardId}/edit")
@@ -296,8 +317,15 @@ public class BoardController {
     boardDTO.setTitle(board.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     boardDTO.setRegisteredAt(registeredAt);
-
-    model.addAttribute("files", attachService.findFiles(boardId));
+//    try {
+//      List<MultipartFile> mFiles =attachService.findMultipartFiles(boardId);
+//      for(MultipartFile m : mFiles){
+//        System.out.println(m.getOriginalFilename());
+//      }
+//      boardDTO.setFiles(mFiles);
+//    } catch (Exception e){
+//      System.out.println(e);
+//    }
 
     //    if (user != null) {
     //      model.addAttribute("user", user);
@@ -317,25 +345,42 @@ public class BoardController {
     //      System.out.println(ex);
     //    }
     //
-
-
+//
+//    model.addAttribute("files", attachService.findFiles(boardId));
     model.addAttribute("boardDTO", boardDTO);
     return "admin/admin_board_update";
   }
 
+
+
   @PostMapping("admin2/boards/{boardId}/edit")
-  public String adminUpdateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user) {
+  public String adminUpdateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + boardId);
     User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
     boardDTO.setUser(admin);
     boardDTO.setId(boardId);
     boardDTO.setRegisteredAt(LocalDateTime.now());
     boardDTO.transViewcontent();
+    List<MultipartFile> mFiles = boardDTO.getFiles();
+    if(mFiles !=null){
+      for(MultipartFile m : file){
+        mFiles.add(m);
+
+      }
+      boardDTO.setFiles(mFiles);
+    } else{
+      if(file != null){
+        mFiles = Arrays.asList(file);
+        boardDTO.setFiles(mFiles);
+      }
+    }
+
+
 
     boardService.addBoard(boardDTO);
     attachService.addAttach(boardDTO);
 
-    return "redirect:admin2/boards/{boardId}";
+    return "redirect:/boards/{boardId}";
   }
 
 
@@ -399,7 +444,16 @@ public class BoardController {
   @GetMapping("/boards/{boardId}/{file}/delete")
   public String deleteFile(@PathVariable("boardId") Long boardId, @PathVariable("file") String filename, Model model) {
     attachService.delete(attachService.findByname(filename).get(0));
-    return "redirect:boards/" + boardId + "/edit";
+    return "redirect:/boards/" + boardId + "/edit";
   }
+
+  @GetMapping("api/{file}/delete")
+  public ResponseEntity asyncDeleteFile( @PathVariable("file") String filename, Model model) {
+    System.out.println("파일 삭제 성공!");
+    attachService.delete(attachService.findByname(filename).get(0));
+    return new ResponseEntity(HttpStatus.OK);
+  }
+
+
 
 }

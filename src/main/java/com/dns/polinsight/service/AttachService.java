@@ -2,8 +2,10 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.BoardDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public interface AttachService {
@@ -16,11 +18,14 @@ public interface AttachService {
 
   List<File> findFiles(Long boardId);
 
+  List<MultipartFile> findMultipartFiles(Long boardId) throws IOException;
+
   Attach find(Attach attach);
 
   Attach saveOrUpdate(Attach attach);
 
   List<Attach> findByname(String filename);
+
 
   void addAttach(BoardDTO boardDTO);
 
