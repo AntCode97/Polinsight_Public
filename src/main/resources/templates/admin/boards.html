@@ -194,7 +194,7 @@
                 <!-- 게시글 전체 조회 출력 -->
                 <div class="board-row" th:each="list : ${boards}">
                     <span th:text="${list.id}"></span>
-                    <a th:href="@{/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>
+                    <a th:href="@{/admin2/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>
                     <span th:if="${list.newBoard}">
                                  New!
                             </span>

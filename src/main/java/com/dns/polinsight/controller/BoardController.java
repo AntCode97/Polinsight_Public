@@ -33,6 +33,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -186,6 +188,7 @@ public class BoardController {
     if(boardSearch.getBoardType() !=null){
       model.addAttribute("boardSearch", boardSearch);
     }
+    model.addAttribute("boards", boards);
     System.out.println(boardSearch.toString());
 
 
@@ -235,7 +238,7 @@ public class BoardController {
     return "boards/board";
   }
   @GetMapping("admin2/boards/{boardId}")
-  public String adminContent(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
+  public String adminContent(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
@@ -246,8 +249,27 @@ public class BoardController {
     //      model.addAttribute("user", user);
     //    }
     Board findBoard = boardService.findOne(boardId);
-    boardService.upViewCnt(findBoard);
+    try{
+      System.out.println(session);
+      long update_time =0;
+      if(session.getAttribute("update_time"+findBoard.getId()) != null){
+          update_time = (long)session.getAttribute("update_time"+findBoard.getId());
+      }
+      long current_time =System.currentTimeMillis();
+      if(current_time - update_time > 24*60*601000){
+        System.out.println("조회수 증가!!");
+        boardService.upViewCnt(findBoard);
+        session.setAttribute("update_time"+findBoard.getId(), current_time);
+      } else System.out.println("하루가 지나야 조회수가 오름");
+
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+
+
     model.addAttribute("board", findBoard);
+
+
     return "boards/board";
   }
 
