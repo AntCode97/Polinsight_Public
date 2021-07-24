@@ -91,6 +91,12 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
+  public Page<Board> searchKeyword(String keyword, Pageable pageable) {
+    return repository.findBySearchKeyword(keyword, pageable);
+
+  }
+
+  @Override
   public void upViewCnt(Board board) {
     repository.upViewCnt(board);
   }

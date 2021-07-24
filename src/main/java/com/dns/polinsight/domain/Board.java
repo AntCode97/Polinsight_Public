@@ -24,6 +24,7 @@ public class Board implements Serializable {
 
   @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
   @Builder.Default
+  @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
 
   @Id

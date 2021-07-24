@@ -445,6 +445,25 @@ public class BoardController {
     return ResponseEntity.ok(map);
   }
 
+  @RequestMapping(value = "/api/admin2/board/search", method = { RequestMethod.POST })
+  public String asyncAdminBoardSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model) {
+
+
+    String keyword = paramMap.get("keyword").toString();
+    System.out.println(keyword);
+    //List<Board> boards = boardService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
+    Page<Board> boards = boardService.searchKeyword(keyword, pageable);
+    for(Board b : boards){
+      System.out.println(b.getId());
+    }
+    model.addAttribute("boards", boards);
+
+
+
+
+    return "/fragments/boardList :: #boardTable";
+  }
+
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
   @GetMapping("/boards/upload-dir/{filename:.+}")

@@ -1,0 +1,26 @@
+
+<div xmlns:th="http://www.thymeleaf.org" >
+    <th:block layout:fragment="layout.content">
+<div id="boardTable" >
+    <div class="board-row" th:each="list : ${boards}">
+        <span th:text="${list.id}"></span>
+        <a th:href="@{/admin2/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>
+        <span th:if="${list.newBoard}">
+                                 New!
+                            </span>
+        <span th:text="${list.user.name}"></span>
+        <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
+
+        <span th:text="${list.viewcnt}"></span>
+        <span>
+                        <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
+                        <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
+                    </span>
+        <span><button class="btn_udel btn-support" th:onclick="|location.href='@{/admin2/boards/{id}/edit (id=${list.id})}'|">수정</button>
+                        <button class="btn_udel btn-warn" th:onclick="|location.href='@{/admin2/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>
+    </div>
+    <div class="board-bottom"><button class="btn_udel btn-green" onclick="location.href='/admin2/boards/new'">새 글쓰기</button></div>
+</div>
+
+</th:block>
+</div>

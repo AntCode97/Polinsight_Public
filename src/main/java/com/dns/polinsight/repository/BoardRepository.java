@@ -31,6 +31,12 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
   )
   Page<Board> findBySearchcontent(String searchcontent, BoardType boardType, Pageable pageable);
 
+  @Query(
+          value = "SELECT b FROM Board b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
+          countQuery = "SELECT COUNT(b.id) FROM Board b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
+  )
+  Page<Board> findBySearchKeyword(String keyword,Pageable pageable);
+
   @Transactional
   @Modifying()
   @Query(

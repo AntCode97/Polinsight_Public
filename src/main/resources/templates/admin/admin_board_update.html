@@ -759,14 +759,7 @@
         const fileName = $(this).attr('value');
         console.log(fileName);
         axios.get('/api/'+ fileName + '/delete')
-            .then(res => {
-                const boards = res.data.data
-                const body = $('tbody')
-                body.empty()
-                for (idx in boards) {
-                    body.append(makeTemplate(boards[idx]))
-                }
-            })
+            .then()
             .catch(err => {
                 console.log(err)
             })
