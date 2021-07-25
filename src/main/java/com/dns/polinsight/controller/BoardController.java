@@ -59,8 +59,18 @@ public class BoardController {
 
 
   @GetMapping("admin2/boards")
-  public String adminBoardList(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model) {
-    Page<Board> boards = boardService.getBoardList(pageable);
+  public String adminBoardList(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap ) {
+
+    Page<Board> boards;
+    if(paramMap.get("keyword") != null){
+      String keyword = paramMap.get("keyword").toString();
+      System.out.println(keyword);
+      model.addAttribute("keyword", keyword);
+      boards = boardService.searchKeyword(keyword, pageable);
+    } else{
+      boards = boardService.getBoardList(pageable);
+    }
+
     //    List<Board> boards = boardService.findAll();
     boardService.renewBoard();
 
@@ -117,24 +127,28 @@ public class BoardController {
   }
 
   @GetMapping("admin2/boards/search")
-  public String adminsearch(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
+  public String adminsearch(@PageableDefault Pageable pageable,@RequestParam Map<String, Object> paramMap,
                             Model model) {
-    //    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue());
+
     Page<Board> boards;
-    if (boardSearch.getSearchType() == SearchType.TITLE) {
-      boards = boardService.searchTitle(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
-    } else {
-      boards = boardService.searchContent(boardSearch.getSearchValue(), boardSearch.getBoardType(), pageable);
+    if(paramMap.get("keyword") != null){
+      String keyword = paramMap.get("keyword").toString();
+      System.out.println(keyword);
+      model.addAttribute("keyword", keyword);
+      boards = boardService.searchKeyword(keyword, pageable);
+      for (Board b:
+            boards) {
+        System.out.println(b.getId());
+      }
+    } else{
+      boards = boardService.getBoardList(pageable);
     }
+
     model.addAttribute("boards", boards);
 
 
-    if(boardSearch.getBoardType() !=null){
-      model.addAttribute("boardSearch", boardSearch);
-    }
-    System.out.println(boardSearch.toString());
 
-    return "boards/boardList";
+    return "admin/boards";
   }
 
   @GetMapping("boards/new")
@@ -445,7 +459,7 @@ public class BoardController {
     return ResponseEntity.ok(map);
   }
 
-  @RequestMapping(value = "/api/admin2/board/search", method = { RequestMethod.POST })
+  @PostMapping("/api/admin2/boards/search")
   public String asyncAdminBoardSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model) {
 
 
@@ -456,14 +470,12 @@ public class BoardController {
     for(Board b : boards){
       System.out.println(b.getId());
     }
+    model.addAttribute("keyword", keyword);
     model.addAttribute("boards", boards);
 
 
-
-
-    return "/fragments/boardList :: #boardTable";
+    return "/fragments/boardList";
   }
-
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
   @GetMapping("/boards/upload-dir/{filename:.+}")
@@ -495,6 +507,22 @@ public class BoardController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
+//  @GetMapping("/api/admin2/boards/search")
+//  public String asyncAdminBoardSearch2(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model){
+//    String keyword = paramMap.get("keyword").toString();
+//    System.out.println(paramMap);
+//    System.out.println(keyword);
+//    //List<Board> boards = boardService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
+//    Page<Board> boards = boardService.searchKeyword(keyword, pageable);
+//    for(Board b : boards){
+//      System.out.println(b.getId());
+//    }
+//    model.addAttribute("keyword", keyword);
+//    model.addAttribute("boards", boards);
+//
+//
+//    return "/fragments/boardList";
+//  }
 
 
 }
