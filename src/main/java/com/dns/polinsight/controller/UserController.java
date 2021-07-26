@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,9 +34,9 @@ public class UserController {
 
   private final UserService userService;
 
-  private final AdditionalService additionalService;
+//  private final AdditionalService additionalService;
 
-  private final PointService pointService;
+  private final SurveyQueryService surveyQueryService;
 
   private final HttpSession session;
 
@@ -91,12 +90,10 @@ public class UserController {
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
     //    user = User.builder().id(user.getId()).role(UserRoleType.PANEL).build();
-    // 유저 객체 정보 업데이트
-    additional.update(user);
     user = user.update(additional).update(sessionUser);
     // 업데이트된 정보 저장
     // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
-    additionalService.save(additional);
+//    additionalService.save(additional);
     userService.save(user);
 
     Map<String, Object> map = new HashMap<>();
@@ -258,7 +255,7 @@ public class UserController {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
 
-      map.put("data", pointService.addUserPointRequest(user.getId(), point));
+      map.put("data", surveyQueryService.addUserPointRequest(user.getId(), point));
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();
@@ -272,7 +269,7 @@ public class UserController {
   public ResponseEntity<Map<String, Object>> getPointRequestList(@PathVariable(name = "userid") Long userid) {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", pointService.getUserPointRequests(userid));
+      map.put("data", surveyQueryService.getUserPointRequests(userid));
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();

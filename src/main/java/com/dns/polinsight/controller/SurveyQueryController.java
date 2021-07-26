@@ -2,10 +2,10 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Point;
+import com.dns.polinsight.domain.SurveyQuery;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.PointNotUpdateException;
-import com.dns.polinsight.service.PointService;
+import com.dns.polinsight.service.SurveyQueryService;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,35 +25,35 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/point")
-public class PointController {
+public class SurveyQueryController {
 
 
   private final UserService userService;
 
-  private final PointService pointService;
+  private final SurveyQueryService surveyQueryService;
 
   // TODO: 2021-07-06 0006 : 로직 변경 필요 
   @GetMapping("/callback")
-  public ResponseEntity<?> callback(@ModelAttribute Point point) {
+  public ResponseEntity<?> callback(@ModelAttribute SurveyQuery surveyQuery) {
     Map<String, Object> map = new HashMap<>();
 
-    log.info("emai: {}, hash: {}", point.getEmail(), point.getHash());
+    log.info("emai: {}, hash: {}", surveyQuery.getEmail(), surveyQuery.getHash());
 
-    System.out.printf("emai: {}, hash: {}%n", point.getEmail(), point.getHash());
+    System.out.printf("emai: {}, hash: {}%n", surveyQuery.getEmail(), surveyQuery.getHash());
 
-    if (point.getHash().equals("null")) {
+    if (surveyQuery.getHash().equals("null")) {
       throw new ValidationException("user mail");
     }
-    User user = userService.findUserByEmail(User.builder().email(point.getEmail()).build());
-    point = pointService.getHashByEmail(user);
-    if (point.getHash().equals(point.getHash())) {
+    User user = userService.findUserByEmail(User.builder().email(surveyQuery.getEmail()).build());
+    surveyQuery = surveyQueryService.getHashByEmail(user);
+    if (surveyQuery.getHash().equals(surveyQuery.getHash())) {
       // 포인트 적립
       map.put("msg", "success");
       map.put("data", userService.save(user));
     } else {
       // 포인트 적립 실패
       // 실패 로그 작성
-      throw new PointNotUpdateException("user " + point.getEmail() + " failed to accumulate points ");
+      throw new PointNotUpdateException("user " + surveyQuery.getEmail() + " failed to accumulate points ");
     }
     return ResponseEntity.ok(map);
   }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /*
@@ -17,9 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointRequest implements Serializable {
-
-  private static final long serialVersionUID = 1793106791023567213L;
+public class PointRequest {
 
   @Id
   private Long id;

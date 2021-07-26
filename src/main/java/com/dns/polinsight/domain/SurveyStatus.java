@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +31,7 @@ public class SurveyStatus {
   private Integer count = 0;
 
   @Enumerated(EnumType.STRING)
+  @Builder.Default
   private ProgressType progressType = ProgressType.BEFORE;
 
   // 포인트가 지급 될 수 있는 최소 시간

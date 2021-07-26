@@ -4,27 +4,18 @@ import com.dns.polinsight.types.GenderType;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import java.util.Date;
 import java.util.List;
 
 @Embeddable
 @ToString
-//@Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Additional  {
-
-//  @Id
-//  @GeneratedValue(strategy = GenerationType.IDENTITY)
-//  @Column(name = "id", nullable = false)
-//  private Long id;
-
-  @OneToOne(mappedBy = "additional")
-  private User user;
+public class Additional {
 
   /*
    * 추가정보 클래스
@@ -46,10 +37,5 @@ public class Additional  {
 
   @ElementCollection
   private List<String> favorite;
-
-  public Additional update(User user) {
-    this.user = user;
-    return this;
-  }
 
 }

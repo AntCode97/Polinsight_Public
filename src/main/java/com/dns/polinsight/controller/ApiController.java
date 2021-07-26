@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -24,7 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ApiController {
 
-  private final PointService pointService;
+  private final SurveyQueryService pointService;
 
   private final UserService userService;
 
@@ -171,14 +171,12 @@ public class ApiController {
 
   @GetMapping("{id}/pointrequestlist")
   public void getExcelFromAllRequests(HttpServletResponse response,
-                                      @PathVariable("id") long userId) {
+                                      @PathVariable("id") long userId,
+                                      @RequestBody(required = false) PointRequest pointRequest) {
     try {
-      List<PointRequest> tdata = new ArrayList<>();
-      tdata.add(new PointRequest(1L, 1L, 10000L, LocalDateTime.now(), "my-account"));
       ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
-      //      excelUtil.createExcelToResponse(pointService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDateTime.now()), response);
-      excelUtil.createExcelToResponse(tdata, String.format("%s-%s", "data", LocalDateTime.now()), response);
-    } catch (IllegalAccessException e) {
+      excelUtil.createExcelToResponse(pointService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDate.now()), response);
+    } catch (IllegalAccessException | IOException e) {
       e.printStackTrace();
     }
   }

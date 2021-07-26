@@ -1,11 +1,9 @@
 package com.dns.polinsight.service;
 
-import com.dns.polinsight.domain.Point;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.SurveyQuery;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.repository.PointRepository;
 import com.dns.polinsight.repository.PointRequestRepository;
 import com.dns.polinsight.repository.SurveyQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +54,10 @@ public class SurveyQueryServiceImpl implements SurveyQueryService {
   @Override
   public PointRequest addUserPointRequest(Long uid, Long point) {
     return pointRequestRepository.save(PointRequest.builder()
-                                            .uid(uid)
-                                            .requestedAt(LocalDateTime.now())
-                                            .requestPoint(point)
-                                            .build());
+                                                   .uid(uid)
+                                                   .requestedAt(LocalDateTime.now())
+                                                   .requestPoint(point)
+                                                   .build());
   }
 
   @Override

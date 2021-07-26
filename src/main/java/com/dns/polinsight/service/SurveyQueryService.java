@@ -1,7 +1,6 @@
 package com.dns.polinsight.service;
 
 
-import com.dns.polinsight.domain.Point;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.SurveyQuery;
 import com.dns.polinsight.domain.User;
@@ -13,11 +12,11 @@ public interface SurveyQueryService {
 
   void saveAndUpdate(SurveyQuery point);
 
-  Point getPoint(User user);
+  SurveyQuery getPoint(User user);
 
   String getHash(String email) throws NoSuchAlgorithmException;
 
-  Point getHashByEmail(User user);
+  SurveyQuery getHashByEmail(User user);
 
   PointRequest addUserPointRequest(Long uid, Long point);
 

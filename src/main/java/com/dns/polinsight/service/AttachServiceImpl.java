@@ -71,8 +71,8 @@ public class AttachServiceImpl implements AttachService {
   }
 
   @Override
-  public List<Attach> findByname(String filename) {
-    return repository.findByFilename(filename);
+  public List<Attach> findByname(String fileName) {
+    return repository.findByFileName(fileName);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class AttachServiceImpl implements AttachService {
         if (!file.isEmpty()) {
           UUID uuid = UUID.randomUUID();
           Attach attach = Attach.builder()
-                                .filename(uuid + file.getOriginalFilename())
+                                .fileName(uuid + file.getOriginalFilename())
                                 .fileSize(file.getSize())
                                 .originalName(file.getOriginalFilename())
                                 .filePath(baseLocation + uuid + file.getOriginalFilename())
