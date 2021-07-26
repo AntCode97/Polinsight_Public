@@ -675,13 +675,13 @@
                     												<a href="/admin2/boards" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                     											</span>
                                         </div>
-                                        <th:block sec:authorize="isAuthenticated()">
-                                            <div class="btn_wrap2" th:if="${4 == board.user.role}">
+                                        <th:block >
+                                            <div class="btn_wrap2"  th:if="${user.role.toString()} =='ADMIN'">
                                                     <span>
-                                                        <a th:href="@{/boards/{id}/edit (id=${board.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
+                                                        <a th:href="@{/admin2/boards/{id}/edit (id=${board.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                                                     </span>
                                                     <span>
-                                                        <a th:href="@{/boards/{id}/delete (id=${board.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
+                                                        <a th:href="@{/admin2/boards/{id}/delete (id=${board.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
                                                     </span>
                                             </div>
                                         </th:block>

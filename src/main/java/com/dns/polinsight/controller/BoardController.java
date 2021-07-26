@@ -262,6 +262,7 @@ public class BoardController {
     //    if (user != null) {
     //      model.addAttribute("user", user);
     //    }
+    model.addAttribute("user", user);
     Board findBoard = boardService.findOne(boardId);
     try{
       System.out.println(session);
