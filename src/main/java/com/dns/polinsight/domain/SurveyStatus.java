@@ -9,45 +9,45 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyStatus implements Serializable {
+@Embeddable
+public class SurveyStatus {
 
-  private static final long serialVersionUID = 4634709298238240835L;
 
+  // 서베이몽키에서 등록한 설문의 커스텀 변수
   @ElementCollection
   @Builder.Default
-  private final Map<String, String> variables = new HashMap<>();
+  @Column(name = "variables")
+  @Setter
+  private Set<String> variables = new HashSet<>();
 
+  // 설문을 완료한 사람 수
   @Builder.Default
-  @OneToMany(mappedBy = "id")
-  private final List<User> participant = new ArrayList<>();
+  @Setter
+  private Integer count = 0;
 
-  @Id
-  private Long id;
-
-  @Builder.Default
-  private Long count = 0L;
-
+  @Enumerated(EnumType.STRING)
   private ProgressType progressType = ProgressType.BEFORE;
 
-  @OneToOne(mappedBy = "status")
-  @Setter
-  private Survey survey;
+  // 포인트가 지급 될 수 있는 최소 시간
+  private LocalDateTime minimumTime;
+
 
   public void setProgressType(LocalDateTime endDateTime) {
-    int cmp = LocalDateTime.now().compareTo(endDateTime);
-    if (cmp < 0) {
-      this.progressType = ProgressType.ONGOING;
-    } else {
-      this.progressType = ProgressType.END;
+    try {
+      int cmp = LocalDateTime.now().compareTo(endDateTime);
+      if (cmp < 0) {
+        this.progressType = ProgressType.ONGOING;
+      } else {
+        this.progressType = ProgressType.END;
+      }
+    } catch (Exception e) {
+      this.progressType = ProgressType.BEFORE;
     }
   }
 

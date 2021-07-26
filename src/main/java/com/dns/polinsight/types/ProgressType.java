@@ -1,6 +1,10 @@
 package com.dns.polinsight.types;
 
-// TODO: 2021-07-21 :서베이 타입 지정 필요
 public enum ProgressType {
+  /*
+  * @Param BEFORE - 등록 전
+  * @Param ONGOING - 진행 중
+  * @Param END - 설문 종료
+  * */
   BEFORE, ONGOING, END
 }

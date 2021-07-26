@@ -3,14 +3,15 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Point;
 import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.SurveyQuery;
 import com.dns.polinsight.domain.User;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public interface PointService {
+public interface SurveyQueryService {
 
-  void saveAndUpdate(Point point);
+  void saveAndUpdate(SurveyQuery point);
 
   Point getPoint(User user);
 
@@ -20,7 +21,7 @@ public interface PointService {
 
   PointRequest addUserPointRequest(Long uid, Long point);
 
-  List<PointRequest> getUserPointRequest(Long uid);
+  List<PointRequest> getUserPointRequests(Long uid);
 
 
 }

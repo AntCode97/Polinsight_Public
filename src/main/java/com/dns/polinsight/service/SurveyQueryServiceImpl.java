@@ -2,10 +2,12 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Point;
 import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.SurveyQuery;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.repository.PointRepository;
 import com.dns.polinsight.repository.PointRequestRepository;
+import com.dns.polinsight.repository.SurveyQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +20,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PointServiceImpl implements PointService {
+public class SurveyQueryServiceImpl implements SurveyQueryService {
 
   final String salt = "polinsightPointSalt";
 
-  private final PointRepository repository;
+  private final SurveyQueryRepository repository;
 
   private final PointRequestRepository pointRequestRepository;
 
 
   @Override
-  public void saveAndUpdate(Point point) {
+  public void saveAndUpdate(SurveyQuery point) {
     repository.save(point);
   }
 
   @Override
-  public Point getPoint(User user) {
+  public SurveyQuery getPoint(User user) {
     return repository.findPointByUid(user.getId()).orElseThrow(UserNotFoundException::new);
   }
 
@@ -47,7 +49,7 @@ public class PointServiceImpl implements PointService {
   }
 
   @Override
-  public Point getHashByEmail(User user) {
+  public SurveyQuery getHashByEmail(User user) {
     return repository.findPointByEmail(user.getEmail()).orElseThrow(UserNotFoundException::new);
   }
 
@@ -61,7 +63,7 @@ public class PointServiceImpl implements PointService {
   }
 
   @Override
-  public List<PointRequest> getUserPointRequest(Long uid) {
+  public List<PointRequest> getUserPointRequests(Long uid) {
     return pointRequestRepository.findPointRequestsByUid(uid);
   }
 

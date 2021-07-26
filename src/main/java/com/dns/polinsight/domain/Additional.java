@@ -9,18 +9,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Embeddable
 @ToString
-@Entity
+//@Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Additional implements Serializable {
+public class Additional  {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long id;
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.IDENTITY)
+//  @Column(name = "id", nullable = false)
+//  private Long id;
 
   @OneToOne(mappedBy = "additional")
   private User user;

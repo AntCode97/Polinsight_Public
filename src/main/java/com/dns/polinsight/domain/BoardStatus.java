@@ -24,7 +24,7 @@ public class BoardStatus {
 
 
   @OneToMany(mappedBy = "id")
-  @JoinColumn(name = "view_user")
+//  @JoinColumn(name = "view_user")
   @Builder.Default
   private List<User> viewer = new ArrayList<>();
   // TODO: 2021-07-24

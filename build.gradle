@@ -41,17 +41,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     /* OAuth2 */
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    /* Swagger */
-    implementation "io.springfox:springfox-boot-starter:3.0.0"
-    /* LayOut*/
-    implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
+
     /* actuator */
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     /* Batch */
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    //file upload
-    implementation 'commons-io:commons-io:2.6'
+
+    /* file upload */
+    implementation 'commons-io:commons-io:2.11.0'
     implementation 'commons-fileupload:commons-fileupload:1.4'
+
+    /* xlsx */
+    implementation 'org.apache.poi:poi:3.17'
+    implementation 'org.apache.poi:poi-ooxml:3.17'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

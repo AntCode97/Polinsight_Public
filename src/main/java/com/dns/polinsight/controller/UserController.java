@@ -272,7 +272,7 @@ public class UserController {
   public ResponseEntity<Map<String, Object>> getPointRequestList(@PathVariable(name = "userid") Long userid) {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", pointService.getUserPointRequest(userid));
+      map.put("data", pointService.getUserPointRequests(userid));
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();

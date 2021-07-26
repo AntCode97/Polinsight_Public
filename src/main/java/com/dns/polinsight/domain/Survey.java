@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.SurveyMonkeyDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,32 +17,33 @@ public class Survey implements Serializable {
 
   private static final long serialVersionUID = -4701183897615758658L;
 
+//  @OneToOne(fetch = FetchType.EAGER)
+  @Setter
+  @Embedded
+  private SurveyStatus status;
+
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  // 서베이 몽키에서 제공하는 설문 아이디
   private Long surveyId;
+
+  //  private String nickname;
+
+  //  private String href;
 
   private String title;
 
-//  private String nickname;
+  //  private LocalDateTime modifiedAt;
 
-//  private String href;
-
-  @Temporal(TemporalType.TIMESTAMP)
+  @Setter
   private LocalDateTime createdAt;
 
-//  private LocalDateTime modifiedAt;
+  //  private String preview;
 
-  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime endAt;
 
-//  private String preview;
-
   private Long point;
-
-
-  @OneToOne
-  @JoinColumn(name = "status_id")
-  private SurveyStatus status;
 
 }

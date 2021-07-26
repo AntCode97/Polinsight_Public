@@ -63,10 +63,10 @@ public class User implements UserDetails, Serializable {
   @Enumerated(EnumType.STRING)
   private UserRoleType role;
 
-  @OneToOne
-  @JsonIgnore
-  @JoinColumn(name = "additional_id")
-  @ToString.Exclude
+  @Embedded
+//  @JsonIgnore
+//  @JoinColumn(name = "additional_id")
+//  @ToString.Exclude
   private Additional additional;
 
   // TODO: 2021-07-21 : 설문 클릭 시, 콤마로 구분지어 서베이 아이디 저장

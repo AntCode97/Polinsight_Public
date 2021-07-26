@@ -1,4 +1,4 @@
-package com.dns.polinsight.domain.dto;
+package com.dns.polinsight.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,13 +20,15 @@ import java.time.LocalDateTime;
 public class ParticipateSurvey implements Serializable {
 
   @Id
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long seq;
 
-  private Long uid;
+  private Long userId;
 
-  private String surveyId;
+  private Long surveyId;
 
-  @Temporal(TemporalType.TIMESTAMP)
   private LocalDateTime participatedAt;
+
+  private Long surveyPoint;
 
 }

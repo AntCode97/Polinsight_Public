@@ -1,16 +1,21 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.oauth.LoginUser;
+import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.service.AdminService;
-import com.dns.polinsight.service.SurveyService;
-import com.dns.polinsight.service.UserService;
-import groovy.util.logging.Slf4j;
+import com.dns.polinsight.service.*;
+import com.dns.polinsight.utils.ExcelUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -19,16 +24,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ApiController {
 
+  private final PointService pointService;
+
   private final UserService userService;
 
   private final SurveyService surveyService;
 
   private final AdminService adminService;
 
+  private final ParticipateSurveyService participateSurveyService;
+
   @GetMapping("/surveys/sync")
   public ResponseEntity<Map<String, Object>> surveySyncWithSM() {
     Map<String, Object> map = new HashMap<>();
     try {
+      // FIXME: 2021/07/26 : embedded 한 데이터가 넘어오지 않음
       map.put("data", surveyService.getSurveyListAndSyncPerHour());
       map.put("code", 200);
       map.put("msg", "sync and save success");
@@ -144,6 +154,33 @@ public class ApiController {
       e.printStackTrace();
     }
     return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("participate")
+  public ResponseEntity<Map<String, Object>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser, @RequestParam("type") String type) {
+    Map<String, Object> map = new HashMap<>();
+    try {
+      map.put("data", participateSurveyService.findByUserId(sessionUser.getId()));
+      map.put("error", null);
+    } catch (Exception e) {
+      map.put("data", null);
+      map.put("error", e.getMessage());
+    }
+    return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("{id}/pointrequestlist")
+  public void getExcelFromAllRequests(HttpServletResponse response,
+                                      @PathVariable("id") long userId) {
+    try {
+      List<PointRequest> tdata = new ArrayList<>();
+      tdata.add(new PointRequest(1L, 1L, 10000L, LocalDateTime.now(), "my-account"));
+      ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
+      //      excelUtil.createExcelToResponse(pointService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDateTime.now()), response);
+      excelUtil.createExcelToResponse(tdata, String.format("%s-%s", "data", LocalDateTime.now()), response);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
 }
