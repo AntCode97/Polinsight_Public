@@ -9,7 +9,7 @@
       .admin_wrap {
         position: relative;
         top: 0;
-        height: 100vh;
+        /*height: 100vh;*/
         color: #3c4858;
       }
 
@@ -656,7 +656,7 @@
                                 </div>
                                 <div th:each="file : ${board.attaches}" class="input_wrap">
                                     <div class="board_div">
-                                        <label class="file_item" th:text="'첨부파일#' + ${file.id}"></label>
+                                        <label class="file_item" th:text="'첨부파일#'"></label>
                                         <a class="file_download" th:href="@{'/boards/'+${file.filePath}}" th:text="${file.originalName}"></a>
                                     </div>
                                 </div>
@@ -672,16 +672,16 @@
                                         <div class="btn_wrap1">
                     											<span>
 
-                    												<a href="/admin2/boards" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
+                    												<a href="/admin/boards" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                     											</span>
                                         </div>
                                         <th:block >
                                             <div class="btn_wrap2"  th:if="${user.role.toString()} =='ADMIN'">
                                                     <span>
-                                                        <a th:href="@{/admin2/boards/{id}/edit (id=${board.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
+                                                        <a th:href="@{/admin/boards/{id}/edit (id=${board.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                                                     </span>
                                                     <span>
-                                                        <a th:href="@{/admin2/boards/{id}/delete (id=${board.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
+                                                        <a th:href="@{/admin/boards/{id}/delete (id=${board.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
                                                     </span>
                                             </div>
                                         </th:block>

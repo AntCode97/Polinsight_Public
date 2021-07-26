@@ -9,7 +9,7 @@
       .admin_wrap {
         position: relative;
         top: 0;
-        height: 100vh;
+        /*height: 100vh;*/
         color: #3c4858;
       }
 
@@ -615,7 +615,7 @@
                 <div class="metop_inner">
                     <div class="metop_board_wrap">
                         <div class="metop_board_card">
-                            <form id="frm_board" th:action="@{/admin2/boards/new}" th:object="${boardDTO}" method="POST" enctype="multipart/form-data">
+                            <form id="frm_board" th:action="@{/admin/boards/new}" th:object="${boardDTO}" method="POST" enctype="multipart/form-data">
                                 <div class="input_wrap register_top_wrap">
                                     <div class="board_div">
                                         <label for="board_title"><span>*</span>게시판</label>
@@ -729,5 +729,14 @@
       var num = $(this).attr('data-num');
       $('.file_item').eq(num-1).css('border', 'none').empty();
     });
+    $(document).on('change', '.board_file', function (){
+        const file = $(this).val().toString();
+        console.log(file);
+        if(file.includes("[") || file.includes("]")){
+            alert("파일명에 대괄호는 포함할 수 없습니다.")
+            $(".board_file").val("");
+        }
+    });
+
   </script>
 </html>

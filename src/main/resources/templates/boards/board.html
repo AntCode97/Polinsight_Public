@@ -156,8 +156,8 @@
                                     </thead>
                                     <tbody>
                                     <ul>
-                                        <li th:each="file : ${files}">
-                                            <a th:href="${file}" th:text="${file}" />
+                                        <li th:each="file : ${board.attaches}">
+                                            <a th:href="@{'/boards/'+${file.filePath}}" th:text="${file.originalName}" />
                                         </li>
                                     </ul>
                                     <tr>

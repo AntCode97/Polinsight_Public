@@ -39,7 +39,7 @@
 
     <div class="board-row" th:each="list : ${boards}">
         <span th:text="${list.id}"></span>
-        <a th:href="@{/admin2/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>
+        <a th:href="@{/admin/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>
         <span th:if="${list.newBoard}">
                                  New!
                             </span>
@@ -51,10 +51,10 @@
                         <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
                         <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
                     </span>
-        <span><button class="btn_udel btn-support" th:onclick="|location.href='@{/admin2/boards/{id}/edit (id=${list.id})}'|">수정</button>
-                        <button class="btn_udel btn-warn" th:onclick="|location.href='@{/admin2/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>
+        <span><button class="btn_udel btn-support" th:onclick="|location.href='@{/admin/boards/{id}/edit (id=${list.id})}'|">수정</button>
+                        <button class="btn_udel btn-warn" th:onclick="|location.href='@{/admin/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>
     </div>
-    <div class="board-bottom"><button class="btn_udel btn-green" onclick="location.href='/admin2/boards/new'">새 글쓰기</button></div>
+    <div class="board-bottom"><button class="btn_udel btn-green" onclick="location.href='/admin/boards/new'">새 글쓰기</button></div>
 
     <!-- 페이지네이션 -->
     <div class="page-button" th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
@@ -62,18 +62,18 @@
         <!--                    <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>-->
         <!--                </a>-->
 
-        <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{'/admin2/boards/' + ${type}(page=${boards.number})}" aria-label="Previous">
+        <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{'/admin/boards/' + ${type}(page=${boards.number})}" aria-label="Previous">
             <i class="fas fa-angle-double-left"></i>
         </a>
 
                         <a onclick="asyncGetPage()" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
                            ></a>
 <!--        <a th:if="${boardSearch.getBoardType()} !=null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"-->
-<!--           th:href="@{/admin2/boards/search(page=${page}-1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>-->
+<!--           th:href="@{/admin/boards/search(page=${page}-1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>-->
 <!--        <a th:if="${boardSearch.getBoardType()} ==null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"-->
 <!--           th:href="@{/amdin2/boards(page=${page})}"></a>-->
 
-        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{'/admin2/boards/' + ${type}(page=${boards.number + 2})}" aria-label="Next">
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{'/admin/boards/' + ${type}(page=${boards.number + 2})}" aria-label="Next">
             <i class="fas fa-angle-double-right"></i>
         </a>
 
@@ -94,7 +94,7 @@
 
 <!--        // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)-->
 <!--        console.log(keyword);-->
-<!--        // axios.get('/api/admin2/board/search?keyword=' + keyword)-->
+<!--        // axios.get('/api/admin/board/search?keyword=' + keyword)-->
 <!--        //     .then(function (fragment){-->
 <!--        //         $('#boardTable').replaceWith(fragment);-->
 <!--        //     })-->
@@ -102,7 +102,7 @@
 <!--        //         console.log(err)-->
 <!--        //     })-->
 <!--        $.ajax({-->
-<!--            url: '/api/admin2/board/search?keyword=' + keyword,-->
+<!--            url: '/api/admin/board/search?keyword=' + keyword,-->
 <!--            type: "POST",-->
 <!--            data: keyword,-->
 <!--        }).done(function (fragment) {-->

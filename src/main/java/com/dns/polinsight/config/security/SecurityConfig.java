@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .cors().disable()
           .authorizeRequests()
           .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
-          .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasRole(UserRoleType.ADMIN.name())  // Swagger 접근 허가
+          .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
           .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
           .anyRequest().authenticated()
         .and()

@@ -58,7 +58,7 @@ public class BoardController {
   private final AttachService attachService;
 
 
-  @GetMapping("admin2/boards")
+  @GetMapping("admin/boards")
   public String adminBoardList(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap ) {
 
     Page<Board> boards;
@@ -84,7 +84,7 @@ public class BoardController {
 
 
 
-  @GetMapping("admin2/boards/new")
+  @GetMapping("admin/boards/new")
   public String adminCreateForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
 //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -97,7 +97,7 @@ public class BoardController {
   }
 
 
-  @PostMapping("admin2/boards/new")
+  @PostMapping("admin/boards/new")
   public String adminCreate(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
     log.info("Result: " + result + ", data: " + boardDTO.toString());
 
@@ -123,10 +123,10 @@ public class BoardController {
 
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + boardDTO.getFiles() + "!");
 
-    return "redirect:/admin2/boards";
+    return "redirect:/admin/boards";
   }
 
-  @GetMapping("admin2/boards/search")
+  @GetMapping("admin/boards/search")
   public String adminsearch(@PageableDefault Pageable pageable,@RequestParam Map<String, Object> paramMap,
                             Model model) {
 
@@ -251,7 +251,7 @@ public class BoardController {
     model.addAttribute("board", findBoard);
     return "boards/board";
   }
-  @GetMapping("admin2/boards/{boardId}")
+  @GetMapping("admin/boards/{boardId}")
   public String adminContent(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
@@ -342,7 +342,7 @@ public class BoardController {
     return "redirect:/boards/{boardId}";
   }
 
-  @GetMapping("admin2/boards/{boardId}/edit")
+  @GetMapping("admin/boards/{boardId}/edit")
   public String adminUpdateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
     Board board = boardService.findOne(boardId);
     BoardDTO boardDTO = new BoardDTO();
@@ -390,7 +390,7 @@ public class BoardController {
 
 
 
-  @PostMapping("admin2/boards/{boardId}/edit")
+  @PostMapping("admin/boards/{boardId}/edit")
   public String adminUpdateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + boardId);
     User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
@@ -417,7 +417,7 @@ public class BoardController {
     boardService.addBoard(boardDTO);
     attachService.addAttach(boardDTO);
 
-    return "redirect:/boards/{boardId}";
+    return "redirect:/admin/boards/{boardId}";
   }
 
 
@@ -428,12 +428,12 @@ public class BoardController {
     boardService.delete(board);
     return "redirect:boards";
   }
-  @GetMapping("admin2/boards/{boardId}/delete")
+  @GetMapping("admin/boards/{boardId}/delete")
   public String adminDelete(@PathVariable("boardId") Long boardId, Model model) {
     Board board = boardService.findOne(boardId);
     attachService.deleteAttaches(boardId);
     boardService.delete(board);
-    return "redirect:/admin2/boards";
+    return "redirect:/admin/boards";
   }
 
   @GetMapping("/api/board/search")
@@ -460,7 +460,7 @@ public class BoardController {
     return ResponseEntity.ok(map);
   }
 
-  @PostMapping("/api/admin2/boards/search")
+  @PostMapping("/api/admin/boards/search")
   public String asyncAdminBoardSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model) {
 
 
@@ -508,7 +508,7 @@ public class BoardController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
-//  @GetMapping("/api/admin2/boards/search")
+//  @GetMapping("/api/admin/boards/search")
 //  public String asyncAdminBoardSearch2(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model){
 //    String keyword = paramMap.get("keyword").toString();
 //    System.out.println(paramMap);
