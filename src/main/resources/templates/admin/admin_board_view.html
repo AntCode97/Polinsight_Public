@@ -295,7 +295,7 @@
           justify-content: center;
       }
       .metop_board_card {
-          width: 100%;
+          width: 85%;
           margin: 30px 0;
           padding: 40px 30px 20px 30px;
           border-radius: 2px;
@@ -622,18 +622,18 @@
             <div id="metop_container">
                 <div class="metop_inner">
                     <!-- 상세 게시글 창 -->
-                    <div class="metop_board_wrap">
+                    <div class="metop_board_wrap" th:object="${board}">
                         <div class="metop_board_card">
                             <form name="" action="" method="POST">
                                 <div class="input_wrap title_div">
                                     <div class="board_div">
                                         <div class="tile_info_wrap">
                                             <div>
-                                                <span class="post_no" th:text="'['+${one.id}+']번째 글'"></span>
+                                                <span class="post_no" th:text="'['+${board.id}+']번째 글'"></span>
                                             </div>
                                         </div>
                                         <div class="title_text">
-                                            <span th:text="${one.title}">폴인사이트입니다.</span>
+                                            <span th:text="${board.title}">폴인사이트입니다.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -641,28 +641,28 @@
                                 <div class="input_wrap">
                                     <div class="board_div" id="writer_div">
                                         <label>작성자</label>
-                                        <span th:text="${one.writer}">관리자</span>
+                                        <span>관리자</span>
                                     </div>
                                 </div>
                                 <div class="input_wrap">
                                     <div class="board_div">
                                         <label>작성일</label>
-                                        <span class="regdate" th:if="${one.regdate == one.updatedate}" th:text="${#temporals.format(one.regdate, 'yyyy-MM-dd HH:mm')}"></span>
-                                        <span class="updatedate" th:unless="${one.regdate == one.updatedate}" th:text="${#temporals.format(one.updatedate, 'yyyy-MM-dd HH:mm')} + '(수정)'"></span>
+                                        <span class="regdate" th:if="${board.registeredAt == board.registeredAt}" th:text="${#temporals.format(board.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+<!--                                        <span class="updatedate" th:unless="${one.regdate == one.updatedate}" th:text="${#temporals.format(one.updatedate, 'yyyy-MM-dd HH:mm')} + '(수정)'"></span>-->
 
                                         <label class="label_padding">조회</label>
-                                        <span th:text="${one.viewcnt}">12</span>
+                                        <span th:text="${board.viewcnt}">12</span>
                                     </div>
                                 </div>
-                                <div th:each="file : ${files}" class="input_wrap">
+                                <div th:each="file : ${board.attaches}" class="input_wrap">
                                     <div class="board_div">
-                                        <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
-                                        <a class="file_download" th:href="@{'/attach/' + ${file.id}}" th:text="${file.orignalFileName}"></a>
+                                        <label class="file_item" th:text="'첨부파일#' + ${file.id}"></label>
+                                        <a class="file_download" th:href="@{'/boards/'+${file.filePath}}" th:text="${file.originalName}"></a>
                                     </div>
                                 </div>
                                 <div class="input_wrap textarea_div">
-                                    <div class="board_div" th:text="${one.viewcontent}">
-                                      폴인사이트 에요~ 우리는 변덕쟁이랍니다.
+                                    <div class="board_div" th:text="${board.viewcontent}">
+
                                     </div>
                                 </div>
 
@@ -672,16 +672,16 @@
                                         <div class="btn_wrap1">
                     											<span>
 
-                    												<a href="${header.referer}" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
+                    												<a href="/admin2/boards" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                     											</span>
                                         </div>
                                         <th:block sec:authorize="isAuthenticated()">
-                                            <div class="btn_wrap2" th:if="${#authentication.principal.name == one.writer}">
+                                            <div class="btn_wrap2" th:if="${4 == board.user.role}">
                                                     <span>
-                                                        <a th:href="@{'/boards/modify/' + ${one.id}}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
+                                                        <a th:href="@{/boards/{id}/edit (id=${board.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                                                     </span>
                                                     <span>
-                                                        <a href="#" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
+                                                        <a th:href="@{/boards/{id}/delete (id=${board.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
                                                     </span>
                                             </div>
                                         </th:block>
@@ -700,8 +700,19 @@
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
+      window.onload = function () {
+          let file_item = document.getElementsByClassName("file_item");
+          let fileCount = file_item.length;
+
+          console.log(fileCount, file_item);
+          for (let i = 1; i <= fileCount; i++) {
+              file_item[i - 1].innerText = "첨부파일#" + i;
+          }
+      }
+
+
     /* <![CDATA[ */
-        var bno = [[${one.id}]];
+        var bno = [[${board.id}]];
     /* ]]> */
 
     $(function() {

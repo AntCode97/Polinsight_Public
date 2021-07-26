@@ -284,7 +284,7 @@ public class BoardController {
     model.addAttribute("board", findBoard);
 
 
-    return "boards/board";
+    return "admin/admin_board_view";
   }
 
   @GetMapping("/boards/{boardId}/edit")
