@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-        crossorigin="anonymous">
   <style type="text/css">
-    @import url("@{/css/common.css}");
+    @import url("/css/common.css");
     /* 모달 로그인 창 */
     .modal_wrap {
       height: 100vh;
@@ -39,7 +36,7 @@
     }
 
     .login_title {
-      margin: 0 auto -40px;
+      margin: 0 auto;
       text-align: center;
     }
 
@@ -48,8 +45,7 @@
     }
 
     .login_logo_text {
-      margin-top: -50px;
-      max-width: 30rem;
+      max-width: 25rem;
     }
 
     .login_content {
@@ -60,7 +56,7 @@
 
     .err_content {
       margin: 8px 0;
-      padding: 15px;
+      padding: 30px 15px 15px 15px;
       font-size: 15px;
       text-align: left;
       line-height: 20px;
@@ -123,6 +119,7 @@
     .qnapw > a {
       font-size: 14px;
       letter-spacing: 0.8px;
+      color: inherit;
     }
 
     .qnapw > a:first-child {
@@ -139,7 +136,7 @@
       margin-top: 30px;
     }
 
-    .login_btn_wrap > .btn-primary {
+    .login_btn_wrap > button {
       width: 100%;
       font-weight: bold;
     }
@@ -219,7 +216,6 @@
 
       .login_logo_text {
         width: 100%;
-        margin-top: -20px;
       }
 
       .login_content {
