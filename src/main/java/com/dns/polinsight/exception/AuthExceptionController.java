@@ -6,14 +6,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.dns.polinsight.utils.ApiUtils.error;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class AuthExceptionController {
 
-  @ExceptionHandler(BadCredentialsException.class)
+  @ExceptionHandler({BadCredentialsException.class, UnAuthorizedException.class})
   public ApiUtils.ApiResult<?> handleBadCredential(BadCredentialsException e) {
     return error(e.getMessage(), 400);
   }

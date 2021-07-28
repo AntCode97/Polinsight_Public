@@ -40,4 +40,9 @@ public class DefaultExceptionController {
     return error(e.getMessage(), 500);
   }
 
+  @ExceptionHandler(SurveyNotFoundException.class)
+  public ApiUtils.ApiResult<?> handleSurveyNotFound(SurveyNotFoundException e) {
+    return error("Survey Not Found", 505);
+  }
+
 }
