@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
-  <style>
+  <style type="text/css">
     /* 여기서부터 index.html 내용 */
     .panel_wrap {
       width: 900px;
@@ -139,22 +139,81 @@
       background-color: #dedede;
     }
 
-    .search_survey_wrap {
+    /* 진행중인 온라인 조사 */
+    .main_survey_list_wrap {
+      padding: 20px 30px;
+      background-color: #e1eef6;
+      width: 1000px;
+      margin: 0 auto 50px;
+    }
+
+    .main_survey_list_title {
       display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      margin-bottom: 25px;
     }
 
-    .search_input_wrap {
-      margin-left: auto;
+    .main_survey_list_title > p {
+      font-size: 25px;
+      font-weight: bold;
+      margin-right: 10px;
     }
 
-    .search_btn_wrap {
+    .main_survey_item {
+      width: 300px;
+      padding: 10px;
+    }
 
+    .survey_run, .survey_stop {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .survey_title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 45px;
+    }
+
+    .survey_point {
+      font-weight: bold;
+      border-bottom: 1px solid #dadada;
+      padding-bottom: 5px;
+    }
+
+    .survey_date {
+      text-align: right;
+      font-weight: bold;
+      padding: 10px 0 20px;
+    }
+
+    .main_survey_item_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .survey_run {
+      color: #4C99CF;
+    }
+
+    .survey_stop {
+      color: #000;
+    }
+
+    .bg_color_item_white {
+      background-color: white;
+    }
+
+    .bg_color_item_gray {
+      background-color: #dedede;
     }
   </style>
-
 </head>
 <body>
-<!--로그인 안했을때만 보이도록-->
 <th:block th:if="${session.user==null}">
   <div class="panel_wrap">
     <div class="panel_item panel_item_vertical">
@@ -174,55 +233,6 @@
   </div>
 </th:block>
 <th:block th:include="survey/surveylist" />
-<!-- 진행중인 온라인 조사 -->
-<!--<div class="main_survey_list_wrap">-->
-<!--  <div class="main_survey_list_title">-->
-<!--    <p>진행중인 <span class="pol_color">온라인조사</span></p>-->
-<!--    <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>-->
-<!--  </div>-->
-<!--  <div class="main_survey_box">-->
-<!--    <div class="main_survey_item_wrap">-->
-<!--      <div class="main_survey_item bg_color_item_white">-->
-<!--        <p class="survey_run">진행중</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--      <div class="main_survey_item bg_color_item_white">-->
-<!--        <p class="survey_run">진행중</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--      <div class="main_survey_item bg_color_item_white">-->
-<!--        <p class="survey_run">진행중</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="main_survey_item_wrap">-->
-<!--      <div class="main_survey_item bg_color_item_white">-->
-<!--        <p class="survey_run">진행중</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--      <div class="main_survey_item bg_color_item_gray">-->
-<!--        <p class="survey_stop">조사완료</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--      <div class="main_survey_item bg_color_item_gray">-->
-<!--        <p class="survey_stop">조사완료</p>-->
-<!--        <p class="survey_title">패키지스쿨 프로그램 개발 조서</p>-->
-<!--        <p class="survey_point">1,000P 지급</p>-->
-<!--        <p class="survey_date">~ 2021-4-26</p>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
 <div style="height: 200px;"></div>
 </body>
 <script th:inline="javascript">

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>폴인사이트</title>
   <link rel="icon" th:href="@{/favicon.ico}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /*@import url("/css/common.css");*/
+    @import url('common.css');
 
     .header_wrap {
       position: fixed;
@@ -143,7 +143,6 @@
       background-size: cover;
     }
   </style>
-
 </head>
 <body>
 <button class="top-btn btn-circle">
@@ -153,11 +152,9 @@
 <div class="header_wrap">
   <div class="header_box">
     <div class="header_container_logo">
-      <div class="header_logo">
-        <a href="/">
-          <img th:src="@{/img/logo/logo.png}" alt="로고" />
-        </a>
-      </div>
+      <div class="header_logo"><a href="/">
+        <img src="img/logo/white_logo.png" alt="로고" />
+      </a></div>
     </div>
     <div class="header_container_navi">
       <ul class="navi_box">
@@ -188,10 +185,10 @@
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/boards}">Board</a>
+          <a th:href="@{/}">Research</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/boards}" class="dropdown_element">Board</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents03</a>
               <a th:href="@{/}" class="dropdown_element">Contents04</a>
@@ -239,23 +236,10 @@
     </div>
   </div>
 </div>
-
 <!-- 배너이미지 -->
 <div class="carasel_wrap"></div>
-
 </body>
 <script th:inline="javascript">
-  const logout_process = e => {
-    axios.get("/dologout")
-        .then(res => {
-          console.log("로그아웃 성공")
-          window.location.href = "/"
-        })
-        .catch(err => {
-          console.log("로그아웃 중 에러 발생")
-          console.log(err)
-        })
-  }
   $(function () {
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가

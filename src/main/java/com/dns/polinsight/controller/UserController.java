@@ -56,7 +56,7 @@ public class UserController {
   private final ChangePasswordService changePasswordService;
 
   @PostMapping("/signup")
-  public ResponseEntity<Map<String, Object>> userSignUp(@RequestBody SignupDTO signupDTO) {
+  public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
       User user = userService.save(User.builder()
@@ -67,26 +67,22 @@ public class UserController {
                                        .recommend(signupDTO.getRecommend())
                                        .role(UserRoleType.USER)
                                        .build());
-      session.setAttribute("basic_user", new SessionUser(user));
       if (signupDTO.isIspanel()) {
-        map.put("code", 200);
-        map.put("msg", "need more info for panel signup");
+        // TODO: 2021/07/28  
+        session.setAttribute("basic_user", new SessionUser(user));
       } else {
-        map.put("code", 200);
-        map.put("msg", "normal user signup success");
+        session.setAttribute("user", new SessionUser(user));
       }
+      return success(Boolean.TRUE);
     } catch (Exception e) {
-      log.error("basic singup error: {}", e.getMessage());
-      map.put("code", 6000);
-      map.put("msg", "there is something wrong");
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody Additional additional, HttpSession session) {
-    //    session.invalidate();
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Additional additional, HttpSession session) {
+    session.invalidate();
     SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
     sessionUser = SessionUser.builder()
                              .email(sessionUser.getEmail())
@@ -95,18 +91,9 @@ public class UserController {
                              .point(sessionUser.getPoint())
                              .build();
     session.invalidate();
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    //    user = User.builder().id(user.getId()).role(UserRoleType.PANEL).build();
-    user = user.update(additional).update(sessionUser);
-    // 업데이트된 정보 저장
-    // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
-    //    additionalService.save(additional);
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()).update(additional).update(sessionUser);
     userService.save(user);
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("msg", "success");
-    map.put("code", 200);
-    return ResponseEntity.ok(map);
+    return success(Boolean.TRUE);
   }
 
   @DeleteMapping("/user")
@@ -127,19 +114,7 @@ public class UserController {
   /*
    * 회원 가입 시, 사용 할 수 있는 이메일인지 검증하기 위한 메소드
    * */
-  @GetMapping("/user/{email}")
-  @CrossOrigin("*")
-  public ResponseEntity<Map<String, Object>> findUserByEmail(@Email @PathVariable("email") String email) {
-    Map<String, Object> map = new HashMap<>();
-    try {
-      map.put("user", userService.findUserByEmail(User.builder().email(email).build()));
-    } catch (RuntimeException e) {
-      e.getMessage();
-      return ResponseEntity.noContent().build();
-    }
 
-    return ResponseEntity.ok(map);
-  }
 
   @GetMapping("/mypage")
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {

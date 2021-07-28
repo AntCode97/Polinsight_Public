@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
   <title></title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <style type="text/css">
-    @import url('/css/common.css');
-
+  <style>
+    /*@import url('/css/common.css');*/
     .register_wrap {
       width: 1000px;
       margin: 0 auto;
@@ -216,7 +215,7 @@
       <h1>회원 가입</h1>
     </div>
     <div class="register_contents_wrap">
-      <form action="/signup" id="signupfrm" method="post">
+      <form th:action="@{/signup}" id="signupfrm" method="post">
         <p>기본정보</p>
         <div class="register_contents">
           <ul>
@@ -231,7 +230,6 @@
                 <span>@</span>
                 <select name="domain" id="email_domain" required>
                   <optgroup label="도메인">
-                    <!--                    <option value="null" selected>&#45;&#45; 선택 &#45;&#45;</option>-->
                     <option value="naver.com">naver.com</option>
                     <option value="gmail.com">gmail.com</option>
                     <option value="kakao.com">kakao.com</option>
@@ -431,8 +429,8 @@
 
 
   const debounceCallEmailCheck = _.debounce((email, callback) => {
-    axios.get("http://localhost:8080/user/" + email)
-        .then(res => callback(res.status))
+    axios.get("http://localhost:8080/api/user/" + email)
+        .then(res => callback(res.data.response))
         .catch(err => {
           console.log("error", err)
         })
@@ -451,7 +449,8 @@
     } else {
       if (email.match(regex) != null) {
         debounceCallEmailCheck(email, function (status) {
-              if (status === 204) {
+              alert(status)
+              if (status) {
                 msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
               } else {
                 msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
@@ -530,8 +529,6 @@
 
     $("input[name=ispanel]").on('click', (e) => {
       if (e.target.value === "false") {
-        // 가입 안했을때의 경고창
-        // alert('폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.')
         $(".popup_overlay").css('display', 'block')
       }
     })
@@ -561,7 +558,7 @@
                   location.replace('/panelagreement')
                 } else {
                   alert('일반 유저 가입 성공!')
-                  location.replace('/')
+                  location.replace('/success_basic')
                 }
               } else {
                 alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')

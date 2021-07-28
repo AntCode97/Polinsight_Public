@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -220,6 +221,16 @@ public class ApiController {
       } else {
         throw new Exception(e.getMessage());
       }
+    }
+  }
+
+  @CrossOrigin("*")
+  @GetMapping("/user/{email}")
+  public ApiUtils.ApiResult<Boolean> findUserByEmail(@Email @PathVariable("email") String email) {
+    try {
+      return success(userService.findUserByEmail(User.builder().email(email).build()) == null ? Boolean.FALSE : Boolean.TRUE);
+    } catch (RuntimeException e) {
+      throw new RuntimeException(e.getMessage());
     }
   }
 
