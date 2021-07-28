@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<head>
+  <style>
+    .web {
+      margin: auto;
+      width: 1200px;
+    }
+
+    img {
+      margin-left: -2px;
+      margin-right: -2px;
+      padding: 0;
+    }
+
+    .sub-main {
+      height: 50px;
+      padding-bottom: 0px;
+      border-bottom: 1px solid #EFEEEC;
+    }
+
+    ul li {
+      list-style-type: none;
+      float: left;
+    }
+
+    .sub-main li {
+      width: 150px;
+      height: 100%;
+      font-size: 20px;
+      color: white;
+      text-align: center;
+      line-height: 250%;
+    }
+
+    .notice {
+      background-color: #1A2738;
+      border: 1px solid #1A2738;
+    }
+
+    .qna {
+      background-color: #EFEEEC;
+      border: 1px solid #EFEEEC;
+    }
+
+    .sub-main-name {
+      width: 1200px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      font-size: 25px;
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+    }
+
+    .button {
+
+      margin-bottom: 20px;
+    }
+
+    .select {
+      height: 25px;
+    }
+
+    .btn-search {
+      height: 25px;
+      color: white;
+      background: black;
+      border-radius: 5px 5px 5px 5px;
+    }
+
+    .tblList {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    .tblList thead th {
+      background-color: #EFEEEC;
+      border-top: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+      padding-left: 20px;
+    }
+
+    .tblList tbody td {
+      padding-left: 20px;
+      height: 50px;
+      border-bottom: 2px solid #EFEEEC;
+    }
+
+    .writeButton {
+      margin-top: 20px;
+      float: right;
+    }
+
+    .write {
+      text-align: center;
+      line-height: 200%;
+      width: 100px;
+      height: 30px;
+      font-size: 15px;
+      color: black;
+      border-radius: 5px 5px 5px 5px;
+      border: 1px solid black;
+    }
+
+    .page-button {
+      margin-top: 50px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .current-page {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
+    .button {
+      vertical-align: text-top;
+      min-width: 25px;
+      height: 25px;
+    }
+
+    .disabled {
+      opacity: 0;
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
+      text-decoration: none;
+    }
+
+    .active {
+      font-size: 19px;
+      font-weight: bold;
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    .not-active {
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: dodgerblue;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body class="PC">
+<div class="web">
+  <div class="sub-main">
+    <span></span>
+    <ul>
+      <li class="notice">공지사항</li>
+      <li class="qna">문의사항</li>
+    </ul>
+  </div>
+
+  <div class="sub-main-name"><b>공지사항</b></div>
+
+  <div class="board">
+    <div class="button">
+      <form th:action="@{/boards/search}" th:object="${boardSearch}" method="get">
+
+        <select th:field="*{boardType}" class="select" name="classify" id="classify">
+          <optgroup label="분류 선택">
+            <option selected value="NOTICE">공지</option>
+            <option value="EVENT">이벤트</option>
+          </optgroup>
+        </select>
+
+        <select th:field="*{searchType}" name="search_item" class="select" id="type">
+          <optgroup label="통합검색">
+            <option selected th:value="TITLE" th:text="제목"></option>
+            <option th:value="CONTENT" th:text="내용"></option>
+          </optgroup>
+        </select>
+        <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
+        <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
+      </form>
+    </div>
+
+    <div class="post-list">
+      <div>
+        <table class="tblList">
+          <thead>
+          <tr align="left">
+            <th width="50" height="36"> 번호</th>
+            <th width="900">제목</th>
+            <th width="80">등록자</th>
+            <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr class="first" th:each="board : ${boards}">
+            <td width="50" th:text="${board.id}">&nbsp;</td>
+            <td width="950"><a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
+              <span th:if="${board.newBoard}">
+                                 New!
+                            </span>
+            </td>
+
+            <td width="80" th:text="${board.user.name}"></td>
+            <td width="120" th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
+
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!--  <h1 th:text="${T(com.dns.polinsight.types)}"></h1>-->
+  <th:block th:unless="${session.user} == null">
+    <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
+      <div class="writeButton">
+        <div class=write><a href="/boards/new"> <b>글쓰기</b> </a></div>
+      </div>
+    </th:block>
+  </th:block>
+
+  <div class="page-button"
+       th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
+                    last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
+    <a th:href="@{/boards(page=1)}" aria-label="First">
+      <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+    </a>
+
+
+    <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+      <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+    </a>
+
+
+    <a th:if="${boardSearch.getBoardType()} !=null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+       th:href="@{/boards/search(page=${page}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>
+    <a th:if="${boardSearch.getBoardType()} ==null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+       th:href="@{/boards(page=${page})}"></a>
+
+    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+      <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
+    </a>
+
+
+    <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+      <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+    </a>
+  </div>
+
+</div>
+</body>
+<script>
+  const makeTemplate = (board) => {
+    console.log(board)
+    let template = '';
+    template += '<tr class="first">'
+    template += '<td width="50">' + board.id + '</td>'
+    template += '<td width="950">'
+    template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
+    if (board.newBoard === true)
+      template += '<span>New!</span>'
+    template += '</td>'
+    template += '<td width="80">' + board.user.name + '</td>'
+    template += '<td width="120">' + board.registeredAt + '</td>'
+    template += '</tr>'
+    return template
+  }
+
+  const asyncFindBoard = (e) => {
+    e.preventDefault();
+    e.returnValue = false;
+    const searchType = $("#type").val()
+    const classify = $('#classify').val()
+    const keyword = $("#searchinput").val()
+
+    // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
+    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+            .then(res => {
+              const boards = res.data.data
+              const body = $('tbody')
+              body.empty()
+              for (idx in boards) {
+                body.append(makeTemplate(boards[idx]))
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+  }
+
+
+  // $(function () {
+  //   $("#searchinput").on('change keyup', asyncFindBoard)
+  // })
+
+  // function movePage(uri, queryString) {
+  //   location.href = uri + queryString;
+  // }
+</script>
+</html>

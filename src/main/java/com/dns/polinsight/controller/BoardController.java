@@ -87,6 +87,7 @@ public class BoardController {
   @GetMapping("admin/boards/new")
   public String adminCreateForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
+    model.addAttribute("user", user);
 //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
 //      //      model.addAttribute("user", user);
 //      return "boards/createBoardForm";
@@ -154,6 +155,7 @@ public class BoardController {
   @GetMapping("boards/new")
   public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
     model.addAttribute("boardDTO", new BoardDTO());
+    model.addAttribute("user", user);
 //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
 //      //      model.addAttribute("user", user);
 //      return "boards/createBoardForm";
@@ -165,7 +167,8 @@ public class BoardController {
 
 
   @PostMapping("boards/new")
-  public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user) {
+  public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
+    boardDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + boardDTO.toString());
     // NOTE 2021-07-04 0004 : BindingResult??
     if (result.hasErrors()) {
@@ -236,7 +239,7 @@ public class BoardController {
 
 
   @GetMapping("/boards/{boardId}")
-  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
+  public String content(@PathVariable("boardId") Long boardId, Model model) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
@@ -290,55 +293,57 @@ public class BoardController {
 
   @GetMapping("/boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
-    Board board = boardService.findOne(boardId);
-    BoardDTO boardDTO = new BoardDTO();
-    boardDTO.setId(board.getId());
-    boardDTO.setContent(board.getSearchcontent());
-    boardDTO.setViewcontent(board.getViewcontent());
-    boardDTO.setAttaches(board.getAttaches());
-    boardDTO.setUser(board.getUser());
-    boardDTO.setTitle(board.getTitle());
-    LocalDateTime registeredAt = LocalDateTime.now();
-    boardDTO.setRegisteredAt(registeredAt);
 
-    model.addAttribute("files", attachService.findFiles(boardId));
+    if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL ||user.getRole() == UserRoleType.BEST
+            ||user.getRole() == UserRoleType.MANAGER  ||user.getRole() == UserRoleType.ADMIN )) {
+      Board board = boardService.findOne(boardId);
+      BoardDTO boardDTO = new BoardDTO();
+      boardDTO.setId(board.getId());
+      boardDTO.setContent(board.getSearchcontent());
+      boardDTO.setViewcontent(board.getViewcontent());
+      boardDTO.setAttaches(board.getAttaches());
+      boardDTO.setUser(board.getUser());
+      boardDTO.setTitle(board.getTitle());
+      LocalDateTime registeredAt = LocalDateTime.now();
+      boardDTO.setRegisteredAt(registeredAt);
 
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
+      model.addAttribute("files", attachService.findFiles(boardId));
 
-    //    try{
-    //      File file = new File(board.getFilePath());
-    //      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
-    //      InputStream input = new FileInputStream(file);
-    //      OutputStream os = fileItem.getOutputStream();
-    //      IOUtils.copy(input, os);
-    //      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-    //      boardDTO.setFile(multipartFile);
-    //      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
-    //
-    //    }catch (IOException ex){
-    //      System.out.println(ex);
-    //    }
-    //
+      model.addAttribute("boardDTO", boardDTO);
+      return "boards/updateBoardForm";
+    } else{
+      return "redirect:/boards";
+    }
 
 
-    model.addAttribute("boardDTO", boardDTO);
-    return "boards/updateBoardForm";
   }
 
   @PostMapping("/boards/{boardId}/edit")
-  public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user) {
-    //    System.out.println("게시글 수정!" + boardId);
-    User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
-    boardDTO.setUser(admin);
-    boardDTO.setId(boardId);
-    boardDTO.setRegisteredAt(LocalDateTime.now());
-    boardDTO.transViewcontent();
+  public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user, MultipartFile[] file) {
+    if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL ||user.getRole() == UserRoleType.BEST
+            ||user.getRole() == UserRoleType.MANAGER  ||user.getRole() == UserRoleType.ADMIN )) {
+      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      boardDTO.setUser(admin);
+      boardDTO.setId(boardId);
+      boardDTO.setRegisteredAt(LocalDateTime.now());
+      boardDTO.transViewcontent();
+      List<MultipartFile> mFiles = boardDTO.getFiles();
+      if(mFiles !=null){
+        for(MultipartFile m : file){
+          mFiles.add(m);
 
-    boardService.addBoard(boardDTO);
-    attachService.addAttach(boardDTO);
+        }
+        boardDTO.setFiles(mFiles);
+      } else{
+        if(file != null){
+          mFiles = Arrays.asList(file);
+          boardDTO.setFiles(mFiles);
+        }
+      }
 
+      boardService.addBoard(boardDTO);
+      attachService.addAttach(boardDTO);
+    }
     return "redirect:/boards/{boardId}";
   }
 

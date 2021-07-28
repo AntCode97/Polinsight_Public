@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        a {
+            text-decoration: none
+        }
+
+        a:link,
+        a:visited,
+        a:hover {
+            color: white
+        }
+
+
+
+        .web {
+            margin: auto;
+            width: 1200px;
+        }
+
+        img {
+            margin-left: -2px;
+            margin-right: -2px;
+            padding: 0;
+        }
+
+        .sub-main {
+            height: 50px;
+            padding-bottom: 0px;
+            border-bottom: 1px solid #EFEEEC;
+        }
+
+        ul li {
+            list-style-type: none;
+            float: left;
+        }
+
+        .sub-main li {
+            width: 150px;
+            height: 100%;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            line-height: 250%;
+        }
+
+        .notice {
+            background-color: #1A2738;
+            border: 1px solid #1A2738;
+        }
+
+        .qna {
+            background-color: #EFEEEC;
+            border: 1px solid #EFEEEC;
+        }
+
+        .sub-main-name {
+            width: 1000px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            margin-bottom: 50px;
+            font-size: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+
+
+        .information {
+            height: 210px;
+            padding-bottom: 15px;
+        }
+
+
+        .information_title {
+            display: flex;
+            width: 1000px;
+            border-top: 2px solid rgb(0, 0, 0);
+            border-bottom: 1px solid gray;
+            line-height: 40px;
+        }
+
+        .titleContent {
+            width: 1000px;
+            height: 80px;
+            line-height: 80px;
+            background-color: #EFEEEC;
+            font-size: 20px;
+            padding-left: 20px;
+        }
+
+        .information_write {
+            width: 980px;
+            font-size: 14px;
+            display: flex;
+            border-bottom: 1px solid gray;
+            padding-left: 20px;
+        }
+
+        .margin {
+            font-size: 14px;
+            height: 40px;
+            line-height: 40px;
+            color: gray;
+            margin-right: 10px;
+        }
+
+        .information_name,
+        .information_date {
+            display: flex;
+            font-size: 14px;
+        }
+
+
+        .name,
+        .date {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+        }
+
+        .nameContent,
+        .dateContent,
+        .information_count {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+        }
+
+        .nameContent {
+            width: 100px;
+        }
+
+
+        .dateContent {
+            width: 200px;
+        }
+
+        .information_file {
+            display: flex;
+            width: 1000px;
+            height: 150px;
+            border-bottom: 1px solid gray;
+        }
+
+        .file {
+            width: 100px;
+            font-size: 20px;
+            line-height: 50px;
+            padding-left: 20px;
+        }
+
+        .fileContent {
+            line-height: 40px;
+            font-size: 15px;
+            padding-left: 5px;
+            height: 150px;
+            margin-top: 5px;
+        }
+
+
+        .file1,
+        .file2,
+        .file3 {
+            display: flex;
+            line-height: 45px;
+            font-size: 14px;
+        }
+
+        .fileName {
+            width: 400px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 14px;
+        }
+
+        .viewFile {
+            color: gray;
+            width: 100px;
+            height: 35px;
+            line-height: 35px;
+            margin-top: 5px;
+            padding-left: 4px;
+            border: 1px solid gray;
+            border-radius: 5px 5px 5px 5px;
+        }
+
+        .fileButton {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        .letter {
+            width: 1000px;
+            margin-top: 10px;
+        }
+
+        .postContent {
+            width: 1000px;
+            height: 200px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .Button {
+            display: flex;
+            width:1000px;
+            height:50px;
+            padding-left: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modifyButton,
+        .listButton {
+            text-align: center;
+            line-height: 200%;
+            width: 90px;
+            height: 45px;
+            line-height: 45px;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            border-radius: 5px 5px 5px 5px;
+            border: 1px solid black;
+            margin-left: 8px;
+        }
+
+        .postList {
+            width: 1000px;
+            height: 80px;
+            background-color: rgb(241, 238, 238);
+        }
+
+        .nearPost {
+            display: flex;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .nearPostLetter {
+            width: 100px;
+            padding-left: 10px;
+            font-size: 15px;
+        }
+
+        .nearPostName{
+            width:800px;
+            font-size: 15px;
+        }
+
+        .nearPostDate{
+            width:200px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body class="PC">
+    <div class="web">
+        <div class="sub-main">
+            <span></span>
+            <ul>
+                <li class="notice">공지사항</li>
+                <li class="qna">문의사항</li>
+            </ul>
+        </div>
+
+        <div class="sub-main-name"><b>공지사항</b></div>
+
+        <div class="board">
+            <div class=information>
+                <div class="information_title">
+                    <div class="titleContent"> <b>-제목-</b></div>
+                </div>
+                <div class="information_write">
+                    <div class="information_name">
+                        <div class="name">작성자&nbsp;: </div>
+                        <div class="nameContent">관리자</div>
+                    </div>
+                    <div class="margin"><b> | </b></div>
+                    <div class="information_date">
+                        <div class="date">작성일 : </div>
+                        <div class="dateContent"> -작성일-</div>
+                    </div>
+                    <div class="margin"> <b> | </b> </div>
+                    <div class="information_count"> 조회수 </div>
+                </div>
+
+                <div class="information_file">
+                    <div class="file"><b>파일</b></div>
+                    <div class="fileContent">
+                        <div class="file1">
+                            <div class="fileName"> 첨부파일 1 </div>
+                            <div class="viewFile">미리보기
+                                <img class="fileButton" src="images/gofile.png" alt="미리보기">
+                            </div>
+                        </div>
+                        <div class="file2">
+                            <div class="fileName"> 첨부파일 2 </div>
+                            <div class="viewFile">미리보기
+                                <img class="fileButton" src="images/gofile.png" alt="미리보기">
+                            </div>
+                        </div>
+                        <div class="file3">
+                            <div class="fileName"> 첨부파일 3 </div>
+                            <div class="viewFile">미리보기
+                                <img class="fileButton" src="images/gofile.png" alt="미리보기">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="letter">
+                <div class="postContent">
+
+                    <!--글 내용에 따라 높이 조정-->
+                </div>
+            </div>
+
+            <div class="Button">
+                <div class="modifyButton">
+                    <a href> <b>수정</b></a>
+                </div>
+                <div class="listButton">
+                    <a href> <b>목록</b></a>
+                </div>
+            </div>
+
+            <div class="postList">
+                <div class="nearPost">
+                    <div class="nearPostLetter"> <b>다음글</b> &nbsp;&nbsp;&nbsp; | </div>
+                    <div class="nearPostName"> -다음글 제목-</div>
+                    <div class="nearPostDate">-다음글 날짜</div>
+                </div>
+                <div class="nearPost">
+                    <div class="nearPostLetter"> <b>이전글 </b>&nbsp;&nbsp;&nbsp; | </div>
+                    <div class="nearPostName"> -이전글 제목-</div>
+                    <div class="nearPostDate">-이전글 날짜</div>
+                </div>
+            </div>
+
+        </div>
+</body>

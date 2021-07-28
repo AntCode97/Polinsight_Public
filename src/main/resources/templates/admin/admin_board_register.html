@@ -621,9 +621,11 @@
                                         <label for="board_title"><span>*</span>게시판</label>
                                         <span class="board_span">
                                           <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{boardType}" autofocus required>
-                                            <option value="none">선택</option>
+                                            <optgroup label="분류 선택">
                                             <option value="NOTICE">공지사항</option>
-                                            <option value="EVENT">자료실</option>
+                                            <option value="ARCHIVES">자료실</option>
+                                              <option value="EVENT">이벤트</option>
+                                                 </optgroup>
                                           </select>
                                           <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후 변경이 불가능합니다.)</span>
                                           <div class="err_msg_wrap err_title"><span class="err_msg">게시판 타입을 선택해주세요.:(</span></div>
@@ -639,7 +641,7 @@
                                     <div class="board_div" id="writer_div">
                                         <label for="board_title"><span>*</span>작성자</label>
                                         <span  class="board_span">
-                                          <input type="text" class="board_input board_writer" name="writer" id="board_writer" value="관리자" readonly />
+                                          <input type="text" class="board_input board_writer" name="writer" id="board_writer" th:value="${user.name}" readonly />
                                         </span>
                                     </div>
                                 </div>
@@ -674,18 +676,19 @@
                                 <!-- 취소 & 등록 버튼 -->
                                 <div class="input_wrap">
                                     <div class="board_div btn_wrap">
-                  										<span>
-                  											<button type="button" class="btn btn-basic cancel_btn">취소</button>
+                  									        <span>
+                  											<button type="button" class="btn btn-basic cancel_btn"  onclick="history.back()">취소</button>
+                                                            </span>
+                                                        <span>
+                  											<button type="button" class="btn btn-green insert_btn"
+                                                                    onclick="document.getElementById('frm_board').submit();"
+                                                            >등록</button>
                   										</span>
 
                                     </div>
 
                                 </div>
-                                <span>
-                  											<button type="button" class="btn btn-green insert_btn"
-                                                                    onclick="document.getElementById('frm_board').submit();"
-                                                            >등록</button>
-                  										</span>
+
                             </form>
                         </div>
                     </div>

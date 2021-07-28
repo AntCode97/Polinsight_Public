@@ -115,27 +115,8 @@
 <div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
     <div class="ABA-container-box-1200">
         <div id="AB_contents">
-            <form action="kwa-jobopening" enctype="multipart/form-data" id="TCBOARD_jobopening_LIST_index192" method="post" name="TCBOARD_jobopening_LIST_index192"
-                  submit-func="return TCBOARD_jobopening_LIST_index192_submit(this, &quot;&quot;);" vi="">
+
                 <div class="ABA-content-box bdList">
-                    <div>
-                        <div class="-bdSchWrap">
-                            <div><select class="AB-select onlyPC AB-move-url" name="SCH_category_1"
-                                         rel="kwa-jobopening?SCH_category_1=">
-                                <option selected="" value="">분류선택</option>
-                                <option value="A">공지</option>
-                                <option value="B">이벤트</option>
-                            </select><select class="AB-select admin-width-d onlyPC" name="search_item">
-                                <option value="A">통합검색</option>
-                                <option value="subject">제목</option>
-                            </select>
-                                <input type="text" />
-                                <input class="btn-tpl btn-round-03 btn-pattern-B08 btn-size-08 btn-b" data-cbk="" data-cbk-a="" data-cbk-time="100"
-                                       data-overlay="Y" id="AB_btn_submit_sch"
-                                       name="submit_OK" type="submit" value="검색하기">
-                            </div>
-                        </div>
-                    </div>
 
                     <div>
                         <div class="articleList">
@@ -163,7 +144,7 @@
                                     <tr>
                                         <td class="onlyPC" th:utext="${board.viewcontent}" width="140"></td>
                                     </tr>
-                                    <td>
+                                    <td th:unless="${session.user} == null">
                                         <a role="button" th:href="@{/boards/{id}/edit (id=${board.id})}">수정</a>
                                     </td>
                                     </tbody>
@@ -172,18 +153,17 @@
                         </div>
                     </div>
 
-                    <div>
-                        <div class="-btnPageLink">
-                            <div><span class="LF_page_link_current"><b>1</b></span>
-                                <a class="LF_page_link_next_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">
-                                    <img align="center" alt="다음 페이지로 이동" border="0" class="LF_page_link_next_page_img" src="/static/img/board/list_next.png"></a>
-                                <a class="LF_page_link_last_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">
-                                    <img align="center" alt="마지막 페이지로 이동" border="0" class="LF_page_link_last_page_img" src="/static/img/board/last_page.png"></a>
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div>-->
+<!--                        <div class="-btnPageLink">-->
+<!--                            <div><span class="LF_page_link_current"><b>1</b></span>-->
+<!--                                <a class="LF_page_link_next_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">-->
+<!--                                    <img align="center" alt="다음 페이지로 이동" border="0" class="LF_page_link_next_page_img" src="/static/img/board/list_next.png"></a>-->
+<!--                                <a class="LF_page_link_last_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">-->
+<!--                                    <img align="center" alt="마지막 페이지로 이동" border="0" class="LF_page_link_last_page_img" src="/static/img/board/last_page.png"></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
-            </form>
         </div>
     </div>
 </div>
