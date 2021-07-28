@@ -25,9 +25,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     return isLoginUserAnnotation && isUserClass;
   }
 
-  /*
-   * supportsParameter의 반환값이 true이면 세션에서 user를 가져와서 반환
-   * */
   @Override
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     return session.getAttribute("user");

@@ -2,29 +2,36 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.dto.PointRequestDto;
+import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.PointCalculateException;
+import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.types.PointRequestProgressType;
+import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ApiController {
-
-  private final SurveyQueryService pointService;
 
   private final UserService userService;
 
@@ -34,150 +41,185 @@ public class ApiController {
 
   private final ParticipateSurveyService participateSurveyService;
 
+  private final PointRequestService pointRequestService;
+
+  private final BoardService boardService;
+
+  @PutMapping("{boardId}/count")
+  public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
+    try {
+      Board board = boardService.findOne(boardId);
+      board.getBoardStatus().setViewCount(board.getBoardStatus().getViewCount() + 1);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
   @GetMapping("/surveys/sync")
-  public ResponseEntity<Map<String, Object>> surveySyncWithSM() {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<Survey>> surveySyncWithSM() throws Exception {
     try {
       // FIXME: 2021/07/26 : embedded 한 데이터가 넘어오지 않음
-      map.put("data", surveyService.getSurveyListAndSyncPerHour());
-      map.put("code", 200);
-      map.put("msg", "sync and save success");
-      map.put("error", null);
+      return success(surveyService.getSurveyListAndSyncPerHour());
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/user/find/{regex}")
-  public ResponseEntity<Map<String, Object>> adminUserFind(@PathVariable(name = "regex") String regex) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<User>> adminUserFind(@PathVariable(name = "regex") String regex) throws Exception {
     try {
-      map.put("data", adminService.adminSerchUserByRegex(regex));
-      map.put("error", null);
+      return success(adminService.adminSerchUserByRegex(regex));
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @DeleteMapping("/user/{email}")
-  public ResponseEntity<Map<String, Object>> adminUserDeleteByEmail(@PathVariable(name = "email") String email) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable(name = "email") String email) throws Exception {
     try {
       userService.deleteUserByEmail(email);
-      map.put("data", true);
-      map.put("error", null);
+      return success(Boolean.TRUE);
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 회원 가입된 모든 유저 정보 반환
+   * */
   @GetMapping("/users")
-  public ResponseEntity<Map<String, Object>> adminFindAllUsers() {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers() throws Exception {
     try {
-      map.put("data", userService.findAll());
-      map.put("error", null);
+      return success(userService.findAll().parallelStream().map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
       e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 저장된 모든 설문 반환
+   * */
   @GetMapping("/survyes")
-  public ResponseEntity<Map<String, Object>> adminGetAllSurveys() {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys() throws Exception {
     try {
-      map.put("data", surveyService.findAll());
-      map.put("error", null);
+      return success(surveyService.findAll());
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 정규식을 통한 다건 설문 검색
+   * */
   @GetMapping("/survey/{regex}")
-  public ResponseEntity<Map<String, Object>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, String type /*검색 타입*/) {
+  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, String type /*검색 타입*/) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
       if (type.equals("title")) {
-        map.put("data", surveyService.findSurveysByTitleRegex(regex));
+        return success(surveyService.findSurveysByTitleRegex(regex));
       } else {
-        map.put("data", surveyService.findSurveysByEndDate(LocalDateTime.parse(regex)));
+        return success(surveyService.findSurveysByEndDate(LocalDateTime.parse(regex)));
       }
-      map.put("error", null);
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 저장된 설문 목록 삭제를 위한 api
+   * */
   @DeleteMapping("/survey/{id}")
-  public ResponseEntity<Map<String, Object>> adminDeleteSurveyById(@PathVariable(name = "id") Long surveyId) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@PathVariable(name = "id") Long surveyId) throws Exception {
     try {
       surveyService.deleteSurveyById(surveyId);
-      map.put("data", true);
-      map.put("error", null);
+      return success(Boolean.TRUE);
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 저장된 서베이 목록 수정을 위한 api
+   * */
   @PutMapping("/survey")
-  public ResponseEntity<Map<String, Object>> adminUpdateSurveyById(Survey survey) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<Survey>> adminUpdateSurveyById(Survey survey) throws Exception {
     try {
       surveyService.update(survey);
-      map.put("data", surveyService.findAll());
-      map.put("error", null);
+      return success(surveyService.findAll());
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
-      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  /*
+   * 사용자가 참여한 서베이 목록 가져옴
+   * */
   @GetMapping("participate")
-  public ResponseEntity<Map<String, Object>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser, @RequestParam("type") String type) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser, @RequestParam("type") String type) throws Exception {
     try {
-      map.put("data", participateSurveyService.findByUserId(sessionUser.getId()));
-      map.put("error", null);
+      return success(participateSurveyService.findByUserId(sessionUser.getId()));
     } catch (Exception e) {
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
-  @GetMapping("{id}/pointrequestlist")
+  @GetMapping("{userId}/pointrequest")
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@LoginUser SessionUser sessionUser) throws Exception {
+    try {
+      return success(pointRequestService.getUserPointRequests(sessionUser.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("{userId}/pointrequestlist/excel")
   public void getExcelFromAllRequests(HttpServletResponse response,
-                                      @PathVariable("id") long userId,
+                                      @PathVariable("userId") long userId,
                                       @RequestBody(required = false) PointRequest pointRequest) {
     try {
       ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
-      excelUtil.createExcelToResponse(pointService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDate.now()), response);
+      excelUtil.createExcelToResponse(pointRequestService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDate.now()), response);
     } catch (IllegalAccessException | IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  /**
+   * @param requestId
+   *     : 변경할 포인트 지급 요청의 아이디
+   * @param progressType
+   *     : 변경할 요청의 상태
+   * @return boolean : 요청 성공 여부
+   */
+  @PutMapping("{requestId}/pointrequest")
+  public ApiUtils.ApiResult<Boolean> adminHandleUserPointRequest(@PathVariable("requestId") long requestId,
+                                                                 @RequestParam PointRequestProgressType progressType) throws Exception {
+    try {
+      PointRequest request = pointRequestService.findPointRequestById(requestId).orElseThrow(Exception::new);
+      request.setProgressType(progressType);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+
+  }
+
+  @PostMapping("/pointrequest")
+  public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
+                                                                 @LoginUser SessionUser sessionUser) throws Exception {
+    try {
+      pointRequestService.saveOrUpdate(new PointRequest().of(pointRequestDto));
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      if (e instanceof PointCalculateException) {
+        throw new PointCalculateException(e.getMessage());
+      } else if (e instanceof PointHistoryException) {
+        throw new PointHistoryException(e.getMessage());
+      } else {
+        throw new Exception(e.getMessage());
+      }
     }
   }
 

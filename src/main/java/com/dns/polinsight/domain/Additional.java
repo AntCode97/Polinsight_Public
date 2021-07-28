@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +17,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Additional {
+public class Additional implements Serializable {
+
+  private static final long serialVersionUID = 4323740522466099195L;
 
   /*
    * 추가정보 클래스
@@ -36,6 +40,6 @@ public class Additional {
   private String industry;
 
   @ElementCollection
-  private List<String> favorite;
+  private final List<String> favorite= new ArrayList<>();
 
 }

@@ -1,11 +1,10 @@
 package com.dns.polinsight.service;
 
-import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -19,13 +18,11 @@ public interface UserService extends UserDetailsService {
 
   User update(User user);
 
-  User findUserById(User user);
+
+  Optional<User> findById(long id);
 
   void deleteUser(User user);
 
-
   User findUserByEmail(User user);
-
-  String makeHashForChangePassword(String email, String username) throws NoSuchAlgorithmException;
 
 }

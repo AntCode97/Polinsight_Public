@@ -58,6 +58,7 @@ public class User implements UserDetails, Serializable {
 
   @PositiveOrZero
   @Builder.Default
+  @Setter
   private Long point = 0L;
 
   @Enumerated(EnumType.STRING)

@@ -96,9 +96,9 @@ spring :
     ansi :
       enabled : always
 
-logging :
-  file :
-    name : ./polinsight_logs.log
+#logging :
+#  file :
+#    name : ./polinsight_logs.log
 
 
 file :
@@ -114,7 +114,7 @@ custom :
       - favicon.ico
 
     admin :
-    #      - /admin/**
+      - /admin/**
 
     template :
       - /
@@ -142,7 +142,6 @@ custom :
       - /actuator/**
       - /panelagreement
       - /surveys/**
-      - /admin/**
       - /chpwd/**
       - /changepwd**
   api :
@@ -150,6 +149,10 @@ custom :
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
   callback :
     base : "http://localhost:8080"
+  hash :
+    passwordsalt : polinsightPasswordSalt
+    pointsalt :    polinsightPointSalt
+
 
 management :
   endpoints :

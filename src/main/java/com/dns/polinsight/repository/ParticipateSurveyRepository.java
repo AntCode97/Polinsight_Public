@@ -13,10 +13,10 @@ public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSu
 
   List<ParticipateSurvey> findParticipateSurveysByUserIdOrderByParticipatedAtDesc(long userId);
 
-  List<ParticipateSurvey> findParticipateSurveysBySurveyIdOrderByParticipatedAtDesc(long surveyId);
-
   List<ParticipateSurvey> findParticipateSurveyByUserIdAndParticipatedAt(long userId, LocalDateTime participateAt);
 
   List<ParticipateSurvey> findParticipateSurveyByUserIdAndSurveyPoint(long userId, long surveyPoint);
+
+  Optional<ParticipateSurvey> findParticipateSurveyByHash(String hash);
 
 }

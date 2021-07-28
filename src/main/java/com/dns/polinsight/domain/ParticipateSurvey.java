@@ -1,9 +1,6 @@
 package com.dns.polinsight.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,8 +13,11 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @ToString
 public class ParticipateSurvey implements Serializable {
+
+  private static final long serialVersionUID = 2771063029297680262L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +30,10 @@ public class ParticipateSurvey implements Serializable {
   private LocalDateTime participatedAt;
 
   private Long surveyPoint;
+
+  private String hash;
+
+  @Setter
+  private Boolean finished;
 
 }

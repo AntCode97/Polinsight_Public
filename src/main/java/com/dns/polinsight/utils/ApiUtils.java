@@ -15,25 +15,25 @@ public class ApiUtils<T> {
 
   @Getter
   @Setter
-  private static class ApiResult<T> {
+  public static class ApiResult<T> {
 
-    private boolean sucess;
+    private boolean success;
 
     private T response;
 
-    private ApiError apiError;
+    private ApiError error;
 
     public ApiResult(boolean sucess, T response, ApiError apiError) {
-      this.sucess = sucess;
+      this.success = sucess;
       this.response = response;
-      this.apiError = apiError;
+      this.error = apiError;
     }
 
   }
 
   @Getter
   @Setter
-  private static class ApiError {
+  public static class ApiError {
 
     private String message;
 

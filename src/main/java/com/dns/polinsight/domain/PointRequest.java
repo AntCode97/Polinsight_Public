@@ -1,11 +1,13 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.types.BankType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.dns.polinsight.types.PointRequestProgressType;
+import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
@@ -14,11 +16,13 @@ import java.time.LocalDateTime;
  * */
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PointRequest {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private Long uid;
@@ -27,10 +31,21 @@ public class PointRequest {
 
   private LocalDateTime requestedAt;
 
-  // 은행 타입
   private BankType bankName;
 
-  //  유저가 요청한 계좌
   private String account;
+
+  @Setter
+  private PointRequestProgressType progressType;
+
+  public PointRequest of(PointRequestDto dto) {
+    this.uid = dto.getUid();
+    this.requestPoint = dto.getRequestPoint();
+    this.requestedAt = dto.getRequestedAt();
+    this.bankName = dto.getBankName();
+    this.account = dto.getAccount();
+    this.progressType = dto.getProgressType();
+    return this;
+  }
 
 }

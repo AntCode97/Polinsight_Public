@@ -5,7 +5,7 @@ import com.dns.polinsight.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Optional;
 
 public interface SurveyService {
 
@@ -17,11 +17,7 @@ public interface SurveyService {
 
   Survey update(Survey survey);
 
-  /*
-   * 매 한시간마다 서베이몽키에 접근해, 서베이 목록 수집
-   * */
-  List<Survey> getSurveyListAndSyncPerHour() throws Exception;
-
+  List<Survey> getSurveyListAndSyncPerHour();
 
   List<Survey> getUserParticipateSurvey(User user);
 
@@ -30,5 +26,7 @@ public interface SurveyService {
   List<Survey> findSurveysByEndDate(LocalDateTime endDate);
 
   List<Survey> findSurveysByTitleRegex(String titleRegex);
+
+  Optional<Survey> findSurveyById(long surveyId);
 
 }

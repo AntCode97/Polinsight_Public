@@ -3,12 +3,15 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Additional;
+import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.utils.ApiUtils;
+import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +27,12 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
@@ -34,9 +41,9 @@ public class UserController {
 
   private final UserService userService;
 
-//  private final AdditionalService additionalService;
+  private final ParticipateSurveyService participateSurveyService;
 
-  private final SurveyQueryService surveyQueryService;
+  private final PointRequestService pointRequestService;
 
   private final HttpSession session;
 
@@ -93,7 +100,7 @@ public class UserController {
     user = user.update(additional).update(sessionUser);
     // 업데이트된 정보 저장
     // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
-//    additionalService.save(additional);
+    //    additionalService.save(additional);
     userService.save(user);
 
     Map<String, Object> map = new HashMap<>();
@@ -164,20 +171,18 @@ public class UserController {
   @PostMapping("/findpwd")
   public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
                               @RequestParam(name = "email") String email,
-                              @RequestParam(name = "name") String name) throws MessagingException,
-                                                                               NoSuchAlgorithmException {
+                              @RequestParam(name = "name") String name,
+                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
+                                                                                        NoSuchAlgorithmException {
     /*
      *  메일 서비스 필요
      *  등록한 주소로 메일 리다이렉팅 할 메일 전달
      * 해시값을 저장한 페이지를 리턴한다
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
-    //    템플릿 작성에 필요한 변수들을 담는 객체
-    ModelAndView mv = new ModelAndView("redirect:/index");
-
     if (userService.isExistUser(email)) {
       Map<String, Object> variables = new HashMap<>();
-      String hash = userService.makeHashForChangePassword(email, name);
+      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
       changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
       //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
       variables.put("date", LocalDateTime.now());
@@ -187,14 +192,13 @@ public class UserController {
       variables.put("callback", callbackBase + "/chpwd");
       emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
     }
-    return mv;
+    return new ModelAndView("redirect:/index");
   }
 
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView("member/changepwd");
     log.info(sessionUser.toString());
-
 
     if (session.getAttribute("user") == null) {
       return new ModelAndView("redirect:/denied");
@@ -255,7 +259,7 @@ public class UserController {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
 
-      map.put("data", surveyQueryService.addUserPointRequest(user.getId(), point));
+      map.put("data", pointRequestService.addUserPointRequest(user.getId(), point));
       map.put("error", null);
     } catch (Exception e) {
       e.printStackTrace();
@@ -266,32 +270,24 @@ public class UserController {
   }
 
   @GetMapping("/api/point/{userid}")
-  public ResponseEntity<Map<String, Object>> getPointRequestList(@PathVariable(name = "userid") Long userid) {
+  public ApiUtils.ApiResult<List<PointRequest>> getPointRequestList(@PathVariable(name = "userid") long userid) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
-      map.put("data", surveyQueryService.getUserPointRequests(userid));
-      map.put("error", null);
+      return success(pointRequestService.getUserPointRequests(userid));
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/api/user/participate")
-  public ResponseEntity<Map<String, Object>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) {
+  public ApiUtils.ApiResult<List<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      map.put("data", surveyService.getUserParticipateSurvey(user));
-      map.put("error", null);
+      return success(surveyService.getUserParticipateSurvey(user));
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/api/survey/participate")

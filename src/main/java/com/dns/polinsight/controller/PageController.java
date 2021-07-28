@@ -2,9 +2,11 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.service.PageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ public class PageController {
   private final PageService service;
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(@LoginUser SessionUser user) {
+    public ModelAndView home(@LoginUser SessionUser user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
       mv.addObject("user", user);
@@ -38,7 +40,7 @@ public class PageController {
   }
 
   @GetMapping("/login")
-  public ModelAndView login(ModelAndView mav) {
+  public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/login");
     return mv;

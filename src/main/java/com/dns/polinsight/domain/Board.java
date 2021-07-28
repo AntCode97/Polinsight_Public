@@ -53,6 +53,9 @@ public class Board implements Serializable {
 
   private Boolean newBoard;
 
+  @Embedded
+  private BoardStatus boardStatus;
+
   public static BoardBuilder builder(BoardDTO boardDTO) {
     return BoardBuilder()
         .id(boardDTO.getId())

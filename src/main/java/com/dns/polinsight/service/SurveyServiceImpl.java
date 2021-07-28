@@ -14,15 +14,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -64,7 +60,7 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  @Scheduled(cron = "0 0 0/1 * * *")
+  //  @Scheduled(cron = "0 0 0/1 * * *")
   public List<Survey> getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
 
@@ -137,6 +133,11 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public List<Survey> findSurveysByTitleRegex(String titleRegex) {
     return surveyRepository.findSurveysByTitleLike(titleRegex);
+  }
+
+  @Override
+  public Optional<Survey> findSurveyById(long surveyId) {
+    return surveyRepository.findById(surveyId);
   }
 
 }

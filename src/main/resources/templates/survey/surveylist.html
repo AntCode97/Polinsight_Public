@@ -4,22 +4,22 @@
       <p>진행중인 <span class="pol_color">온라인조사</span></p>
       <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
     </div>
-    <div class="search_survey_wrap">
-      <div>
+<!--    <div class="search_survey_wrap">-->
+<!--      <div>-->
 
-        <select name="survey_search_option" id="survey_search_option">
-          <option value="title" selected>제목</option>
-          <option value="point">포인트</option>
-          <!--          <option value="end_date">종료일</option>-->
-        </select>
-      </div>
-      <div class="search_input_wrap">
-        <input name="searchInput" placeholder="설문 제목으로 검색" type="text">
-      </div>
-      <div class="search_btn_wrap">
-        <button id="survey_search_btn" value="">🔍찾기</button>
-      </div>
-    </div>
+<!--        <select name="survey_search_option" id="survey_search_option">-->
+<!--          <option value="title" selected>제목</option>-->
+<!--          <option value="point">포인트</option>-->
+<!--          &lt;!&ndash;          <option value="end_date">종료일</option>&ndash;&gt;-->
+<!--        </select>-->
+<!--      </div>-->
+<!--      <div class="search_input_wrap">-->
+<!--        <input name="searchInput" placeholder="설문 제목으로 검색" type="text">-->
+<!--      </div>-->
+<!--      <div class="search_btn_wrap">-->
+<!--        <button id="survey_search_btn" value="">🔍찾기</button>-->
+<!--      </div>-->
+<!--    </div>-->
     <div class="main_survey_box">
     </div>
   </div>
@@ -43,30 +43,33 @@
       return template;
     }
     const makeSurveyCardList = (surveyList) => {
+
       const survey_box = $(".main_survey_box");
       let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-      survey_box.append('<div class="main_survey_item_wrap"></div>')
-      for (idx in surveyList) {
-        if (!!surveyList[idx].point)
-          if (idx % 3 !== 0) {
-            item_wrap.append(makeSurveyCard(surveyList[idx]))
-          } else {
-            survey_box.append('<div class="main_survey_item_wrap"></div>')
-            item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-            item_wrap.append(makeSurveyCard(surveyList[idx]))
-          }
-      }
+      let count = 0;
+      surveyList.forEach(survey => {
+        if (count % 3 !== 0) {
+          item_wrap.append(makeSurveyCard(survey))
+        } else {
+          survey_box.append('<div class="main_survey_item_wrap"></div>')
+          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
+          item_wrap.append(makeSurveyCard(survey))
+        }
+        count++;
+      })
     }
 
     const getSurveyList = () => {
+      console.log("get survey list in init time")
       axios.get('/api/surveys')
           .then(res => {
+            // console.log(res.data.data)
             if (res.data.data !== null) {
               surveys = res.data.data
               if (surveys.length > 0) {
                 makeSurveyCardList(surveys)
               } else {
-// TODO: 진행중인 조사가 없습니다.
+                // TODO: 진행중인 조사가 없습니다.
               }
             }
           })
