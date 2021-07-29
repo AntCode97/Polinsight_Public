@@ -106,9 +106,9 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys() throws Exception {
+  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable) throws Exception {
     try {
-      return success(surveyService.findAll());
+      return success(surveyService.findAll(pageable).getContent());
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

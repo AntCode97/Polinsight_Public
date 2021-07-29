@@ -14,9 +14,9 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_member_list");
   }
 
-  @GetMapping("/membersearch")
-  public ModelAndView adminMemberSearch() {
-    return new ModelAndView("admin/admin_member_search");
+  @GetMapping("/memberinfo")
+  public ModelAndView adminMemberDetailInfo() {
+    return new ModelAndView("admin/admin_member_info");
   }
 
   @GetMapping("/surveylist")

@@ -47,9 +47,9 @@ create table additional
 
 create table additional_favorite
 (
-    additional_id bigint       not null,
+    user_id bigint       not null,
     favorite      varchar(255) null,
-    foreign key (additional_id) references additional (id)
+    foreign key (user_id) references user (id)
 );
 
 create table user
@@ -59,12 +59,17 @@ create table user
     name          varchar(255) null,
     password      varchar(255) null,
     phone         varchar(11)  null,
-    point         bigint       null,
+    point         bigint       null DEFAULT 0,
     recommend     varchar(11)  null,
-    role          varchar(255) null,
-    additional_id bigint       null,
-    unique (email),
-    foreign key (additional_id) references additional (id)
+    role          varchar(255) null DEFAULT 'USER',
+    birth      datetime(6)  null,
+    birth_type varchar(255) null DEFAULT '양력',
+    education  varchar(255) null,
+    gender     int          null,
+    industry   varchar(255) null,
+    job        varchar(255) null,
+    marry      bit          null
+    unique (email)
 );
 
 create table board

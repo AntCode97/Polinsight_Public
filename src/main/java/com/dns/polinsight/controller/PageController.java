@@ -87,4 +87,5 @@ public class PageController {
     session.setAttribute("basic_user", sessionUser);
     return new ModelAndView("redirect:/panelagreement");
   }
+
 }

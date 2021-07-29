@@ -255,7 +255,6 @@ public class UserController {
 
   @GetMapping("/api/user/participate")
   public ApiUtils.ApiResult<List<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
-    Map<String, Object> map = new HashMap<>();
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
       return success(surveyService.getUserParticipateSurvey(user));
@@ -284,5 +283,7 @@ public class UserController {
   public ApiUtils.ApiResult<Long> coutAllUser() {
     return success(userService.coutAllUser());
   }
+
+
 
 }
