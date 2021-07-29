@@ -62,7 +62,7 @@ public class User implements UserDetails, Serializable {
   private Long point = 0L;
 
   @Enumerated(EnumType.STRING)
-  private UserRoleType role;
+  private UserRoleType role = UserRoleType.USER;
 
   @Embedded
   private Additional additional;

@@ -19,7 +19,7 @@
       <div class="board-search">
         <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
       </div>
-
+      <!--관리자 페이지 사용자 찾기 기능-->
       <div class="form-search">
         <div class="tbl-search">
           <div class="box-search">
@@ -73,12 +73,19 @@
   </div>
   <script>
     // 10개씩 나타내는것을 기준으로 함
-    const makePaginationButton = (size, offset) => {
+    const makePaginationButton = (offset) => {
+      const size = 10;
+      // 전체 요소 갯수 가져오기
       const userCount = $('div.util-search').children('strong').text()
-      let pages = (userCount / size) + 1 + offset  // 바로가기 버튼의 개수
+      let pages = Math.floor(userCount / 10) + 1  // 바로가기 버튼의 개수
       // 버튼 만들기
-      for (let i = 1; i <= 10; i++) {
-        const tmp = $(`<a class="pagenation_button">${i}</a>`)
+      for (let i = 1; i <= pages; i++) {
+        const tmp = $(`<a onclick="getMemberList(${i})" class="pagenation_button">${i}</a>`)
+        tmp.on('mouseover', function () {
+          $(this).css('cursor', 'pointer').css('text-decoration', 'underline')
+        }).on('mouseleave', function () {
+          $(this).css('cursor', 'default').css('text-decoration', 'none')
+        })
         $('div.pagination').append(tmp)
       }
     }
@@ -95,13 +102,16 @@
     }
 
     const makeAdminMemberListTemplate = memberInfoList => {
+      if (!memberInfoList) return
       const table = $('.scroll-table')
       table.empty()
       for (memberInfo of memberInfoList)
         table.append(makeAdminMemberRowTemplate(memberInfo))
     }
 
-    const getMemberList = (size, offset) => {
+    const getMemberList = (multiple) => {
+      const size = 10;
+      const offset = multiple*size;
       axios.get('/api/users', {
             params: {
               'size': size,
@@ -109,7 +119,8 @@
             }
           })
           .then(res => {
-            makePaginationButton(size, offset)
+            console.log(res)
+            makePaginationButton(offset)
             makeAdminMemberListTemplate(res.data.response)
           })
           .catch()
@@ -138,8 +149,6 @@
     }
 
     const throttleFindUserByRegex = _.throttle(findUserByRegex, 300)
-
-    let userCount = 0;
 
     $(function () {
       countAllUsers()
