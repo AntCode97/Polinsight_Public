@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<head>
+    <style type="text/css">
+        .-tblList thead th {
+            color: #454545;
+            font-weight: bold;
+            letter-spacing: -0.5px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid rgb(0, 0, 0);
+            border-top: 1px solid rgb(0, 0, 0);
+            padding: 7px 5px 8px 5px;
+            margin: 0px;
+            font-size: 14px;
+            border-collapse: collapse;
+            position: relative;
+            /*font-family: "맑은 고딕", malgun gothic, dotum;*/
+            display: table-cell;
+            border-spacing: 0;
+            vertical-align: inherit;
+        }
+
+        .caption {
+            padding-bottom: 50px;
+            font-size: 30px;
+            /*font-family: "맑은 고딕", malgun gothic, dotum;*/
+            text-align: center;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+
+        .-btnPageLink {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .btn-tpl {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 4px;
+            -webkit-appearance: none;
+            box-sizing: border-box;
+            cursor: pointer;
+            white-space: nowrap;
+            border-radius: 3px;
+            font-weight: bold;
+            letter-spacing: -1px;
+            background: #4C4C4C;
+            border: 1px solid #4C4C4C;
+            text-shadow: #292929 0 0 1px;
+            color: #fff;
+        }
+
+        [class*="LF_page_link"] {
+            display: inline-block;
+            min-width: 27px;
+            height: 25px;
+            box-sizing: border-box;
+        }
+
+        [class*="bdList"] .-bdSchWrap {
+            text-align: left;
+            background-color: #fff;
+            padding: 10px 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .AB-select {
+            background-image: url(icon_select_arrow_m.png);
+            background-position: right center;
+            background-repeat: no-repeat;
+            background-color: #fff;
+            background-size: 21px;
+            padding-right: 17px;
+            padding-left: 2px;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    </style>
+</head>
+
+<body class="PC">
+<div class="ABA-wrap-box AB-cr">
+    <div class="ABA-container-box">
+        <div class="ABA-content-box">
+            <div>
+                <div class="GNB-color-02 LNB-h LNB-tab" style="margin-bottom:5px;">
+                    <div class="ABA-lnb-box" id="ABA-lnb-104500">
+
+                        <div class="ABA-body-lnb">
+                            <div class="lnb-2dph">
+                                <div class="ABA-bglnb-left"></div>
+                                <ul class="ABA-lnb">
+                                    <li class="AB-first AB-current-lnb AB-child" id="AB-lnb-104500-1">
+                                        <a class="" href="@{/boards}">공지사항<span class="AB-lleft"></span> <span class="AB-rleft"></span></a>
+                                    </li>
+                                    <li class="AB-last" id="AB-lnb-104500-2">
+                                        <a class="" href="">문의사항<span class="AB-lleft"></span> <span class="AB-rleft"></span> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ABA-wrap-box AB-cr ABA-layout-align" id="ABA-column-wrap" style="padding:20px 0 30px 0;">
+    <div class="ABA-container-box-1200">
+        <div id="AB_contents">
+
+                <div class="ABA-content-box bdList">
+
+                    <div>
+                        <div class="articleList">
+                            <div>
+                                <table class="-tblList" th:object="${board}">
+                                    <thead>
+                                    <tr class="onlyPC">
+                                        <th height="36" th:text="${board.id}" width="50"></th>
+                                        <th th:text="${board.title}" width="300"></th>
+                                        <th width="90">
+                                            <th:block th:unless="${session.user} == null">
+                                                <span th:text="${session.user}?${session.user.name}:'guest'"></span>
+
+                                            </th:block>
+                                        </th>
+                                        <th th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width="140"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ul>
+                                        <li th:each="file : ${board.attaches}">
+                                            <a th:href="@{'/boards/'+${file.filePath}}" th:text="${file.originalName}" />
+                                        </li>
+                                    </ul>
+                                    <tr>
+                                        <td class="onlyPC" th:utext="${board.viewcontent}" width="140"></td>
+                                    </tr>
+                                    <td th:unless="${session.user} == null">
+                                        <a role="button" th:href="@{/boards/{id}/edit (id=${board.id})}">수정</a>
+                                    </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    <div>-->
+<!--                        <div class="-btnPageLink">-->
+<!--                            <div><span class="LF_page_link_current"><b>1</b></span>-->
+<!--                                <a class="LF_page_link_next_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">-->
+<!--                                    <img align="center" alt="다음 페이지로 이동" border="0" class="LF_page_link_next_page_img" src="/static/img/board/list_next.png"></a>-->
+<!--                                <a class="LF_page_link_last_page" href="/kwa-jobopening?search_item=A&amp;PB_1618220647=2">-->
+<!--                                    <img align="center" alt="마지막 페이지로 이동" border="0" class="LF_page_link_last_page_img" src="/static/img/board/last_page.png"></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

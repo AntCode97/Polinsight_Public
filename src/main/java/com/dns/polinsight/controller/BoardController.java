@@ -239,12 +239,14 @@ public class BoardController {
 
 
   @GetMapping("/boards/{boardId}")
-  public String content(@PathVariable("boardId") Long boardId, Model model) {
+  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
     //                    "serveFile", path.getFileName().toString()).build().toUri().toString())
     //            .collect(Collectors.toList()));
+
+    model.addAttribute("user", user);
     model.addAttribute("files", attachService.findFiles(boardId));
     //    if (user != null) {
     //      model.addAttribute("user", user);
@@ -252,6 +254,19 @@ public class BoardController {
     Board findBoard = boardService.findOne(boardId);
     boardService.upViewCnt(findBoard);
     model.addAttribute("board", findBoard);
+    List<Board> allBoards = boardService.findAll();
+    for(int i =0; i<allBoards.size();i++){
+      if(allBoards.get(i).getId() == boardId){
+        if(i !=0){
+          model.addAttribute("prevBoard", allBoards.get(i-1));
+        }
+        if( i != allBoards.size()-1){
+          model.addAttribute("nextBoard", allBoards.get(i+1));
+        }
+        break;
+      }
+    }
+
     return "boards/board";
   }
   @GetMapping("admin/boards/{boardId}")
