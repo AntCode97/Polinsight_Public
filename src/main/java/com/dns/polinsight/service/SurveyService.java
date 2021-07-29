@@ -29,4 +29,5 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyById(long surveyId);
 
+  long countAllSurvey();
 }

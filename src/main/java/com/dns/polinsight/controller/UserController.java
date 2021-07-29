@@ -24,7 +24,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import javax.validation.constraints.Email;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -279,6 +278,11 @@ public class UserController {
       map.put("error", e.getMessage());
     }
     return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("/api/user/total")
+  public ApiUtils.ApiResult<Long> coutAllUser() {
+    return success(userService.coutAllUser());
   }
 
 }

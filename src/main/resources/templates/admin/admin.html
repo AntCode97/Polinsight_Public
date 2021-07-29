@@ -1,57 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-<th:block th:include="admin/layout/sidebar"></th:block>
-<h1>Admin Page</h1>
-<button id="syncSurveyList">서베이몽키와 동기화</button>
-<button id="getExcelBtn">목록 엑셀로 다운받기</button>
+<th:block th:include="admin/admin_sidebar" />
+<th:block>
+  <div>
+    <h1>Admin Page</h1>
+    <button id="syncSurveyList">서베이몽키와 동기화</button>
+    <button id="getExcelBtn">목록 엑셀로 다운받기</button>
+  </div>
+  <script>
+    const syncSurveyList = () => {
+      axios.get('/api/survey/sync')
+          .then(alert('동기화 성공'))
+          .catch(alert('동기화 실패'))
+    }
 
-</body>
-<script>
-  const syncSurveyList = () => {
-    axios.get('/api/survey/sync')
-        .then(alert('동기화 성공'))
-        .catch(alert('동기화 실패'))
-  }
+    const updateUserPoints = () => {
+      const checkedUpdateUser = $("input[name=check]:checked")
+    }
 
-  const updateUserPoints = () => {
-    const checkedUpdateUser = $("input[name=check]:checked")
-  }
+    const getDataAsExcel = () => {
 
-  const getDataAsExcel = () => {
+    }
 
-  }
+    const deleteSurveyFromSurveyList = () => {
+    }
 
-  const deleteSurveyFromSurveyList = () => {
-  }
+    const setPointToSurvey = () => {
 
-  const setPointToSurvey = () => {
+    }
 
-  }
+    const deleteUser = () => {
+      axios.delete('/user', {
+        data: {}
+      })
+    }
 
-  const deleteUser = () => {
-    axios.delete('/user', {
-      data: {}
+    const getAllUsers = () => {
+      axios.get('/users')
+          .then()
+          .catch()
+    }
+
+    const successPointPayment = () => {
+
+    }
+
+    $(function () {
+      $("#syncSurveyList").on('click', syncSurveyList)
+      $("#getExcelBtn").on('click', getDataAsExcel)
     })
-  }
-
-  const getAllUsers = () => {
-    axios.get('/users')
-        .then()
-        .catch()
-  }
-
-  const successPointPayment = () => {
-
-  }
-
-  $(function () {
-    $("#syncSurveyList").on('click', syncSurveyList)
-    $("#getExcelBtn").on('click', getDataAsExcel)
-  })
-</script>
-</html>
+  </script>
+</th:block>

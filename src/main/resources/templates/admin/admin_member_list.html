@@ -1,3 +1,12 @@
+<!--<th:block th:include="admin/admin_sidebar"/>-->
+<th:block th:include="module/common" />
+<th:block>
+  <style>
+    /*.board-row:hover {*/
+    /*  background-color: lightgray;*/
+    /*}*/
+  </style>
+</th:block>
 <th:block>
   <div class="admin_main_contents">
     <div class="admin_main_contents_category">
@@ -8,7 +17,16 @@
 
     <div class="main_contents_wrap">
       <div class="board-search">
-        <div class="util-search">총 <strong>?</strong>명의 회원이 있습니다.</div>
+        <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
+      </div>
+
+      <div class="form-search">
+        <div class="tbl-search">
+          <div class="box-search">
+            <input name="adminfinduserby" type="text" />
+            <button name="adminfinduser_btn" type="submit">찾기</button>
+          </div>
+        </div>
       </div>
 
       <div class="scroll-table">
@@ -20,43 +38,53 @@
           <span>휴대전화</span>
           <span>유형</span>
         </div>
-        <div class="board-row">
-          <span>1</span>
-          <span>admin@polinsight.com</span>
-          <!--          <span>password1234</span>-->
-          <span>관리자</span>
-          <span>01012345678</span>
-          <span>일반</span>
-        </div>
+        <!--        <div class="board-row">-->
+        <!--          <span>1</span>-->
+        <!--          <span>admin@polinsight.com</span>-->
+        <!--          &lt;!&ndash;          <span>password1234</span>&ndash;&gt;-->
+        <!--          <span>관리자</span>-->
+        <!--          <span>01012345678</span>-->
+        <!--          <span>일반</span>-->
+        <!--        </div>-->
       </div>
+      <div class="pagination"></div>
       <!--TODO : 수정 필요-->
-      <div class="page-button"
-           th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
-        <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
-    </a> -->
-        <a href="#"><i class="fas fa-angle-double-left"></i></a>
-        <a href="#" class="main-page">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#"><i class="fas fa-angle-double-right"></i></a>
-        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
-        <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
-    </a>
-    <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
-    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
-        <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
-    </a> -->
-        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
-        <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
-    </a> -->
-      </div>
+      <!--      <div class="page-button"           th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">-->
+      <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
+      <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+  </a> -->
+      <!--      <a href="#"><i class="fas fa-angle-double-left"></i></a>-->
+      <!--      <a href="#" class="main-page">1</a>-->
+      <!--      <a href="#">2</a>-->
+      <!--      <a href="#">3</a>-->
+      <!--      <a href="#"><i class="fas fa-angle-double-right"></i></a>-->
+      <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+      <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+  </a>
+  <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+  <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+      <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
+  </a> -->
+      <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+      <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+  </a> -->
     </div>
   </div>
+  </div>
   <script>
-    const makeAdminMemberListTemplate = (memberInfo) => {
+    // 10개씩 나타내는것을 기준으로 함
+    const makePaginationButton = (size, offset) => {
+      const userCount = $('div.util-search').children('strong').text()
+      let pages = (userCount / size) + 1 + offset  // 바로가기 버튼의 개수
+      // 버튼 만들기
+      for (let i = 1; i <= 10; i++) {
+        const tmp = $(`<a class="pagenation_button">${i}</a>`)
+        $('div.pagination').append(tmp)
+      }
+    }
 
-      let template = `<div className="board-row">`
+    const makeAdminMemberRowTemplate = memberInfo => {
+      let template = `<div class="board-row">`
       template += `<span>${memberInfo.id}</span>`
       template += `<span>${memberInfo.email}</span>`
       template += `<span>${memberInfo.name}</span>`
@@ -65,17 +93,72 @@
       template += `</div>`
       return template;
     }
-    const getMemberList = () => {
-      axios.get()
+
+    const makeAdminMemberListTemplate = memberInfoList => {
+      const table = $('.scroll-table')
+      table.empty()
+      for (memberInfo of memberInfoList)
+        table.append(makeAdminMemberRowTemplate(memberInfo))
+    }
+
+    const getMemberList = (size, offset) => {
+      axios.get('/api/users', {
+            params: {
+              'size': size,
+              'offset': offset
+            }
+          })
           .then(res => {
-            for (member of res.data)
-              makeAdminMemberListTemplate(member)
+            makePaginationButton(size, offset)
+            makeAdminMemberListTemplate(res.data.response)
           })
           .catch()
     }
 
+
+    const countAllUsers = () => {
+      axios.get('/api/user/total')
+          .then(res => {
+            $('div.util-search').children('strong').text(res.data.response)
+          })
+          .catch()
+    }
+
+    const findUserByRegex = e => {
+      const findValue = $('input[name=adminfinduserby]').val()
+      let url = ''
+      if (!findValue) url = '/api/users'
+      else url = '/api/user/find/' + findValue
+
+      axios.get(url)
+          .then(res => {
+            $('div.util-search').children('strong').text(res.data.response.length)
+            makeAdminMemberListTemplate(res.data.response)
+          }).catch(err => console.log(err))
+    }
+
+    const throttleFindUserByRegex = _.throttle(findUserByRegex, 300)
+
+    let userCount = 0;
+
     $(function () {
-      getMemberList()
+      countAllUsers()
+      getMemberList(10, 0)  // 페이지 초기 값
+
+      $(document).on('click', 'div.board-row', () => {
+        // 클릭시 디테일 페이지?
+        alert('aaa')
+      }).on('mouseover', 'div.board-row', function (e) {
+        $(this).css('background-color', 'lightgray')
+        $(this).css('cursor', 'pointer')
+      }).on('mouseleave', 'div.board-row', function () {
+        $(this).css('background-color', 'rgba(0,0,0,0)')
+        $(this).css('cursor', 'default')
+      })
+
+      /*비동기 회원 찾기 및 화면 업데이트*/
+      $('input[name=adminfinduserby]').on('keyup', throttleFindUserByRegex)
+      $('button[name=adminfinduser_btn]').on('click', findUserByRegex)
     })
   </script>
 </th:block>

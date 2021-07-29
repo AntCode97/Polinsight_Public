@@ -11,8 +11,10 @@ import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.PointRequestProgressType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
+import com.dns.polinsight.utils.PageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -68,9 +70,9 @@ public class ApiController {
   }
 
   @GetMapping("/user/find/{regex}")
-  public ApiUtils.ApiResult<List<User>> adminUserFind(@PathVariable(name = "regex") String regex) throws Exception {
+  public ApiUtils.ApiResult<List<UserDto>> adminUserFind(@PathVariable(name = "regex") String regex) throws Exception {
     try {
-      return success(adminService.adminSerchUserByRegex(regex));
+      return success(adminService.adminSerchUserByRegex(regex).stream().map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -90,9 +92,10 @@ public class ApiController {
    * 회원 가입된 모든 유저 정보 반환
    * */
   @GetMapping("/users")
-  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers() throws Exception {
+  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
     try {
-      return success(userService.findAll().parallelStream().map(UserDto::new).collect(Collectors.toList()));
+      System.out.println(pageable.toString());
+      return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());

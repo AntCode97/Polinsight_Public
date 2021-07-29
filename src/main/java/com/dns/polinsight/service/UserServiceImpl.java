@@ -4,9 +4,10 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +27,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<User> findAll() {
+    return repository.findAll();
+  }
+
+  @Override
   public User loadUserByUsername(String username) throws UsernameNotFoundException {
     return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
   @Override
-  public List<User> findAll() {
-    return repository.findAll();
+  public Page<User> findAll(Pageable pageable) {
+    return repository.findAll(pageable);
   }
 
   @Override
@@ -64,6 +70,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public User findUserByEmail(User user) throws UsernameNotFoundException {
     return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
+  }
+
+  @Override
+  public long coutAllUser() {
+    return repository.count();
   }
 
 }

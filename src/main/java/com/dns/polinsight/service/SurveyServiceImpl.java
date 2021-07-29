@@ -140,4 +140,9 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.findById(surveyId);
   }
 
+  @Override
+  public long countAllSurvey() {
+    return surveyRepository.count();
+  }
+
 }

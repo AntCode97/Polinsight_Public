@@ -1,6 +1,8 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -11,6 +13,8 @@ public interface UserService extends UserDetailsService {
   boolean isExistUser(String email);
 
   List<User> findAll();
+
+  Page<User> findAll(Pageable pageable);
 
   void deleteUserByEmail(String email);
 
@@ -24,5 +28,7 @@ public interface UserService extends UserDetailsService {
   void deleteUser(User user);
 
   User findUserByEmail(User user);
+
+  long coutAllUser();
 
 }

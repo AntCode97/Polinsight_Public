@@ -95,6 +95,9 @@ spring :
   output :
     ansi :
       enabled : always
+  thymeleaf :
+    servlet :
+      content-type : "*/*"
 
 #logging :
 #  file :
@@ -115,9 +118,11 @@ custom :
 
     admin :
       - /admin/**
+      - /api/admin/**
 
     template :
       - /
+      - /api/**
       - /signup
       - /join
       - /index

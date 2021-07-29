@@ -4,10 +4,10 @@ import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.exception.SurveyNotFoundException;
-import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
@@ -98,7 +100,7 @@ public class SurveyController {
     if (sessionUser == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
-    System.out.println("surveyId: "+surveyId);
+    System.out.println("surveyId: " + surveyId);
     try {
       // TODO: 2021/07/27 : 값 넣기
       List<String> someVariables = new ArrayList<>();
@@ -116,6 +118,11 @@ public class SurveyController {
     //    } catch (NoSuchAlgorithmException e) {
     //      throw new NoSuchAlgorithmException(e.getMessage());
     //    }
+  }
+
+  @GetMapping("/api/survey/total")
+  public ApiUtils.ApiResult<Long> coutAllSurvey() {
+    return success(surveyService.countAllSurvey());
   }
 
 }

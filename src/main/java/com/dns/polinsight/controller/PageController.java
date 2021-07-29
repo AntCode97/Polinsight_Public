@@ -2,7 +2,6 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.service.PageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -17,8 +16,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequiredArgsConstructor
 public class PageController {
-
-  private final PageService service;
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
   public ModelAndView home(@LoginUser SessionUser user) {
@@ -90,5 +87,4 @@ public class PageController {
     session.setAttribute("basic_user", sessionUser);
     return new ModelAndView("redirect:/panelagreement");
   }
-
 }

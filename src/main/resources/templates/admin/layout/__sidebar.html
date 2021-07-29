@@ -1,11 +1,11 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!DOCTYPE html>
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
 <head>
     <title>폴인사이트</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link th:href="@{/css/common.css}" rel="stylesheet">
+<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">-->
+<!--    <link th:href="@{/css/common.css}" rel="stylesheet">-->
     <style type="text/css">
         .admin_wrap {
             position: relative;
@@ -281,7 +281,7 @@
             <!-- 관리자 계정 정보 -->
             <div class="admin_user">
                 <div class="admin_user_photo">
-                    <img src="/img/user/circle_loppy.png" alt="user_img" style="width: 100%;"/>
+                    <img th:src="/img/user/circle_loppy.png" alt="user_img" style="width: 100%;"/>
                 </div>
                 <div class="user-info">
                     <a class="username">

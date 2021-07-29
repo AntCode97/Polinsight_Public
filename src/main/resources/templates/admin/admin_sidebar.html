@@ -1,308 +1,312 @@
 <!DOCTYPE html>
+<th:block th:include="module/common" />
+<!--<th:block th:include="layout/header" />-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<title>폴인사이트</title>
-<meta charset="UTF-8">
-<style type="text/css">
-  .admin_wrap {
-    position: relative;
-    top: 0;
-    color: #3c4858;
-  }
+<head>
+  <title>폴인사이트</title>
+  <meta charset="UTF-8">
+  <style>
+    .admin_wrap {
+      position: relative;
+      top: 0;
+      color: #3c4858;
+    }
 
-  .admin_sidebar, .admin_sidebar_wrap, .admin_main {
-    transition-property: top, bottom, width;
-    transition-duration: .2s, .2s, .35s;
-    transition-timing-function: linear, linear, ease;
-  }
+    .admin_sidebar, .admin_sidebar_wrap, .admin_main {
+      transition-property: top, bottom, width;
+      transition-duration: .2s, .2s, .35s;
+      transition-timing-function: linear, linear, ease;
+    }
 
-  .admin_sidebar {
-    background-color: #191919;
-    height: 100%;
-    max-height: 100%;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 999;
-    width: 260px;
-    box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
-  }
+    .admin_sidebar {
+      background-color: #191919;
+      height: 100%;
+      max-height: 100%;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 999;
+      width: 260px;
+      box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+    }
 
-  .admin_logo {
-    padding: 15px 0;
-    margin: 0;
-    display: block;
-    position: relative;
-    z-index: 4;
-  }
+    .admin_logo {
+      padding: 15px 0;
+      margin: 0;
+      display: block;
+      position: relative;
+      z-index: 4;
+    }
 
-  .admin_logo:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 15px;
-    height: 1px;
-    width: calc(100% - 30px);
-    background-color: hsla(0, 0%, 71%, .3);
-  }
+    .admin_logo:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 15px;
+      height: 1px;
+      width: calc(100% - 30px);
+      background-color: hsla(0, 0%, 71%, .3);
+    }
 
-  .logo-mini {
-    color: white;
-    transition: all .3s linear;
-    opacity: 1;
-    float: left;
-    width: 30px;
-    text-align: center;
-    margin-left: 23px;
-    margin-right: 15px;
-  }
+    .logo-mini {
+      color: white;
+      transition: all .3s linear;
+      opacity: 1;
+      float: left;
+      width: 30px;
+      text-align: center;
+      margin-left: 23px;
+      margin-right: 15px;
+    }
 
-  .simple-text {
-    text-transform: uppercase;
-    padding: 5px 0;
-    display: inline-block;
-    font-size: 18px;
-    white-space: nowrap;
-    font-weight: 400;
-    line-height: 30px;
-    overflow: hidden;
-  }
+    .simple-text {
+      text-transform: uppercase;
+      padding: 5px 0;
+      display: inline-block;
+      font-size: 18px;
+      white-space: nowrap;
+      font-weight: 400;
+      line-height: 30px;
+      overflow: hidden;
+    }
 
-  .logo-normal {
-    display: block;
-    opacity: 1;
-    transform: translateZ(0);
-    color: white;
-  }
+    .logo-normal {
+      display: block;
+      opacity: 1;
+      transform: translateZ(0);
+      color: white;
+    }
 
-  .admin_sidebar_wrap {
-    position: relative;
-    height: calc(100vh - 75px);
-    width: 260px;
-    z-index: 4;
-    padding-bottom: 30px;
-  }
+    .admin_sidebar_wrap {
+      position: relative;
+      height: calc(100vh - 75px);
+      width: 260px;
+      z-index: 4;
+      padding-bottom: 30px;
+    }
 
-  .ps {
-    overflow: hidden !important;
-    overflow-anchor: none;
-    touch-action: auto;
-  }
+    .ps {
+      overflow: hidden !important;
+      overflow-anchor: none;
+      touch-action: auto;
+    }
 
-  .admin_user {
-    padding-bottom: 20px;
-    margin: 20px auto 0;
-    position: relative;
-  }
+    .admin_user {
+      padding-bottom: 20px;
+      margin: 20px auto 0;
+      position: relative;
+    }
 
-  .admin_user_photo {
-    width: 34px;
-    height: 34px;
-    overflow: hidden;
-    float: left;
-    z-index: 5;
-    margin-right: 11px;
-    border-radius: 50%;
-    margin-left: 23px;
-    box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
-  }
+    .admin_user_photo {
+      width: 34px;
+      height: 34px;
+      overflow: hidden;
+      float: left;
+      z-index: 5;
+      margin-right: 11px;
+      border-radius: 50%;
+      margin-left: 23px;
+      box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+    }
 
-  .user-info > a {
-    color: white;
-    font-size: 14px;
-    line-height: 18px;
-    display: block;
-    padding: 8px 15px;
-    white-space: nowrap;
-  }
+    .user-info > a {
+      color: white;
+      font-size: 14px;
+      line-height: 18px;
+      display: block;
+      padding: 8px 15px;
+      white-space: nowrap;
+    }
 
-  .username {
-    display: block;
-    line-height: 18px;
-    font-size: 14px;
-  }
+    .username {
+      display: block;
+      line-height: 18px;
+      font-size: 14px;
+    }
 
-  .admin_user:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 15px;
-    height: 1px;
-    width: calc(100% - 30px);
-    background-color: hsla(0, 0%, 71%, .3);
-  }
+    .admin_user:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 15px;
+      height: 1px;
+      width: calc(100% - 30px);
+      background-color: hsla(0, 0%, 71%, .3);
+    }
 
-  .admin_nav {
-    margin-top: 15px;
-    display: block;
-    flex-wrap: wrap;
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-  }
+    .admin_nav {
+      margin-top: 15px;
+      display: block;
+      flex-wrap: wrap;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+    }
 
-  .nav_link {
-    color: white;
-    margin: 10px 15px 0;
-    border-radius: 3px;
-    padding: .5rem 10px;
-    text-transform: capitalize;
-    font-size: 13px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    transition: all .15s ease-in;
-  }
+    .nav_link {
+      color: white;
+      margin: 10px 15px 0;
+      border-radius: 3px;
+      padding: .5rem 10px;
+      text-transform: capitalize;
+      font-size: 13px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      transition: all .15s ease-in;
+    }
 
-  .nav_link > i {
-    font-size: 20px;
-    margin-right: 15px;
-    line-height: 30px;
-    width: 30px;
-    text-align: center;
-    vertical-align: middle;
-  }
+    .nav_link > i {
+      font-size: 20px;
+      margin-right: 15px;
+      line-height: 30px;
+      width: 30px;
+      text-align: center;
+      vertical-align: middle;
+    }
 
-  .nav_link > p {
-    width: 100%;
-    margin: 0;
-    line-height: 30px;
-    font-size: 14px;
-    position: relative;
-    display: block;
-    height: auto;
-    white-space: nowrap;
-  }
+    .nav_link > p {
+      width: 100%;
+      margin: 0;
+      line-height: 30px;
+      font-size: 14px;
+      position: relative;
+      display: block;
+      height: auto;
+      white-space: nowrap;
+    }
 
-  .nav-item:hover > a {
-    background-color: hsla(0, 0%, 78%, .2);
-    box-shadow: none;
-  }
+    .nav-item:hover > a {
+      background-color: hsla(0, 0%, 78%, .2);
+      box-shadow: none;
+    }
 
-  .nav_link > p > i {
-    position: absolute;
-    right: 6px;
-    vertical-align: middle;
-    line-height: 30px;
-  }
+    .nav_link > p > i {
+      position: absolute;
+      right: 6px;
+      vertical-align: middle;
+      line-height: 30px;
+    }
 
-  .nav_dropdown {
-    padding-left: 40px;
-  }
+    .nav_dropdown {
+      padding-left: 40px;
+    }
 
-  .collapse-show {
-    height: 0;
-    overflow: hidden;
-  }
+    .collapse-show {
+      height: 0;
+      overflow: hidden;
+    }
 
-  .admin_main {
-    width: calc(100% - 260px);
-    float: right;
-    position: fixed;
-    top: 0;
-    z-index: 999;
-  }
+    .admin_main {
+      width: calc(100% - 260px);
+      float: right;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 999;
+    }
 
-  .admin_main_header {
-    width: 100%;
-    background-color: white;
-    height: 51px;
-    border-bottom: 1px solid #DDDDDD;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-  }
+    .admin_main_header {
+      width: 100%;
+      background-color: white;
+      height: 51px;
+      border-bottom: 1px solid #DDDDDD;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
 
-  .contents_title {
-    font-size: 1.4rem;
-  }
+    .contents_title {
+      font-size: 1.4rem;
+    }
 
-  .right_menu > ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    .right_menu > ul {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  .right_menu > ul > li {
-    position: relative;
-  }
+    .right_menu > ul > li {
+      position: relative;
+    }
 
-  a.header_menu_item {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 20px;
-    cursor: pointer;
-    border-radius: 50%;
-    border: 1.5px solid transparent;
-  }
+    a.header_menu_item {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 20px;
+      cursor: pointer;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+    }
 
-  .right_menu > ul > li:hover > a {
-    border: 1.5px solid #dddddd;
-    box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
-  }
+    .right_menu > ul > li:hover > a {
+      border: 1.5px solid #dddddd;
+      box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+    }
 
-  .right_menu > ul > li:hover > .dropdown_user {
-    display: block;
-  }
+    .right_menu > ul > li:hover > .dropdown_user {
+      display: block;
+    }
 
-  .header_menu_item > i {
-    font-size: 15px;
-  }
+    .header_menu_item > i {
+      font-size: 15px;
+    }
 
-  .dropdown_user {
-    position: absolute;
-    right: 0;
-    background-color: white;
-    width: 160px;
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
-    border: 1.5px solid #dddddd;
-    padding: 5px 0;
-    z-index: 9999;
-    display: none;
-  }
+    .dropdown_user {
+      position: absolute;
+      right: 0;
+      background-color: white;
+      width: 160px;
+      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
+      border: 1.5px solid #dddddd;
+      padding: 5px 0;
+      z-index: 9999;
+      display: none;
+    }
 
-  .dropdown_user > a {
-    margin: 0 5px;
-    padding: 10px 24px;
-    display: block;
-    border-radius: 2px;
-  }
+    .dropdown_user > a {
+      margin: 0 5px;
+      padding: 10px 24px;
+      display: block;
+      border-radius: 2px;
+    }
 
-  .dropdown_user > a:hover {
-    color: white;
-    background-color: #3885CA;
-    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
-  }
+    .dropdown_user > a:hover {
+      color: white;
+      background-color: #3885CA;
+      box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
+    }
 
-  .contents_title > a > i {
-    font-size: .9rem;
-    margin-right: 5px;
-  }
+    .contents_title > a > i {
+      font-size: .9rem;
+      margin-right: 5px;
+    }
 
-  .contents_title > a {
-    position: relative;
-  }
+    .contents_title > a {
+      position: relative;
+    }
 
-  .next-link {
-    padding-left: 20px;
-  }
+    .next-link {
+      padding-left: 20px;
+    }
 
-  .next-link::before {
-    content: '';
-    background-image: url('/img/etc/dot_depth.gif');
-    background-repeat: no-repeat;
-    background-position: center center;
-    position: absolute;
-    top: 2px;
-    left: 3px;
-    width: 10px;
-    height: 15px;
-  }
-</style>
+    .next-link::before {
+      content: '';
+      background-image: url('/img/etc/dot_depth.gif');
+      background-repeat: no-repeat;
+      background-position: center center;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 10px;
+      height: 15px;
+    }
+  </style>
 </head>
 <body>
 <div class="admin_wrap">
@@ -335,7 +339,7 @@
           </a>
         </li>
         <li class="nav-item nav_action">
-          <a th:href="@{admin/admin_member_list}" class="nav_link">
+          <a href="#" class="nav_link">
             <i class="fas fa-user-friends"></i>
             <p>
               회원관리
@@ -346,12 +350,12 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a th:href="@{admin/admin_member_list}" class="nav_link">
+              <a th:href="@{/admin/memberlist}" class="nav_link">
                 <p class="nav_dropdown">회원 목록</p>
               </a>
             </li>
             <li class="nav-item">
-              <a th:href="@{admin/admin_member_search}" class="nav_link">
+              <a th:href="@{/admin/membersearch}" class="nav_link">
                 <p class="nav_dropdown">회원 검색</p>
               </a>
             </li>
@@ -374,7 +378,7 @@
         </li>
 
         <li class="nav-item nav_action">
-          <a th:href="@{admin/admin_board_list}" class="nav_link">
+          <a href="#" class="nav_link">
             <i class="fas fa-clipboard-list"></i>
             <p>
               공지사항
@@ -403,7 +407,7 @@
         </div>
 
         <li class="nav-item nav_action">
-          <a th:href="@{admin/admin_survey_list}" class="nav_link">
+          <a href="#" class="nav_link">
             <i class="fas fa-list"></i>
             <p>
               설문 관리
@@ -425,22 +429,29 @@
   <div class="admin_main ps">
     <div class="admin_main_header">
       <div class="contents_title">
-        <a th:href="@{/admin}"><i class="fas fa-user-lock"></i> Admin</a>
-        <!--        <a th:href="@{/admin/board/manage}" class="next-link">게시글관리</a>-->
-        <!--        <a th:href="@{/admin/noti/manage}" class="next-link">공지사항</a>-->
+        <a th:href="@{/admin}">
+          <i class="fas fa-user-lock"></i>
+          Admin
+        </a>
+        <!--                <a th:href="@{/admin/board/manage}" class="next-link">게시글관리</a>-->
+        <!--                <a th:href="@{/admin/noti/manage}" class="next-link">공지사항</a>-->
       </div>
 
       <div class="right_menu">
         <ul>
           <li>
-            <a class="header_menu_item"><i class="fas fa-user"></i></a>
+            <a class="header_menu_item">
+              <i class="fas fa-user"></i>
+            </a>
             <div class="dropdown_user">
               <a th:href="@{/admin/user/manage}">정보수정</a>
               <a th:href="@{/dologout}">로그아웃</a>
             </div>
           </li>
           <li>
-            <a th:href="@{/}" class="header_menu_item"><i class="fas fa-door-open"></i></a>
+            <a th:href="@{/}" class="header_menu_item">
+              <i class="fas fa-door-open"></i>
+            </a>
           </li>
         </ul>
       </div>
