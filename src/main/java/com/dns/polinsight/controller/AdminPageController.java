@@ -24,4 +24,31 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_survey_list");
   }
 
+  @GetMapping
+  public ModelAndView goAdminPage() {
+    return new ModelAndView("admin/admin");
+  }
+
+
+  /*
+   * 게시글 관리 페이지
+   * */
+  @GetMapping("/board/manage")
+  public ModelAndView getBoardManage() {
+    return new ModelAndView("admin/admin_board_list");
+  }
+
+  /*
+   * 공지사항 관리 페이지
+   * */
+  @GetMapping("/noti/manage")
+  public ModelAndView getNotiManage() {
+    return new ModelAndView("admin/admin_board_register");
+  }
+
+  @GetMapping("/user/manage")
+  public ModelAndView getUserManage() {
+    return new ModelAndView("admin/admin_board_view");
+  }
+
 }

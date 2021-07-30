@@ -70,9 +70,21 @@ public class ApiController {
   }
 
   @GetMapping("/user/find/{regex}")
-  public ApiUtils.ApiResult<List<UserDto>> adminUserFind(@PathVariable(name = "regex") String regex) throws Exception {
+  public ApiUtils.ApiResult<List<UserDto>> adminUserFind(
+      @PageHandler Pageable pageable,
+      @PathVariable(name = "regex") String regex) throws Exception {
     try {
-      return success(adminService.adminSerchUserByRegex(regex).stream().map(UserDto::new).collect(Collectors.toList()));
+      return success(adminService.adminSerchUserByRegex(regex, pageable).stream().map(UserDto::new).collect(Collectors.toList()));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/user/find/{regex}/total")
+  public ApiUtils.ApiResult<Long> adminCountUserFind(
+      @PathVariable(name = "regex") String regex) throws Exception {
+    try {
+      return success(adminService.countUserFindRegex(regex));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -126,6 +138,16 @@ public class ApiController {
       } else {
         return success(surveyService.findSurveysByEndDate(LocalDateTime.parse(regex)));
       }
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/user/find/{regex}/total")
+  public ApiUtils.ApiResult<Long> adminCountSurveyFindByRegex(
+      @PathVariable(name = "regex") String regex) throws Exception {
+    try {
+      return success(adminService.countUserFindRegex(regex));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

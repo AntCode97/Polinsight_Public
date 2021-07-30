@@ -1,4 +1,4 @@
-<th:block th:include="admin/admin_sidebar"/>
+<th:block th:include="admin/admin_sidebar" />
 <th:block th:include="module/common" />
 <th:block>
   <style>
@@ -52,7 +52,8 @@
     }
 
     const makePaginationButton = current => {
-      const size = 10;
+      const findValue = $('input[name=adminfinduserby]').val()
+
       // 전체 요소 갯수 가져오기
       const userCount = $('div.util-search').children('strong').text()
       let totalPage = Math.floor(userCount / 10)  // 총 페이지 수
@@ -61,34 +62,68 @@
 
       let start = current - 5 <= 0 ? 0 : current - 5;
       let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
-
       // 못가게 되면 비활성화
-      let gofirstArrow = addPagenationEvent($(`<div class="pagenation_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`))
-      let goLastArrow = addPagenationEvent($(`<div class="pagenation_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`))
-      let prev = addPagenationEvent($(`<div class="pagenation_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`))
-      let next =
-          addPagenationEvent($(`<div class="pagenation_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`))
-      // first arrow
-      pagenationElem.append(gofirstArrow)
-      // prev arrow
-      pagenationElem.append(prev)
+      if (userCount > 0) {
+        if (!findValue) {
+          let gofirstArrow = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`))
+          let goLastArrow = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`))
+          let prev = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`))
+          let next =
+              addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`))
 
-      for (let i = start; i < end; i++) {
-        let tmp = $(`<div onclick="getMemberList(${i})" class="pagenation_button">${i + 1}</div>`)
-        tmp = addPagenationEvent(tmp)
-        // 활성화된 버튼에 대해 디자인 처리
-        if (current === i) {
-          tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+          // first arrow
+          pagenationElem.append(gofirstArrow)
+          // prev arrow
+          pagenationElem.append(prev)
+
+          for (let i = start; i < end; i++) {
+            let tmp = $(`<div onclick="getMemberList(${i})" class="pagenation_button">${i + 1}</div>`)
+            tmp = addPagenationEventCss(tmp)
+            // 활성화된 버튼에 대해 디자인 처리
+            if (current === i) {
+              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+            }
+            pagenationElem.append(tmp)
+          }
+          // next arrow
+          pagenationElem.append(next)
+          // last arrow
+          pagenationElem.append(goLastArrow)
+        } else {
+          let gofirstArrow = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-double-left"></i></div>`))
+          let goLastArrow = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-double-right"></i></div>`))
+          let prev = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-left"></i></div>`))
+          let next = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-right"></i></div>`))
+          gofirstArrow.on('click', {param_offset: 0}, findUserByRegex)
+          goLastArrow.on('click', {param_offset: totalPage - 1}, findUserByRegex)
+          prev.on('click', {param_offset: current - 1 < 0 ? 0 : current - 1}, findUserByRegex)
+          next.on('click', {param_offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
+// // first arrow
+          pagenationElem.append(gofirstArrow)
+//         // prev arrow
+          pagenationElem.append(prev)
+          for (let i = start; i < end; i++) {
+            let tmp = $(`<div class="pagenation_button">${i + 1}</div>`)
+            tmp = addPagenationEventCss(tmp)
+            tmp.on('click', {param_offset: i}, findUserByRegex);
+            // 활성화된 버튼에 대해 디자인 처리
+            if (current === i) {
+              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+            }
+            pagenationElem.append(tmp)
+          }
+          // // next arrow
+          pagenationElem.append(next)
+          // // last arrow
+          pagenationElem.append(goLastArrow)
         }
-        pagenationElem.append(tmp)
+      } else {
+        // 검색 결과가 없습니다.
+        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
       }
-      // next arrow
-      pagenationElem.append(next)
-      // last arrow
-      pagenationElem.append(goLastArrow)
     }
 
-    const addPagenationEvent = elem => {
+    const addPagenationEventCss = elem => {
       elem.on('mouseover', function () {
         $(this).css('cursor', 'pointer').css('text-decoration', 'underline')
       }).on('mouseleave', function () {
@@ -131,13 +166,12 @@
             }
           })
           .then(res => {
-            console.log(res)
             if (res.data.response.length > 0) {
               makePaginationButton(current)
               makeAdminMemberListTemplate(res.data.response)
             }
           })
-          .catch()
+      // .catch(location.replace("/admin/memberlist"))
     }
 
 
@@ -149,18 +183,28 @@
           .catch()
     }
 
+    const countSearchUsers = regex => {
+      axios.get('/api/user/find/' + regex + '/total')
+          .then(res => {
+            $('div.util-search').children('strong').text(res.data.response)
+          })
+          .catch()
+    }
+
     const findUserByRegex = e => {
       const findValue = $('input[name=adminfinduserby]').val()
-      let url = ''
-      if (!findValue) url = '/api/users'
-      else url = '/api/user/find/' + findValue
-
-      axios.get(url)
-          .then(res => {
-            $('div.util-search').children('strong').text(res.data.response.length)
-            makeAdminMemberListTemplate(res.data.response)
-            makePaginationButton(0)
-          }).catch(err => console.log(err))
+      if (!findValue) {
+        countAllUsers()
+        getMemberList(0);
+      } else {
+        countSearchUsers(findValue)
+        const offset = !e.data ? 0 : e.data.param_offset
+        axios.get('/api/user/find/' + findValue, {params: {'size': 10, 'offset': offset}})
+            .then(res => {
+              makeAdminMemberListTemplate(res.data.response)
+              makePaginationButton(offset)
+            }).catch(err => console.log(err))
+      }
     }
 
     const throttleFindUserByRegex = _.throttle(findUserByRegex, 300)
@@ -181,7 +225,7 @@
       })
 
       /*비동기 회원 찾기 및 화면 업데이트*/
-      $('input[name=adminfinduserby]').on('keyup', throttleFindUserByRegex)
+      $('input[name=adminfinduserby]').on('keyup', throttleFindUserByRegex).attr('placeholder', '유저 찾기')
       $('button[name=adminfinduser_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
     })
   </script>

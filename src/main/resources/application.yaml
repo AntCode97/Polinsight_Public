@@ -180,11 +180,12 @@ management :
 ---
 spring :
   datasource :
-    username :          root
-    password :          root
-    url :               jdbc:mariadb://localhost:3306/polinsight
-    driver-class-name : org.mariadb.jdbc.Driver
-
+    username :            root
+    password :            root
+    url :                 jdbc:mariadb://localhost:3306/polinsight
+    driver-class-name :   org.mariadb.jdbc.Driver
+    sql-script-encoding : UTF-8
+    continue-on-error :   true
 
   data :
     mongodb :
