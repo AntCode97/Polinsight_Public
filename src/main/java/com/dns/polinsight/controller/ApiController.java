@@ -125,6 +125,14 @@ public class ApiController {
       throw new Exception(e.getMessage());
     }
   }
+  @GetMapping("/survey/total")
+  public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
+    try {
+      return success(surveyService.countAllSurvey());
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
 
   /*
    * 정규식을 통한 다건 설문 검색
@@ -143,7 +151,7 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/user/find/{regex}/total")
+  @GetMapping("/survey/find/{regex}/total")
   public ApiUtils.ApiResult<Long> adminCountSurveyFindByRegex(
       @PathVariable(name = "regex") String regex) throws Exception {
     try {

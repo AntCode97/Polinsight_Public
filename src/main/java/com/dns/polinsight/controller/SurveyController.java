@@ -120,9 +120,4 @@ public class SurveyController {
     //    }
   }
 
-  @GetMapping("/api/survey/total")
-  public ApiUtils.ApiResult<Long> coutAllSurvey() {
-    return success(surveyService.countAllSurvey());
-  }
-
 }

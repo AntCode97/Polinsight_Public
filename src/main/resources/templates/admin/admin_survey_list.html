@@ -54,9 +54,11 @@
 
       let start = current - 5 <= 0 ? 0 : current - 5;
       let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
-
+      // TODO 페이지네이션 이벤트 설정
       if (surveyCount > 0) {
         if (!regexValue) {
+          paginationElement.append(gofirstArrow).append(prev)
+
           for (let i = start; i < end; i++) {
             let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
             if (current === i) {
@@ -64,6 +66,8 @@
             }
             paginationElement.append(tmp);
           }
+
+          paginationElement.append(next).append(goLastArrow)
         } else {
           paginationElement.append(gofirstArrow).append(prev)
           for (let i = start; i < end; i++) {
@@ -76,7 +80,7 @@
           paginationElement.append(next).append(goLastArrow)
         }
       } else {
-        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다.</h2></div>`))
+        $('.scroll-table').empty().append($(`<div><h2>검색 결과가 없습니다.</h2></div>`))
       }
     }
 
@@ -117,8 +121,8 @@
       axios.get('/api/surveys')
           .then(res => {
             getTotalCount()
-            makePaginationsInAdminSurvey(0)
             adminMakeSurveySearchResults(res.data.response)
+            makePaginationsInAdminSurvey(0)
           })
           .catch(err => {
             console.log(err)
@@ -140,13 +144,16 @@
 
     const getTotalCount = regex => {
       if (!regex) {
-        $('.util-search>strong').text(res.data.response.length)
+        axios.get('/api/survey/total')
+            .then(res => $('.util-search>strong').text(res.data.response))
       } else {
-        $('.util-search>strong').text(res.data.response.length)
+        axios.get('/api/survey/find/' + regex + '/total')
+            .then(res => $('.util-search>strong').text(res.data.response))
       }
     }
 
     $(function () {
+      getTotalCount()
       adminGetAllSurveys()
 
       $('input[name=adminfindsurvey]').on('keyup', _.throttle(findSurveyByRegex, 300)).attr('placeholder', '설문 찾기')
