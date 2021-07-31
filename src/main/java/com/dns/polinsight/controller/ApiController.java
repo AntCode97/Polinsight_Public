@@ -49,7 +49,7 @@ public class ApiController {
   public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
     try {
       Board board = boardService.findOne(boardId);
-      board.getBoardStatus().setViewCount(board.getBoardStatus().getViewCount() + 1);
+      board.setViewcnt(board.getViewcnt() + 1);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
