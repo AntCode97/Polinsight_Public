@@ -42,6 +42,7 @@ public class BoardDTO {
 
   private List<MultipartFile> files;
 
+
   public void transViewcontent() {
     this.viewcontent = this.content.replaceAll("\r\n", "<br>").replaceAll(" ", "&nbsp;");
   }

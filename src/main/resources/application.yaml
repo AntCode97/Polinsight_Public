@@ -134,6 +134,7 @@ custom :
       - /terms
       - /wholesign
       - /boards**
+      - /boards/**
       - /panel
       - /point**
       - /denied
@@ -224,7 +225,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : none
     properties :
       format_sql : true
     show-sql :     true

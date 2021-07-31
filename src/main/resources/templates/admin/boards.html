@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<<<<<<< HEAD
 <th:block th:include="admin/layout/__sidebar"></th:block>
+=======
+<!--<th:block th:include="admin/layout/sidebar"></th:block>-->
+>>>>>>> origin/board_file
 <head>
     <meta charset="UTF-8">
     <style type="text/css">
@@ -154,6 +158,7 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <div class="main_contents_wrap">
             <div class="board-search">
                 <div class="util-search">총 <strong th:text="${boards.getTotalElements()}"></strong>개의 게시물이 있습니다.</div>
@@ -231,4 +236,96 @@
         </div>
     </div>
 </body>
+=======
+
+
+                <!-- 게시글 전체 조회 출력 -->
+                <div th:replace="fragments/boardList :: #boardTable" >
+<!--                    <div id="boardTable" >-->
+<!--                <div class="board-row" th:each="list : ${boards}">-->
+<!--                    <span th:text="${list.id}"></span>-->
+<!--                    <a th:href="@{/admin/boards/{id} (id=${list.id})}" class="board-title"><strong th:text="${list.title}"></strong></a>-->
+<!--                    <span th:if="${list.newBoard}">-->
+<!--                                 New!-->
+<!--                            </span>-->
+<!--                    <span th:text="${list.user.name}"></span>-->
+<!--                    <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>-->
+
+<!--                    <span th:text="${list.viewcnt}"></span>-->
+<!--                    <span>-->
+<!--                        <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>-->
+<!--                        <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>-->
+<!--                    </span>-->
+<!--                    <span><button class="btn_udel btn-support" th:onclick="|location.href='@{/admin/boards/{id}/edit (id=${list.id})}'|">수정</button>-->
+<!--                        <button class="btn_udel btn-warn" th:onclick="|location.href='@{/admin/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>-->
+<!--                </div>-->
+<!--                <div class="board-bottom"><button class="btn_udel btn-green" onclick="location.href='/admin/boards/new'">새 글쓰기</button></div>-->
+<!--                </div>-->
+            </div>
+
+
+        </div>
+    </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const asyncFindBoard = (e) => {
+        // e.preventDefault();
+        // e.returnValue = false;
+        const keyword = $("#searchinput").val()
+
+        // console.log('/api/board/search?type=' + searchType + '&cassify=' + classify + '&keyword=' + keyword)
+        console.log(keyword);
+        // axios.get('/api/admin/board/search?keyword=' + keyword)
+        //     .then(function (fragment){
+        //         $('#boardTable').replaceWith(fragment);
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
+        $.ajax({
+            url: '/api/admin/boards/search?keyword=' + keyword,
+            type: "POST",
+            data: keyword,
+        }).done(function (fragment) {
+            // console.log(fragment)
+            $('#boardTable').replaceWith(fragment);
+        });
+    }
+    //
+    // const asyncGetPage= (e) => {
+    //     const keyword = $("#searchinput").val()
+    //     const page = parseInt($('.not-active').text());
+    //     console.log(keyword);
+    //     console.log(page);
+    //     $(location).attr("href", '/admin/boards/search?keyword=' + keyword + '&page=' +page )
+    //     // $.ajax({
+    //     //     url: '/api/admin/boards/search?keyword=' + keyword + '&page=' +page  ,
+    //     //     type: "GET",
+    //     // }).done(function (fragment) {
+    //     //     // console.log(fragment)
+    //     //      $(location).attr("href", '/admin/boards/?keyword=' + keyword +'&page=' +page )
+    //     //     // $('#boardTable').replaceWith(fragment);
+    //     // });
+    //  }
+
+
+
+
+
+
+
+
+    // $(function () {
+    //     $("#searchinput").on('change keyup', asyncFindBoard)
+    // })
+    // window.onload = function (){
+    //     const keyword = document.getElementById("searchinput");
+    //
+    //     console.log(keyword);
+    //     keyword.onchange(asyncFindBoard);
+    // }
+
+</script>
+>>>>>>> origin/board_file
 </html>

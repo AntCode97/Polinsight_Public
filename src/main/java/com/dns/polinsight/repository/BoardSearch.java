@@ -15,4 +15,5 @@ public class BoardSearch {
 
   private String searchValue;
 
+
 }
