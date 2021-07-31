@@ -56,24 +56,17 @@ public class UserController {
 
   @PostMapping("/signup")
   public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
-    Map<String, Object> map = new HashMap<>();
+    System.out.println(signupDTO);
     try {
-      User user = userService.save(User.builder()
-                                       .email(signupDTO.getEmail())
-                                       .name(signupDTO.getName())
-                                       .phone(signupDTO.getPhone())
-                                       .password(passwordEncoder.encode(signupDTO.getPassword()))
-                                       .recommend(signupDTO.getRecommend())
-                                       .role(UserRoleType.USER)
-                                       .build());
+      User user = userService.save(signupDTO.toUser(passwordEncoder));
       if (signupDTO.isIspanel()) {
-        // TODO: 2021/07/28  
         session.setAttribute("basic_user", new SessionUser(user));
       } else {
         session.setAttribute("user", new SessionUser(user));
       }
       return success(Boolean.TRUE);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
   }
@@ -264,26 +257,20 @@ public class UserController {
   }
 
   @PostMapping("/api/survey/participate")
-  public ResponseEntity<Map<String, Object>> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<User> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
       user.setParticipateSurvey(user.getParticipateSurvey() + "," + survey.getId());
-      map.put("data", userService.update(user));
-      map.put("error", null);
+      return success(userService.update(user));
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/api/user/total")
   public ApiUtils.ApiResult<Long> coutAllUser() {
-    return success(userService.coutAllUser());
+    return success(userService.countAllUser());
   }
-
 
 
 }

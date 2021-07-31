@@ -48,7 +48,7 @@ public class PageController {
 
 
   @GetMapping("/signup")
-  public ModelAndView terms() {
+  public ModelAndView contract() {
     return new ModelAndView("member/contract");
   }
 

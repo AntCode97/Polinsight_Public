@@ -73,8 +73,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public long coutAllUser() {
+  public long countAllUser() {
     return repository.count();
+  }
+
+  @Override
+  public Boolean isExistEmail(String email) {
+    return repository.existsUserByEmail(email);
+  }
+
+  @Override
+  public Boolean isExistPhone(String phone) {
+    return repository.existsUserByEmail(phone);
   }
 
 }

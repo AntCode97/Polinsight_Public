@@ -2,7 +2,10 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.ParticipateSurvey;
+import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
@@ -12,6 +15,7 @@ import com.dns.polinsight.types.PointRequestProgressType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import com.dns.polinsight.utils.PageHandler;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -250,13 +254,21 @@ public class ApiController {
     }
   }
 
-  @CrossOrigin("*")
   @GetMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> findUserByEmail(@Email @PathVariable("email") String email) {
+  public ApiUtils.ApiResult<Boolean> isExistEmail(@Email @PathVariable("email") String email) throws NotFoundException {
     try {
-      return success(userService.findUserByEmail(User.builder().email(email).build()) == null ? Boolean.FALSE : Boolean.TRUE);
+      return success(!userService.isExistEmail(email));
     } catch (RuntimeException e) {
-      throw new RuntimeException(e.getMessage());
+      throw new NotFoundException("Email Number Not Found");
+    }
+  }
+
+  @GetMapping("/user/recommend/{phone}")
+  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") String recommendPhone) throws NotFoundException {
+    try {
+      return success(!userService.isExistPhone(recommendPhone));
+    } catch (Exception e) {
+      throw new NotFoundException("Phone Number Not Found");
     }
   }
 

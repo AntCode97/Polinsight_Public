@@ -18,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsUserByEmail(String email);
 
+  boolean existsUserByPhone(String phone);
+
   @Query(nativeQuery = true, value = "SELECT * FROM user WHERE email LIKE %?1% OR ROLE LIKE %?1% OR phone LIKE %?1% OR NAME LIKE %?1%")
   List<User> findUsersByRegex(String regex, Pageable pageable);
 

@@ -236,23 +236,4 @@
 <th:block th:include="survey/surveylist" />
 <div style="height: 200px;"></div>
 </body>
-<script th:inline="javascript">
-  $(function () {
-    // Scroll TOP버튼 생성 및 TOP으로 이동
-    // + header 디자인 그림자 추가
-    $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#192739');
-      } else {
-        $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
-      }
-    });
-    $('.top-btn').click(function () {
-      $('html, body').animate({scrollTop: 0}, 800);
-    });
-  });
-</script>
 </html>

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title></title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
-    /*@import url('/css/common.css');*/
     .register_wrap {
       width: 1000px;
       margin: 0 auto;
@@ -58,7 +57,7 @@
       overflow: hidden;
       line-height: 18px;
       cursor: pointer;
-      background: url('imgs/icon_required_input.png') right center no-repeat;
+      background: url('img/etc/icon_required_input.png') right center no-repeat;
     }
 
     .right_content > input {
@@ -167,10 +166,9 @@
     .popup_overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -178,8 +176,8 @@
       position: relative;
       top: 50%;
       left: 50%;
-      width: 550px;
       transform: translate(-50%, -50%);
+      width: 550px;
       box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.35);
       background-color: white;
     }
@@ -264,6 +262,7 @@
               </div>
             </li>
             <li>
+              <!--TODO : 특수문자 검증 필요-->
               <div class="left_content">
                 <label for="user_name">이름</label>
               </div>
@@ -327,6 +326,7 @@
     </div>
   </div>
 </div>
+
 <div class="popup_overlay">
   <div class="popup_box">
     <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
@@ -340,6 +340,7 @@
     </div>
   </div>
 </div>
+
 </body>
 <script>
   const phoneNumberChecker = () => {
@@ -405,12 +406,12 @@
   const checkNotNull = () => {
     let result = true
     $("form").find('input').each(function (item) {
-      let input = $(this)
-      let label = input.prev('label')
-      let inputValue = input.val().trim()
-      if ($(this).prop('required') && !!inputValue) {
-        input.focus()    // 입력이 안된 사항으로 포커싱
-        input.val('') // 값 초기화
+      let inputElem = $(this)
+      let label = inputElem.prev('div>label')
+      let inputValue = inputElem.val().trim()
+      if ($(this).prop('required') && !inputValue) {
+        inputElem.focus()    // 입력이 안된 사항으로 포커싱
+        inputElem.val('') // 값 초기화
         alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
         result = false
         return false;   // $.each를 break
@@ -431,9 +432,7 @@
   const debounceCallEmailCheck = _.debounce((email, callback) => {
     axios.get("http://localhost:8080/api/user/" + email)
         .then(res => callback(res.data.response))
-        .catch(err => {
-          console.log("error", err)
-        })
+        .catch(err => console.log("error", err))
   }, 200)
 
   const emailChecker = (e) => {
@@ -449,7 +448,6 @@
     } else {
       if (email.match(regex) != null) {
         debounceCallEmailCheck(email, function (status) {
-              alert(status)
               if (status) {
                 msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
               } else {
@@ -469,7 +467,7 @@
     const form = $('form')
     form.find('input').each((idx, item) => {
       if (item.name === 'phone' || item.name === 'recommend') {
-        basicInfo[item.name] = item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3");
+        basicInfo[item.name] = !item.value ? null : item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
       } else if (item.name !== 'pwdcfm') {
         basicInfo[item.name] = item.value;
       }
@@ -495,10 +493,6 @@
           e.preventDefault()
           alert("붙여넣기는 사용하실 수 없습니다.")
         });
-    // .on('click', e => {
-    //   /*입력폼 클릭시 입력값 삭제*/
-    //   $('#' + e.target.id).val('')
-    // })
 
     $("#email").on("change keyup paste", emailChecker);
     $("#email_domain").on('change', () => {
@@ -529,15 +523,24 @@
 
     $("input[name=ispanel]").on('click', (e) => {
       if (e.target.value === "false") {
-        $(".popup_overlay").css('display', 'block')
+        $(".popup_overlay").fadeIn(100)
       }
     })
-
-    $("#popup_close_btn").on('click', (e) => {
-      $(".popup_overlay").css('display', 'none')
+    // TODO : 팝업 관련 설정
+    $("#popup_close_btn>i").on('click', (e) => {
+      // $(".popup_overlay").css('display', 'none')
+      $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+      $('.popup_overlay').fadeOut(100)
     })
+
     $(".popup_btn").on('click', (e) => {
-      $(".popup_overlay").css('display', 'none')
+      $('input[name=ispanel][type=radio][value=false]').prop('checked', true)
+      $(".popup_overlay").fadeOut(100)
+    })
+
+    $('.popup_overlay').on('click', function () {
+      $(this).css('display', 'none')
+      // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
     })
 
     $("#frmsubmit").on('click', (e) => {
@@ -550,26 +553,26 @@
 
         axios.post('/signup', info)
             .then(res => {
-              console.log('ispanel', info['ispanel'])
-              console.log("response", res)
-              if (res.data.code === 200) {
+              console.log(res.data)
+              if (res.data.response) {
                 if (info['ispanel']) {
-                  alert('패널 가입을 위해서는 추가정보가 필요합니다.')
+                  // alert('패널 가입을 위해서는 추가정보가 필요합니다.')
                   location.replace('/panelagreement')
                 } else {
-                  alert('일반 유저 가입 성공!')
+                  // alert('일반 유저 가입 성공!')
                   location.replace('/success_basic')
                 }
-              } else {
-                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
               }
             })
             .catch(err => {
-              console.log("Error resposne", err)
+              console.log("Error response", err)
               alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
             })
       }
     })
+
+    $('.left_content>label').last().css('background', 'none')
+
   })
 
 </script>

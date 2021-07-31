@@ -29,6 +29,10 @@ public interface UserService extends UserDetailsService {
 
   User findUserByEmail(User user);
 
-  long coutAllUser();
+  long countAllUser();
+
+  Boolean isExistEmail(String email);
+
+  Boolean isExistPhone(String phone);
 
 }

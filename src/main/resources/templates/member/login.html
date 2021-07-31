@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html dir="ltr" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -79,7 +79,7 @@
       margin-bottom: 20px;
     }
 
-    .input_div > p {
+    .input_div p {
       font-size: 16px;
       text-align: left;
       color: #a5dff9;
@@ -240,7 +240,7 @@
     <div class="modal_login">
       <div class="login_title">
         <a th:href="@{/}">
-          <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text"  alt=""/>
+          <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" alt="" />
         </a>
       </div>
       <div class="login_content">
@@ -248,13 +248,13 @@
         <form class="frm_login" th:action="@{/dologin}" method="post">
           <div class="input_div">
             <label>
-              이메일
+              <p>이메일</p>
               <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
             </label>
           </div>
           <div class="input_div">
             <label>
-              비밀번호
+              <p>비밀번호</p>
               <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
               <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
             </label>

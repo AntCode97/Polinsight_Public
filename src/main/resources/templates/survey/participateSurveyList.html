@@ -49,10 +49,10 @@
     const getParticipateSurveyList = () => {
       axios.get('/api/survey/participate')
           .then(res => {
-            let surveys = res.data
-            makeSurveyListView(surveys)
+            makeSurveyListView(res.data.response)
           })
           .catch(err => {
+            // surveys is not iterable
             console.log(err)
             alert('참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요.')
           })

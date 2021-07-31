@@ -9,6 +9,7 @@
       height: 100vh;
       width: 100vw;
       position: relative;
+      top: 80px;
     }
 
     .mypage_modal_content {
@@ -55,7 +56,7 @@
         <input id="pwdcfm" type="password" value="">
       </label>
     </div>
-    <!--수정 필요-->
+    <!-- TODO 수정 필요-->
     <!--    <div>-->
     <!--      <label>-->
     <!--        관심사-->
@@ -65,7 +66,7 @@
     <div>
       <label>
         회원 타입
-        <input readonly th:value="${session.user.role}" type="text">
+        <input readonly th:value="${session.user.role.name()}" type="text">
       </label>
     </div>
     <div>
@@ -93,10 +94,11 @@
       <button id="modi" th:onclick="chkInput()">변경하기</button>
     </div>
   </div>
-  <div>
-    <h2>참여한 설문 목록</h2>
-    <th:block th:include="survey/participateSurveyList" />
-  </div>
+  <!--  TODO : -->
+  <!--  <div>-->
+  <!--    <h2>참여한 설문 목록</h2>-->
+  <!--    <th:block th:include="survey/participateSurveyList" />-->
+  <!--  </div>-->
   <div class="rtop_btn">
     <label for="deluser">
       <input id="deluser" value="회원 탈퇴" type="button" th:onclick="alert('준비 중 입니다.')">
@@ -113,7 +115,6 @@
         .then(res => {
           console.log(res)
           alert("회원 정보가 업데이트 되었습니다.")
-          // 어디로 이동하게 할까??
           location.replace("/")
         })
         .catch(err => {
@@ -158,7 +159,7 @@
     const amount_point = $('input[name=point]').val();
     if (amount_point >= 10000) {
       let selbox = $('select[name=reqpoint]')
-      for (var i = 1; i <= parseInt(amount_point / 10000); i++) {
+      for (let i = 1; i <= parseInt(amount_point / 10000); i++) {
         selbox.append($('<option></option>').attr("value", i * 10000).text(i * 10000))
       }
     }
@@ -168,7 +169,6 @@
     init()
     $('#deluser').on('click', deleteUserRequest);
     $('#modi').on('click', chkInput);
-
   })
 
 </script>
