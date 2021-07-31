@@ -1,6 +1,85 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block th:include="module/common" />
 <th:block>
+  <th:block>
+    <style>.board-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cfcfd1;
+    }
+
+    .board-row > * {
+      padding: 9px 10px;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 30px;
+      color: #666;
+      text-align: center;
+    }
+
+    .board-row > *:nth-child(1) {
+      width: 70px;
+    }
+
+    .board-row > *:nth-child(2) {
+      width: 500px;
+    }
+
+    .board-row > *:nth-child(3) {
+      width: 100px;
+    }
+
+    .board-row > *:nth-child(4) {
+      width: 130px;
+    }
+
+    .board-row > *:nth-child(5) {
+      width: 80px;
+    }
+
+    .board-row > *:nth-child(6) {
+      width: 95px;
+    }
+
+    .board-row > *:nth-child(7) {
+      width: 120px;
+    }
+
+    .btn_udel {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .board-row > span > button:first-child {
+      margin-right: 3px;
+    }
+
+    .btn_udel {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .pagination > div {
+      text-align: center;
+      display: inline-block;
+      font-size: 0.9rem;
+      width: 30px;
+      line-height: 34px;
+      border: 1px solid #e2e2e2;
+      cursor: pointer;
+    }
+    </style>
+  </th:block>
   <div class="admin_main_contents">
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
@@ -54,9 +133,11 @@
 
       let start = current - 5 <= 0 ? 0 : current - 5;
       let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
-
+      // TODO 페이지네이션 이벤트 설정
       if (surveyCount > 0) {
         if (!regexValue) {
+          paginationElement.append(gofirstArrow).append(prev)
+
           for (let i = start; i < end; i++) {
             let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
             tmp.on('click', {param_offset: i}, adminGetAllSurveys)
@@ -65,6 +146,8 @@
             }
             paginationElement.append(tmp);
           }
+
+          paginationElement.append(next).append(goLastArrow)
         } else {
           paginationElement.append(gofirstArrow).append(prev)
           for (let i = start; i < end; i++) {
@@ -78,7 +161,7 @@
           paginationElement.append(next).append(goLastArrow)
         }
       } else {
-        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다.</h2></div>`))
+        $('.scroll-table').empty().append($(`<div><h2>검색 결과가 없습니다.</h2></div>`))
       }
     }
 
@@ -146,14 +229,30 @@
 
     const getTotalCount = regex => {
       if (!regex) {
-        $('.util-search>strong').text(res.data.response.length)
+        axios.get('/api/survey/total')
+            .then(res => $('.util-search>strong').text(res.data.response))
       } else {
-        $('.util-search>strong').text(res.data.response.length)
+        axios.get('/api/survey/find/' + regex + '/total')
+            .then(res => $('.util-search>strong').text(res.data.response))
       }
     }
 
     $(function () {
+      getTotalCount()
       adminGetAllSurveys()
+
+      $(document).on('click', 'div.board-row:not(:first-of-type)', () => {
+        // 클릭시 디테일 페이지?
+        alert('aaa')
+      }).on('mouseover', 'div.board-row:not(:first-of-type)', function (e) {
+        $(this).css('background-color', 'lightgray')
+            .css('cursor', 'pointer')
+            .css('transition', 'background-color .5s')
+      }).on('mouseleave', 'div.board-row:not(:first-of-type)', function () {
+        $(this).css('background-color', 'rgba(0,0,0,0)')
+            .css('cursor', 'default')
+            .css('transition', 'background-color .5s')
+      })
 
       $('input[name=adminfindsurvey]').on('keyup', _.throttle(findSurveyByRegex, 300)).attr('placeholder', '설문 찾기')
     })

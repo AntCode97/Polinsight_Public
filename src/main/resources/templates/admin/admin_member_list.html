@@ -2,9 +2,83 @@
 <th:block th:include="module/common" />
 <th:block>
   <style>
-    /*.board-row:hover {*/
-    /*  background-color: lightgray;*/
-    /*}*/
+    .board-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cfcfd1;
+    }
+
+    .board-row > * {
+      padding: 9px 10px;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 30px;
+      color: #666;
+      text-align: center;
+    }
+
+    .board-row > *:nth-child(1) {
+      width: 70px;
+    }
+
+    .board-row > *:nth-child(2) {
+      width: 500px;
+    }
+
+    .board-row > *:nth-child(3) {
+      width: 100px;
+    }
+
+    .board-row > *:nth-child(4) {
+      width: 130px;
+    }
+
+    .board-row > *:nth-child(5) {
+      width: 80px;
+    }
+
+    .board-row > *:nth-child(6) {
+      width: 95px;
+    }
+
+    .board-row > *:nth-child(7) {
+      width: 120px;
+    }
+
+    .btn_udel {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .board-row > span > button:first-child {
+      margin-right: 3px;
+    }
+
+    .btn_udel {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .page-button {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .page-button > a {
+      text-align: center;
+      display: inline-block;
+      font-size: 0.9rem;
+      width: 30px;
+      line-height: 34px;
+      border: 1px solid #e2e2e2;
+      cursor: pointer;
+    }
+
   </style>
 </th:block>
 <th:block>
@@ -213,15 +287,17 @@
       countAllUsers()
       getMemberList(0)  // 페이지 초기 값
 
-      $(document).on('click', 'div.board-row', () => {
+      $(document).on('click', 'div.board-row:not(:first-of-type)', () => {
         // 클릭시 디테일 페이지?
         alert('aaa')
-      }).on('mouseover', 'div.board-row', function (e) {
+      }).on('mouseover', 'div.board-row:not(:first-of-type)', function (e) {
         $(this).css('background-color', 'lightgray')
-        $(this).css('cursor', 'pointer')
-      }).on('mouseleave', 'div.board-row', function () {
+            .css('cursor', 'pointer')
+            .css('transition', 'background-color .5s')
+      }).on('mouseleave', 'div.board-row:not(:first-of-type)', function () {
         $(this).css('background-color', 'rgba(0,0,0,0)')
-        $(this).css('cursor', 'default')
+            .css('cursor', 'default')
+            .css('transition', 'background-color .5s')
       })
 
       /*비동기 회원 찾기 및 화면 업데이트*/

@@ -51,4 +51,20 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_board_view");
   }
 
+
+  @GetMapping("/boards/notice")
+  public ModelAndView adminBoardnotice() {
+    return new ModelAndView("admin/");
+  }
+
+  @GetMapping("/boards/download")
+  public ModelAndView adminBoarddownload() {
+    return new ModelAndView("admin/");
+  }
+
+  @GetMapping("/boards/QnA")
+  public ModelAndView adminBoardQnA() {
+    return new ModelAndView("admin/");
+  }
+
 }

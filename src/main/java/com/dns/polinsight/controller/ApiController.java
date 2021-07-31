@@ -106,7 +106,6 @@ public class ApiController {
   @GetMapping("/users")
   public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
     try {
-      System.out.println(pageable.toString());
       return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       e.printStackTrace();
@@ -121,6 +120,14 @@ public class ApiController {
   public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable) throws Exception {
     try {
       return success(surveyService.findAll(pageable).getContent());
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+  @GetMapping("/survey/total")
+  public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
+    try {
+      return success(surveyService.countAllSurvey());
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -143,7 +150,7 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/user/find/{regex}/total")
+  @GetMapping("/survey/find/{regex}/total")
   public ApiUtils.ApiResult<Long> adminCountSurveyFindByRegex(
       @PathVariable(name = "regex") String regex) throws Exception {
     try {
