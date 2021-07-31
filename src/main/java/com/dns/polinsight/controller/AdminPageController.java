@@ -1,13 +1,21 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.service.SurveyService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminPageController {
+
+  private final SurveyService surveyService;
 
   @GetMapping("/memberlist")
   public ModelAndView adminMemberList() {
@@ -65,6 +73,21 @@ public class AdminPageController {
   @GetMapping("/boards/QnA")
   public ModelAndView adminBoardQnA() {
     return new ModelAndView("admin/");
+  }
+
+  @GetMapping("/survey/{id}")
+  public ModelAndView adminGetSurveyDetailInfo(@PathVariable("id") long surveyId) {
+    log.info("surveyid: " + surveyId);
+    ModelAndView mv = new ModelAndView("redirect:admin/admin_survey_info");
+    mv.addObject("survey", surveyService.findSurveyById(surveyId));
+    return mv;
+  }
+
+  @GetMapping("/surveyinfo")
+  public ModelAndView adminGetDetailPage(ModelAndView mav) {
+    System.out.println(mav.getModel().toString());
+    mav.setViewName("admin/admin_survey_info");
+    return mav;
   }
 
 }

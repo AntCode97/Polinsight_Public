@@ -121,7 +121,7 @@
     const makePaginationsInAdminSurvey = current => {
       const regexValue = $('input[name=adminfindsurvey]').val()
       const surveyCount = $('.util-search>strong').text()
-      const totalPage = Math.floor(surveyCount / 10)
+      const totalPage = Math.ceil(surveyCount / 10)
 
       let gofirstArrow = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-double-left"></i></div>`))
       let goLastArrow = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-double-right"></i></div>`))
@@ -132,7 +132,7 @@
       paginationElement.empty()
 
       let start = current - 5 <= 0 ? 0 : current - 5;
-      let end = current > totalPage ? current : totalPage < 10 ? 10 : current + 5;
+      let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
 
       if (surveyCount > 0) {
         if (!regexValue) {
@@ -193,7 +193,7 @@
       for (survey of surveys) {
         let template = `<div class="board-row">`
         template += `<span>${survey.id}</span>`// 번호
-        template += `<span>${survey.title}</span>`// 설문 이름
+        template += `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</span>`// 설문 이름
         template += `<span>${survey.point}</span>`// 지급 포인트
         template += `<span>${survey.phone}</span>` // 설문 기간
         template += `<span>${survey.role}</span>`// 진행 상태
@@ -209,7 +209,6 @@
 
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex
       const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset
-      console.log('call url: ' + '/api/surveys' + regex + ', offset: ' + offset)
       axios.get('/api/surveys' + regex, {
             params: {size: 10, offset: offset}
           })
@@ -237,9 +236,12 @@
       getTotalCount()
       adminGetAllSurveys()
 
-      $(document).on('click', 'div.board-row:not(:first-of-type)', () => {
-        // 클릭시 디테일 페이지?
-        alert('aaa')
+      $(document).on('click', 'div.board-row:not(:first-of-type)', function (e) {
+        const id = $(this).children('span:first-child').text()
+        // 클릭시 디테일 페이지 ==> 폼 만들고 submit
+        const form  = $(`<form action="/admin/survey/${id}" method="get"></form>`)
+        $('body').append(form)
+        form.submit()
       }).on('mouseover', 'div.board-row:not(:first-of-type)', function (e) {
         $(this).css('background-color', 'lightgray')
             .css('cursor', 'pointer')

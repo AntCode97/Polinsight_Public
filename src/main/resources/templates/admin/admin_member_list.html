@@ -130,7 +130,7 @@
 
       // 전체 요소 갯수 가져오기
       const userCount = $('div.util-search').children('strong').text()
-      let totalPage = Math.floor(userCount / 10)  // 총 페이지 수
+      let totalPage = Math.ceil(userCount / 10)  // 총 페이지 수
       const pagenationElem = $('div.pagination').css('text-align', 'center').css('margin', '0')
       pagenationElem.empty()
 
