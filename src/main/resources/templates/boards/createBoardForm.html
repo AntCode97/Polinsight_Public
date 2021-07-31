@@ -1,13 +1,7 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<th:block th:include="module/common" />
-<th:block th:include="layout/header" />
-=======
 <html lang="ko">
 <html xmlns:th="http://www.thymeleaf.org">
 
->>>>>>> origin/board_file
 <head>
     <script type="text/javascript" src="workspace/static/js/service/HuskyEZCreator.js" charset="utf-8"></script>
     <script type="text/javascript">
@@ -310,66 +304,6 @@
 </head>
 
 <body class="PC">
-<<<<<<< HEAD
-<div class="web">
-  <div class="sub-main">
-    <span></span>
-    <ul>
-      <li class="notice">공지사항</li>
-      <li class="qna">문의사항</li>
-    </ul>
-  </div>
-
-  <div class="sub-main-name"><b>공지사항</b></div>
-
-  <div class="writeBoard">공지사항 작성</div>
-
-  <div class="board">
-
-    <form class=information enctype="multipart/form-data" method="post" th:action="@{/boards/new}" th:object="${boardDTO}">
-      <div class="information_title">
-        <div class="informationSubject">
-          <b>제목</b>
-        </div>
-        <span>
-          <input maxlength="255" placeholder="제목을 입력하세요." style="width:800px;height:20px" th:field="*{title}" type="text">
-        </span>
-      </div>
-      <div class="information_name">
-        <div class="informationSubject"><b>작성자</b></div>
-        <span th:text="${session.user.name}"></span>
-      </div>
-      <div class="information_category">
-        <div class="informationSubject"><b>분류</b></div>
-        <div>
-          <select maxlength="20" style="width:70px;height:25px" th:field="*{boardType}">
-            <optgroup label="분류 선택">
-              <option value="NOTICE">공지</option>
-              <option value="EVENT">이벤트</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-      <div class=information_file>
-        <div class="informationSubject"><b>첨부파일</b></div>
-        <input accept="*" multiple="multiple" style="margin-top:8px" th:field="*{files}" type="file">
-      </div>
-
-
-      <div class="letter">
-        <!--글 에디터-->
-        <textarea placeholder="내용을 입력하세요" rows="30" th:field="*{content}"></textarea>
-      </div>
-      <div class="register">
-        <input class="registerButton" type="submit" value="등록">
-      </div>
-    </form>
-  </div>
-
-
-</div>
-</body>
-=======
     <div class="web">
         <div class="sub-main">
             <span></span>
@@ -529,4 +463,3 @@
 
 </script>
 </html>
->>>>>>> origin/board_file
