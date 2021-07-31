@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="admin/layout/sidebar"></th:block>
+<!--<th:block th:include="admin/layout/sidebar"></th:block>-->
 <head>
     <meta charset="UTF-8">
     <style type="text/css">
@@ -209,22 +209,22 @@
             $('#boardTable').replaceWith(fragment);
         });
     }
-
-    const asyncGetPage= (e) => {
-        const keyword = $("#searchinput").val()
-        const page = parseInt($('.not-active').text());
-        console.log(keyword);
-        console.log(page);
-        $(location).attr("href", '/admin/boards/search?keyword=' + keyword + '&page=' +page )
-        // $.ajax({
-        //     url: '/api/admin/boards/search?keyword=' + keyword + '&page=' +page  ,
-        //     type: "GET",
-        // }).done(function (fragment) {
-        //     // console.log(fragment)
-        //      $(location).attr("href", '/admin/boards/?keyword=' + keyword +'&page=' +page )
-        //     // $('#boardTable').replaceWith(fragment);
-        // });
-     }
+    //
+    // const asyncGetPage= (e) => {
+    //     const keyword = $("#searchinput").val()
+    //     const page = parseInt($('.not-active').text());
+    //     console.log(keyword);
+    //     console.log(page);
+    //     $(location).attr("href", '/admin/boards/search?keyword=' + keyword + '&page=' +page )
+    //     // $.ajax({
+    //     //     url: '/api/admin/boards/search?keyword=' + keyword + '&page=' +page  ,
+    //     //     type: "GET",
+    //     // }).done(function (fragment) {
+    //     //     // console.log(fragment)
+    //     //      $(location).attr("href", '/admin/boards/?keyword=' + keyword +'&page=' +page )
+    //     //     // $('#boardTable').replaceWith(fragment);
+    //     // });
+    //  }
 
 
 

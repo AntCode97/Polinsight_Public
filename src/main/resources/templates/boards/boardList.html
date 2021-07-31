@@ -233,22 +233,37 @@
         <div class="page-button"
              th:with="start=${T(Math).floor(boards.number/10)*10 + 1},
                     last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-            <a th:href="@{/boards(page=1)}" aria-label="First">
+            <span th:if="${boardSearch.getBoardType()} !=null">
+                <a th:href="@{/boards/search(page=1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}" aria-label="First">
                 <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
-            </a>
-
-
-            <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+                </a>
+                 <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards/search(page=${boards.number}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}" aria-label="Previous">
                 <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+                </a>
+                <a  th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+                th:href="@{/boards/search(page=${page}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>
+
+                <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue} )}" aria-label="Next">
+                <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
             </a>
 
 
-            <a th:if="${boardSearch.getBoardType()} !=null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
-               th:href="@{/boards/search(page=${page}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>
-            <a th:if="${boardSearch.getBoardType()} ==null" th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
-               th:href="@{/boards(page=${page})}"></a>
+            <a th:href="@{/boards(page=${boards.totalPages}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue} )}" aria-label="Last">
+                <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+            </a>
 
-            <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+            </span>
+
+            <span th:if="${boardSearch.getBoardType()} ==null">
+                <a th:href="@{/boards(page=1)}" aria-label="First">
+                <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+                </a>
+                 <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+                <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+                </a>
+                <a  th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
+                th:href="@{/boards(page=${page})}"></a>
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
                 <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
             </a>
 
@@ -256,6 +271,16 @@
             <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
                 <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
             </a>
+
+            </span>
+
+
+
+
+
+
+
+
         </div>
     </div>
 </body>

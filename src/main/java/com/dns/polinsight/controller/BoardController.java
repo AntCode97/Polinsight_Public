@@ -62,22 +62,24 @@ public class BoardController {
   public String adminBoardList(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap ) {
 
     Page<Board> boards;
-    if(paramMap.get("keyword") != null){
+    if(paramMap.get("keyword") != null ){
       String keyword = paramMap.get("keyword").toString();
       System.out.println(keyword);
-      model.addAttribute("keyword", keyword);
-      boards = boardService.searchKeyword(keyword, pageable);
+      if(keyword.equals("")){
+        model.addAttribute("keyword", keyword);
+        boards = boardService.searchKeyword(keyword, pageable);
+
+        model.addAttribute("boards", boards);
+      }
     } else{
       boards = boardService.getBoardList(pageable);
+      model.addAttribute("boards", boards);
     }
 
     //    List<Board> boards = boardService.findAll();
     boardService.renewBoard();
 
-    model.addAttribute("boards", boards);
-    if(boardSearch.getBoardType() !=null){
-      model.addAttribute("boardSearch", boardSearch);
-    }
+
     return "admin/boards";
   }
 
