@@ -106,7 +106,6 @@ public class ApiController {
   @GetMapping("/users")
   public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
     try {
-      System.out.println(pageable.toString());
       return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       e.printStackTrace();

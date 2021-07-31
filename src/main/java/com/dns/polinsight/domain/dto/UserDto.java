@@ -21,6 +21,8 @@ public class UserDto {
 
   private String phone;
 
+  private String name;
+
   private UserRoleType role;
 
   private Boolean isEmailReceive;
@@ -32,6 +34,7 @@ public class UserDto {
     this.id = user.getId();
     this.point = user.getPoint();
     this.email = user.getEmail();
+    this.name = user.getName();
     this.phone = user.getPhone();
     this.role = user.getRole();
     this.isEmailReceive = user.getIsEmailReceive();
