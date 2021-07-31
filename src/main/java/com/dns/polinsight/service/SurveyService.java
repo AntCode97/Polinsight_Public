@@ -29,7 +29,7 @@ public interface SurveyService {
 
   List<Survey> findSurveysByEndDate(LocalDateTime endDate);
 
-  List<Survey> findSurveysByTitleRegex(String titleRegex);
+  List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable);
 
   Optional<Survey> findSurveyById(long surveyId);
 

@@ -8,6 +8,7 @@ import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,23 +20,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SurveyServiceImpl implements SurveyService {
 
   private final SurveyRepository surveyRepository;
 
-  private final HttpEntity<Object> httpEntity;
+  @Value("${custom.api.accessToken}")
+  private String accessToken;
+
+  private HttpEntity<Object> httpEntity;
 
   @Value("${custom.api.url}")
   private String baseURL;
 
-  public SurveyServiceImpl(SurveyRepository surveyRepository, @Value("${custom.api.accessToken}") String accessToken) {
-    this.surveyRepository = surveyRepository;
+  @PostConstruct
+  public void init() {
     HttpHeaders header = new HttpHeaders();
     header.setBearerAuth(accessToken);
     httpEntity = new HttpEntity<>(header);
@@ -138,8 +144,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public List<Survey> findSurveysByTitleRegex(String titleRegex) {
-    return surveyRepository.findSurveysByTitleLike(titleRegex);
+  public List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable) {
+    return surveyRepository.findSurveysByTitleLike(titleRegex, pageable);
   }
 
   @Override

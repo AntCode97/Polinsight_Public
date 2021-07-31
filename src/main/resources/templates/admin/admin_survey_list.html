@@ -132,27 +132,34 @@
       paginationElement.empty()
 
       let start = current - 5 <= 0 ? 0 : current - 5;
-      let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
-      // TODO 페이지네이션 이벤트 설정
+      let end = current > totalPage ? current : totalPage < 10 ? 10 : current + 5;
+
       if (surveyCount > 0) {
         if (!regexValue) {
-          paginationElement.append(gofirstArrow).append(prev)
+          gofirstArrow.on('click', {offset: 0}, adminGetAllSurveys)
+          goLastArrow.on('click', {offset: totalPage}, adminGetAllSurveys)
+          prev.on('click', {offset: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys)
+          next.on('click', {offset: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys)
 
+          paginationElement.append(gofirstArrow).append(prev)
           for (let i = start; i < end; i++) {
             let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
-            tmp.on('click', {param_offset: i}, adminGetAllSurveys)
+            tmp.on('click', {offset: i}, adminGetAllSurveys)
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
             }
             paginationElement.append(tmp);
           }
-
           paginationElement.append(next).append(goLastArrow)
         } else {
+          gofirstArrow.on('click', {regex: regexValue, offset: 0}, adminGetAllSurveys)
+          goLastArrow.on('click', {regex: regexValue, offset: totalPage}, adminGetAllSurveys)
+          prev.on('click', {regex: regexValue, offset: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys)
+          next.on('click', {regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys)
           paginationElement.append(gofirstArrow).append(prev)
           for (let i = start; i < end; i++) {
             let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
-            tmp.on('click', {param_offset: i, regex: regexValue}, adminGetAllSurveys)
+            tmp.on('click', {offset: i, regex: regexValue}, adminGetAllSurveys)
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
             }
@@ -181,7 +188,7 @@
 
     const adminMakeSurveySearchResults = surveys => {
       const table = $('div.scroll-table');
-      table.remove('div.board-row')
+      table.empty()
       table.append(surveyListHeader())
       for (survey of surveys) {
         let template = `<div class="board-row">`
@@ -199,13 +206,15 @@
     }
 
     const adminGetAllSurveys = e => {
-      const regex = !e.data.regex ? '' : '/' + e.data.regex
-      const offset = !e.data.param_offset ? 0 : e.data.param_offset
+
+      const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex
+      const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset
+      console.log('call url: ' + '/api/surveys' + regex + ', offset: ' + offset)
       axios.get('/api/surveys' + regex, {
             params: {size: 10, offset: offset}
           })
           .then(res => {
-            getTotalCount()
+            getTotalCount(regex)
             makePaginationsInAdminSurvey(offset)
             adminMakeSurveySearchResults(res.data.response)
           })
@@ -213,19 +222,6 @@
             console.log(err)
           })
     }
-
-    // const findSurveyByRegex = (e) => {
-    //   axios.get('', {
-    //     params: {
-    //       size: 10,
-    //       offset: 0
-    //     }
-    //   }).then(res => {
-    //     getTotalCount()
-    //     adminMakeSurveySearchResults(res.data.response)
-    //     makePaginationsInAdminSurvey(0)
-    //   })
-    // }
 
     const getTotalCount = regex => {
       if (!regex) {
@@ -254,7 +250,7 @@
             .css('transition', 'background-color .5s')
       })
 
-      $('input[name=adminfindsurvey]').on('keyup', _.throttle(findSurveyByRegex, 300)).attr('placeholder', '설문 찾기')
+      $('input[name=adminfindsurvey]').on('keyup', _.throttle(adminGetAllSurveys, 300)).attr('placeholder', '설문 찾기')
     })
   </script>
 </th:block>

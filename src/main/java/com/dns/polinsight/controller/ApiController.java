@@ -22,10 +22,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -124,6 +121,7 @@ public class ApiController {
       throw new Exception(e.getMessage());
     }
   }
+
   @GetMapping("/survey/total")
   public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
     try {
@@ -136,15 +134,11 @@ public class ApiController {
   /*
    * 정규식을 통한 다건 설문 검색
    * */
-  @GetMapping("/survey/{regex}")
-  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, String type /*검색 타입*/) throws Exception {
-    Map<String, Object> map = new HashMap<>();
+  @GetMapping("/surveys/{regex}")
+  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageHandler Pageable pageable) throws Exception {
+    System.out.println(pageable.toString());
     try {
-      if (type.equals("title")) {
-        return success(surveyService.findSurveysByTitleRegex(regex));
-      } else {
-        return success(surveyService.findSurveysByEndDate(LocalDateTime.parse(regex)));
-      }
+      return success(surveyService.findSurveysByTitleRegex(regex, pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

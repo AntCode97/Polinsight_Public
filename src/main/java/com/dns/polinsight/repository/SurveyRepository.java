@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-  List<Survey> findSurveysByTitleLike(String title);
+  List<Survey> findSurveysByTitleLike(String title, Pageable pageable);
 
   List<Survey> findSurveysByEndAtLessThan(LocalDateTime endAt);
 
@@ -22,4 +22,5 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   long countSurveyByRegex(String regex);
 
+//  long countAll();
 }
