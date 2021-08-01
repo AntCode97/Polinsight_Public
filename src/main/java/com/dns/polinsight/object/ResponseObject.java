@@ -11,7 +11,7 @@ public class ResponseObject {
 
   private final int statuscode;
 
-  private final Object data;
+  private final Object response;
 
   private final String msg;
 

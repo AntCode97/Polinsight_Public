@@ -10,6 +10,7 @@
     .register_wrap {
       width: 1000px;
       margin: 0 auto;
+      top: 80px;
       position: relative;
     }
 
@@ -479,6 +480,7 @@
   }
 
   $(function () {
+    $('.header_wrap').css('background-color', '#182838')
     $(document).on('focus', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #4C99CF');
     });

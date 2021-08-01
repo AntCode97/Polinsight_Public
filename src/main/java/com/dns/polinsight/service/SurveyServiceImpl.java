@@ -63,8 +63,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Survey findById(Survey survey) {
-    return surveyRepository.findById(survey.getSurveyId()).orElseThrow(SurveyNotFoundException::new);
+  public Survey findById(long surveyId) {
+    return surveyRepository.findById(surveyId).orElseThrow(SurveyNotFoundException::new);
   }
 
   @Override
@@ -104,15 +104,11 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public List<Survey> getUserParticipateSurvey(User user) {
-    // TODO: 2021-07-21 수정 필요
-
-    StringTokenizer st = new StringTokenizer(user.getParticipateSurvey());
-    List<Survey> list = new ArrayList<>();
-    while (st.hasMoreTokens()) {
-      list.add(this.findById(Survey.builder().id(Long.parseLong(st.nextToken())).build()));
-    }
-    return list;
+  public Set<Survey> getUserParticipateSurvey(User user) {
+    Set<Survey> ret = new HashSet<>();
+    for (var surveyId : user.getParticipateSurvey())
+      ret.add(this.findById(surveyId));
+    return ret;
   }
 
 

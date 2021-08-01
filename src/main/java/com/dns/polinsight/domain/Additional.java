@@ -21,6 +21,9 @@ public class Additional implements Serializable {
 
   private static final long serialVersionUID = 4323740522466099195L;
 
+  @ElementCollection
+  private final List<String> favorite = new ArrayList<>();
+
   /*
    * 추가정보 클래스
    * */
@@ -39,7 +42,15 @@ public class Additional implements Serializable {
 
   private String industry;
 
-  @ElementCollection
-  private final List<String> favorite= new ArrayList<>();
+  public void update(Additional additional) {
+    this.gender = additional.getGender();
+    this.education = additional.getEducation();
+    this.marry = additional.getMarry();
+    this.birth = additional.getBirth();
+    this.birthType = additional.getBirthType();
+    this.job = additional.getJob();
+    this.industry = additional.getIndustry();
+    this.favorite.addAll(additional.getFavorite());
+  }
 
 }

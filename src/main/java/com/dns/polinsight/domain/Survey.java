@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Survey implements Serializable {
 
   @Setter
   @Embedded
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private SurveyStatus status;
 
   @Id

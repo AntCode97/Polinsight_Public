@@ -4,42 +4,34 @@
       <p>진행중인 <span class="pol_color">온라인조사</span></p>
       <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
     </div>
-    <!--    <div class="search_survey_wrap">-->
-    <!--      <div>-->
-
-    <!--        <select name="survey_search_option" id="survey_search_option">-->
-    <!--          <option value="title" selected>제목</option>-->
-    <!--          <option value="point">포인트</option>-->
-    <!--          &lt;!&ndash;          <option value="end_date">종료일</option>&ndash;&gt;-->
-    <!--        </select>-->
-    <!--      </div>-->
-    <!--      <div class="search_input_wrap">-->
-    <!--        <input name="searchInput" placeholder="설문 제목으로 검색" type="text">-->
-    <!--      </div>-->
-    <!--      <div class="search_btn_wrap">-->
-    <!--        <button id="survey_search_btn" value="">🔍찾기</button>-->
-    <!--      </div>-->
-    <!--    </div>-->
     <div class="main_survey_box">
     </div>
   </div>
   <script th:inline="javascript">
 
-    // TODO: Survey Title에 콜백 주소 넣어서 클릭하면 링크로
-    const makeSurveyCard = (survey) => {
-      let template = ""
-      if (survey.isRun) {
-        template += `<div class="main_survey_item bg_color_item_white">`;
-        template += `<p class="survey_run">진행중</p>`
+    const makeSurveyCard = survey => {
+      console.log(survey)
+      let template = $(`<div></div>`).addClass('main_survey_item')
+      if (survey.status.progress === 'ONGOING') {
+        template.addClass('bg_color_item_white')
+        template.append(`<p class="survey_run">진행중</p>`)
+        template.on('mouseover', function () {
+          $(this).css('cursor', 'pointer').css('box-shadow', '5px 5px 10px rgba(0,0,0, .3)').css('transition', 'box-shadow 0.5s ease-in-out')
+        }).on('mouseleave', function () {
+          $(this).css('cursor', 'default').css('box-shadow', 'none')
+        }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
+
       } else {
-        template += `<div class="main_survey_item bg_color_item_gray">`;
-        template += `<p class="survey_stop">조사완료</p>`
+        template.addClass('bg_color_item_gray')
+        template.append(`<p class="survey_stop">조사완료</p>`)
+        template.on('click', function () {
+          alert('종료된 설문입니다.')
+        })
       }
-      template += `<p class="survey_title">${survey.title}</p>`
-      template += `<p class="survey_point"> ${!survey.point ? '지정 안됨' : survey.point + P}</p>`
-      template += `<p class="survey_date"> ${!survey.endAt ? '지정 안됨' : ~survey.endAt}</p>`
-      template += `<input type="hidden" value="${survey.surveyId}" />`
-      template += `</div>`
+      template.append(`<p class="survey_title">${survey.title}</p>`)
+      template.append(`<p class="survey_point"> ${!survey.point ? '지정 안됨' : survey.point + ' P'}</p>`)
+      template.append(`<p class="survey_date"> ${!survey.endAt ? '지정 안됨' : '~ ' + survey.endAt.split('T')[0]}</p>`)
+
       return template;
     }
     const makeSurveyCardList = (surveyList) => {
@@ -60,14 +52,12 @@
     }
 
     const getSurveyList = () => {
-      axios.get('/api/surveys')
+      axios.get('/api/surveys?type=index')
           .then(res => {
             if (res.data.response !== null) {
               const surveys = res.data.response
               if (!!surveys) {
                 makeSurveyCardList(surveys)
-              } else {
-                // TODO: 진행중인 조사가 없습니다.
               }
             }
           })
@@ -99,37 +89,37 @@
       }
     }
 
-    const cardClickEventHandler = (e) => {
+    const loginChk = () => {
+      /*<![CDATA[*/
+      let sessionUser = /*[[${session.user}]]*/;
+      /*]]*/
+      if (!sessionUser) {
+        alert('로그인을 먼저 해주세요')
+        return false
+      }
+      return true
+    }
+
+    const surveyCardClickEventHandler = (e) => {
+      if (!loginChk()) return
       e.preventDefault()
       e.returnValue = false;
-      const clickedSurveyTitle = e.target.value
-      if (confirm(clickedSurveyTitle + ' 설문을 진행하시겠습니까?')) {
+
+      const seq = e.data.seq
+      const surveyId = e.data.surveyid
+      const title = e.data.title
+
+      if (confirm(title + ' 설문을 진행하시겠습니까?')) {
 // 서버에 서베이 정보 + 유저 정보 저장 ==> 이후 관리자 및 마이페이지에서 목록 조회 가능
+//         let dynamicNewForm = $(`<form action="/survey/${surveyId}" method="post"></form>`)
+//           dynamicNewForm.appendTo('body');
+//           dynamicNewForm.submit();
       }
     }
 
     $(function () {
       getSurveyList();
-      // $('input[name=searchInput]').on('change', asyncSurveySearch)
-
-      $(document).on('click', '.main_survey_item', function () {
-        /*<![CDATA[*/
-        let sessionUser = /*[[${session.user}]]*/;
-        /*]]*/
-        console.log(sessionUser)
-        alert('sessionuser: ' + sessionUser)
-        if (!sessionUser) {
-          alert('로그인을 먼저 해주세요')
-        }
-
-        let surveyId = $(this).children('input').val()
-        if (!!surveyId) {
-          let dynamicNewForm = $(`<form action="/survey/${surveyId}" method="post"></form>`)
-          // body에 연결되어야 submit이 작동 함
-          dynamicNewForm.appendTo('body');
-          dynamicNewForm.submit();
-        }
-      })
+      $('input[name=searchInput]').on('change', asyncSurveySearch)
     })
   </script>
 </th:block>

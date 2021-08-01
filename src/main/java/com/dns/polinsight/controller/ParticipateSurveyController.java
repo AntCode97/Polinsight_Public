@@ -35,7 +35,6 @@ public class ParticipateSurveyController {
 
   private final ParticipateSurveyService participateSurveyService;
 
-  // TODO: 2021-07-06 0006 : 로직 변경 필요
   /*
    * 포인트 적립 성공 시 : mypage,
    * 포인트 적립 실패 시 : 적립 에러 팝업 페이지
@@ -44,6 +43,7 @@ public class ParticipateSurveyController {
   public ModelAndView callback(@LoginUser SessionUser sessionUser,
                                @RequestParam("hash") String hash,
                                @RequestParam("email") String email) {
+
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
       throw new InvalidParameterException();
     }
@@ -58,13 +58,13 @@ public class ParticipateSurveyController {
         // 적립 처리
         // 참여 서베이(finished필드를 true로), , 포인트히스토리에 남기기
         this.processingPointSurveyHistory(user, participateSurvey);
-        mv.setViewName("redirect:/mypage");
+        return new ModelAndView("redirect:/mypage");
       }
       throw new Exception();
     } catch (Exception e) {
-      mv.setViewName("redirect:에러페이지로 리다이렉트");
+      // todo 에러페이지 설정
+      return new ModelAndView("redirect:에러페이지로 리다이렉트");
     }
-    return mv;
   }
 
   @Transactional

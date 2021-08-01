@@ -59,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
           .anyRequest().authenticated()
         .and()
+          .rememberMe()
+        .key("remeberMeSecretKey")
+        .authenticationSuccessHandler(successHandler)
+        .rememberMeParameter("rememberMe")
+        .tokenValiditySeconds(7*24*60*60)  // 7일
+        .and()
           .formLogin()
             .loginPage("/login")
             .loginProcessingUrl("/dologin")

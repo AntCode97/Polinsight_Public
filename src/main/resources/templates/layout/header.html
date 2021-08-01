@@ -170,10 +170,10 @@
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/}">Business</a>
+          <a th:href="@{/boards}">Board</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/boards}" class="dropdown_element">공지사항</a>
               <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents03</a>
               <a th:href="@{/}" class="dropdown_element">Contents04</a>
@@ -217,15 +217,10 @@
         <a th:href="@{/signup}">JOIN</a>
       </th:block>
       <th:block th:unless="${session.user} == null">
-        <!-- 유저 로그인 -->
-        <!-- <span></span> -->
-        <th:block th:unless="${ session.user.role == 'ADMIN'}">
-          <a th:href="@{/mypage}">MYPAGE</a>
+        <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
+          <a th:href="@{/mypage}">MY PAGE</a>
         </th:block>
-        <!-- 관리자 로그인 -->
-        <!--      <a th:href="@{/dologout}">LOGOUT</a>-->
-        <!-- <span></span> -->
-        <th:block th:if="${ session.user.role == 'ADMIN'}">
+        <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
           <a th:href="@{/admin}">ADMIN</a>
         </th:block>
         <span></span>
@@ -234,8 +229,6 @@
     </div>
   </div>
 </div>
-<!-- 배너이미지 -->
-<!--<div class="carasel_wrap"></div>-->
 </body>
 <script th:inline="javascript">
   $(function () {

@@ -22,5 +22,4 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   long countSurveyByRegex(String regex);
 
-//  long countAll();
 }

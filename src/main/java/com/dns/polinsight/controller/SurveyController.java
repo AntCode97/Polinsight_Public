@@ -7,7 +7,6 @@ import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.service.UserService;
-import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
@@ -40,9 +37,7 @@ public class SurveyController {
   public ModelAndView getSurveyById(HttpServletRequest request) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("");
-    mv.addObject("survey", surveyService.findById(Survey.builder()
-                                                        .id(Long.parseLong(request.getParameter("surveyId")))
-                                                        .build()));
+    mv.addObject("survey", surveyService.findById(Long.parseLong(request.getParameter("surveyId"))));
     return mv;
   }
 
@@ -77,7 +72,7 @@ public class SurveyController {
   public ResponseEntity<Map<String, Object>> surveyInfoUpdate(Survey survey) {
     Map<String, Object> map = new HashMap<>();
     try {
-      survey = surveyService.findById(survey);
+      survey = surveyService.findById(survey.getId());
       surveyService.update(survey);
       map.put("data", "");
       map.put("error", null);
@@ -100,7 +95,6 @@ public class SurveyController {
     if (sessionUser == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
-    System.out.println("surveyId: " + surveyId);
     try {
       // TODO: 2021/07/27 : 값 넣기
       List<String> someVariables = new ArrayList<>();

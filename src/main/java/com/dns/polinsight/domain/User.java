@@ -1,6 +1,5 @@
 package com.dns.polinsight.domain;
 
-import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -12,10 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -29,6 +25,13 @@ import java.util.List;
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
+
+  @Builder.Default
+  @ElementCollection
+  private final Set<Long> participateSurvey = new HashSet<>();
+
+  @Enumerated(EnumType.STRING)
+  private UserRoleType role = UserRoleType.USER;
 
   /*
    * 유저 기본정보 클래스
@@ -61,14 +64,8 @@ public class User implements UserDetails, Serializable {
   @Setter
   private Long point = 0L;
 
-  @Enumerated(EnumType.STRING)
-  private UserRoleType role = UserRoleType.USER;
-
   @Embedded
   private Additional additional;
-
-  // TODO: 2021-07-21 : 설문 클릭 시, 콤마로 구분지어 서베이 아이디 저장 ==> set으로 저장
-  private String participateSurvey;
 
   /*이메일 수신 동의 여부*/
   private Boolean isEmailReceive;
@@ -76,8 +73,8 @@ public class User implements UserDetails, Serializable {
   /*문자 수신 동의 여부*/
   private Boolean isSMSReceive;
 
-  public void setParticipateSurvey(String participateSurvey) {
-    this.participateSurvey = participateSurvey;
+  public void addParticipateSurvey(long surveyId) {
+    this.participateSurvey.add(surveyId);
   }
 
   public void setBoards(List<Board> boards) {
@@ -123,17 +120,5 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
-  public User update(SessionUser sessionUser) {
-    this.name = sessionUser.getName();
-    this.email = sessionUser.getEmail();
-    this.role = sessionUser.getRole();
-    this.point = sessionUser.getPoint() == null ? 0 : sessionUser.getPoint();
-    return this;
-  }
-
-  public User update(Additional additional) {
-    this.additional = additional;
-    return this;
-  }
 
 }

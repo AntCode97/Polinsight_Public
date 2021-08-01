@@ -26,10 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
 
@@ -83,7 +80,8 @@ public class UserController {
                              .point(sessionUser.getPoint())
                              .build();
     session.invalidate();
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()).update(additional).update(sessionUser);
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    user.getAdditional().update(additional);
     userService.save(user);
     return success(Boolean.TRUE);
   }
@@ -102,10 +100,6 @@ public class UserController {
     }
     return ResponseEntity.ok(map);
   }
-
-  /*
-   * 회원 가입 시, 사용 할 수 있는 이메일인지 검증하기 위한 메소드
-   * */
 
 
   @GetMapping("/mypage")
@@ -126,7 +120,7 @@ public class UserController {
       userService.update(user);
       map.put("data", "user info has updated");
       session.invalidate();
-      session.setAttribute("user", new SessionUser().of(user));
+      session.setAttribute("user", new SessionUser(user));
       log.info("User '{}' has requested change password", user.getEmail());
     } catch (Exception e) {
       e.printStackTrace();
@@ -202,8 +196,7 @@ public class UserController {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
         throw new IllegalAccessException();
       }
-      session.setAttribute("user", new SessionUser().of(userService.findUserByEmail(User.builder().email(email).build())));
-
+      session.setAttribute("user", new SessionUser(userService.findUserByEmail(User.builder().email(email).build())));
     } catch (Exception e) {
       e.printStackTrace();
       session.invalidate();
@@ -217,28 +210,22 @@ public class UserController {
 
   // TODO: 2021-07-19 수정 필요
   @PostMapping("/api/point/{point}")
-  public ResponseEntity<Map<String, Object>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
-                                                                      @PathVariable(name = "point") Long point) {
+  public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
+                                                                         @PathVariable(name = "point") Long point) throws Exception {
     /*
      * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
      * */
-    Map<String, Object> map = new HashMap<>();
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-
-      map.put("data", pointRequestService.addUserPointRequest(user.getId(), point));
-      map.put("error", null);
+      pointRequestService.addUserPointRequest(user.getId(), point);
+      return success(pointRequestService.getUserPointRequests(user.getId()));
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @GetMapping("/api/point/{userid}")
   public ApiUtils.ApiResult<List<PointRequest>> getPointRequestList(@PathVariable(name = "userid") long userid) throws Exception {
-    Map<String, Object> map = new HashMap<>();
     try {
       return success(pointRequestService.getUserPointRequests(userid));
     } catch (Exception e) {
@@ -247,7 +234,7 @@ public class UserController {
   }
 
   @GetMapping("/api/user/participate")
-  public ApiUtils.ApiResult<List<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
+  public ApiUtils.ApiResult<Set<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
       return success(surveyService.getUserParticipateSurvey(user));
@@ -257,11 +244,12 @@ public class UserController {
   }
 
   @PostMapping("/api/survey/participate")
-  public ApiUtils.ApiResult<User> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
+  public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.setParticipateSurvey(user.getParticipateSurvey() + "," + survey.getId());
-      return success(userService.update(user));
+      user.addParticipateSurvey(survey.getId());
+      userService.update(user);
+      return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

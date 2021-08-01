@@ -100,15 +100,10 @@ public class BoardController {
     log.info("Result: " + result + ", data: " + boardDTO.toString());
 
     boardDTO.setFiles(Arrays.asList(file));
-    // NOTE 2021-07-04 0004 : BindingResult??
-
     if (result.hasErrors()) {
       return "admin/admin_board_register";
     }
-
     boardDTO.transViewcontent();
-
-    // NOTE 2021-07-04 0004 : 관리자 확인 로직 추가
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
       User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
@@ -166,14 +161,10 @@ public class BoardController {
   public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
     boardDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + boardDTO.toString());
-    // NOTE 2021-07-04 0004 : BindingResult??
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
-
     boardDTO.transViewcontent();
-
-    // NOTE 2021-07-04 0004 : 관리자 확인 로직 추가
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
       User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());

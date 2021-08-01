@@ -43,4 +43,5 @@ public class PointRequestServiceImpl implements PointRequestService {
     return pointRequestRepository.findById(id);
   }
 
+
 }

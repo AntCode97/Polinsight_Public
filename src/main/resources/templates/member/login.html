@@ -262,6 +262,12 @@
           <div class="login_btn_wrap">
             <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
           </div>
+          <div>
+            <label>
+              자동 로그인
+              <input type="checkbox" name="rememberMe" value="true" />
+            </label>
+          </div>
         </form>
         <div class="qnapw">
           <a th:href="@{/signup}">회원가입</a>
@@ -279,13 +285,12 @@
     axios.post('/dologin', null, {
           params: {
             email: $('input[name=email]').val().trim(),
-            password: $('input[name=password]').val().trim()
+            password: $('input[name=password]').val().trim(),
+            rememberMe: $('input[name=rememberMe]').val().trim()
           }
         })
         .then(res => {
-          // console.log(res)
-          if (res.data.msg === 'success') {
-            // alert('로그인 성공')
+          if (res.data.response) {
             location.replace('/')
           } else {
             alert('로그인 실패\n아이디와 비밀번호를 확인해주세요.')
@@ -299,6 +304,8 @@
   }
 
   $(function () {
+    $('.header_wrap').css('background-color', '#182838')
+
     $('form').on('submit', login)
 
     // 로그인 input(id, pw)에 focus 되면 테두리색 변경

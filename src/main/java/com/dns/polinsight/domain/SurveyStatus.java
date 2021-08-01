@@ -1,10 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.types.ProgressType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
+@Getter
 public class SurveyStatus {
 
 
@@ -32,22 +30,22 @@ public class SurveyStatus {
 
   @Enumerated(EnumType.STRING)
   @Builder.Default
-  private ProgressType progressType = ProgressType.BEFORE;
+  private ProgressType progress = ProgressType.BEFORE;
 
   // 포인트가 지급 될 수 있는 최소 시간
   private LocalDateTime minimumTime;
 
 
-  public void setProgressType(LocalDateTime endDateTime) {
+  public void setProgress(LocalDateTime endDateTime) {
     try {
       int cmp = LocalDateTime.now().compareTo(endDateTime);
       if (cmp < 0) {
-        this.progressType = ProgressType.ONGOING;
+        this.progress = ProgressType.ONGOING;
       } else {
-        this.progressType = ProgressType.END;
+        this.progress = ProgressType.END;
       }
     } catch (Exception e) {
-      this.progressType = ProgressType.BEFORE;
+      this.progress = ProgressType.BEFORE;
     }
   }
 

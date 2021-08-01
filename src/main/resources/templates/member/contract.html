@@ -4,12 +4,12 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <style type="text/css">
-    /*@import url('common.css');*/
+  <style>
     .contract_wrap {
       width: 1000px;
       margin: 0 auto;
       position: relative;
+      top: 80px
     }
 
     .contract_title {
@@ -490,6 +490,7 @@
 </body>
 <script type="text/javascript">
   $(document).ready(function () {
+    $('.header_wrap').css('background-color', '#182838')
     $("#cbox").click(function () {
       var ckAll = $("#cbox").is(":checked");
       /* alert("상태: " + ckAll); */

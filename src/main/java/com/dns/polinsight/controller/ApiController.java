@@ -63,7 +63,6 @@ public class ApiController {
   @GetMapping("/surveys/sync")
   public ApiUtils.ApiResult<List<Survey>> surveySyncWithSM() throws Exception {
     try {
-      // FIXME: 2021/07/26 : embedded 한 데이터가 넘어오지 않음
       return success(surveyService.getSurveyListAndSyncPerHour());
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -122,9 +121,10 @@ public class ApiController {
     try {
       return success(surveyService.findAll(pageable).getContent());
     } catch (Exception e) {
-      throw new Exception(e.getMessage());
+      throw new Exception();
     }
   }
+
 
   @GetMapping("/survey/total")
   public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface SurveyService {
 
@@ -17,13 +18,13 @@ public interface SurveyService {
 
   Page<Survey> findAll(Pageable pageable);
 
-  Survey findById(Survey survey);
+  Survey findById(long surveyId);
 
   Survey update(Survey survey);
 
   List<Survey> getSurveyListAndSyncPerHour();
 
-  List<Survey> getUserParticipateSurvey(User user);
+  Set<Survey> getUserParticipateSurvey(User user);
 
   void deleteSurveyById(Long surveyId);
 
