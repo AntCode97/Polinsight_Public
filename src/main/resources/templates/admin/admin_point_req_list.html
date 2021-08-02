@@ -1,0 +1,100 @@
+<th:block>
+  <style>
+    .content_body {
+      height: calc(100vh - 51px);
+      width: calc(100vw - 260px);
+      background-color: white;
+    }
+  </style>
+  <div class="content_body">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">포인트 정산 요청 목록</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="board-search">
+        <div class="util-search">총 <strong></strong>개의 요청이 있습니다.</div>
+      </div>
+      <!--관리자 페이지 사용자 찾기 기능-->
+      <div class="form-search">
+        <div class="tbl-search">
+          <div class="box-search">
+            <input name="adminfindreq" type="text" placeholder="" />
+            <button name="adminfindreq_btn" type="submit">찾기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-table">
+      </div>
+      <div class="pagination"></div>
+    </div>
+  </div>
+  <script>
+    const makePointRequestListPagination = current => {
+      const paginationForm = $('.pagination')
+      const totalPages = Math.ceil(totalcount / 10);
+
+      let start = current > 0 ? current - 1 : 0
+      let end = current < totalPages - 1 ? current + 1 : totalPages;
+      let first = $(`<div><i class="fas fa-angle-double-left"></i></div>`).on('click', {offset: 0, size: 10}, getPointRequest)
+      let prev = $(`<div><i class="fas fa-angle-left"></i></div>`).on('click', {offset: current > 0 ? current - 1 : 0, size: 10}, getPointRequest)
+      let next = $(`<div><i class="fas fa-angle-right"></i></div>`).on('click', {offset: current < totalPages - 1 ? current + 1 : totalPages - 1, size: 10}, getPointRequest)
+      let last = $(`<div><i class="fas fa-angle-double-right"></i></div>`).on('click', {offset: totalPages - 1, size: 10}, getPointRequest)
+
+      for (let i = start; i < end; i++) {
+        const tmp = $(`<div class="board_row">${i + 1}</div>`).on('click', {offset: i, size: 10}, getPointRequest)
+        if (i === current) {
+
+        }
+        paginationForm.append(tmp)
+      }
+      paginationForm.prepend(first).prepend(prev)
+      paginationForm.append(next).append(last)
+
+    }
+    const makePointRequestTemplate = req => {
+      let template = $(`<div class="board-row"></div>`);
+      template.append(`<span>${req.id}</span>`)
+      template.append(`<span>${req.name}</span>`)
+      template.append(`<span>${req.point}</span>`)
+      template.append(`<span>${req.bank}</span>`)
+      template.append(`<span>${req.account}</span>`)
+      template.append(`<span>${req.progress}</span>`)
+      return template;
+    }
+
+    const makePointRequestList = requests => {
+      const table = $('.div.scroll-table')
+      for (requst of requests) {
+        table.append(makePointRequestTemplate(requst))
+      }
+    }
+
+    const countPointRequest = e => {
+      axios.get(`/api/points/${!e.data.regex ? '' : e.data.regex + '/'}total`)
+          .then(res => pointRequestCount = res.data.response)
+          .catch(err => console.log(err))
+    }
+
+    const getPointRequest = e => {
+      axios.get(`/api/points${!e.data.regex ? '' : '/' + e.data.regex}`)
+          .then(res => {
+            console.log(res.data.response)
+            makePointRequestList(res.data.response)
+          }).catch(err => console.log(err))
+    }
+
+    let pointRequestCount = 0;
+
+    $(function () {
+      countPointRequest()
+      getPointRequest()
+
+      $('.adminfindreq').on('keyup', {regex: $('input[name=adminfindreq]').val()}, getPointRequest)
+      $('.adminfindreq_btn').on('click', {regex: $('input[name=adminfindreq]').val()}, getPointRequest)
+    })
+  </script>
+</th:block>

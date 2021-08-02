@@ -10,7 +10,6 @@
   <script th:inline="javascript">
 
     const makeSurveyCard = survey => {
-      console.log(survey)
       let template = $(`<div></div>`).addClass('main_survey_item')
       if (survey.status.progress === 'ONGOING') {
         template.addClass('bg_color_item_white')

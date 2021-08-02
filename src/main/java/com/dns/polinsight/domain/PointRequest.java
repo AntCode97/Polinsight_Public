@@ -40,11 +40,11 @@ public class PointRequest {
 
   public PointRequest of(PointRequestDto dto) {
     this.uid = dto.getUid();
-    this.requestPoint = dto.getRequestPoint();
+    this.requestPoint = dto.getPoint();
     this.requestedAt = dto.getRequestedAt();
-    this.bankName = dto.getBankName();
+    this.bankName = dto.getBank();
     this.account = dto.getAccount();
-    this.progressType = dto.getProgressType();
+    this.progressType = dto.getProgress();
     return this;
   }
 

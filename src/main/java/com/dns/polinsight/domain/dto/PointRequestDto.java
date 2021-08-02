@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @ToString
@@ -20,25 +21,30 @@ public class PointRequestDto {
   private final LocalDateTime requestedAt = LocalDateTime.now();
 
   @Enumerated(EnumType.STRING)
-  private PointRequestProgressType progressType;
+  private PointRequestProgressType progress;
 
   private Long uid;
 
-  @NotNull
-  private Long requestPoint;
+  @NotNull(message = "요청 포인트는 NULL이 될 수 없습니다")
+  @Positive(message = "요청 포인트는 10,000 포인트 이상 설정할 수 있습니다")
+  private Long point;
 
-  @NotNull
+  @NotNull(message = "은행명은 NULL이 될 수 없습니다")
   @Enumerated(EnumType.STRING)
-  private BankType bankName;
+  private BankType bank;
 
-  @NotNull
+  @NotNull(message = "계좌번호는 NULL이 될 수 없습니다")
   private String account;
 
+  private String userName;
+
   public PointRequestDto(PointRequest pointRequest) {
-    this.requestPoint = pointRequest.getRequestPoint();
+    // todo : 유저 이름 추가
+    this.uid = pointRequest.getUid();
+    this.point = pointRequest.getRequestPoint();
     this.account = pointRequest.getAccount();
-    this.bankName = pointRequest.getBankName();
-    this.progressType = pointRequest.getProgressType();
+    this.bank = pointRequest.getBankName();
+    this.progress = pointRequest.getProgressType();
   }
 
 }

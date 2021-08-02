@@ -10,6 +10,7 @@ import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
+import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.PointRequestProgressType;
 import com.dns.polinsight.utils.ApiUtils;
@@ -140,7 +141,6 @@ public class ApiController {
    * */
   @GetMapping("/surveys/{regex}")
   public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageHandler Pageable pageable) throws Exception {
-    System.out.println(pageable.toString());
     try {
       return success(surveyService.findSurveysByTitleRegex(regex, pageable));
     } catch (Exception e) {
@@ -240,7 +240,11 @@ public class ApiController {
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
                                                                  @LoginUser SessionUser sessionUser) throws Exception {
+    if (sessionUser == null)
+      throw new UnAuthorizedException("Unauthorized error");
+    System.out.println(pointRequestDto.toString());
     try {
+    // TODO: 2021-08-03 저장 시 에러 
       pointRequestService.saveOrUpdate(new PointRequest().of(pointRequestDto));
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -269,6 +273,43 @@ public class ApiController {
       return success(!userService.isExistPhone(recommendPhone));
     } catch (Exception e) {
       throw new NotFoundException("Phone Number Not Found");
+    }
+  }
+
+  @GetMapping("/points/total")
+  public ApiUtils.ApiResult<Long> countPointRequests() throws Exception {
+    try {
+      return success(pointRequestService.countAllPointRequests());
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/points")
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable) throws Exception {
+    try {
+      return success(pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/points/{regex}")
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable,
+                                                                       @PathVariable("regex") String regex) throws Exception {
+    try {
+      return success(pointRequestService.getAllPointRequestsByRegex(pageable, regex).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/points/{regex}/total")
+  public ApiUtils.ApiResult<Long> countPointRequests(@PathVariable("regex") String regex) throws Exception {
+    try {
+      return success(pointRequestService.countPointRequestsByRegex(regex));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
     }
   }
 

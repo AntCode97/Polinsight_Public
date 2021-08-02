@@ -85,9 +85,19 @@ public class AdminPageController {
 
   @GetMapping("/surveyinfo")
   public ModelAndView adminGetDetailPage(ModelAndView mav) {
-    System.out.println(mav.getModel().toString());
     mav.setViewName("admin/admin_survey_info");
     return mav;
   }
+
+  @GetMapping("/pointlist")
+  public ModelAndView adminUserPointRequest() {
+    return new ModelAndView("admin/admin_point_req_list");
+  }
+
+//  @GetMapping("/pointreqinfo")
+//  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
+//    mav.setViewName("admin/admin_survey_info");
+//    return mav;
+//  }
 
 }
