@@ -1,12 +1,32 @@
+<th:block th:include="admin/admin_sidebar" />
+<th:block th:include="module/common" />
 <th:block>
   <style>
-    .content_body {
-      height: calc(100vh - 51px);
-      width: calc(100vw - 260px);
-      background-color: white;
+    .board-row > *:nth-child(1) {
+      width: 120px;
+    }
+
+    .board-row > *:nth-child(2) {
+      width: 200px;
+    }
+
+    .board-row > *:nth-child(3) {
+      width: 100px;
+    }
+
+    .board-row > *:nth-child(4) {
+      width: 95px;
+    }
+
+    .board-row > *:nth-child(5) {
+      width: 150px;
+    }
+
+    .board-row > *:nth-child(6) {
+      width: 95px;
     }
   </style>
-  <div class="content_body">
+  <div class="admin_main_contents">
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
         <p class="main_item">포인트 정산 요청 목록</p>
@@ -14,17 +34,17 @@
     </div>
 
     <div class="main_contents_wrap">
-      <div class="board-search">
-        <div class="util-search">총 <strong></strong>개의 요청이 있습니다.</div>
+      <div class="count_wrap">
+        <div>총 <strong></strong>개의 요청이 있습니다.</div>
       </div>
-      <!--관리자 페이지 사용자 찾기 기능-->
-      <div class="form-search">
-        <div class="tbl-search">
-          <div class="box-search">
-            <input name="adminfindreq" type="text" placeholder="" />
-            <button name="adminfindreq_btn" type="submit">찾기</button>
-          </div>
-        </div>
+      <!--관리자 페이지 요청 찾기 기능-->
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
+      </div>
+
+      <div style="float: right">
+        <button class="btn_del btn-big btn-green">엑셀로 저장</button>
       </div>
 
       <div class="scroll-table">
@@ -66,24 +86,46 @@
       return template;
     }
 
+    const makeheader = () => {
+      let template = $(`<div>`).addClass('board-row').addClass('board-th')
+      template.append(`<span>요청 아이디</span>`)
+      template.append(`<span>요청인</span>`)
+      template.append(`<span>요청 포인트</span>`)
+      template.append(`<span>은행</span>`)
+      template.append(`<span>계좌번호</span>`)
+      template.append(`<span>진행 상황</span>`)
+      return template;
+    }
+
     const makePointRequestList = requests => {
-      const table = $('.div.scroll-table')
-      for (requst of requests) {
-        table.append(makePointRequestTemplate(requst))
-      }
+      const table = $('.scroll-table')
+      table.append(makeheader())
+      if (requests.length === 0)
+        table.append($(`<div class="empty-data"><h1>요청 목록이 없습니다</h1></div>`))
+      else
+        for (requst of requests) {
+          table.append(makePointRequestTemplate(requst))
+        }
     }
 
     const countPointRequest = e => {
-      axios.get(`/api/points/${!e.data.regex ? '' : e.data.regex + '/'}total`)
-          .then(res => pointRequestCount = res.data.response)
+      const url = `/api/points/${!e ? '' : e.data.regex + '/'}total`
+      axios.get(url)
+          .then(res => {
+            pointRequestCount = res.data.response
+            $('.count_wrap strong').text(pointRequestCount)
+          })
           .catch(err => console.log(err))
     }
 
     const getPointRequest = e => {
-      axios.get(`/api/points${!e.data.regex ? '' : '/' + e.data.regex}`)
+      const url = `/api/points${!e ? '' : '/' + e.data.regex}`
+      axios.get(url)
           .then(res => {
-            console.log(res.data.response)
-            makePointRequestList(res.data.response)
+            console.log(res.data)
+            if (res.data.success) {
+              makePointRequestList(res.data.response)
+            }
           }).catch(err => console.log(err))
     }
 
@@ -93,8 +135,8 @@
       countPointRequest()
       getPointRequest()
 
-      $('.adminfindreq').on('keyup', {regex: $('input[name=adminfindreq]').val()}, getPointRequest)
-      $('.adminfindreq_btn').on('click', {regex: $('input[name=adminfindreq]').val()}, getPointRequest)
+      $('input[name=admin_find]').on('keyup', {regex: $('input[name=admin_find]').val()}, getPointRequest)
+
     })
   </script>
 </th:block>

@@ -53,11 +53,9 @@
     const getSurveyList = () => {
       axios.get('/api/surveys?type=index')
           .then(res => {
-            if (res.data.response !== null) {
-              const surveys = res.data.response
-              if (!!surveys) {
-                makeSurveyCardList(surveys)
-              }
+            console.log(res)
+            if (res.data.success) {
+              makeSurveyCardList(res.data.response)
             }
           })
           .catch(err => console.log(err))

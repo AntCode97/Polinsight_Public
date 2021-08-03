@@ -34,7 +34,7 @@ public class AdminPageController {
 
   @GetMapping
   public ModelAndView goAdminPage() {
-    return new ModelAndView("admin/admin");
+    return new ModelAndView("admin/admin_dashboard");
   }
 
 

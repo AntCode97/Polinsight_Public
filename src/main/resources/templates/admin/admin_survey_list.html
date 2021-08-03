@@ -2,82 +2,52 @@
 <th:block th:include="module/common" />
 <th:block>
   <th:block>
-    <style>.board-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #cfcfd1;
-    }
+    <style>
+      table, tr, th, td {
+        width: 100%;
+        margin: 0;
+      }
 
-    .board-row > * {
-      padding: 9px 10px;
-      display: inline-block;
-      font-size: 1rem;
-      line-height: 30px;
-      color: #666;
-      text-align: center;
-    }
 
-    .board-row > *:nth-child(1) {
-      width: 70px;
-    }
+      .board-row > *:nth-child(1) {
+        width: 70px;
+      }
 
-    .board-row > *:nth-child(2) {
-      width: 500px;
-    }
+      .board-row > *:nth-child(2) {
+        width: 500px;
+      }
 
-    .board-row > *:nth-child(3) {
-      width: 100px;
-    }
+      tbody > .board-row > td:nth-child(2) {
+        text-align: left;
+      }
 
-    .board-row > *:nth-child(4) {
-      width: 130px;
-    }
+      .board-row > *:nth-child(3) {
+        width: 90px;
+      }
 
-    .board-row > *:nth-child(5) {
-      width: 80px;
-    }
+      .board-row > *:nth-child(4) {
+        width: 150px;
+      }
 
-    .board-row > *:nth-child(6) {
-      width: 95px;
-    }
+      .board-row > *:nth-child(5) {
+        width: 95px;
+      }
 
-    .board-row > *:nth-child(7) {
-      width: 120px;
-    }
+      .board-row > *:nth-child(6) {
+        width: 95px;
+      }
 
-    .btn_udel {
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
+      .board-row > *:nth-child(7) {
+        width: 120px;
+      }
 
-    .board-row > span > button:first-child {
-      margin-right: 3px;
-    }
+      .board-row > *:nth-child(8) {
+        width: 120px;
+      }
 
-    .btn_udel {
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
-    .pagination {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .pagination > div {
-      text-align: center;
-      display: inline-block;
-      font-size: 0.9rem;
-      width: 30px;
-      line-height: 34px;
-      border: 1px solid #e2e2e2;
-      cursor: pointer;
-    }
+      table {
+        align: center;
+      }
     </style>
   </th:block>
   <div class="admin_main_contents">
@@ -93,40 +63,31 @@
       </div>
 
       <!--관리자 페이지 설문 찾기 기능-->
-      <div class="form-search">
-        <div class="tbl-search">
-          <div class="box-search">
-            <input name="adminfindsurvey" type="text" />
-            <button name="adminfindsurvey_btn" type="submit">찾기</button>
-          </div>
-        </div>
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
       </div>
 
-      <div class="scroll-table"></div>
+      <table class="scroll-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
       <div class="pagination"></div>
 
     </div>
   </div>
   <script>
 
-    const addPaginationCssInAdminSurvey = elem => {
-      elem.on('mouseover', function () {
-        $(this).css('cursor', 'pointer').css('text-decoration', 'underline')
-      }).on('mouseleave', function () {
-        $(this).css('cursor', 'default').css('text-decoration', 'none')
-      })
-      elem.css('width', '7px').css('height', '7px').css('display', 'inline').css('margin', '5px')
-      return elem
-    }
+
     const makePaginationsInAdminSurvey = current => {
       const regexValue = $('input[name=adminfindsurvey]').val()
-      const surveyCount = $('.util-search>strong').text()
+      const surveyCount = parseInt($('.util-search>strong').text())
       const totalPage = Math.ceil(surveyCount / 10)
 
-      let first = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-double-left"></i></div>`))
-      let last = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-double-right"></i></div>`))
-      let prev = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-left"></i></div>`))
-      let next = addPaginationCssInAdminSurvey($(`<div class="pagenation_button" ><i class="fas fa-angle-right"></i></div>`))
+      let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`)
+      let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
+      let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
+      let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
 
       const paginationElement = $('div.pagination')
       paginationElement.empty()
@@ -134,7 +95,11 @@
       let start = current - 5 <= 0 ? 0 : current - 5;
       let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
 
-      if (surveyCount > 0) {
+      if (surveyCount === 0) {
+        console.log('length 0')
+        $('.scroll-table').empty().after(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`)
+        $('.pagination').empty()
+      } else {
         if (!regexValue) {
           first.on('click', {offset: 0}, adminGetAllSurveys)
           last.on('click', {offset: totalPage}, adminGetAllSurveys)
@@ -143,7 +108,7 @@
 
           paginationElement.append(first).append(prev)
           for (let i = start; i < end; i++) {
-            let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
             tmp.on('click', {offset: i}, adminGetAllSurveys)
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
@@ -158,49 +123,47 @@
           next.on('click', {regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys)
           paginationElement.append(first).append(prev)
           for (let i = start; i < end; i++) {
-            let tmp = addPaginationCssInAdminSurvey($(`<div class="pagenation_button">${i + 1}</div>`))
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
             tmp.on('click', {offset: i, regex: regexValue}, adminGetAllSurveys)
             if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+              tmp.addClass('pagination_button_current')
+            } else {
+              tmp.removeClass('pagination_button_current')
             }
             paginationElement.append(tmp);
           }
           paginationElement.append(next).append(last)
         }
-      } else {
-        $('.scroll-table').empty().append($(`<div><h2>검색 결과가 없습니다.</h2></div>`))
       }
     }
 
     const surveyListHeader = () => {
-      let template = `<div class="board-row board-th">`
-      template += `<span>번호</span>`
-      template += `<span>설문 이름</span>`
-      template += `<span>지급 포인트</span>`
-      template += `<span>설문 기간</span>`
-      template += `<span>진행 상태</span>`
-      template += `<span>참여자 수</span>`
-      template += `<span>설문 아이디</span>`
-      template += `<span>공지사항 관리</span>`
-      template += `</div>`
+      let template = $(`<tr class="board-row board-th"></tr>`)
+      template.append(`<th>번호</th>`)
+      template.append(`<th>설문 이름</th>`)
+      template.append(`<th>포인트</th>`)
+      template.append(`<th>설문 기간</th>`)
+      template.append(`<th>진행 상태</th>`)
+      template.append(`<th>참여자 수</th>`)
+      template.append(`<th>설문 아이디</th>`)
+      template.append(`<th>관리</th>`)
       return template
     }
 
     const adminMakeSurveySearchResults = surveys => {
-      const table = $('div.scroll-table');
+      const table = $('.scroll-table>tbody');
       table.empty()
-      table.append(surveyListHeader())
+
       for (survey of surveys) {
-        let template = `<div class="board-row">`
-        template += `<span>${survey.id}</span>`// 번호
-        template += `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</span>`// 설문 이름
-        template += `<span>${!survey.point ? 0 : survey.point}</span>`// 지급 포인트
-        template += `<span>${survey.phone}</span>` // 설문 기간
-        template += `<span>${survey.role}</span>`// 진행 상태
-        template += `<span>${survey.status.count}</span>`// 참여자 수
-        template += `<span>${survey.surveyId}</span>`// 서베이 아이디
-        template += `<span><button class="btn_udel btn-warn">삭제</button></span>`
-        template += `</div>`
+        let template = $(`<tr class="board-row">`)
+        template.append(`<td>${survey.id}</td>`)// 번호
+        template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`)// 설문 이름
+        template.append(`<td>${!survey.point ? 0 : survey.point}</td>`)// 지급 포인트
+        template.append(`<td>${String(survey.createdAt).split('T')[0]} ~ ${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`) // 설문 기간
+        template.append(`<td>${survey.status.progress}</td>`)// 진행 상태
+        template.append(`<td>${survey.status.count}</td>`)// 참여자 수
+        template.append(`<td>${survey.surveyId}</td>`)// 서베이 아이디
+        template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`)
         table.append(template);
       }
     }
@@ -213,9 +176,11 @@
             params: {size: 10, offset: offset}
           })
           .then(res => {
-            getTotalCount(regex)
-            makePaginationsInAdminSurvey(offset)
-            adminMakeSurveySearchResults(res.data.response)
+            if (res.data.success) {
+              getTotalCount(regex)
+              makePaginationsInAdminSurvey(offset)
+              adminMakeSurveySearchResults(res.data.response)
+            }
           })
           .catch(err => {
             console.log(err)
@@ -233,26 +198,19 @@
     }
 
     $(function () {
+      $('.scroll-table>thead').append(surveyListHeader())
       getTotalCount()
       adminGetAllSurveys()
 
-      $(document).on('click', 'div.board-row:not(:first-of-type)', function (e) {
+      $(document).on('click', '.board-row:not(:first-of-type)', function (e) {
         const id = $(this).children('span:first-child').text()
         // 클릭시 디테일 페이지 ==> 폼 만들고 submit
         const form = $(`<form action="/admin/survey/${id}" method="get"></form>`)
         $('body').append(form)
         form.submit()
-      }).on('mouseover', 'div.board-row:not(:first-of-type)', function (e) {
-        $(this).css('background-color', 'lightgray')
-            .css('cursor', 'pointer')
-            .css('transition', 'background-color .5s')
-      }).on('mouseleave', 'div.board-row:not(:first-of-type)', function () {
-        $(this).css('background-color', 'rgba(0,0,0,0)')
-            .css('cursor', 'default')
-            .css('transition', 'background-color .5s')
       })
 
-      $('input[name=adminfindsurvey]').on('keyup', _.throttle(adminGetAllSurveys, 300)).attr('placeholder', '설문 찾기')
+      $('input[name=admin_find]').on('keyup', _.throttle(adminGetAllSurveys, 300))
     })
   </script>
 </th:block>

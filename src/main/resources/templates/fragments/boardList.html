@@ -51,11 +51,11 @@
                         <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
                         <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
                     </span>
-        <span><button class="btn_udel btn-support" th:onclick="|location.href='@{/admin/boards/{id}/edit (id=${list.id})}'|">수정</button>
-                        <button class="btn_udel btn-warn" th:onclick="|location.href='@{/admin/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>
+        <span><button class="btn_del btn-support" th:onclick="|location.href='@{/admin/boards/{id}/edit (id=${list.id})}'|">수정</button>
+                        <button class="btn_del btn-warn" th:onclick="|location.href='@{/admin/boards/{id}/delete (id=${list.id})}'|">삭제</button></span>
       </div>
       <div class="board-bottom">
-        <button class="btn_udel btn-green" onclick="location.href='/admin/boards/new'">새 글쓰기</button>
+        <button class="btn_del btn-green" onclick="location.href='/admin/boards/new'">새 글쓰기</button>
       </div>
 
       <!-- 페이지네이션 -->

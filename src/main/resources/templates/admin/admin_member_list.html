@@ -2,6 +2,11 @@
 <th:block th:include="module/common" />
 <th:block>
   <style>
+    table {
+      width: 100%;
+      margin: 0;
+    }
+
     .board-row {
       display: flex;
       align-items: center;
@@ -23,7 +28,11 @@
     }
 
     .board-row > *:nth-child(2) {
-      width: 500px;
+      width: 300px;
+    }
+
+    tbody > .board-row > *:nth-child(2) {
+      text-align: left;
     }
 
     .board-row > *:nth-child(3) {
@@ -39,49 +48,17 @@
     }
 
     .board-row > *:nth-child(6) {
-      width: 95px;
+      width: 120px;
     }
 
     .board-row > *:nth-child(7) {
       width: 120px;
     }
 
-    .btn_udel {
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
     .board-row > span > button:first-child {
       margin-right: 3px;
     }
-
-    .btn_udel {
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
-    .page-button {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .page-button > a {
-      text-align: center;
-      display: inline-block;
-      font-size: 0.9rem;
-      width: 30px;
-      line-height: 34px;
-      border: 1px solid #e2e2e2;
-      cursor: pointer;
-    }
-
   </style>
-</th:block>
-<th:block>
   <div class="admin_main_contents">
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
@@ -94,17 +71,15 @@
         <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
       </div>
       <!--관리자 페이지 사용자 찾기 기능-->
-      <div class="form-search">
-        <div class="tbl-search">
-          <div class="box-search">
-            <input name="adminfinduserby" type="text" />
-            <button name="adminfinduser_btn" type="submit">찾기</button>
-          </div>
-        </div>
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="회원 검색" />
       </div>
 
-      <div class="scroll-table">
-      </div>
+      <table class="scroll-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
       <div class="pagination"></div>
     </div>
   </div>
@@ -115,13 +90,14 @@
     }
 
     const getHeader = () => {
-      let header = `<div class="board-row board-th">`
-      header += `<span>번호</span>`
-      header += `<span>아이디(이메일)</span>`
-      header += `<span>이름</span>`
-      header += `<span>휴대전화</span>`
-      header += `<span>유형</span>`
-      header += `</div>`
+      let header = $(`<tr class="board-row board-th"></tr>`)
+      header.append(`<td>번호</td>`)
+      header.append(`<td>아이디(이메일)</td>`)
+      header.append(`<td>이름</td>`)
+      header.append(`<td>휴대전화</td>`)
+      header.append(`<td>보유 포인트</td>`)
+      header.append(`<td>유형</td>`)
+      header.append(`<td>관리</td>`)
       return header;
     }
 
@@ -139,11 +115,11 @@
       // 못가게 되면 비활성화
       if (userCount > 0) {
         if (!findValue) {
-          let gofirstArrow = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`))
-          let goLastArrow = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`))
-          let prev = addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`))
+          let gofirstArrow = $(`<div class="pagination_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`)
+          let goLastArrow = $(`<div class="pagination_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`)
+          let prev = $(`<div class="pagination_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`)
           let next =
-              addPagenationEventCss($(`<div class="pagenation_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`))
+              $(`<div class="pagination_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`)
 
           // first arrow
           pagenationElem.append(gofirstArrow)
@@ -151,8 +127,7 @@
           pagenationElem.append(prev)
 
           for (let i = start; i < end; i++) {
-            let tmp = $(`<div onclick="getMemberList(${i})" class="pagenation_button">${i + 1}</div>`)
-            tmp = addPagenationEventCss(tmp)
+            let tmp = $(`<div onclick="getMemberList(${i})" class="pagination_button">${i + 1}</div>`)
             // 활성화된 버튼에 대해 디자인 처리
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
@@ -164,24 +139,25 @@
           // last arrow
           pagenationElem.append(goLastArrow)
         } else {
-          let first = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-double-left"></i></div>`))
-          let last = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-double-right"></i></div>`))
-          let prev = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-left"></i></div>`))
-          let next = addPagenationEventCss($(`<div class="pagenation_button" ><i class="fas fa-angle-right"></i></div>`))
+          let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`)
+          let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
+          let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
+          let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
           first.on('click', {param_offset: 0}, findUserByRegex)
           last.on('click', {param_offset: totalPage - 1}, findUserByRegex)
-          prev.on('click', {param_offset: current - 1 >= 0 ? current - 1 :0}, findUserByRegex)
+          prev.on('click', {param_offset: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
           next.on('click', {param_offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
 
           pagenationElem.append(first)
           pagenationElem.append(prev)
           for (let i = start; i < end; i++) {
-            let tmp = $(`<div class="pagenation_button">${i + 1}</div>`)
-            tmp = addPagenationEventCss(tmp)
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
             tmp.on('click', {param_offset: i}, findUserByRegex);
 
             if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+              tmp.addClass('pagination_button_current')
+            } else {
+              tmp.removeClass('pagination_button_current')
             }
             pagenationElem.append(tmp)
           }
@@ -196,32 +172,22 @@
       }
     }
 
-    const addPagenationEventCss = elem => {
-      elem.on('mouseover', function () {
-        $(this).css('cursor', 'pointer').css('text-decoration', 'underline')
-      }).on('mouseleave', function () {
-        $(this).css('cursor', 'default').css('text-decoration', 'none')
-      })
-      elem.css('width', '7px').css('height', '7px').css('display', 'inline').css('margin', '5px')
-      return elem;
-    }
-
     const makeAdminMemberRowTemplate = memberInfo => {
-      let template = `<div class="board-row">`
-      template += `<span>${memberInfo.id}</span>`
-      template += `<span>${memberInfo.email}</span>`
-      template += `<span>${memberInfo.name}</span>`
-      template += `<span>${memberInfo.phone}</span>`
-      template += `<span>${memberInfo.role}</span>`
-      template += `</div>`
+      let template = $(`<tr class="board-row"></tr>`)
+      template.append(`<td>${memberInfo.id}</td>`)
+      template.append(`<td>${memberInfo.email}</td>`)
+      template.append(`<td>${memberInfo.name}</td>`)
+      template.append(`<td>${memberInfo.phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")}</td>`)
+      template.append(`<td>${memberInfo.point}</td>`)
+      template.append(`<td>${memberInfo.role}</td>`)
+      template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`)
       return template;
     }
 
     const makeAdminMemberListTemplate = memberInfoList => {
       if (!memberInfoList) return
-      const table = $('.scroll-table')
+      const table = $('.scroll-table>tbody')
       table.empty()
-      table.append(getHeader())
       for (memberInfo of memberInfoList)
         table.append(makeAdminMemberRowTemplate(memberInfo))
     }
@@ -265,7 +231,8 @@
     }
 
     const findUserByRegex = e => {
-      const findValue = $('input[name=adminfinduserby]').val()
+      const findValue = $('input[name=admin_find]').val()
+      console.log(findValue)
       if (!findValue) {
         countAllUsers()
         getMemberList(0);
@@ -280,28 +247,18 @@
       }
     }
 
-    const throttleFindUserByRegex = _.throttle(findUserByRegex, 300)
-
     $(function () {
       countAllUsers()
       getMemberList(0)  // 페이지 초기 값
-
+      $('.scroll-table>thead').append(getHeader())
       $(document).on('click', 'div.board-row:not(:first-of-type)', () => {
         // 클릭시 디테일 페이지?
         alert('aaa')
-      }).on('mouseover', 'div.board-row:not(:first-of-type)', function (e) {
-        $(this).css('background-color', 'lightgray')
-            .css('cursor', 'pointer')
-            .css('transition', 'background-color .5s')
-      }).on('mouseleave', 'div.board-row:not(:first-of-type)', function () {
-        $(this).css('background-color', 'rgba(0,0,0,0)')
-            .css('cursor', 'default')
-            .css('transition', 'background-color .5s')
       })
 
       /*비동기 회원 찾기 및 화면 업데이트*/
-      $('input[name=adminfinduserby]').on('keyup', throttleFindUserByRegex).attr('placeholder', '유저 찾기')
-      $('button[name=adminfinduser_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
+      $('input[name=admin_find]').on('keyup', _.throttle(findUserByRegex, 300))
+      $('button[name=admin_find_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
     })
   </script>
 </th:block>

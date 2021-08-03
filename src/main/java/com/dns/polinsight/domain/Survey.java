@@ -32,8 +32,6 @@ public class Survey implements Serializable {
 
   private String title;
 
-  //  private LocalDateTime modifiedAt;
-
   @Setter
   private LocalDateTime createdAt;
 

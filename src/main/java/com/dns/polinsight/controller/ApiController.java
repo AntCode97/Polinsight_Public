@@ -118,8 +118,20 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable,
+                                                             @RequestParam(value = "type", required = false) String type) throws Exception {
     try {
+      if (type.equals("index")) {
+        List<Survey> list = surveyService.findAll();
+        list.sort((o1, o2) -> {
+              if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
+                return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
+              } else
+                return o1.getEndAt().compareTo(o2.getEndAt());
+            }
+        );
+        return success(list);
+      }
       return success(surveyService.findAll(pageable).getContent());
     } catch (Exception e) {
       throw new Exception();
@@ -244,7 +256,7 @@ public class ApiController {
       throw new UnAuthorizedException("Unauthorized error");
     System.out.println(pointRequestDto.toString());
     try {
-    // TODO: 2021-08-03 저장 시 에러 
+      // TODO: 2021-08-03 저장 시 에러
       pointRequestService.saveOrUpdate(new PointRequest().of(pointRequestDto));
       return success(Boolean.TRUE);
     } catch (Exception e) {

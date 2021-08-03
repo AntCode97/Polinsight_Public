@@ -6,10 +6,17 @@
   <title>폴인사이트</title>
   <meta charset="UTF-8">
   <style>
-    .admin_wrap {
-      position: relative;
-      top: 0;
-      color: #3c4858;
+    body {
+      background-color: #fafafa;
+    }
+
+    .admin_main_contents {
+      display: block;
+      margin-left: 260px;
+      margin-top: 51px;
+      width: calc(100% - 260px);
+      height: calc(100% - 51px);
+      padding: 50px 50px 0;
     }
 
     .admin_sidebar, .admin_sidebar_wrap, .admin_main {
@@ -86,10 +93,6 @@
       padding-bottom: 30px;
     }
 
-    .main_contents_wrap {
-      margin-top: 50px;
-      margin-left: 50px;
-    }
 
     .ps {
       overflow: hidden !important;
@@ -213,7 +216,7 @@
     }
 
     .admin_main_header {
-      width: 100%;
+      width: calc(100vw - 260px);
       background-color: white;
       height: 51px;
       border-bottom: 1px solid #DDDDDD;
@@ -221,15 +224,6 @@
       justify-content: space-between;
       align-items: center;
       padding: 0 20px;
-    }
-
-    .admin_main_contents {
-      width: calc(100% - 260px);
-      float: right;
-      top: 51px;
-      right: 0;
-      margin-top: 20px;
-      margin-left: 20px;
     }
 
     .contents_title {
@@ -283,11 +277,13 @@
       display: none;
     }
 
-    .dropdown_user > a {
+
+    .dropdown_user:hover > a {
       margin: 0 5px;
       padding: 10px 24px;
       display: block;
       border-radius: 2px;
+      z-index: 9999;
     }
 
     .dropdown_user > a:hover {
@@ -319,6 +315,103 @@
       left: 3px;
       width: 10px;
       height: 15px;
+    }
+
+    .pagination {
+      display: block;
+      justify-items: center;
+      align-content: center;
+      text-align: center;
+    }
+
+    .pagination > .pagination_button {
+      display: inline-block;
+      width: 25px;
+      margin: 2px;
+      margin-top: 5px;
+      padding: 0;
+      text-align: center;
+    }
+
+    .pagination_button:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .pagination_button_current {
+      color: rgba(32, 205, 195, 1);
+      background-color: rgba(255, 255, 255, .5);
+      font-weight: bolder;
+    }
+
+    .scroll-table > tbody > .board-row:hover {
+      cursor: pointer;
+      background-color: lightgray;
+      transition: background-color .3s;
+    }
+
+    .search-box-container {
+      width: 300px;
+      justify-items: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      position: relative;
+      margin: 0 auto;
+    }
+
+
+    .search-box-container .admin_find {
+      width: 300px;
+      height: 50px;
+      background: white;
+      float: left;
+      color: #63717f;
+      padding-left: 45px;
+      border-radius: 5px;
+      border: 0.5px solid black;
+    }
+
+    .search-box-container .search-icon {
+      position: absolute;
+      top: 50%;
+      margin-left: 17px;
+      margin-top: 17px;
+      z-index: 1;
+      color: #4f5b66;
+    }
+
+    .scroll-table {
+      margin-top: 50px;
+    }
+
+    .btn_del {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .empty-data {
+      height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .board-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cfcfd1;
+    }
+
+    .board-row > * {
+      padding: 9px 10px;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 30px;
+      color: #666;
+      text-align: center;
     }
   </style>
 </head>
@@ -368,11 +461,11 @@
                 <p class="nav_dropdown">회원 목록</p>
               </a>
             </li>
-<!--            <li class="nav-item">-->
-<!--              <a th:href="@{/admin/membersearch}" class="nav_link">-->
-<!--                <p class="nav_dropdown">회원 검색</p>-->
-<!--              </a>-->
-<!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--              <a th:href="@{/admin/membersearch}" class="nav_link">-->
+            <!--                <p class="nav_dropdown">회원 검색</p>-->
+            <!--              </a>-->
+            <!--            </li>-->
             <li class="nav-item">
               <a href="#" class="nav_link">
                 <p class="nav_dropdown">이메일보내기</p>
@@ -403,7 +496,7 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a th:href="@{/admin/boards/notice}" class="nav_link">
+              <a th:href="@{/admin/boards}" class="nav_link">
                 <p class="nav_dropdown">공지사항</p>
               </a>
             </li>
@@ -425,6 +518,15 @@
             <i class="fas fa-list"></i>
             <p>
               설문 관리
+              <i class="fas fa-caret-down arrow"></i>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item nav_action">
+          <a th:href="@{/admin/pointlist}" class="nav_link">
+            <i class="fas fa-list"></i>
+            <p>
+              포인트 요청 목록
               <i class="fas fa-caret-down arrow"></i>
             </p>
           </a>
