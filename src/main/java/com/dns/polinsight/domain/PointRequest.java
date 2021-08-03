@@ -5,10 +5,7 @@ import com.dns.polinsight.types.BankType;
 import com.dns.polinsight.types.PointRequestProgressType;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /*
@@ -25,26 +22,38 @@ public class PointRequest {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Setter
   private Long uid;
+
+  private String email;
 
   private Long requestPoint;
 
   private LocalDateTime requestedAt;
 
+  @Enumerated(EnumType.STRING)
   private BankType bankName;
 
   private String account;
 
   @Setter
-  private PointRequestProgressType progressType;
+  @Enumerated(EnumType.STRING)
+  private PointRequestProgressType progress;
 
   public PointRequest of(PointRequestDto dto) {
-    this.uid = dto.getUid();
-    this.requestPoint = dto.getPoint();
     this.requestedAt = dto.getRequestedAt();
     this.bankName = dto.getBank();
     this.account = dto.getAccount();
-    this.progressType = dto.getProgress();
+    this.progress = dto.getProgress();
+    return this;
+  }
+
+  public PointRequest progressUpdate(PointRequestDto dto) {
+    if (dto.getProgress() == PointRequestProgressType.REQUESTED) {
+      this.progress = PointRequestProgressType.PROCESSING;
+    } else if (dto.getProgress() == PointRequestProgressType.PROCESSING) {
+      this.progress = PointRequestProgressType.FINISHED;
+    }
     return this;
   }
 

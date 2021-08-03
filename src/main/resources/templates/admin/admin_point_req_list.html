@@ -2,12 +2,17 @@
 <th:block th:include="module/common" />
 <th:block>
   <style>
+    table {
+      width: 100%;
+      margin: 0;
+    }
+
     .board-row > *:nth-child(1) {
-      width: 120px;
+      width: 70px;
     }
 
     .board-row > *:nth-child(2) {
-      width: 200px;
+      width: 250px;
     }
 
     .board-row > *:nth-child(3) {
@@ -19,11 +24,15 @@
     }
 
     .board-row > *:nth-child(5) {
-      width: 150px;
+      width: 200px;
     }
 
     .board-row > *:nth-child(6) {
-      width: 95px;
+      width: 100px;
+    }
+
+    .board-row > *:nth-child(7) {
+      width: 150px;
     }
   </style>
   <div class="admin_main_contents">
@@ -47,15 +56,15 @@
         <button class="btn_del btn-big btn-green">엑셀로 저장</button>
       </div>
 
-      <div class="scroll-table">
-      </div>
+      <table class="scroll-table">
+      </table>
       <div class="pagination"></div>
     </div>
   </div>
   <script>
     const makePointRequestListPagination = current => {
       const paginationForm = $('.pagination')
-      const totalPages = Math.ceil(totalcount / 10);
+      const totalPages = Math.ceil(pointRequestCount / 10);
 
       let start = current > 0 ? current - 1 : 0
       let end = current < totalPages - 1 ? current + 1 : totalPages;
@@ -76,24 +85,52 @@
 
     }
     const makePointRequestTemplate = req => {
-      let template = $(`<div class="board-row"></div>`);
-      template.append(`<span>${req.id}</span>`)
-      template.append(`<span>${req.name}</span>`)
-      template.append(`<span>${req.point}</span>`)
-      template.append(`<span>${req.bank}</span>`)
-      template.append(`<span>${req.account}</span>`)
-      template.append(`<span>${req.progress}</span>`)
+      let template = $(`<tr class="board-row"></tr>`);
+      template.append(`<td>${req.id}</td>`)
+      template.append(`<td>${req.email}</td>`)
+      template.append(`<td>${req.point}</td>`)
+      template.append(`<td>${req.bank}은행</td>`)
+      template.append(`<td>${req.account}</td>`)
+      template.append(`<td>${req.progress}</td>`)
+      const modify_btn = $(`<button class="btn_del btn-support">수정</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate)
+      const delete_btn = $(`<button class="btn_del btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest)
+      const tmp_cell = $(`<td></td>`).append(modify_btn).append(`<span>  </span>`).append(delete_btn)
+      template.append(tmp_cell)
       return template;
     }
 
+    const deleteRequest = e => {
+      if (confirm('정말로 요청을 삭제하시겠습니까?')) {
+        axios.delete(`/points/${e.data.id}`)
+            .then(res => {
+              if (res.data.success) {
+                getAllPointRequest()
+                alert('요청 삭제 완료')
+              }
+            })
+      }
+    }
+
+    const progressUpdate = e => {
+      console.log(e.data.id)
+      console.log(typeof e.data.id)
+      axios.put(`/api/points/${e.data.id}`, {progress: e.data.progress})
+          .then(res => {
+            if (res.data.success) {
+              getAllPointRequest()
+            }
+          }).catch(console.log)
+    }
+
     const makeheader = () => {
-      let template = $(`<div>`).addClass('board-row').addClass('board-th')
-      template.append(`<span>요청 아이디</span>`)
-      template.append(`<span>요청인</span>`)
-      template.append(`<span>요청 포인트</span>`)
-      template.append(`<span>은행</span>`)
-      template.append(`<span>계좌번호</span>`)
-      template.append(`<span>진행 상황</span>`)
+      let template = $(`<tr>`).addClass('board-row').addClass('board-th')
+      template.append(`<th>요청 아이디</th>`)
+      template.append(`<th>요청인</th>`)
+      template.append(`<th>요청 포인트</th>`)
+      template.append(`<th>은행</th>`)
+      template.append(`<th>계좌번호</th>`)
+      template.append(`<th>진행 상황</th>`)
+      template.append(`<th>관리</th>`)
       return template;
     }
 
@@ -102,10 +139,12 @@
       table.append(makeheader())
       if (requests.length === 0)
         table.append($(`<div class="empty-data"><h1>요청 목록이 없습니다</h1></div>`))
-      else
+      else {
         for (requst of requests) {
           table.append(makePointRequestTemplate(requst))
         }
+        makePointRequestListPagination(0)
+      }
     }
 
     const countPointRequest = e => {
@@ -122,7 +161,6 @@
       const url = `/api/points${!e ? '' : '/' + e.data.regex}`
       axios.get(url)
           .then(res => {
-            console.log(res.data)
             if (res.data.success) {
               makePointRequestList(res.data.response)
             }

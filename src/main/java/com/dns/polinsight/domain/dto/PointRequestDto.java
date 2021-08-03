@@ -23,6 +23,8 @@ public class PointRequestDto {
   @Enumerated(EnumType.STRING)
   private PointRequestProgressType progress;
 
+  private Long id;
+
   private Long uid;
 
   @NotNull(message = "요청 포인트는 NULL이 될 수 없습니다")
@@ -36,15 +38,17 @@ public class PointRequestDto {
   @NotNull(message = "계좌번호는 NULL이 될 수 없습니다")
   private String account;
 
-  private String userName;
+  @Setter
+  private String email;
 
   public PointRequestDto(PointRequest pointRequest) {
-    // todo : 유저 이름 추가
+    this.id = pointRequest.getId();
     this.uid = pointRequest.getUid();
     this.point = pointRequest.getRequestPoint();
     this.account = pointRequest.getAccount();
     this.bank = pointRequest.getBankName();
-    this.progress = pointRequest.getProgressType();
+    this.progress = pointRequest.getProgress();
+    this.email = pointRequest.getEmail();
   }
 
 }

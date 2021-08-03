@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   void deleteUserByEmail(String email);
 
+  @Query(nativeQuery = true, value = "UPDATE user SET point = point - ?2 WHERE id = ?1")
+  void subtractUserPointByUid(long uid, long point);
+
 }
