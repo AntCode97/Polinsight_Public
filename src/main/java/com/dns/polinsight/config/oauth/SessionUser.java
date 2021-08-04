@@ -44,13 +44,4 @@ public class SessionUser implements Serializable {
     this.point = user.getPoint();
   }
 
-  public SessionUser of(User user) {
-    this.id = user.getId();
-    this.email = user.getEmail();
-    this.role = user.getRole();
-    this.name = user.getName();
-    this.point = user.getPoint();
-    return this;
-  }
-
 }

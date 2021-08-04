@@ -2,7 +2,6 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.service.PageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -11,14 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class PageController {
-
-  private final PageService service;
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
   public ModelAndView home(@LoginUser SessionUser user) {
@@ -30,9 +27,6 @@ public class PageController {
     return mv;
   }
 
-  /*
-   * 비밀번호 찾기 기능
-   * */
   @GetMapping("/findpwd")
   public ModelAndView findpassword() {
     ModelAndView mv = new ModelAndView();
@@ -49,22 +43,13 @@ public class PageController {
 
   @GetMapping("/join")
   public ModelAndView signUp() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/basicsignup");
-    return mv;
+    return new ModelAndView("member/basicsignup");
   }
 
 
   @GetMapping("/signup")
-  public ModelAndView terms() {
-    ModelAndView mv = new ModelAndView();
-    try {
-      mv.addObject("terms", service.getTerms());
-      mv.setViewName("member/signupterms");
-    } catch (IOException e) {
-      mv.setViewName("5xx");
-    }
-    return mv;
+  public ModelAndView contract() {
+    return new ModelAndView("member/contract");
   }
 
   @GetMapping("/panel")
@@ -77,13 +62,30 @@ public class PageController {
   @GetMapping("/denied")
   public ModelAndView deniedHandler() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("denied");
+    mv.setViewName("error/denied");
     return mv;
   }
 
   @GetMapping("/panelagreement")
-  public ModelAndView panelAgreement(){
+  public ModelAndView panelAgreement() {
     return new ModelAndView("member/pagree");
+  }
+
+  @GetMapping("/success_basic")
+  public ModelAndView successBasicMemberSignUp() {
+    return new ModelAndView("member/success_basicmember");
+  }
+
+  @GetMapping("/success_panel")
+  public ModelAndView successPanelMemberSignUp() {
+    return new ModelAndView("member/success_panel");
+  }
+
+  @GetMapping("/basictopanel")
+  public ModelAndView changeBasicToPanel(@LoginUser SessionUser sessionUser, HttpSession session) {
+    session.invalidate();
+    session.setAttribute("basic_user", sessionUser);
+    return new ModelAndView("redirect:/panelagreement");
   }
 
 }

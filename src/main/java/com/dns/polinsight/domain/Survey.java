@@ -1,10 +1,13 @@
 package com.dns.polinsight.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+@Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -14,20 +17,27 @@ public class Survey implements Serializable {
 
   private static final long serialVersionUID = -4701183897615758658L;
 
+  @Setter
+  @Embedded
+  @Cascade(org.hibernate.annotations.CascadeType.ALL)
+  private SurveyStatus status;
+
   @Id
-  private String id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   private Long surveyId;
 
-  private String title;
-
-  private String nickname;
-
   private String href;
 
-  /*
-   * 설문 완료시 지급할 포인트 수치
-   * */
+  private String title;
+
+  @Setter
+  private LocalDateTime createdAt;
+
+  @Setter
+  private LocalDateTime endAt;
+
   private Long point;
 
 }

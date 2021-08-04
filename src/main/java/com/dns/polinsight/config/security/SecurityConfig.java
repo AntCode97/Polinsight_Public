@@ -17,6 +17,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -58,6 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
           .anyRequest().authenticated()
         .and()
+          .rememberMe()
+        .key("remeberMeSecretKey")
+        .authenticationSuccessHandler(successHandler)
+        .rememberMeParameter("rememberMe")
+        .tokenValiditySeconds(7*24*60*60)  // 7일
+        .and()
           .formLogin()
             .loginPage("/login")
             .loginProcessingUrl("/dologin")
@@ -78,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .clearAuthentication(true)
               .invalidateHttpSession(true)
         .and()
+          .addFilterBefore(customAuthProccessingFilter(), BasicAuthenticationFilter.class)
           .httpBasic().disable()
           .oauth2Login()
             .loginPage("/login")

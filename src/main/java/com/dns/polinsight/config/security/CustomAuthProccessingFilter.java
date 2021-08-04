@@ -18,10 +18,8 @@ public class CustomAuthProccessingFilter extends AbstractAuthenticationProcessin
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    //    이메일로 인증할 것
     String username = request.getParameter("email");
     String password = request.getParameter("password");
-
     return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
   }
 

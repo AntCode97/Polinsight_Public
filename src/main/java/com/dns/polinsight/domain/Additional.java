@@ -4,26 +4,25 @@ import com.dns.polinsight.types.GenderType;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Embeddable
 @ToString
-@Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Additional implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long id;
+  private static final long serialVersionUID = 4323740522466099195L;
 
-  @OneToOne(mappedBy = "additional")
-  private User user;
+  @ElementCollection
+  private final List<String> favorite = new ArrayList<>();
 
   /*
    * 추가정보 클래스
@@ -43,12 +42,15 @@ public class Additional implements Serializable {
 
   private String industry;
 
-  @ElementCollection
-  private List<String> favorite;
-
-  public Additional update(User user) {
-    this.user = user;
-    return this;
+  public void update(Additional additional) {
+    this.gender = additional.getGender();
+    this.education = additional.getEducation();
+    this.marry = additional.getMarry();
+    this.birth = additional.getBirth();
+    this.birthType = additional.getBirthType();
+    this.job = additional.getJob();
+    this.industry = additional.getIndustry();
+    this.favorite.addAll(additional.getFavorite());
   }
 
 }

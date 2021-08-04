@@ -1,0 +1,95 @@
+<div id='boardTable'>
+  <div class='main_contents_wrap'>
+    <div class='board-search'>
+      <div class='util-search'>총 <strong th:text='${boards.getTotalElements()}'></strong>개의 게시물이 있습니다.</div>
+      <div class='form-search'>
+        <div class='tbl-search'>
+          <div class='box-search'>
+            <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
+            <input type='submit' />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='scroll-table'>
+      <div class='board-th board-row'>
+        <span>번호</span>
+        <a href='#'>제목</a>
+        <span>작성자</span>
+        <span>작성일</span>
+        <span>조회수</span>
+        <span>첨부파일</span>
+        <span>수정/삭제</span>
+      </div>
+
+      <!-- 게시글이 0건인 경우 -->
+      <div class='board-row' th:if='${boards.getTotalElements() == 0}'>
+        <span>1</span>
+        <a class='board-title'><strong>등록된 게시글이 없습니다.</strong></a>
+        <span>관리자</span>
+        <span th:text="${#calendars.format(#calendars.createNow, 'yyyy-MM-dd')}"></span>
+        <span>0</span>
+        <span>
+          <i class='fas fa-paperclip file_icon_no'></i>
+        </span>
+        <span></span>
+      </div>
+
+      <div class='board-row' th:each='list : ${boards}'>
+        <span th:text='${list.id}'></span>
+        <a th:href='@{/admin/boards/{id} (id=${list.id})}' class='board-title'><strong th:text='${list.title}'></strong></a>
+        <span th:if='${list.newBoard}'>New!</span>
+        <span th:text='${list.user.name}'></span>
+        <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
+        <span th:text='${list.viewcnt}'></span>
+        <span>
+          <i th:if='${list.attaches.size() == 0}' class='fas fa-paperclip file_icon_no'></i>
+          <i th:unless='${list.attaches.size() == 0}' class='fas fa-paperclip file_icon_yes'></i>
+        </span>
+        <span>
+          <button class='btn_del btn-support' th:onclick="|location.href='@{/admin/boards/{id}/edit (id=${list.id})}'|">수정</button>
+          <button class='btn_del btn-warn' th:onclick="|location.href='@{/admin/boards/{id}/delete (id=${list.id})}'|">삭제</button>
+        </span>
+      </div>
+      <div class='board-bottom'>
+        <button class='btn_del btn-green' onclick="location.href='/admin/boards/new'">새 글쓰기</button>
+      </div>
+
+      <!-- 페이지네이션 -->
+      <div th:if='${keyword} !=null' class='page-button' th:with='start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})'>
+        <a th:href="${boards.first} ? '#' : @{/admin/boards/search(keyword=${keyword}, page=1)}" aria-label='First'>
+          <i class='fas fa-angle-double-left'></i>
+        </a>
+        <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/admin/boards/search(keyword=${keyword}, page=${boards.number})}" aria-label='Prev'>
+          <i class='fas fa-angle-left'></i>
+        </a>
+        <a th:unless='${page == 0}' class='current-page' th:each='page: ${#numbers.sequence(start, last)}' th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text='${page}'
+           th:href='@{/admin/boards/search(keyword=${keyword}, page=${page})}'></a>
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/admin/boards/search(keyword=${keyword}, page=${boards.number + 2})}" aria-label='Next'>
+          <i class='fas fa-angle-right'></i>
+        </a>
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/admin/boards/search(keyword=${keyword}, page=${boards.totalPages})}" aria-label='Last'>
+          <i class='fas fa-angle-double-right'></i>
+        </a>
+      </div>
+      <div th:if='${keyword} == null' class='page-button' th:with='start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})'>
+        <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/admin/boards/(page=1)}" aria-label='First'>
+          <i class='fas fa-angle-double-left'></i>
+        </a>
+        <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/admin/boards/(page=${boards.number})}" aria-label='Prev'>
+          <i class='fas fa-angle-left'></i>
+        </a>
+        <a th:unless='${page == 0}' class='current-page' th:each='page: ${#numbers.sequence(start, last)}' th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text='${page}'
+           th:href='@{/admin/boards/(page=${page})}'></a>
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/admin/boards/(page=${boards.number + 2})}" aria-label='Next'>
+          <i class='fas fa-angle-right'></i>
+        </a>
+
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/admin/boards/(page=${boards.totalPages})}" aria-label='Last'>
+          <i class='fas fa-angle-double-right'></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

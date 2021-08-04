@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
 <head>
+  <title>폴인사이트</title>
+  <link rel="icon" th:href="@{/favicon.ico}">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>폴인사이트</title>
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <style type="text/css">
-    @import url("/css/common.css");
-
+  <style>
     .header_wrap {
       position: fixed;
       top: 0;
@@ -143,8 +140,214 @@
       background-position: center, center;
       background-size: cover;
     }
-  </style>
 
+
+    /* 여기서부터 index.html 내용 */
+    .panel_wrap {
+      width: 900px;
+      padding: 30px 0;
+      margin: 30px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1.5px solid #AAA;
+    }
+
+    .panel_item_horizontal {
+      display: flex;
+    }
+
+    .panel_item_vertical {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pol_color {
+      color: #4C99CF;
+    }
+
+    .panel_item > p {
+      font-size: 14px;
+    }
+
+    .panel_big_item {
+      font-size: 25px !important;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+
+    .panel_btn {
+      font-size: 14px;
+      padding: 7px 0;
+      text-align: center;
+      width: 110px;
+    }
+
+    .panel_btn_login {
+      background-color: #182838;
+      color: white;
+      margin-right: 5px;
+    }
+
+    .panel_btn_join {
+      background-color: #4C99CF;
+      color: white;
+    }
+
+    .panel_line {
+      width: 2px;
+      height: 65px;
+      background-color: #182838;
+      margin: 0 30px;
+    }
+
+    /* 진행중인 온라인 조사 */
+    .main_survey_list_wrap {
+      padding: 20px 30px;
+      background-color: #e1eef6;
+      width: 1000px;
+      margin: 0 auto 50px;
+    }
+
+    .main_survey_list_title {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      margin-bottom: 25px;
+    }
+
+    .main_survey_list_title > p {
+      font-size: 25px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .main_survey_item {
+      width: 300px;
+      padding: 10px;
+    }
+
+    .survey_run, .survey_stop {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .survey_title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 45px;
+    }
+
+    .survey_point {
+      font-weight: bold;
+      border-bottom: 1px solid #dadada;
+      padding-bottom: 5px;
+    }
+
+    .survey_date {
+      text-align: right;
+      font-weight: bold;
+      padding: 10px 0 20px;
+    }
+
+    .main_survey_item_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .survey_run {
+      color: #4C99CF;
+    }
+
+    .survey_stop {
+      color: #000;
+    }
+
+    .bg_color_item_white {
+      background-color: white;
+    }
+
+    .bg_color_item_gray {
+      background-color: #dedede;
+    }
+
+    /* 진행중인 온라인 조사 */
+    .main_survey_list_wrap {
+      padding: 20px 30px;
+      background-color: #e1eef6;
+      width: 1000px;
+      margin: 0 auto 50px;
+    }
+
+    .main_survey_list_title {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      margin-bottom: 25px;
+    }
+
+    .main_survey_list_title > p {
+      font-size: 25px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .main_survey_item {
+      width: 300px;
+      padding: 10px;
+    }
+
+    .survey_run, .survey_stop {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .survey_title {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 45px;
+      height: 2rem;
+    }
+
+    .survey_point {
+      font-weight: bold;
+      border-bottom: 1px solid #dadada;
+      padding-bottom: 5px;
+    }
+
+    .survey_date {
+      text-align: right;
+      font-weight: bold;
+      padding: 10px 0 20px;
+    }
+
+    .main_survey_item_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .survey_run {
+      color: #4C99CF;
+    }
+
+    .survey_stop {
+      color: #000;
+    }
+
+    .bg_color_item_white {
+      background-color: white;
+    }
+
+    .bg_color_item_gray {
+      background-color: #dedede;
+    }
+  </style>
 </head>
 <body>
 <button class="top-btn btn-circle">
@@ -155,7 +358,7 @@
   <div class="header_box">
     <div class="header_container_logo">
       <div class="header_logo">
-        <a href="/">
+        <a th:href="@{/}">
           <img th:src="@{/img/logo/white_logo.png}" alt="로고" />
         </a>
       </div>
@@ -176,10 +379,10 @@
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/}">Business</a>
+          <a th:href="@{/boards}">Board</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
+              <a th:href="@{/boards}" class="dropdown_element">공지사항</a>
               <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents03</a>
               <a th:href="@{/}" class="dropdown_element">Contents04</a>
@@ -189,10 +392,10 @@
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/boards}">Board</a>
+          <a th:href="@{/}">Research</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/boards}" class="dropdown_element">Board</a>
+              <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents01</a>
               <a th:href="@{/}" class="dropdown_element">Contents03</a>
               <a th:href="@{/}" class="dropdown_element">Contents04</a>
@@ -223,15 +426,10 @@
         <a th:href="@{/signup}">JOIN</a>
       </th:block>
       <th:block th:unless="${session.user} == null">
-        <!-- 유저 로그인 -->
-        <!-- <span></span> -->
-        <th:block th:unless="${ session.user.role.name() == 'ADMIN'}">
-          <a th:href="@{/mypage}">MYPAGE</a>
+        <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
+          <a th:href="@{/mypage}">MY PAGE</a>
         </th:block>
-        <!-- 관리자 로그인 -->
-        <!--      <a th:href="@{/dologout}">LOGOUT</a>-->
-        <!-- <span></span> -->
-        <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
+        <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
           <a th:href="@{/admin}">ADMIN</a>
         </th:block>
         <span></span>
@@ -240,23 +438,8 @@
     </div>
   </div>
 </div>
-
-<!-- 배너이미지 -->
-<div class="carasel_wrap"></div>
-
 </body>
 <script th:inline="javascript">
-  const logout_process = e => {
-    axios.get("/dologout")
-        .then(res => {
-          console.log("로그아웃 성공")
-          window.location.href = "/"
-        })
-        .catch(err => {
-          console.log("로그아웃 중 에러 발생")
-          console.log(err)
-        })
-  }
   $(function () {
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가

@@ -28,7 +28,7 @@ public class BoardServiceImpl implements BoardService {
 
   private final AttachRepository attachRepository;
 
-  @Cacheable
+  //@Cacheable
   @Override
   public List<Board> findAll() {
     return repository.findAll();
@@ -80,14 +80,31 @@ public class BoardServiceImpl implements BoardService {
 
   @Override
   public Page<Board> searchTitle(String title, BoardType boardType, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
     return repository.findByTitle(title, boardType, pageable);
 
   }
 
   @Override
   public Page<Board> searchContent(String searchcontent, BoardType boardType, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
     return repository.findBySearchcontent(searchcontent, boardType, pageable);
 
+  }
+
+  @Override
+  public Page<Board> searchKeyword(String keyword, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
+    return repository.findBySearchKeyword(keyword, pageable);
+
+  }
+
+  @Override
+  public void upViewCnt(Board board) {
+    repository.upViewCnt(board);
   }
 
 }

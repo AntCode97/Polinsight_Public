@@ -14,6 +14,6 @@ public interface AttachRepository extends JpaRepository<Attach, Long> {
   )
   List<Attach> findByBoardId(Long boardId);
 
-  List<Attach> findByFilename(String filename);
+  List<Attach> findByFileName(String fileName);
 
 }

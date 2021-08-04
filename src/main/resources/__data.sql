@@ -1,15 +1,10 @@
-INSERT INTO user ( id, email, name, password, phone, point, recommend, role, additional_id )
-VALUES
-( 1, 'testadmin@gmail.com', '관리자', '$2a$10$V9Z9tA4TZlyEfs3ghMrXpu3GJJLkCeHetQH/CgAWdn1zWZJpiKadW', '', 987654321, '', 'ADMIN', 1 ),
-( 2, 'testpanel@gmail.com', '테스트 패널', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '', 100, '', 'PANEL', 2 ),
-( 3, 'testuser@gmail.com', '테스트 유저', '$2a$10$jNZjemrZ03Xpkkw5XAaXVe2A4WYT58S20Lupx18Jj.xjmrOLr0k2u', '', 0, '', 'PANEL', 3 );
+INSERT INTO user ( id, email, name, password, phone, point, recommend, role, birth, birth_type, education, gender, industry, job, marry )
+    VALUES
+( 1, 'testadmin@gmail.com', '관리자', '$2a$10$V9Z9tA4TZlyEfs3ghMrXpu3GJJLkCeHetQH/CgAWdn1zWZJpiKadW', '', 987654321, '', 'ADMIN', '2020-01-01 00:00:00', '양력', '대학 재학', 0, '학생', '학생', 0 ),
+( 2, 'testpanel@gmail.com', '테스트 패널', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '', 100, '', 'PANEL', '2020-03-01 00:00:00', '양력', '대학 재학', 1, '직장인', '직장인', 1 ),
+( 3, 'testuser@gmail.com', '테스트 유저', '$2a$10$jNZjemrZ03Xpkkw5XAaXVe2A4WYT58S20Lupx18Jj.xjmrOLr0k2u', '', 0, '', 'PANEL', '2020-04-01 00:00:00', '양력', '대학 재학', 0, '교수', '교수', 1 );
 
 
-INSERT INTO additional( id, birth, birth_type, education, gender, industry, job, marry )
-VALUES
-    ( 1, '2020-01-01 00:00:00', '양력', '대학 재학', 0, '학생', '학생', 0 ),
-    ( 2, '2020-03-01 00:00:00', '양력', '대학 재학', 1, '직장인', '직장인', 1 ),
-    ( 3, '2020-04-01 00:00:00', '양력', '대학 재학', 0, '교수', '교수', 1 );
 
 INSERT INTO board ( bno, board_type, new_board, registered_at, searchcontent, title, viewcontent, user_id )
 VALUES

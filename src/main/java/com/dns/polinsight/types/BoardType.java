@@ -1,5 +1,5 @@
 package com.dns.polinsight.types;
 
 public enum BoardType {
-  EVENT, NOTICE
+  EVENT, NOTICE, FAQ, QNA, ARCHIVES
 }

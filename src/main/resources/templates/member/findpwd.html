@@ -63,7 +63,7 @@
 <div class="modal_wrap">
   <div class="modal_content">
     <div class="modal_login">
-      <form action="/findpwd" method="post">
+      <form th:action="@{/findpwd}" method="POST">
         <div class="input_div">
           <label for="input_email">
             <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
@@ -76,10 +76,13 @@
             <p><i class="fas fa-user"></i>&nbsp;이름</p>
           </label>
           <input name="name" class="login_input" id="input_name" required type="text">
+          <span class="err_msg" style="display:none;">이름을 정확히 입력해주세요.</span>
         </div>
         <div class="modal_btn_wrap">
           <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
-          <button id="submit_btn" class="modal_btn btn-primary btn-effect" th:onclick="alert('이메일로 확인코드를 전송하였습니다. 확인해주세요.')">
+          <button
+              th:onclick="alert('패스워드를 찾기 위한 이메일을 보냈습니다. 확인 해주세요.')"
+              type="submit" id="submit_btn" class="modal_btn btn-primary btn-effect">
             &nbsp;<i class="fas fa-search">찾기</i>
           </button>
         </div>
@@ -90,13 +93,22 @@
 <script>
   const emailChecker = () => {
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const emailValue = $("#input_email").val();
-    const msg = $("#emailmsg")
+    const email = $("input[name=email]");
 
-    if (emailValue.match(regex) != null) {
-      msg.css("display", "none");
+
+    if (email.val().match(regex) != null) {
+      email.next('span').css("display", "none");
     } else {
-      msg.css("display", "block");
+      email.next('span').css("display", "block");
+    }
+  }
+
+  const nameChecker = () => {
+    const name = $('input[name=name]').val()
+    if (name.match()) {
+      name.next('span').css("display", "none");
+    } else {
+      name.next('span').css("display", "block");
     }
   }
 
@@ -113,11 +125,10 @@
       $(this).css('border-bottom', '1.5px solid #dde0ea');
     });
 
-    $("#input_email").on("change keydown keyup paste", emailChecker);
+    $("input[name=email]").on("keyup", emailChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
+    
+    $("input[name=name]").on("keyup", nameChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
 
-    $("#submit_btn").on('click', () => {
-      alert('패스워드 변경을 위한 이메일을 보냈습니다.\n확인 해주세요.')
-    })
   })
 </script>
 </body>

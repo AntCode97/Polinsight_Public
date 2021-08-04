@@ -27,7 +27,7 @@ public class Attach {
 
   private Long fileSize;
 
-  private String filename;
+  private String fileName;
 
   private String originalName;
 

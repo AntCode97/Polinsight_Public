@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -21,16 +21,12 @@ style 속성만 적용 됨
 <div class="wrap">
   <p>
     <span th:text="${name}"></span>이 메일은 비밀번호를 변경하기 위한 이메일입니다.<br />
-                                   비밀번호 변경 요청을 하지 않았을 경우 메일은 무시해주세요.<br />
-                                   비밀번호를 변경하시려면 아래의 버튼을 눌러주세요.</br>
+                                   비밀번호 변경 요청을 하지 않았을 경우 메일은 삭제해주세요.<br />
+                                   비밀번호를 변경하시려면 아래의 링크를 클릭해주세요.
   </p>
-  <a>
-    <a href="${callback}?hash=${hash}&email=${email}&name=${name}">
-      <button>
-        비밀번호 변경하기
-      </button>
-    </a>
-  </a>
+  <a th:href="|${callback}/${hash}/${name}/${email}|">폴인사이트 비밀번호 변경하기</a>
+  <br />
+  <span th:text="|메일 발송 시각 : ${date}|"></span>
 </div>
 </body>
 </html>

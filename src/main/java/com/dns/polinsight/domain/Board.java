@@ -2,6 +2,7 @@ package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.BoardDTO;
 import com.dns.polinsight.types.BoardType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +24,9 @@ public class Board implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
 
-  @OneToMany(mappedBy = "board") //누구에 의해서 매핑되는가,
+  @OneToMany(mappedBy = "board")
   @Builder.Default
+  @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
 
   @Id
@@ -53,6 +55,9 @@ public class Board implements Serializable {
 
   private Boolean newBoard;
 
+  @Setter
+  private long viewcnt;
+
   public static BoardBuilder builder(BoardDTO boardDTO) {
     return BoardBuilder()
         .id(boardDTO.getId())
@@ -62,7 +67,8 @@ public class Board implements Serializable {
         .user(boardDTO.getUser())
         .registeredAt(boardDTO.getRegisteredAt())
         .boardType(boardDTO.getBoardType())
-        .attaches(boardDTO.getAttaches());
+        .attaches(boardDTO.getAttaches())
+        .viewcnt(0);
   }
 
 

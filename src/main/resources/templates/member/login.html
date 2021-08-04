@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>폴인사이트</title>
-  <style type="text/css">
-    @import url("/css/common.css");
+<th:block th:include="module/common" />
+<th:block th:include="layout/header" />
+<th:block>
+  <style>
     /* 모달 로그인 창 */
     .modal_wrap {
       height: 100vh;
@@ -77,7 +73,7 @@
       margin-bottom: 20px;
     }
 
-    .input_div > p {
+    .input_div p {
       font-size: 16px;
       text-align: left;
       color: #a5dff9;
@@ -231,39 +227,103 @@
       }
     }
   </style>
-</head>
-<body>
-<div class="modal_wrap">
-  <div class="modal_content">
-    <div class="modal_login">
-      <div class="login_title">
-        <a th:href="@{/}">
-          <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" />
-        </a>
-      </div>
-      <div class="login_content">
-        <div class="err_content"></div>
-        <form class="frm_login" action="/dologin" method="post">
-          <div class="input_div">
-            <p>이메일</p>
-            <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required>
+</th:block>
+<th:block>
+  <div class="modal_wrap">
+    <div class="modal_content">
+      <div class="modal_login">
+        <div class="login_title">
+          <a th:href="@{/}">
+            <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" alt="" />
+          </a>
+        </div>
+        <div class="login_content">
+          <div class="err_content"></div>
+          <form class="frm_login" th:action="@{/dologin}" method="post">
+            <div class="input_div">
+              <label>
+                <p>이메일</p>
+                <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
+              </label>
+            </div>
+            <div class="input_div">
+              <label>
+                <p>비밀번호</p>
+                <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
+                <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
+              </label>
+            </div>
+            <div class="login_btn_wrap">
+              <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
+            </div>
+            <div>
+              <label>
+                자동 로그인
+                <input type="checkbox" name="rememberMe" value="true" />
+              </label>
+            </div>
+          </form>
+          <div class="qnapw">
+            <a th:href="@{/signup}">회원가입</a>
+            <a th:href="@{/findpwd}">아이디/비밀번호 찾기</a>
           </div>
-          <div class="input_div">
-            <p>비밀번호</p>
-            <input type="password" class="login_input" id="login_pw" name="password" placeholder="비밀번호를 입력해 주세요" required>
-            <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
-          </div>
-          <div class="login_btn_wrap">
-            <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
-          </div>
-        </form>
-        <div class="qnapw">
-          <a th:href="@{/signup}">회원가입</a>
-          <a th:href="@{/findpwd}">아이디/비밀번호 찾기</a>
         </div>
       </div>
     </div>
   </div>
-</div>
-</body>
-</html>
+
+  <script>
+    const login = e => {
+      e.preventDefault()
+      e.returnValue = false
+      axios.post('/dologin', null, {
+            params: {
+              email: $('input[name=email]').val().trim(),
+              password: $('input[name=password]').val().trim(),
+              rememberMe: $('input[name=rememberMe]').val().trim()
+            }
+          })
+          .then(res => {
+            if (res.data.response) {
+              location.replace('/')
+            } else {
+              alert('로그인 실패\n아이디와 비밀번호를 확인해주세요.')
+              location.replace('/login')
+            }
+          })
+          .catch(err => {
+            alert('로그인 중 에러가 발생하였습니다.\n다시 시도해주세요')
+            location.replace('/login')
+          })
+    }
+
+    $(function () {
+      $('.header_wrap').css('background-color', '#182838')
+
+      $('form').on('submit', login)
+
+      // 로그인 input(id, pw)에 focus 되면 테두리색 변경
+      $(document).on('focus', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #4C99CF');
+      });
+      $(document).on('blur', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #dde0ea');
+      });
+
+      // LOGIN Modal창 암호 보이기 or 숨기기
+      $(document).on('click', '.pw_eye', function () {
+        var code = $(this).prev().attr('type');
+
+        if (code === 'password') {
+          $(this).prev().attr('type', 'text');
+          $(this).html('<i class="fas fa-eye"></i>')
+              .css('color', '#666');
+        } else {
+          $(this).prev().attr('type', 'password');
+          $(this).html('<i class="fas fa-eye-slash"></i>')
+              .css('color', '#AAA');
+        }
+      });
+    })
+  </script>
+</th:block>

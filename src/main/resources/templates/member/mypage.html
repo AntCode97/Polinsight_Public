@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="module/common" />
-<th:block th:include="layout/header" />
-<head>
-  <meta charset="UTF-8">
+<th:block th:include='layout/header' />
+<th:block>
   <style>
+    .main_contents {
+      margin-top: 80px;
+      height: 100%;
+      width: 100%;
+    }
+
     .mypage_modal_container {
-      height: 100vh;
+      height: calc(100vh - 80px);
       width: 100vw;
       position: relative;
     }
 
     .mypage_modal_content {
-      position: absolute;
+      width: 1200px;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
@@ -20,137 +23,313 @@
 
     .rtop_btn {
       cursor: pointer;
-      position: fixed;
+      position: absolute;
+      float: right;
       right: 50px;
       top: 50px;
-      border: 1px solid black;
     }
-  </style>
-</head>
-<body>
-<div class="mypage_modal_container">
-  <div class="mypage_modal_content">
-    <div>
-      <label>
-        이름
-        <input th:value="${session.user.name}" type="text">
-      </label>
-    </div>
-    <div>
-      <label>
-        아이디
-        <input id="email" th:value="${session.user.email}" type="email">
-      </label>
-    </div>
-    <div>
-      <label>
-        비밀번호
-        <input id="pwd" type="password" value="">
-      </label>
-      <span class="info">비밀번호를 변경하고 싶으시면 작성 후 확인버튼을 눌러주세요</span>
-    </div>
-    <div>
-      <label>
-        비밀번호 확인
-        <input id="pwdcfm" type="password" value="">
-      </label>
-    </div>
-    <!--수정 필요-->
-    <!--    <div>-->
-    <!--      <label>-->
-    <!--        관심사-->
-    <!--        <input name="point" readonly th:value="${session.user.additional.favorite}">-->
-    <!--      </label>-->
-    <!--    </div>-->
-    <div>
-      <label>
-        회원 타입
-        <input readonly th:value="${session.user.role}" type="text">
-      </label>
-    </div>
-    <div>
-      <label>
-        포인트
-        <input name="point" readonly th:value="${session.user.point}" type="number">
-      </label>
-    </div>
-    <th:block th:if="${session.user.point >= 10000}">
-      <div>
-        <form action="">
-          <div style="display: inline-block">
-            <input type="submit" value="지급 요청">
-          </div>
-        </form>
-      </div>
-    </th:block>
-    <div>
-      <button id="modi" th:onclick="chkInput()">변경하기</button>
-      <!--      <button th:onclick="window.history.back()">돌아가기</button>-->
-    </div>
-  </div>
-  <div class="rtop_btn">
-    <label for="deluser">
-      <input id="deluser" value="회원 탈퇴" type="button" th:onclick="alert('준비 중 입니다.')">
-    </label>
-  </div>
-</div>
-<script>
-  const userInfoUpdate = (password) => {
-    const userInfo = {}
-    userInfo['email'] = $("#email").val()
-    userInfo['password'] = password;
 
-    axios.post("/", userInfo)
+    .header_wrap {
+      background-color: #182838;
+    }
+
+  </style>
+  <div class='main_contents'>
+    <div class='mypage_modal_container'>
+      <div class='mypage_modal_content'>
+        <div>
+          <label>
+            이름
+            <input class='admin_search' th:value='${session.user.name}' type='text'>
+          </label>
+        </div>
+        <div>
+          <label>
+            아이디
+            <input class='admin_search' id='email' th:value='${session.user.email}' type='email'>
+          </label>
+        </div>
+        <div>
+          <label>
+            비밀번호
+            <input class='admin_search' id='pwd' type='password' value=''>
+          </label>
+          <span class='info'>비밀번호를 변경하고 싶으시면 작성 후 확인버튼을 눌러주세요</span>
+        </div>
+        <div>
+          <label>
+            비밀번호 확인
+            <input class='admin_search' id='pwdcfm' type='password' value=''>
+          </label>
+        </div>
+        <!-- TODO 수정 필요-->
+        <!--    <div>-->
+        <!--      <label>-->
+        <!--        관심사-->
+        <!--        <input name="point" readonly th:value="${session.user.additional.favorite}">-->
+        <!--      </label>-->
+        <!--    </div>-->
+        <div>
+          <label>
+            회원 타입
+            <input class='admin_search' readonly th:value='${session.user.role.name()}' type='text'>
+          </label>
+        </div>
+        <div>
+          <button class='btn btn-primary' id='modi' th:onclick='chkInput'>회원 정보 변경</button>
+        </div>
+        <hr />
+        <div>
+          <label>
+            보유 포인트
+            <input name='point' readonly th:value='${session.user.point}' type='number'>
+          </label>
+        </div>
+        <th:block th:if='${session.user.point >= 10000}'>
+          <div class='point_request_container'>
+            <div>
+              <label>
+                요청 할 포인트
+                <select name='reqpoint'></select>
+              </label>
+            </div>
+            <div>
+              <label>
+                은행
+                <select name='bank'>
+                  <option value='신한'>신한</option>
+                  <option value='카카오'>카카오</option>
+                  <option value='농협'>농협</option>
+                  <option value='수협'>수협</option>
+                  <option value='국민'>국민</option>
+                  <option value='광주'>광주</option>
+                  <option value='제일'>제일</option>
+                  <option value='기업'>기업</option>
+                  <option value='하나'>하나</option>
+                  <option value='우리'>우리</option>
+                  <option value='케이'>케이</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                계좌번호
+                <input name='account' placeholder='계좌번호를 입력해주세요' />
+              </label>
+            </div>
+            <div>
+              <div style='display: inline-block'>
+                <button class='btn btn-primary' name='pointrequest_btn' type='submit'>전환 요청</button>
+              </div>
+            </div>
+          </div>
+        </th:block>
+
+      </div>
+      <th:block>
+        <!--  TODO : -->
+        <!--  <div>-->
+        <!--    <h2>참여한 설문 목록</h2>-->
+        <!--    <th:block th:include="survey/participateSurveyList" />-->
+        <!--  </div>-->
+      </th:block>
+      <th:block>
+        <div>
+          <div>
+            <h2>포인트 전환 요청 목록</h2>
+          </div>
+          <div>
+            <table class='scroll-table point_request_table'>
+              <thead>
+              <tr>
+                <th>아이디</th>
+                <th>유저아이디</th>
+                <th>요청 포인트</th>
+                <th>요청일</th>
+                <th>은행</th>
+                <th>계좌번호</th>
+                <th>상태</th>
+              </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </th:block>
+      <th:block>
+        <div>
+          <div>
+            <h2>참여 설문 목록</h2>
+          </div>
+          <div>
+            <table class='scroll-table participate_survey_table'>
+              <thead>
+              <tr>
+                <th>아이디</th>
+                <th>설문 제목</th>
+                <th>참여일</th>
+                <th>참여 포인트</th>
+                <th>완료 여부</th>
+              </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </th:block>
+      <div class='rtop_btn'>
+        <button class='btn btn-warn' id='deluser' type='button' th:onclick="alert('준비 중 입니다.')">회원 탈퇴</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const makePointRequestList = requests => {
+      const table = $('.point_request_table>tbody');
+      table.empty();
+      for (request of requests) {
+        console.log(request);
+        const tmp = $(`<tr class="table-row"></tr>`);
+        tmp.append(`<td>${request.id}</td>`);
+        tmp.append(`<td>${request.uid}</td>`);
+        tmp.append(`<td>${request.point}</td>`);
+        tmp.append(`<td>${request.requestedAt}</td>`);
+        tmp.append(`<td>${request.bank}</td>`);
+        tmp.append(`<td>${request.account}</td>`);
+        tmp.append(`<td>${request.progress}</td>`);
+        table.append(tmp);
+      }
+    };
+    const makeParticipateList = surveys => {
+      const table = $('.participate_survey_table>tbody');
+      table.empty();
+      for (survey of surveys) {
+        const tmp = $(`<tr class="table-row"></tr>`);
+        tmp.append(`<td>${survey.userId}</td>`);
+        tmp.append(`<td>${survey.title}</td>`);
+        tmp.append(`<td>${survey.participatedAt}</td>`);
+        tmp.append(`<td>${survey.point}</td>`);
+        tmp.append(`<td>${survey.finished}</td>`);
+        table.append(tmp);
+      }
+    };
+
+    const getAllParticipateSurveys = () => {
+      axios.get('/api/participate')
         .then(res => {
-          console.log(res)
-          alert("회원 정보가 업데이트 되었습니다.")
-          // 어디로 이동하게 할까??
-          location.replace("/")
+          if (res.data.success) {
+            // mkae participate survey list
+            makeParticipateList(res.data.response);
+          }
+        })
+        .catch(console.log);
+    };
+
+    const getAllPointRequest = () => {
+      axios.get('/api/points')
+        .then(res => {
+          if (res.data.success) {
+            // make req list
+            makePointRequestList(res.data.response);
+          }
+        })
+        .catch(err => console.log(err));
+    };
+    const userInfoUpdate = (password) => {
+      const userInfo = {};
+      userInfo['email'] = $('#email').val();
+      userInfo['password'] = password;
+
+      axios.post('/update', userInfo)
+        .then(res => {
+          console.log(res);
+          alert('회원 정보가 업데이트 되었습니다.');
+          location.replace('/');
         })
         .catch(err => {
-          console.log(err)
-          alert("업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요")
-        })
-  }
+          console.log(err);
+          alert('업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요');
+        });
+    };
 
 
-  const chkInput = () => {
-    const pwdValue = $("#pwd").val()
-    const pwdcfmValue = $("#pwdcfm").val()
+    const chkInput = () => {
+      const pwdValue = $('#pwd').val().trim();
+      const pwdcfmValue = $('#pwdcfm').val().trim();
 
-    if (pwdcfmValue === "" || pwdcfmValue === undefined || pwdcfmValue === null || pwdcfmValue === "undefined") {
-      return
-    }
+      if (!pwdcfmValue || !pwdValue) {
+        return;
+      }
+      if (pwdValue === pwdcfmValue) {
+        _.throttle(userInfoUpdate(pwd), 200);
+      }
+    };
 
-    if (pwdValue === "" || pwdValue === undefined || pwdValue === null || pwdValue === "undefined") {
-      return
-    }
-
-    if (pwdValue === pwdcfmValue) {
-      _.throttle(userInfoUpdate(pwd), 200)
-    }
-  }
-
-  const deleteUserRequest = (e) => {
-    const userinfo = {}
-    axios.post('/deleteuser', userinfo)
+    const deleteUserRequest = (e) => {
+      const userinfo = {};
+      axios.post('/deleteuser', userinfo)
         .then(res => {
-          alert('회원 탈퇴 성공')
-          location.replace("/")
+          alert('회원 탈퇴 성공');
+          location.replace('/');
         })
         .catch(
-            err => {
-              console.log(err)
-              alert('회원 탈퇴 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.')
-            }
+          err => {
+            console.log(err);
+            alert('회원 탈퇴 중 에러가 발생하였습니다.\n관리자에게 문의해주세요.');
+          }
         );
-  }
+    };
 
-  $(function () {
-    $('#deluser').on('click', deleteUserRequest);
-    $('#modi').on('click', chkInput);
-  })
+    const requestPointToCash = e => {
+      e.preventDefault();
+      e.returnValue = false;
+      const point = $('select[name=reqpoint]').val();
+      const account = $('input[name=account]').val();
+      const bank = $('select[name=bank]').val();
+      console.log(point, account, bank);
+      axios.post('/api/pointrequest', {
+          'point': point,
+          'account': account,
+          'bank': bank
+        })
+        .then(res => {
+          if (res.data.response) {
+            alert('요청이 성공적으로 완료되었습니다.');
+            location.replace('/mypage');
+          } else {
+            alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
+          }
+        })
+        .catch(err => console.log(err));
+    };
 
-</script>
-</body>
-</html>
+    const init = () => {
+      const point = $('input[name=point]').val();
+      if (point >= 10000) {
+        let selbox = $('select[name=reqpoint]');
+        for (let i = 1; i <= parseInt(point / 10000); i++) {
+          selbox.append($('<option></option>').attr('value', i * 10000).text(i * 10000));
+        }
+      }
+    };
+
+    const checkRequiredInput = () => {
+      const account = $('input[name=account]').val();
+      const reqPoint = $('input[name=point]').val();
+      if (!account) {
+        account.focus();
+        alert('계좌번호를 입력해 주세요');
+      } else {
+        requestPointToCash();
+      }
+    };
+
+    $(function() {
+      init();
+      getAllPointRequest();
+      $('#deluser').on('click', deleteUserRequest);
+      $('#modi').on('click', chkInput);
+      $('input[name=pointrequest_btn]').on('click', checkRequiredInput);
+    });
+
+  </script>
+</th:block>
