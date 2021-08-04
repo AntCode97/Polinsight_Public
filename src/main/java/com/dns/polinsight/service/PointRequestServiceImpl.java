@@ -66,5 +66,10 @@ public class PointRequestServiceImpl implements PointRequestService {
     return pointRequestRepository.findPointRequestsByRegex(pageable, regex);
   }
 
+  @Override
+  public void deletePointRequestById(long id) {
+    pointRequestRepository.deleteById(id);
+  }
+
 
 }

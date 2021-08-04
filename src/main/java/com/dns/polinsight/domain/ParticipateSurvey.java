@@ -21,7 +21,7 @@ public class ParticipateSurvey implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long seq;
+  private Long id;
 
   private Long userId;
 

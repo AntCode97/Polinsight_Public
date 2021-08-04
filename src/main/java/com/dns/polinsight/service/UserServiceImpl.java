@@ -87,4 +87,9 @@ public class UserServiceImpl implements UserService {
     return repository.existsUserByEmail(phone);
   }
 
+  @Override
+  public void subUserPoint(long uid, long point) {
+    repository.subtractUserPointByUid(uid, point);
+  }
+
 }

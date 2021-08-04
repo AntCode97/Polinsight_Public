@@ -26,4 +26,6 @@ public interface PointRequestService {
 
   Page<PointRequest> getAllPointRequestsByRegex(Pageable pageable, String regex);
 
+  void deletePointRequestById(long id);
+
 }

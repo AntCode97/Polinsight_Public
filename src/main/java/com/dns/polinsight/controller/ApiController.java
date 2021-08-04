@@ -23,10 +23,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -200,8 +202,9 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser, @RequestParam("type") String type) throws Exception {
+  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser) throws Exception {
     try {
+
       return success(participateSurveyService.findByUserId(sessionUser.getId()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -241,7 +244,7 @@ public class ApiController {
                                                                  @RequestParam PointRequestProgressType progressType) throws Exception {
     try {
       PointRequest request = pointRequestService.findPointRequestById(requestId).orElseThrow(Exception::new);
-      request.setProgressType(progressType);
+      request.setProgress(progressType);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -249,15 +252,26 @@ public class ApiController {
 
   }
 
+  @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
                                                                  @LoginUser SessionUser sessionUser) throws Exception {
     if (sessionUser == null)
       throw new UnAuthorizedException("Unauthorized error");
-    System.out.println(pointRequestDto.toString());
+
     try {
-      // TODO: 2021-08-03 저장 시 에러
-      pointRequestService.saveOrUpdate(new PointRequest().of(pointRequestDto));
+      PointRequest preq = PointRequest.builder()
+                                      .email(sessionUser.getEmail())
+                                      .requestPoint(pointRequestDto.getPoint())
+                                      .account(pointRequestDto.getAccount())
+                                      .requestedAt(LocalDateTime.now())
+                                      .progress(PointRequestProgressType.REQUESTED)
+                                      .bankName(pointRequestDto.getBank())
+                                      .uid(sessionUser.getId())
+                                      .build();
+
+      pointRequestService.saveOrUpdate(preq);
+      userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {
@@ -320,6 +334,28 @@ public class ApiController {
   public ApiUtils.ApiResult<Long> countPointRequests(@PathVariable("regex") String regex) throws Exception {
     try {
       return success(pointRequestService.countPointRequestsByRegex(regex));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PutMapping("/points/{id}")
+  public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId, @RequestBody PointRequestDto dto) throws Exception {
+    try {
+      PointRequest pointRequest = pointRequestService.findPointRequestById(pointReqId).orElseThrow();
+      pointRequest.progressUpdate(dto);
+      pointRequestService.saveOrUpdate(pointRequest);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @DeleteMapping("/points/{id}")
+  public ApiUtils.ApiResult<Boolean> deleteUserRequestByAdmin(@PathVariable("id") long pointReqId) throws Exception {
+    try {
+      pointRequestService.deletePointRequestById(pointReqId);
+      return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

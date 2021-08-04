@@ -35,4 +35,6 @@ public interface UserService extends UserDetailsService {
 
   Boolean isExistPhone(String phone);
 
+  void subUserPoint(long uid, long point);
+
 }

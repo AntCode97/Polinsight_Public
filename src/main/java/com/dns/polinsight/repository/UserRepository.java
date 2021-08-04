@@ -20,12 +20,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsUserByPhone(String phone);
 
-  @Query(nativeQuery = true, value = "SELECT * FROM user WHERE email LIKE %?1% OR ROLE LIKE %?1% OR phone LIKE %?1% OR NAME LIKE %?1%")
+  @Query(nativeQuery = true, value = "SELECT * FROM user WHERE email LIKE %?1% OR role LIKE %?1% OR phone LIKE %?1% OR name LIKE %?1%")
   List<User> findUsersByRegex(String regex, Pageable pageable);
 
-  @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM user WHERE email LIKE %?1% OR ROLE LIKE %?1% OR phone LIKE %?1% OR NAME LIKE %?1%")
+  @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM user WHERE email LIKE %?1% OR role LIKE %?1% OR phone LIKE %?1% OR name LIKE %?1%")
   long countUsersByRegex(String regex);
 
   void deleteUserByEmail(String email);
+
+  @Query(nativeQuery = true, value = "UPDATE user SET point = point - ?2 WHERE id = ?1")
+  void subtractUserPointByUid(long uid, long point);
 
 }
