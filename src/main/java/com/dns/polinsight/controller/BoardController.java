@@ -193,7 +193,7 @@ public class BoardController {
       model.addAttribute("boardSearch", boardSearch);
     }
     model.addAttribute("boards", boards);
-    System.out.println(boardSearch.toString());
+    //System.out.println(boardSearch.toString());
 
 
     return "boards/boardList";
