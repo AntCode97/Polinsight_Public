@@ -169,31 +169,33 @@
     };
 
     const adminGetAllSurveys = e => {
-
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
       axios.get('/api/surveys' + regex, {
           params: { size: 10, offset: offset }
         })
         .then(res => {
+          console.log(res);
           if (res.data.success) {
             getTotalCount(regex);
             makePaginationsInAdminSurvey(offset);
             adminMakeSurveySearchResults(res.data.response);
+          } else {
+            console.log('data fetching error');
           }
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .catch(console.log);
     };
 
     const getTotalCount = regex => {
       if (!regex) {
         axios.get('/api/survey/total')
-          .then(res => $('.util-search>strong').text(res.data.response));
+          .then(res => $('.util-search>strong').text(res.data.response))
+          .catch(console.log);
       } else {
         axios.get('/api/survey/find/' + regex + '/total')
-          .then(res => $('.util-search>strong').text(res.data.response));
+          .then(res => $('.util-search>strong').text(res.data.response))
+          .catch(console.log);
       }
     };
 

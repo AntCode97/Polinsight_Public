@@ -1,197 +1,208 @@
-<th:block th:include="admin/admin_sidebar" />
+<th:block th:include='admin/admin_sidebar' />
+<th:block th:include='module/common' />
 <th:block>
-  <th:block>
-    <style>
-      .board-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #cfcfd1;
-      }
+  <style>
+    .main_item {
+      color: #000;
+      font-size: 3rem;
+      font-weight: bold;
+      padding: 10px 0 20px;
+      border-bottom: 1px dashed #dadada;
+    }
 
-      .board-row > * {
-        padding: 9px 10px;
-        display: inline-block;
-        font-size: 1rem;
-        line-height: 30px;
-        color: #666;
-        text-align: center;
-      }
+    .admin_main_contents_item > a {
+      background-color: #FFF;
+      border: 1px solid #DDD;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border-radius: 5px;
+      padding: 10px 20px;
+      display: inline-block;
+      cursor: pointer;
+      box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+      transition: 0.2s linear;
+    }
 
-      .board-row > *:nth-child(1) {
-        width: 70px;
-      }
+    .admin_main_contents_item > a:hover {
+      box-shadow: none;
+    }
 
-      .board-row > *:nth-child(2) {
-        width: 500px;
-      }
+    .main_contents_wrap {
+      margin: 40px 0;
+    }
 
-      .board-row > *:nth-child(3) {
-        width: 100px;
-      }
+    .board-search {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 41px;
+    }
 
-      .board-row > *:nth-child(4) {
-        width: 130px;
-      }
+    .board-search .util-search {
+      color: #333;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
 
-      .board-row > *:nth-child(5) {
-        width: 80px;
-      }
+    .board-search .form-search {
+      background-color: #EEE;
+      padding: 20px;
+      box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+    }
 
-      .board-row > *:nth-child(6) {
-        width: 95px;
-      }
+    .board-search .tbl-search {
+      text-align: center;
+    }
 
-      .board-row > *:nth-child(7) {
-        width: 120px;
-      }
+    .board-search .box-search {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      background-color: white;
+      height: 55px;
+      line-height: 55px;
+      border: 1px solid #ccd0d7;
+      min-width: 600px;
+    }
 
-      .btn_udel {
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-      }
+    .board-search .box-search input {
+      position: relative;
+      top: -1px;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background-color: transparent;
+      font-size: 1.6rem;
+      text-indent: 10px;
+      padding-right: 55px;
+    }
 
-      .board-row > span > button:first-child {
-        margin-right: 3px;
-      }
+    .board-search .box-search input[type="submit"] {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50px;
+      height: 55px;
+      background-image: url('/img/etc/ico-search-btn.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      text-indent: -9999px;
+      cursor: pointer;
+    }
 
-      .btn_udel {
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-      }
+    .board-th {
+      border-top: 2px solid #7c7c7c;
+      background-color: #f2f2f2 !important;
+    }
 
-      .page-button {
-        text-align: center;
-        margin: 20px 0;
-      }
+    .board-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cfcfd1;
+      background-color: #FFF;
+    }
 
-      .page-button > a {
-        text-align: center;
-        display: inline-block;
-        font-size: 0.9rem;
-        width: 30px;
-        line-height: 34px;
-        border: 1px solid #e2e2e2;
-        cursor: pointer;
-      }
+    .board-row > *:nth-child(1) {
+      width: 70px;
+    }
 
-    </style>
-  </th:block>
-  <div class="admin_main_contents">
-    <div class="admin_main_contents_category">
-      <div class="admin_main_contents_item">
-        <p class="main_item">공지사항</p>
-      </div>
-    </div>
+    .board-row > *:nth-child(2) {
+      width: 500px;
+    }
 
-    <div class="main_contents_wrap">
-      <div class="board-search">
-        <div class="util-search">총 <strong>?</strong>개의 게시물이 있습니다.</div>
-        <div class="form-search">
-          <div class="tbl-search">
-            <div class="box-search">
-              <input type="text" />
-              <input type="submit" />
-            </div>
-          </div>
+    .board-row > *:nth-child(3) {
+      width: 100px;
+    }
+
+    .board-row > *:nth-child(4) {
+      width: 130px;
+    }
+
+    .board-row > *:nth-child(5) {
+      width: 80px;
+    }
+
+    .board-row > *:nth-child(6) {
+      width: 95px;
+    }
+
+    .board-row > *:nth-child(7) {
+      width: 120px;
+    }
+
+    .board-row > span > button:first-child {
+      margin-right: 3px;
+    }
+
+    .board-title {
+      text-align: left !important;
+    }
+
+    .board-bottom {
+      text-align: right;
+      padding: 10px;
+    }
+
+    .page-button {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .page-button > a {
+      text-align: center;
+      display: inline-block;
+      font-size: 1.5rem;
+      width: 30px;
+      line-height: 34px;
+      border: 1px solid #e2e2e2;
+      cursor: pointer;
+    }
+
+    .active {
+      color: white;
+      background-color: #444;
+      border: 1px solid #006;
+    }
+
+    .file_icon_no {
+      color: #ddd;
+    }
+
+    .file_icon_yes {
+      color: black;
+    }
+  </style>
+
+  <div>
+    <div class='admin_main_contents'>
+      <div class='admin_main_contents_category'>
+        <div class='admin_main_contents_item'>
+          <p class='main_item'>공지사항</p>
         </div>
       </div>
-
-      <div class="scroll-table">
-        <div class="board-row board-th">
-          <span>번호</span>
-          <a href="#">제목</a>
-          <span>작성자</span>
-          <span>작성일</span>
-          <span>조회수</span>
-          <span>첨부파일</span>
-          <span>수정/삭제</span>
-        </div>
-        <div class="board-row">
-          <span>1</span>
-          <a href="#" class="board-title"><strong>테스트</strong></a>
-          <span>관리자</span>
-          <span>2021-07-10</span>
-          <span>52</span>
-          <span><i class="fas fa-paperclip file_icon_no"></i></span>
-          <span>
-            <button class="btn_udel btn-support">
-              <a href="admin_board_modify.html">수정</a>
-            </button>
-            <button class="btn_udel btn-warn">
-              <a href="board_delete_popup.html" onclick="window.open(this.href, '_blank', 'width=300px, height=150px, toolbars=no, scollbars=no'); return false;">삭제</a>
-            </button>
-          </span>
-        </div>
-        <div class="board-bottom">
-          <button name="createnewboard" class="btn_udel btn-green">새 글쓰기</button>
-        </div>
+      <!-- 게시글 전체 조회 출력 -->
+      <div th:replace='fragments/boardList :: #boardTable'>
       </div>
 
-      <div class="page-button"
-           th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
-        <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
-    </a> -->
-        <a href="#"><i class="fas fa-angle-double-left"></i></a>
-        <a href="#" class="main-page">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#"><i class="fas fa-angle-double-right"></i></a>
-        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
-        <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
-    </a>
-    <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
-    <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
-        <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
-    </a> -->
-        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
-        <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
-    </a> -->
-      </div>
+
     </div>
   </div>
   <script>
-    const adminMakeBoardSearchResults = boards => {
-      const table = $('div.scroll-table');
-      table.remove('div.board-row')
-      let idx = 1;
-      for (board of boards) {
-        let template = `<span>${idx}</span>` // 번호
-        template += `<span>${board.title}</span>`//제목
-        template += `<span>${board.user.name}</span>`//작성자
-        template += `<span>${board.registeredAt}</span>`//작성일
-        template += `<span>${board}</span>`//조회수
-        template += `<span>${board}</span>`//첨부파일
-        // TODO : 버튼 이벤트 수정
-        template += `<span>
-            <button class="btn_udel btn-support">
-              <a href="admin_board_modify.html">수정</a>
-            </button>
-            <button class="btn_udel btn-warn">
-              <a href="board_delete_popup.html" onclick="window.open(this.href, '_blank', 'width=300px, height=150px, toolbars=no, scollbars=no'); return false;">삭제</a>
-            </button>
-            </span>`// 수정 /삭제
-        template += `<span>${board}</span>`
-        table.append(template);
-      }
-    }
+    const asyncFindBoard = () => {
+      const keyword = $('#searchinput').val();
+      $.ajax({
+        url: '/api/admin/boards/search?keyword=' + keyword,
+        type: 'POST',
+        data: keyword
+      }).done(function(fragment) {
+        // console.log(fragment)
+        $('#boardTable').replaceWith(fragment);
+      });
+    };
 
-    const adminGetBoardList = () => {
-      axios.get("/api/boards")
-          .then(res => {
+    const deleteNotice = (e) => {
+      e.preventDefault();
 
-          })
-          .catch(err => console.log(err))
-    }
-
-    $(function () {
-      adminGetBoardList()
-      $('button[name=createnewboard]').on('click', () => location.replace("#")) // TODO : 새글 쓰기 경로로 수정
-    });
+    };
   </script>
 </th:block>

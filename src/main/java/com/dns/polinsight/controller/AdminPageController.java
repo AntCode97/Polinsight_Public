@@ -38,42 +38,42 @@ public class AdminPageController {
   }
 
 
-  /*
-   * 게시글 관리 페이지
-   * */
-  @GetMapping("/board/manage")
-  public ModelAndView getBoardManage() {
-    return new ModelAndView("admin/admin_board_list");
-  }
+//  /*
+//   * 게시글 관리 페이지
+//   * */
+//  @GetMapping("/board/manage")
+//  public ModelAndView getBoardManage() {
+//    return new ModelAndView("admin/admin_board_list");
+//  }
+//
+//  /*
+//   * 공지사항 관리 페이지
+//   * */
+//  @GetMapping("/noti/manage")
+//  public ModelAndView getNotiManage() {
+//    return new ModelAndView("admin/admin_board_register");
+//  }
+//
+//  @GetMapping("/user/manage")
+//  public ModelAndView getUserManage() {
+//    return new ModelAndView("admin/admin_board_view");
+//  }
+//
+  //
+  //  @GetMapping("/boards/notice")
+  //  public ModelAndView adminBoardnotice() {
+  //    return new ModelAndView("admin/");
+  //  }
 
-  /*
-   * 공지사항 관리 페이지
-   * */
-  @GetMapping("/noti/manage")
-  public ModelAndView getNotiManage() {
-    return new ModelAndView("admin/admin_board_register");
-  }
+    @GetMapping("/boards/download")
+    public ModelAndView adminBoarddownload() {
+      return new ModelAndView("admin/admin_board_download");
+    }
 
-  @GetMapping("/user/manage")
-  public ModelAndView getUserManage() {
-    return new ModelAndView("admin/admin_board_view");
-  }
-
-
-  @GetMapping("/boards/notice")
-  public ModelAndView adminBoardnotice() {
-    return new ModelAndView("admin/");
-  }
-
-  @GetMapping("/boards/download")
-  public ModelAndView adminBoarddownload() {
-    return new ModelAndView("admin/");
-  }
-
-  @GetMapping("/boards/QnA")
-  public ModelAndView adminBoardQnA() {
-    return new ModelAndView("admin/");
-  }
+    @GetMapping("/boards/qna")
+    public ModelAndView adminBoardQnA() {
+      return new ModelAndView("admin/admin_board_qna");
+    }
 
   @GetMapping("/survey/{id}")
   public ModelAndView adminGetSurveyDetailInfo(@PathVariable("id") long surveyId) {
@@ -94,10 +94,10 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_point_req_list");
   }
 
-//  @GetMapping("/pointreqinfo")
-//  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
-//    mav.setViewName("admin/admin_survey_info");
-//    return mav;
-//  }
+  //  @GetMapping("/pointreqinfo")
+  //  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
+  //    mav.setViewName("admin/admin_survey_info");
+  //    return mav;
+  //  }
 
 }

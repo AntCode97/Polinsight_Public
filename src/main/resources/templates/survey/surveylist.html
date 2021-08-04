@@ -116,7 +116,7 @@
 
     $(function () {
       getSurveyList();
-      $('input[name=searchInput]').on('change', asyncSurveySearch)
+      $('input[name=searchInput]').on('keyup', asyncSurveySearch)
     })
   </script>
 </th:block>

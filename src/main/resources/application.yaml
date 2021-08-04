@@ -237,6 +237,7 @@ spring :
   banner :
     location : banner-dev.txt
 
+
   session :
     store-type : none
 

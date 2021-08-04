@@ -123,15 +123,17 @@ public class ApiController {
   public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable,
                                                              @RequestParam(value = "type", required = false) String type) throws Exception {
     try {
-      if (type.equals("index")) {
+      if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
-        list.sort((o1, o2) -> {
+        list.stream().filter(obj -> obj.getEndAt() != null).collect(Collectors.toList()).sort((o1, o2) -> {
               if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
                 return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
               } else
-                return o1.getEndAt().compareTo(o2.getEndAt());
+                return -o1.getEndAt().compareTo(o2.getEndAt());
             }
         );
+        System.out.println("리스트 테스트:" +
+            list.toString());
         return success(list);
       }
       return success(surveyService.findAll(pageable).getContent());

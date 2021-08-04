@@ -77,7 +77,7 @@ public class BoardController {
     boardService.renewBoard();
 
 
-    return "admin/boards";
+    return "admin/admin_board_list";
   }
 
 

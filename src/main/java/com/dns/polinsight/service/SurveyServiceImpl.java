@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -119,8 +118,9 @@ public class SurveyServiceImpl implements SurveyService {
     SurveyMonkeyDTO tmpDto = res.getBody();
     LocalDateTime createAt = LocalDateTime.parse(tmpDto.getDate_created());
     basicSurvey.getStatus().setVariables(tmpDto.getCustom_variables().keySet());
+    Calendar calendar = Calendar.getInstance();
     basicSurvey.setCreatedAt(createAt);
-
+    basicSurvey.setEndAt(createAt.plusMonths(6));
     return basicSurvey;
   }
 

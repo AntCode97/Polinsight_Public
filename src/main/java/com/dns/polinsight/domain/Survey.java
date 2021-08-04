@@ -35,6 +35,7 @@ public class Survey implements Serializable {
   @Setter
   private LocalDateTime createdAt;
 
+  @Setter
   private LocalDateTime endAt;
 
   private Long point;
