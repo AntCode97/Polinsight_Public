@@ -2,10 +2,7 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Board;
-import com.dns.polinsight.domain.ParticipateSurvey;
-import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
@@ -51,6 +48,8 @@ public class ApiController {
   private final PointRequestService pointRequestService;
 
   private final BoardService boardService;
+
+  private final PointCalculateService pointCaculateService;
 
   @PutMapping("{boardId}/count")
   public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
@@ -125,15 +124,14 @@ public class ApiController {
     try {
       if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
-        list.stream().filter(obj -> obj.getEndAt() != null).collect(Collectors.toList()).sort((o1, o2) -> {
+
+        list.stream().filter(obj -> LocalDateTime.now().isBefore(obj.getEndAt())).collect(Collectors.toList()).sort((o1, o2) -> {
               if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
                 return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
               } else
-                return -o1.getEndAt().compareTo(o2.getEndAt());
+                return o1.getEndAt().compareTo(o2.getEndAt());
             }
         );
-        System.out.println("리스트 테스트:" +
-            list.toString());
         return success(list);
       }
       return success(surveyService.findAll(pageable).getContent());
@@ -274,6 +272,12 @@ public class ApiController {
 
       pointRequestService.saveOrUpdate(preq);
       userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
+      pointCaculateService.saveOrUpdate(PointCalculate.builder()
+                                                      .amount(pointRequestDto.getPoint())
+                                                      .total(sessionUser.getPoint() - pointRequestDto.getPoint())
+                                                      .sign(false)
+                                                      .uid(sessionUser.getId())
+                                                      .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {

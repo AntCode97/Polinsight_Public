@@ -31,4 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query(nativeQuery = true, value = "UPDATE user SET point = point - ?2 WHERE id = ?1")
   void subtractUserPointByUid(long uid, long point);
 
+  @Query(nativeQuery = true, value = "UPDATE user SET point = point + ?2 WHERE id = ?1")
+  User userAddPointById(long id, long point);
+
 }

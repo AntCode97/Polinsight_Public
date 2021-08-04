@@ -47,13 +47,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User save(User user) {
+  public User saveOrUpdate(User user) {
     return repository.save(user);
-  }
-
-  @Override
-  public User update(User user) {
-    return repository.saveAndFlush(user);
   }
 
 
@@ -90,6 +85,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public void subUserPoint(long uid, long point) {
     repository.subtractUserPointByUid(uid, point);
+  }
+
+  @Override
+  public User addPointByUserId(long uid, long point) {
+    return repository.userAddPointById(uid, point);
   }
 
 }

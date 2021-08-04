@@ -160,7 +160,7 @@ public class BoardController {
   @PostMapping("boards/new")
   public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
     boardDTO.setFiles(Arrays.asList(file));
-    log.info("Result: " + result + ", data: " + boardDTO.toString());
+    log.info("Result: " + result + ", data: " + boardDTO);
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
@@ -193,7 +193,7 @@ public class BoardController {
       model.addAttribute("boardSearch", boardSearch);
     }
     model.addAttribute("boards", boards);
-    System.out.println(boardSearch.toString());
+    System.out.println(boardSearch);
 
 
     return "boards/boardList";
@@ -216,7 +216,7 @@ public class BoardController {
     if (boardSearch.getBoardType() != null) {
       model.addAttribute("boardSearch", boardSearch);
     }
-    System.out.println(boardSearch.toString());
+    System.out.println(boardSearch);
 
     return "boards/boardList";
   }

@@ -55,7 +55,7 @@ public class UserController {
   public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
     System.out.println(signupDTO);
     try {
-      User user = userService.save(signupDTO.toUser(passwordEncoder));
+      User user = userService.saveOrUpdate(signupDTO.toUser(passwordEncoder));
       if (signupDTO.isIspanel()) {
         session.setAttribute("basic_user", new SessionUser(user));
       } else {
@@ -82,7 +82,7 @@ public class UserController {
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
     user.getAdditional().update(additional);
-    userService.save(user);
+    userService.saveOrUpdate(user);
     return success(Boolean.TRUE);
   }
 
@@ -117,7 +117,7 @@ public class UserController {
       String password = passwordEncoder.encode(user.getPassword());
       user = userService.findUserByEmail(user);
       user.setPassword(password);
-      userService.update(user);
+      userService.saveOrUpdate(user);
       map.put("data", "user info has updated");
       session.invalidate();
       session.setAttribute("user", new SessionUser(user));
@@ -178,7 +178,7 @@ public class UserController {
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
     user.setPassword(passwordEncoder.encode(newPassword));
-    userService.update(user); // DB 업데이트할 유저 객체 넣기
+    userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
     return new ModelAndView("redirect:/index");
   }
 
@@ -248,7 +248,7 @@ public class UserController {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
       user.addParticipateSurvey(survey.getId());
-      userService.update(user);
+      userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
