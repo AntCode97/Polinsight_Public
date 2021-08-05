@@ -140,7 +140,7 @@ public class BoardController {
     model.addAttribute("boards", boards);
 
 
-    return "admin/boards";
+    return "admin/admin_board_list";
   }
 
   @GetMapping("boards/new")
@@ -160,7 +160,7 @@ public class BoardController {
   @PostMapping("boards/new")
   public String create(BoardDTO boardDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
     boardDTO.setFiles(Arrays.asList(file));
-    log.info("Result: " + result + ", data: " + boardDTO);
+    log.info("Result: " + result + ", data: " + boardDTO.toString());
     if (result.hasErrors()) {
       return "boards/createBoardForm";
     }
@@ -193,14 +193,14 @@ public class BoardController {
       model.addAttribute("boardSearch", boardSearch);
     }
     model.addAttribute("boards", boards);
-    System.out.println(boardSearch);
+    //System.out.println(boardSearch.toString());
 
 
     return "boards/boardList";
   }
 
 
-  @GetMapping("/boards/search")
+  @GetMapping("boards/search")
   public String search(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue());
@@ -216,14 +216,14 @@ public class BoardController {
     if (boardSearch.getBoardType() != null) {
       model.addAttribute("boardSearch", boardSearch);
     }
-    System.out.println(boardSearch);
+    System.out.println(boardSearch.toString());
 
     return "boards/boardList";
   }
 
 
-  @GetMapping("/boards/{boardId}")
-  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
+  @GetMapping("boards/{boardId}")
+  public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(BoardController.class,
@@ -236,7 +236,25 @@ public class BoardController {
     //      model.addAttribute("user", user);
     //    }
     Board findBoard = boardService.findOne(boardId);
-    boardService.upViewCnt(findBoard);
+    try {
+      System.out.println(session);
+      long update_time = 0;
+      if (session.getAttribute("update_time" + findBoard.getId()) != null) {
+        update_time = (long) session.getAttribute("update_time" + findBoard.getId());
+      }
+      long current_time = System.currentTimeMillis();
+      if (current_time - update_time > 24 * 60 * 601000) {
+        System.out.println("조회수 증가!!");
+        boardService.upViewCnt(findBoard);
+        session.setAttribute("update_time" + findBoard.getId(), current_time);
+      } else
+        System.out.println("하루가 지나야 조회수가 오름");
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+
     model.addAttribute("board", findBoard);
     List<Board> allBoards = boardService.findAll();
     for (int i = 0; i < allBoards.size(); i++) {
@@ -292,7 +310,7 @@ public class BoardController {
     return "admin/admin_board_view";
   }
 
-  @GetMapping("/boards/{boardId}/edit")
+  @GetMapping("boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
 
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
@@ -319,7 +337,7 @@ public class BoardController {
 
   }
 
-  @PostMapping("/boards/{boardId}/edit")
+  @PostMapping("boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
