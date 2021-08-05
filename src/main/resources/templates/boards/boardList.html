@@ -240,7 +240,7 @@
     <span th:if="${boardSearch.getBoardType()} !=null">
       <a th:href="@{/boards/search(page=1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}" aria-label="First">
         <span aria-hidden="true">
-          <img class="button" th:src="@{img/board/first_page.png}" alt="처음 페이지로 이동"></span>
+          <img class="button" th:src="@{/img/board/first_page.png}" alt="처음 페이지로 이동"></span>
                 </a>
                  <a th:class="${boards.first} ? 'disabled'"
                     th:href="${boards.first} ? '#' : @{/boards/search(page=${boards.number}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"
@@ -263,7 +263,7 @@
 
     <span th:if="${boardSearch.getBoardType()} ==null">
       <a th:href="@{/boards(page=1)}" aria-label="First">
-        <span aria-hidden="true"><img class="button" th:src="@{/img/board/first_page.png}" alt="처음 페이지로 이동"></span>
+        <img class="button" th:src="@{/img/board/first_page.png}" alt="처음 페이지로 이동">
       </a>
       <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
         <img class="button" th:src="@{/img/board/list_prev.png}" alt="이전 페이지로 이동">
@@ -281,51 +281,51 @@
 </div>
 </body>
 <script>
-  const makeTemplate = (board) => {
-    console.log(board)
-    let template = '';
-    template += '<tr class="first">'
-    template += '<td width="50">' + board.id + '</td>'
-    template += '<td width="950">'
-    template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
-    if (board.newBoard === true)
-      template += '<span>New!</span>'
-    template += '</td>'
-    template += '<td width="80">' + board.user.name + '</td>'
-    template += '<td width="120">' + board.registeredAt + '</td>'
-    template += '</tr>'
-    return template
-  }
-
-  const asyncFindBoard = (e) => {
-    e.preventDefault();
-    e.returnValue = false;
-    const searchType = $("#type").val()
-    const classify = $('#classify').val()
-    const keyword = $("#searchinput").val()
-
-    axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
-        .then(res => {
-          const boards = res.data.data
-          const body = $('tbody')
-          body.empty()
-          for (idx in boards) {
-            body.append(makeTemplate(boards[idx]))
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
-  }
-
-
+  // const makeTemplate = (board) => {
+  //   console.log(board)
+  //   let template = '';
+  //   template += '<tr class="first">'
+  //   template += '<td width="50">' + board.id + '</td>'
+  //   template += '<td width="950">'
+  //   template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
+  //   if (board.newBoard === true)
+  //     template += '<span>New!</span>'
+  //   template += '</td>'
+  //   template += '<td width="80">' + board.user.name + '</td>'
+  //   template += '<td width="120">' + board.registeredAt + '</td>'
+  //   template += '</tr>'
+  //   return template
+  // }
+  //
+  // const asyncFindBoard = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = false;
+  //   const searchType = $("#type").val()
+  //   const classify = $('#classify').val()
+  //   const keyword = $("#searchinput").val()
+  //
+  //   axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+  //       .then(res => {
+  //         const boards = res.data.data
+  //         const body = $('tbody')
+  //         body.empty()
+  //         for (idx in boards) {
+  //           body.append(makeTemplate(boards[idx]))
+  //         }
+  //       })
+  //       .catch(err => {
+  //         console.log(err)
+  //       })
+  // }
+  //
+  //
   $(function () {
     $('.header_wrap').css('background-color', '#182838')
-    $("#searchinput").on('change keyup', asyncFindBoard)
+  //  $("#searchinput").on('change keyup', asyncFindBoard)
   })
-
-  function movePage(uri, queryString) {
-    location.href = uri + queryString;
-  }
+  //
+  // function movePage(uri, queryString) {
+  //   location.href = uri + queryString;
+  // }
 </script>
 </html>

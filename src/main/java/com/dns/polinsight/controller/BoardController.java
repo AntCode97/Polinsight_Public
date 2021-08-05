@@ -140,7 +140,7 @@ public class BoardController {
     model.addAttribute("boards", boards);
 
 
-    return "admin/boards";
+    return "admin/admin_board_list";
   }
 
   @GetMapping("boards/new")
@@ -200,7 +200,7 @@ public class BoardController {
   }
 
 
-  @GetMapping("/boards/search")
+  @GetMapping("boards/search")
   public String search(@ModelAttribute("boardSearch") BoardSearch boardSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(boardSearch.getSearchType() + boardSearch.getSearchValue());
@@ -222,7 +222,7 @@ public class BoardController {
   }
 
 
-  @GetMapping("/boards/{boardId}")
+  @GetMapping("boards/{boardId}")
   public String content(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
@@ -310,7 +310,7 @@ public class BoardController {
     return "admin/admin_board_view";
   }
 
-  @GetMapping("/boards/{boardId}/edit")
+  @GetMapping("boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, Model model, @LoginUser SessionUser user) {
 
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
@@ -337,7 +337,7 @@ public class BoardController {
 
   }
 
-  @PostMapping("/boards/{boardId}/edit")
+  @PostMapping("boards/{boardId}/edit")
   public String updateBoard(@PathVariable("boardId") Long boardId, @ModelAttribute("boardDTO") BoardDTO boardDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
