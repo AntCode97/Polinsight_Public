@@ -19,7 +19,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -95,7 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .clearAuthentication(true)
               .invalidateHttpSession(true)
         .and()
-          .addFilterBefore(customAuthProccessingFilter(), BasicAuthenticationFilter.class)
           .httpBasic().disable()
           .oauth2Login()
             .loginPage("/login")
@@ -108,18 +106,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public CustomAuthProccessingFilter customAuthProccessingFilter() {
-    CustomAuthProccessingFilter filter = new CustomAuthProccessingFilter("/dologin");
-    filter.setAuthenticationManager(authManager());
-    return filter;
-  }
-
-  @Bean
-  public CustomAuthManager authManager() {
-    return new CustomAuthManager(userService);
   }
 
 }

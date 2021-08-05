@@ -1,13 +1,13 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.domain.ParticipateSurvey;
-import com.dns.polinsight.domain.PointCalculate;
+import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
 import com.dns.polinsight.service.ParticipateSurveyService;
-import com.dns.polinsight.service.PointCalculateService;
+import com.dns.polinsight.service.PointHistoryService;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.security.InvalidParameterException;
 @RequestMapping("/api")
 public class ParticipateSurveyController {
 
-  private final PointCalculateService pointCalculateService;
+  private final PointHistoryService pointHistoryService;
 
   private final UserService userService;
 
@@ -85,12 +85,12 @@ public class ParticipateSurveyController {
     }
 
     try {
-      pointCalculateService.saveOrUpdate(PointCalculate.builder()
-                                                       .amount(participateSurvey.getSurveyPoint())
-                                                       .total(user.getPoint())
-                                                       .sign(true)
-                                                       .uid(user.getId())
-                                                       .build());
+      pointHistoryService.saveOrUpdate(PointHistory.builder()
+                                                     .amount(participateSurvey.getSurveyPoint())
+                                                     .total(user.getPoint())
+                                                     .sign(true)
+                                                     .uid(user.getId())
+                                                     .build());
     } catch (Exception e) {
       throw new Exception("PointHistory write Exception");
     }

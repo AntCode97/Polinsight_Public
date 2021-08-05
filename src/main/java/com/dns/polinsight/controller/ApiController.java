@@ -49,7 +49,7 @@ public class ApiController {
 
   private final BoardService boardService;
 
-  private final PointCalculateService pointCaculateService;
+  private final PointHistoryService pointCaculateService;
 
   @PutMapping("{boardId}/count")
   public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
@@ -272,12 +272,12 @@ public class ApiController {
 
       pointRequestService.saveOrUpdate(preq);
       userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
-      pointCaculateService.saveOrUpdate(PointCalculate.builder()
-                                                      .amount(pointRequestDto.getPoint())
-                                                      .total(sessionUser.getPoint() - pointRequestDto.getPoint())
-                                                      .sign(false)
-                                                      .uid(sessionUser.getId())
-                                                      .build());
+      pointCaculateService.saveOrUpdate(PointHistory.builder()
+                                                    .amount(pointRequestDto.getPoint())
+                                                    .total(sessionUser.getPoint() - pointRequestDto.getPoint())
+                                                    .sign(false)
+                                                    .uid(sessionUser.getId())
+                                                    .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {
