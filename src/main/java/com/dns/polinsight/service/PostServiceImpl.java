@@ -1,14 +1,13 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
-import com.dns.polinsight.domain.Board;
-import com.dns.polinsight.domain.dto.BoardDTO;
-import com.dns.polinsight.types.BoardType;
-import com.dns.polinsight.exception.BoardNotFoundException;
+import com.dns.polinsight.domain.Post;
+import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.types.PostType;
+import com.dns.polinsight.exception.PostNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
-import com.dns.polinsight.repository.BoardRepository;
+import com.dns.polinsight.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,56 +21,56 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BoardServiceImpl implements BoardService {
+public class PostServiceImpl implements PostService {
 
-  private final BoardRepository repository;
+  private final PostRepository repository;
 
   private final AttachRepository attachRepository;
 
   //@Cacheable
   @Override
-  public List<Board> findAll() {
+  public List<Post> findAll() {
     return repository.findAll();
   }
 
 
   @Override
-  public Board findOne(Long boardId) {
-    return repository.findById(boardId).orElseThrow(BoardNotFoundException::new);
+  public Post findOne(Long boardId) {
+    return repository.findById(boardId).orElseThrow(PostNotFoundException::new);
   }
 
   @Override
-  public Board find(Board board) {
-    return repository.findById(board.getId()).orElseThrow(BoardNotFoundException::new);
+  public Post find(Post post) {
+    return repository.findById(post.getId()).orElseThrow(PostNotFoundException::new);
   }
 
 
   @Override
-  public Board addBoard(BoardDTO boardDTO) {
-    return repository.save(Board.builder(boardDTO).build());
+  public Post addPost(PostDTO postDTO) {
+    return repository.save(Post.builder(postDTO).build());
   }
 
   @Transactional
   @Override
-  public void renewBoard() {
-    List<Board> boards = this.findAll();
-    for (Board board : boards) {
-      LocalDateTime writeTime = board.getRegisteredAt();
+  public void renewPost() {
+    List<Post> posts = this.findAll();
+    for (Post post : posts) {
+      LocalDateTime writeTime = post.getRegisteredAt();
       LocalDateTime now = LocalDateTime.now();
       Duration duration = Duration.between(writeTime, now);
-      board.setNewBoard(duration.getSeconds() < 3600 * 12);
+      post.setNewPost(duration.getSeconds() < 3600 * 12);
     }
   }
 
   @Override
-  public void delete(Board board) {
-    List<Attach> attaches = attachRepository.findByBoardId(board.getId());
+  public void delete(Post post) {
+    List<Attach> attaches = attachRepository.findByPostId(post.getId());
     attaches.forEach(attachRepository::delete);
-    repository.delete(board);
+    repository.delete(post);
   }
 
 
-  public Page<Board> getBoardList(Pageable pageable) {
+  public Page<Post> getPostList(Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
 
@@ -79,23 +78,23 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
-  public Page<Board> searchTitle(String title, BoardType boardType, Pageable pageable) {
+  public Page<Post> searchTitle(String title, PostType postType, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
-    return repository.findByTitle(title, boardType, pageable);
+    return repository.findByTitle(title, postType, pageable);
 
   }
 
   @Override
-  public Page<Board> searchContent(String searchcontent, BoardType boardType, Pageable pageable) {
+  public Page<Post> searchContent(String searchcontent, PostType postType, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
-    return repository.findBySearchcontent(searchcontent, boardType, pageable);
+    return repository.findBySearchcontent(searchcontent, postType, pageable);
 
   }
 
   @Override
-  public Page<Board> searchKeyword(String keyword, Pageable pageable) {
+  public Page<Post> searchKeyword(String keyword, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id"); // <- Sort 추가
     return repository.findBySearchKeyword(keyword, pageable);
@@ -103,9 +102,9 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
-  public void upViewCnt(Board board) {
-    //board.setViewcnt(board.getViewcnt() +1);
-    repository.upViewCnt(board);
+  public void upViewCnt(Post post) {
+    //post.setViewcnt(post.getViewcnt() +1);
+    repository.upViewCnt(post);
   }
 
 }

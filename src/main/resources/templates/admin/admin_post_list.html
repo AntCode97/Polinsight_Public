@@ -31,29 +31,29 @@
       margin: 40px 0;
     }
 
-    .board-search {
+    .post-search {
       display: inline-block;
       width: 100%;
       margin-bottom: 41px;
     }
 
-    .board-search .util-search {
+    .post-search .util-search {
       color: #333;
       font-size: 1.6rem;
       margin-bottom: 20px;
     }
 
-    .board-search .form-search {
+    .post-search .form-search {
       background-color: #EEE;
       padding: 20px;
       box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
     }
 
-    .board-search .tbl-search {
+    .post-search .tbl-search {
       text-align: center;
     }
 
-    .board-search .box-search {
+    .post-search .box-search {
       position: relative;
       display: inline-block;
       vertical-align: middle;
@@ -64,7 +64,7 @@
       min-width: 600px;
     }
 
-    .board-search .box-search input {
+    .post-search .box-search input {
       position: relative;
       top: -1px;
       width: 100%;
@@ -76,7 +76,7 @@
       padding-right: 55px;
     }
 
-    .board-search .box-search input[type="submit"] {
+    .post-search .box-search input[type="submit"] {
       position: absolute;
       right: 0;
       top: 0;
@@ -89,12 +89,12 @@
       cursor: pointer;
     }
 
-    .board-th {
+    .post-th {
       border-top: 2px solid #7c7c7c;
       background-color: #f2f2f2 !important;
     }
 
-    .board-row {
+    .post-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -102,43 +102,43 @@
       background-color: #FFF;
     }
 
-    .board-row > *:nth-child(1) {
+    .post-row > *:nth-child(1) {
       width: 70px;
     }
 
-    .board-row > *:nth-child(2) {
+    .post-row > *:nth-child(2) {
       width: 500px;
     }
 
-    .board-row > *:nth-child(3) {
+    .post-row > *:nth-child(3) {
       width: 100px;
     }
 
-    .board-row > *:nth-child(4) {
+    .post-row > *:nth-child(4) {
       width: 130px;
     }
 
-    .board-row > *:nth-child(5) {
+    .post-row > *:nth-child(5) {
       width: 80px;
     }
 
-    .board-row > *:nth-child(6) {
+    .post-row > *:nth-child(6) {
       width: 95px;
     }
 
-    .board-row > *:nth-child(7) {
+    .post-row > *:nth-child(7) {
       width: 120px;
     }
 
-    .board-row > span > button:first-child {
+    .post-row > span > button:first-child {
       margin-right: 3px;
     }
 
-    .board-title {
+    .post-title {
       text-align: left !important;
     }
 
-    .board-bottom {
+    .post-bottom {
       text-align: right;
       padding: 10px;
     }
@@ -181,7 +181,7 @@
         </div>
       </div>
       <!-- 게시글 전체 조회 출력 -->
-      <div th:replace='fragments/boardList :: #boardTable'>
+      <div th:replace="fragments/postList :: #boardTable">
       </div>
 
 
@@ -191,7 +191,7 @@
     const asyncFindBoard = () => {
       const keyword = $('#searchinput').val();
       $.ajax({
-        url: '/api/admin/boards/search?keyword=' + keyword,
+        url: '/api/admin/posts/search?keyword=' + keyword,
         type: 'POST',
         data: keyword
       }).done(function(fragment) {

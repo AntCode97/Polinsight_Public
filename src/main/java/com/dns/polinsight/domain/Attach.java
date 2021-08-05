@@ -23,7 +23,7 @@ public class Attach {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bno")
   @NotNull
-  private Board board;
+  private Post post;
 
   private Long fileSize;
 

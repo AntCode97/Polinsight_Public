@@ -2,7 +2,7 @@ package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.types.BoardType;
+import com.dns.polinsight.types.PostType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDTO {
+public class PostDTO {
 
   @Positive
   private Long id;
@@ -26,7 +26,7 @@ public class BoardDTO {
   private String title;
 
   @NotNull
-  private BoardType boardType;
+  private PostType postType;
 
   private String content;
 

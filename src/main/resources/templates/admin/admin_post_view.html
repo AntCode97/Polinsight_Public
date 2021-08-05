@@ -181,18 +181,18 @@
       <div id='metop_container'>
         <div class='metop_inner'>
           <!-- 상세 게시글 창 -->
-          <div class="metop_board_wrap" th:object="${board}">
+          <div class="metop_board_wrap" th:object="${post}">
             <div class="metop_board_card">
               <form name="" action="" method="POST">
                 <div class="input_wrap title_div">
                   <div class="board_div2">
                     <div class="tile_info_wrap">
                       <div>
-                        <span class="post_no" th:text="'['+${board.id}+']번째 글'"></span>
+                        <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
                       </div>
                     </div>
                     <div class="title_text">
-                      <span th:text="${board.title}">폴인사이트입니다.</span>
+                      <span th:text="${post.title}">폴인사이트입니다.</span>
                     </div>
                   </div>
                 </div>
@@ -206,21 +206,21 @@
                 <div class="input_wrap">
                   <div class="board_div2">
                     <label>작성일</label>
-                    <span class="regdate" th:if="${board.registeredAt == board.registeredAt}" th:text="${#temporals.format(board.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+                    <span class="regdate" th:if="${post.registeredAt == post.registeredAt}" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
                     <!--                                        <span class="updatedate" th:unless="${one.regdate == one.updatedate}" th:text="${#temporals.format(one.updatedate, 'yyyy-MM-dd HH:mm')} + '(수정)'"></span>-->
 
                     <label class="label_padding">조회</label>
-                    <span th:text="${board.viewcnt}">12</span>
+                    <span th:text="${post.viewcnt}">12</span>
                   </div>
                 </div>
-                <div th:each="file : ${board.attaches}" class="input_wrap">
+                <div th:each="file : ${post.attaches}" class="input_wrap">
                   <div class="board_div2">
                     <label class="file_item2" th:text="'첨부파일#'"></label>
-                    <a class="file_download" th:href="@{'/boards/'+${file.filePath}}" th:text="${file.originalName}"></a>
+                    <a class="file_download" th:href="@{'/posts/'+${file.filePath}}" th:text="${file.originalName}"></a>
                   </div>
                 </div>
                 <div class="input_wrap textarea_div">
-                  <div class="board_div2" th:text="${board.viewcontent}">
+                  <div class="board_div2" th:text="${post.viewcontent}">
 
                   </div>
                 </div>
@@ -230,16 +230,16 @@
                   <div class='board_div2 btn_wrap'>
                     <div class='btn_wrap1'>
                       <span>
-                        <a th:href='@{/admin/boards}' class='board_btn list_btn'> <i class='far fa-file-alt'></i>목록</a>
+                        <a th:href='@{/admin/posts}' class='board_btn list_btn'> <i class='far fa-file-alt'></i>목록</a>
                       </span>
                     </div>
                     <th:block>
                       <div class='btn_wrap2' th:if="${user.role.toString()} =='ADMIN'">
                         <span>
-                          <a th:href='@{/admin/boards/{id}/edit (id=${board.id})}' class='board_btn update_btn'><i class='fas fa-edit'></i>수정</a>
+                          <a th:href='@{/admin/posts/{id}/edit (id=${post.id})}' class='board_btn update_btn'><i class='fas fa-edit'></i>수정</a>
                         </span>
                         <span>
-                          <a th:href='@{/admin/boards/{id}/delete (id=${board.id})}' class='board_btn delete_btn'><i class='far fa-trash-alt'></i>삭제</a>
+                          <a th:href='@{/admin/posts/{id}/delete (id=${post.id})}' class='board_btn delete_btn'><i class='far fa-trash-alt'></i>삭제</a>
                         </span>
                       </div>
                     </th:block>

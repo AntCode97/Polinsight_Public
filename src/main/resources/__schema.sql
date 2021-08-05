@@ -2,7 +2,7 @@ drop table if exists additional_favorite cascade;
 
 drop table if exists attach cascade;
 
-drop table if exists board cascade;
+drop table if exists post cascade;
 
 drop table if exists change_pwd_dto cascade;
 
@@ -72,7 +72,7 @@ create table user
     unique (email)
 );
 
-create table board
+create table post
 (
     bno           bigint        not null primary key,
     board_type    int           null,
@@ -93,5 +93,5 @@ create table attach
     filename      varchar(255) null,
     original_name varchar(255) null,
     bno           bigint       null,
-    foreign key (bno) references board (bno)
+    foreign key (bno) references post (bno)
 )
