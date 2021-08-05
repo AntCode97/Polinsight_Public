@@ -234,7 +234,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create
+      ddl-auto : update
     properties :
       format_sql : true
     show-sql :     true
