@@ -40,7 +40,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
   @Transactional
   @Modifying()
   @Query(
-    value = "UPDATE Board b SET b.viewcnt = :#{#board.viewcnt}+1 WHERE b.id = :#{#board.id}"
+    value = "UPDATE Board b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :#{#board.id}"
           )
   void upViewCnt(Board board);
 
