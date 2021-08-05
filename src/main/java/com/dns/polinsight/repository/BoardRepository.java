@@ -37,11 +37,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
   )
   Page<Board> findBySearchKeyword(String keyword,Pageable pageable);
 
-//  @Transactional
-//  @Modifying()
-//  @Query(
-//    value = "UPDATE Board b SET b.viewcnt = :#{#board.viewcnt}+1 WHERE b.id = :#{#board.id}"
-//          )
-//  void upViewCnt(Board board);
+  @Transactional
+  @Modifying()
+  @Query(
+    value = "UPDATE Board b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :#{#board.id}"
+          )
+  void upViewCnt(Board board);
 
 }

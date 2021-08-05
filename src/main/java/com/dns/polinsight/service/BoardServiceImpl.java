@@ -104,8 +104,8 @@ public class BoardServiceImpl implements BoardService {
 
   @Override
   public void upViewCnt(Board board) {
-    board.setViewcnt(board.getViewcnt() +1);
-    //repository.upViewCnt(board);
+    //board.setViewcnt(board.getViewcnt() +1);
+    repository.upViewCnt(board);
   }
 
 }
