@@ -502,7 +502,7 @@ public class PostController {
   }
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
-  @GetMapping("/posts/upload-dir/{filename:.+}")
+  @GetMapping("/posts/upload-dir/{filename}")
   @ResponseBody
   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 

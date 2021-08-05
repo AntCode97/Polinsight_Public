@@ -106,7 +106,7 @@ spring :
 
 file :
   upload :
-    baseLocation : "./upload_dir/"
+    baseLocation : "./upload-dir/"
 
 custom :
   permission :
