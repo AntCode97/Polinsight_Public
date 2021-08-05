@@ -14,14 +14,26 @@ public class DBCPConfig {
   @Value("${spring.datasource.url}")
   private String mariadb_URL;
 
+  @Value("${spring.datasource.username}")
+  private String username;
+
+  @Value("${spring.datasource.password}")
+  private String password;
+
+  @Value("${spring.datasource.hikari.pool-name}")
+  private String poolName;
+
+  @Value("${spring.datasource.hikari.maximum-pool-size}")
+  private int maximumPoolSize;
+
   @Bean
   public DataSource hikariDataSource() {
     HikariConfig config = new HikariConfig();
-    config.setPoolName("Test-DBCPPool");
-    config.setUsername("java");
-    config.setPassword("1234");
+    config.setPoolName(poolName);
+    config.setUsername(username);
+    config.setPassword(password);
     config.setLeakDetectionThreshold(30000);
-    config.setMaximumPoolSize(5);
+    config.setMaximumPoolSize(maximumPoolSize);
     config.setJdbcUrl(mariadb_URL);
     return new HikariDataSource(config);
   }

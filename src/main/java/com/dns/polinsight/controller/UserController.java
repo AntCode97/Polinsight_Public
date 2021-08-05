@@ -3,17 +3,18 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Additional;
-import com.dns.polinsight.domain.dto.SignupDTO;
+import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.object.ResponseObject;
-import com.dns.polinsight.repository.ChangePwdRepository;
-import com.dns.polinsight.service.AdditionalService;
-import com.dns.polinsight.service.EmailService;
-import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.domain.dto.ChangePwdDto;
+import com.dns.polinsight.domain.dto.SignupDTO;
+import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.utils.ApiUtils;
+import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import javax.validation.constraints.Email;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
@@ -38,48 +37,41 @@ public class UserController {
 
   private final UserService userService;
 
-  private final AdditionalService additionalService;
+  private final ParticipateSurveyService participateSurveyService;
+
+  private final PointRequestService pointRequestService;
 
   private final HttpSession session;
 
   private final EmailService emailService;
 
+  private final SurveyService surveyService;
+
   private final PasswordEncoder passwordEncoder;
 
-  private final ChangePwdRepository pwdRepository;
+  private final ChangePasswordService changePasswordService;
 
   @PostMapping("/signup")
-  public ResponseEntity<Map<String, Object>> userSignUp(@RequestBody SignupDTO signupDTO) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
+    System.out.println(signupDTO);
     try {
-      User user = userService.save(User.builder()
-                                       .email(signupDTO.getEmail())
-                                       .name(signupDTO.getName())
-                                       .phone(signupDTO.getPhone())
-                                       .password(passwordEncoder.encode(signupDTO.getPassword()))
-                                       .recommend(signupDTO.getRecommend())
-                                       .role(UserRoleType.USER)
-                                       .build());
-      session.setAttribute("basic_user", new SessionUser(user));
+      User user = userService.save(signupDTO.toUser(passwordEncoder));
       if (signupDTO.isIspanel()) {
-        map.put("code", 200);
-        map.put("msg", "need more info for panel signup");
+        session.setAttribute("basic_user", new SessionUser(user));
       } else {
-        map.put("code", 200);
-        map.put("msg", "normal user signup success");
+        session.setAttribute("user", new SessionUser(user));
       }
+      return success(Boolean.TRUE);
     } catch (Exception e) {
-      log.error("basic singup error: {}", e.getMessage());
-      map.put("code", 6000);
-      map.put("msg", "there is something wrong");
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ResponseEntity<Map<String, Object>> panelSignup(@RequestBody Additional additional, HttpSession session) {
-    //    session.invalidate();
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Additional additional, HttpSession session) {
+    session.invalidate();
     SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
     sessionUser = SessionUser.builder()
                              .email(sessionUser.getEmail())
@@ -89,19 +81,9 @@ public class UserController {
                              .build();
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    //    user = User.builder().id(user.getId()).role(UserRoleType.PANEL).build();
-    // 유저 객체 정보 업데이트
-    additional.update(user);
-    user = user.update(additional).update(sessionUser);
-    // 업데이트된 정보 저장
-    // 외래키를 갖는 Additional 엔티티의 객체가 먼저 저장되고 마스터 엔티티인 user가 저장되어야 한다.
-    additionalService.save(additional);
+    user.getAdditional().update(additional);
     userService.save(user);
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("msg", "success");
-    map.put("code", 200);
-    return ResponseEntity.ok(map);
+    return success(Boolean.TRUE);
   }
 
   @DeleteMapping("/user")
@@ -116,20 +98,6 @@ public class UserController {
       map.put("error", null);
       map.put("msg", e.getMessage());
     }
-    return ResponseEntity.ok(map);
-  }
-
-  @GetMapping("/user/{email}")
-  @CrossOrigin("*") // 비동기 이메일 검증을 위한 cors 처리
-  public ResponseEntity<Map<String, Object>> findUserByEmail(@Email @PathVariable("email") String email) {
-    Map<String, Object> map = new HashMap<>();
-    try {
-      map.put("user", userService.findUserByEmail(User.builder().email(email).build()));
-    } catch (RuntimeException e) {
-      e.getMessage();
-      return ResponseEntity.noContent().build();
-    }
-
     return ResponseEntity.ok(map);
   }
 
@@ -152,7 +120,7 @@ public class UserController {
       userService.update(user);
       map.put("data", "user info has updated");
       session.invalidate();
-      session.setAttribute("user", new SessionUser().of(user));
+      session.setAttribute("user", new SessionUser(user));
       log.info("User '{}' has requested change password", user.getEmail());
     } catch (Exception e) {
       e.printStackTrace();
@@ -162,70 +130,135 @@ public class UserController {
   }
 
   @PostMapping("/findpwd")
-  public ResponseEntity<?> findPwd(HttpServletRequest request) throws MessagingException, NoSuchAlgorithmException {
+  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
+                              @RequestParam(name = "email") String email,
+                              @RequestParam(name = "name") String name,
+                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
+                                                                                        NoSuchAlgorithmException {
     /*
      *  메일 서비스 필요
      *  등록한 주소로 메일 리다이렉팅 할 메일 전달
      * 해시값을 저장한 페이지를 리턴한다
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
-    //    템플릿 작성에 필요한 변수들을 담는 객체
-    Map<String, Object> variables = new HashMap<>();
+    if (userService.isExistUser(email)) {
+      Map<String, Object> variables = new HashMap<>();
+      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
+      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
+      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
+      variables.put("date", LocalDateTime.now());
+      variables.put("hash", hash);
+      variables.put("name", name);
+      variables.put("email", email);
+      variables.put("callback", callbackBase + "/chpwd");
+      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    }
+    return new ModelAndView("redirect:/index");
+  }
 
-    String email = request.getParameter("email");
-    String name = request.getParameter("name");
-    String hash = userService.getHash(email, name);
+  @GetMapping("/changepwd")
+  public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
+    ModelAndView mv = new ModelAndView("member/changepwd");
+    log.info(sessionUser.toString());
 
-    //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
-    variables.put("date", LocalDateTime.now());
-    variables.put("hash", hash);
-    variables.put("callback", "/changepassword");
-    emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 안내 메일입니다.", variables);
-    // TODO: 2021-07-12 해시는 따로 저장
-    ResponseObject obj = ResponseObject.builder()
-                                       .statuscode(HttpStatus.OK.value())
-                                       .msg("password changed")
-                                       .build();
-    return ResponseEntity.ok(obj);
+    if (session.getAttribute("user") == null) {
+      return new ModelAndView("redirect:/denied");
+    }
+    return mv;
   }
 
   @PostMapping("/changepwd")
-  public ResponseEntity<?> changePwd(HttpServletRequest request, @LoginUser SessionUser sessionUser, HttpSession session) {
+  public ModelAndView changePwd(@LoginUser SessionUser sessionUser,
+                                HttpSession session,
+                                @RequestParam(name = "pwd") String newPassword) throws Exception {
     /*
      * 비밀번호 변경 처리 후 리다이렉팅
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
-    Map<String, Object> map = new HashMap<>();
+    session.invalidate();
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userService.update(user); // DB 업데이트할 유저 객체 넣기
+    return new ModelAndView("redirect:/index");
+  }
+
+  @GetMapping("/chpwd/{hash}/{name}/{email}")
+  public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
+                                     @PathVariable(name = "email") String email,
+                                     @PathVariable(name = "name") String name,
+                                     ModelAndView mv,
+                                     HttpSession session
+  ) {
+    mv.clear();
+    mv = new ModelAndView("redirect:/changepwd");
+    try {
+      if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(email).getHash())) {
+        // 받은 해시와 저장된 해시가 다르면 접근 거부
+        throw new IllegalAccessException();
+      }
+      session.setAttribute("user", new SessionUser(userService.findUserByEmail(User.builder().email(email).build())));
+    } catch (Exception e) {
+      e.printStackTrace();
+      session.invalidate();
+      ModelAndView errMav = new ModelAndView("redirect:error/denied");
+      errMav.addObject("msg", e.getCause());
+      return errMav;
+    }
+
+    return mv;
+  }
+
+  // TODO: 2021-07-19 수정 필요
+  @PostMapping("/api/point/{point}")
+  public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
+                                                                         @PathVariable(name = "point") Long point) throws Exception {
+    /*
+     * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
+     * */
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.setPassword(passwordEncoder.encode(request.getParameter("newpassword")));
-      userService.update(user); // DB 업데이트할 유저 객체 넣기
-      map.put("code", 200);
-      map.put("msg", "비밀번호 변경 완료");
+      pointRequestService.addUserPointRequest(user.getId(), point);
+      return success(pointRequestService.getUserPointRequests(user.getId()));
     } catch (Exception e) {
-      map.put("code", 201);
-      map.put("msg", "there is something worng");
+      throw new Exception(e.getMessage());
     }
-
-    session.invalidate();
-    return ResponseEntity.ok(map);
   }
 
-  @GetMapping("/changepassword")
-  public void changePassword(@RequestParam(name = "hash") String hash,
-                             @RequestParam(name = "email") String email,
-                             @RequestParam(name = "name") String name,
-                             HttpSession session,
-                             HttpServletResponse response
-  ) throws NoSuchAlgorithmException, IOException {
-    /*등록한 메일 주소로 전달한 페이지에서, 비밀번호 변경 클릭 시 리다이렉팅 될 주소*/
-    // NOTE 2021-06-23 0023 : 해시가 우리 서버에서 발급한게 맞는지 확인한다
-    log.info("callback url executed ---\n{}", String.format("%1$20s\n%1$20s\n%1$20s", "hash: " + hash, "email: " + email, "name: " + name));
-    if (hash.equals(userService.getHash(email, name))) {
-      session.setAttribute("user", new SessionUser().of(userService.findUserByEmail(User.builder().email(email).build())));
-      response.sendRedirect("/changepwd");
+  @GetMapping("/api/point/{userid}")
+  public ApiUtils.ApiResult<List<PointRequest>> getPointRequestList(@PathVariable(name = "userid") long userid) throws Exception {
+    try {
+      return success(pointRequestService.getUserPointRequests(userid));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
     }
-    response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
   }
+
+  @GetMapping("/api/user/participate")
+  public ApiUtils.ApiResult<Set<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
+    try {
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      return success(surveyService.getUserParticipateSurvey(user));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PostMapping("/api/survey/participate")
+  public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
+    try {
+      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      user.addParticipateSurvey(survey.getId());
+      userService.update(user);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/api/user/total")
+  public ApiUtils.ApiResult<Long> coutAllUser() {
+    return success(userService.countAllUser());
+  }
+
 
 }

@@ -6,12 +6,11 @@
   <title></title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <style type="text/css">
-    @import url('/css/common.css');
-
+  <style>
     .register_wrap {
       width: 1000px;
-      margin: 30px auto 50px;
+      margin: 0 auto;
+      top: 80px;
       position: relative;
     }
 
@@ -168,10 +167,9 @@
     .popup_overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -179,8 +177,8 @@
       position: relative;
       top: 50%;
       left: 50%;
-      width: 550px;
       transform: translate(-50%, -50%);
+      width: 550px;
       box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.35);
       background-color: white;
     }
@@ -216,7 +214,7 @@
       <h1>회원 가입</h1>
     </div>
     <div class="register_contents_wrap">
-      <form action="/signup" id="signupfrm" method="post">
+      <form th:action="@{/signup}" id="signupfrm" method="post">
         <p>기본정보</p>
         <div class="register_contents">
           <ul>
@@ -231,7 +229,6 @@
                 <span>@</span>
                 <select name="domain" id="email_domain" required>
                   <optgroup label="도메인">
-                    <!--                    <option value="null" selected>&#45;&#45; 선택 &#45;&#45;</option>-->
                     <option value="naver.com">naver.com</option>
                     <option value="gmail.com">gmail.com</option>
                     <option value="kakao.com">kakao.com</option>
@@ -266,6 +263,7 @@
               </div>
             </li>
             <li>
+              <!--TODO : 특수문자 검증 필요-->
               <div class="left_content">
                 <label for="user_name">이름</label>
               </div>
@@ -329,6 +327,7 @@
     </div>
   </div>
 </div>
+
 <div class="popup_overlay">
   <div class="popup_box">
     <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
@@ -342,9 +341,22 @@
     </div>
   </div>
 </div>
+
 <th:block th:include="layout/footer" />
+
 </body>
 <script>
+  const phoneNumberChecker = () => {
+    const recommend = $('input[name=recommend]')
+    const myPhone = $('input[name=phone]')
+
+    if (!myPhone.val() || !recommend.val()) // 공백/undefined/null 체크
+      return
+
+    if (recommend.val() === myPhone.val())
+      return false;
+  }
+
   const editHyphen = e => {
     const phoneValue = e.target.value
     let ret = "";
@@ -371,12 +383,6 @@
     if (e.target.value === "") return;
     const keycode = e.keyCode;
 
-    // if (keycode === 32 || keycode === 9) {
-    //   e.preventDefault()
-    //   e.returnValue = false;
-    //   alert("공백은 입력할 수 없습니다.")
-    //   return;
-    // } else
     let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
 
     /* 숫자, 소문자, 대문자, 특수문자 */
@@ -403,20 +409,20 @@
   const checkNotNull = () => {
     let result = true
     $("form").find('input').each(function (item) {
-      let input = $(this)
-      let label = input.prev('label')
-      let inputValue = input.val()
-      if ($(this).prop('required') && (inputValue == null || inputValue === "" || inputValue === undefined || inputValue === "undefined")) {
-        input.focus()    // 입력이 안된 사항으로 포커싱
-        input.val('') // 값 초기화
+      let inputElem = $(this)
+      let label = inputElem.prev('div>label')
+      let inputValue = inputElem.val().trim()
+      if ($(this).prop('required') && !inputValue) {
+        inputElem.focus()    // 입력이 안된 사항으로 포커싱
+        inputElem.val('') // 값 초기화
         alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
         result = false
         return false;   // $.each를 break
       }
     })
 
-    const domainValue = $('select[name=domain] option:selected').val()
-    if (domainValue === "null") {
+    const domainValue = $('select[name=domain] option:selected').val().trim()
+    if (!domainValue) {
       $('select[name=domain]').focus()
       alert('이메일 주소는 필수 입력 사항입니다.')
       result = false;
@@ -427,27 +433,25 @@
 
 
   const debounceCallEmailCheck = _.debounce((email, callback) => {
-    axios.get("http://localhost:8080/user/" + email)
-        .then(res => callback(res.status))
-        .catch(err => {
-          console.log("error", err)
-        })
+    axios.get("http://localhost:8080/api/user/" + email)
+        .then(res => callback(res.data.response))
+        .catch(err => console.log("error", err))
   }, 200)
 
   const emailChecker = (e) => {
     /* 5 ~ 20자 제한 */
     const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const emailValue = $("input[name=email]").val();
-    const emailDomain = $("#email_domain").val();
+    const emailValue = $("input[name=email]").val().trim();
+    const emailDomain = $("#email_domain").val().trim();
     const email = emailValue + '@' + emailDomain;
     const msg = $("#email_msg")
 
-    if (emailValue === "") {
+    if (!emailValue) {
       msg.text("").removeClass("correct_msg").addClass("err_msg")
     } else {
       if (email.match(regex) != null) {
         debounceCallEmailCheck(email, function (status) {
-              if (status === 204) {
+              if (status) {
                 msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
               } else {
                 msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
@@ -466,19 +470,19 @@
     const form = $('form')
     form.find('input').each((idx, item) => {
       if (item.name === 'phone' || item.name === 'recommend') {
-        basicInfo[item.name] = item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3");
+        basicInfo[item.name] = !item.value ? null : item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
       } else if (item.name !== 'pwdcfm') {
         basicInfo[item.name] = item.value;
       }
     })
     form.find('select').each((idx, item) => {
-      basicInfo['email'] += '@' + $(item).val()
+      basicInfo['email'] += '@' + $(item).val().trim()
     })
-    console.log(basicInfo)
     return basicInfo
   }
 
   $(function () {
+    $('.header_wrap').css('background-color', '#182838')
     $(document).on('focus', '.login_input', function () {
       $(this).css('border-bottom', '1.5px solid #4C99CF');
     });
@@ -493,14 +497,10 @@
           e.preventDefault()
           alert("붙여넣기는 사용하실 수 없습니다.")
         });
-    // .on('click', e => {
-    //   /*입력폼 클릭시 입력값 삭제*/
-    //   $('#' + e.target.id).val('')
-    // })
 
     $("#email").on("change keyup paste", emailChecker);
     $("#email_domain").on('change', () => {
-      if ($('input[name=email]').val().length > 0) {
+      if ($('input[name=email]').val().trim().length > 0) {
         emailChecker()
       }
     });
@@ -527,17 +527,24 @@
 
     $("input[name=ispanel]").on('click', (e) => {
       if (e.target.value === "false") {
-        // 가입 안했을때의 경고창
-        // alert('폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.')
-        $(".popup_overlay").css('display', 'block')
+        $(".popup_overlay").fadeIn(100)
       }
     })
-
-    $("#popup_close_btn").on('click', (e) => {
-      $(".popup_overlay").css('display', 'none')
+    // TODO : 팝업 관련 설정
+    $("#popup_close_btn>i").on('click', (e) => {
+      // $(".popup_overlay").css('display', 'none')
+      $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+      $('.popup_overlay').fadeOut(100)
     })
+
     $(".popup_btn").on('click', (e) => {
-      $(".popup_overlay").css('display', 'none')
+      $('input[name=ispanel][type=radio][value=false]').prop('checked', true)
+      $(".popup_overlay").fadeOut(100)
+    })
+
+    $('.popup_overlay').on('click', function () {
+      $(this).css('display', 'none')
+      // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
     })
 
     $("#frmsubmit").on('click', (e) => {
@@ -550,30 +557,26 @@
 
         axios.post('/signup', info)
             .then(res => {
-              console.log('ispanel', info['ispanel'])
-              console.log("response", res)
-              if (res.data.code === 200) {
+              console.log(res.data)
+              if (res.data.response) {
                 if (info['ispanel']) {
-                  alert('패널 가입을 위해서는 추가정보가 필요합니다.')
+                  // alert('패널 가입을 위해서는 추가정보가 필요합니다.')
                   location.replace('/panelagreement')
                 } else {
-                  alert('일반 유저 가입 성공!')
-                  location.replace('/')
+                  // alert('일반 유저 가입 성공!')
+                  location.replace('/success_basic')
                 }
-              } else {
-                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
               }
             })
             .catch(err => {
-              console.log("Error resposne", err)
+              console.log("Error response", err)
               alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
             })
       }
     })
 
-    // if (keycode === 20) {
-    //   // TODO : capslock이 켜져있습니다 띄우기 --> 문서 열때
-    // }
+    $('.left_content>label').last().css('background', 'none')
+
   })
 
 </script>

@@ -5,7 +5,7 @@ const boardSearch = (e) => {
   // e.preventDefault();
   // alert('dkfjdkfjdkj')
   console.log("thymeleaf javascript test")
-  http.get('/board/search?boardType=NOTICE&searchType=TITLE&searchValue=asd')
+  http.get('/post/search?boardType=NOTICE&searchType=TITLE&searchValue=asd')
       .then(res => console.log(res))
       .catch(err => console.log(err))
 

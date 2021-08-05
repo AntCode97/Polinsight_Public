@@ -1,21 +1,28 @@
 package com.dns.polinsight.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Getter
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChangePwdDto {
 
   @Id
-  private final String email;
+  private String email;
 
-  private final String name;
+  @NotNull
+  private String name;
 
-  private final String hash;
+  @NotNull
+  private String hash;
 
 }

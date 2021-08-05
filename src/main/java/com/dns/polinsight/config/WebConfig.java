@@ -1,6 +1,7 @@
 package com.dns.polinsight.config;
 
 import com.dns.polinsight.config.oauth.LoginUserArgumentResolver;
+import com.dns.polinsight.utils.PageableHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -17,9 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
 
   private final LoginUserArgumentResolver loginUserArgumentResolver;
 
+  private final PageableHandler pageableHandler;
+
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
     resolvers.add(loginUserArgumentResolver);
+    resolvers.add(pageableHandler);
   }
 
   @Override

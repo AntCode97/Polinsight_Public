@@ -1,0 +1,264 @@
+<th:block th:include="admin/admin_sidebar" />
+<th:block th:include="module/common" />
+<th:block>
+  <style>
+    table {
+      width: 100%;
+      margin: 0;
+    }
+
+    .post-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #cfcfd1;
+    }
+
+    .post-row > * {
+      padding: 9px 10px;
+      display: inline-block;
+      font-size: 1rem;
+      line-height: 30px;
+      color: #666;
+      text-align: center;
+    }
+
+    .post-row > *:nth-child(1) {
+      width: 70px;
+    }
+
+    .post-row > *:nth-child(2) {
+      width: 300px;
+    }
+
+    tbody > .post-row > *:nth-child(2) {
+      text-align: left;
+    }
+
+    .post-row > *:nth-child(3) {
+      width: 100px;
+    }
+
+    .post-row > *:nth-child(4) {
+      width: 130px;
+    }
+
+    .post-row > *:nth-child(5) {
+      width: 80px;
+    }
+
+    .post-row > *:nth-child(6) {
+      width: 120px;
+    }
+
+    .post-row > *:nth-child(7) {
+      width: 120px;
+    }
+
+    .post-row > span > button:first-child {
+      margin-right: 3px;
+    }
+  </style>
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">회원 목록</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="post-search">
+        <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
+      </div>
+      <!--관리자 페이지 사용자 찾기 기능-->
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="회원 검색" />
+      </div>
+
+      <table class="scroll-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+      <div class="pagination"></div>
+    </div>
+  </div>
+
+  <script>
+    const goUserInfoDetail = () => {
+
+    }
+
+    const getHeader = () => {
+      let header = $(`<tr class="post-row post-th"></tr>`)
+      header.append(`<td>번호</td>`)
+      header.append(`<td>아이디(이메일)</td>`)
+      header.append(`<td>이름</td>`)
+      header.append(`<td>휴대전화</td>`)
+      header.append(`<td>보유 포인트</td>`)
+      header.append(`<td>유형</td>`)
+      header.append(`<td>관리</td>`)
+      return header;
+    }
+
+    const makePaginationButton = current => {
+      const findValue = $('input[name=adminfinduserby]').val()
+
+      // 전체 요소 갯수 가져오기
+      const userCount = $('div.util-search').children('strong').text()
+      let totalPage = Math.ceil(userCount / 10)  // 총 페이지 수
+      const pagenationElem = $('div.pagination').css('text-align', 'center').css('margin', '0')
+      pagenationElem.empty()
+
+      let start = current - 5 <= 0 ? 0 : current - 5;
+      let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
+      // 못가게 되면 비활성화
+      if (userCount > 0) {
+        if (!findValue) {
+          let gofirstArrow = $(`<div class="pagination_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`)
+          let goLastArrow = $(`<div class="pagination_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`)
+          let prev = $(`<div class="pagination_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`)
+          let next =
+              $(`<div class="pagination_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`)
+
+          // first arrow
+          pagenationElem.append(gofirstArrow)
+          // prev arrow
+          pagenationElem.append(prev)
+
+          for (let i = start; i < end; i++) {
+            let tmp = $(`<div onclick="getMemberList(${i})" class="pagination_button">${i + 1}</div>`)
+            // 활성화된 버튼에 대해 디자인 처리
+            if (current === i) {
+              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+            }
+            pagenationElem.append(tmp)
+          }
+          // next arrow
+          pagenationElem.append(next)
+          // last arrow
+          pagenationElem.append(goLastArrow)
+        } else {
+          let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`)
+          let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
+          let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
+          let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
+          first.on('click', {param_offset: 0}, findUserByRegex)
+          last.on('click', {param_offset: totalPage - 1}, findUserByRegex)
+          prev.on('click', {param_offset: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
+          next.on('click', {param_offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
+
+          pagenationElem.append(first)
+          pagenationElem.append(prev)
+          for (let i = start; i < end; i++) {
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
+            tmp.on('click', {param_offset: i}, findUserByRegex);
+
+            if (current === i) {
+              tmp.addClass('pagination_button_current')
+            } else {
+              tmp.removeClass('pagination_button_current')
+            }
+            pagenationElem.append(tmp)
+          }
+          // // next arrow
+          pagenationElem.append(next)
+          // // last arrow
+          pagenationElem.append(last)
+        }
+      } else {
+        // 검색 결과가 없습니다.
+        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
+      }
+    }
+
+    const makeAdminMemberRowTemplate = memberInfo => {
+      let template = $(`<tr class="post-row"></tr>`)
+      template.append(`<td>${memberInfo.id}</td>`)
+      template.append(`<td>${memberInfo.email}</td>`)
+      template.append(`<td>${memberInfo.name}</td>`)
+      template.append(`<td>${memberInfo.phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")}</td>`)
+      template.append(`<td>${memberInfo.point}</td>`)
+      template.append(`<td>${memberInfo.role}</td>`)
+      template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`)
+      return template;
+    }
+
+    const makeAdminMemberListTemplate = memberInfoList => {
+      if (!memberInfoList) return
+      const table = $('.scroll-table>tbody')
+      table.empty()
+      for (memberInfo of memberInfoList)
+        table.append(makeAdminMemberRowTemplate(memberInfo))
+    }
+
+    /*
+    * @Param  offset : 페이지 번호
+    * */
+    const getMemberList = current => {
+      const size = 10;
+
+      axios.get('/api/users', {
+            params: {
+              'size': size,
+              'offset': current
+            }
+          })
+          .then(res => {
+            if (res.data.response.length > 0) {
+              makePaginationButton(current)
+              makeAdminMemberListTemplate(res.data.response)
+            }
+          })
+      // .catch(location.replace("/admin/memberlist"))
+    }
+
+
+    const countAllUsers = () => {
+      axios.get('/api/user/total')
+          .then(res => {
+            $('div.util-search').children('strong').text(res.data.response)
+          })
+          .catch()
+    }
+
+    const countSearchUsers = regex => {
+      axios.get('/api/user/find/' + regex + '/total')
+          .then(res => {
+            $('div.util-search').children('strong').text(res.data.response)
+          })
+          .catch()
+    }
+
+    const findUserByRegex = e => {
+      const findValue = $('input[name=admin_find]').val()
+      console.log(findValue)
+      if (!findValue) {
+        countAllUsers()
+        getMemberList(0);
+      } else {
+        countSearchUsers(findValue)
+        const offset = !e.data ? 0 : e.data.param_offset
+        axios.get('/api/user/find/' + findValue, {params: {'size': 10, 'offset': offset}})
+            .then(res => {
+              makeAdminMemberListTemplate(res.data.response)
+              makePaginationButton(offset)
+            }).catch(err => console.log(err))
+      }
+    }
+
+    $(function () {
+      countAllUsers()
+      getMemberList(0)  // 페이지 초기 값
+      $('.scroll-table>thead').append(getHeader())
+      $(document).on('click', 'div.post-row:not(:first-of-type)', () => {
+        // 클릭시 디테일 페이지?
+        alert('aaa')
+      })
+
+      /*비동기 회원 찾기 및 화면 업데이트*/
+      $('input[name=admin_find]').on('keyup', _.throttle(findUserByRegex, 300))
+      $('button[name=admin_find_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
+    })
+  </script>
+</th:block>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <style>
+        a {
+            text-decoration: none
+        }
+
+        a:link,
+        a:visited,
+        a:hover {
+            color: #191919;
+        }
+
+
+
+        .web {
+            margin: auto;
+            width: 1200px;
+        }
+
+        img {
+            margin-left: -2px;
+            margin-right: -2px;
+            padding: 0;
+        }
+
+        .sub-main {
+            height: 50px;
+            padding-bottom: 0px;
+            border-bottom: 1px solid #EFEEEC;
+        }
+
+        ul li {
+            list-style-type: none;
+            float: left;
+        }
+
+        .sub-main li {
+            width: 150px;
+            height: 100%;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            line-height: 250%;
+        }
+
+        .notice {
+            background-color: #1A2738;
+            border: 1px solid #1A2738;
+        }
+
+        .qna {
+            background-color: #EFEEEC;
+            border: 1px solid #EFEEEC;
+        }
+
+        .sub-main-name {
+            width: 1000px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            margin-bottom: 50px;
+            font-size: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgb(0, 0, 0);
+        }
+
+
+        .information {
+            /*height: 210px;*/
+            padding-bottom: 15px;
+        }
+
+
+        .information_title {
+            display: flex;
+            width: 1000px;
+            border-top: 2px solid rgb(0, 0, 0);
+            border-bottom: 1px solid gray;
+            line-height: 40px;
+        }
+
+        .titleContent {
+            width: 1000px;
+            height: 80px;
+            line-height: 80px;
+            background-color: #EFEEEC;
+            font-size: 20px;
+            padding-left: 20px;
+        }
+
+        .information_write {
+            width: 980px;
+            font-size: 14px;
+            display: flex;
+            border-bottom: 1px solid gray;
+            padding-left: 20px;
+        }
+
+        .margin {
+            font-size: 14px;
+            height: 40px;
+            line-height: 40px;
+            color: gray;
+            margin-right: 10px;
+        }
+
+        .information_name,
+        .information_date {
+            display: flex;
+            font-size: 14px;
+        }
+
+
+        .name,
+        .date {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+        }
+
+        .nameContent,
+        .dateContent,
+        .information_count {
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+        }
+
+        .nameContent {
+            width: 100px;
+        }
+
+
+        .dateContent {
+            width: 200px;
+        }
+
+        .information_file {
+            display: flex;
+            width: 1000px;
+            /*height: 150px;*/
+            border-bottom: 1px solid gray;
+        }
+
+        .file {
+            width: 100px;
+            font-size: 20px;
+            line-height: 50px;
+            padding-left: 20px;
+        }
+
+        .fileContent {
+            line-height: 40px;
+            font-size: 15px;
+            padding-left: 5px;
+            /*height: 150px;*/
+            margin-top: 5px;
+        }
+
+
+        .file1,
+        .file2,
+        .file3 {
+            display: flex;
+            line-height: 45px;
+            font-size: 14px;
+        }
+
+        .fileName {
+            width: 800px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 14px;
+        }
+
+        .viewFile {
+            color: gray;
+            width: 100px;
+            height: 35px;
+            line-height: 35px;
+            margin-top: 5px;
+            padding-left: 4px;
+            border: 1px solid gray;
+            border-radius: 5px 5px 5px 5px;
+        }
+
+        .fileButton {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        .letter {
+            width: 1000px;
+            margin-top: 10px;
+        }
+
+        .postContent {
+            width: 1000px;
+            height: 200px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .Button {
+            display: flex;
+            width:1000px;
+            height:50px;
+            padding-left: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modifyButton,
+        .listButton {
+            text-align: center;
+            line-height: 200%;
+            width: 90px;
+            height: 45px;
+            line-height: 45px;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            border-radius: 5px 5px 5px 5px;
+            border: 1px solid black;
+            margin-left: 8px;
+        }
+
+        .postList {
+            width: 1000px;
+            height: 80px;
+            background-color: rgb(241, 238, 238);
+        }
+
+        .nearPost {
+            display: flex;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        .nearPostLetter {
+            width: 100px;
+            padding-left: 10px;
+            font-size: 15px;
+        }
+
+        .nearPostName{
+            width:800px;
+            font-size: 15px;
+        }
+
+        .nearPostDate{
+            width:200px;
+            font-size: 15px;
+        }
+        a.btn{
+            color:white;
+        }
+    </style>
+</head>
+
+<body class="PC">
+    <div class="web">
+        <div class="sub-main">
+            <span></span>
+            <ul>
+                <li class="notice">공지사항</li>
+                <li class="qna">문의사항</li>
+            </ul>
+        </div>
+
+        <div class="sub-main-name"><b>공지사항</b></div>
+
+        <div class="post" th:object="${post}">
+            <div class=information>
+                <div class="information_title">
+                    <div class="titleContent" th:text="*{title}"> <b>-제목-</b></div>
+                </div>
+                <div class="information_write">
+                    <div class="information_name">
+                        <div class="name">작성자&nbsp;: </div>
+                        <div class="nameContent" th:text="*{user.name}">관리자</div>
+                    </div>
+                    <div class="margin"><b> | </b></div>
+                    <div class="information_date">
+                        <div class="date">작성일 : </div>
+                        <div class="dateContent" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"> -작성일-</div>
+                    </div>
+                    <div class="margin"> <b> | </b> 조회수 :</div>
+                    <div class="information_count" th:text="${post.viewcnt}"> 조회수 </div>
+                </div>
+
+                <div class="information_file">
+                    <div class="file"><b>파일</b></div>
+                    <div class="fileContent">
+                        <div class="file1" th:each="file : ${post.attaches}">
+                            <div class="fileName" >
+                                <span class="file_item" th:text="'첨부파일#'"></span>
+                                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}" >
+
+
+                            </a>
+                            </div></div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="letter">
+                <div class="postContent">
+                    <div th:text="${post.viewcontent}"></div>
+                    <!--글 내용에 따라 높이 조정-->
+                </div>
+            </div>
+            <span th:unless="${user} == null">
+            <div class="Button" th:if="${user.role.toString()} =='ADMIN'">
+                <div class="modifyButton">
+                    <a  class="btn" th:href="@{/posts/{id}/edit (id=${post.id})}"> <b>수정</b></a>
+                </div>
+                <div class="listButton">
+                    <a  class="btn" href="/posts" > <b>목록</b></a>
+                </div>
+            </div>
+            </span>
+            <div class="postList">
+                <div class="nearPost" th:unless="${nextBoard} ==null">
+                    <div class="nearPostLetter" > <b>다음글</b> &nbsp;&nbsp;&nbsp; | </div>
+                    <div class="nearPostName" th:text="${nextBoard.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextBoard.id})}'|"> -다음글 제목-</div>
+                    <div class="nearPostDate" th:text="${#temporals.format(nextBoard.registeredAt, 'yyyy-MM-dd HH:mm')}">-다음글 날짜</div>
+                </div>
+                <div class="nearPost" th:unless="${prevBoard} ==null">
+                    <div class="nearPostLetter"> <b>이전글 </b>&nbsp;&nbsp;&nbsp; | </div>
+                    <div class="nearPostName" th:text="${prevBoard.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevBoard.id})}'|"> -이전글 제목-</div>
+                    <div class="nearPostDate" th:text="${#temporals.format(prevBoard.registeredAt, 'yyyy-MM-dd HH:mm')}">-이전글 날짜</div>
+                </div>
+            </div>
+
+        </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        let file_item = document.getElementsByClassName("file_item");
+        let fileCount = file_item.length;
+
+        console.log(fileCount, file_item);
+        for (let i = 1; i <= fileCount; i++) {
+            file_item[i - 1].innerText = "첨부파일#" + i;
+        }
+    }
+
+
+    /* <![CDATA[ */
+    var bno = [[${post.id}]];
+    /* ]]> */
+
+    $(function() {
+        $('.nav_action').click(function() {
+            var value = $(this).find('.arrow').attr('class');
+            if(value == 'fas fa-caret-down arrow') {
+                $(this).next('div').css('height', '100%');
+                $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
+            }else if(value == 'fas fa-caret-up arrow') {
+                $(this).next('div').css('height', '0');
+                $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
+            }
+        });
+
+        // 삭제버튼 클릭시 모달창 Open
+        $('.delete_btn').click(function(){
+            if(reply_cnt == 0) { // 댓글이 없는 경우
+                $('#modal_msg_main_txt').text(bno +"번 게시글을 삭제하시겠습니까?");
+                $('#modal_msg_yes').css('display', 'block');
+                $('#modal_msg_cancle').text('취 소');
+            } else { // 댓글이 있는 경우
+                $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+                $('#modal_msg_yes').css('display', 'none');
+                $('#modal_msg_cancle').text('확 인');
+            }
+
+            $('.modal_msg_wrap').css('display', 'flex');
+        });
+
+        // 삭제 알림 모달창에서 확인버튼 Click -> 게시글 삭제
+        $('#modal_msg_yes').click(function(){
+            $.ajax({
+                type: 'DELETE',
+                url: '/posts/' + bno,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    if(data == 0) {
+                        $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+                        $('#modal_msg_yes').css('display', 'none');
+                        $('#modal_msg_cancle').text('확 인');
+                        $('.modal_msg_wrap').css('display', 'flex');
+                    } else if(data == 9) {
+                        $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
+                        $('#modal_msg_yes').css('display', 'none');
+                        $('#modal_msg_cancle').text('확 인');
+                        $('.modal_msg_wrap').css('display', 'flex');
+                    } else {
+                        location.href = "/posts"
+                    }
+                },
+                error: function() {
+                    alert('System ERROR:(');
+                }
+            });
+        });
+    });
+</script>
+</html>

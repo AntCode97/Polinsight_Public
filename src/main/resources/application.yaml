@@ -78,10 +78,10 @@ spring :
     type : redis
 
   mail :
-    host :  # smtp address
-    port :  # smtp port
-    username :  # smtp 등록 계정
-    password :  # smtp 등록 계정의 패스워드
+    host :     smtp.gmail.com # smtp address
+    port :     587 # smtp port
+    username : jnudnslab@gmail.com # smtp 등록 계정
+    password : dnslab@3438 # smtp 등록 계정의 패스워드
     properties :
       mail :
         smtp :
@@ -95,15 +95,18 @@ spring :
   output :
     ansi :
       enabled : always
+  thymeleaf :
+    servlet :
+      content-type : "*/*"
 
-logging :
-  file :
-    name : ./polinsight_logs.log
+#logging :
+#  file :
+#    name : ./polinsight_logs.log
 
 
 file :
   upload :
-    baseLocation : "./upload_dir/"
+    baseLocation : "./upload-dir/"
 
 custom :
   permission :
@@ -111,13 +114,15 @@ custom :
       - /css/**
       - /js/**
       - /img/**
-      - favicon.ico
+      - /favicon.ico
 
     admin :
       - /admin/**
+      - /api/admin/**
 
     template :
       - /
+      - /api/**
       - /signup
       - /join
       - /index
@@ -128,7 +133,8 @@ custom :
       - /findpwd
       - /terms
       - /wholesign
-      - /boards**
+      - /posts**
+      - /posts/**
       - /panel
       - /point**
       - /denied
@@ -136,15 +142,26 @@ custom :
       - /dologin
       - /actuator**
       - /h2**
-      - /boards/**
-      - /board**
+      - /posts/**
+      - /post**
       - /api/**
       - /actuator/**
       - /panelagreement
       - /surveys/**
+      - /chpwd/**
+      - /changepwd**
+      - /survey/**
+      - /success_basic
+      - /basictopanel
+      - /panelagreement
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
+  callback :
+    base : "http://localhost:8080"
+  hash :
+    passwordsalt : polinsightPasswordSalt
+    pointsalt :    polinsightPointSalt
 
 
 management :
@@ -167,10 +184,15 @@ management :
 ---
 spring :
   datasource :
-    username :          root
-    password :          root
-    url :               jdbc:mariadb://localhost:3306/polinsight_db
-    driver-class-name : org.mariadb.jdbc.Driver
+    username :            root
+    password :            159753
+    url :                 jdbc:mariadb://localhost:3306/polinsight
+    driver-class-name :   org.mariadb.jdbc.Driver
+    sql-script-encoding : UTF-8
+    continue-on-error :   true
+    hikari :
+      pool-name :         Test DBCP Pool
+      maximum-pool-size : 5
 
 
   data :
@@ -191,7 +213,9 @@ spring :
     password :          polinsight
     url :               jdbc:mariadb://pol-mariadb:3306/polinsight?useSSL=false
     driver-class-name : org.mariadb.jdbc.Driver
-
+    hikari :
+      maximum-pool-size : 300
+      pool-name :         Pollinsight DBCP Pool
   data :
     mongodb :
       uri : mongodb://pol-mongodb:27017/polinsight
@@ -210,7 +234,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
     properties :
       format_sql : true
     show-sql :     true
@@ -218,6 +242,7 @@ spring :
 
   banner :
     location : banner-dev.txt
+
 
   session :
     store-type : none
