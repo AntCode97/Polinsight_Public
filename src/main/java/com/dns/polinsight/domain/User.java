@@ -29,6 +29,7 @@ public class User implements UserDetails, Serializable {
   @ElementCollection
   private final Set<Long> participateSurvey = new HashSet<>();
 
+  @Builder.Default
   @Enumerated(EnumType.STRING)
   private UserRoleType role = UserRoleType.USER;
 
