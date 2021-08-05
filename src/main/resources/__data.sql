@@ -6,7 +6,7 @@ INSERT INTO user ( id, email, name, password, phone, point, recommend, role, bir
 
 
 
-INSERT INTO board ( bno, board_type, new_board, registered_at, searchcontent, title, viewcontent, user_id )
+INSERT INTO post ( bno, board_type, new_board, registered_at, searchcontent, title, viewcontent, user_id )
 VALUES
 ( 1, 1, TRUE, '2021-07-01 00:00:00',
   'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae, Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus.',

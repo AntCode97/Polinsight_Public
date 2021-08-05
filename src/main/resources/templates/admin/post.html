@@ -96,7 +96,7 @@
                 <div class='ABA-bglnb-left'></div>
                 <ul class='ABA-lnb'>
                   <li class='AB-first AB-current-lnb AB-child' id='AB-lnb-104500-1'>
-                    <a class='' href='@{/boards}'>공지사항<span class='AB-lleft'></span> <span class='AB-rleft'></span></a>
+                    <a class='' href='@{/posts}'>공지사항<span class='AB-lleft'></span> <span class='AB-rleft'></span></a>
                   </li>
                   <li class='AB-last' id='AB-lnb-104500-2'>
                     <a class='' href=''>문의사항<span class='AB-lleft'></span> <span class='AB-rleft'></span> </a>
@@ -140,18 +140,18 @@
           <div>
             <div class='articleList'>
               <div>
-                <table class='-tblList' th:object='${board}'>
+                <table class='-tblList' th:object='${post}'>
                   <thead>
                   <tr class='onlyPC'>
-                    <th height='36' th:text='${board.id}' width='50'></th>
-                    <th th:text='${board.title}' width='300'></th>
+                    <th height='36' th:text='${post.id}' width='50'></th>
+                    <th th:text='${post.title}' width='300'></th>
                     <th width='90'>
                       <th:block th:unless='${session.user} == null'>
                         <span th:text="${session.user}?${session.user.name}:'guest'"></span>
 
                       </th:block>
                     </th>
-                    <th th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width='140'></th>
+                    <th th:text="${#temporals.format(post.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}" width='140'></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -161,10 +161,10 @@
                     </li>
                   </ul>
                   <tr>
-                    <td class='onlyPC' th:utext='${board.viewcontent}' width='140'></td>
+                    <td class='onlyPC' th:utext='${post.viewcontent}' width='140'></td>
                   </tr>
                   <td>
-                    <a role='button' th:href='@{/boards/{id}/edit (id=${board.id})}'>수정</a>
+                    <a role='button' th:href='@{/posts/{id}/edit (id=${post.id})}'>수정</a>
                   </td>
                   </tbody>
                 </table>
@@ -176,9 +176,9 @@
             <div class='-btnPageLink'>
               <div><span class='LF_page_link_current'><b>1</b></span>
                 <a class='LF_page_link_next_page' href='/kwa-jobopening?search_item=A&amp;PB_1618220647=2'>
-                  <img align='center' alt='다음 페이지로 이동' border='0' class='LF_page_link_next_page_img' src='/static/img/board/list_next.png'></a>
+                  <img align='center' alt='다음 페이지로 이동' border='0' class='LF_page_link_next_page_img' src='/static/img/post/list_next.png'></a>
                 <a class='LF_page_link_last_page' href='/kwa-jobopening?search_item=A&amp;PB_1618220647=2'>
-                  <img align='center' alt='마지막 페이지로 이동' border='0' class='LF_page_link_last_page_img' src='/static/img/board/last_page.png'></a>
+                  <img align='center' alt='마지막 페이지로 이동' border='0' class='LF_page_link_last_page_img' src='/static/img/post/last_page.png'></a>
               </div>
             </div>
           </div>

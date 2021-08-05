@@ -7,31 +7,31 @@
       margin: 0;
     }
 
-    .board-row > *:nth-child(1) {
+    .post-row > *:nth-child(1) {
       width: 70px;
     }
 
-    .board-row > *:nth-child(2) {
+    .post-row > *:nth-child(2) {
       width: 250px;
     }
 
-    .board-row > *:nth-child(3) {
+    .post-row > *:nth-child(3) {
       width: 100px;
     }
 
-    .board-row > *:nth-child(4) {
+    .post-row > *:nth-child(4) {
       width: 95px;
     }
 
-    .board-row > *:nth-child(5) {
+    .post-row > *:nth-child(5) {
       width: 200px;
     }
 
-    .board-row > *:nth-child(6) {
+    .post-row > *:nth-child(6) {
       width: 100px;
     }
 
-    .board-row > *:nth-child(7) {
+    .post-row > *:nth-child(7) {
       width: 150px;
     }
   </style>
@@ -85,7 +85,7 @@
 
     }
     const makePointRequestTemplate = req => {
-      let template = $(`<tr class="board-row"></tr>`);
+      let template = $(`<tr class="post-row"></tr>`);
       template.append(`<td>${req.id}</td>`);
       template.append(`<td>${req.email}</td>`);
       template.append(`<td>${req.point}</td>`);
@@ -123,7 +123,7 @@
     };
 
     const makeheader = () => {
-      let template = $(`<tr>`).addClass('board-row').addClass('board-th');
+      let template = $(`<tr>`).addClass('post-row').addClass('post-th');
       template.append(`<th>요청 아이디</th>`);
       template.append(`<th>요청인</th>`);
       template.append(`<th>요청 포인트</th>`);

@@ -2,7 +2,7 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Board;
+import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.Survey;
@@ -50,13 +50,13 @@ public class ApiController {
 
   private final PointRequestService pointRequestService;
 
-  private final BoardService boardService;
+  private final PostService postService;
 
-  @PutMapping("{boardId}/count")
-  public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
+  @PutMapping("{postId}/count")
+  public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
     try {
-      Board board = boardService.findOne(boardId);
-      board.setViewcnt(board.getViewcnt() + 1);
+      Post post = postService.findOne(postId);
+      post.setViewcnt(post.getViewcnt() + 1);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());

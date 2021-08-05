@@ -133,8 +133,8 @@ custom :
       - /findpwd
       - /terms
       - /wholesign
-      - /boards**
-      - /boards/**
+      - /posts**
+      - /posts/**
       - /panel
       - /point**
       - /denied
@@ -142,8 +142,8 @@ custom :
       - /dologin
       - /actuator**
       - /h2**
-      - /boards/**
-      - /board**
+      - /posts/**
+      - /post**
       - /api/**
       - /actuator/**
       - /panelagreement
@@ -234,7 +234,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : create
     properties :
       format_sql : true
     show-sql :     true
