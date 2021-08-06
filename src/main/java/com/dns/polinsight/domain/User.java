@@ -40,7 +40,7 @@ public class User implements UserDetails, Serializable {
   @OneToMany(mappedBy = "user")
   @Builder.Default
   @ToString.Exclude
-  private List<Board> boards = new ArrayList<>();
+  private List<Post> posts = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,8 +75,8 @@ public class User implements UserDetails, Serializable {
     this.participateSurvey.add(surveyId);
   }
 
-  public void setBoards(List<Board> boards) {
-    this.boards = boards;
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
   }
 
   @Override

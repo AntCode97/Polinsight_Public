@@ -47,15 +47,15 @@ public class ApiController {
 
   private final PointRequestService pointRequestService;
 
-  private final BoardService boardService;
+  private final PostService postService;
 
-  private final PointHistoryService pointCaculateService;
+  private PointHistoryService pointHistoryService;
 
-  @PutMapping("{boardId}/count")
-  public ApiUtils.ApiResult<Boolean> handleBoardCount(@PathVariable long boardId) throws Exception {
+  @PutMapping("{postId}/count")
+  public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
     try {
-      Board board = boardService.findOne(boardId);
-      board.setViewcnt(board.getViewcnt() + 1);
+      Post post = postService.findOne(postId);
+      post.setViewcnt(post.getViewcnt() + 1);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -272,12 +272,12 @@ public class ApiController {
 
       pointRequestService.saveOrUpdate(preq);
       userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
-      pointCaculateService.saveOrUpdate(PointHistory.builder()
-                                                    .amount(pointRequestDto.getPoint())
-                                                    .total(sessionUser.getPoint() - pointRequestDto.getPoint())
-                                                    .sign(false)
-                                                    .uid(sessionUser.getId())
-                                                    .build());
+      pointHistoryService.saveOrUpdate(PointHistory.builder()
+                                                   .amount(pointRequestDto.getPoint())
+                                                   .total(sessionUser.getPoint() - pointRequestDto.getPoint())
+                                                   .sign(false)
+                                                   .uid(sessionUser.getId())
+                                                   .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {

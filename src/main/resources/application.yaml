@@ -106,7 +106,7 @@ spring :
 
 file :
   upload :
-    baseLocation : "./upload_dir/"
+    baseLocation : "./upload-dir/"
 
 custom :
   permission :
@@ -133,8 +133,8 @@ custom :
       - /findpwd
       - /terms
       - /wholesign
-      - /boards**
-      - /boards/**
+      - /posts**
+      - /posts/**
       - /panel
       - /point**
       - /denied
@@ -142,8 +142,8 @@ custom :
       - /dologin
       - /actuator**
       - /h2**
-      - /boards/**
-      - /board**
+      - /posts/**
+      - /post**
       - /api/**
       - /actuator/**
       - /panelagreement

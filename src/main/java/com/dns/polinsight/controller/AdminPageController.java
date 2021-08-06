@@ -41,7 +41,7 @@ public class AdminPageController {
 //  /*
 //   * 게시글 관리 페이지
 //   * */
-//  @GetMapping("/board/manage")
+//  @GetMapping("/post/manage")
 //  public ModelAndView getBoardManage() {
 //    return new ModelAndView("admin/admin_board_list");
 //  }
@@ -60,19 +60,19 @@ public class AdminPageController {
 //  }
 //
   //
-  //  @GetMapping("/boards/notice")
+  //  @GetMapping("/posts/notice")
   //  public ModelAndView adminBoardnotice() {
   //    return new ModelAndView("admin/");
   //  }
 
     @GetMapping("/boards/download")
     public ModelAndView adminBoarddownload() {
-      return new ModelAndView("admin/admin_board_download");
+      return new ModelAndView("admin_post_download");
     }
 
     @GetMapping("/boards/qna")
     public ModelAndView adminBoardQnA() {
-      return new ModelAndView("admin/admin_board_qna");
+      return new ModelAndView("admin_post_qna");
     }
 
   @GetMapping("/survey/{id}")

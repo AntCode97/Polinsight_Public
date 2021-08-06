@@ -13,12 +13,12 @@
         <div class="metop_inner">
           <div class="metop_board_wrap">
             <div class="metop_board_card">
-              <form id="frm_board" th:action="@{/admin/boards/new}" th:object="${boardDTO}" method="POST" enctype="multipart/form-data">
+              <form id="frm_board" th:action="@{/admin/posts/new}" th:object="${postDTO}" method="POST" enctype="multipart/form-data">
                 <div class="input_wrap register_top_wrap">
                   <div class="board_div">
                     <label for="board_title"><span>*</span>게시판</label>
                     <span class="board_span">
-                                          <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{boardType}" autofocus required>
+                                          <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{postType}" autofocus required>
                                             <optgroup label="분류 선택">
                                             <option value="NOTICE">공지사항</option>
                                             <option value="ARCHIVES">자료실</option>

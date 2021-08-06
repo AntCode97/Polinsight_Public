@@ -167,12 +167,12 @@
 
   <div class="sub-main-name"><b>공지사항</b></div>
 
-  <div class="board">
+  <div class="post">
     <div class="button">
       <div>
-        <form th:action="@{/boards/search}" th:object="${boardSearch}" method="get">
+        <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
 
-          <select th:field="*{boardType}" class="select" name="classify" id="classify">
+          <select th:field="*{postType}" class="select" name="classify" id="classify">
             <optgroup label="분류 선택">
               <option selected value="NOTICE">공지</option>
               <option value="EVENT">이벤트</option>
@@ -203,19 +203,19 @@
           </thead>
 
           <tbody>
-          <tr class="first" th:each="board : ${boards}">
-            <td width="50" th:text="${board.id}">&nbsp;</td>
-            <td width="950"><a th:text="${board.title}" th:href="@{/boards/{id} (id=${board.id})}"></a>
-              <span th:if="${board.newBoard}">
+          <tr class="first" th:each="post : ${posts}">
+            <td width="50" th:text="${post.id}">&nbsp;</td>
+            <td width="950"><a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}"></a>
+              <span th:if="${post.newPost}">
                                  New!
                             </span>
               <span>
-                        <i th:unless="${board.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
+                        <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
                     </span>
             </td>
 
-            <td width="80" th:text="${board.user.name}"></td>
-            <td width="120" th:text="${#temporals.format(board.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
+            <td width="80" th:text="${post.user.name}"></td>
+            <td width="120" th:text="${#temporals.format(post.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
 
           </tr>
           </tbody>
@@ -228,7 +228,7 @@
     <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
       <div class="writeButton">
         <div class="write">
-          <a th:href="@{/boards/new}">
+          <a th:href="@{/posts/new}">
             <b>글쓰기</b>
           </a>
         </div>
@@ -236,63 +236,63 @@
     </th:block>
   </th:block>
 
-  <div class="page-button" th:with="start=${T(Math).floor(boards.number/10)*10 + 1}, last=(${start + 9 < boards.totalPages ? start + 9 : boards.totalPages})">
-    <span th:if="${boardSearch.getBoardType()} !=null">
-      <a th:href="@{/boards/search(page=1, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}" aria-label="First">
+  <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
+    <span th:if="${postSearch.getPostType()} !=null">
+      <a th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First">
         <span aria-hidden="true">
-          <img class="button" th:src="@{/img/board/first_page.png}" alt="처음 페이지로 이동"></span>
+          <img class="button" th:src="@{/img/post/first_page.png}" alt="처음 페이지로 이동"></span>
                 </a>
-                 <a th:class="${boards.first} ? 'disabled'"
-                    th:href="${boards.first} ? '#' : @{/boards/search(page=${boards.number}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"
+                 <a th:class="${posts.first} ? 'disabled'"
+                    th:href="${posts.first} ? '#' : @{/posts/search(page=${posts.number}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
                     aria-label="Previous">
-                   <img class="button" th:src="@{/img/board/list_prev.png}" alt="이전 페이지로 이동">
+                   <img class="button" th:src="@{/img/post/list_prev.png}" alt="이전 페이지로 이동">
                  </a>
-      <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' "
+      <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
          th:text="${page}"
-         th:href="@{/boards/search(page=${page}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue})}"></a>
-      <a th:class="${boards.last} ? 'disabled'"
-         th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue} )}"
+         th:href="@{/posts/search(page=${page}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"></a>
+      <a th:class="${posts.last} ? 'disabled'"
+         th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}"
          aria-label="Next">
-        <img class="button" th:src="@{/img/board/list_next.png}" alt="다음 페이지로 이동">
+        <img class="button" th:src="@{/img/post/list_next.png}" alt="다음 페이지로 이동">
       </a>
-      <a th:href="@{/boards(page=${boards.totalPages}, boardType=${boardSearch.boardType}, searchType=${boardSearch.searchType},searchValue=${boardSearch.searchValue} )}"
+      <a th:href="@{/posts/search(page=${posts.totalPages}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}"
          aria-label="Last">
-        <img class="button" th:src="@{/img/board/last_page.png}" alt="마지막 페이지로 이동">
+        <img class="button" th:src="@{/img/post/last_page.png}" alt="마지막 페이지로 이동">
       </a>
     </span>
 
-    <span th:if="${boardSearch.getBoardType()} ==null">
-      <a th:href="@{/boards(page=1)}" aria-label="First">
-        <img class="button" th:src="@{/img/board/first_page.png}" alt="처음 페이지로 이동">
+    <span th:if="${postSearch.getPostType()} ==null">
+      <a th:href="@{/posts(page=1)}" aria-label="First">
+        <img class="button" th:src="@{/img/post/first_page.png}" alt="처음 페이지로 이동">
       </a>
-      <a th:class="${boards.first} ? 'disabled'" th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
-        <img class="button" th:src="@{/img/board/list_prev.png}" alt="이전 페이지로 이동">
+      <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/posts(page=${posts.number})}" aria-label="Previous">
+        <img class="button" th:src="@{/img/post/list_prev.png}" alt="이전 페이지로 이동">
       </a>
-      <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}"
-         th:href="@{/boards(page=${page})}"></a>
-      <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
-        <img class="button" th:src="@{/img/board/list_next.png}" alt="다음 페이지로 이동">
+      <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' " th:text="${page}"
+         th:href="@{/posts(page=${page})}"></a>
+      <a th:class="${posts.last} ? 'disabled'" th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2})}" aria-label="Next">
+        <img class="button" th:src="@{/img/post/list_next.png}" alt="다음 페이지로 이동">
       </a>
-      <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
-        <img class="button" th:src="@{/img/board/last_page.png}" alt="마지막 페이지로 이동">
+      <a th:href="@{/posts(page=${posts.totalPages})}" aria-label="Last">
+        <img class="button" th:src="@{/img/post/last_page.png}" alt="마지막 페이지로 이동">
       </a>
     </span>
   </div>
 </div>
 </body>
 <script>
-  // const makeTemplate = (board) => {
-  //   console.log(board)
+  // const makeTemplate = (post) => {
+  //   console.log(post)
   //   let template = '';
   //   template += '<tr class="first">'
-  //   template += '<td width="50">' + board.id + '</td>'
+  //   template += '<td width="50">' + post.id + '</td>'
   //   template += '<td width="950">'
-  //   template += '<a href="/boards/' + board.id + '">' + board.title + '</a>'
-  //   if (board.newBoard === true)
+  //   template += '<a href="/posts/' + post.id + '">' + post.title + '</a>'
+  //   if (post.newPost === true)
   //     template += '<span>New!</span>'
   //   template += '</td>'
-  //   template += '<td width="80">' + board.user.name + '</td>'
-  //   template += '<td width="120">' + board.registeredAt + '</td>'
+  //   template += '<td width="80">' + post.user.name + '</td>'
+  //   template += '<td width="120">' + post.registeredAt + '</td>'
   //   template += '</tr>'
   //   return template
   // }
@@ -304,13 +304,13 @@
   //   const classify = $('#classify').val()
   //   const keyword = $("#searchinput").val()
   //
-  //   axios.get('/api/board/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
+  //   axios.get('/api/post/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
   //       .then(res => {
-  //         const boards = res.data.data
+  //         const posts = res.data.data
   //         const body = $('tbody')
   //         body.empty()
-  //         for (idx in boards) {
-  //           body.append(makeTemplate(boards[idx]))
+  //         for (idx in posts) {
+  //           body.append(makeTemplate(posts[idx]))
   //         }
   //       })
   //       .catch(err => {

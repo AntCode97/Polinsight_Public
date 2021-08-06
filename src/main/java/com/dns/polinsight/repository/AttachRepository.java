@@ -9,10 +9,10 @@ import java.util.List;
 public interface AttachRepository extends JpaRepository<Attach, Long> {
 
   @Query(
-      value = "SELECT a FROM Attach a WHERE a.board.id = :boardId",
-      countQuery = "SELECT COUNT(a.id) FROM Attach a WHERE a.board.id = :boardId"
+      value = "SELECT a FROM Attach a WHERE a.post.id = :postId",
+      countQuery = "SELECT COUNT(a.id) FROM Attach a WHERE a.post.id = :postId"
   )
-  List<Attach> findByBoardId(Long boardId);
+  List<Attach> findByPostId(Long postId);
 
   List<Attach> findByFileName(String fileName);
 

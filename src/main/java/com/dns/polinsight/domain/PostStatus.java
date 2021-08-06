@@ -10,7 +10,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Setter
 @Getter
-public class BoardStatus {
+public class PostStatus {
 
 
   private Long viewCount;

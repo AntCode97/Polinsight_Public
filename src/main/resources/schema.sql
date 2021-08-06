@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS additional_favorite CASCADE;
 
 DROP TABLE IF EXISTS attach CASCADE;
 
-DROP TABLE IF EXISTS board CASCADE;
+
+DROP TABLE IF EXISTS post CASCADE;
 
 DROP TABLE IF EXISTS change_pwd_dto CASCADE;
 
@@ -125,4 +126,15 @@ CREATE TABLE point_request
     bank          VARCHAR(20)  NOT NULL,
     account       VARCHAR(50)  NOT NULL,
     progress      VARCHAR(20)  NOT NULL DEFAULT 'REQUESTED'
-)
+);
+
+CREATE TABLE post
+(
+    id            BIGINT       NOT NULL PRIMARY KEY,
+    file_path     VARCHAR(255) NULL,
+    file_size     BIGINT       NULL,
+    filename      VARCHAR(255) NULL,
+    original_name VARCHAR(255) NULL,
+    bno           BIGINT       NULL,
+    FOREIGN KEY (bno) REFERENCES post (bno)
+);

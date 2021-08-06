@@ -1,7 +1,7 @@
 package com.dns.polinsight.domain;
 
-import com.dns.polinsight.domain.dto.BoardDTO;
-import com.dns.polinsight.types.BoardType;
+import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.types.PostType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -17,20 +17,20 @@ import java.util.List;
 @Entity
 @ToString
 @Getter
-@Builder(builderMethodName = "BoardBuilder")
+@Builder(builderMethodName = "PostBuilder")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board implements Serializable {
+public class Post implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
 
-  @OneToMany(mappedBy = "board")
+  @OneToMany(mappedBy = "post")
   @Builder.Default
   @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
 
   @Id
-  @Column(name = "bno")
+  @Column(name = "pno")
   @GeneratedValue(strategy = GenerationType.AUTO)
   @PositiveOrZero
   private Long id;
@@ -51,23 +51,23 @@ public class Board implements Serializable {
 
   private LocalDateTime registeredAt;
 
-  private BoardType boardType;
+  private PostType postType;
 
-  private Boolean newBoard;
+  private Boolean newPost;
 
   @Setter
   private long viewcnt;
 
-  public static BoardBuilder builder(BoardDTO boardDTO) {
-    return BoardBuilder()
-        .id(boardDTO.getId())
-        .title(boardDTO.getTitle())
-        .searchcontent(boardDTO.getContent())
-        .viewcontent(boardDTO.getViewcontent())
-        .user(boardDTO.getUser())
-        .registeredAt(boardDTO.getRegisteredAt())
-        .boardType(boardDTO.getBoardType())
-        .attaches(boardDTO.getAttaches())
+  public static PostBuilder builder(PostDTO postDTO) {
+    return PostBuilder()
+        .id(postDTO.getId())
+        .title(postDTO.getTitle())
+        .searchcontent(postDTO.getContent())
+        .viewcontent(postDTO.getViewcontent())
+        .user(postDTO.getUser())
+        .registeredAt(postDTO.getRegisteredAt())
+        .postType(postDTO.getPostType())
+        .attaches(postDTO.getAttaches())
         .viewcnt(0);
   }
 
@@ -80,8 +80,8 @@ public class Board implements Serializable {
   //    this.registeredAt =registeredAt;
   //  }
 
-  public void setNewBoard(Boolean time) {
-    this.newBoard = time;
+  public void setNewPost(Boolean time) {
+    this.newPost = time;
   }
 
 

@@ -1,7 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
-import com.dns.polinsight.domain.dto.BoardDTO;
+import com.dns.polinsight.domain.dto.PostDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,6 +27,6 @@ public interface AttachService {
   List<Attach> findByname(String filename);
 
 
-  void addAttach(BoardDTO boardDTO);
+  void addAttach(PostDTO postDTO);
 
 }
