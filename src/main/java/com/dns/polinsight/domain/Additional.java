@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,7 @@ public class Additional implements Serializable {
   /*
    * 추가정보 클래스
    * */
+  @Enumerated(EnumType.STRING)
   private GenderType gender;
 
   private String education;

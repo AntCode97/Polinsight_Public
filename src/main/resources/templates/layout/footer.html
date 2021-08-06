@@ -1,91 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<th:block th:include="module/common" />
-<head>
-        <style type="text/css">
-            footer {
-                position: relative;
-                height: 200px;
-            }
-            .footer_wrap {
-                padding: 20px 20px 30px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                height: 200px;
-                background-color: #FFF;
-                color: #000;
-                font-size: 14px;
-                position: absolute;
-                left: 0px;
-                right: 0px;
-                bottom: 0px;
-                border-top: 1px solid #444;
-            }
-            .footer_container {
-                width: 1200px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                padding: 0 15px;
-            }
-            .footer_logo {
-                width: 200px;
-                height: 50px;
-                background-image: url("/img/logo/logo_color.png");
-                background-repeat: no-repeat;
-                background-position: center center;
-                background-size: contain;
-                margin-right: 70px;
-            }
-            .footer_href {
-                font-weight: bold;
-            }
-            .footer_href::before {
-                content: '|';
-                display: inline-block;
-                color: #bdbdbd;
-                margin: 0 8px;
-                font-size: 14px;
-            }
-            .footer_conn::before {
-                content: '|';
-                display: inline-block;
-                color: #bdbdbd;
-                margin: 0 8px;
-                font-size: 14px;
-            }
-            .footer_left_common {
-                margin-bottom: 8px;
-                color: #444;
-                font-size: 14px;
-            }
-        </style>
-</head>
-<body>
-<footer>
-    <div class="footer_wrap">
-        <div class="footer_container">
-            <div class="footer_logo"></div>
-            <div class="footer_left">
-                <div class="footer_left_common footer_left_line1">
-                    <span><a href="#" class="point_color" style="font-weight: bold;">개인정보처리방침</a></span>
-                    <span><a href="#" class="footer_href">이메일무단수집거부</a></span>
-                    <span class="footer_href" style="font-weight: normal;">(62265) 광주광역시 광산구 첨단내촌로 70번길 55(월계동 769-4) 404호</span>
-                </div>
+<th:block>
+  <style type="text/css">
+    footer {
+      height: 200px;
+    }
 
-                <div class="footer_left_common footer_left_line3">
-                    <span>TEL : 062-374-7011</span>
-                    <span class="footer_conn">FAX : 062-374-7013</span>
-                    <span class="footer_conn">EMAIL : polinsight@gmail.com</span>
-                </div>
-                <div class="footer_left_common footer_left_line4">
-                    <span>©POLINSIGHT. ALL RIGHTS RESERVED.</span>
-                </div>
-            </div>
+    .footer_wrap {
+      padding: 20px 20px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 200px;
+      background-color: #FFF;
+      color: #000;
+      font-size: 14px;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      border-top: 1px solid #444;
+    }
+
+    .footer_container {
+      width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+    }
+
+    .footer_logo {
+      width: 200px;
+      height: 50px;
+      background-image: url("/img/logo/logo_color.png");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: contain;
+      margin-right: 70px;
+    }
+
+    .footer_href {
+      font-weight: bold;
+    }
+
+    .footer_href::before {
+      content: '|';
+      display: inline-block;
+      color: #bdbdbd;
+      margin: 0 8px;
+      font-size: 14px;
+    }
+
+    .footer_conn::before {
+      content: '|';
+      display: inline-block;
+      color: #bdbdbd;
+      margin: 0 8px;
+      font-size: 14px;
+    }
+
+    .footer_left_common {
+      margin-bottom: 8px;
+      color: #444;
+      font-size: 14px;
+    }
+  </style>
+  <footer>
+    <div class="footer_wrap">
+      <div class="footer_container">
+        <div class="footer_logo"></div>
+        <div class="footer_left">
+          <div class="footer_left_common footer_left_line1">
+            <span><a href="#" class="point_color" style="font-weight: bold;">개인정보처리방침</a></span>
+            <span><a href="#" class="footer_href">이메일무단수집거부</a></span>
+            <span class="footer_href" style="font-weight: normal;">(62265) 광주광역시 광산구 첨단내촌로 70번길 55(월계동 769-4) 404호</span>
+          </div>
+
+          <div class="footer_left_common footer_left_line3">
+            <span>TEL : 062-374-7011</span>
+            <span class="footer_conn">FAX : 062-374-7013</span>
+            <span class="footer_conn">EMAIL : polinsight@gmail.com</span>
+          </div>
+          <div class="footer_left_common footer_left_line4">
+            <span>©POLINSIGHT. ALL RIGHTS RESERVED.</span>
+          </div>
         </div>
+      </div>
     </div>
-</footer>
-</body>
-</html>
+  </footer>
+</th:block>

@@ -32,8 +32,7 @@ public class SurveyStatus {
   @Builder.Default
   private ProgressType progress = ProgressType.BEFORE;
 
-  // 포인트가 지급 될 수 있는 최소 시간
-  private LocalDateTime minimumTime;
+  private Integer minimumTime = 30;
 
 
   public void setProgress(LocalDateTime endDateTime) {
