@@ -23,17 +23,6 @@ CREATE TABLE change_pwd_dto
     UNIQUE (email)
 );
 
-# CREATE TABLE point
-# (
-#     id          BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
-#     email       VARCHAR(255) NULL,
-#     hash        VARCHAR(255) NULL,
-#     point_value BIGINT       NULL,
-#     survey_id   BIGINT       NULL,
-#     uid         BIGINT       NULL
-# );
-
-
 CREATE TABLE user_favorite
 (
     user_id  BIGINT       NOT NULL,

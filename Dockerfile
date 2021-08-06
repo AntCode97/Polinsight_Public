@@ -19,12 +19,12 @@ LABEL description="polinsight web project"
 
 ENV profile="prod"
 
-ENV maria_host="pol-mariadb"
-
-ENV mongo_host="pol-mongodb"
-
-ENV redis_host="pol-redis"
+#ENV maria_host="pol-mariadb"
+#
+#ENV mongo_host="pol-mongodb"
+#
+#ENV redis_host="pol-redis"
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-Dspring.profiles.active=${profile}","-jar", "app.jar", "--spring", "--spring.datasource.url=jdbc:mariadb://${maria_host}:3306/polinsight" ,"--spring.data.mongodb.uri=mongodb://${mongo_host}:27017/polinsight", "--spring.redis.host=${redis_host}"]
+ENTRYPOINT ["java","-Dspring.profiles.active=${profile}","-jar", "app.jar"]
