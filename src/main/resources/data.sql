@@ -1065,7 +1065,7 @@ VALUES
     ( 999, '2021-03-08 12:43:29.000000', '양력', '대학', 'FEMALE', '교육', '학생', FALSE, 'bsleenyrq@feedburner.com', TRUE, TRUE, 'atheakstonrq', NULL, '7706752480', NULL, NULL, NULL ),
     ( 1000, '2020-10-19 20:43:40.000000', '양력', '대학', 'FEMALE', '교육', '학생', FALSE, 'mtivnanrr@google.ru', TRUE, TRUE, 'olyndrr', NULL, '4935673208', NULL, NULL, NULL );
 
-INSERT INTO post ( pno, post_type, new_post, registered_at, searchcontent, title, viewcontent, viewcnt, user_id )
+INSERT INTO post ( pno, type, is_new, registered_at, search_content, title, view_content, view_count, user_id )
 VALUES
     ( 1, 'NOTICE', FALSE, '2021-07-01 00:00:00.000000',
       'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae, Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus.',

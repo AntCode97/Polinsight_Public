@@ -39,9 +39,11 @@ public class Post implements Serializable {
   private String title;
 
   @NotEmpty
+  @Column(name = "search_content")
   private String searchcontent;
 
   @NotEmpty
+  @Column(name = "view_content")
   private String viewcontent;
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -52,12 +54,15 @@ public class Post implements Serializable {
   private LocalDateTime registeredAt;
 
   @Enumerated(EnumType.STRING)
+  @Column(name = "type")
   private PostType postType;
 
+  @Column(name = "is_new")
   private Boolean newPost;
 
   @Setter
-  private long viewcnt;
+  @Column(name = "view_count")
+  private Long viewcnt;
 
   public static PostBuilder builder(PostDTO postDTO) {
     return PostBuilder()
@@ -69,7 +74,7 @@ public class Post implements Serializable {
         .registeredAt(postDTO.getRegisteredAt())
         .postType(postDTO.getPostType())
         .attaches(postDTO.getAttaches())
-        .viewcnt(0);
+        .viewcnt(0L);
   }
 
 

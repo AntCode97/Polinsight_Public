@@ -69,14 +69,14 @@ CREATE TABLE user_favorite
 CREATE TABLE post
 (
 
-    pno           BIGINT        NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    post_type     VARCHAR(30)   NULL,
-    new_post      BIT           NULL DEFAULT FALSE,
-    registered_at DATETIME(6)   NULL DEFAULT NOW(),
-    searchcontent VARCHAR(2550) NULL,
-    title         VARCHAR(255)  NULL,
-    viewcontent   VARCHAR(2550) NULL,
-    user_id       BIGINT        NOT NULL,
+    pno            BIGINT        NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    is_new         BIT           NULL     DEFAULT FALSE,
+    registered_at  DATETIME(6)   NULL     DEFAULT NOW(),
+    search_content VARCHAR(2550) NULL,
+    title          VARCHAR(255)  NULL,
+    view_content   VARCHAR(2550) NULL,
+    view_count     BIGINT        NOT NULL DEFAULT 0,
+    user_id        BIGINT        NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
