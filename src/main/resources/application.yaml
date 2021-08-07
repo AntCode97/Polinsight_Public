@@ -209,7 +209,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : create-drop
     properties :
       format_sql : true
     show-sql :     true
@@ -257,7 +257,7 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : create
     generate-ddl : false
 
 
