@@ -44,7 +44,7 @@ CREATE TABLE user
     birth            DATETIME(6)  NULL,
     birth_type       VARCHAR(255) NULL DEFAULT '양력',
     education        VARCHAR(255) NULL,
-    gender           INT          NULL,
+    gender           VARCHAR(20)         NULL,
     industry         VARCHAR(255) NULL,
     job              VARCHAR(255) NULL,
     marry            BIT          NULL,
