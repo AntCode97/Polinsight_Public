@@ -40,9 +40,9 @@ CREATE TABLE user
 (
     id               BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
     email            VARCHAR(255) NOT NULL,
-    name             VARCHAR(255) NULL,
+    name             VARCHAR(255) NOT NULL,
     password         VARCHAR(255) NOT NULL,
-    phone            VARCHAR(11)  NULL,
+    phone            VARCHAR(11)  NOT NULL,
     point            BIGINT       NULL DEFAULT 0,
     recommend        VARCHAR(11)  NULL,
     role             VARCHAR(255) NULL DEFAULT 'USER',
@@ -77,6 +77,7 @@ CREATE TABLE post
     view_content   VARCHAR(2550) NULL,
     view_count     BIGINT        NOT NULL DEFAULT 0,
     user_id        BIGINT        NOT NULL,
+    type           VARCHAR(30)   NULL,
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
