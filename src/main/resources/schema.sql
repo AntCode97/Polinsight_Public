@@ -91,7 +91,7 @@ CREATE TABLE survey
     point        BIGINT       NOT NULL DEFAULT 0,
     href         VARCHAR(255) NOT NULL,
     progress     VARCHAR(255) NOT NULL DEFAULT 'BEFORE',
-    minimum_time DATETIME     NOT NULL,
+    minimum_time INT          NOT NULL,
     count        INTEGER      NOT NULL DEFAULT 0,
     UNIQUE (survey_id)
 );
@@ -102,7 +102,7 @@ CREATE TABLE participate_survey
     user_id         BIGINT       NOT NULL,
     survey_id       BIGINT       NOT NULL,
     participated_at DATETIME     NOT NULL DEFAULT NOW(),
-    survey_point    BIGINT       NOT NULL,
+    survey_point    TINYINT      NOT NULL,
     hash            VARCHAR(255) NOT NULL,
     finished        BIT          NOT NULL DEFAULT FALSE,
     UNIQUE (hash),
