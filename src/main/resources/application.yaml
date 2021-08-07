@@ -193,11 +193,7 @@ spring :
     hikari :
       pool-name :         Test DBCP Pool
       maximum-pool-size : 5
-
-
-  #  data :
-  #    mongodb :
-  #      uri : mongodb://localhost:27017/polinsight
+    initialization-mode : always
 
   redis :
     host : localhost
@@ -245,9 +241,6 @@ spring :
     hikari :
       maximum-pool-size : 300
       pool-name :         Pollinsight DBCP Pool
-  #  data :
-  #    mongodb :
-  #      uri : mongodb://pol-mongodb:27017/polinsight
 
   redis :
     host : pol-redis

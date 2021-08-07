@@ -31,7 +31,7 @@ public class Post implements Serializable {
 
   @Id
   @Column(name = "pno")
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @PositiveOrZero
   private Long id;
 
@@ -51,6 +51,7 @@ public class Post implements Serializable {
 
   private LocalDateTime registeredAt;
 
+  @Enumerated(EnumType.STRING)
   private PostType postType;
 
   private Boolean newPost;
