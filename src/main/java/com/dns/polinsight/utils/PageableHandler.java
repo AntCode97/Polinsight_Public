@@ -1,6 +1,7 @@
 package com.dns.polinsight.utils;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -25,5 +26,4 @@ public class PageableHandler implements HandlerMethodArgumentResolver {
     int offset = webRequest.getParameterMap().containsKey("offset") ? Integer.parseInt(webRequest.getParameter("offset")) : 0;
     return PageRequest.of(offset, size);
   }
-
 }

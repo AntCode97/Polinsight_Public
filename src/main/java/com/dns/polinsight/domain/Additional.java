@@ -26,9 +26,6 @@ public class Additional implements Serializable {
   @ElementCollection
   private final List<String> favorite = new ArrayList<>();
 
-  /*
-   * 추가정보 클래스
-   * */
   @Enumerated(EnumType.STRING)
   private GenderType gender;
 

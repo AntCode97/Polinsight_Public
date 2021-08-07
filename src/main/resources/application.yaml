@@ -193,6 +193,7 @@ spring :
     hikari :
       pool-name :         Test DBCP Pool
       maximum-pool-size : 5
+    initialization-mode : always
 
   redis :
     host : localhost
@@ -208,7 +209,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : update
     properties :
       format_sql : true
     show-sql :     true
