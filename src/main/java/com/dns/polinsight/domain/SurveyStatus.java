@@ -26,12 +26,13 @@ public class SurveyStatus {
   // 설문을 완료한 사람 수
   @Builder.Default
   @Setter
-  private Integer count = 0;
+  private Long count = 0L;
 
   @Enumerated(EnumType.STRING)
   @Builder.Default
   private ProgressType progress = ProgressType.BEFORE;
 
+  @Column(name = "minimum_time")
   private Integer minimumTime = 30;
 
 

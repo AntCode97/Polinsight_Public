@@ -103,7 +103,7 @@ CREATE TABLE survey
     href         VARCHAR(255) NOT NULL,
     progress     VARCHAR(255) NOT NULL DEFAULT 'BEFORE',
     minimum_time INT          NOT NULL,
-    count        INTEGER      NOT NULL DEFAULT 0,
+    count        BIGINT       NOT NULL DEFAULT 0,
     UNIQUE (survey_id)
 );
 
