@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
+<th:block>
   <style>
     .web {
       margin: auto;
@@ -152,91 +149,92 @@
       text-decoration: none;
       color: #2F3138;
     }
+
+    .PC {
+      margin-top: 80px;
+      height: 100%;
+    }
   </style>
-</head>
 
-<body class="PC">
-<div class="web">
-  <div class="sub-main">
-    <span></span>
-    <ul>
-      <li class="notice">공지사항</li>
-      <li class="qna">문의사항</li>
-    </ul>
-  </div>
-
-  <div class="sub-main-name"><b>공지사항</b></div>
-
-  <div class="post">
-    <div class="button">
-      <div>
-        <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
-
-          <select th:field="*{postType}" class="select" name="classify" id="classify">
-            <optgroup label="분류 선택">
-              <option selected value="NOTICE">공지</option>
-              <option value="EVENT">이벤트</option>
-            </optgroup>
-          </select>
-          <select th:field="*{searchType}" name="search_item" class="select" id="type">
-            <optgroup label="통합검색">
-              <option selected th:value="TITLE" th:text="제목"></option>
-              <option th:value="CONTENT" th:text="내용"></option>
-            </optgroup>
-          </select>
-          <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
-          <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
-        </form>
+  <div class="PC">
+    <div class="web">
+      <div class="sub-main">
+        <span></span>
+        <ul>
+          <li class="notice">공지사항</li>
+          <li class="qna">문의사항</li>
+        </ul>
       </div>
-    </div>
 
-    <div class="post-list">
-      <div>
-        <table class="tblList">
-          <thead>
-          <tr align="left">
-            <th width="50" height="36"> 번호</th>
-            <th width="900">제목</th>
-            <th width="80">등록자</th>
-            <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
-          </tr>
-          </thead>
+      <div class="sub-main-name"><b>공지사항</b></div>
 
-          <tbody>
-          <tr class="first" th:each="post : ${posts}">
-            <td width="50" th:text="${post.id}">&nbsp;</td>
-            <td width="950"><a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}"></a>
-              <span th:if="${post.newPost}">
-                                 New!
-                            </span>
-              <span>
-                        <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-                    </span>
-            </td>
+      <div class="post">
+        <div class="button">
+          <div>
+            <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
 
-            <td width="80" th:text="${post.user.name}"></td>
-            <td width="120" th:text="${#temporals.format(post.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
+              <select th:field="*{postType}" class="select" name="classify" id="classify">
+                <optgroup label="분류 선택">
+                  <option selected value="NOTICE">공지</option>
+                  <option value="EVENT">이벤트</option>
+                </optgroup>
+              </select>
+              <select th:field="*{searchType}" name="search_item" class="select" id="type">
+                <optgroup label="통합검색">
+                  <option selected th:value="TITLE" th:text="제목"></option>
+                  <option th:value="CONTENT" th:text="내용"></option>
+                </optgroup>
+              </select>
+              <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
+              <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
+            </form>
+          </div>
+        </div>
 
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+        <div class="post-list">
+          <div>
+            <table class="tblList">
+              <thead>
+              <tr align="left">
+                <th width="50" height="36"> 번호</th>
+                <th width="900">제목</th>
+                <th width="80">등록자</th>
+                <th width="120">&nbsp;&nbsp;&nbsp;등록일</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="first" th:each="post : ${posts}">
+                <td width="50" th:text="${post.id}">&nbsp;</td>
+                <td width="950"><a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}"></a>
+                  <span th:if="${post.newPost}">New!</span>
+                  <span>
+                    <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
+                  </span>
+                </td>
 
-  <th:block th:unless="${session.user} == null">
-    <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
-      <div class="writeButton">
-        <div class="write">
-          <a th:href="@{/posts/new}">
-            <b>글쓰기</b>
-          </a>
+                <td width="80" th:text="${post.user.name}"></td>
+                <td width="120" th:text="${#temporals.format(post.registeredAt, 'yyyy년 MM월 dd일 HH:mm')}"></td>
+
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </th:block>
-  </th:block>
 
-  <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
+      <th:block th:unless="${session.user} == null">
+        <th:block th:if="${ session.user.role.name() == 'ADMIN'}">
+          <div class="writeButton">
+            <div class="write">
+              <a th:href="@{/posts/new}">
+                <b>글쓰기</b>
+              </a>
+            </div>
+          </div>
+        </th:block>
+      </th:block>
+
+      <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
     <span th:if="${postSearch.getPostType()} !=null">
       <a th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First">
         <span aria-hidden="true">
@@ -261,7 +259,7 @@
       </a>
     </span>
 
-    <span th:if="${postSearch.getPostType()} ==null">
+        <span th:if="${postSearch.getPostType()} ==null">
       <a th:href="@{/posts(page=1)}" aria-label="First">
         <img class="button" th:src="@{/img/post/first_page.png}" alt="처음 페이지로 이동">
       </a>
@@ -277,55 +275,14 @@
         <img class="button" th:src="@{/img/post/last_page.png}" alt="마지막 페이지로 이동">
       </a>
     </span>
+      </div>
+    </div>
   </div>
-</div>
-</body>
-<script>
-  // const makeTemplate = (post) => {
-  //   console.log(post)
-  //   let template = '';
-  //   template += '<tr class="first">'
-  //   template += '<td width="50">' + post.id + '</td>'
-  //   template += '<td width="950">'
-  //   template += '<a href="/posts/' + post.id + '">' + post.title + '</a>'
-  //   if (post.newPost === true)
-  //     template += '<span>New!</span>'
-  //   template += '</td>'
-  //   template += '<td width="80">' + post.user.name + '</td>'
-  //   template += '<td width="120">' + post.registeredAt + '</td>'
-  //   template += '</tr>'
-  //   return template
-  // }
-  //
-  // const asyncFindBoard = (e) => {
-  //   e.preventDefault();
-  //   e.returnValue = false;
-  //   const searchType = $("#type").val()
-  //   const classify = $('#classify').val()
-  //   const keyword = $("#searchinput").val()
-  //
-  //   axios.get('/api/post/search?type=' + searchType + '&classify=' + classify + '&keyword=' + keyword)
-  //       .then(res => {
-  //         const posts = res.data.data
-  //         const body = $('tbody')
-  //         body.empty()
-  //         for (idx in posts) {
-  //           body.append(makeTemplate(posts[idx]))
-  //         }
-  //       })
-  //       .catch(err => {
-  //         console.log(err)
-  //       })
-  // }
-  //
-  //
-  $(function () {
-    $('.header_wrap').css('background-color', '#182838')
-  //  $("#searchinput").on('change keyup', asyncFindBoard)
-  })
-  //
-  // function movePage(uri, queryString) {
-  //   location.href = uri + queryString;
-  // }
-</script>
-</html>
+  <th:block th:include="layout/footer"></th:block>
+  <script>
+    $(function () {
+      $('.header_wrap').css('background-color', '#182838')
+
+    })
+  </script>
+</th:block>

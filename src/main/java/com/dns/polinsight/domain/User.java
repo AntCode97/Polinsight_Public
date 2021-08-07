@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
 
@@ -30,6 +29,7 @@ public class User implements UserDetails, Serializable {
   @ElementCollection
   private final Set<Long> participateSurvey = new HashSet<>();
 
+  @Builder.Default
   @Enumerated(EnumType.STRING)
   private UserRoleType role = UserRoleType.USER;
 
@@ -53,10 +53,8 @@ public class User implements UserDetails, Serializable {
 
   private String name;
 
-  @Size(min = 11, max = 11)
   private String phone;
 
-  @Size(min = 11, max = 11)
   private String recommend;
 
   @PositiveOrZero

@@ -1,5 +1,5 @@
-<th:block th:include='admin/admin_sidebar' />
-<th:block th:include='module/common' />
+<th:block th:include="admin/admin_sidebar" />
+<th:block th:include="module/common" />
 <th:block>
   <th:block>
     <style>
@@ -50,29 +50,29 @@
       }
     </style>
   </th:block>
-  <div class='admin_main_contents'>
-    <div class='admin_main_contents_category'>
-      <div class='admin_main_contents_item'>
-        <p class='main_item'>설문 목록</p>
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">설문 목록</p>
       </div>
     </div>
 
-    <div class='main_contents_wrap'>
-      <div class='post-search'>
-        <div class='util-search'>총 <strong></strong>개의 설문이 있습니다.</div>
+    <div class="main_contents_wrap">
+      <div class="post-search">
+        <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
       </div>
 
       <!--관리자 페이지 설문 찾기 기능-->
-      <div class='search-box-container'>
-        <span class='search-icon'><i class='fa fa-search'></i></span>
-        <input class='admin_find' name='admin_find' type='text' placeholder='검색' />
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
       </div>
 
-      <table class='scroll-table'>
+      <table class="scroll-table">
         <thead></thead>
         <tbody></tbody>
       </table>
-      <div class='pagination'></div>
+      <div class="pagination"></div>
 
     </div>
   </div>
@@ -84,10 +84,10 @@
       const surveyCount = parseInt($('.util-search>strong').text());
       const totalPage = Math.ceil(surveyCount / 10);
 
-      let first = $(`<div class='pagination_button' ><i class='fas fa-angle-double-left'></i></div>`);
-      let last = $(`<div class='pagination_button' ><i class='fas fa-angle-double-right'></i></div>`);
-      let prev = $(`<div class='pagination_button' ><i class='fas fa-angle-left'></i></div>`);
-      let next = $(`<div class='pagination_button' ><i class='fas fa-angle-right'></i></div>`);
+      let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`);
+      let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`);
+      let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`);
+      let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`);
 
       const paginationElement = $('div.pagination');
       paginationElement.empty();
@@ -97,19 +97,19 @@
 
       if (surveyCount === 0) {
         console.log('length 0');
-        $('.scroll-table').empty().after(`<div class='empty-data'><h1>결과가 없습니다</h1></div>`);
+        $('.scroll-table').empty().after(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
         $('.pagination').empty();
       } else {
         if (!regexValue) {
-          first.on('click', { offset: 0 }, adminGetAllSurveys);
-          last.on('click', { offset: totalPage }, adminGetAllSurveys);
-          prev.on('click', { offset: current - 1 >= 0 ? current - 1 : 0 }, adminGetAllSurveys);
-          next.on('click', { offset: current + 1 >= totalPage ? totalPage - 1 : current + 1 }, adminGetAllSurveys);
+          first.on('click', {offset: 0}, adminGetAllSurveys);
+          last.on('click', {offset: totalPage}, adminGetAllSurveys);
+          prev.on('click', {offset: current - 1 >= 0 ? current - 1 : 0}, adminGetAllSurveys);
+          next.on('click', {offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
 
           paginationElement.append(first).append(prev);
           for (let i = start; i < end; i++) {
-            let tmp = $(`<div class='pagination_button'>${i + 1}</div>`);
-            tmp.on('click', { offset: i }, adminGetAllSurveys);
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+            tmp.on('click', {offset: i}, adminGetAllSurveys);
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold');
             }
@@ -117,14 +117,14 @@
           }
           paginationElement.append(next).append(last);
         } else {
-          first.on('click', { regex: regexValue, offset: 0 }, adminGetAllSurveys);
-          last.on('click', { regex: regexValue, offset: totalPage }, adminGetAllSurveys);
-          prev.on('click', { regex: regexValue, offset: current - 1 <= 0 ? 0 : current - 1 }, adminGetAllSurveys);
-          next.on('click', { regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1 }, adminGetAllSurveys);
+          first.on('click', {regex: regexValue, offset: 0}, adminGetAllSurveys);
+          last.on('click', {regex: regexValue, offset: totalPage}, adminGetAllSurveys);
+          prev.on('click', {regex: regexValue, offset: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+          next.on('click', {regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
           paginationElement.append(first).append(prev);
           for (let i = start; i < end; i++) {
-            let tmp = $(`<div class='pagination_button'>${i + 1}</div>`);
-            tmp.on('click', { offset: i, regex: regexValue }, adminGetAllSurveys);
+            let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+            tmp.on('click', {offset: i, regex: regexValue}, adminGetAllSurveys);
             if (current === i) {
               tmp.addClass('pagination_button_current');
             } else {
@@ -138,7 +138,7 @@
     };
 
     const surveyListHeader = () => {
-      let template = $(`<tr class='post-row post-th'></tr>`);
+      let template = $(`<tr class="post-row post-th"></tr>`);
       template.append(`<th>번호</th>`);
       template.append(`<th>설문 이름</th>`);
       template.append(`<th>포인트</th>`);
@@ -153,17 +153,16 @@
     const adminMakeSurveySearchResults = surveys => {
       const table = $('.scroll-table>tbody');
       table.empty();
-
       for (survey of surveys) {
-        let template = $(`<tr class='post-row'>`);
+        let template = $(`<tr class="post-row">`);
         template.append(`<td>${survey.id}</td>`);// 번호
-        template.append(`<td style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${survey.title}</td>`);// 설문 이름
+        template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
         template.append(`<td>${!survey.point ? 0 : survey.point}</td>`);// 지급 포인트
         template.append(`<td>${String(survey.createdAt).split('T')[0]} ~ ${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
         template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
         template.append(`<td>${survey.status.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class='btn_del btn-support'>수정</button><span>  </span><button class='btn_del btn-warn'>삭제</button></td>`);
+        template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`);
         table.append(template);
       }
     };
@@ -172,42 +171,44 @@
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
       axios.get('/api/surveys' + regex, {
-          params: { size: 10, offset: offset }
-        })
-        .then(res => {
-          console.log(res);
-          if (res.data.success) {
-            getTotalCount(regex);
-            makePaginationsInAdminSurvey(offset);
-            adminMakeSurveySearchResults(res.data.response);
-          } else {
-            console.log('data fetching error');
-          }
-        })
-        .catch(console.log);
+            params: {size: 10, offset: offset}
+          })
+          .then(res => {
+            console.log(res);
+            if (res.data.success) {
+              getTotalCount(regex);
+              makePaginationsInAdminSurvey(offset);
+              adminMakeSurveySearchResults(res.data.response);
+            } else {
+              console.log('data fetching error');
+            }
+          })
+          .catch(console.log);
     };
 
     const getTotalCount = regex => {
       if (!regex) {
         axios.get('/api/survey/total')
-          .then(res => $('.util-search>strong').text(res.data.response))
-          .catch(console.log);
+            .then(res => $('.util-search>strong').text(res.data.response))
+            .catch(console.log);
       } else {
         axios.get('/api/survey/find/' + regex + '/total')
-          .then(res => $('.util-search>strong').text(res.data.response))
-          .catch(console.log);
+            .then(res => $('.util-search>strong').text(res.data.response))
+            .catch(console.log);
       }
     };
 
-    $(function() {
+    let sort_state = 'number';
+
+    $(function () {
       $('.scroll-table>thead').append(surveyListHeader());
       getTotalCount();
       adminGetAllSurveys();
 
-      $(document).on('click', '.post-row:not(:first-of-type)', function(e) {
+      $(document).on('click', '.post-row:not(:first-of-type)', function (e) {
         const id = $(this).children('span:first-child').text();
         // 클릭시 디테일 페이지 ==> 폼 만들고 submit
-        const form = $(`<form action='/admin/survey/${id}' method='get'></form>`);
+        const form = $(`<form action="/admin/survey/${id}" method="get"></form>`);
         $('body').append(form);
         form.submit();
       });

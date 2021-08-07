@@ -18,10 +18,7 @@ public interface UserService extends UserDetailsService {
 
   void deleteUserByEmail(String email);
 
-  User save(User user);
-
-  User update(User user);
-
+  User saveOrUpdate(User user);
 
   Optional<User> findById(long id);
 
@@ -36,5 +33,7 @@ public interface UserService extends UserDetailsService {
   Boolean isExistPhone(String phone);
 
   void subUserPoint(long uid, long point);
+
+  User addPointByUserId(long uid, long point);
 
 }

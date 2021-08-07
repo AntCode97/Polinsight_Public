@@ -17,11 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Component
+@Component("customSuccessHandler")
 @RequiredArgsConstructor
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
-  //  private final HttpSession session;
 
   private final UserRepository repository;
 

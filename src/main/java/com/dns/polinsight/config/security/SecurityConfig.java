@@ -4,6 +4,8 @@ import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,16 +19,13 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final UserService service;
-
-  private final AuthenticationSuccessHandler successHandler;
+  private final UserService userService;
 
   private final LogoutSuccessHandler logoutSuccessHandler;
 
@@ -42,9 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final PathPermission permission;
 
+  @Autowired
+  @Qualifier("customSuccessHandler")
+  private AuthenticationSuccessHandler successHandler;
+
+  @Autowired
+  @Qualifier("rememberMeSuccessHandler")
+  private RemeberMeSuccessHandler remeberMeSuccessHandler;
+
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(service).passwordEncoder(passwordEncoder());
+    auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
   }
 
   @Override
@@ -61,9 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
           .rememberMe()
         .key("remeberMeSecretKey")
-        .authenticationSuccessHandler(successHandler)
         .rememberMeParameter("rememberMe")
         .tokenValiditySeconds(7*24*60*60)  // 7일
+        .useSecureCookie(true)
+        .userDetailsService(userService)
+        .authenticationSuccessHandler(remeberMeSuccessHandler)
         .and()
           .formLogin()
             .loginPage("/login")
@@ -85,7 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               .clearAuthentication(true)
               .invalidateHttpSession(true)
         .and()
-          .addFilterBefore(customAuthProccessingFilter(), BasicAuthenticationFilter.class)
           .httpBasic().disable()
           .oauth2Login()
             .loginPage("/login")
@@ -98,18 +106,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public CustomAuthProccessingFilter customAuthProccessingFilter() {
-    CustomAuthProccessingFilter filter = new CustomAuthProccessingFilter("/dologin");
-    filter.setAuthenticationManager(authManager());
-    return filter;
-  }
-
-  @Bean
-  public CustomAuthManager authManager() {
-    return new CustomAuthManager(service);
   }
 
 }

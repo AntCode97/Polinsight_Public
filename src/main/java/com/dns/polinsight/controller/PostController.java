@@ -188,6 +188,7 @@ public class PostController {
     //    List<Post> posts = postService.findAll();
     postService.renewPost();
 
+    posts.get().map(Post::toString);
 
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);

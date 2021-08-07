@@ -15,11 +15,11 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointCalculate {
+public class PointHistory {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long seq;
+  private Long id;
 
   private Long uid;
 

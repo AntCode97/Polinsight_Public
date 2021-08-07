@@ -17,9 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-
   private final UserRepository repository;
-
 
   @Override
   public boolean isExistUser(String email) {
@@ -47,15 +45,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User save(User user) {
+  public User saveOrUpdate(User user) {
     return repository.save(user);
   }
-
-  @Override
-  public User update(User user) {
-    return repository.saveAndFlush(user);
-  }
-
 
   @Override
   public Optional<User> findById(long id) {
@@ -90,6 +82,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public void subUserPoint(long uid, long point) {
     repository.subtractUserPointByUid(uid, point);
+  }
+
+  @Override
+  public User addPointByUserId(long uid, long point) {
+    return repository.userAddPointById(uid, point);
   }
 
 }
