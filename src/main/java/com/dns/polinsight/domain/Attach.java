@@ -21,7 +21,7 @@ public class Attach {
 
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bno")
+  @JoinColumn(name = "pno")
   @NotNull
   private Post post;
 

@@ -86,7 +86,7 @@ CREATE TABLE attach
     id            BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
     file_path     VARCHAR(255) NULL,
     file_size     BIGINT       NULL,
-    filename      VARCHAR(255) NULL,
+    file_name     VARCHAR(255) NULL,
     original_name VARCHAR(255) NULL,
     pno           BIGINT       NULL,
     FOREIGN KEY (pno) REFERENCES post (pno)
@@ -113,12 +113,19 @@ CREATE TABLE participate_survey
     user_id         BIGINT       NOT NULL,
     survey_id       BIGINT       NOT NULL,
     participated_at DATETIME     NOT NULL DEFAULT NOW(),
-    survey_point    TINYINT      NOT NULL,
+    survey_point    BIGINT       NOT NULL,
     hash            VARCHAR(255) NOT NULL,
     finished        BIT          NOT NULL DEFAULT FALSE,
     UNIQUE (hash),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (survey_id) REFERENCES survey (id)
+);
+
+CREATE TABLE user_participate_survey
+(
+    user_id               BIGINT NOT NULL,
+    participate_survey_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
 CREATE TABLE point_history
@@ -141,4 +148,11 @@ CREATE TABLE point_request
     bank          VARCHAR(20)  NOT NULL,
     account       VARCHAR(50)  NOT NULL,
     progress      VARCHAR(20)  NOT NULL DEFAULT 'REQUESTED'
+);
+
+CREATE TABLE survey_variables
+(
+    survey_id BIGINT       NOT NULL,
+    variable  VARCHAR(255) NULL,
+    FOREIGN KEY (survey_id) REFERENCES survey (id)
 );

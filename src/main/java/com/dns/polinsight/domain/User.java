@@ -27,6 +27,7 @@ public class User implements UserDetails, Serializable {
 
   @Builder.Default
   @ElementCollection
+  @Column(name = "participate_survey_id")
   private final Set<Long> participateSurvey = new HashSet<>();
 
   @Builder.Default

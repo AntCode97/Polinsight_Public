@@ -209,7 +209,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : validate
     properties :
       format_sql : true
     show-sql :     true

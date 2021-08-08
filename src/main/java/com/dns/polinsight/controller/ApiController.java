@@ -266,7 +266,7 @@ public class ApiController {
                                       .account(pointRequestDto.getAccount())
                                       .requestedAt(LocalDateTime.now())
                                       .progress(PointRequestProgressType.REQUESTED)
-                                      .bankName(pointRequestDto.getBank())
+                                      .bank(pointRequestDto.getBank())
                                       .uid(sessionUser.getId())
                                       .build();
 
@@ -276,7 +276,7 @@ public class ApiController {
                                                    .amount(pointRequestDto.getPoint())
                                                    .total(sessionUser.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-                                                   .uid(sessionUser.getId())
+                                                   .userId(sessionUser.getId())
                                                    .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {

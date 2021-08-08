@@ -19,7 +19,7 @@ public class SurveyStatus {
   // 서베이몽키에서 등록한 설문의 커스텀 변수
   @ElementCollection
   @Builder.Default
-  @Column(name = "variables")
+  @Column(name = "variable")
   @Setter
   private Set<String> variables = new HashSet<>();
 
