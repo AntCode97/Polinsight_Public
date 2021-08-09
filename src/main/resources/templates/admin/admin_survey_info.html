@@ -3,7 +3,12 @@
   <style></style>
   <div class="admin_main_contents">
     <h1>Survey Info </h1>
-    <div th:text="${survey.id}"></div>
+    <div>
+      <label>
+        아이디
+        <input name="survey_id" type="text" th:value="${survey.id}">
+      </label>
+    </div>
     <div>
       <label>
         설문 제목
@@ -30,10 +35,34 @@
         <input type="text" th:value="${survey.status.progress}">
       </label>
     </div>
+    <button class="btn btn-green" name="info_update_btn">설문 정보 업데이트</button>
+    <button class="btn btn-warn" name="info_delete_btn">설문 정보 삭제</button>
   </div>
   <script>
-    $(function () {
+    const updateSurveyInfo = e => {
+      if (confirm('정말 업데이트 하시겠습니까?')) {
+        axios.put('/survey', surveyInfo)
+            .then(res => {
+              if (res.data.success) {
+                alert('업데이트 성공')
+                // TODO : 업데이트한 정보로 내용 다시 쓰기
+              }
+            })
+            .catch(console.log)
+      }
+    }
 
+    const deleteSurveyInfo = e => {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        const surveyId = $('input[name=survey_id]').val()
+        axios.delete('/user', {id: surveyId})
+            .then(console.log)
+            .catch(console.log)
+      }
+    }
+    $(function () {
+      $('button[name=info_update_btn]').on('click', updateSurveyInfo)
+      $('button[name=info_delete_btn]').on('click', deleteSurveyInfo)
     })
   </script>
 </th:block>

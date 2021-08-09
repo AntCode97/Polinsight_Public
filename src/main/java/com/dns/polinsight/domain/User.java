@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -72,6 +74,20 @@ public class User implements UserDetails, Serializable {
   /*문자 수신 동의 여부*/
   @Column(name = "is_sms_receive")
   private Boolean isSmsReceive;
+
+  @Column(name = "registered_at")
+  private LocalDateTime registeredAt;
+
+  public User(UserDto dto) {
+    this.id = dto.getId();
+    this.point = dto.getPoint();
+    this.name = dto.getName();
+    this.email = dto.getEmail();
+    this.phone = dto.getPhone();
+    this.isSmsReceive = dto.getIsSmsReceive();
+    this.isEmailReceive = dto.getIsEmailReceive();
+    this.recommend = dto.getRecommend();
+  }
 
   public void addParticipateSurvey(long surveyId) {
     this.participateSurvey.add(surveyId);

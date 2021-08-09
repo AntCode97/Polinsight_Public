@@ -131,8 +131,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public void deleteSurveyById(Long surveyId) {
-    surveyRepository.delete(Survey.builder().id(surveyId).build());
+  public void deleteSurveyById(long surveyId) {
+    surveyRepository.deleteById(surveyId);
   }
 
   @Override

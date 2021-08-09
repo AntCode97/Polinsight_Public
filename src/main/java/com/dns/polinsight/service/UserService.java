@@ -22,7 +22,7 @@ public interface UserService extends UserDetailsService {
 
   Optional<User> findById(long id);
 
-  void deleteUser(User user);
+  void deleteUserById(long userId);
 
   User findUserByEmail(User user);
 

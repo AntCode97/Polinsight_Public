@@ -6,7 +6,7 @@
   <div class="admin_main_contents">
     <label>
       아이디
-      <input th:value="${user.id}" type="text">
+      <input name="user_id" th:value="${user.id}" type="text">
     </label>
     <label>
       타입
@@ -30,7 +30,9 @@
     </label>
     <label>
       추천인
+      <!--      작동 안함 -->
       <input th:value="${user.recommend == null ? '123123' : user.recommend}" type="text">
+
     </label>
     <label>
       이메일 수신 동의
@@ -40,8 +42,35 @@
       SMS 수신 동의
       <input readonly th:checked="${user.isSmsReceive}" type="checkbox">
     </label>
-    <button>aa</button>
+    <button class="btn btn-green" name="info_update_btn">유저 정보 업데이트</button>
+    <button class="btn btn-warn" name="info_delete_btn">유저 정보 삭제</button>
   </div>
   <script>
+    const updateUserInfo = e => {
+      if (confirm('정말 업데이트 하시겠습니까?')) {
+        axios.put('/user', userInfo)
+            .then(res => {
+              if (res.data.success) {
+                alert('업데이트 성공')
+                // TODO : 업데이트한 정보로 내용 다시 쓰기
+              }
+            })
+            .catch(console.log)
+      }
+    }
+
+    const deleteUserInfo = e => {
+      if (confirm('정말 삭제하시겠습니까?')) {
+        const userId = $('input[name=user_id]').val()
+        axios.delete('/user', {id: userId})
+            .then(console.log)
+            .catch(console.log)
+      }
+    }
+
+    $(function () {
+      $('button[name=info_update_btn]').on('click', updateUserInfo)
+      $('button[name=info_delete_btn]').on('click', deleteUserInfo)
+    })
   </script>
 </th:block>

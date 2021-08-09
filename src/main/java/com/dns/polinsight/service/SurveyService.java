@@ -26,7 +26,7 @@ public interface SurveyService {
 
   Set<Survey> getUserParticipateSurvey(User user);
 
-  void deleteSurveyById(Long surveyId);
+  void deleteSurveyById(long surveyId);
 
   List<Survey> findSurveysByEndDate(LocalDateTime endDate);
 

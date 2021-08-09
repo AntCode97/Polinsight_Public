@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<th:block th:include="module/common" />
-<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
+<th:block th:include="module/common"/>
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>폴인사이트</title>
   <meta charset="UTF-8">
@@ -694,15 +694,15 @@
   <div class="admin_sidebar ps">
     <!-- 사이드바 로고 -->
     <div class="admin_logo">
-      <a th:href="@{/}" class="simple-text logo-mini">PI</a>
-      <a th:href="@{/}" class="simple-text logo-normal">POLINSIGHT</a>
+      <a class="simple-text logo-mini" th:href="@{/}">PI</a>
+      <a class="simple-text logo-normal" th:href="@{/}">POLINSIGHT</a>
     </div>
 
     <div class="admin_sidebar_wrap ps">
       <!-- 관리자 계정 정보 -->
       <div class="admin_user">
         <div class="admin_user_photo">
-          <img th:src="@{/img/etc/circle_loppy.png}" alt="user_img" style="width: 100%;" />
+          <img alt="user_img" style="width: 100%;" th:src="@{/img/etc/circle_loppy.png}"/>
         </div>
         <div class="user-info">
           <a class="username">
@@ -713,13 +713,13 @@
       <!-- 네비게이션 -->
       <ul class="admin_nav">
         <li class="nav-item nav_action">
-          <a th:href="@{/admin}" class="nav_link">
-            <i class="fas fa-chart-line"></i>
+          <a class="nav_link" th:href="@{/admin}">
+            <i class="fas fa-home"></i>
             <p>대시보드</p>
           </a>
         </li>
         <li class="nav-item nav_action">
-          <a href="#" class="nav_link">
+          <a class="nav_link" href="#">
             <i class="fas fa-user-friends"></i>
             <p>
               회원관리
@@ -730,7 +730,7 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a th:href="@{/admin/memberlist}" class="nav_link">
+              <a class="nav_link" th:href="@{/admin/memberlist}">
                 <p class="nav_dropdown">회원 목록</p>
               </a>
             </li>
@@ -740,14 +740,14 @@
             <!--              </a>-->
             <!--            </li>-->
             <li class="nav-item">
-              <a href="#" class="nav_link">
+              <a class="nav_link" href="#">
                 <p class="nav_dropdown">이메일보내기</p>
               </a>
             </li>
           </ul>
         </div>
         <li class="nav-item nav_action">
-          <a href="#" class="nav_link">
+          <a class="nav_link" href="#">
             <i class="fas fa-clipboard-list"></i>
             <p>
               게시글 관리
@@ -758,17 +758,17 @@
         <div class="collapse-show">
           <ul class="admin_nav">
             <li class="nav-item">
-              <a th:href="@{/admin/posts}" class="nav_link">
+              <a class="nav_link" th:href="@{/admin/posts}">
                 <p class="nav_dropdown">공지사항</p>
               </a>
             </li>
             <li class="nav-item">
-              <a th:href="@{/admin/posts/download }" class="nav_link">
+              <a class="nav_link" th:href="@{/admin/posts/download }">
                 <p class="nav_dropdown">자료실</p>
               </a>
             </li>
             <li class="nav-item">
-              <a th:href="@{/admin/posts/qna}" class="nav_link">
+              <a class="nav_link" th:href="@{/admin/posts/qna}">
                 <p class="nav_dropdown">Q & A</p>
               </a>
             </li>
@@ -776,7 +776,7 @@
         </div>
 
         <li class="nav-item nav_action">
-          <a th:href="@{/admin/surveylist}" class="nav_link">
+          <a class="nav_link" th:href="@{/admin/surveylist}">
             <i class="fas fa-poll-h"></i>
             <p>
               설문 관리
@@ -785,7 +785,7 @@
           </a>
         </li>
         <li class="nav-item nav_action">
-          <a th:href="@{/admin/pointlist}" class="nav_link">
+          <a class="nav_link" th:href="@{/admin/pointlist}">
             <i class="fas fa-coins"></i>
             <p>
               포인트 요청 목록
@@ -827,7 +827,7 @@
             </div>
           </li>
           <li>
-            <a th:href="@{/}" class="header_menu_item">
+            <a class="header_menu_item" th:href="@{/}">
               <i class="fas fa-door-open"></i>
             </a>
           </li>

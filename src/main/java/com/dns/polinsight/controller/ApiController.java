@@ -176,10 +176,10 @@ public class ApiController {
   /*
    * 저장된 설문 목록 삭제를 위한 api
    * */
-  @DeleteMapping("/survey/{id}")
-  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@PathVariable(name = "id") Long surveyId) throws Exception {
+  @DeleteMapping("/survey")
+  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@RequestBody Survey survey) throws Exception {
     try {
-      surveyService.deleteSurveyById(surveyId);
+      surveyService.deleteSurveyById(survey.getId());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -234,9 +234,10 @@ public class ApiController {
   }
 
   /**
-   * @param requestId    : 변경할 포인트 지급 요청의 아이디
-   * @param progressType : 변경할 요청의 상태
-   *
+   * @param requestId
+   *     : 변경할 포인트 지급 요청의 아이디
+   * @param progressType
+   *     : 변경할 요청의 상태
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -261,23 +262,23 @@ public class ApiController {
 
     try {
       PointRequest preq = PointRequest.builder()
-          .email(sessionUser.getEmail())
-          .requestPoint(pointRequestDto.getPoint())
-          .account(pointRequestDto.getAccount())
-          .requestedAt(LocalDateTime.now())
-          .progress(PointRequestProgressType.REQUESTED)
-          .bank(pointRequestDto.getBank())
-          .uid(sessionUser.getId())
-          .build();
+                                      .email(sessionUser.getEmail())
+                                      .requestPoint(pointRequestDto.getPoint())
+                                      .account(pointRequestDto.getAccount())
+                                      .requestedAt(LocalDateTime.now())
+                                      .progress(PointRequestProgressType.REQUESTED)
+                                      .bank(pointRequestDto.getBank())
+                                      .uid(sessionUser.getId())
+                                      .build();
 
       pointRequestService.saveOrUpdate(preq);
       userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
       pointHistoryService.saveOrUpdate(PointHistory.builder()
-          .amount(pointRequestDto.getPoint())
-          .total(sessionUser.getPoint() - pointRequestDto.getPoint())
-          .sign(false)
-          .userId(sessionUser.getId())
-          .build());
+                                                   .amount(pointRequestDto.getPoint())
+                                                   .total(sessionUser.getPoint() - pointRequestDto.getPoint())
+                                                   .sign(false)
+                                                   .userId(sessionUser.getId())
+                                                   .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {

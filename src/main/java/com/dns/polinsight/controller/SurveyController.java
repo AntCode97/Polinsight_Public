@@ -7,10 +7,10 @@ import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.service.UserService;
+import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
@@ -63,25 +63,13 @@ public class SurveyController {
     return mv;
   }
 
-
-  /*
-   * 서베이 수정
-   * TODO: 2021/07/17
-   * */
   @PutMapping("/survey")
-  public ResponseEntity<Map<String, Object>> surveyInfoUpdate(Survey survey) {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Survey> surveyInfoUpdate(@RequestBody Survey survey) throws Exception {
     try {
-      survey = surveyService.findById(survey.getId());
-      surveyService.update(survey);
-      map.put("data", "");
-      map.put("error", null);
+      return success(surveyService.update(survey));
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("data", null);
-      map.put("error", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
   /*

@@ -8,6 +8,7 @@ import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
@@ -87,20 +88,25 @@ public class UserController {
   }
 
   @DeleteMapping("/user")
-  public ResponseEntity<Map<String, Object>> deleteUser(@RequestBody User user) {
+  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
-      userService.deleteUser(user);
-      map.put("data", user.getEmail() + " has deleted");
-      map.put("msg", user.getEmail() + " has deleted");
+      userService.deleteUserById(userDto.getId());
+      return success(true);
     } catch (Exception e) {
-      e.printStackTrace();
-      map.put("error", null);
-      map.put("msg", e.getMessage());
+      throw new Exception(e.getMessage());
     }
-    return ResponseEntity.ok(map);
   }
 
+  @PutMapping("/user")
+  public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto) throws Exception {
+    try {
+      // TODO: 2021-08-10 : 자동 바인딩  사용해보기
+      return success(new UserDto(userService.saveOrUpdate(new User(userDto))));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
 
   @GetMapping("/mypage")
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
@@ -159,8 +165,6 @@ public class UserController {
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView("member/changepwd");
-    log.info(sessionUser.toString());
-
     if (session.getAttribute("user") == null) {
       return new ModelAndView("redirect:/denied");
     }
