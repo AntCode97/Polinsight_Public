@@ -21,7 +21,7 @@ public class PointHistory {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long uid;
+  private Long userId;
 
   private Long amount;
 

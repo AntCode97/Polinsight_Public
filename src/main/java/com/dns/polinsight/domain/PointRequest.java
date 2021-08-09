@@ -32,7 +32,7 @@ public class PointRequest {
   private LocalDateTime requestedAt;
 
   @Enumerated(EnumType.STRING)
-  private BankType bankName;
+  private BankType bank;
 
   private String account;
 
@@ -42,7 +42,7 @@ public class PointRequest {
 
   public PointRequest of(PointRequestDto dto) {
     this.requestedAt = dto.getRequestedAt();
-    this.bankName = dto.getBank();
+    this.bank = dto.getBank();
     this.account = dto.getAccount();
     this.progress = dto.getProgress();
     return this;

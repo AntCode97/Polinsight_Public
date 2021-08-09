@@ -86,11 +86,11 @@ public class ParticipateSurveyController {
 
     try {
       pointHistoryService.saveOrUpdate(PointHistory.builder()
-                                                     .amount(participateSurvey.getSurveyPoint())
-                                                     .total(user.getPoint())
-                                                     .sign(true)
-                                                     .uid(user.getId())
-                                                     .build());
+                                                   .amount(participateSurvey.getSurveyPoint())
+                                                   .total(user.getPoint())
+                                                   .sign(true)
+                                                   .userId(user.getId())
+                                                   .build());
     } catch (Exception e) {
       throw new Exception("PointHistory write Exception");
     }

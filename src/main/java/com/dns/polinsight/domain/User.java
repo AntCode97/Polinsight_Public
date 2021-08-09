@@ -27,6 +27,7 @@ public class User implements UserDetails, Serializable {
 
   @Builder.Default
   @ElementCollection
+  @Column(name = "participate_survey_id")
   private final Set<Long> participateSurvey = new HashSet<>();
 
   @Builder.Default
@@ -69,7 +70,7 @@ public class User implements UserDetails, Serializable {
   private Boolean isEmailReceive;
 
   /*문자 수신 동의 여부*/
-  private Boolean isSMSReceive;
+  private Boolean isSmsReceive;
 
   public void addParticipateSurvey(long surveyId) {
     this.participateSurvey.add(surveyId);
