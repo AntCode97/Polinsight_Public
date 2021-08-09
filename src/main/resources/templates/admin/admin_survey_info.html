@@ -1,6 +1,36 @@
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
   <style></style>
-  <div></div>
+  <div class="admin_main_contents">
+    <h1>Survey Info </h1>
+    <div th:text="${survey.id}"></div>
+    <div>
+      <label>
+        설문 제목
+        <div th:text="${survey.title}"></div>
+      </label>
+    </div>
+    <div>
+      <label>
+        포인트
+        <input type="text" th:value="${survey.point}">
+      </label>
+    </div>
+    <div>
+      <label>
+        설문 기간
+        <input type="text" th:value="${survey.createdAt}">
+        <span> ~ </span>
+        <input type="text" th:value="${survey.endAt}">
+      </label>
+    </div>
+    <div>
+      <label>
+        진행 상태
+        <input type="text" th:value="${survey.status.progress}">
+      </label>
+    </div>
+  </div>
   <script>
     $(function () {
 
