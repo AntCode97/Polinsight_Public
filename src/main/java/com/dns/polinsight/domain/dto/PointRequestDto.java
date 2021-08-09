@@ -46,7 +46,7 @@ public class PointRequestDto {
     this.uid = pointRequest.getUid();
     this.point = pointRequest.getRequestPoint();
     this.account = pointRequest.getAccount();
-    this.bank = pointRequest.getBankName();
+    this.bank = pointRequest.getBank();
     this.progress = pointRequest.getProgress();
     this.email = pointRequest.getEmail();
   }

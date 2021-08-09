@@ -27,7 +27,7 @@ public class UserDto {
 
   private Boolean isEmailReceive;
 
-  private Boolean isSMSReceive;
+  private Boolean isSmsReceive;
 
 
   public UserDto(User user) {
@@ -38,7 +38,7 @@ public class UserDto {
     this.phone = user.getPhone();
     this.role = user.getRole();
     this.isEmailReceive = user.getIsEmailReceive();
-    this.isSMSReceive = user.getIsSMSReceive();
+    this.isSmsReceive = user.getIsSmsReceive();
   }
 
 }

@@ -206,6 +206,7 @@
       padding: 20px 30px;
       background-color: #e1eef6;
       width: 1000px;
+      height: 100%;
       margin: 0 auto 50px;
     }
 
@@ -274,32 +275,6 @@
       background-color: #dedede;
     }
 
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
-
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
     .survey_run, .survey_stop {
       font-size: 17px;
       font-weight: bold;
@@ -323,13 +298,6 @@
       text-align: right;
       font-weight: bold;
       padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
     }
 
     .survey_run {
@@ -445,18 +413,24 @@
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가
     $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#192739');
+      if (document.location.href.split('/').length > 0) {
+        $('header_wrap').css('background-color', '#182838')
       } else {
-        $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+          $('.top-btn').fadeIn().css("display", "flex");
+          $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+              .css('background-color', '#192739');
+        } else {
+          $('.top-btn').fadeOut();
+          $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        }
       }
     });
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });
+
+
   });
 </script>
 </html>

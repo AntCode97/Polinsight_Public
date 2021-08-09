@@ -226,8 +226,6 @@
       }
     }
   </style>
-</th:block>
-<th:block>
   <div class="modal_wrap">
     <div class="modal_content">
       <div class="modal_login">
@@ -270,7 +268,9 @@
       </div>
     </div>
   </div>
-
+  <div>
+    <th:block th:include="layout/footer" />
+  </div>
   <script>
     const login = e => {
       e.preventDefault()
