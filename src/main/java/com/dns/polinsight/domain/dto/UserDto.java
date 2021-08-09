@@ -21,6 +21,8 @@ public class UserDto {
 
   private String phone;
 
+  private String recommend;
+
   private String name;
 
   private UserRoleType role;
@@ -39,6 +41,7 @@ public class UserDto {
     this.role = user.getRole();
     this.isEmailReceive = user.getIsEmailReceive();
     this.isSmsReceive = user.getIsSmsReceive();
+    this.recommend = user.getRecommend();
   }
 
 }

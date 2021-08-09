@@ -1,11 +1,14 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.service.SurveyService;
+import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
@@ -15,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminPageController {
 
   private final SurveyService surveyService;
+
+  private final UserService userService;
 
   @GetMapping("/memberlist")
   public ModelAndView adminMemberList() {
@@ -83,9 +88,16 @@ public class AdminPageController {
   }
 
   @GetMapping("/surveyinfo/{id}")
-  public ModelAndView adminGetDetailPage(@PathVariable("id") long surveyid) {
+  public ModelAndView adminGetSurveyDetailPage(@PathVariable("id") long surveyid) {
     ModelAndView mv = new ModelAndView("admin/admin_survey_info");
     mv.addObject("survey", surveyService.findSurveyById(surveyid).get());
+    return mv;
+  }
+
+  @GetMapping("/memberinfo/{id}")
+  public ModelAndView adminGetMemberDetailPage(@PathVariable("id") long memberId) {
+    ModelAndView mv = new ModelAndView("admin/admin_member_info");
+    mv.addObject("user", new UserDto(userService.findById(memberId).get()));
     return mv;
   }
 
@@ -93,6 +105,7 @@ public class AdminPageController {
   public ModelAndView adminUserPointRequest() {
     return new ModelAndView("admin/admin_point_req_list");
   }
+
 
   //  @GetMapping("/pointreqinfo")
   //  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {

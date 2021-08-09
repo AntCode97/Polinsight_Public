@@ -10,6 +10,7 @@ import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.PointRequestProgressType;
+import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import com.dns.polinsight.utils.PageHandler;
@@ -108,7 +109,7 @@ public class ApiController {
   @GetMapping("/users")
   public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
     try {
-      return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
+      return success(userService.findAll(pageable).getContent().parallelStream().filter(user -> !user.getRole().equals(UserRoleType.ADMIN)).map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());

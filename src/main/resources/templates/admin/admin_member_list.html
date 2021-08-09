@@ -251,9 +251,9 @@
       countAllUsers()
       getMemberList(0)  // 페이지 초기 값
       $('.scroll-table>thead').append(getHeader())
-      $(document).on('click', 'div.post-row:not(:first-of-type)', () => {
-        // 클릭시 디테일 페이지?
-        alert('aaa')
+      $(document).on('click', 'tbody > .post-row', function (e) {
+        const memberId = $(this).children('td:first-child').text();
+        location.href=`/admin/memberinfo/${memberId}`
       })
 
       /*비동기 회원 찾기 및 화면 업데이트*/

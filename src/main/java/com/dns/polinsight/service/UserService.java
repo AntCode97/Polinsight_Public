@@ -28,6 +28,8 @@ public interface UserService extends UserDetailsService {
 
   long countAllUser();
 
+  long countAllUserExludeAdmin();
+
   Boolean isExistEmail(String email);
 
   Boolean isExistPhone(String phone);
