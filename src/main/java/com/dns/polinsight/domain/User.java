@@ -45,7 +45,6 @@ public class User implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @PositiveOrZero
   private Long id;
 
   private String email;
@@ -67,9 +66,11 @@ public class User implements UserDetails, Serializable {
   private Additional additional;
 
   /*이메일 수신 동의 여부*/
+  @Column(name = "is_email_receive")
   private Boolean isEmailReceive;
 
   /*문자 수신 동의 여부*/
+  @Column(name = "is_sms_receive")
   private Boolean isSmsReceive;
 
   public void addParticipateSurvey(long surveyId) {

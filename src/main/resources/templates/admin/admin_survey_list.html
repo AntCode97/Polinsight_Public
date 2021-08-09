@@ -225,7 +225,7 @@
       adminGetAllSurveys();
 
       /* 요소 클릭 이벤트 */
-      $(document).on('click', '.post-row', function () {
+      $(document).on('click', 'tbody > .post-row', function () {
         const id = $(this).children('td:first-child').text();
         location.href = `/admin/surveyinfo/${id}`
       });

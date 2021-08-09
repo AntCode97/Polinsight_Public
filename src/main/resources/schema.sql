@@ -53,8 +53,8 @@ CREATE TABLE user
     industry         VARCHAR(255) NULL,
     job              VARCHAR(255) NULL,
     marry            BIT          NULL,
-    is_sms_receive   BIT          NULL,
     is_email_receive BIT          NULL,
+    is_sms_receive   BIT          NULL,
     UNIQUE (email)
 );
 
