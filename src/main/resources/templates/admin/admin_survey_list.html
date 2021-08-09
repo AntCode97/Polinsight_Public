@@ -1,4 +1,4 @@
-<th:block th:include="admin/admin_sidebar" />
+<th:block th:include="admin/admin_sidebar"/>
 <th:block>
   <th:block>
     <style>
@@ -78,7 +78,7 @@
       <!--관리자 페이지 설문 찾기 기능-->
       <div class="search-box-container">
         <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
+        <input class="admin_find" name="admin_find" placeholder="검색" type="text"/>
       </div>
 
       <table class="scroll-table">
@@ -120,15 +120,15 @@
         $('.pagination').empty();
       } else {
         if (!regexValue) {
-          first.on('click', {offset: 0}, adminGetAllSurveys);
-          last.on('click', {offset: totalPage}, adminGetAllSurveys);
-          prev.on('click', {offset: current - 1 >= 0 ? current - 1 : 0}, adminGetAllSurveys);
-          next.on('click', {offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+          first.on('click', {page: 0}, adminGetAllSurveys);
+          last.on('click', {page: totalPage}, adminGetAllSurveys);
+          prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, adminGetAllSurveys);
+          next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
 
           paginationElement.append(first).append(prev);
           for (let i = start; i < end; i++) {
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-            tmp.on('click', {offset: i}, adminGetAllSurveys);
+            tmp.on('click', {page: i}, adminGetAllSurveys);
             if (current === i) {
               tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold');
             }
@@ -136,14 +136,17 @@
           }
           paginationElement.append(next).append(last);
         } else {
-          first.on('click', {regex: regexValue, offset: 0}, adminGetAllSurveys);
-          last.on('click', {regex: regexValue, offset: totalPage}, adminGetAllSurveys);
-          prev.on('click', {regex: regexValue, offset: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
-          next.on('click', {regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+          first.on('click', {regex: regexValue, page: 0}, adminGetAllSurveys);
+          last.on('click', {regex: regexValue, page: totalPage}, adminGetAllSurveys);
+          prev.on('click', {regex: regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+          next.on('click', {
+            regex: regexValue,
+            page: current >= totalPage ? totalPage - 1 : current + 1
+          }, adminGetAllSurveys);
           paginationElement.append(first).append(prev);
           for (let i = start; i < end; i++) {
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-            tmp.on('click', {offset: i, regex: regexValue}, adminGetAllSurveys);
+            tmp.on('click', {page: i, regex: regexValue}, adminGetAllSurveys);
             if (current === i) {
               tmp.addClass('pagination_button_current');
             } else {
@@ -169,7 +172,6 @@
       return template;
     };
 
-
     const adminMakeSurveySearchResults = surveys => {
       const table = $('.scroll-table>tbody');
       table.empty();
@@ -191,8 +193,8 @@
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
       axios.get('/api/surveys' + regex, {
-            params: {size: 10, offset: offset}
-          })
+        params: {size: 10, page: offset}
+      })
           .then(res => {
             if (res.data.success) {
               getTotalCount(regex);

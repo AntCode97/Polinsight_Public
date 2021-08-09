@@ -143,16 +143,16 @@
                     let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
                     let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
                     let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
-                    first.on('click', {param_offset: 0}, findUserByRegex)
-                    last.on('click', {param_offset: totalPage - 1}, findUserByRegex)
-                    prev.on('click', {param_offset: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
-                    next.on('click', {param_offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
+                    first.on('click', {page: 0}, findUserByRegex)
+                    last.on('click', {page: totalPage - 1}, findUserByRegex)
+                    prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
+                    next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
 
                     pagenationElem.append(first)
                     pagenationElem.append(prev)
                     for (let i = start; i < end; i++) {
                         let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
-                        tmp.on('click', {param_offset: i}, findUserByRegex);
+                        tmp.on('click', {page: i}, findUserByRegex);
 
                         if (current === i) {
                             tmp.addClass('pagination_button_current')
@@ -238,8 +238,8 @@
                 getMemberList(0);
             } else {
                 countSearchUsers(findValue)
-                const offset = !e.data ? 0 : e.data.param_offset
-                axios.get('/api/user/find/' + findValue, {params: {'size': 10, 'offset': offset}})
+                const offset = !e.data ? 0 : e.data.page
+                axios.get('/api/user/find/' + findValue, {params: {size: 10, page: offset}})
                     .then(res => {
                         makeAdminMemberListTemplate(res.data.response)
                         makePaginationButton(offset)

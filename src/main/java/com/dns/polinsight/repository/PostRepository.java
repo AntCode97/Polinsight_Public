@@ -32,16 +32,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   Page<Post> findBySearchcontent(String searchcontent, PostType postType, Pageable pageable);
 
   @Query(
-          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
-          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
+      value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
+      countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
   )
   Page<Post> findBySearchKeyword(String keyword, Pageable pageable);
 
   @Transactional
   @Modifying()
   @Query(
-    value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :#{#post.id}"
-          )
+      value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :#{#post.id}"
+  )
   void upViewCnt(Post post);
+
+  Page<Post> findPostsByPostType(PostType postType);
 
 }

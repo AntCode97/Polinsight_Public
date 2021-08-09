@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
-<th:block th:include="module/common" />
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common"/>
 <head>
   <title>폴인사이트</title>
   <link rel="icon" th:href="@{/favicon.ico}">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
     .header_wrap {
       position: fixed;
@@ -327,7 +327,7 @@
     <div class="header_container_logo">
       <div class="header_logo">
         <a th:href="@{/}">
-          <img th:src="@{/img/logo/white_logo.png}" alt="로고" />
+          <img alt="로고" th:src="@{/img/logo/white_logo.png}"/>
         </a>
       </div>
     </div>
@@ -337,10 +337,10 @@
           <a href="/">Company</a>
           <div class="dropdown" style="left: 0px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">인사말</a>
-              <a th:href="@{/}" class="dropdown_element">연혁</a>
-              <a th:href="@{/}" class="dropdown_element">설립목적</a>
-              <a th:href="@{/}" class="dropdown_element">오시는길</a>
+              <a class="dropdown_element" th:href="@{/}">인사말</a>
+              <a class="dropdown_element" th:href="@{/}">연혁</a>
+              <a class="dropdown_element" th:href="@{/}">설립목적</a>
+              <a class="dropdown_element" th:href="@{/}">오시는길</a>
             </div>
           </div>
         </li>
@@ -350,10 +350,10 @@
           <a th:href="@{/posts}">Board</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/posts}" class="dropdown_element">공지사항</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
+              <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
+              <a class="dropdown_element" th:href="@{/events}">이벤트</a>
+              <a class="dropdown_element" th:href="@{/qna}">Q & A</a>
+              <a class="dropdown_element" th:href="@{/faq}">FAQ</a>
             </div>
           </div>
         </li>
@@ -364,10 +364,10 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents02</a>
+              <a class="dropdown_element" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>
@@ -377,10 +377,10 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="right: 0px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>

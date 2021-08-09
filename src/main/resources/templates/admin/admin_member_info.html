@@ -1,3 +1,4 @@
+<th:block th:include="admin/admin_sidebar"/>
 <th:block>
   <style>
 
@@ -33,13 +34,13 @@
     </label>
     <label>
       이메일 수신 동의
-      <input th:checked="${user.isEmailReceive}" type="checkbox" readonly>
+      <input readonly th:checked="${user.isEmailReceive}" type="checkbox">
     </label>
     <label>
       SMS 수신 동의
-      <input th:checked="${user.isSmsReceive}" type="checkbox" readonly>
+      <input readonly th:checked="${user.isSmsReceive}" type="checkbox">
     </label>
-
+    <button>aa</button>
   </div>
   <script>
   </script>
