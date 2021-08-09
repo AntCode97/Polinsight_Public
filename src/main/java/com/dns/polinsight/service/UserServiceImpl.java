@@ -70,6 +70,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public long countAllUserExludeAdmin() {
+    return repository.userCountExludeAdmin();
+  }
+
+  @Override
   public Boolean isExistEmail(String email) {
     return repository.existsUserByEmail(email);
   }

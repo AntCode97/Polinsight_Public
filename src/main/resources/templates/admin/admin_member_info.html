@@ -1,13 +1,46 @@
 <th:block>
-  <div></div>
+  <style>
+
+  </style>
+  <div class="admin_main_contents">
+    <label>
+      아이디
+      <input th:value="${user.id}" type="text">
+    </label>
+    <label>
+      타입
+      <input th:value="${user.role}" type="text">
+    </label>
+    <label>
+      이메일
+      <input th:value="${user.email}" type="text">
+    </label>
+    <label>
+      이름
+      <input th:value="${user.name}" type="text">
+    </label>
+    <label>
+      연락처
+      <input th:value="${user.phone}" type="text">
+    </label>
+    <label>
+      포인트
+      <input th:value="${user.point}" type="text">
+    </label>
+    <label>
+      추천인
+      <input th:value="${user.recommend == null ? '123123' : user.recommend}" type="text">
+    </label>
+    <label>
+      이메일 수신 동의
+      <input th:checked="${user.isEmailReceive}" type="checkbox" readonly>
+    </label>
+    <label>
+      SMS 수신 동의
+      <input th:checked="${user.isSmsReceive}" type="checkbox" readonly>
+    </label>
+
+  </div>
   <script>
-    // todo
-    const getUserDetail = id => {
-
-    }
-
-    $(function () {
-
-    })
   </script>
 </th:block>

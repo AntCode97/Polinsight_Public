@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -94,9 +95,9 @@ public class AdminPageController {
   }
 
   @GetMapping("/memberinfo/{id}")
-  public ModelAndView adminGetMemberDetailPage(@PathVariable("id") long userid) {
-    ModelAndView mv = new ModelAndView("admin/admin_survey_info");
-    mv.addObject("survey", userService.findById(userid).get());
+  public ModelAndView adminGetMemberDetailPage(@PathVariable("id") long memberId) {
+    ModelAndView mv = new ModelAndView("admin/admin_member_info");
+    mv.addObject("user", new UserDto(userService.findById(memberId).get()));
     return mv;
   }
 
@@ -104,6 +105,7 @@ public class AdminPageController {
   public ModelAndView adminUserPointRequest() {
     return new ModelAndView("admin/admin_point_req_list");
   }
+
 
   //  @GetMapping("/pointreqinfo")
   //  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
