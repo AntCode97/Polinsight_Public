@@ -44,6 +44,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   )
   void upViewCnt(Post post);
 
-  Page<Post> findPostsByPostType(PostType postType);
+  Page<Post> findPostsByPostType(Pageable pageable, PostType postType);
 
 }

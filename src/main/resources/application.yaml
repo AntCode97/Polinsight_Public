@@ -184,8 +184,8 @@ management :
 ---
 spring :
   datasource :
-    username :            root
-    password :            root
+    username :            polinsight
+    password :            polinsight
     url :                 jdbc:mariadb://localhost:3306/polinsight
     driver-class-name :   org.mariadb.jdbc.Driver
     sql-script-encoding : UTF-8
@@ -218,7 +218,6 @@ spring :
   banner :
     location : banner-dev.txt
 
-
   session :
     store-type : none
 
@@ -226,6 +225,9 @@ spring :
     restart :
       poll-interval : 1s
 
+  thymeleaf :
+    cache : false
+    
 server :
   port : 8080
   servlet :

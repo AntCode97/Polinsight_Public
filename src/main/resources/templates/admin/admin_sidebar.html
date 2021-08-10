@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<th:block th:include="module/common"/>
+<th:block th:include="module/common" />
 <html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>폴인사이트</title>
@@ -684,8 +684,57 @@
     }
 
     /*게시글 조회 파트*/
+    .left_content {
+      flex: 1.5;
+    }
 
+    .right_content {
+      flex: 8.5;
+    }
 
+    .left_content > label {
+      font-weight: bold;
+      padding: 0 15px;
+      overflow: hidden;
+      line-height: 18px;
+      cursor: pointer;
+      background: url('img/etc/icon_required_input.png') right center no-repeat;
+    }
+
+    .right_content > input {
+      border: 1px solid #ddd;
+      color: #333;
+      font-size: 14px;
+      width: 300px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+    }
+
+    .right_content > select {
+      border: 1px solid #ddd;
+      color: #333;
+      font-size: 14px;
+      width: 200px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+      text-align: center;
+      text-align-last: center;
+      display: inline-block;
+    }
+
+    .info_msg, .err_msg {
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0 5px;
+    }
+
+    .info_msg {
+      color: #a9a9a9;
+    }
   </style>
 </head>
 <body>
@@ -702,7 +751,7 @@
       <!-- 관리자 계정 정보 -->
       <div class="admin_user">
         <div class="admin_user_photo">
-          <img alt="user_img" style="width: 100%;" th:src="@{/img/etc/circle_loppy.png}"/>
+          <img alt="user_img" style="width: 100%;" th:src="@{/img/etc/circle_loppy.png}" />
         </div>
         <div class="user-info">
           <a class="username">

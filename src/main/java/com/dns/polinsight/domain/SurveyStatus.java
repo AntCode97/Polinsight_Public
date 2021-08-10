@@ -32,6 +32,7 @@ public class SurveyStatus {
   @Builder.Default
   private ProgressType progress = ProgressType.BEFORE;
 
+  @Builder.Default
   @Column(name = "minimum_time")
   private Integer minimumTime = 30;
 

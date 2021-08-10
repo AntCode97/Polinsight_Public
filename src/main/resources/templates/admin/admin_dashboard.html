@@ -18,9 +18,9 @@
   </div>
   <script>
     const syncSurveyList = () => {
-      axios.get('/api/survey/sync')
-          .then(alert('동기화 성공'))
-          .catch(alert('동기화 실패'))
+      axios.get('/api/surveys/sync')
+          .then(console.log)
+          .catch(console.log)
     }
 
     const updateUserPoints = () => {

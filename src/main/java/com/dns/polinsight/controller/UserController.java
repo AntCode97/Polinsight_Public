@@ -261,7 +261,7 @@ public class UserController {
 
   @GetMapping("/api/user/total")
   public ApiUtils.ApiResult<Long> coutAllUser() {
-    return success(userService.countAllUserExludeAdmin());
+    return success(userService.countAllUserExcludeAdmin());
   }
 
 

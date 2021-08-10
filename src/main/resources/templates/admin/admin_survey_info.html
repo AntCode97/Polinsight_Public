@@ -4,39 +4,65 @@
   <div class="admin_main_contents">
     <h1>Survey Info </h1>
     <div>
-      <label>
-        아이디
-        <input name="survey_id" type="text" th:value="${survey.id}">
-      </label>
+      <div class="left_content">
+        <label>
+          아이디
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="id" type="text" th:value="${survey.id}" readonly />
+      </div>
     </div>
     <div>
-      <label>
-        설문 제목
-        <div th:text="${survey.title}"></div>
-      </label>
+      <div class="left_content">
+        <label>
+          설문 제목
+        </label>
+      </div>
+      <div class="right_content">
+        <input type="text" name="title" th:value="${survey.title}" readonly />
+      </div>
     </div>
     <div>
-      <label>
-        포인트
-        <input type="text" th:value="${survey.point}">
-      </label>
+      <div class="left_content">
+        <label>
+          포인트
+        </label>
+      </div>
+      <div class="right_content">
+        <input type="text" name="point" th:value="${survey.point}">
+        <span class="info_msg">변경 됨</span>
+      </div>
     </div>
     <div>
-      <label>
-        설문 기간
-        <input type="text" th:value="${survey.createdAt}">
+      <div class="left_content">
+        <label>
+          설문 기간
+        </label>
+      </div>
+      <div class="right_content">
+        <input type="date" name="createdAt" th:value="${#temporals.format(survey.createdAt, 'yyyy-MM-dd')}">
         <span> ~ </span>
-        <input type="text" th:value="${survey.endAt}">
-      </label>
+        <input type="date" name="endAt" th:value="${#temporals.format(survey.endAt,'yyyy-MM-dd')}">
+        <span class="info_msg">변경 됨</span>
+      </div>
     </div>
     <div>
-      <label>
-        진행 상태
-        <input type="text" th:value="${survey.status.progress}">
-      </label>
+      <div class="left_content">
+        <label>
+          진행 상태
+        </label>
+      </div>
+      <div class="right_content">
+        <select name="progress"> </select>
+        <span class="info_msg">변경 됨</span>
+      </div>
     </div>
-    <button class="btn btn-green" name="info_update_btn">설문 정보 업데이트</button>
-    <button class="btn btn-warn" name="info_delete_btn">설문 정보 삭제</button>
+    <div style="display: flex; justify-content: center; align-items: center">
+      <button class="btn_del btn-green" name="info_update_btn">설문 정보 업데이트</button>
+      <button class="btn_del btn-warn" name="info_delete_btn">설문 정보 삭제</button>
+    </div>
+    <div><input type="hidden" name="progress" th:value="${survey.status.progress}"></div>
   </div>
   <script>
     const updateSurveyInfo = e => {
@@ -45,7 +71,11 @@
             .then(res => {
               if (res.data.success) {
                 alert('업데이트 성공')
-                // TODO : 업데이트한 정보로 내용 다시 쓰기
+                let newSurveyInfo = res.data.response
+                for (let key in newSurveyInfo) {
+                  beforeSurveyInfo[key] = newSurveyInfo[key];
+                  $(`input[name=${newSurveyInfo[key]}`).val(newSurveyInfo[key])
+                }
               }
             })
             .catch(console.log)
@@ -54,15 +84,61 @@
 
     const deleteSurveyInfo = e => {
       if (confirm('정말 삭제하시겠습니까?')) {
-        const surveyId = $('input[name=survey_id]').val()
+        let surveyId = $('input[name=id]').val()
         axios.delete('/user', {id: surveyId})
-            .then(console.log)
+            .then(res => {
+              if (res.data.response) {
+                alert('설문 정보 삭제 성공')
+                location.replace('/admin/surveylist')
+              } else {
+                alert('삭제 중 에러가 발생하였습니다.')
+              }
+            })
             .catch(console.log)
       }
     }
+
+
+    const adminSurveyInfoInit = () => {
+      let progress = $('input[type=hidden]').val()
+      let sel = $('select[name=progress]')
+      sel.append($(`<option name="progress" value="BEFORE">등록 전</option>`))
+      sel.append($(`<option name="progress" value="ONGOING">진행 중</option>`))
+      sel.append($(`<option name="progress" value="END">종료</option>`))
+      sel.find(`option[value=${progress}]`).attr('selected', 'true')
+      let root = $('.admin_main_contents');
+      root.find('input').each((idx, item) => {
+        beforeSurveyInfo[$(item).attr('name')] = $(item).val()
+        if ($(item).attr('readonly'))
+          $(item).css('background-color', 'lightgrey')
+      })
+
+      root.find('span.info_msg').each((idx, item) => $(item).css('display', 'none'))
+      root.find('input').each((idx, item) => {
+        if ($(item).attr('readonly'))
+          $(item).css('background-color', 'lightgrey')
+      })
+    }
+
+    const inputChangeHandler = (e) => {
+      let inputDiv = $(e.target).parent('div')
+      if (beforeSurveyInfo[e.target.name] !== e.target.value) {
+        inputDiv.find('span.info_msg').css('display', 'block')
+      } else {
+        inputDiv.find('span.info_msg').css('display', 'none')
+      }
+    }
+
+
+    const beforeSurveyInfo = {}
+
     $(function () {
+      adminSurveyInfoInit()
       $('button[name=info_update_btn]').on('click', updateSurveyInfo)
       $('button[name=info_delete_btn]').on('click', deleteSurveyInfo)
+
+      $('input').on('change keyup', inputChangeHandler)
+      $('select[name=progress]').on('change', inputChangeHandler)
     })
   </script>
 </th:block>

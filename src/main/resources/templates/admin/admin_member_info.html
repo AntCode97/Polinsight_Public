@@ -1,58 +1,128 @@
-<th:block th:include="admin/admin_sidebar"/>
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
   <style>
-
   </style>
   <div class="admin_main_contents">
-    <label>
-      아이디
-      <input name="user_id" th:value="${user.id}" type="text">
-    </label>
-    <label>
-      타입
-      <input th:value="${user.role}" type="text">
-    </label>
-    <label>
-      이메일
-      <input th:value="${user.email}" type="text">
-    </label>
-    <label>
-      이름
-      <input th:value="${user.name}" type="text">
-    </label>
-    <label>
-      연락처
-      <input th:value="${user.phone}" type="text">
-    </label>
-    <label>
-      포인트
-      <input th:value="${user.point}" type="text">
-    </label>
-    <label>
-      추천인
-      <!--      작동 안함 -->
-      <input th:value="${user.recommend == null ? '123123' : user.recommend}" type="text">
-
-    </label>
-    <label>
-      이메일 수신 동의
-      <input readonly th:checked="${user.isEmailReceive}" type="checkbox">
-    </label>
-    <label>
-      SMS 수신 동의
-      <input readonly th:checked="${user.isSmsReceive}" type="checkbox">
-    </label>
-    <button class="btn btn-green" name="info_update_btn">유저 정보 업데이트</button>
-    <button class="btn btn-warn" name="info_delete_btn">유저 정보 삭제</button>
+    <div>
+      <div class="left_content">
+        <label>
+          아이디
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="id" th:value="${user.id}" type="text" readonly>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          타입
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="role" th:value="${user.role}" type="text">
+        <span class="info_msg">변경 됨</span>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          이메일
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="email" th:value="${user.email}" type="text" readonly>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          이름
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="name" th:value="${user.name}" type="text" readonly>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          연락처
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="phone" th:value="${user.phone}" type="text" readonly>
+      </div>
+    </div>
+    <!--    <div>-->
+    <!--      <div class="left_content">-->
+    <!--        <label>-->
+    <!--          등록일-->
+    <!--        </label>-->
+    <!--      </div>-->
+    <!--      <div class="right_content">-->
+    <!--        <input th:value="${#temporals.format(user.registeredAt, 'yyyy-MM-dd')}" type="text" readonly>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <div>
+      <div class="left_content">
+        <label>
+          포인트
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="point" th:value="${user.point}" type="text">
+        <span class="info_msg">변경 됨</span>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          추천인
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="recommend" th:value="${user.recommend == null ? '등록 안함' : user.recommend}" type="text" readonly>
+      </div>
+    </div>
+    <div>
+      <div class="left_content">
+        <label>
+          이메일 수신 동의
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="isEmailReceive" readonly th:checked="${user.isEmailReceive}" type="radio" />
+        <span class="info_msg">변경 됨</span>
+      </div>
+      <div class="left_content">
+        <label>
+          SMS 수신 동의
+        </label>
+      </div>
+      <div class="right_content">
+        <input name="isSmsReceive" readonly th:checked="${user.isSmsReceive}" type="radio" />
+        <span class="info_msg">변경 됨</span>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center">
+      <button class="btn_del btn-green" name="info_update_btn">유저 정보 업데이트</button>
+      <button class="btn_del btn-warn" name="info_delete_btn">유저 정보 삭제</button>
+    </div>
   </div>
   <script>
     const updateUserInfo = e => {
       if (confirm('정말 업데이트 하시겠습니까?')) {
+
         axios.put('/user', userInfo)
             .then(res => {
               if (res.data.success) {
                 alert('업데이트 성공')
-                // TODO : 업데이트한 정보로 내용 다시 쓰기
+                let newUserInfo = res.data.response
+                for (let key in newUserInfo) {
+                  beforeUserInfo[key] = newUserInfo[key];
+                  $(`input[name=${newUserInfo[key]}`).val(newUserInfo[key])
+                }
               }
             })
             .catch(console.log)
@@ -61,16 +131,45 @@
 
     const deleteUserInfo = e => {
       if (confirm('정말 삭제하시겠습니까?')) {
-        const userId = $('input[name=user_id]').val()
+        let userId = $('input[name=id]').val()
         axios.delete('/user', {id: userId})
-            .then(console.log)
+            .then(res => {
+              if (res.data.response) {
+                alert('유저 정보 삭제 성공')
+                location.replace('/admin/memberlist')
+              }
+            })
             .catch(console.log)
       }
     }
 
+    const inputChangeHandler = (e) => {
+      let inputDiv = $(e.target).parent('div')
+      if (beforeUserInfo[e.target.name] !== e.target.value) {
+        inputDiv.find('span.info_msg').css('display', 'block')
+      } else {
+        inputDiv.find('span.info_msg').css('display', 'none')
+      }
+    }
+
+    const adminMemberInfoInit = () => {
+      let root = $('.admin_main_contents');
+      root.find('input').each((idx, item) => {
+        beforeUserInfo[$(item).attr('name')] = $(item).val()
+        if ($(item).attr('readonly'))
+          $(item).css('background-color', 'lightgrey')
+      })
+      root.find('span.info_msg').each((idx, item) => $(item).css('display', 'none'))
+    }
+
+    const beforeUserInfo = {}
+
     $(function () {
+      adminMemberInfoInit()
       $('button[name=info_update_btn]').on('click', updateUserInfo)
       $('button[name=info_delete_btn]').on('click', deleteUserInfo)
+
+      $('input').on('change keyup', inputChangeHandler)
     })
   </script>
 </th:block>

@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public long countAllUserExludeAdmin() {
-    return repository.userCountExludeAdmin();
+  public long countAllUserExcludeAdmin() {
+    return repository.userCountExcludeAdmin();
   }
 
   @Override

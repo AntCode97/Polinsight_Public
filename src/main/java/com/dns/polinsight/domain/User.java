@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -30,7 +29,7 @@ public class User implements UserDetails, Serializable {
   @Builder.Default
   @ElementCollection
   @Column(name = "participate_survey_id")
-  private final Set<Long> participateSurvey = new HashSet<>();
+  private Set<Long> participateSurvey = new HashSet<>();
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -75,8 +74,8 @@ public class User implements UserDetails, Serializable {
   @Column(name = "is_sms_receive")
   private Boolean isSmsReceive;
 
-  @Column(name = "registered_at")
-  private LocalDateTime registeredAt;
+  //  @Column(name = "registered_at")
+  //  private LocalDateTime registeredAt;
 
   public User(UserDto dto) {
     this.id = dto.getId();
@@ -87,6 +86,8 @@ public class User implements UserDetails, Serializable {
     this.isSmsReceive = dto.getIsSmsReceive();
     this.isEmailReceive = dto.getIsEmailReceive();
     this.recommend = dto.getRecommend();
+    this.participateSurvey = new HashSet<>();
+    //    this.registeredAt = dto.getRegisteredAt();
   }
 
   public void addParticipateSurvey(long surveyId) {

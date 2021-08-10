@@ -27,6 +27,8 @@ public class UserDto {
 
   private UserRoleType role;
 
+  //  private LocalDateTime registeredAt;
+
   private Boolean isEmailReceive;
 
   private Boolean isSmsReceive;
@@ -42,6 +44,7 @@ public class UserDto {
     this.isEmailReceive = user.getIsEmailReceive();
     this.isSmsReceive = user.getIsSmsReceive();
     this.recommend = user.getRecommend();
+    //    this.registeredAt = user.getRegisteredAt();
   }
 
 }

@@ -34,6 +34,8 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyById(long surveyId);
 
+  Optional<Survey> findSurveyBySurveyId(long surveyId);
+
   long countAllSurvey();
 
 }
