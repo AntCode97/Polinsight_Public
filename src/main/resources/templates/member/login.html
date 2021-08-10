@@ -275,12 +275,10 @@
     const login = e => {
       e.preventDefault()
       e.returnValue = false
-      http.post('/dologin', null, {
-            params: {
-              email: $('input[name=email]').val().trim(),
-              password: $('input[name=password]').val().trim(),
-              rememberMe: $('input[name=rememberMe]').val().trim()
-            }
+      http.post('/dologin', {
+            email: $('input[name=email]').val().trim(),
+            password: $('input[name=password]').val().trim(),
+            rememberMe: $('input[name=rememberMe]').val().trim()
           })
           .then(res => {
             if (res.data.response) {
