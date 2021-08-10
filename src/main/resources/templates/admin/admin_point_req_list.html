@@ -47,18 +47,18 @@
         <div>총 <strong></strong>개의 요청이 있습니다.</div>
       </div>
       <!--관리자 페이지 요청 찾기 기능-->
-      <div class='search-box-container'>
-        <span class='search-icon'><i class='fa fa-search'></i></span>
-        <input class='admin_find' name='admin_find' type='text' placeholder='검색' />
+      <div class="search-box-container">
+        <span class="search-icon"><i class="fa fa-search"></i></span>
+        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
       </div>
 
-      <div style='float: right'>
-        <button class='btn_del btn-big btn-green'>엑셀로 저장</button>
+      <div style="float: right">
+        <button class="btn_del btn-big btn-green">엑셀로 저장</button>
       </div>
 
-      <table class='scroll-table'>
+      <table class="scroll-table">
       </table>
-      <div class='pagination'></div>
+      <div class="pagination"></div>
     </div>
   </div>
   <script>
@@ -92,8 +92,8 @@
       template.append(`<td>${req.bank}은행</td>`);
       template.append(`<td>${req.account}</td>`);
       template.append(`<td>${req.progress}</td>`);
-      const modify_btn = $(`<button class="btn_del btn-support">수정</button>`).on('click', { id: req.id, progress: req.progress }, progressUpdate);
-      const delete_btn = $(`<button class="btn_del btn-warn">삭제</button>`).on('click', { id: req.id }, deleteRequest);
+      const modify_btn = $(`<button class="btn_del btn-support">수정</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
+      const delete_btn = $(`<button class="btn_del btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
       const tmp_cell = $(`<td></td>`).append(modify_btn).append(`<span>  </span>`).append(delete_btn);
       template.append(tmp_cell);
       return template;
@@ -101,25 +101,25 @@
 
     const deleteRequest = e => {
       if (confirm('정말로 요청을 삭제하시겠습니까?')) {
-        axios.delete(`/points/${e.data.id}`)
-          .then(res => {
-            if (res.data.success) {
-              getAllPointRequest();
-              alert('요청 삭제 완료');
-            }
-          });
+        http.delete(`/points/${e.data.id}`)
+            .then(res => {
+              if (res.data.success) {
+                getAllPointRequest();
+                alert('요청 삭제 완료');
+              }
+            });
       }
     };
 
     const progressUpdate = e => {
       console.log(e.data.id);
       console.log(typeof e.data.id);
-      axios.put(`/api/points/${e.data.id}`, { progress: e.data.progress })
-        .then(res => {
-          if (res.data.success) {
-            getAllPointRequest();
-          }
-        }).catch(console.log);
+      http.put(`/api/points/${e.data.id}`, {progress: e.data.progress})
+          .then(res => {
+            if (res.data.success) {
+              getAllPointRequest();
+            }
+          }).catch(console.log);
     };
 
     const makeheader = () => {
@@ -149,7 +149,7 @@
 
     const countPointRequest = e => {
       const url = `/api/points/${!e ? '' : e.data.regex + '/'}total`
-      axios.get(url)
+      http.get(url)
           .then(res => {
             pointRequestCount = res.data.response
             $('.count_wrap strong').text(pointRequestCount)
@@ -159,7 +159,7 @@
 
     const getPointRequest = e => {
       const url = `/api/points${!e ? '' : '/' + e.data.regex}`
-      axios.get(url)
+      http.get(url)
           .then(res => {
             if (res.data.success) {
               makePointRequestList(res.data.response)

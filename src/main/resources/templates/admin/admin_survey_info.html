@@ -67,7 +67,7 @@
   <script>
     const updateSurveyInfo = e => {
       if (confirm('정말 업데이트 하시겠습니까?')) {
-        axios.put('/survey', surveyInfo)
+        http.put('/survey', surveyInfo)
             .then(res => {
               if (res.data.success) {
                 alert('업데이트 성공')
@@ -85,7 +85,7 @@
     const deleteSurveyInfo = e => {
       if (confirm('정말 삭제하시겠습니까?')) {
         let surveyId = $('input[name=id]').val()
-        axios.delete('/user', {id: surveyId})
+        http.delete('/user', {id: surveyId})
             .then(res => {
               if (res.data.response) {
                 alert('설문 정보 삭제 성공')

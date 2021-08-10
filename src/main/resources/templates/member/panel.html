@@ -630,7 +630,7 @@
 
         if (checkRequiredValue(info)) {
           // 데이터 전달 후 확인까지
-          axios.post('/moreinfo', info)
+          http.post('/moreinfo', info)
               .then(res => {
                 console.log(res)
                 if (res.data.code === 200) {

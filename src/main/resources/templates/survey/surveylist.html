@@ -51,7 +51,7 @@
     }
 
     const getSurveyList = () => {
-      axios.get('/api/surveys?type=index')
+      http.get('/api/surveys?type=index')
           .then(res => {
             if (res.data.success) {
               makeSurveyCardList(res.data.response)
@@ -111,7 +111,7 @@
 //         dynamicNewForm.appendTo('body');
 //         dynamicNewForm.submit();
         console.log(`/api/survey/${surveyId}`)
-        axios.get(`/api/survey/${surveyId}`)
+        http.get(`/api/survey/${surveyId}`)
             .then(res => {
               if (res.data.success) {
                 // window.open(res.data.response);

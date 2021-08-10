@@ -200,7 +200,7 @@
     const getMemberList = current => {
       const size = 10;
 
-      axios.get('/api/users', {
+      http.get('/api/users', {
             params: {
               'size': size,
               'offset': current
@@ -217,7 +217,7 @@
 
 
     const countAllUsers = () => {
-      axios.get('/api/user/total')
+      http.get('/api/user/total')
           .then(res => {
             $('div.util-search').children('strong').text(res.data.response)
           })
@@ -225,7 +225,7 @@
     }
 
     const countSearchUsers = regex => {
-      axios.get('/api/user/find/' + regex + '/total')
+      http.get('/api/user/find/' + regex + '/total')
           .then(res => {
             $('div.util-search').children('strong').text(res.data.response)
           })
@@ -241,7 +241,7 @@
       } else {
         countSearchUsers(findValue)
         const offset = !e.data ? 0 : e.data.page
-        axios.get('/api/user/find/' + findValue, {params: {size: 10, page: offset}})
+        http.get('/api/user/find/' + findValue, {params: {size: 10, page: offset}})
             .then(res => {
               makeAdminMemberListTemplate(res.data.response)
               makePaginationButton(offset)

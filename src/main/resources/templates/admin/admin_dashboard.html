@@ -18,7 +18,7 @@
   </div>
   <script>
     const syncSurveyList = () => {
-      axios.get('/api/surveys/sync')
+      http.get('/api/surveys/sync')
           .then(console.log)
           .catch(console.log)
     }
@@ -39,13 +39,13 @@
     }
 
     const deleteUser = () => {
-      axios.delete('/user', {
+      http.delete('/user', {
         data: {}
       })
     }
 
     const getAllUsers = () => {
-      axios.get('/users')
+      http.get('/users')
           .then()
           .catch()
     }

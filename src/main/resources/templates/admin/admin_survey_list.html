@@ -1,4 +1,4 @@
-<th:block th:include="admin/admin_sidebar"/>
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
   <th:block>
     <style>
@@ -78,7 +78,7 @@
       <!--관리자 페이지 설문 찾기 기능-->
       <div class="search-box-container">
         <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" placeholder="검색" type="text"/>
+        <input class="admin_find" name="admin_find" placeholder="검색" type="text" />
       </div>
 
       <table class="scroll-table">
@@ -192,9 +192,9 @@
     const adminGetAllSurveys = e => {
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
-      axios.get('/api/surveys' + regex, {
-        params: {size: 10, page: offset}
-      })
+      http.get('/api/surveys' + regex, {
+            params: {size: 10, page: offset}
+          })
           .then(res => {
             if (res.data.success) {
               getTotalCount(regex);
@@ -209,11 +209,11 @@
 
     const getTotalCount = regex => {
       if (!regex) {
-        axios.get('/api/survey/total')
+        http.get('/api/survey/total')
             .then(res => $('.util-search>strong').text(res.data.response))
             .catch(console.log);
       } else {
-        axios.get('/api/survey/find/' + regex + '/total')
+        http.get('/api/survey/find/' + regex + '/total')
             .then(res => $('.util-search>strong').text(res.data.response))
             .catch(console.log);
       }

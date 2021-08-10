@@ -427,7 +427,7 @@
 
 
     const debounceCallEmailCheck = _.debounce((email, callback) => {
-      axios.get("http://localhost:8080/api/user/" + email)
+      http.get("/api/user/" + email)
           .then(res => callback(res.data.response))
           .catch(err => console.log("error", err))
     }, 200)
@@ -549,7 +549,7 @@
           const info = getFormData()
           info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
 
-          axios.post('/signup', info)
+          http.post('/signup', info)
               .then(res => {
                 console.log(res.data)
                 if (res.data.response) {
