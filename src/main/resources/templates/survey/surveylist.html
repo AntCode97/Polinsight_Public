@@ -85,21 +85,25 @@
       }
     }
 
-    const loginChk = () => {
+    const loginChk = id => {
       /*<![CDATA[*/
       let sessionUser = /*[[${session.user}]]*/;
       /*]]*/
+
       if (!sessionUser) {
         alert('로그인을 먼저 해주세요')
         return false
+      } else if (sessionUser.role === 'ADMIN') {
+        location.href = `/admin/surveyinfo/${id}`
+        return false;
       }
       return true
     }
 
     const surveyCardClickEventHandler = (e) => {
-      if (!loginChk()) return
       e.preventDefault()
       e.returnValue = false;
+      if (!loginChk(e.data.seq)) return
 
       const seq = e.data.seq
       const surveyId = e.data.surveyid

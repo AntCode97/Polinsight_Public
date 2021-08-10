@@ -115,22 +115,17 @@
       if (confirm('정말 업데이트 하시겠습니까?')) {
         let userInfo = {}
         $('.admin_main_contents').find('input').each((idx, item) => {
-          console.log($(item).attr('type'))
           if ($(item).attr('type') === 'text')
             userInfo[$(item).attr('name')] = $(item).val()
           else
             userInfo[$(item).attr('name')] = $(item).is(':checked')
         });
 
-        http.put('/user', userInfo)
+        http.put('/admin/user', userInfo)
             .then(res => {
               if (res.data.success) {
                 alert('업데이트 성공')
-                let newUserInfo = res.data.response
-                for (let key in newUserInfo) {
-                  beforeUserInfo[key] = newUserInfo[key];
-                  $(`input[name=${newUserInfo[key]}`).val(newUserInfo[key])
-                }
+                location.reload()
               } else {
                 console.log(res)
               }
@@ -142,7 +137,7 @@
     const deleteUserInfo = e => {
       if (confirm('정말 삭제하시겠습니까?')) {
         let userId = $('input[name=id]').val()
-        http.delete('/user', {id: userId})
+        http.delete('/user', {data: {id: userId}})
             .then(res => {
               if (res.data.response) {
                 alert('유저 정보 삭제 성공')

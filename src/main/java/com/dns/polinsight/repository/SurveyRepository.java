@@ -25,4 +25,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   Optional<Survey> findSurveyBySurveyId(long surveyId);
 
+  @Query(nativeQuery = true, value = "UPDATE survey SET point = ?2 , created_at = ?3, end_at  = ?4, progress = ?5  WHERE id = ?1")
+  void adminSurveyUpdate(long id, long point, String createdAt, String endAt, String progress);
+
 }

@@ -275,11 +275,11 @@
     const login = e => {
       e.preventDefault()
       e.returnValue = false
-      http.post('/dologin', {
-            email: $('input[name=email]').val().trim(),
-            password: $('input[name=password]').val().trim(),
-            rememberMe: $('input[name=rememberMe]').val().trim()
-          })
+      let formdata = new FormData();
+      formdata.append('email', $('input[name=email]').val())
+      formdata.append('password', $('input[name=password]').val())
+      formdata.append('rememberMe', $('input[name=rememberMe]').val())
+      http.post('/dologin', formdata)
           .then(res => {
             if (res.data.response) {
               location.replace('/')

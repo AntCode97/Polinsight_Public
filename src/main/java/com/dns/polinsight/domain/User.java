@@ -4,6 +4,7 @@ import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ import java.util.*;
     @UniqueConstraint(columnNames = {"email"})
 })
 @ToString
+@DynamicUpdate
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;

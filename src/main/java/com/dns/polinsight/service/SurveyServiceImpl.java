@@ -187,4 +187,9 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.count();
   }
 
+  @Override
+  public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
+    surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
+  }
+
 }

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -122,6 +123,9 @@ public class ApiController {
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                              @RequestParam(value = "type", required = false) String type) throws Exception {
+    System.out.println("------------------------------");
+    System.out.println(pageable);
+    System.out.println("------------------------------");
     try {
       if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
@@ -364,6 +368,21 @@ public class ApiController {
     try {
       pointRequestService.deletePointRequestById(pointReqId);
       return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PutMapping("/admin/survey")
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
+    try {
+      surveyService.adminSurveyUpdate(
+          Long.parseLong(map.get("id")),
+          Long.parseLong(map.get("point")),
+          map.get("create"),
+          map.get("end"),
+          map.get("progress"));
+      return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

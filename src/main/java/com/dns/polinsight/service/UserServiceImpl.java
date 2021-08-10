@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.UserRepository;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -46,9 +47,6 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveOrUpdate(User user) {
-    System.out.println("=========================");
-    System.out.println(user.toString());
-    System.out.println("=========================");
     return repository.save(user);
   }
 
@@ -95,6 +93,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public User addPointByUserId(long uid, long point) {
     return repository.userAddPointById(uid, point);
+  }
+
+  @Override
+  public void adminUserUpdate(long uid, UserRoleType roleType, long point) {
+    repository.adminUpdateUser(uid, roleType.name(), point);
   }
 
 }

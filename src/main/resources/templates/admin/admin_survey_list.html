@@ -191,7 +191,7 @@
 
     const adminGetAllSurveys = e => {
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
-      const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
+      const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
       http.get('/api/surveys' + regex, {
             params: {size: 10, page: offset}
           })
@@ -218,8 +218,6 @@
             .catch(console.log);
       }
     };
-
-    let sort_state = 'number';
 
     $(function () {
       $('.scroll-table>thead').append(surveyListHeader());

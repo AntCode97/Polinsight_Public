@@ -108,6 +108,16 @@ public class UserController {
     }
   }
 
+  @PutMapping("/admin/user")
+  public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto userDto) throws Exception {
+    try {
+      userService.adminUserUpdate(userDto.getId(), userDto.getRole(), userDto.getPoint());
+      return success(true);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
   @GetMapping("/mypage")
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();

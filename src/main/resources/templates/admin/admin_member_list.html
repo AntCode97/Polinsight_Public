@@ -168,8 +168,7 @@
           pagenationElem.append(last)
         }
       } else {
-        // 검색 결과가 없습니다.
-        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
+        $('.scroll-table>tbody').empty().append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
       }
     }
 
@@ -198,12 +197,10 @@
     * @Param  offset : 페이지 번호
     * */
     const getMemberList = current => {
-      const size = 10;
-
       http.get('/api/users', {
             params: {
-              'size': size,
-              'offset': current
+              size: 10,
+              page: current
             }
           })
           .then(res => {
@@ -212,7 +209,6 @@
               makeAdminMemberListTemplate(res.data.response)
             }
           })
-      // .catch(location.replace("/admin/memberlist"))
     }
 
 
@@ -234,7 +230,6 @@
 
     const findUserByRegex = e => {
       const findValue = $('input[name=admin_find]').val()
-      console.log(findValue)
       if (!findValue) {
         countAllUsers()
         getMemberList(0);

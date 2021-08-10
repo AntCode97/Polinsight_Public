@@ -38,4 +38,7 @@ public interface SurveyService {
 
   long countAllSurvey();
 
+
+  void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
+
 }

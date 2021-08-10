@@ -30,6 +30,7 @@ public class SurveyStatus {
 
   @Enumerated(EnumType.STRING)
   @Builder.Default
+  @Setter
   private ProgressType progress = ProgressType.BEFORE;
 
   @Builder.Default
@@ -37,7 +38,7 @@ public class SurveyStatus {
   private Integer minimumTime = 30;
 
 
-  public void setProgress(LocalDateTime endDateTime) {
+  public void setProgressByDate(LocalDateTime endDateTime) {
     try {
       int cmp = LocalDateTime.now().compareTo(endDateTime);
       if (cmp < 0) {

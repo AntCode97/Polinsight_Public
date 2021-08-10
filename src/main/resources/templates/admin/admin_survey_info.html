@@ -41,9 +41,9 @@
         </label>
       </div>
       <div class="right_content">
-        <input type="date" name="createdAt" th:value="${#temporals.format(survey.createdAt, 'yyyy-MM-dd')}">
+        <input type="date" name="create" th:value="${#temporals.format(survey.createdAt, 'yyyy-MM-dd')}">
         <span> ~ </span>
-        <input type="date" name="endAt" th:value="${#temporals.format(survey.endAt,'yyyy-MM-dd')}">
+        <input type="date" name="end" th:value="${#temporals.format(survey.endAt,'yyyy-MM-dd')}">
         <span class="info_msg">변경 됨</span>
       </div>
     </div>
@@ -67,15 +67,11 @@
   <script>
     const updateSurveyInfo = e => {
       if (confirm('정말 업데이트 하시겠습니까?')) {
-        http.put('/survey', surveyInfo)
+        http.put('/api/admin/survey', surveyInfo)
             .then(res => {
               if (res.data.success) {
                 alert('업데이트 성공')
-                let newSurveyInfo = res.data.response
-                for (let key in newSurveyInfo) {
-                  beforeSurveyInfo[key] = newSurveyInfo[key];
-                  $(`input[name=${newSurveyInfo[key]}`).val(newSurveyInfo[key])
-                }
+                location.reload()
               }
             })
             .catch(console.log)
@@ -85,7 +81,7 @@
     const deleteSurveyInfo = e => {
       if (confirm('정말 삭제하시겠습니까?')) {
         let surveyId = $('input[name=id]').val()
-        http.delete('/user', {id: surveyId})
+        http.delete('/user', {data: {id: surveyId}})
             .then(res => {
               if (res.data.response) {
                 alert('설문 정보 삭제 성공')
@@ -108,11 +104,12 @@
       sel.find(`option[value=${progress}]`).attr('selected', 'true')
       let root = $('.admin_main_contents');
       root.find('input').each((idx, item) => {
-        beforeSurveyInfo[$(item).attr('name')] = $(item).val()
+        surveyInfo[$(item).attr('name')] = $(item).val()
         if ($(item).attr('readonly'))
           $(item).css('background-color', 'lightgrey')
       })
 
+      surveyInfo['progress'] = $('select option:selected').val()
       root.find('span.info_msg').each((idx, item) => $(item).css('display', 'none'))
       root.find('input').each((idx, item) => {
         if ($(item).attr('readonly'))
@@ -122,15 +119,16 @@
 
     const inputChangeHandler = (e) => {
       let inputDiv = $(e.target).parent('div')
-      if (beforeSurveyInfo[e.target.name] !== e.target.value) {
+      if (surveyInfo[e.target.name] !== e.target.value) {
         inputDiv.find('span.info_msg').css('display', 'block')
       } else {
         inputDiv.find('span.info_msg').css('display', 'none')
       }
+      surveyInfo[e.target.name] = e.target.value
     }
 
 
-    const beforeSurveyInfo = {}
+    const surveyInfo = {}
 
     $(function () {
       adminSurveyInfoInit()
