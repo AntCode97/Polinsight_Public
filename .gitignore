@@ -445,3 +445,6 @@ application-dev.yaml
 *.out
 /upload-dir/
 /.gradle/
+
+**gradle**
+**build**
