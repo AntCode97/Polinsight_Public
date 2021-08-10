@@ -46,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveOrUpdate(User user) {
+    System.out.println("=========================");
+    System.out.println(user.toString());
+    System.out.println("=========================");
     return repository.save(user);
   }
 

@@ -100,8 +100,8 @@ public class UserController {
 
   @PutMapping("/user")
   public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto) throws Exception {
+    System.out.println(userDto.toString());
     try {
-      // TODO: 2021-08-10 : 자동 바인딩  사용해보기
       return success(new UserDto(userService.saveOrUpdate(new User(userDto))));
     } catch (Exception e) {
       throw new Exception(e.getMessage());

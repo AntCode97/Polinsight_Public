@@ -37,4 +37,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM user WHERE role NOT LIKE 'ADMIN'")
   long userCountExcludeAdmin();
 
+
 }

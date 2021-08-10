@@ -113,6 +113,14 @@
   <script>
     const updateUserInfo = e => {
       if (confirm('정말 업데이트 하시겠습니까?')) {
+        let userInfo = {}
+        $('.admin_main_contents').find('input').each((idx, item) => {
+          console.log($(item).attr('type'))
+          if ($(item).attr('type') === 'text')
+            userInfo[$(item).attr('name')] = $(item).val()
+          else
+            userInfo[$(item).attr('name')] = $(item).is(':checked')
+        });
 
         http.put('/user', userInfo)
             .then(res => {
@@ -123,6 +131,8 @@
                   beforeUserInfo[key] = newUserInfo[key];
                   $(`input[name=${newUserInfo[key]}`).val(newUserInfo[key])
                 }
+              } else {
+                console.log(res)
               }
             })
             .catch(console.log)
