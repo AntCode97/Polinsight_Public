@@ -328,15 +328,15 @@
             </div>
             </span>
             <div class="postList">
-                <div class="nearPost" th:unless="${nextBoard} ==null">
+                <div class="nearPost" th:unless="${nextPost} ==null">
                     <div class="nearPostLetter" > <b>다음글</b> &nbsp;&nbsp;&nbsp; | </div>
-                    <div class="nearPostName" th:text="${nextBoard.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextBoard.id})}'|"> -다음글 제목-</div>
-                    <div class="nearPostDate" th:text="${#temporals.format(nextBoard.registeredAt, 'yyyy-MM-dd HH:mm')}">-다음글 날짜</div>
+                    <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
+                    <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-다음글 날짜</div>
                 </div>
-                <div class="nearPost" th:unless="${prevBoard} ==null">
+                <div class="nearPost" th:unless="${prevPost} ==null">
                     <div class="nearPostLetter"> <b>이전글 </b>&nbsp;&nbsp;&nbsp; | </div>
-                    <div class="nearPostName" th:text="${prevBoard.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevBoard.id})}'|"> -이전글 제목-</div>
-                    <div class="nearPostDate" th:text="${#temporals.format(prevBoard.registeredAt, 'yyyy-MM-dd HH:mm')}">-이전글 날짜</div>
+                    <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
+                    <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-이전글 날짜</div>
                 </div>
             </div>
 
