@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="module/common"/>
+<th:block th:include="module/common" />
 <head>
   <title>폴인사이트</title>
   <link rel="icon" th:href="@{/favicon.ico}">
@@ -13,7 +13,6 @@
       left: 0;
       width: 100%;
       background-color: transparent;
-      /*background-color: #182838;*/
       z-index: 9999;
     }
 
@@ -327,7 +326,7 @@
     <div class="header_container_logo">
       <div class="header_logo">
         <a th:href="@{/}">
-          <img alt="로고" th:src="@{/img/logo/white_logo.png}"/>
+          <img alt="로고" th:src="@{/img/logo/white_logo.png}" />
         </a>
       </div>
     </div>
@@ -414,7 +413,7 @@
     // + header 디자인 그림자 추가
     $(window).scroll(function () { // 스크롤이 움직이면
       if (document.location.href.split('/').length > 0) {
-        $('header_wrap').css('background-color', '#182838')
+        $('.header_wrap').css('background-color', '#182838')
       } else {
         if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
           $('.top-btn').fadeIn().css("display", "flex");
@@ -429,8 +428,6 @@
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });
-
-
   });
 </script>
 </html>

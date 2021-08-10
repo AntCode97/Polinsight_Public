@@ -1,29 +1,38 @@
-DROP TABLE if EXISTS hibernate_sequence CASCADE;
+SET
+foreign_key_checks = 0;
 
-DROP TABLE if EXISTS point_history CASCADE;
+DROP TABLE if EXISTS polinsight.post CASCADE;
 
-DROP TABLE if EXISTS point_request CASCADE;
+DROP TABLE if EXISTS polinsight.survey CASCADE;
 
-DROP TABLE if EXISTS user_favorite CASCADE;
+DROP TABLE if EXISTS polinsight.user CASCADE;
 
-DROP TABLE if EXISTS additional_favorite CASCADE;
+DROP TABLE if EXISTS polinsight.hibernate_sequence CASCADE;
 
-DROP TABLE if EXISTS attach CASCADE;
+DROP TABLE if EXISTS polinsight.point_history CASCADE;
 
-DROP TABLE if EXISTS post CASCADE;
+DROP TABLE if EXISTS polinsight.point_request CASCADE;
 
-DROP TABLE if EXISTS change_pwd_dto CASCADE;
+DROP TABLE if EXISTS polinsight.user_favorite CASCADE;
 
-DROP TABLE if EXISTS point CASCADE;
+DROP TABLE if EXISTS polinsight.additional_favorite CASCADE;
 
-DROP TABLE if EXISTS additional CASCADE;
+DROP TABLE if EXISTS polinsight.attach CASCADE;
 
-DROP TABLE if EXISTS participate_survey CASCADE;
+DROP TABLE if EXISTS polinsight.change_pwd_dto CASCADE;
 
-DROP TABLE if EXISTS survey CASCADE;
+DROP TABLE if EXISTS polinsight.point CASCADE;
 
-DROP TABLE if EXISTS USER CASCADE;
+DROP TABLE if EXISTS polinsight.additional CASCADE;
 
+DROP TABLE if EXISTS polinsight.participate_survey CASCADE;
+
+DROP TABLE if EXISTS polinsight.user_participate_survey CASCADE;
+
+DROP TABLE if EXISTS polinsight.survey_variables CASCADE;
+
+SET
+foreign_key_checks = 1;
 
 CREATE TABLE change_pwd_dto
 (

@@ -291,6 +291,7 @@ public class ApiController {
     }
   }
 
+  @CrossOrigin
   @GetMapping("/user/{email}")
   public ApiUtils.ApiResult<Boolean> isExistEmail(@Email @PathVariable("email") String email) throws NotFoundException {
     try {
