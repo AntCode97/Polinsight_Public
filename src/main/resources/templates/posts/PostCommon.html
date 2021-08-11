@@ -1,15 +1,15 @@
 <th:block th:include="layout/header" />
 <div>
-  <script type="text/javascript" src="/static/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
-  <script type="text/javascript">
-    var oEditors = [];
-    nhn.husky.EZCreator.createInlFrame({
-      oAppRef: oEditors,
-      elPlaceHoler: "editor",
-      sSkinURL: "./workspace/static/SmartEditor2Skin.html",
-      fCreator: "createSEditor2"
-    });
-  </script>
+  <!--  <script type="text/javascript" src="/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>-->
+  <!--  <script type="text/javascript">-->
+  <!--    var oEditors = [];-->
+  <!--    nhn.husky.EZCreator.createInlFrame({-->
+  <!--      oAppRef: oEditors,-->
+  <!--      elPlaceHoler: "editor",-->
+  <!--      sSkinURL: "./workspace/static/SmartEditor2Skin.html",-->
+  <!--      fCreator: "createSEditor2"-->
+  <!--    });-->
+  <!--  </script>-->
   <style>
     .header_wrap {
       background-color: #182838;
@@ -525,6 +525,10 @@
       margin-left: 8px;
     }
 
+    .modifyButton b, .listButton b {
+      color: white;
+    }
+
     .postList {
       width: 1000px;
       height: 80px;
@@ -546,6 +550,7 @@
     .nearPostName {
       width: 800px;
       font-size: 15px;
+      cursor: pointer;
     }
 
     .nearPostDate {

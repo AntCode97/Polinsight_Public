@@ -74,6 +74,7 @@ spring :
       static-locations : classpath:/static
       add-mappings :     true
 
+
   cache :
     type : redis
 
@@ -141,8 +142,6 @@ custom :
       - /moreinfo
       - /dologin
       - /actuator**
-      - /posts/**
-      - /post**
       - /actuator/**
       - /surveys/**
       - /chpwd/**
@@ -238,14 +237,14 @@ spring :
   datasource :
     username :          polinsight
     password :          polinsight
-    url :               jdbc:mariadb://pol-mariadb:3306/polinsight?useSSL=false
+    url :               jdbc:mariadb://localhost:3306/polinsight?useSSL=false
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :
       maximum-pool-size : 300
       pool-name :         Pollinsight DBCP Pool
 
   redis :
-    host : pol-redis
+    host : localhost
     port : 6379
 
   config :
