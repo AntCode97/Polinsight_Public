@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
     margin: 0;
     padding: 0;
     font-size: 14px;
@@ -127,7 +127,7 @@ button.btn-warn {
 }
 
 button.btn-warn:hover {
-    background-color: tomato;
+    background-color: #e75a40;
     border-color: transparent;
 }
 
