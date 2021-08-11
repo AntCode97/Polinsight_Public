@@ -77,7 +77,7 @@ public class PostController {
     postService.renewPost();
 
 
-    return "/admin/admin_post_list";
+    return "admin/admin_post_list";
   }
 
 
@@ -91,7 +91,7 @@ public class PostController {
     //    }
     //    return "index";
     //로그인이 안되서 일단 이렇게 진행
-    return "/admin/admin_post_register";
+    return "admin/admin_post_register";
   }
 
 
@@ -101,7 +101,7 @@ public class PostController {
 
     postDTO.setFiles(Arrays.asList(file));
     if (result.hasErrors()) {
-      return "/admin/admin_post_register";
+      return "admin/admin_post_register";
     }
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -140,7 +140,7 @@ public class PostController {
     model.addAttribute("posts", posts);
 
 
-    return "/admin/admin_post_list";
+    return "admin/admin_post_list";
   }
 
   @GetMapping("posts/new")
@@ -153,7 +153,7 @@ public class PostController {
     //    }
     //    return "index";
     //로그인이 안되서 일단 이렇게 진행
-    return "/posts/createPostForm";
+    return "posts/createPostForm";
   }
 
 
@@ -197,7 +197,7 @@ public class PostController {
     //System.out.println(postSearch.toString());
 
 
-    return "/posts/postList";
+    return "posts/postList";
   }
 
 
@@ -219,7 +219,7 @@ public class PostController {
     }
     System.out.println(postSearch.toString());
 
-    return "/posts/postList";
+    return "posts/postList";
   }
 
 
@@ -270,7 +270,7 @@ public class PostController {
       }
     }
 
-    return "/posts//post";
+    return "posts/post";
   }
 
   @GetMapping("admin/posts/{postId}")
@@ -308,7 +308,7 @@ public class PostController {
     model.addAttribute("post", findPost);
 
 
-    return "/admin/admin_post_view";
+    return "admin/admin_post_view";
   }
 
   @GetMapping("posts/{postId}/edit")
@@ -410,7 +410,7 @@ public class PostController {
     //
     //    model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
-    return "/admin/admin_post_update";
+    return "admin/admin_post_update";
   }
 
 
@@ -462,7 +462,6 @@ public class PostController {
 
   @GetMapping("/api/post/search")
   public ResponseEntity<Map<String, Object>> asyncPostSearch(HttpServletRequest request, @PageableDefault Pageable pageable) {
-    System.out.println("Hi");
     Map<String, Object> map = new HashMap<>();
     String type = request.getParameter("type");
     String cls = request.getParameter("classify");
@@ -499,7 +498,7 @@ public class PostController {
     model.addAttribute("posts", posts);
 
 
-    return "/fragments/postList";
+    return "fragments/postList";
   }
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
@@ -531,23 +530,5 @@ public class PostController {
     attachService.delete(attachService.findByname(filename).get(0));
     return new ResponseEntity(HttpStatus.OK);
   }
-
-  //  @GetMapping("/api/admin/posts/search")
-  //  public String asyncAdminPostSearch2(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model){
-  //    String keyword = paramMap.get("keyword").toString();
-  //    System.out.println(paramMap);
-  //    System.out.println(keyword);
-  //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-  //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-  //    for(Post b : posts){
-  //      System.out.println(b.getId());
-  //    }
-  //    model.addAttribute("keyword", keyword);
-  //    model.addAttribute("posts", posts);
-  //
-  //
-  //    return "/fragments/postList";
-  //  }
-
 
 }

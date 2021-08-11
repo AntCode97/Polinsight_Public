@@ -1068,7 +1068,7 @@ VALUES
   ( 1009, '2021-08-06 14:34:49.000000', '양력', '대학', 'FEMALE', '교육', '학생', FALSE, 'xptmxmdlapdlf@naver.com', TRUE, 'dklfjaklsdfjakls',
     '$2a$10$EHw6bgXla3JyBht4jWoxsOS/.xuLr1GCcbKvUjug7Fz7N6M3utrAm', '09812093810', 0, NULL, NULL, TRUE );
 
-INSERT INTO polinsight.post ( pno, is_new, registered_at, search_content, title, view_content, view_count, user_id, type )
+INSERT INTO post ( pno, is_new, registered_at, search_content, title, view_content, view_count, user_id, type )
 VALUES
   ( 1, FALSE, '2021-06-07 08:35:37.000000', 'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.', 'Nulla nisl.', 'Maecenas pulvinar lobortis est.', 0, 1, 'NOTICE' ),
   ( 2, TRUE, '2021-05-28 18:28:38.000000', 'Nullam porttitor lacus at turpis.', 'Etiam justo.', 'Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.', 0, 1,

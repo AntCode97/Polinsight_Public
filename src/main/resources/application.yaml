@@ -74,6 +74,7 @@ spring :
       static-locations : classpath:/static
       add-mappings :     true
 
+
   cache :
     type : redis
 
@@ -141,8 +142,6 @@ custom :
       - /moreinfo
       - /dologin
       - /actuator**
-      - /posts/**
-      - /post**
       - /actuator/**
       - /surveys/**
       - /chpwd/**
