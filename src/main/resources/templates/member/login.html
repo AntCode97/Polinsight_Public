@@ -250,6 +250,7 @@
                 <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
               </label>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="login_btn_wrap">
               <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
             </div>
@@ -268,6 +269,7 @@
       </div>
     </div>
   </div>
+
   <div>
     <th:block th:include="layout/footer" />
   </div>
@@ -279,6 +281,11 @@
       formdata.append('email', $('input[name=email]').val())
       formdata.append('password', $('input[name=password]').val())
       formdata.append('rememberMe', $('input[name=rememberMe]').val())
+      /*<![CDATA[*/
+      let csrfname =/*[[${_csrf.parameterName}]]*/;
+      let csrftoken =/*[[${_csrf.token}]]*/;
+      /*]]*/
+      formdata.append(csrfname, csrftoken)
       http.post('/dologin', formdata)
           .then(res => {
             if (res.data.response) {
