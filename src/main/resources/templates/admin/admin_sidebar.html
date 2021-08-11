@@ -15,7 +15,7 @@
       margin-top: 51px;
       width: calc(100% - 260px);
       height: calc(100% - 51px);
-      padding: 50px 50px 0;
+      padding: 20px 40px 40px;
     }
 
     .admin_sidebar, .admin_sidebar_wrap, .admin_main {
@@ -207,6 +207,7 @@
 
     .admin_main {
       width: calc(100% - 260px);
+      height: 130px;
       float: right;
       position: fixed;
       top: 0;
@@ -226,7 +227,7 @@
     }
 
     .contents_title {
-      font-size: 1.4rem;
+      font-size: 1.0rem;
     }
 
     .right_menu > ul {
@@ -277,7 +278,7 @@
     }
 
 
-    .dropdown_user:hover > a {
+    .dropdown_user > a {
       margin: 0 5px;
       padding: 10px 24px;
       display: block;
@@ -321,15 +322,18 @@
       justify-items: center;
       align-content: center;
       text-align: center;
+      margin: 20px 0;
     }
 
     .pagination > .pagination_button {
       display: inline-block;
-      width: 25px;
-      margin: 2px;
-      margin-top: 5px;
-      padding: 0;
       text-align: center;
+      width: 30px;
+      font-size: 0.9rem;
+      line-height: 34px;
+      border: 1px solid #e2e2e2;
+      cursor: pointer;
+      margin: 0 2px;
     }
 
     .pagination_button:hover {
@@ -379,10 +383,6 @@
       color: #4f5b66;
     }
 
-    .scroll-table {
-      margin-top: 50px;
-    }
-
     .btn_del {
       border: none;
       border-radius: 5px;
@@ -424,13 +424,16 @@
     }
 
     .post-row > * {
-      padding: 9px 10px;
+      padding: 9px 0px;
       display: inline-block;
       font-size: 1rem;
       line-height: 30px;
       color: #666;
       text-align: center;
     }
+    .main_contents_wrap {margin: 40px 0;}
+    .util-search {font-size: 1rem; margin-bottom: 20px; color: #333;}
+
 
     /* 여기까지 전체적인 레이아웃 */
     /* 게시글판 디자인 */
@@ -734,6 +737,21 @@
 
     .info_msg {
       color: #a9a9a9;
+    }
+
+    .page-button {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .page-button > a {
+      text-align: center;
+      display: inline-block;
+      font-size: 0.9rem;
+      width: 30px;
+      line-height: 34px;
+      border: 1px solid #e2e2e2;
+      cursor: pointer;
     }
   </style>
 </head>

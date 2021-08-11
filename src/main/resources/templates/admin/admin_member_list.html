@@ -7,6 +7,64 @@
       margin: 0;
     }
 
+    .post-search {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 41px;
+    }
+
+    .post-search .util-search {
+      color: #333;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .post-search .form-search {
+      background-color: #EEE;
+      padding: 20px;
+      box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+    }
+
+    .post-search .tbl-search {
+      text-align: center;
+    }
+
+    .post-search .box-search {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      background-color: white;
+      height: 55px;
+      line-height: 55px;
+      border: 1px solid #ccd0d7;
+      min-width: 600px;
+    }
+
+    .post-search .box-search input {
+      position: relative;
+      top: -1px;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background-color: transparent;
+      font-size: 1.0rem;
+      text-indent: 10px;
+      padding-right: 55px;
+    }
+
+    .post-search .box-search input[type="submit"] {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50px;
+      height: 55px;
+      background-image: url('/img/etc/ico-search-btn.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      text-indent: -9999px;
+      cursor: pointer;
+    }
+
     .post-row {
       display: flex;
       align-items: center;
@@ -69,11 +127,16 @@
     <div class="main_contents_wrap">
       <div class="post-search">
         <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
-      </div>
-      <!--관리자 페이지 사용자 찾기 기능-->
-      <div class="search-box-container">
-        <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" type="text" placeholder="회원 검색" />
+
+        <!--관리자 페이지 사용자 찾기 기능-->
+        <div class='form-search'>
+          <div class='tbl-search'>
+            <div class='box-search'>
+              <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
+              <input type='submit' />
+            </div>
+          </div>
+        </div>
       </div>
 
       <table class="scroll-table">
@@ -108,7 +171,7 @@
       // 전체 요소 갯수 가져오기
       const userCount = $('div.util-search').children('strong').text()
       let totalPage = Math.ceil(userCount / 10)  // 총 페이지 수
-      const pagenationElem = $('div.pagination').css('text-align', 'center').css('margin', '0')
+      const pagenationElem = $('div.pagination').css('text-align', 'center');
       pagenationElem.empty()
 
       let start = current - 5 <= 0 ? 0 : current - 5;
@@ -131,7 +194,7 @@
             let tmp = $(`<div onclick="getMemberList(${i})" class="pagination_button">${i + 1}</div>`)
             // 활성화된 버튼에 대해 디자인 처리
             if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold')
+              tmp.css('color', 'white').css('background-color', '#444');
             }
             pagenationElem.append(tmp)
           }
