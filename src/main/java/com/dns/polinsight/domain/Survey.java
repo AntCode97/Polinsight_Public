@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -42,5 +43,8 @@ public class Survey implements Serializable {
   private LocalDateTime endAt;
 
   private Long point;
+
+  @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Collector> collectors;
 
 }

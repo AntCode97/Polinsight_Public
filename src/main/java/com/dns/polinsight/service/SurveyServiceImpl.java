@@ -80,12 +80,12 @@ public class SurveyServiceImpl implements SurveyService {
     try {
       ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
       List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-      List<Survey> surveyList = tmplist.stream().map(objmap -> SurveyMonkeyDTO.builder()
-                                                                              .id(Long.valueOf(objmap.get("id")))
-                                                                              .title(objmap.get("title"))
-                                                                              .createdAt(LocalDateTime.parse(objmap.get("date_created")))
-                                                                              .href(objmap.get("href"))
-                                                                              .build()).map(SurveyMonkeyDTO::toSurvey).collect(Collectors.toList());
+      List<Survey> surveyList = tmplist.parallelStream().map(objmap -> SurveyMonkeyDTO.builder()
+                                                                                      .id(Long.valueOf(objmap.get("id")))
+                                                                                      .title(objmap.get("title"))
+                                                                                      .createdAt(LocalDateTime.parse(objmap.get("date_created")))
+                                                                                      .href(objmap.get("href"))
+                                                                                      .build()).map(SurveyMonkeyDTO::toSurvey).collect(Collectors.toList());
 
       surveyList = surveyList.parallelStream().map(survey -> {
         survey.setStatus(new SurveyStatus());
@@ -134,7 +134,7 @@ public class SurveyServiceImpl implements SurveyService {
     Map dto = res.getBody();
     // 설문에 걸린 모든 collector 객체 (name, id, href)
     List<Map<String, String>> list = (List<Map<String, String>>) dto.get("data");
-    List<Map> mapList = list.stream().map(map -> {
+    List<Map> mapList = list.parallelStream().map(map -> {
       return this.getCollectorsDetailByCollectorId(map.get("href"), header);
     }).collect(Collectors.toList());
   }

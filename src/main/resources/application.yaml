@@ -100,9 +100,7 @@ spring :
     servlet :
       content-type : "*/*"
 
-#logging :
-#  file :
-#    name : ./polinsight_logs.log
+
 
 
 file :
@@ -258,10 +256,8 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : create
+      ddl-auto : validate
     generate-ddl : false
-
-
 
   banner :
     location : banner-prod.txt
@@ -272,3 +268,7 @@ server :
   servlet :
     session :
       timeout : 15m
+
+logging :
+  file :
+    name : ./polinsight_logs.log
