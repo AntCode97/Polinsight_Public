@@ -316,6 +316,27 @@
       align-items: center;
       background-color: #eee;
     }
+    .file_item2 > label {
+      display: block;
+      width: 100px;
+      text-align: center;
+    }
+
+    .file_item2 > div {
+      padding: 9px 10px;
+      background-color: #fff;
+      flex: 7;
+      display: flex;
+      align-items: center;
+    }
+
+    .file_item2 {
+      /*display: flex;*/
+      justify-content: flex-start;
+      align-items: center;
+      /*background-color: #eee;*/
+    }
+
 
     .btn-add, .btn-remove {
       cursor: pointer;
@@ -382,11 +403,14 @@
     }
 
     .titleContent {
+      display: flex;
       width: 1000px;
-      height: 80px;
-      line-height: 80px;
+      min-height: 6vh;
+      max-height: 10vh;
+      line-height: 1.6;
       background-color: #EFEEEC;
       font-size: 20px;
+      align-items: center;
       padding-left: 20px;
     }
 
@@ -527,14 +551,17 @@
 
     .postList {
       width: 1000px;
-      height: 80px;
+      /*height: 80px;*/
       background-color: rgb(241, 238, 238);
     }
 
     .nearPost {
       display: flex;
-      height: 40px;
-      line-height: 40px;
+      align-items: center;
+      height: auto;
+      min-height: 4vh;
+      max-height: 6vh;
+      line-height: 1.7;
     }
 
     .nearPostLetter {
@@ -553,9 +580,6 @@
       font-size: 15px;
     }
 
-    a.btn {
-      color: white;
-    }
 
     .popup {
       display: table;
@@ -578,12 +602,15 @@
 
     .button {
       height: 25px;
-      width: 60px;
+      /*width: 60px;*/
       border-radius: 5px;
       /*background-color: gray;*/
       color: white;
-      margin-left: 30px;
       margin-bottom: 20px;
+    }
+
+    .search-btn{
+      margin-left: 30px;
     }
 
     .disabled {
@@ -696,6 +723,14 @@
       0 3px 1px -2px rgba(0, 0, 0, .2),
       0 1px 5px 0 rgba(0, 0, 0, .12);
       position: relative;
+    }
+
+
+    div.listButton > a.btn  {
+      color: white;
+    }
+    div.modifyButton > a.btn  {
+      color: white;
     }
   </style>
 

@@ -28,7 +28,7 @@
             <div class="fileContent">
               <div class="file1" th:each="file : ${post.attaches}">
                 <div class="fileName">
-                  <span class="file_item" th:text="'첨부파일#'"></span>
+                  <span class="file_item2" th:text="'첨부파일#'"></span>
                   <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}">
                   </a>
                 </div>
@@ -69,16 +69,16 @@
       </div>
     </div>
     <div>
-      <th:block th:include="lyaout/footer" />
+      <th:block th:include="layout/footer" />
     </div>
     <script type="text/javascript">
       window.onload = function () {
-        let file_item = document.getElementsByClassName("file_item");
-        let fileCount = file_item.length;
+        let file_item2 = document.getElementsByClagssName("file_item2");
+        let fileCount = file_item2.length;
 
-        console.log(fileCount, file_item);
+        console.log(fileCount, file_item2);
         for (let i = 1; i <= fileCount; i++) {
-          file_item[i - 1].innerText = "첨부파일#" + i;
+          file_item2[i - 1].innerText = "첨부파일#" + i;
         }
       }
 

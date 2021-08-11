@@ -4,7 +4,7 @@
     <div class="web">
       <div class="sub-main-name"><b>공지사항</b></div>
       <div class="post">
-        <div class="button">
+        <div class="button search-btn">
           <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
             <select th:field="*{postType}" class="select" name="classify" id="classify">
               <optgroup label="분류 선택">
@@ -81,7 +81,7 @@
          th:text="${page}"
          th:href="@{/posts/search(page=${page}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"></a>
       <a th:class="${posts.last} ? 'disabled'"
-         th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}"
+         th:href="${posts.last} ? '#' :  @{/posts/search(page=${posts.number+2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
          aria-label="Next">
         <img class="button" th:src="@{/img/post/list_next.png}" alt="다음 페이지로 이동">
       </a>
