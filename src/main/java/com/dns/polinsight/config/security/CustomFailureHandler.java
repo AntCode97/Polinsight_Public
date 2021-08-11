@@ -21,7 +21,8 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
-    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder().msg("failed").build()).trim());
+    //    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder().msg("failed").build()).trim());
+    response.sendRedirect("/login?error=true");
   }
 
 }

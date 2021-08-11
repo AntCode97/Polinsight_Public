@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   @Qualifier("customSuccessHandler")
-  private AuthenticationSuccessHandler successHandler;
+  private CustomSuccessHandler successHandler;
 
   @Autowired
   @Qualifier("rememberMeSuccessHandler")
@@ -60,54 +60,51 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    // @formatter:off
     http
-          .csrf().disable()
-
-          .authorizeRequests()
+        .csrf().disable()
+        .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-          .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
-          .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
-          .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
-          .anyRequest().authenticated().and()
-          .cors().and()
-          .rememberMe()
+        .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
+        .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
+        .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
+        .anyRequest().authenticated().and()
+        .cors().and()
+        .rememberMe()
         .key("remeberMeSecretKey")
         .rememberMeParameter("rememberMe")
-        .tokenValiditySeconds(7*24*60*60)  // 7일
+        .tokenValiditySeconds(7 * 24 * 60 * 60)  // 7일
         .useSecureCookie(true)
         .userDetailsService(userService)
         .authenticationSuccessHandler(remeberMeSuccessHandler)
         .and()
-          .formLogin()
-            .loginPage("/login")
-            .loginProcessingUrl("/dologin")
-            .usernameParameter("email")
-            .passwordParameter("password")
-        .successForwardUrl("/")
-        .failureForwardUrl("/denied")
-//            .successHandler(successHandler)
-//            .failureHandler(failureHandler)
-            .permitAll()
+        .formLogin()
+        .loginPage("/login")
+        .loginProcessingUrl("/dologin")
+        .usernameParameter("email")
+        .passwordParameter("password")
+        //        .successForwardUrl("/")
+        //        .failureForwardUrl("/denied")
+        .successHandler(successHandler)
+        .failureHandler(failureHandler)
+        .permitAll()
         .and()
-          .exceptionHandling()
-          .authenticationEntryPoint(entryPoint)
-          .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
+        .exceptionHandling()
+        .authenticationEntryPoint(entryPoint)
+        .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
         .and()
-            .logout()
-              .logoutUrl("/dologout")
-              .logoutSuccessHandler(logoutSuccessHandler)
-              .deleteCookies("JSESSIONID")
-              .clearAuthentication(true)
-              .invalidateHttpSession(true)
+        .logout()
+        .logoutUrl("/dologout")
+        .logoutSuccessHandler(logoutSuccessHandler)
+        .deleteCookies("JSESSIONID")
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
         .and()
-          .httpBasic().disable()
-          .oauth2Login()
-            .loginPage("/login")
-            .successHandler(successHandler)
-            .userInfoEndpoint()
-            .userService(customOAuth2Service);
-    // @formatter:on
+        .httpBasic().disable()
+        .oauth2Login()
+        .loginPage("/login")
+        .successHandler(successHandler)
+        .userInfoEndpoint()
+        .userService(customOAuth2Service);
   }
 
   @Bean
