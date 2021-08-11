@@ -82,8 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .loginProcessingUrl("/dologin")
         .usernameParameter("email")
         .passwordParameter("password")
-        //        .successForwardUrl("/")
-        //        .failureForwardUrl("/denied")
         .successHandler(successHandler)
         .failureHandler(failureHandler)
         .permitAll()
