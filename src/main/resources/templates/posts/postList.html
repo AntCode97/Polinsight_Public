@@ -1,194 +1,26 @@
-<th:block th:include="layout/header" />
+<th:block th:include="posts/PostCommon" />
 <th:block>
-  <style>
-    .web {
-      margin: auto;
-      width: 1200px;
-    }
-
-    img {
-      margin-left: -2px;
-      margin-right: -2px;
-      padding: 0;
-    }
-
-    .sub-main {
-      height: 50px;
-      padding-bottom: 0px;
-      border-bottom: 1px solid #EFEEEC;
-    }
-
-    ul li {
-      list-style-type: none;
-      float: left;
-    }
-
-    .sub-main li {
-      width: 150px;
-      height: 100%;
-      font-size: 20px;
-      color: white;
-      text-align: center;
-      line-height: 250%;
-    }
-
-    .notice {
-      background-color: #1A2738;
-      border: 1px solid #1A2738;
-    }
-
-    .qna {
-      background-color: #EFEEEC;
-      border: 1px solid #EFEEEC;
-    }
-
-    .sub-main-name {
-      width: 1200px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      margin-bottom: 50px;
-      font-size: 25px;
-      text-align: center;
-      border-bottom: 1px solid rgb(0, 0, 0);
-    }
-
-    .button {
-      margin-bottom: 20px;
-    }
-
-    .disabled {
-      opacity: 0;
-      color: #6c757d;
-      pointer-events: none;
-      background-color: #fff;
-      border-color: #dee2e6;
-      text-decoration: none;
-    }
-
-    .active {
-      font-size: 19px;
-      font-weight: bold;
-      margin-left: 2px;
-      margin-right: 2px;
-      z-index: 3;
-      color: #2F3138;
-      text-decoration: none;
-    }
-
-    .not-active {
-      margin-left: 2px;
-      margin-right: 2px;
-      z-index: 3;
-      color: #2F3138;
-      text-decoration: none;
-    }
-
-    .select {
-      height: 25px;
-    }
-
-    .btn-search {
-      height: 25px;
-      color: white;
-      background: black;
-      border-radius: 5px 5px 5px 5px;
-    }
-
-    .tblList {
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
-
-    .tblList thead th {
-      background-color: #EFEEEC;
-      border-top: 1px solid rgb(0, 0, 0);
-      border-bottom: 1px solid rgb(0, 0, 0);
-      padding-left: 20px;
-    }
-
-    .tblList tbody td {
-      padding-left: 20px;
-      height: 50px;
-      border-bottom: 2px solid #EFEEEC;
-    }
-
-    .writeButton {
-      margin-top: 20px;
-      float: right;
-    }
-
-    .write {
-      text-align: center;
-      line-height: 200%;
-      width: 100px;
-      height: 30px;
-      font-size: 15px;
-      color: black;
-      border-radius: 5px 5px 5px 5px;
-      border: 1px solid black;
-    }
-
-    .page-button {
-      margin-top: 50px;
-      vertical-align: middle;
-      text-align: center;
-    }
-
-    .current-page {
-      margin-right: 5px;
-      margin-left: 5px;
-    }
-
-    .button {
-      vertical-align: text-top;
-      min-width: 25px;
-      height: 25px;
-    }
-
-    .page-button > a {
-      text-decoration: none;
-      color: #2F3138;
-    }
-
-    .PC {
-      margin-top: 80px;
-      height: 100%;
-    }
-  </style>
-
   <div class="PC">
     <div class="web">
-      <!--      <div class="sub-main">-->
-      <!--        <span></span>-->
-      <!--        <ul>-->
-      <!--          <li class="notice">공지사항</li>-->
-      <!--          <li class="qna">문의사항</li>-->
-      <!--        </ul>-->
-      <!--      </div>-->
-
       <div class="sub-main-name"><b>공지사항</b></div>
-
       <div class="post">
         <div class="button">
-          <div>
-            <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
-
-              <select th:field="*{postType}" class="select" name="classify" id="classify">
-                <optgroup label="분류 선택">
-                  <option selected value="NOTICE">공지</option>
-                  <option value="EVENT">이벤트</option>
-                </optgroup>
-              </select>
-              <select th:field="*{searchType}" name="search_item" class="select" id="type">
-                <optgroup label="통합검색">
-                  <option selected th:value="TITLE" th:text="제목"></option>
-                  <option th:value="CONTENT" th:text="내용"></option>
-                </optgroup>
-              </select>
-              <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
-              <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
-            </form>
-          </div>
+          <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
+            <select th:field="*{postType}" class="select" name="classify" id="classify">
+              <optgroup label="분류 선택">
+                <option selected value="NOTICE">공지</option>
+                <option value="EVENT">이벤트</option>
+              </optgroup>
+            </select>
+            <select th:field="*{searchType}" name="search_item" class="select" id="type">
+              <optgroup label="통합검색">
+                <option selected th:value="TITLE" th:text="제목"></option>
+                <option th:value="CONTENT" th:text="내용"></option>
+              </optgroup>
+            </select>
+            <input id="searchinput" th:field="*{searchValue}" type="text" placeholder="검색어를 입력하세요">
+            <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
+          </form>
         </div>
 
         <div class="post-list">
@@ -278,7 +110,9 @@
       </div>
     </div>
   </div>
-  <th:block th:include="layout/footer"></th:block>
+  <div>
+    <th:block th:include="layout/footer" />
+  </div>
   <script>
     $(function () {
       $('.header_wrap').css('background-color', '#182838')

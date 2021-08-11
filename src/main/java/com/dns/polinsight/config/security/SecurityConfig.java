@@ -62,13 +62,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
+        .cors().disable()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
+        .antMatchers(permission.getTemplate().toArray(new String[0])).permitAll()
         .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
         .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
         .anyRequest().authenticated().and()
-        .cors().and()
         .rememberMe()
         .key("remeberMeSecretKey")
         .rememberMeParameter("rememberMe")
