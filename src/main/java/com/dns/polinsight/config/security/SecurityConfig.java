@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
@@ -62,13 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http
           .csrf().disable()
-          .cors().configurationSource(corsConfigurationSource()).and()
+
           .authorizeRequests()
+        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+          .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
           .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
           .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
-          .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
-          .anyRequest().authenticated()
-        .and()
+          .anyRequest().authenticated().and()
+          .cors().and()
           .rememberMe()
         .key("remeberMeSecretKey")
         .rememberMeParameter("rememberMe")
@@ -82,8 +84,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/dologin")
             .usernameParameter("email")
             .passwordParameter("password")
-            .successHandler(successHandler)
-            .failureHandler(failureHandler)
+        .successForwardUrl("/")
+        .failureForwardUrl("/denied")
+//            .successHandler(successHandler)
+//            .failureHandler(failureHandler)
             .permitAll()
         .and()
           .exceptionHandling()
