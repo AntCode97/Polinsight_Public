@@ -38,7 +38,7 @@
 
       <div class='post-row' th:each='list : ${posts}'>
         <span th:text='${list.id}'></span>
-        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title'><strong th:text='${list.title}'></strong></a>
+        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title' th:text='${list.title}'></a>
         <span th:if='${list.newPost}'>New!</span>
         <span th:text='${list.user.name}'></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
