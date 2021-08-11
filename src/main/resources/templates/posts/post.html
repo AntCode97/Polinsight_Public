@@ -1,274 +1,7 @@
-<th:block th:include="layout/header"></th:block>
+<th:block th:include="posts/PostCommon" />
 <th:block>
-  <style>
-    a {
-      text-decoration: none
-    }
-
-    a:link,
-    a:visited,
-    a:hover {
-      color: #191919;
-    }
-
-
-    .web {
-      margin: auto;
-      width: 1200px;
-    }
-
-    img {
-      margin-left: -2px;
-      margin-right: -2px;
-      padding: 0;
-    }
-
-    .sub-main {
-      height: 50px;
-      padding-bottom: 0px;
-      border-bottom: 1px solid #EFEEEC;
-    }
-
-    ul li {
-      list-style-type: none;
-      float: left;
-    }
-
-    .sub-main li {
-      width: 150px;
-      height: 100%;
-      font-size: 20px;
-      color: white;
-      text-align: center;
-      line-height: 250%;
-    }
-
-    .notice {
-      background-color: #1A2738;
-      border: 1px solid #1A2738;
-    }
-
-    .qna {
-      background-color: #EFEEEC;
-      border: 1px solid #EFEEEC;
-    }
-
-    .sub-main-name {
-      width: 1000px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      margin-bottom: 50px;
-      font-size: 25px;
-      text-align: center;
-      border-bottom: 1px solid rgb(0, 0, 0);
-    }
-
-
-    .information {
-      /*height: 210px;*/
-      padding-bottom: 15px;
-    }
-
-
-    .information_title {
-      display: flex;
-      width: 1000px;
-      border-top: 2px solid rgb(0, 0, 0);
-      border-bottom: 1px solid gray;
-      line-height: 40px;
-    }
-
-    .titleContent {
-      width: 1000px;
-      height: 80px;
-      line-height: 80px;
-      background-color: #EFEEEC;
-      font-size: 20px;
-      padding-left: 20px;
-    }
-
-    .information_write {
-      width: 980px;
-      font-size: 14px;
-      display: flex;
-      border-bottom: 1px solid gray;
-      padding-left: 20px;
-    }
-
-    .margin {
-      font-size: 14px;
-      height: 40px;
-      line-height: 40px;
-      color: gray;
-      margin-right: 10px;
-    }
-
-    .information_name,
-    .information_date {
-      display: flex;
-      font-size: 14px;
-    }
-
-
-    .name,
-    .date {
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-    }
-
-    .nameContent,
-    .dateContent,
-    .information_count {
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-    }
-
-    .nameContent {
-      width: 100px;
-    }
-
-
-    .dateContent {
-      width: 200px;
-    }
-
-    .information_file {
-      display: flex;
-      width: 1000px;
-      /*height: 150px;*/
-      border-bottom: 1px solid gray;
-    }
-
-    .file {
-      width: 100px;
-      font-size: 20px;
-      line-height: 50px;
-      padding-left: 20px;
-    }
-
-    .fileContent {
-      line-height: 40px;
-      font-size: 15px;
-      padding-left: 5px;
-      /*height: 150px;*/
-      margin-top: 5px;
-    }
-
-
-    .file1,
-    .file2,
-    .file3 {
-      display: flex;
-      line-height: 45px;
-      font-size: 14px;
-    }
-
-    .fileName {
-      width: 800px;
-      height: 50px;
-      line-height: 50px;
-      font-size: 14px;
-    }
-
-    .viewFile {
-      color: gray;
-      width: 100px;
-      height: 35px;
-      line-height: 35px;
-      margin-top: 5px;
-      padding-left: 4px;
-      border: 1px solid gray;
-      border-radius: 5px 5px 5px 5px;
-    }
-
-    .fileButton {
-      width: 20px;
-      height: 20px;
-      margin-left: 10px;
-    }
-
-    .letter {
-      width: 1000px;
-      margin-top: 10px;
-    }
-
-    .postContent {
-      width: 1000px;
-      height: 200px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid lightgray;
-    }
-
-    .Button {
-      display: flex;
-      width: 1000px;
-      height: 50px;
-      padding-left: 800px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-    }
-
-    .modifyButton,
-    .listButton {
-      text-align: center;
-      line-height: 200%;
-      width: 90px;
-      height: 45px;
-      line-height: 45px;
-      font-size: 15px;
-      background-color: black;
-      color: white;
-      border-radius: 5px 5px 5px 5px;
-      border: 1px solid black;
-      margin-left: 8px;
-    }
-
-    .postList {
-      width: 1000px;
-      height: 80px;
-      background-color: rgb(241, 238, 238);
-    }
-
-    .nearPost {
-      display: flex;
-      height: 40px;
-      line-height: 40px;
-    }
-
-    .nearPostLetter {
-      width: 100px;
-      padding-left: 10px;
-      font-size: 15px;
-    }
-
-    .nearPostName {
-      width: 800px;
-      font-size: 15px;
-    }
-
-    .nearPostDate {
-      width: 200px;
-      font-size: 15px;
-    }
-
-    a.btn {
-      color: white;
-    }
-
-
-  </style>
   <div class="PC">
     <div class="web">
-      <div class="sub-main">
-        <span></span>
-        <ul>
-          <li class="notice">공지사항</li>
-          <li class="qna">문의사항</li>
-        </ul>
-      </div>
-
       <div class="sub-main-name"><b>공지사항</b></div>
 
       <div class="post" th:object="${post}">
@@ -335,7 +68,9 @@
 
       </div>
     </div>
-    <th:block th:include="lyaout/footer"></th:block>
+    <div>
+      <th:block th:include="lyaout/footer" />
+    </div>
     <script type="text/javascript">
       window.onload = function () {
         let file_item = document.getElementsByClassName("file_item");
@@ -347,18 +82,16 @@
         }
       }
 
-
       /* <![CDATA[ */
       var bno = [[${post.id}]];
       /* ]]> */
-
       $(function () {
         $('.nav_action').click(function () {
           var value = $(this).find('.arrow').attr('class');
-          if (value == 'fas fa-caret-down arrow') {
+          if (value === 'fas fa-caret-down arrow') {
             $(this).next('div').css('height', '100%');
             $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
-          } else if (value == 'fas fa-caret-up arrow') {
+          } else if (value === 'fas fa-caret-up arrow') {
             $(this).next('div').css('height', '0');
             $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
           }
@@ -366,7 +99,7 @@
 
         // 삭제버튼 클릭시 모달창 Open
         $('.delete_btn').click(function () {
-          if (reply_cnt == 0) { // 댓글이 없는 경우
+          if (reply_cnt === 0) { // 댓글이 없는 경우
             $('#modal_msg_main_txt').text(bno + "번 게시글을 삭제하시겠습니까?");
             $('#modal_msg_yes').css('display', 'block');
             $('#modal_msg_cancle').text('취 소');
@@ -387,12 +120,12 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-              if (data == 0) {
+              if (data === 0) {
                 $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
                 $('#modal_msg_yes').css('display', 'none');
                 $('#modal_msg_cancle').text('확 인');
                 $('.modal_msg_wrap').css('display', 'flex');
-              } else if (data == 9) {
+              } else if (data === 9) {
                 $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
                 $('#modal_msg_yes').css('display', 'none');
                 $('#modal_msg_cancle').text('확 인');

@@ -1,46 +1,15 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
-<head>
-    <style type="text/css">
-    .popup{
-        display: table;
-    }
-        
-        .message {
-            height: 50px;
-            width: 280px;
-            text-align:center;
-            font-size:17px;
-            margin-top:20px;
-        }
-
-        .buttonDiv {
-            text-align: center;
-            margin-top:20px;
-            height: 30px;
-            width: 250px;
-        }
-
-        .button {
-            height: 25px;
-            width: 60;
-            border-radius: 5px;
-            background-color: gray;
-            color: white;
-            margin-left:30px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="popup">
-        <div class="message">
-            공지사항을 삭제하시겠습니까?<br>삭제하면 복구할 수 없습니다.
-        </div>
-        <div class="buttonDiv">
-            <button class="button">삭제</button>
-            <button class="button">취소</button>
-        </div>
+<th:block th:include="posts/PostCommon" />
+<th:block>
+  <div class="popup">
+    <div class="message">
+      공지사항을 삭제하시겠습니까?<br>삭제하면 복구할 수 없습니다.
     </div>
-</body>
+    <div class="buttonDiv">
+      <button class="button">삭제</button>
+      <button class="button">취소</button>
+    </div>
+  </div>
+  <div>
+    <th:block th:include="lyaout/footer" />
+  </div>
+</th:block>

@@ -90,13 +90,14 @@
     }
 
     const getHeader = () => {
-      let header = $(`<tr class="post-row post-th"></tr>`)
+      let header = $(`<tr class="post-th"></tr>`)
       header.append(`<td>번호</td>`)
       header.append(`<td>아이디(이메일)</td>`)
       header.append(`<td>이름</td>`)
       header.append(`<td>휴대전화</td>`)
       header.append(`<td>보유 포인트</td>`)
       header.append(`<td>유형</td>`)
+      header.append(`<td>가입일</td>`)
       header.append(`<td>관리</td>`)
       return header;
     }
@@ -143,16 +144,16 @@
           let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
           let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
           let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
-          first.on('click', {param_offset: 0}, findUserByRegex)
-          last.on('click', {param_offset: totalPage - 1}, findUserByRegex)
-          prev.on('click', {param_offset: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
-          next.on('click', {param_offset: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
+          first.on('click', {page: 0}, findUserByRegex)
+          last.on('click', {page: totalPage - 1}, findUserByRegex)
+          prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
+          next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
 
           pagenationElem.append(first)
           pagenationElem.append(prev)
           for (let i = start; i < end; i++) {
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
-            tmp.on('click', {param_offset: i}, findUserByRegex);
+            tmp.on('click', {page: i}, findUserByRegex);
 
             if (current === i) {
               tmp.addClass('pagination_button_current')
@@ -167,8 +168,7 @@
           pagenationElem.append(last)
         }
       } else {
-        // 검색 결과가 없습니다.
-        $('.scroll-table').append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
+        $('.scroll-table>tbody').empty().append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
       }
     }
 
@@ -180,6 +180,7 @@
       template.append(`<td>${memberInfo.phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")}</td>`)
       template.append(`<td>${memberInfo.point}</td>`)
       template.append(`<td>${memberInfo.role}</td>`)
+      template.append(`<td>${memberInfo.registeredAt}</td>`)
       template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`)
       return template;
     }
@@ -196,12 +197,10 @@
     * @Param  offset : 페이지 번호
     * */
     const getMemberList = current => {
-      const size = 10;
-
-      axios.get('/api/users', {
+      http.get('/api/users', {
             params: {
-              'size': size,
-              'offset': current
+              size: 10,
+              page: current
             }
           })
           .then(res => {
@@ -210,12 +209,11 @@
               makeAdminMemberListTemplate(res.data.response)
             }
           })
-      // .catch(location.replace("/admin/memberlist"))
     }
 
 
     const countAllUsers = () => {
-      axios.get('/api/user/total')
+      http.get('/api/user/total')
           .then(res => {
             $('div.util-search').children('strong').text(res.data.response)
           })
@@ -223,7 +221,7 @@
     }
 
     const countSearchUsers = regex => {
-      axios.get('/api/user/find/' + regex + '/total')
+      http.get('/api/user/find/' + regex + '/total')
           .then(res => {
             $('div.util-search').children('strong').text(res.data.response)
           })
@@ -232,14 +230,13 @@
 
     const findUserByRegex = e => {
       const findValue = $('input[name=admin_find]').val()
-      console.log(findValue)
       if (!findValue) {
         countAllUsers()
         getMemberList(0);
       } else {
         countSearchUsers(findValue)
-        const offset = !e.data ? 0 : e.data.param_offset
-        axios.get('/api/user/find/' + findValue, {params: {'size': 10, 'offset': offset}})
+        const offset = !e.data ? 0 : e.data.page
+        http.get('/api/user/find/' + findValue, {params: {size: 10, page: offset}})
             .then(res => {
               makeAdminMemberListTemplate(res.data.response)
               makePaginationButton(offset)
@@ -251,9 +248,9 @@
       countAllUsers()
       getMemberList(0)  // 페이지 초기 값
       $('.scroll-table>thead').append(getHeader())
-      $(document).on('click', 'div.post-row:not(:first-of-type)', () => {
-        // 클릭시 디테일 페이지?
-        alert('aaa')
+      $(document).on('click', 'tbody > tr.post-row', function () {
+        const userId = $(this).children('td:first-child').text()
+        location.href = `/admin/memberinfo/${userId}`
       })
 
       /*비동기 회원 찾기 및 화면 업데이트*/

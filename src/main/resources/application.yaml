@@ -141,12 +141,9 @@ custom :
       - /moreinfo
       - /dologin
       - /actuator**
-      - /h2**
       - /posts/**
       - /post**
-      - /api/**
       - /actuator/**
-      - /panelagreement
       - /surveys/**
       - /chpwd/**
       - /changepwd**
@@ -154,6 +151,9 @@ custom :
       - /success_basic
       - /basictopanel
       - /panelagreement
+      - /success_panel
+      - /success_basic
+      - /mypage
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
@@ -184,8 +184,8 @@ management :
 ---
 spring :
   datasource :
-    username :            root
-    password :            root
+    username :            polinsight
+    password :            polinsight
     url :                 jdbc:mariadb://localhost:3306/polinsight
     driver-class-name :   org.mariadb.jdbc.Driver
     sql-script-encoding : UTF-8
@@ -209,7 +209,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : validate
     properties :
       format_sql : true
     show-sql :     true
@@ -218,13 +218,15 @@ spring :
   banner :
     location : banner-dev.txt
 
-
   session :
     store-type : none
 
   devtools :
     restart :
       poll-interval : 1s
+
+  thymeleaf :
+    cache : false
 
 server :
   port : 8080
@@ -257,8 +259,9 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : update
+      ddl-auto : create
     generate-ddl : false
+
 
 
   banner :

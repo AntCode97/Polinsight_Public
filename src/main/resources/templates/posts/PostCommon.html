@@ -1,0 +1,702 @@
+<th:block th:include="layout/header" />
+<div>
+  <script type="text/javascript" src="/static/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    var oEditors = [];
+    nhn.husky.EZCreator.createInlFrame({
+      oAppRef: oEditors,
+      elPlaceHoler: "editor",
+      sSkinURL: "./workspace/static/SmartEditor2Skin.html",
+      fCreator: "createSEditor2"
+    });
+  </script>
+  <style>
+    .header_wrap {
+      background-color: #182838;
+    }
+
+    .web {
+      margin: auto;
+      width: 1200px;
+    }
+
+    img {
+      margin-left: -2px;
+      margin-right: -2px;
+      padding: 0;
+    }
+
+    .sub-main {
+      height: 50px;
+      padding-bottom: 0px;
+      border-bottom: 1px solid #EFEEEC;
+    }
+
+    .sub-main li {
+      width: 150px;
+      height: 100%;
+      font-size: 20px;
+      color: white;
+      text-align: center;
+      line-height: 250%;
+    }
+
+    .notice {
+      background-color: #1A2738;
+      border: 1px solid #1A2738;
+    }
+
+    .qna {
+      background-color: #EFEEEC;
+      border: 1px solid #EFEEEC;
+    }
+
+    .sub-main-name {
+      width: 1200px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      font-size: 25px;
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+    }
+
+    .writeBoard {
+      font-size: 25px;
+      display: flex;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+
+    .admin_main_contents {
+      width: 100%;
+      padding: 20px 40px 40px;
+    }
+
+    .contents_title > a > i {
+      font-size: .9rem;
+      margin-right: 5px;
+    }
+
+    .contents_title > a {
+      position: relative;
+    }
+
+    .next-link {
+      padding-left: 20px;
+    }
+
+    .next-link::before {
+      content: '';
+      background-image: url('imgs/dot_depth.gif');
+      background-repeat: no-repeat;
+      background-position: center center;
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      width: 10px;
+      height: 15px;
+    }
+
+    .main_item {
+      color: #000;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 10px 0 20px;
+      border-bottom: 1px dashed #dadada;
+    }
+
+    #metop_container {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .metop_board_card {
+      width: 100%;
+      margin: 30px 0;
+      padding: 40px 30px 20px 30px;
+      border-radius: 2px;
+      background: white;
+      border-top: 3px solid mediumseagreen;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14),
+      0 3px 1px -2px rgba(0, 0, 0, .2),
+      0 1px 5px 0 rgba(0, 0, 0, .12);
+      position: relative;
+    }
+
+    /* 카드 제목 */
+    .register_top_wrap {
+      border-top: 2px solid #7c7c7c;
+    }
+
+    .register_bottom_wrap {
+      border-top: 1px solid #dadada;
+    }
+
+    .input_wrap {
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .uploadedList {
+      padding: 15px 0px 0px 0px;
+      display: flex;
+    }
+
+    .uploadedList > li {
+      border-radius: 2px;
+      margin-right: 5px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    }
+
+    .board_div {
+      width: 100%;
+      height: 100%;
+      background-color: #eee;
+      border-bottom: 1px solid #dadada;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .board_div b {
+      font-size: 16px;
+    }
+
+    .board_div > span {
+      font-size: 14px;
+    }
+
+    .board_span {
+      display: block;
+      overflow: hidden;
+      padding: 9px 20px;
+      flex: 7;
+      background-color: #fff;
+    }
+
+    .board_writer {
+      display: inline-block;
+      font-size: 16px;
+      line-height: 30px;
+    }
+
+    .board_type > option {
+      cursor: pointer;
+    }
+
+    .board_input {
+      width: 100%;
+      border: 1px solid #dadada;
+      font-size: 15px;
+      outline: none;
+      height: 30px;
+    }
+
+    .board_content {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #dadada;
+      outline: none;
+      resize: none;
+      font-size: 14px;
+    }
+
+    .textarea_div {
+      align-items: flex-start;
+    }
+
+    .textarea_div > label {
+      margin-top: 10px;
+    }
+
+    .form-group > label {
+      margin-top: 10px;
+    }
+
+    .form-group .board_div {
+      border: 1.5px dashed #dadada;
+      text-align: center;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #515151;
+      font-size: 15px;
+    }
+
+    /* 등록/취소 버튼 */
+    .btn_wrap {
+      border: 0;
+      border-radius: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px 10px 15px;
+      background-color: #fff;
+    }
+
+    .insert_btn {
+      margin-right: -15px;
+      width: 80px;
+    }
+
+    .cancel_btn {
+      margin-left: -15px;
+      width: 80px;
+    }
+
+    .board_content_wrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    div#smart_editor2 {
+      width: 1040px !important;
+    }
+
+    .err_msg_wrap {
+      text-align: left;
+      display: none;
+    }
+
+    .err_msg {
+      color: #d95339;
+      font-size: 14px;
+      display: block;
+    }
+
+    .board_div > label {
+      position: relative;
+      padding-left: 30px;
+      padding: 9px 15px 9px 25px;
+      background-color: #eee;
+      width: 150px;
+      font-size: 16px;
+      display: block;
+      line-height: 30px;
+    }
+
+    .board_div > label > span {
+      position: absolute;
+      color: #d95339;
+      font-size: 20px;
+      left: 10px;
+      top: 9px;
+    }
+
+    #board_writer {
+      width: 150px;
+    }
+
+    .size_limit_msg {
+      color: #999;
+    }
+
+    .file_wrap {
+      border: 1px solid #dadada;
+    }
+
+    .file_item > label {
+      display: block;
+      width: 100px;
+      text-align: center;
+    }
+
+    .file_item > div {
+      padding: 9px 10px;
+      background-color: #fff;
+      flex: 7;
+      display: flex;
+      align-items: center;
+    }
+
+    .file_item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: #eee;
+    }
+
+    .btn-add, .btn-remove {
+      cursor: pointer;
+      width: 60px;
+      outline: none;
+      padding: 5px 7px;
+      margin-right: 5px;
+    }
+
+    .btn-remove {
+      border: 1px solid tomato;
+      background-color: #fff;
+      color: tomato;
+    }
+
+    .other_file_item {
+      border-top: 1px solid #dadada;
+    }
+
+    .board_select {
+      width: 150px;
+      cursor: pointer;
+    }
+
+    .board_file {
+      cursor: pointer;
+    }
+
+    .PC a {
+      text-decoration: none
+    }
+
+    .PC a:link, .PC a:visited, .PC a:hover {
+      color: #191919;
+    }
+
+    .PC ul .PC li {
+      list-style-type: none;
+      float: left;
+    }
+
+    .sub-main-name {
+      width: 1000px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      font-size: 25px;
+      text-align: center;
+      border-bottom: 1px solid rgb(0, 0, 0);
+    }
+
+
+    .information {
+      padding-bottom: 15px;
+    }
+
+
+    .information_title {
+      display: flex;
+      width: 1000px;
+      border-top: 2px solid rgb(0, 0, 0);
+      border-bottom: 1px solid gray;
+      line-height: 40px;
+    }
+
+    .titleContent {
+      width: 1000px;
+      height: 80px;
+      line-height: 80px;
+      background-color: #EFEEEC;
+      font-size: 20px;
+      padding-left: 20px;
+    }
+
+    .information_write {
+      width: 980px;
+      font-size: 14px;
+      display: flex;
+      border-bottom: 1px solid gray;
+      padding-left: 20px;
+    }
+
+    .margin {
+      font-size: 14px;
+      height: 40px;
+      line-height: 40px;
+      color: gray;
+      margin-right: 10px;
+    }
+
+    .information_name,
+    .information_date {
+      display: flex;
+      font-size: 14px;
+    }
+
+    .name,
+    .date {
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+    }
+
+    .nameContent,
+    .dateContent,
+    .information_count {
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+    }
+
+    .nameContent {
+      width: 100px;
+    }
+
+    .dateContent {
+      width: 200px;
+    }
+
+    .information_file {
+      display: flex;
+      width: 1000px;
+      /*height: 150px;*/
+      border-bottom: 1px solid gray;
+    }
+
+    .file {
+      width: 100px;
+      font-size: 20px;
+      line-height: 50px;
+      padding-left: 20px;
+    }
+
+    .fileContent {
+      line-height: 40px;
+      font-size: 15px;
+      padding-left: 5px;
+      /*height: 150px;*/
+      margin-top: 5px;
+    }
+
+    .file1,
+    .file2,
+    .file3 {
+      display: flex;
+      line-height: 45px;
+      font-size: 14px;
+    }
+
+    .fileName {
+      width: 800px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 14px;
+    }
+
+    .viewFile {
+      color: gray;
+      width: 100px;
+      height: 35px;
+      line-height: 35px;
+      margin-top: 5px;
+      padding-left: 4px;
+      border: 1px solid gray;
+      border-radius: 5px 5px 5px 5px;
+    }
+
+    .fileButton {
+      width: 20px;
+      height: 20px;
+      margin-left: 10px;
+    }
+
+    .letter {
+      width: 1000px;
+      margin-top: 10px;
+    }
+
+    .postContent {
+      width: 1000px;
+      height: 200px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid lightgray;
+    }
+
+    .Button {
+      display: flex;
+      width: 1000px;
+      height: 50px;
+      padding-left: 800px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .modifyButton,
+    .listButton {
+      text-align: center;
+      line-height: 200%;
+      width: 90px;
+      height: 45px;
+      line-height: 45px;
+      font-size: 15px;
+      background-color: black;
+      color: white;
+      border-radius: 5px 5px 5px 5px;
+      border: 1px solid black;
+      margin-left: 8px;
+    }
+
+    .postList {
+      width: 1000px;
+      height: 80px;
+      background-color: rgb(241, 238, 238);
+    }
+
+    .nearPost {
+      display: flex;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .nearPostLetter {
+      width: 100px;
+      padding-left: 10px;
+      font-size: 15px;
+    }
+
+    .nearPostName {
+      width: 800px;
+      font-size: 15px;
+    }
+
+    .nearPostDate {
+      width: 200px;
+      font-size: 15px;
+    }
+
+    a.btn {
+      color: white;
+    }
+
+    .popup {
+      display: table;
+    }
+
+    .message {
+      height: 50px;
+      width: 280px;
+      text-align: center;
+      font-size: 17px;
+      margin-top: 20px;
+    }
+
+    .buttonDiv {
+      text-align: center;
+      margin-top: 20px;
+      height: 30px;
+      width: 250px;
+    }
+
+    .button {
+      height: 25px;
+      width: 60px;
+      border-radius: 5px;
+      /*background-color: gray;*/
+      color: white;
+      margin-left: 30px;
+      margin-bottom: 20px;
+    }
+
+    .disabled {
+      opacity: 0;
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
+      text-decoration: none;
+    }
+
+    .active {
+      font-size: 19px;
+      font-weight: bold;
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    .not-active {
+      margin-left: 2px;
+      margin-right: 2px;
+      z-index: 3;
+      color: #2F3138;
+      text-decoration: none;
+    }
+
+    .select {
+      height: 25px;
+    }
+
+    .btn-search {
+      height: 25px;
+      color: white;
+      background: black;
+      border-radius: 5px 5px 5px 5px;
+    }
+
+    .tblList {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    .tblList thead th {
+      background-color: #EFEEEC;
+      border-top: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+      padding-left: 20px;
+    }
+
+    .tblList tbody td {
+      padding-left: 20px;
+      height: 50px;
+      border-bottom: 2px solid #EFEEEC;
+    }
+
+    .writeButton {
+      margin-top: 20px;
+      float: right;
+    }
+
+    .write {
+      text-align: center;
+      line-height: 200%;
+      width: 100px;
+      height: 30px;
+      font-size: 15px;
+      color: black;
+      border-radius: 5px 5px 5px 5px;
+      border: 1px solid black;
+    }
+
+    .page-button {
+      margin-top: 50px;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .current-page {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
+    .button {
+      vertical-align: text-top;
+      min-width: 25px;
+      height: 25px;
+    }
+
+    .page-button > a {
+      text-decoration: none;
+      color: #2F3138;
+    }
+
+    .PC {
+      margin-top: 80px;
+      height: 100%;
+    }
+
+    .metop_board_card {
+      width: 100%;
+      margin: 30px 0;
+      padding: 40px 30px 20px 30px;
+      border-radius: 2px;
+      background: white;
+      border-top: 3px solid rgb(235, 161, 92);
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14),
+      0 3px 1px -2px rgba(0, 0, 0, .2),
+      0 1px 5px 0 rgba(0, 0, 0, .12);
+      position: relative;
+    }
+  </style>
+
+</div>

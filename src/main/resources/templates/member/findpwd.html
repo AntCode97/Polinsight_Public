@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<head>
-  <title>폴인사이트</title>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+<th:block>
   <style>
 
 
@@ -57,79 +51,78 @@
       width: 80%;
     }
   </style>
-</head>
-<body>
-
-<div class="modal_wrap">
-  <div class="modal_content">
-    <div class="modal_login">
-      <form th:action="@{/findpwd}" method="POST">
-        <div class="input_div">
-          <label for="input_email">
-            <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
-          </label>
-          <input name="email" class="login_input" id="input_email" required type="text">
-          <span class="err_msg" id="emailmsg" style="display:none;">이메일을 정확히 입력해주세요.</span>
-        </div>
-        <div class="input_div">
-          <label for="input_name">
-            <p><i class="fas fa-user"></i>&nbsp;이름</p>
-          </label>
-          <input name="name" class="login_input" id="input_name" required type="text">
-          <span class="err_msg" style="display:none;">이름을 정확히 입력해주세요.</span>
-        </div>
-        <div class="modal_btn_wrap">
-          <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
-          <button
-              th:onclick="alert('패스워드를 찾기 위한 이메일을 보냈습니다. 확인 해주세요.')"
-              type="submit" id="submit_btn" class="modal_btn btn-primary btn-effect">
-            &nbsp;<i class="fas fa-search">찾기</i>
-          </button>
-        </div>
-      </form>
+  <div class="modal_wrap">
+    <div class="modal_content">
+      <div class="modal_login">
+        <form th:action="@{/findpwd}" method="POST">
+          <div class="input_div">
+            <label for="input_email">
+              <p><i class="far fa-envelope"></i>&nbsp;이메일</p>
+            </label>
+            <input name="email" class="login_input" id="input_email" required type="text">
+            <span class="err_msg" id="emailmsg" style="display:none;">이메일을 정확히 입력해주세요.</span>
+          </div>
+          <div class="input_div">
+            <label for="input_name">
+              <p><i class="fas fa-user"></i>&nbsp;이름</p>
+            </label>
+            <input name="name" class="login_input" id="input_name" required type="text">
+            <span class="err_msg" style="display:none;">이름을 정확히 입력해주세요.</span>
+          </div>
+          <div class="modal_btn_wrap">
+            <button class="modal_btn btn-primary btn-effect" onclick="location.replace('/')">홈으로&nbsp;</button>
+            <button
+                th:onclick="alert('패스워드를 찾기 위한 이메일을 보냈습니다. 확인 해주세요.')"
+                type="submit" id="submit_btn" class="modal_btn btn-primary btn-effect">
+              &nbsp;<i class="fas fa-search">찾기</i>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-<script>
-  const emailChecker = () => {
-    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const email = $("input[name=email]");
+  <div>
+    <th:block th:include="layout/footer" />
+  </div>
+  <script>
+    const emailChecker = () => {
+      const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+      const email = $("input[name=email]");
 
 
-    if (email.val().match(regex) != null) {
-      email.next('span').css("display", "none");
-    } else {
-      email.next('span').css("display", "block");
+      if (email.val().match(regex) != null) {
+        email.next('span').css("display", "none");
+      } else {
+        email.next('span').css("display", "block");
+      }
     }
-  }
 
-  const nameChecker = () => {
-    const name = $('input[name=name]').val()
-    if (name.match()) {
-      name.next('span').css("display", "none");
-    } else {
-      name.next('span').css("display", "block");
+    const nameChecker = () => {
+      const name = $('input[name=name]').val()
+      if (name.match()) {
+        name.next('span').css("display", "none");
+      } else {
+        name.next('span').css("display", "block");
+      }
     }
-  }
 
-  $(function () {
-    $("form").find(".err_msg").each(function () {
-      $(this).css("display", "none");
-      $(this).css("color", "red");
+    $(function () {
+      $("form").find(".err_msg").each(function () {
+        $(this).css("display", "none");
+        $(this).css("color", "red");
+      })
+
+      $(document).on('focus', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #4C99CF');
+      });
+      $(document).on('blur', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #dde0ea');
+      });
+
+      $("input[name=email]").on("keyup", emailChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
+
+      $("input[name=name]").on("keyup", nameChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
+
     })
-
-    $(document).on('focus', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #4C99CF');
-    });
-    $(document).on('blur', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #dde0ea');
-    });
-
-    $("input[name=email]").on("keyup", emailChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
-    
-    $("input[name=name]").on("keyup", nameChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
-
-  })
-</script>
-</body>
-</html>
+  </script>
+</th:block>

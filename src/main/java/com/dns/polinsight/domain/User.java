@@ -1,8 +1,10 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.UserRoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +23,15 @@ import java.util.*;
     @UniqueConstraint(columnNames = {"email"})
 })
 @ToString
+@DynamicUpdate
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
 
   @Builder.Default
   @ElementCollection
-  private final Set<Long> participateSurvey = new HashSet<>();
+  @Column(name = "participate_survey_id")
+  private Set<Long> participateSurvey = new HashSet<>();
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -44,7 +48,6 @@ public class User implements UserDetails, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @PositiveOrZero
   private Long id;
 
   private String email;
@@ -66,10 +69,28 @@ public class User implements UserDetails, Serializable {
   private Additional additional;
 
   /*이메일 수신 동의 여부*/
+  @Column(name = "is_email_receive")
   private Boolean isEmailReceive;
 
   /*문자 수신 동의 여부*/
-  private Boolean isSMSReceive;
+  @Column(name = "is_sms_receive")
+  private Boolean isSmsReceive;
+
+  //  @Column(name = "registered_at")
+  //  private LocalDateTime registeredAt;
+
+  public User(UserDto dto) {
+    this.id = dto.getId();
+    this.point = dto.getPoint();
+    this.name = dto.getName();
+    this.email = dto.getEmail();
+    this.phone = dto.getPhone();
+    this.isSmsReceive = dto.getIsSmsReceive();
+    this.isEmailReceive = dto.getIsEmailReceive();
+    this.recommend = dto.getRecommend();
+    this.participateSurvey = new HashSet<>();
+    //    this.registeredAt = dto.getRegisteredAt();
+  }
 
   public void addParticipateSurvey(long surveyId) {
     this.participateSurvey.add(surveyId);

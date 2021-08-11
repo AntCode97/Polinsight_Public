@@ -19,6 +19,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -43,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   @Qualifier("customSuccessHandler")
-  private AuthenticationSuccessHandler successHandler;
+  private CustomSuccessHandler successHandler;
 
   @Autowired
   @Qualifier("rememberMeSuccessHandler")
@@ -56,56 +60,66 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    // @formatter:off
     http
-          .csrf().disable()
-          .cors().disable()
-          .authorizeRequests()
-          .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
-          .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
-          .antMatchers(permission.getTemplate().toArray(new String[permission.getTemplate().size()])).permitAll()
-          .anyRequest().authenticated()
-        .and()
-          .rememberMe()
+        .csrf().disable()
+        .cors().disable()
+        .authorizeRequests()
+        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+        .antMatchers(permission.getTemplate().toArray(new String[0])).permitAll()
+        .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
+        .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
+        .anyRequest().authenticated().and()
+        .rememberMe()
         .key("remeberMeSecretKey")
         .rememberMeParameter("rememberMe")
-        .tokenValiditySeconds(7*24*60*60)  // 7일
+        .tokenValiditySeconds(7 * 24 * 60 * 60)  // 7일
         .useSecureCookie(true)
         .userDetailsService(userService)
         .authenticationSuccessHandler(remeberMeSuccessHandler)
         .and()
-          .formLogin()
-            .loginPage("/login")
-            .loginProcessingUrl("/dologin")
-            .usernameParameter("email")
-            .passwordParameter("password")
-            .successHandler(successHandler)
-            .failureHandler(failureHandler)
-            .permitAll()
+        .formLogin()
+        .loginPage("/login")
+        .loginProcessingUrl("/dologin")
+        .usernameParameter("email")
+        .passwordParameter("password")
+        .successHandler(successHandler)
+        .failureHandler(failureHandler)
+        .permitAll()
         .and()
-          .exceptionHandling()
-          .authenticationEntryPoint(entryPoint)
-          .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
+        .exceptionHandling()
+        .authenticationEntryPoint(entryPoint)
+        .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
         .and()
-            .logout()
-              .logoutUrl("/dologout")
-              .logoutSuccessHandler(logoutSuccessHandler)
-              .deleteCookies("JSESSIONID")
-              .clearAuthentication(true)
-              .invalidateHttpSession(true)
+        .logout()
+        .logoutUrl("/dologout")
+        .logoutSuccessHandler(logoutSuccessHandler)
+        .deleteCookies("JSESSIONID")
+        .clearAuthentication(true)
+        .invalidateHttpSession(true)
         .and()
-          .httpBasic().disable()
-          .oauth2Login()
-            .loginPage("/login")
-            .successHandler(successHandler)
-            .userInfoEndpoint()
-            .userService(customOAuth2Service);
-    // @formatter:on
+        .httpBasic().disable()
+        .oauth2Login()
+        .loginPage("/login")
+        .successHandler(successHandler)
+        .userInfoEndpoint()
+        .userService(customOAuth2Service);
   }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration corsConfiguration = new CorsConfiguration();
+    corsConfiguration.addAllowedHeader("*");
+    corsConfiguration.addAllowedOrigin("*");
+    corsConfiguration.addAllowedMethod("*");
+    corsConfiguration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", corsConfiguration);
+    return source;
   }
 
 }

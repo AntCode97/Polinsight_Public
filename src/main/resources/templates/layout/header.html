@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:include="module/common" />
 <head>
   <title>폴인사이트</title>
   <link rel="icon" th:href="@{/favicon.ico}">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
     .header_wrap {
       position: fixed;
@@ -13,7 +13,6 @@
       left: 0;
       width: 100%;
       background-color: transparent;
-      /*background-color: #182838;*/
       z-index: 9999;
     }
 
@@ -140,213 +139,6 @@
       background-position: center, center;
       background-size: cover;
     }
-
-
-    /* 여기서부터 index.html 내용 */
-    .panel_wrap {
-      width: 900px;
-      padding: 30px 0;
-      margin: 30px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1.5px solid #AAA;
-    }
-
-    .panel_item_horizontal {
-      display: flex;
-    }
-
-    .panel_item_vertical {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pol_color {
-      color: #4C99CF;
-    }
-
-    .panel_item > p {
-      font-size: 14px;
-    }
-
-    .panel_big_item {
-      font-size: 25px !important;
-      font-weight: bold;
-      padding-bottom: 10px;
-    }
-
-    .panel_btn {
-      font-size: 14px;
-      padding: 7px 0;
-      text-align: center;
-      width: 110px;
-    }
-
-    .panel_btn_login {
-      background-color: #182838;
-      color: white;
-      margin-right: 5px;
-    }
-
-    .panel_btn_join {
-      background-color: #4C99CF;
-      color: white;
-    }
-
-    .panel_line {
-      width: 2px;
-      height: 65px;
-      background-color: #182838;
-      margin: 0 30px;
-    }
-
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
-
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
-    .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-    }
-
-    .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
-    }
-
-    .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .survey_run {
-      color: #4C99CF;
-    }
-
-    .survey_stop {
-      color: #000;
-    }
-
-    .bg_color_item_white {
-      background-color: white;
-    }
-
-    .bg_color_item_gray {
-      background-color: #dedede;
-    }
-
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
-
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
-    .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-      height: 2rem;
-    }
-
-    .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
-    }
-
-    .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .survey_run {
-      color: #4C99CF;
-    }
-
-    .survey_stop {
-      color: #000;
-    }
-
-    .bg_color_item_white {
-      background-color: white;
-    }
-
-    .bg_color_item_gray {
-      background-color: #dedede;
-    }
   </style>
 </head>
 <body>
@@ -359,7 +151,7 @@
     <div class="header_container_logo">
       <div class="header_logo">
         <a th:href="@{/}">
-          <img th:src="@{/img/logo/white_logo.png}" alt="로고" />
+          <img alt="로고" th:src="@{/img/logo/white_logo.png}" />
         </a>
       </div>
     </div>
@@ -369,10 +161,10 @@
           <a href="/">Company</a>
           <div class="dropdown" style="left: 0px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">인사말</a>
-              <a th:href="@{/}" class="dropdown_element">연혁</a>
-              <a th:href="@{/}" class="dropdown_element">설립목적</a>
-              <a th:href="@{/}" class="dropdown_element">오시는길</a>
+              <a class="dropdown_element" th:href="@{/}">인사말</a>
+              <a class="dropdown_element" th:href="@{/}">연혁</a>
+              <a class="dropdown_element" th:href="@{/}">설립목적</a>
+              <a class="dropdown_element" th:href="@{/}">오시는길</a>
             </div>
           </div>
         </li>
@@ -382,10 +174,10 @@
           <a th:href="@{/posts}">Board</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/posts}" class="dropdown_element">공지사항</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
+              <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
+              <a class="dropdown_element" th:href="@{/events}">이벤트</a>
+              <a class="dropdown_element" th:href="@{/qna}">Q & A</a>
+              <a class="dropdown_element" th:href="@{/faq}">FAQ</a>
             </div>
           </div>
         </li>
@@ -396,10 +188,10 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents02</a>
+              <a class="dropdown_element" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>
@@ -409,10 +201,10 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="right: 0px;">
             <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents01</a>
+              <a class="dropdown_element" th:href="@{/}">Contents03</a>
+              <a class="dropdown_element" th:href="@{/}">Contents04</a>
             </div>
           </div>
         </li>
@@ -445,13 +237,17 @@
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가
     $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#192739');
+      if (document.location.href.split('/').length > 0) {
+        $('.header_wrap').css('background-color', '#182838')
       } else {
-        $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+          $('.top-btn').fadeIn().css("display", "flex");
+          $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+              .css('background-color', '#192739');
+        } else {
+          $('.top-btn').fadeOut();
+          $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        }
       }
     });
     $('.top-btn').click(function () {
