@@ -1,6 +1,5 @@
 <th:block th:include="posts/PostCommon" />
 <th:block>
-
   <div class="PC">
     <div class="web">
       <div class="sub-main-name"><b>공지사항</b></div>
@@ -83,18 +82,16 @@
         }
       }
 
-
       /* <![CDATA[ */
       var bno = [[${post.id}]];
       /* ]]> */
-
       $(function () {
         $('.nav_action').click(function () {
           var value = $(this).find('.arrow').attr('class');
-          if (value == 'fas fa-caret-down arrow') {
+          if (value === 'fas fa-caret-down arrow') {
             $(this).next('div').css('height', '100%');
             $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
-          } else if (value == 'fas fa-caret-up arrow') {
+          } else if (value === 'fas fa-caret-up arrow') {
             $(this).next('div').css('height', '0');
             $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
           }
@@ -102,7 +99,7 @@
 
         // 삭제버튼 클릭시 모달창 Open
         $('.delete_btn').click(function () {
-          if (reply_cnt == 0) { // 댓글이 없는 경우
+          if (reply_cnt === 0) { // 댓글이 없는 경우
             $('#modal_msg_main_txt').text(bno + "번 게시글을 삭제하시겠습니까?");
             $('#modal_msg_yes').css('display', 'block');
             $('#modal_msg_cancle').text('취 소');
@@ -123,12 +120,12 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
-              if (data == 0) {
+              if (data === 0) {
                 $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
                 $('#modal_msg_yes').css('display', 'none');
                 $('#modal_msg_cancle').text('확 인');
                 $('.modal_msg_wrap').css('display', 'flex');
-              } else if (data == 9) {
+              } else if (data === 9) {
                 $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
                 $('#modal_msg_yes').css('display', 'none');
                 $('#modal_msg_cancle').text('확 인');
