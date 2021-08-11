@@ -10,13 +10,14 @@ import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.PointRequestProgressType;
+import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
-import com.dns.polinsight.utils.PageHandler;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -73,7 +75,7 @@ public class ApiController {
 
   @GetMapping("/user/find/{regex}")
   public ApiUtils.ApiResult<List<UserDto>> adminUserFind(
-      @PageHandler Pageable pageable,
+      @PageableDefault Pageable pageable,
       @PathVariable(name = "regex") String regex) throws Exception {
     try {
       return success(adminService.adminSerchUserByRegex(regex, pageable).stream().map(UserDto::new).collect(Collectors.toList()));
@@ -106,9 +108,9 @@ public class ApiController {
    * 회원 가입된 모든 유저 정보 반환
    * */
   @GetMapping("/users")
-  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
+      return success(userService.findAll(pageable).getContent().parallelStream().filter(user -> !user.getRole().equals(UserRoleType.ADMIN)).map(UserDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
@@ -119,8 +121,11 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable,
+  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                              @RequestParam(value = "type", required = false) String type) throws Exception {
+    System.out.println("------------------------------");
+    System.out.println(pageable);
+    System.out.println("------------------------------");
     try {
       if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
@@ -154,7 +159,7 @@ public class ApiController {
    * 정규식을 통한 다건 설문 검색
    * */
   @GetMapping("/surveys/{regex}")
-  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageableDefault Pageable pageable) throws Exception {
     try {
       return success(surveyService.findSurveysByTitleRegex(regex, pageable));
     } catch (Exception e) {
@@ -175,10 +180,10 @@ public class ApiController {
   /*
    * 저장된 설문 목록 삭제를 위한 api
    * */
-  @DeleteMapping("/survey/{id}")
-  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@PathVariable(name = "id") Long surveyId) throws Exception {
+  @DeleteMapping("/survey")
+  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@RequestBody Survey survey) throws Exception {
     try {
-      surveyService.deleteSurveyById(surveyId);
+      surveyService.deleteSurveyById(survey.getId());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -266,7 +271,7 @@ public class ApiController {
                                       .account(pointRequestDto.getAccount())
                                       .requestedAt(LocalDateTime.now())
                                       .progress(PointRequestProgressType.REQUESTED)
-                                      .bankName(pointRequestDto.getBank())
+                                      .bank(pointRequestDto.getBank())
                                       .uid(sessionUser.getId())
                                       .build();
 
@@ -276,7 +281,7 @@ public class ApiController {
                                                    .amount(pointRequestDto.getPoint())
                                                    .total(sessionUser.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-                                                   .uid(sessionUser.getId())
+                                                   .userId(sessionUser.getId())
                                                    .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -290,6 +295,7 @@ public class ApiController {
     }
   }
 
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/user/{email}")
   public ApiUtils.ApiResult<Boolean> isExistEmail(@Email @PathVariable("email") String email) throws NotFoundException {
     try {
@@ -318,7 +324,7 @@ public class ApiController {
   }
 
   @GetMapping("/points")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
     try {
       return success(pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
@@ -327,7 +333,7 @@ public class ApiController {
   }
 
   @GetMapping("/points/{regex}")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable,
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable,
                                                                        @PathVariable("regex") String regex) throws Exception {
     try {
       return success(pointRequestService.getAllPointRequestsByRegex(pageable, regex).stream().map(PointRequestDto::new).collect(Collectors.toList()));
@@ -362,6 +368,21 @@ public class ApiController {
     try {
       pointRequestService.deletePointRequestById(pointReqId);
       return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PutMapping("/admin/survey")
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
+    try {
+      surveyService.adminSurveyUpdate(
+          Long.parseLong(map.get("id")),
+          Long.parseLong(map.get("point")),
+          map.get("create"),
+          map.get("end"),
+          map.get("progress"));
+      return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }

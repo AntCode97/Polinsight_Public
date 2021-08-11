@@ -47,7 +47,7 @@
     }
 
     const getParticipateSurveyList = () => {
-      axios.get('/api/survey/participate')
+      http.get('/api/survey/participate')
           .then(res => {
             makeSurveyListView(res.data.response)
           })
@@ -59,7 +59,7 @@
     }
 
     const testFunc = () => {
-      axios.get('/api/survey/participate')
+      http.get('/api/survey/participate')
           .then(res => {
             makeSurveyListView(res.data)
           })

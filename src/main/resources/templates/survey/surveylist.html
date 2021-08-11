@@ -51,7 +51,7 @@
     }
 
     const getSurveyList = () => {
-      axios.get('/api/surveys?type=index')
+      http.get('/api/surveys?type=index')
           .then(res => {
             if (res.data.success) {
               makeSurveyCardList(res.data.response)
@@ -85,21 +85,25 @@
       }
     }
 
-    const loginChk = () => {
+    const loginChk = id => {
       /*<![CDATA[*/
       let sessionUser = /*[[${session.user}]]*/;
       /*]]*/
+
       if (!sessionUser) {
         alert('로그인을 먼저 해주세요')
         return false
+      } else if (sessionUser.role === 'ADMIN') {
+        location.href = `/admin/surveyinfo/${id}`
+        return false;
       }
       return true
     }
 
     const surveyCardClickEventHandler = (e) => {
-      if (!loginChk()) return
       e.preventDefault()
       e.returnValue = false;
+      if (!loginChk(e.data.seq)) return
 
       const seq = e.data.seq
       const surveyId = e.data.surveyid
@@ -108,8 +112,19 @@
       if (confirm(title + ' 설문을 진행하시겠습니까?')) {
 // 서버에 서베이 정보 + 유저 정보 저장 ==> 이후 관리자 및 마이페이지에서 목록 조회 가능
 //         let dynamicNewForm = $(`<form action="/survey/${surveyId}" method="post"></form>`)
-//           dynamicNewForm.appendTo('body');
-//           dynamicNewForm.submit();
+//         dynamicNewForm.appendTo('body');
+//         dynamicNewForm.submit();
+        console.log(`/api/survey/${surveyId}`)
+        http.get(`/api/survey/${surveyId}`)
+            .then(res => {
+              if (res.data.success) {
+                // window.open(res.data.response);
+                location.replace(res.data.response)
+              } else {
+                alert('에러 발생')
+                console.log(res)
+              }
+            }).catch(console.log)
       }
     }
 

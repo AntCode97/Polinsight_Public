@@ -19,6 +19,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -59,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http
           .csrf().disable()
-          .cors().disable()
+          .cors().configurationSource(corsConfigurationSource()).and()
           .authorizeRequests()
           .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
           .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
@@ -106,6 +109,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration corsConfiguration = new CorsConfiguration();
+    corsConfiguration.addAllowedHeader("*");
+    corsConfiguration.addAllowedOrigin("*");
+    corsConfiguration.addAllowedMethod("*");
+    corsConfiguration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", corsConfiguration);
+    return source;
   }
 
 }

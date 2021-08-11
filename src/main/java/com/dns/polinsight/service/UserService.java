@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.types.UserRoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,11 +23,13 @@ public interface UserService extends UserDetailsService {
 
   Optional<User> findById(long id);
 
-  void deleteUser(User user);
+  void deleteUserById(long userId);
 
   User findUserByEmail(User user);
 
   long countAllUser();
+
+  long countAllUserExcludeAdmin();
 
   Boolean isExistEmail(String email);
 
@@ -35,5 +38,7 @@ public interface UserService extends UserDetailsService {
   void subUserPoint(long uid, long point);
 
   User addPointByUserId(long uid, long point);
+
+  void adminUserUpdate(long uid, UserRoleType roleType, long point);
 
 }

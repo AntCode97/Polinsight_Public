@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
@@ -21,5 +22,10 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   @Query(nativeQuery = true, value = "SELECT COUNT(id) FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   long countSurveyByRegex(String regex);
+
+  Optional<Survey> findSurveyBySurveyId(long surveyId);
+
+  @Query(nativeQuery = true, value = "UPDATE survey SET point = ?2 , created_at = ?3, end_at  = ?4, progress = ?5  WHERE id = ?1")
+  void adminSurveyUpdate(long id, long point, String createdAt, String endAt, String progress);
 
 }

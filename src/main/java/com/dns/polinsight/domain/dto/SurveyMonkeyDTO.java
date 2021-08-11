@@ -57,6 +57,8 @@ public class SurveyMonkeyDTO {
 
   private String summary_url;
 
+  private String url;
+
   private Long total;
 
   public Survey toSurvey() {

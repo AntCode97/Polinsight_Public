@@ -84,6 +84,7 @@ public class SurveyServiceImpl implements SurveyService {
                                                                               .id(Long.valueOf(objmap.get("id")))
                                                                               .title(objmap.get("title"))
                                                                               .createdAt(LocalDateTime.parse(objmap.get("date_created")))
+                                                                              .href(objmap.get("href"))
                                                                               .build()).map(SurveyMonkeyDTO::toSurvey).collect(Collectors.toList());
 
       surveyList = surveyList.parallelStream().map(survey -> {
@@ -124,6 +125,32 @@ public class SurveyServiceImpl implements SurveyService {
     return basicSurvey;
   }
 
+  /**
+   * @param url
+   *     : survey/{surveyId}/collectors : 서베이에 걸린 collector 리스트 가져옴옴
+   */
+  private void getCollectorBySurveyId(String url, HttpEntity<Object> header) {
+    ResponseEntity<Map> res = new RestTemplate().exchange(url, HttpMethod.GET, header, Map.class);
+    Map dto = res.getBody();
+    // 설문에 걸린 모든 collector 객체 (name, id, href)
+    List<Map<String, String>> list = (List<Map<String, String>>) dto.get("data");
+    List<Map> mapList = list.stream().map(map -> {
+      return this.getCollectorsDetailByCollectorId(map.get("href"), header);
+    }).collect(Collectors.toList());
+  }
+
+  private Map getCollectorsDetailByCollectorId(String url, HttpEntity<Object> header) {
+    ResponseEntity<Map> res = new RestTemplate().exchange(url, HttpMethod.GET, header, Map.class);
+    Map dto = res.getBody();
+    String collectorId = (String) dto.get("id");
+    String surveyId = (String) dto.get("survey_id");
+    String surveyTitle = (String) dto.get("name");
+    long surveyResponseCount = (long) dto.get("response_count");
+    String surveyParticipateUrl = (String) dto.get("url"); // 여기에 해시와 여러 정보를 넘겨 설문참여하도록
+    String href = (String) dto.get("href");
+    return new HashMap();
+  }
+
   private long getTotalResponse(Long surveyId, HttpEntity<Object> header) {
     String api = "/surveys/" + surveyId + "/responses/bulk";
     ResponseEntity<SurveyMonkeyDTO> res = new RestTemplate().exchange(baseURL + api, HttpMethod.GET, header, SurveyMonkeyDTO.class);
@@ -131,8 +158,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public void deleteSurveyById(Long surveyId) {
-    surveyRepository.delete(Survey.builder().id(surveyId).build());
+  public void deleteSurveyById(long surveyId) {
+    surveyRepository.deleteById(surveyId);
   }
 
   @Override
@@ -151,8 +178,18 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
+  public Optional<Survey> findSurveyBySurveyId(long surveyId) {
+    return surveyRepository.findSurveyBySurveyId(surveyId);
+  }
+
+  @Override
   public long countAllSurvey() {
     return surveyRepository.count();
+  }
+
+  @Override
+  public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
+    surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
   }
 
 }

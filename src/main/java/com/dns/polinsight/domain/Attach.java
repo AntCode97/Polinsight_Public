@@ -16,12 +16,12 @@ import javax.persistence.*;
 public class Attach {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bno")
+  @JoinColumn(name = "pno")
   @NotNull
   private Post post;
 

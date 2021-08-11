@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.UserRepository;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,8 +56,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteUser(User user) {
-    repository.delete(user);
+  public void deleteUserById(long userId) {
+    repository.deleteById(userId);
   }
 
   @Override
@@ -67,6 +68,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public long countAllUser() {
     return repository.count();
+  }
+
+  @Override
+  public long countAllUserExcludeAdmin() {
+    return repository.userCountExcludeAdmin();
   }
 
   @Override
@@ -87,6 +93,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public User addPointByUserId(long uid, long point) {
     return repository.userAddPointById(uid, point);
+  }
+
+  @Override
+  public void adminUserUpdate(long uid, UserRoleType roleType, long point) {
+    repository.adminUpdateUser(uid, roleType.name(), point);
   }
 
 }

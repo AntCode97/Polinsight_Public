@@ -216,7 +216,7 @@
     };
 
     const getAllParticipateSurveys = () => {
-      axios.get('/api/participate')
+      http.get('/api/participate')
           .then(res => {
             if (res.data.success) {
               // mkae participate survey list
@@ -227,7 +227,7 @@
     };
 
     const getAllPointRequest = () => {
-      axios.get('/api/points')
+      http.get('/api/points')
           .then(res => {
             if (res.data.success) {
               // make req list
@@ -241,7 +241,7 @@
       userInfo['email'] = $('#email').val();
       userInfo['password'] = password;
 
-      axios.post('/update', userInfo)
+      http.post('/update', userInfo)
           .then(res => {
             console.log(res);
             alert('회원 정보가 업데이트 되었습니다.');
@@ -268,7 +268,7 @@
 
     const deleteUserRequest = (e) => {
       const userinfo = {};
-      axios.post('/deleteuser', userinfo)
+      http.post('/deleteuser', userinfo)
           .then(res => {
             alert('회원 탈퇴 성공');
             location.replace('/');
@@ -288,7 +288,7 @@
       const account = $('input[name=account]').val();
       const bank = $('select[name=bank]').val();
       console.log(point, account, bank);
-      axios.post('/api/pointrequest', {
+      http.post('/api/pointrequest', {
             'point': point,
             'account': account,
             'bank': bank

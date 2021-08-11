@@ -26,7 +26,7 @@ public interface SurveyService {
 
   Set<Survey> getUserParticipateSurvey(User user);
 
-  void deleteSurveyById(Long surveyId);
+  void deleteSurveyById(long surveyId);
 
   List<Survey> findSurveysByEndDate(LocalDateTime endDate);
 
@@ -34,6 +34,11 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyById(long surveyId);
 
+  Optional<Survey> findSurveyBySurveyId(long surveyId);
+
   long countAllSurvey();
+
+
+  void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
 
 }

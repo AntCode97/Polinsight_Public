@@ -2,6 +2,7 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,9 +34,11 @@ public class Survey implements Serializable {
   private String title;
 
   @Setter
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDateTime createdAt;
 
   @Setter
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDateTime endAt;
 
   private Long point;

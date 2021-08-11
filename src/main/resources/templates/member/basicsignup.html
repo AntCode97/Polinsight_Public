@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <title></title>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+<th:block>
   <style>
     .register_wrap {
       width: 1000px;
       margin: 0 auto;
-      top: 80px;
+      /*top: 80px;*/
       position: relative;
+      margin-top: 120px;
     }
 
     .register_title {
@@ -206,379 +201,377 @@
       cursor: pointer;
     }
   </style>
-</head>
-<body>
-<div class="register_wrap">
-  <div class="register_box">
-    <div class="register_title">
-      <h1>회원 가입</h1>
-    </div>
-    <div class="register_contents_wrap">
-      <form th:action="@{/signup}" id="signupfrm" method="post">
-        <p>기본정보</p>
-        <div class="register_contents">
-          <ul>
-            <li>
-              <div class="left_content">
-                <label for="email">
-                  아이디(이메일)
-                </label>
-              </div>
-              <div class="right_content">
-                <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
-                <span>@</span>
-                <select name="domain" id="email_domain" required>
-                  <optgroup label="도메인">
-                    <option value="naver.com">naver.com</option>
-                    <option value="gmail.com">gmail.com</option>
-                    <option value="kakao.com">kakao.com</option>
-                  </optgroup>
-                </select>
-                <span id="email_msg"></span>
-                <!--                <span class="info_msg"></span>-->
-              </div>
-            </li>
-            <li>
-              <div class="left_content">
-                <label for="password">
-                  비밀번호
-                </label>
-              </div>
-              <div class="right_content">
-                <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
-                <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
-                <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
-              </div>
-            </li>
-            <li>
-              <div class="left_content">
-                <label for="pwdconfirm">
-                  비밀번호 확인
-                </label>
-              </div>
-              <div class="right_content">
-                <input class="pwdinput" name="pwdcfm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
-                <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
-                <span class="info_msg" id="pwmsg"></span>
-              </div>
-            </li>
-            <li>
-              <!--TODO : 특수문자 검증 필요-->
-              <div class="left_content">
-                <label for="user_name">이름</label>
-              </div>
-              <div class="right_content">
-                <input class="login_input" id="user_name" name="name" required type="text" />
-                <!--                <span>이름을 입력해주세요.</span>-->
-                <span class="info_msg"></span>
-              </div>
-            </li>
-            <li>
-              <div class="left_content">
-                <label for="phone">휴대전화</label>
-              </div>
-              <div class="right_content">
-                <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
-                <!--                <button id="phone_chk">인증</button>-->
-                <!--                <span>휴대전화를 입력해 주세요</span>-->
-                <span class="info_msg">(- 없이 입력해주세요.)</span>
-              </div>
-            </li>
-            <li>
-              <div class="left_content">
-                <label for="recommend" class="no_need">추천인 휴대전화</label>
-              </div>
-              <div class="right_content">
-                <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
-                <!--                <button id="phone_rec_user_chk">확인</button>-->
-                <span class="info_msg">(- 없이 입력해주세요.)</span>
-              </div>
-            </li>
-          </ul>
+  <div>
+    <div class="register_wrap">
+      <div class="register_box">
+        <div class="register_title">
+          <h1>회원 가입</h1>
         </div>
-
-        <div class="pannelinfo_msg_wrap">
-          <div class="pannel_info_contents">
-            <h1>폴인사이트의 패널이 된다면?</h1>
-            <p>폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.</p>
-            <p>참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.</p>
-            <p>폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.</p>
-            <p>패널로 가입하시겠습니까?</p>
-          </div>
-          <div class="pannel_select">
-            <div class="radio_wrap">
-              <label>
-                <input name="ispanel" type="radio" value="true">
-                가입하고 혜택받기
-              </label>
+        <div class="register_contents_wrap">
+          <form th:action="@{/signup}" id="signupfrm" method="post">
+            <p>기본정보</p>
+            <div class="register_contents">
+              <ul>
+                <li>
+                  <div class="left_content">
+                    <label for="email">
+                      아이디(이메일)
+                    </label>
+                  </div>
+                  <div class="right_content">
+                    <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
+                    <span>@</span>
+                    <select name="domain" id="email_domain" required>
+                      <optgroup label="도메인">
+                        <option value="naver.com">naver.com</option>
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="kakao.com">kakao.com</option>
+                      </optgroup>
+                    </select>
+                    <span id="email_msg"></span>
+                    <!--                <span class="info_msg"></span>-->
+                  </div>
+                </li>
+                <li>
+                  <div class="left_content">
+                    <label for="password">
+                      비밀번호
+                    </label>
+                  </div>
+                  <div class="right_content">
+                    <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
+                    <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
+                    <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="left_content">
+                    <label for="pwdconfirm">
+                      비밀번호 확인
+                    </label>
+                  </div>
+                  <div class="right_content">
+                    <input class="pwdinput" name="pwdcfm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
+                    <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
+                    <span class="info_msg" id="pwmsg"></span>
+                  </div>
+                </li>
+                <li>
+                  <!--TODO : 특수문자 검증 필요-->
+                  <div class="left_content">
+                    <label for="user_name">이름</label>
+                  </div>
+                  <div class="right_content">
+                    <input class="login_input" id="user_name" name="name" required type="text" />
+                    <!--                <span>이름을 입력해주세요.</span>-->
+                    <span class="info_msg"></span>
+                  </div>
+                </li>
+                <li>
+                  <div class="left_content">
+                    <label for="phone">휴대전화</label>
+                  </div>
+                  <div class="right_content">
+                    <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
+                    <!--                <button id="phone_chk">인증</button>-->
+                    <!--                <span>휴대전화를 입력해 주세요</span>-->
+                    <span class="info_msg">(- 없이 입력해주세요.)</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="left_content">
+                    <label for="recommend" class="no_need">추천인 휴대전화</label>
+                  </div>
+                  <div class="right_content">
+                    <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
+                    <!--                <button id="phone_rec_user_chk">확인</button>-->
+                    <span class="info_msg">(- 없이 입력해주세요.)</span>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <div class="radio_wrap">
-              <label>
-                <input name="ispanel" type="radio" value="false">
-                가입 안함
-              </label>
+
+            <div class="pannelinfo_msg_wrap">
+              <div class="pannel_info_contents">
+                <h1>폴인사이트의 패널이 된다면?</h1>
+                <p>폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.</p>
+                <p>참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.</p>
+                <p>폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.</p>
+                <p>패널로 가입하시겠습니까?</p>
+              </div>
+              <div class="pannel_select">
+                <div class="radio_wrap">
+                  <label>
+                    <input name="ispanel" type="radio" value="true">
+                    가입하고 혜택받기
+                  </label>
+                </div>
+                <div class="radio_wrap">
+                  <label>
+                    <input name="ispanel" type="radio" value="false">
+                    가입 안함
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="btn_wrap">
+              <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
+            </div>
+          </form>
         </div>
-        <div class="btn_wrap">
-          <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
+      </div>
+    </div>
+    <div>
+      <th:block th:include="layout/footer" />
+    </div>
+    <div class="popup_overlay">
+      <div class="popup_box">
+        <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
+          <i class="fas fa-times"></i>
         </div>
-      </form>
+        <div class="popup_content">
+          <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
+        </div>
+        <div class="popup_btn">
+          확인
+        </div>
+      </div>
     </div>
+
   </div>
-</div>
+  <script>
+    const phoneNumberChecker = () => {
+      const recommend = $('input[name=recommend]')
+      const myPhone = $('input[name=phone]')
 
-<div class="popup_overlay">
-  <div class="popup_box">
-    <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
-      <i class="fas fa-times"></i>
-    </div>
-    <div class="popup_content">
-      <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
-    </div>
-    <div class="popup_btn">
-      확인
-    </div>
-  </div>
-</div>
+      if (!myPhone.val() || !recommend.val()) // 공백/undefined/null 체크
+        return
 
-<th:block th:include="layout/footer" />
-
-</body>
-<script>
-  const phoneNumberChecker = () => {
-    const recommend = $('input[name=recommend]')
-    const myPhone = $('input[name=phone]')
-
-    if (!myPhone.val() || !recommend.val()) // 공백/undefined/null 체크
-      return
-
-    if (recommend.val() === myPhone.val())
-      return false;
-  }
-
-  const editHyphen = e => {
-    const phoneValue = e.target.value
-    let ret = "";
-    if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
-      ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
-    } else {
-      phoneValue.substring(0, 11)
-      ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
-    }
-    e.target.value = ret
-    return ret;
-  }
-
-  /*
-  * 길이 10~16
-  * 영문 대, 소문자, 특수문자
-  * */
-  const passwordValueChecker = pwd => {
-    return pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\]\[/\'\"\\\']{10,16}/) !== null;
-  }
-
-  // 비밀번호 확인 검증
-  const passwordChecker = (e) => {
-    if (e.target.value === "") return;
-    const keycode = e.keyCode;
-
-    let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
-
-    /* 숫자, 소문자, 대문자, 특수문자 */
-    // else
-    if ((48 <= keycode && keycode <= 57) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) ||
-        re.test(e.originalEvent.key)) {
-      const passwordValue = $("#password").val();
-      const confirmValue = $("#pwdconfirm").val();
-      const msg = $("#pwmsg")
-
-      if (passwordValue !== "" && confirmValue !== "") {
-        if (passwordValue === confirmValue) {
-          if (passwordValueChecker(passwordValue)) {
-            msg.text("사용 가능한 패스워드 입니다.").removeClass("err_msg").addClass("correct_msg")
-            return
-          }
-        }
-        msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("err_msg")
-      }
-    }
-  }
-
-  // 필수 입력값 검사
-  const checkNotNull = () => {
-    let result = true
-    $("form").find('input').each(function (item) {
-      let inputElem = $(this)
-      let label = inputElem.prev('div>label')
-      let inputValue = inputElem.val().trim()
-      if ($(this).prop('required') && !inputValue) {
-        inputElem.focus()    // 입력이 안된 사항으로 포커싱
-        inputElem.val('') // 값 초기화
-        alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
-        result = false
-        return false;   // $.each를 break
-      }
-    })
-
-    const domainValue = $('select[name=domain] option:selected').val().trim()
-    if (!domainValue) {
-      $('select[name=domain]').focus()
-      alert('이메일 주소는 필수 입력 사항입니다.')
-      result = false;
+      if (recommend.val() === myPhone.val())
+        return false;
     }
 
-    return result;
-  }
-
-
-  const debounceCallEmailCheck = _.debounce((email, callback) => {
-    axios.get("http://localhost:8080/api/user/" + email)
-        .then(res => callback(res.data.response))
-        .catch(err => console.log("error", err))
-  }, 200)
-
-  const emailChecker = (e) => {
-    /* 5 ~ 20자 제한 */
-    const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-    const emailValue = $("input[name=email]").val().trim();
-    const emailDomain = $("#email_domain").val().trim();
-    const email = emailValue + '@' + emailDomain;
-    const msg = $("#email_msg")
-
-    if (!emailValue) {
-      msg.text("").removeClass("correct_msg").addClass("err_msg")
-    } else {
-      if (email.match(regex) != null) {
-        debounceCallEmailCheck(email, function (status) {
-              if (status) {
-                msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
-              } else {
-                msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
-              }
-            }
-        )
+    const editHyphen = e => {
+      const phoneValue = e.target.value
+      let ret = "";
+      if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
+        ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
       } else {
-        msg.text("올바른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
+        phoneValue.substring(0, 11)
+        ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
       }
-
+      e.target.value = ret
+      return ret;
     }
-  }
 
-  const getFormData = () => {
-    let basicInfo = {}
-    const form = $('form')
-    form.find('input').each((idx, item) => {
-      if (item.name === 'phone' || item.name === 'recommend') {
-        basicInfo[item.name] = !item.value ? null : item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
-      } else if (item.name !== 'pwdcfm') {
-        basicInfo[item.name] = item.value;
+    /*
+    * 길이 10~16
+    * 영문 대, 소문자, 특수문자
+    * */
+    const passwordValueChecker = pwd => {
+      return pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\]\[/\'\"\\\']{10,16}/) !== null;
+    }
+
+    // 비밀번호 확인 검증
+    const passwordChecker = (e) => {
+      if (e.target.value === "") return;
+      const keycode = e.keyCode;
+
+      let re = new RegExp(/[{}\[\]\/?.,;:|)*~`!^\-_+<>@#$%&\\=(\'\"]/gi)
+
+      /* 숫자, 소문자, 대문자, 특수문자 */
+      // else
+      if ((48 <= keycode && keycode <= 57) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) ||
+          re.test(e.originalEvent.key)) {
+        const passwordValue = $("#password").val();
+        const confirmValue = $("#pwdconfirm").val();
+        const msg = $("#pwmsg")
+
+        if (passwordValue !== "" && confirmValue !== "") {
+          if (passwordValue === confirmValue) {
+            if (passwordValueChecker(passwordValue)) {
+              msg.text("사용 가능한 패스워드 입니다.").removeClass("err_msg").addClass("correct_msg")
+              return
+            }
+          }
+          msg.text("올바른 패스워드를 입력해주세요.").removeClass("correct_msg").addClass("err_msg")
+        }
       }
-    })
-    form.find('select').each((idx, item) => {
-      basicInfo['email'] += '@' + $(item).val().trim()
-    })
-    return basicInfo
-  }
+    }
 
-  $(function () {
-    $('.header_wrap').css('background-color', '#182838')
-    $(document).on('focus', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #4C99CF');
-    });
+    // 필수 입력값 검사
+    const checkNotNull = () => {
+      let result = true
+      $("form").find('input').each(function (item) {
+        let inputElem = $(this)
+        let label = inputElem.prev('div>label')
+        let inputValue = inputElem.val().trim()
+        if ($(this).prop('required') && !inputValue) {
+          inputElem.focus()    // 입력이 안된 사항으로 포커싱
+          inputElem.val('') // 값 초기화
+          alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+          result = false
+          return false;   // $.each를 break
+        }
+      })
 
-    $(document).on('blur', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #dde0ea');
-    });
-
-    $(".pwdinput")
-        .on("keyup change", passwordChecker)
-        .on("paste", e => {
-          e.preventDefault()
-          alert("붙여넣기는 사용하실 수 없습니다.")
-        });
-
-    $("#email").on("change keyup paste", emailChecker);
-    $("#email_domain").on('change', () => {
-      if ($('input[name=email]').val().trim().length > 0) {
-        emailChecker()
+      const domainValue = $('select[name=domain] option:selected').val().trim()
+      if (!domainValue) {
+        $('select[name=domain]').focus()
+        alert('이메일 주소는 필수 입력 사항입니다.')
+        result = false;
       }
-    });
 
-    // 유저 전화번호
-    $("#phone").on("blur focus", editHyphen).on('keypress', (e) => {
-      let keycode = e.keyCode
-      if (!(48 <= keycode && keycode <= 57)) {
-        e.preventDefault();
-        e.returnValue = false;
-        alert('숫자만 입력 가능합니다.')
-      }
-    });
+      return result;
+    }
 
-    // 추천인 전화번호
-    $("#recommend").on("blur focus", editHyphen).on('keypress', (e) => {
-      let keycode = e.keyCode
-      if (!(48 <= keycode && keycode <= 57)) {
-        e.preventDefault();
-        e.returnValue = false;
-        alert('숫자만 입력 가능합니다.')
-      }
-    });
 
-    $("input[name=ispanel]").on('click', (e) => {
-      if (e.target.value === "false") {
-        $(".popup_overlay").fadeIn(100)
-      }
-    })
-    // TODO : 팝업 관련 설정
-    $("#popup_close_btn>i").on('click', (e) => {
-      // $(".popup_overlay").css('display', 'none')
-      $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
-      $('.popup_overlay').fadeOut(100)
-    })
+    const debounceCallEmailCheck = _.debounce((email, callback) => {
+      http.get("/api/user/" + email)
+          .then(res => callback(res.data.response))
+          .catch(err => console.log("error", err))
+    }, 200)
 
-    $(".popup_btn").on('click', (e) => {
-      $('input[name=ispanel][type=radio][value=false]').prop('checked', true)
-      $(".popup_overlay").fadeOut(100)
-    })
+    const emailChecker = (e) => {
+      /* 5 ~ 20자 제한 */
+      const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+      const emailValue = $("input[name=email]").val().trim();
+      const emailDomain = $("#email_domain").val().trim();
+      const email = emailValue + '@' + emailDomain;
+      const msg = $("#email_msg")
 
-    $('.popup_overlay').on('click', function () {
-      $(this).css('display', 'none')
-      // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
-    })
-
-    $("#frmsubmit").on('click', (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
-      if (checkNotNull()) {
-        const info = getFormData()
-        info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
-
-        axios.post('/signup', info)
-            .then(res => {
-              console.log(res.data)
-              if (res.data.response) {
-                if (info['ispanel']) {
-                  // alert('패널 가입을 위해서는 추가정보가 필요합니다.')
-                  location.replace('/panelagreement')
+      if (!emailValue) {
+        msg.text("").removeClass("correct_msg").addClass("err_msg")
+      } else {
+        if (email.match(regex) != null) {
+          debounceCallEmailCheck(email, function (status) {
+                if (status) {
+                  msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
                 } else {
-                  // alert('일반 유저 가입 성공!')
-                  location.replace('/success_basic')
+                  msg.text("이미 존재하는 이메일입니다. 다른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
                 }
               }
-            })
-            .catch(err => {
-              console.log("Error response", err)
-              alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
-            })
+          )
+        } else {
+          msg.text("올바른 이메일을 입력해주세요").removeClass("correct_msg").addClass("err_msg")
+        }
+
       }
+    }
+
+    const getFormData = () => {
+      let basicInfo = {}
+      const form = $('form')
+      form.find('input').each((idx, item) => {
+        if (item.name === 'phone' || item.name === 'recommend') {
+          basicInfo[item.name] = !item.value ? null : item.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
+        } else if (item.name !== 'pwdcfm') {
+          basicInfo[item.name] = item.value;
+        }
+      })
+      form.find('select').each((idx, item) => {
+        basicInfo['email'] += '@' + $(item).val().trim()
+      })
+      return basicInfo
+    }
+
+    $(function () {
+      $('.header_wrap').css('background-color', '#182838')
+      $(document).on('focus', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #4C99CF');
+      });
+
+      $(document).on('blur', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #dde0ea');
+      });
+
+      $(".pwdinput")
+          .on("keyup change", passwordChecker)
+          .on("paste", e => {
+            e.preventDefault()
+            alert("붙여넣기는 사용하실 수 없습니다.")
+          });
+
+      $("#email").on("change keyup paste", emailChecker);
+      $("#email_domain").on('change', () => {
+        if ($('input[name=email]').val().trim().length > 0) {
+          emailChecker()
+        }
+      });
+
+      // 유저 전화번호
+      $("#phone").on("blur focus", editHyphen).on('keypress', (e) => {
+        let keycode = e.keyCode
+        if (!(48 <= keycode && keycode <= 57)) {
+          e.preventDefault();
+          e.returnValue = false;
+          alert('숫자만 입력 가능합니다.')
+        }
+      });
+
+      // 추천인 전화번호
+      $("#recommend").on("blur focus", editHyphen).on('keypress', (e) => {
+        let keycode = e.keyCode
+        if (!(48 <= keycode && keycode <= 57)) {
+          e.preventDefault();
+          e.returnValue = false;
+          alert('숫자만 입력 가능합니다.')
+        }
+      });
+
+      $("input[name=ispanel]").on('click', (e) => {
+        if (e.target.value === "false") {
+          $(".popup_overlay").fadeIn(100)
+        }
+      })
+      // TODO : 팝업 관련 설정
+      $("#popup_close_btn>i").on('click', (e) => {
+        // $(".popup_overlay").css('display', 'none')
+        $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+        $('.popup_overlay').fadeOut(100)
+      })
+
+      $(".popup_btn").on('click', (e) => {
+        $('input[name=ispanel][type=radio][value=false]').prop('checked', true)
+        $(".popup_overlay").fadeOut(100)
+      })
+
+      $('.popup_overlay').on('click', function () {
+        $(this).css('display', 'none')
+        // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+      })
+
+      $("#frmsubmit").on('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        // 필수 값이 모두 채워져 있는지 확인 --> 작동 안함
+        if (checkNotNull()) {
+          const info = getFormData()
+          info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
+
+          http.post('/signup', info)
+              .then(res => {
+                console.log(res.data)
+                if (res.data.response) {
+                  if (info['ispanel']) {
+                    // alert('패널 가입을 위해서는 추가정보가 필요합니다.')
+                    location.replace('/panelagreement')
+                  } else {
+                    // alert('일반 유저 가입 성공!')
+                    location.replace('/success_basic')
+                  }
+                }
+              })
+              .catch(err => {
+                console.log("Error response", err)
+                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
+              })
+        }
+      })
+
+      $('.left_content>label').last().css('background', 'none')
+
     })
 
-    $('.left_content>label').last().css('background', 'none')
-
-  })
-
-</script>
-
-</html>
+  </script>
+</th:block>

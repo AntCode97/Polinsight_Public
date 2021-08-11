@@ -21,13 +21,17 @@ public class UserDto {
 
   private String phone;
 
+  private String recommend;
+
   private String name;
 
   private UserRoleType role;
 
+  //  private LocalDateTime registeredAt;
+
   private Boolean isEmailReceive;
 
-  private Boolean isSMSReceive;
+  private Boolean isSmsReceive;
 
 
   public UserDto(User user) {
@@ -38,7 +42,9 @@ public class UserDto {
     this.phone = user.getPhone();
     this.role = user.getRole();
     this.isEmailReceive = user.getIsEmailReceive();
-    this.isSMSReceive = user.getIsSMSReceive();
+    this.isSmsReceive = user.getIsSmsReceive();
+    this.recommend = user.getRecommend();
+    //    this.registeredAt = user.getRegisteredAt();
   }
 
 }
