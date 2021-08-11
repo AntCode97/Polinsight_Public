@@ -39,11 +39,11 @@ public class Post implements Serializable {
   private String title;
 
   @NotEmpty
-  @Column(name = "search_content")
+  @Column(name = "search_content", length = 3000)
   private String searchcontent;
 
   @NotEmpty
-  @Column(name = "view_content")
+  @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
   @ManyToOne(fetch = FetchType.EAGER)
