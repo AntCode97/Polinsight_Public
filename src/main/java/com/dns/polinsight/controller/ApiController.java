@@ -51,6 +51,8 @@ public class ApiController {
 
   private final PostService postService;
 
+  private final CollectorService collectorService;
+
   private PointHistoryService pointHistoryService;
 
   @PutMapping("{postId}/count")
@@ -123,13 +125,10 @@ public class ApiController {
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                              @RequestParam(value = "type", required = false) String type) throws Exception {
-    System.out.println("------------------------------");
-    System.out.println(pageable);
-    System.out.println("------------------------------");
     try {
+      List<Survey> surveyList = null;
       if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
-
         list.stream().filter(obj -> LocalDateTime.now().isBefore(obj.getEndAt())).collect(Collectors.toList()).sort((o1, o2) -> {
               if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
                 return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
@@ -137,9 +136,12 @@ public class ApiController {
                 return o1.getEndAt().compareTo(o2.getEndAt());
             }
         );
-        return success(list);
+        surveyList = list;
       }
-      return success(surveyService.findAll(pageable).getContent());
+      if (surveyList == null)
+        surveyList = surveyService.findAll(pageable).getContent();
+
+      return success(surveyList);
     } catch (Exception e) {
       throw new Exception();
     }

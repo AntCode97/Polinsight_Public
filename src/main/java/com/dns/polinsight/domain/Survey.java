@@ -28,6 +28,7 @@ public class Survey implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "survey_id")
   private Long surveyId;
 
   private String href;

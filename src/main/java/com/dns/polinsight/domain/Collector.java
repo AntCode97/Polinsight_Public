@@ -25,14 +25,14 @@ public class Collector {
 
   private String href;
 
-  private Long surveyId;
+//  private Long surveyId;
 
   private String participateUrl;
 
   private Long responseCount;
 
   @JsonIgnore
-  @JoinColumn(name = "survey_id")
+  @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
   @ManyToOne
   private Survey survey;
 

@@ -181,8 +181,8 @@ management :
 ---
 spring :
   datasource :
-    username :            polinsight
-    password :            polinsight
+    username :            root
+    password :            root
     url :                 jdbc:mariadb://localhost:3306/polinsight
     driver-class-name :   org.mariadb.jdbc.Driver
     sql-script-encoding : UTF-8
@@ -206,7 +206,7 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : validate
+      ddl-auto : create-drop
     properties :
       format_sql : true
     show-sql :     true
