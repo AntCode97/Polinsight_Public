@@ -15,15 +15,12 @@
   /* 여기까지 전체적인 레이아웃 */
 
   /* 카드 제목 */
-  .input_wrap {
-    display: flex;
-    align-items: center;
-  }
+
   .last_wrap { margin-bottom: 10px; }
   .board_div2 {
     width: 100%;
     height: 100%;
-    border-bottom: 1px solid #dadada;
+
     padding: 10px 10px;
     border-radius: 2px;
     font-size: 13px;
@@ -165,6 +162,7 @@
   .file_download:hover {
     text-decoration: underline;
   }
+  .input_wrap {border-bottom: 1px solid #dadada;}
 
 </style>
 </th:block>
@@ -182,7 +180,7 @@
         <div class='metop_inner'>
           <!-- 상세 게시글 창 -->
           <div class="metop_board_wrap" th:object="${post}">
-            <div class="metop_board_card">
+            <div class="metop_board_card" style="border-top: 3px solid #4C99CF;">
               <form name="" action="" method="POST">
                 <div class="input_wrap title_div">
                   <div class="board_div2">
@@ -226,7 +224,7 @@
                 </div>
 
                 <!-- 취소 & 등록 버튼 -->
-                <div class='input_wrap last_wrap'>
+                <div class='last_wrap'>
                   <div class='board_div2 btn_wrap'>
                     <div class='btn_wrap1'>
                       <span>
