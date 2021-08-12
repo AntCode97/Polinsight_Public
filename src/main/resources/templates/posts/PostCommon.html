@@ -1,31 +1,16 @@
-<th:block th:include="layout/header" />
+<th:block th:include="layout/header"/>
 <div>
-  <!--  <script type="text/javascript" src="/se2/js/service/HuskyEZCreator.js" charset="utf-8"></script>-->
-  <!--  <script type="text/javascript">-->
-  <!--    var oEditors = [];-->
-  <!--    nhn.husky.EZCreator.createInlFrame({-->
-  <!--      oAppRef: oEditors,-->
-  <!--      elPlaceHoler: "editor",-->
-  <!--      sSkinURL: "./workspace/static/SmartEditor2Skin.html",-->
-  <!--      fCreator: "createSEditor2"-->
-  <!--    });-->
-  <!--  </script>-->
+  <link th:href="@{/css/common.css}" rel="stylesheet">
+  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
+
     .header_wrap {
       background-color: #182838;
     }
-
     .web {
       margin: auto;
       width: 1200px;
     }
-
-    img {
-      margin-left: -2px;
-      margin-right: -2px;
-      padding: 0;
-    }
-
     .sub-main {
       height: 50px;
       padding-bottom: 0px;
@@ -98,13 +83,7 @@
       height: 15px;
     }
 
-    .main_item {
-      color: #000;
-      font-size: 2rem;
-      font-weight: bold;
-      padding: 10px 0 20px;
-      border-bottom: 1px dashed #dadada;
-    }
+
 
     #metop_container {
       justify-content: center;
@@ -337,7 +316,6 @@
       /*background-color: #eee;*/
     }
 
-
     .btn-add, .btn-remove {
       cursor: pointer;
       width: 60px;
@@ -364,30 +342,6 @@
     .board_file {
       cursor: pointer;
     }
-
-    .PC a {
-      text-decoration: none
-    }
-
-    .PC a:link, .PC a:visited, .PC a:hover {
-      color: #191919;
-    }
-
-    .PC ul .PC li {
-      list-style-type: none;
-      float: left;
-    }
-
-    .sub-main-name {
-      width: 1000px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      margin-bottom: 50px;
-      font-size: 25px;
-      text-align: center;
-      border-bottom: 1px solid rgb(0, 0, 0);
-    }
-
 
     .information {
       padding-bottom: 15px;
@@ -420,14 +374,6 @@
       display: flex;
       border-bottom: 1px solid gray;
       padding-left: 20px;
-    }
-
-    .margin {
-      font-size: 14px;
-      height: 40px;
-      line-height: 40px;
-      color: gray;
-      margin-right: 10px;
     }
 
     .information_name,
@@ -619,41 +565,12 @@
     }
 
     .disabled {
-      opacity: 0;
+      display: none;
       color: #6c757d;
       pointer-events: none;
       background-color: #fff;
       border-color: #dee2e6;
       text-decoration: none;
-    }
-
-    .active {
-      font-size: 19px;
-      font-weight: bold;
-      margin-left: 2px;
-      margin-right: 2px;
-      z-index: 3;
-      color: #2F3138;
-      text-decoration: none;
-    }
-
-    .not-active {
-      margin-left: 2px;
-      margin-right: 2px;
-      z-index: 3;
-      color: #2F3138;
-      text-decoration: none;
-    }
-
-    .select {
-      height: 25px;
-    }
-
-    .btn-search {
-      height: 25px;
-      color: white;
-      background: black;
-      border-radius: 5px 5px 5px 5px;
     }
 
     .tblList {
@@ -690,12 +607,6 @@
       border: 1px solid black;
     }
 
-    .page-button {
-      margin-top: 50px;
-      vertical-align: middle;
-      text-align: center;
-    }
-
     .current-page {
       margin-right: 5px;
       margin-left: 5px;
@@ -705,11 +616,6 @@
       vertical-align: text-top;
       min-width: 25px;
       height: 25px;
-    }
-
-    .page-button > a {
-      text-decoration: none;
-      color: #2F3138;
     }
 
     .PC {

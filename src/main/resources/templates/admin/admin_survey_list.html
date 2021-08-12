@@ -1,105 +1,22 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block>
   <th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
     <style>
       table, tr, th, td {
         width: 100%;
         margin: 0;
       }
 
-      .post-search {
-        display: inline-block;
-        width: 100%;
-        margin-bottom: 41px;
-      }
-
-      .post-search .util-search {
-        color: #333;
-        font-size: 1rem;
-        margin-bottom: 20px;
-      }
-
-      .post-search .form-search {
-        background-color: #EEE;
-        padding: 20px;
-        box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
-      }
-
-      .post-search .tbl-search {
-        text-align: center;
-      }
-
-      .post-search .box-search {
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        background-color: white;
-        height: 55px;
-        line-height: 55px;
-        border: 1px solid #ccd0d7;
-        min-width: 600px;
-      }
-
-      .post-search .box-search input {
-        position: relative;
-        top: -1px;
-        width: 100%;
-        height: 100%;
-        border: 0;
-        background-color: transparent;
-        font-size: 1.0rem;
-        text-indent: 10px;
-        padding-right: 55px;
-      }
-
-      .post-search .box-search input[type="submit"] {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 50px;
-        height: 55px;
-        background-image: url('/img/etc/ico-search-btn.png');
-        background-repeat: no-repeat;
-        background-position: center;
-        text-indent: -9999px;
-        cursor: pointer;
-      }
-
-      .post-row > *:nth-child(1) {
-        width: 70px;
-      }
-
-      .post-row > *:nth-child(2) {
-        width: 500px;
-      }
-
-      tbody > .post-row > td:nth-child(2) {
-        text-align: left;
-      }
-
-      .post-row > *:nth-child(3) {
-        width: 90px;
-      }
-
-      .post-row > *:nth-child(4) {
-        width: 150px;
-      }
-
-      .post-row > *:nth-child(5) {
-        width: 95px;
-      }
-
-      .post-row > *:nth-child(6) {
-        width: 95px;
-      }
-
-      .post-row > *:nth-child(7) {
-        width: 120px;
-      }
-
-      .post-row > *:nth-child(8) {
-        width: 120px;
-      }
+      .post-row > *:nth-child(1) {width: 70px;}
+      .post-row > *:nth-child(2) {width: 500px;}
+      tbody > .post-row > td:nth-child(2) {text-align: left;}
+      .post-row > *:nth-child(3) {width: 90px;}
+      .post-row > *:nth-child(4) {width: 150px;}
+      .post-row > *:nth-child(5) {width: 95px;}
+      .post-row > *:nth-child(6) {width: 95px;}
+      .post-row > *:nth-child(7) {width: 120px;}
+      .post-row > *:nth-child(8) {width: 120px;}
 
       table {
         align: center;
@@ -245,7 +162,7 @@
         template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
         template.append(`<td>${survey.status.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`);
+        template.append(`<td><button class="btn_udel btn-support">수정</button><span>  </span><button class="btn_udel btn-warn">삭제</button></td>`);
         return template
       }).map(elem => table.append(elem))
     };

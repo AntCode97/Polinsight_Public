@@ -1,144 +1,344 @@
-<th:block th:include="posts/PostCommon" />
+<th:block th:include="layout/header"/>
 <th:block>
-  <div class="PC">
-    <div class="web">
-      <div class="sub-main-name"><b>공지사항</b></div>
+  <link th:href="@{/css/common.css}" rel="stylesheet">
+  <link th:href="@{/css/table.css}" rel="stylesheet">
+  <style>
+    .header_wrap {background-color: rgb(24, 40, 56)!important; }
+    .board_contents_wrap {
+      max-width: 1200px;
+      margin: 80px auto 0;
+      padding-top: 20px;
+      min-height: 100vh;
+    }
+    .main_item {
+      color: #000;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 10px 0 20px;
+      border-bottom: 1px dashed #dadada;
+    }
 
-      <div class="post" th:object="${post}">
-        <div class="information">
-          <div class="information_title">
-            <div class="titleContent" th:text="*{title}"><b>-제목-</b></div>
-          </div>
-          <div class="information_write">
-            <div class="information_name">
-              <div class="name">작성자&nbsp;:</div>
-              <div class="nameContent" th:text="*{user.name}">관리자</div>
-            </div>
-            <div class="margin"><b> | </b></div>
-            <div class="information_date">
-              <div class="date">작성일 :</div>
-              <div class="dateContent" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"> -작성일-</div>
-            </div>
-            <div class="margin"><b> | </b> 조회수 :</div>
-            <div class="information_count" th:text="${post.viewcnt}"> 조회수</div>
-          </div>
+    /* 카드 제목 */
+    .input_wrap {
+      display: flex;
+      align-items: center;
+    }
+    .last_wrap { margin-bottom: 10px; }
+    .last_wrap > .board_div {padding: 10px 0;}
+    .board_div {
+      width: 100%;
+      height: 100%;
+      border-bottom: 1px solid #dadada;
+      padding: 10px 10px;
+      border-radius: 2px;
+      font-size: 1rem;
+    }
+    /* 제목 */
+    .tile_info_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+    }
+    .post_no {
+      font-size: 13px;
+      color: #515151;
+      font-weight: bold;
+    }
+    .title_text > span {
+      font-size: 20px;
+      color: #515151;
+    }
+    .regdate {
+      color: #515151;
+      font-size: 14px;
+    }
+    /* 작성자 */
+    #writer_div {
+      height: 48px;
+      line-height: 26px;
+    }
+    .post_count_wrap > div {
+      margin-left: 5px;
+      min-width: 48px;
+      height: 48px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 13px;
+      font-family: sans-serif;
+      color: #515151;
+      cursor: pointer;
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+    .post_count_wrap strong {
+      font-size: 1rem;
+      display: block;
+      font-weight: 400;
+      line-height: 26px;
+    }
+    .textarea_div {
+      align-items: flex-start;
+    }
+    .textarea_div > .board_div {
+      padding: 20px 10px;
+    }
+    /* 등록/취소 버튼 */
+    .btn {font-size: 1rem;}
+    .btn > i { margin-right: 5px; }
+    .btn_wrap {
+      border: 0;
+      border-radius: 0;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .board_btn {
+      padding: 12px 22px;
+      background: white;
+      border-radius: 2px;
+      font-size: 14px;
+      text-decoration: none;
+      transition: box-shadow .2s cubic-bezier(.4,0,1,1),
+      background-color .2s cubic-bezier(.4,0,.2,1);
+      color: white;
+    }
+    .board_btn:hover {
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
+      0 3px 1px -2px rgba(0,0,0,.2),
+      0 1px 5px 0 rgba(0,0,0,.12);
+      box-shadow: 0 14px 26px -12px hsla(0,0%,60%,.42),
+      0 4px 23px 0 rgba(0,0,0,.12),
+      0 8px 10px -5px hsla(0,0%,60%,.2);
+    }
 
-          <div class="information_file">
-            <div class="file"><b>파일</b></div>
-            <div class="fileContent">
-              <div class="file1" th:each="file : ${post.attaches}">
-                <div class="fileName">
-                  <span class="file_item2" th:text="'첨부파일#'"></span>
-                  <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}">
-                  </a>
-                </div>
+    .list_btn > i, .delete_btn > i, .update_btn > i {
+      font-weight: normal;
+      font-size: 17px;
+      padding-right: 5px;
+    }
+
+    .uploadedList  > li {
+      border-radius: 2px;
+      margin-right: 5px;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+
+    /* 첨부파일 */
+    .title_div {
+      border-top: 2px solid #7c7c7c;
+      background-color: #f9f9f9;
+    }
+    .board_div > label {
+      font-weight: bold;
+      padding-right: 7px;
+      margin-right: 7px;
+      border-right: 1px solid #EFEFEF;
+    }
+    .label_padding {
+      padding-left: 20px;
+    }
+    .file_download {
+      color: #007791;
+    }
+    .file_download:hover {
+      text-decoration: underline;
+    }
+
+    .post-move {
+      margin-top: 20px;
+    }
+    .postList {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      background-color: #f9f9f9;
+    }
+    .nearPost {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      cursor: pointer;
+    }
+    .nearPost > div {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .nearPostLetter {
+      border-right: 2px solid #dadada;
+      padding-right: 15px;
+      margin-right: 15px;
+      color: black;
+    }
+  </style>
+  <div class="board_contents_wrap">
+    <!-- Header Title -->
+    <div class="main_item"><p style="text-align: center;">공지사항</p></div>
+
+    <!-- 게시글 내용 -->
+    <section>
+      <div class="metop_board_card" th:object="${post}">
+        <div class="input_wrap title_div">
+          <div class="board_div">
+            <div class="tile_info_wrap">
+              <div>
+                <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
               </div>
             </div>
+            <div class="title_text">
+              <span th:text="*{title}"></span>
+            </div>
           </div>
         </div>
 
-        <div class="letter">
-          <div class="postContent">
-            <div th:text="${post.viewcontent}"></div>
-            <!--글 내용에 따라 높이 조정-->
+        <div class="input_wrap">
+          <div class="board_div" id="writer_div">
+            <label>작성자</label>
+            <span th:text="*{user.name}"></span>
           </div>
         </div>
-        <span th:unless="${user} == null">
-            <div class="Button" th:if="${user.role.toString()} =='ADMIN'">
-                <div class="modifyButton">
-                    <a class="btn" th:href="@{/posts/{id}/edit (id=${post.id})}"> <b>수정</b></a>
-                </div>
-                <div class="listButton">
-                    <a class="btn" href="/posts"> <b>목록</b></a>
-                </div>
-            </div>
-            </span>
-        <div class="postList">
-          <div class="nearPost" th:unless="${nextPost} ==null">
-            <div class="nearPostLetter"><b>다음글</b> &nbsp;&nbsp;&nbsp; |</div>
-            <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
-            <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-다음글 날짜</div>
+
+        <div class="input_wrap">
+          <div class="board_div">
+            <label>작성일</label>
+            <span class="regdate" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+            <label class="label_padding">조회</label>
+            <span th:text="${post.viewcnt}"></span>
           </div>
-          <div class="nearPost" th:unless="${prevPost} ==null">
-            <div class="nearPostLetter"><b>이전글 </b>&nbsp;&nbsp;&nbsp; |</div>
-            <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
-            <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-이전글 날짜</div>
+        </div>
+
+        <div th:each="file : ${post.attaches}" class="input_wrap">
+          <div class="board_div">
+            <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
+            <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>
+          </div>
+        </div>
+
+        <div class="input_wrap textarea_div">
+          <div class="board_div" th:text="${post.viewcontent}">
+          </div>
+        </div>
+
+        <!-- 취소 & 등록 버튼 -->
+        <div class="input_wrap last_wrap">
+          <div class="board_div btn_wrap">
+            <div class="btn_wrap1">
+              <span>
+                  <a href="${header.referer}" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
+              </span>
+            </div>
+<!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
+<!--              <span>-->
+<!--                  <a th:href="@{'/boards/modify/' + ${post.id}}" class="btn btn-support"><i class="fas fa-edit"></i>수정</a>-->
+<!--              </span>-->
+<!--              <span>-->
+<!--                  <a href="#" class="btn btn-warn"><i class="far fa-trash-alt"></i>삭제</a>-->
+<!--              </span>-->
+<!--            </div>-->
           </div>
         </div>
 
       </div>
-    </div>
-    <div>
-      <th:block th:include="layout/footer" />
-    </div>
-    <script type="text/javascript">
-      window.onload = function () {
-        let file_item2 = document.getElementsByClagssName("file_item2");
-        let fileCount = file_item2.length;
+    </section>
 
-        console.log(fileCount, file_item2);
-        for (let i = 1; i <= fileCount; i++) {
-          file_item2[i - 1].innerText = "첨부파일#" + i;
-        }
+    <!--    -->
+    <div class="post-move" th:object="${post}">
+      <div class="postList">
+        <div class="nearPost" th:unless="${nextPost} ==null">
+          <div>
+            <div class="nearPostLetter"><b>다음글</b></div>
+            <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
+          </div>
+          <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd')}">-다음글 날짜</div>
+        </div>
+        <div class="nearPost" th:unless="${prevPost} ==null">
+          <div>
+            <div class="nearPostLetter"><b>이전글</b></div>
+            <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
+          </div>
+          <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd')}">-이전글 날짜</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <th:block th:include="layout/footer"/>
+
+  <script type="text/javascript">
+    window.onload = function () {
+      let file_item2 = document.getElementsByClagssName("file_item2");
+      let fileCount = file_item2.length;
+
+      console.log(fileCount, file_item2);
+      for (let i = 1; i <= fileCount; i++) {
+        file_item2[i - 1].innerText = "첨부파일#" + i;
       }
+    }
 
-      /* <![CDATA[ */
-      var bno = [[${post.id}]];
-      /* ]]> */
-      $(function () {
-        $('.nav_action').click(function () {
-          var value = $(this).find('.arrow').attr('class');
-          if (value === 'fas fa-caret-down arrow') {
-            $(this).next('div').css('height', '100%');
-            $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
-          } else if (value === 'fas fa-caret-up arrow') {
-            $(this).next('div').css('height', '0');
-            $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
-          }
-        });
+    /* <![CDATA[ */
+    var bno = [[${post.id}]];
+    /* ]]> */
+    $(function () {
+      $('.nav_action').click(function () {
+        var value = $(this).find('.arrow').attr('class');
+        if (value === 'fas fa-caret-down arrow') {
+          $(this).next('div').css('height', '100%');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
+        } else if (value === 'fas fa-caret-up arrow') {
+          $(this).next('div').css('height', '0');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
+        }
+      });
 
-        // 삭제버튼 클릭시 모달창 Open
-        $('.delete_btn').click(function () {
-          if (reply_cnt === 0) { // 댓글이 없는 경우
-            $('#modal_msg_main_txt').text(bno + "번 게시글을 삭제하시겠습니까?");
-            $('#modal_msg_yes').css('display', 'block');
-            $('#modal_msg_cancle').text('취 소');
-          } else { // 댓글이 있는 경우
-            $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
-            $('#modal_msg_yes').css('display', 'none');
-            $('#modal_msg_cancle').text('확 인');
-          }
+      // 삭제버튼 클릭시 모달창 Open
+      $('.delete_btn').click(function () {
+        if (reply_cnt === 0) { // 댓글이 없는 경우
+          $('#modal_msg_main_txt').text(bno + "번 게시글을 삭제하시겠습니까?");
+          $('#modal_msg_yes').css('display', 'block');
+          $('#modal_msg_cancle').text('취 소');
+        } else { // 댓글이 있는 경우
+          $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+          $('#modal_msg_yes').css('display', 'none');
+          $('#modal_msg_cancle').text('확 인');
+        }
 
-          $('.modal_msg_wrap').css('display', 'flex');
-        });
+        $('.modal_msg_wrap').css('display', 'flex');
+      });
 
-        // 삭제 알림 모달창에서 확인버튼 Click -> 게시글 삭제
-        $('#modal_msg_yes').click(function () {
-          $.ajax({
-            type: 'DELETE',
-            url: '/posts/' + bno,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-            success: function (data) {
-              if (data === 0) {
-                $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
-                $('#modal_msg_yes').css('display', 'none');
-                $('#modal_msg_cancle').text('확 인');
-                $('.modal_msg_wrap').css('display', 'flex');
-              } else if (data === 9) {
-                $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
-                $('#modal_msg_yes').css('display', 'none');
-                $('#modal_msg_cancle').text('확 인');
-                $('.modal_msg_wrap').css('display', 'flex');
-              } else {
-                location.href = "/posts"
-              }
-            },
-            error: function () {
-              alert('System ERROR:(');
+      // 삭제 알림 모달창에서 확인버튼 Click -> 게시글 삭제
+      $('#modal_msg_yes').click(function () {
+        $.ajax({
+          type: 'DELETE',
+          url: '/posts/' + bno,
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          success: function (data) {
+            if (data === 0) {
+              $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+              $('#modal_msg_yes').css('display', 'none');
+              $('#modal_msg_cancle').text('확 인');
+              $('.modal_msg_wrap').css('display', 'flex');
+            } else if (data === 9) {
+              $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
+              $('#modal_msg_yes').css('display', 'none');
+              $('#modal_msg_cancle').text('확 인');
+              $('.modal_msg_wrap').css('display', 'flex');
+            } else {
+              location.href = "/posts"
             }
-          });
+          },
+          error: function () {
+            alert('System ERROR:(');
+          }
         });
       });
-    </script>
+    });
+  </script>
 </th:block>

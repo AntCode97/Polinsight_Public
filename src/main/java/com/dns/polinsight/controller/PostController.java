@@ -47,11 +47,8 @@ import java.util.stream.Collectors;
 public class PostController {
 
   private final UserService userService;
-
   private final PostService postService;
-
   private final StorageService storageService;
-
   private final AttachService attachService;
 
 
@@ -195,7 +192,6 @@ public class PostController {
     }
     model.addAttribute("posts", posts);
     //System.out.println(postSearch.toString());
-
 
     return "posts/postList";
   }
