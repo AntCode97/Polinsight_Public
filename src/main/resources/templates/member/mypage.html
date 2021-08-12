@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style type="text/css">
+      @import url('common.css');
+      .mypage_wrap {
+        width: 1000px;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .top_box {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+      .top_box > .item_box {
+        width: 270px;
+      }
+      .top_box > .history_box {
+        width: 350px;
+      }
+      .left_top_box {
+        width: 270px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+
+      .item_box {
+        width: 100%;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+      }
+      .item_header {
+        padding: 10px 15px;
+        background-color: white;
+        border-bottom: 1px solid #BBB;
+        color: #444;
+        font-size: 14px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      i { cursor: pointer; }
+      .item_content {background-color: white; padding: 7px 15px; }
+      .data_head { color: #be4bdb; font-weight: bold; }
+      .data_line {
+        font-size: 14px;
+        padding: 3px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+      .data_line:last-child { border: none; }
+      .point_table > .data_head > span:nth-child(1) { flex: 5; text-align: center!important; }
+      .point_table > .data_line > span:nth-child(1) { flex: 5; text-align: left; }
+      .point_table > .data_head > span:nth-child(2) { flex: 5; text-align: center!important; padding: 0px!important; }
+      .point_table > .data_line > span:nth-child(2) { flex: 2; text-align: right; padding-right: 10px; }
+      .point_table > .data_line > span:nth-child(3) { flex: 3; }
+
+      .survey_table > .data_head > span:nth-child(1) { flex: 7; text-align: center!important; }
+      .survey_table > .data_line > span:nth-child(1) { flex: 7; text-align: left; }
+      .survey_table > .data_line > span:nth-child(2) { flex: 3; }
+
+      .user_info {
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+      }
+      .user_info .right_item {
+        padding-left: 25px;
+        display: flex;
+        flex-direction: column;
+        flex: 7;
+      }
+      .user_img_wrap {
+        /* width: 82px;
+        height: 82px;
+        border: 1px solid #ddd; padding: 5px; */
+      }
+      .user_img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50px;
+        overflow: hidden;
+        background-image: url('cherry.JPG');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+      }
+      .user_name {
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        position: relative;
+      }
+      .user_grade {
+        margin-left: 5px;
+        position: absolute;
+        background-color: #4BC699;
+        color: white;
+        font-size: 12px;
+        font-weight: normal;
+        padding: 4px 10px;
+        top: 0;
+        border-radius: 25px;
+      }
+
+      .user_basic_wrap {
+        display: flex;
+        flex-direction: row;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .user_info_box {
+        padding: 13px 20px;
+        flex: 1;
+        border: 1px solid #c5c7d0;
+      }
+      .info_article {
+        display: block;
+        color: #69666D;
+        font-size: 13px;
+        margin-bottom: .35rem;
+      }
+      .user_readonly_box {
+        background-color: #f1f2f7;
+        border: .1rem solid transparent;
+        flex: 1;
+        cursor: not-allowed;
+      }
+      .user_basic_wrap > .user_info_box:first-child {
+        margin-right: 1rem;
+      }
+      .user_info_input {
+        width: 100%;
+        outline: none;
+        font-size: 14px;
+        color: #333;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        height: 32px;
+        line-height: 32px;
+      }
+      .user_btn_wrap { display: flex;}
+      .mypage_btn {
+        color: white;
+        padding: 8px 15px;
+        background: #192739;
+        border-radius: 2px;
+        border: none;
+        font-size: 14px;
+        font-weight: normal;
+        cursor: pointer;
+        transition: box-shadow .2s cubic-bezier(.4,0,1,1), background-color .2s cubic-bezier(.4,0,.2,1);
+      }
+      .mypage_btn:hover {
+        box-shadow: 0 14px 26px -12px hsl(0deg 0% 60% / 42%), 0 4px 23px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px hsl(0deg 0% 60% / 20%);
+      }
+      .bottom_box {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        padding: 10px;
+        margin: 20px 0;
+        border-radius: 5px;
+        overflow: hidden;
+        background-color: white;
+        box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+      }
+      .left_box {
+        width: 200px;
+        padding: 10px 10px;
+        display: inline-block;
+        border-right: 1px solid #c5c7d0;
+      }
+      .right_box {
+        width: calc(100% - 200px);
+        float: right;
+      }
+      .user_nav_btn_wrap {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+      }
+      .user_nav_btn_wrap > input[type='radio'] {display: none;}
+      .user_nav_btn_wrap > input[type='radio'] + label {
+        width: 100%;
+        display: inline-block;
+        color: #444;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 15px 35px;
+        margin: 5px 0;
+        border-radius: 2px;
+      }
+      .user_nav_btn_wrap > input[type='radio'] + label:hover {
+        background-color: hsla(0, 0%, 78%, .2);
+      }
+      .user_nav_btn_wrap > input[type='radio']:checked + label {color: white; background-color: #4C99CF; }
+
+      .tab_box {display: none; }
+
+
+
+
+      .user_input_box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+        position: relative;
+      }
+      .user_input_box > .info_article {
+        width: 105px;
+        margin: 0;
+      }
+      .user_input_box > .user_info_input {
+        width: 200px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+      }
+      .point_input_box::before {
+        content: "point";
+        position: absolute;
+        left: 190px;
+        color: #444;
+        font-size: 14px;
+        z-index: 999;
+      }
+      .point_input_box > .user_info_input {
+        width: 120px;
+      }
+      .input_content {
+        padding: 30px 30px;
+      }
+      .point_txt {
+        font-size: 20px;
+        font-weight: bold;
+        color: #FFBC42;
+        margin: 3px 0 10px;
+      }
+      .point_info {
+        padding: 15px 15px;
+        background: white;
+        text-align: center;
+      }
+      .point_info > span {
+        display: block;
+      }
+      .info_msg {
+        color: #a9a9a9;
+        font-size: 12px;
+        font-weight: normal;
+        padding: 0 10px;
+      }
+      .ck_exit {
+        color: #444;
+        margin: 20px 0 0;
+        cursor: pointer;
+        font-size: 14px;
+        height: 25px;
+        line-height: 25px;
+        display: block;
+        padding-left: 30px;
+        background: url("img/etc/check_off.gif") 0% 50% no-repeat;
+      }
+      #exit_checked:checked +label {
+        background-image: url("img/etc/check_on.gif");
+      }
+      .exit_msg_wrap {
+        background-color: #f1f2f7;
+        border-radius: 5px;
+        padding: 20px 20px 13px 20px;
+      }
+      .exit_msg {
+        font-size: 14px;
+        margin: 7px 0;
+      }
+      .exit_msg > i {
+        padding-right: 5px;
+        color: tomato;
+      }
+      .err_msg {
+        color: tomato;
+        font-size: 14px;
+        margin: 10px 0;
+        display: none;
+      }
+
+
+      .register_box { margin-bottom: 20px;}
+      .register_contents_wrap p {
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      .register_contents {
+        border-top: 1px solid #ddd;
+      }
+      .register_contents > ul > li {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+      }
+      .left_content {
+        flex: 2;
+      }
+      .right_content {
+        flex: 8;
+      }
+      .left_content > label {
+        font-weight: bold;
+        padding: 0 15px;
+        overflow: hidden;
+        line-height: 18px;
+        cursor: pointer;
+        background: url('imgs/icon_required_input.png') right center no-repeat;
+      }
+      .right_content > input {
+        color: #333;
+        font-size: 14px;
+        margin: 0 3px;
+        outline: none;
+      }
+      .info_msg, .err_msg {
+        font-size: 12px;
+        font-weight: normal;
+        padding: 0 5px;
+      }
+      .info_msg {color: #a9a9a9;}
+      .err_msg {color: red;}
+      .no_need { background-image: url('')!important;}
+      .pannel_info_contents {
+        width: 800px;
+        margin: 40px auto 30px;
+        background-color: #EEE;
+        padding: 15px 0;
+        border-radius: 20px;
+      }
+      .pannel_info_contents > * {
+        color: black;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .pannel_info_contents > h1 {
+        font-size: 22px;
+      }
+      .pannel_info_contents > p {
+        font-size: 16px;
+        font-weight: normal;
+      }
+      .pannel_select {
+        margin: 0 auto;
+        width: 300px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .radio_wrap > label {
+        font-size: 16px;
+        font-weight: bold;
+        color: black;
+      }
+      .right_content > label, .right_content > label > input {
+        cursor: pointer;
+      }
+      .text_input {
+        width: 300px;
+        height: 32px;
+        border: 1px solid #ddd;
+      }
+      .right_content > select {
+        width: 80px;
+        height: 32px;
+        cursor: pointer;
+      }
+      #edu { width: 170px;}
+      #jobs { width: 120px;}
+      #industry { width: 200px;}
+
+      .introduce {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+      }
+      .introduce > .left_content {
+        flex: 3;
+      }
+      .introduce > .right_content {
+        flex: 7;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .introduce:nth-child(1) {
+        padding-top: 0;
+      }
+      .introduce:nth-child(5) {
+        padding-bottom: 0;
+        border: none;
+      }
+
+      .bank_input_box select {
+        height: 32px;
+        outline: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body style="background-color: #f1f1f1;">
+    <div class="mypage_wrap">
+      <div class="top_box">
+
+        <div class="left_top_box">
+          <!-- 회원 소개 -->
+          <div class="item_box">
+            <div class="user_info">
+              <div class="left_item">
+                <div class="user_img_wrap">
+                  <div class="user_img"></div>
+                </div>
+              </div>
+              <div class="right_item">
+                <span class="user_name">최체리<span class="user_grade">우수패널</span></span>
+                <span class="user_point">cherry@google.com</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 포인트 소개 -->
+          <div class="item_box">
+            <div class="point_info">
+              <span class="user_point point_txt"><i class="fas fa-coins" style="padding-right: 3px;"></i>12,000 포인트</span>
+              <span class="msg">10,000포인트 현금전환 가능합니다.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 포인트 이력 -->
+        <div class="item_box history_box">
+          <div class="item_header">
+            <span><i class="fas fa-star" style="padding-right: 3px; color: #4C99CF;"></i>포인트이력</span>
+            <span><i class="fas fa-plus"></i></span>
+          </div>
+          <div class="item_content">
+            <div class="data_table point_table">
+              <div class="data_head data_line">
+                <span>내용</span>
+                <span>포인트</span>
+                <span>일자</span>
+              </div>
+              <div class="data_line">
+                <span>Test1</span>
+                <span>+5,000</span>
+                <span>2021.08.05</span>
+              </div>
+              <div class="data_line">
+                <span>Test2</span>
+                <span>-10,000</span>
+                <span>2021.08.04</span>
+              </div>
+              <div class="data_line">
+                <span>Test3</span>
+                <span>+5,000</span>
+                <span>2021.08.03</span>
+              </div>
+              <div class="data_line">
+                <span>Test4</span>
+                <span>+5,000</span>
+                <span>2021.08.02</span>
+              </div>
+              <div class="data_line">
+                <span>Test5</span>
+                <span>+5,000</span>
+                <span>2021.08.01</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 서베이 이력 -->
+        <div class="item_box history_box">
+          <div class="item_header">
+            <span><i class="fas fa-poll-h" style="padding-right: 3px; color: #4C99CF;"></i>서베이이력</span>
+            <span><i class="fas fa-plus"></i></span>
+          </div>
+          <div class="item_content">
+            <div class="data_table survey_table">
+              <div class="data_head data_line">
+                <span>서베이</span>
+                <span>일자</span>
+              </div>
+              <div class="data_line">
+                <span>Survey1</span>
+                <span>2021.08.05</span>
+              </div>
+              <div class="data_line">
+                <span>Survey2</span>
+                <span>2021.08.04</span>
+              </div>
+              <div class="data_line">
+                <span>Survey3</span>
+                <span>2021.08.03</span>
+              </div>
+              <div class="data_line">
+                <span>Survey4</span>
+                <span>2021.08.02</span>
+              </div>
+              <div class="data_line">
+                <span>Survey5</span>
+                <span>2021.08.01</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="bottom_box">
+        <div class="left_box">
+          <!-- 네비게이션 -->
+          <div class="user_nav_btn_wrap">
+            <input type="radio" name="tabmenu" id="tab01" checked>
+            <label for="tab01">회원정보변경</label>
+            <input type="radio" name="tabmenu" id="tab02">
+            <label for="tab02">패널정보변경</label>
+            <input type="radio" name="tabmenu" id="tab03">
+            <label for="tab03">비밀번호변경</label>
+            <input type="radio" name="tabmenu" id="tab04">
+            <label for="tab04">포인트현금신청</label>
+            <input type="radio" name="tabmenu" id="tab05">
+            <label for="tab05">회원탈퇴</label>
+
+            <!-- <div class="user_nav_btn">회원정보변경</div>
+            <div class="user_nav_btn">비밀번호변경</div>
+            <div class="user_nav_btn">포인트신청</div>
+            <div class="user_nav_btn">회원탈퇴</div> -->
+          </div>
+        </div>
+
+        <div class="right_box">
+          <!-- 회원 정보 -->
+          <div class="tab_box box01" style="display: block;">
+            <form action="" method="">
+              <div class="item_header">
+                <span><i class="fas fa-user" style="padding-right: 3px; color: #4C99CF;"></i>회원정보</span>
+              </div>
+              <div class="item_content">
+                <div class="user_basic_wrap">
+                  <div class="user_info_box user_readonly_box">
+                    <span class="info_article">아이디</span>
+                    <p>cherry02@google.com</p>
+                    <input type="hidden" name="">
+                  </div>
+                  <div class="user_info_box user_readonly_box">
+                    <span class="info_article">추천인 전화번호</span>
+                    <p>010-1234-1235</p>
+                    <input type="hidden" name="">
+                  </div>
+                </div>
+                <div class="user_basic_wrap">
+                  <div class="user_info_box user_name_box">
+                    <span class="info_article">이름</span>
+                    <input type="text" class="user_info_input" name="name" value="최체리"></input>
+                  </div>
+                  <div class="user_info_box user_phone_box">
+                    <span class="info_article">전화번호</span>
+                    <input type="tel" class="user_info_input" name="phone" value="01077779999" maxlength="11" onkeypress='return checkNumber(event)'></input>
+                  </div>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-start;">
+                  <span class="err_msg">에러 메세지!!</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-end;">
+                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- 패널정보 변경 -->
+          <div class="tab_box box02">
+            <form action="" method="">
+              <div class="item_header">
+                <span><i class="fas fa-user-astronaut" style="padding-right: 3px; color: #4C99CF;"></i></i>패널정보변경</span>
+              </div>
+              <div class="input_content">
+                <div class="register_wrap">
+                  <div class="register_box">
+                    <div class="register_contents_wrap">
+                        <p>추가정보</p>
+                        <div class="register_contents">
+                          <ul>
+                            <li>
+                              <div class="left_content">
+                                <label for="user_sex">성별</label>
+                              </div>
+                              <div class="right_content">
+                                <label>
+                                  <input name="gender" type="radio" value="남성">
+                                  남성
+                                </label>
+                                <label>
+                                  <input name="gender" type="radio" value="여성">
+                                  여성
+                                </label>
+                                <span class="err_msg">성별을 선택해주세요.</span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="left_content">
+                                <label for="year">생년월일</label>
+                              </div>
+                              <div class="right_content">
+                                <select id="year" name="year">
+                                  <option>선택</option>
+                                </select><label for="year"> 년</label>
+                                <select id="month" name="month">
+                                  <option>선택</option>
+                                </select><label for="month"> 월</label>
+                                <select id="day" name="day">
+                                  <option>선택</option>
+                                </select><label for="day"> 일</label>
+                                <label>
+                                  <input checked name="birth" type="radio" value="양력">
+                                  양력
+                                </label>
+                                <label>
+                                  <input name="birth" type="radio" value="음력">
+                                  음력
+                                </label>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="left_content">
+                                <label for="city">거주지</label>
+                              </div>
+                              <div class="right_content">
+                                <select id="city" name="city">
+                                  <option>시도</option>
+                                </select>
+                                <select id="gu" name="gu">
+                                  <option>시군구</option>
+                                </select>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="left_content">
+                                <label for="edu">최종학력</label>
+                              </div>
+                              <div class="right_content">
+                                <select id="edu" name="edu">
+                                  <option>선택</option>
+                                  <option value="high">고졸 이하(재학 포함)</option>
+                                  <option value="inuniversity">대학 재학</option>
+                                  <option value="university">대학교 졸업(수료 포함)</option>
+                                  <option value="graduate">대학원 이상</option>
+                                </select>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="left_content">
+                                <label for="">결혼여부</label>
+                              </div>
+                              <div class="right_content">
+                                <label>
+                                  <input checked name="marry" type="radio" value="미혼">
+                                  미혼
+                                </label>
+                                <label>
+                                  <input name="marry" type="radio" value="기혼">
+                                  기혼
+                                </label>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="left_content">
+                                <label for="jobs">직업</label>
+                              </div>
+                              <div class="right_content">
+                                <select id="jobs" name="jobs">
+                                  <option>선택</option>
+                                  <option value="">학생</option>
+                                  <option value="">경영직</option>
+                                  <option value="">공무</option>
+                                  <option value="">회사원</option>
+                                  <option value="">자영업</option>
+                                  <option value="">생산기술직</option>
+                                  <option value="">예술인</option>
+                                  <option value="">프리랜서</option>
+                                  <option value="">무직</option>
+                                  <option value="">기타</option>
+                                </select>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="left_content">
+                                <label for="industry">직종</label>
+                              </div>
+                              <div class="right_content">
+                                <select id="industry" name="industry">
+                                  <option>선택</option>
+                                  <option value="">제조업</option>
+                                  <option value="">건설업(인테리어 포함)</option>
+                                  <option value="">부동산업</option>
+                                  <option value="">임대•대여업</option>
+                                  <option value="">도매 및 소매업(유통업)</option>
+                                  <option value="">음식업•외식업</option>
+                                  <option value="">운수•여객•숙박업</option>
+                                  <option value="">여가 관련 서비스업</option>
+                                  <option value="">방송•언론•출판</option>
+                                  <option value="">정보통신업</option>
+                                  <option value="">금융업</option>
+                                  <option value="">교육 서비스업</option>
+                                  <option value="">의료•보건•사회복지</option>
+                                  <option value="">시장조사•컨설팅•광고대행업</option>
+                                  <option value="">기타</option>
+                                </select>
+                                <span class="err_msg"></span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="left_content">
+                                <label for="">관심분야</label>
+                              </div>
+                              <div class="right_content">
+                                <div class="type_box">
+                                  <div class="introduce">
+                                    <div class="left_content">
+                                      <label for="" class="no_need">건강, 헬스케어</label>
+                                    </div>
+                                    <div class="right_content">
+                                      <label>
+                                        <input type="checkbox" value="">
+                                        건강일반
+                                      </label>
+                                      <label>
+                                        <input type="checkbox" value="">
+                                        건강식품
+                                      </label>
+                                      <label>
+                                        <input type="checkbox" value="">
+                                        다이어트
+                                      </label>
+                                      <label>
+                                        <input type="checkbox" value="">
+                                        심리건강
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  <div class="introduce">
+                                    <div class="left_content">
+                                      <label for="" class="no_need">문화예술, 여가, 스포츠</label>
+                                    </div>
+                                    <div class="right_content">
+                                      <label>
+                                        <input type="checkbox">
+                                        대중문화
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        음악
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        미술
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        공연•축제
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        여행
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        생활문화
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        장르예술
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        레저활동
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        생활체육
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  <div class="introduce">
+                                    <div class="left_content">
+                                      <label for="" class="no_need">경제, 경영</label>
+                                    </div>
+                                    <div class="right_content">
+                                      <label>
+                                        <input type="checkbox">
+                                        재테크
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        창업
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        사회적경제
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  <div class="introduce">
+                                    <div class="left_content">
+                                      <label for="" class="no_need">사회, 복지</label>
+                                    </div>
+                                    <div class="right_content">
+                                      <label>
+                                        <input type="checkbox">
+                                        사회, 복지일반
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        아동, 청소년
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        여성
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        청년
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        노인
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        장애인
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        다문화
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        민주인권
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        노동인권
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        자원봉사
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  <div class="introduce">
+                                    <div class="left_content">
+                                      <label for="" class="no_need">교육</label>
+                                    </div>
+                                    <div class="right_content">
+                                      <label>
+                                        <input type="checkbox">
+                                        평생교육
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        초,중,고등학교
+                                      </label>
+                                      <label>
+                                        <input type="checkbox">
+                                        대학교육
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="register_box">
+                    <div class="register_contents_wrap">
+                        <p>수신동의</p>
+                        <div class="register_contents">
+                          <ul>
+                            <li>
+                              <div class="left_content">
+                                <label for="" class="no_need">SMS 수신동의</label>
+                              </div>
+                              <div class="right_content">
+                                <label>
+                                  <input name="gender" type="radio" value="y">
+                                  동의함
+                                </label>
+                                <label>
+                                  <input name="gender" type="radio" value="n">
+                                  동의안함
+                                </label>
+                                <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="left_content">
+                                <label for="" class="no_need">이메일 수신동의</label>
+                              </div>
+                              <div class="right_content">
+                                <label >
+                                  <input name="gender" type="radio" value="y">
+                                  동의함
+                                </label>
+                                <label>
+                                  <input name="gender" type="radio" value="n">
+                                  동의안함
+                                </label>
+                                <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
+                                <span class="info_msg"></span>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+
+
+                <div class="user_btn_wrap" style="justify-content: flex-start;">
+                  <span class="err_msg">에러 메세지!!</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-end;">
+                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- 비밀번호 변경 -->
+          <div class="tab_box box03">
+            <form action="" method="">
+              <div class="item_header">
+                <span><i class="fas fa-key" style="padding-right: 3px; color: #4C99CF;"></i>비밀번호변경</span>
+              </div>
+              <div class="input_content">
+                <div class="user_input_box">
+                  <span class="info_article">현재 비밀번호 </span>
+                  <input type="password" class="user_info_input" required></input>
+                </div>
+                <div class="user_input_box">
+                  <span class="info_article">새로운 비밀번호</span>
+                  <input type="password" class="user_info_input" name="password" required></input>
+                  <span class="info_msg">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+                </div>
+                <div class="user_input_box">
+                  <span class="info_article">비밀번호 확인</span>
+                  <input type="password" class="user_info_input"value="" required></input>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-start;">
+                  <span class="err_msg">에러 메세지!!</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-end;">
+                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- 포인트현금신청 -->
+          <div class="tab_box box04">
+            <form action="" method="">
+              <div class="item_header">
+                <span><i class="fas fa-piggy-bank" style="padding-right: 3px; color: #4C99CF;"></i>포인트현금신청</span>
+              </div>
+              <div class="input_content">
+                <div class="user_input_box point_input_box">
+                  <span class="info_article">보유한 포인트</span>
+                  <input type="text" class="user_info_input" value="12000" readonly></input>
+                </div>
+                <div class="user_input_box point_input_box">
+                  <span class="info_article">신청가능 포인트</span>
+                  <input type="text" class="user_info_input" name="password" value="10000" readonly></input>
+                  <span class="info_msg">(5,000포인트 단위로 신청 가능)</span>
+                </div>
+                <div class="user_input_box point_input_box">
+                  <span class="info_article">신청 포인트</span>
+                  <input type="text" class="user_info_input" onkeypress='return checkNumber(event)' required></input>
+                </div>
+                <div class="user_input_box bank_input_box">
+                  <span class="info_article">신청 계좌</span>
+                  <select name="bank">
+                    <option selected>은행명</option>
+                    <option selected>국민</option>
+                    <option selected>우리</option>
+                    <option selected>신한</option>
+                    <option selected>농협</option>
+                  </select>
+                  <input type="text" class="user_info_input" placeholder="계좌번호를 입력해주세요." onkeypress='return checkNumber(event)' required></input>
+                  <span class="info_msg">(숫자만 입력해주세요.)</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-start;">
+                  <span class="err_msg">에러 메세지!!</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-end;">
+                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-sign-in-alt"  style="padding-right: 5px; font-size: 17px;"></i>신청</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- 회원탈퇴 -->
+          <div class="tab_box box05">
+            <form action="" method="">
+              <div class="item_header">
+                <span><i class="fas fa-door-closed" style="padding-right: 3px; color: #4C99CF;"></i>회원탈퇴</span>
+              </div>
+              <div class="input_content">
+                <div class="exit_msg_wrap">
+                  <div class="user_input_box">
+                    <span class="exit_msg"><i class="fas fa-check"></i>사용하고 계신 아이디(cherry02@gmail.com)는 탈퇴할 경우 재사용 및 복구가 불가능합니다.</span>
+                  </div>
+                  <div class="user_input_box">
+                      <span class="exit_msg"><i class="fas fa-check"></i>탈퇴 후 회원정보 및 개인형 서비스 이용기록은 모두 삭제됩니다.</span>
+                  </div>
+                  <div class="user_input_box">
+                      <span class="exit_msg"><i class="fas fa-check"></i>탈퇴 후에도 게시판형 서비스에 등록한 게시물은 그대로 남아 있습니다.</span>
+                  </div>
+                </div>
+                <div class="user_input_box">
+                  <input type="checkbox" id="exit_checked" style="display: none;" required>
+                  <label for="exit_checked" class="ck_exit">안내 사항을 모두 확인하였으며, 이에 동의합니다.</label>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-start;">
+                  <span class="err_msg">에러 메세지!!</span>
+                </div>
+                <div class="user_btn_wrap" style="justify-content: flex-end;">
+                  <button type="submit" class="mypage_btn update_btn"><i class="fas fa-sign-in-alt"  style="padding-right: 5px; font-size: 17px;"></i>확인</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+
+        </div>
+      </div>
+
+
+
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).on('focus', '.user_info_input', function(){
+      $(this).css('border-bottom', '1px solid #4C99CF');
+      $(this).prevAll('.info_article').css('color', '#4C99CF')
+      $(this).parent('.user_info_box').css('border', '1px solid #4C99CF');
+    });
+    $(document).on('blur', '.user_info_input', function(){
+      $(this).css('border-bottom', '1px solid #c5c7d0');
+      $(this).prevAll('.info_article').css('color', '#69666D')
+      $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
+    });
+
+    $(document).on('click', '.user_nav_btn_wrap > input', function(){
+      if($(this).is(':checked')) {
+        $('.tab_box').css('display', 'none');
+        const id = $(this).attr('id');
+        const num = id.substring(3,5);
+        const selector = ".box" + num;
+        $(selector).css('display', 'block');
+      }
+    });
+
+    function checkNumber(event) {
+      if(event.key >= 0 && event.key <= 9) {
+        return true;
+      }
+      return false;
+    }
+
+  </script>
+</html>
