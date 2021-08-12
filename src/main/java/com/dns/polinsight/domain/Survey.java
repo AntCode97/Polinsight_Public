@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,15 +38,23 @@ public class Survey implements Serializable {
 
   @Setter
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDateTime createdAt;
+  private LocalDate createdAt;
 
   @Setter
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDateTime endAt;
+  private LocalDate endAt;
 
   private Long point;
 
+  @Setter
+  private Long questionCount;
+
   @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Collector> collectors;
+
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
+    this.endAt = createdAt.plusMonths(3);
+  }
 
 }

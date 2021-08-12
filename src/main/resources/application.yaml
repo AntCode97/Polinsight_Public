@@ -185,12 +185,9 @@ spring :
     password :            root
     url :                 jdbc:mariadb://localhost:3306/polinsight
     driver-class-name :   org.mariadb.jdbc.Driver
-    sql-script-encoding : UTF-8
-    continue-on-error :   true
     hikari :
       pool-name :         Test DBCP Pool
       maximum-pool-size : 5
-    initialization-mode : always
 
   redis :
     host : localhost
@@ -206,11 +203,11 @@ spring :
       on-profile : dev
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : none
     properties :
       format_sql : true
     show-sql :     true
-    generate-ddl : true
+#    generate-ddl : true
 
   banner :
     location : banner-dev.txt

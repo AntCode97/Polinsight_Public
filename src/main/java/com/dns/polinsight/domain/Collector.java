@@ -1,10 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,10 +22,10 @@ public class Collector {
 
   private String href;
 
-//  private Long surveyId;
-
+  @Setter
   private String participateUrl;
 
+  @Setter
   private Long responseCount;
 
   @JsonIgnore
