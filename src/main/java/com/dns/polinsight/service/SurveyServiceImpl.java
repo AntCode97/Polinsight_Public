@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -184,6 +181,21 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
     surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
+  }
+
+  /**
+   * @param survey
+   *     : CustomVariables가 등록되지 않은 서베이 엔티티
+   */
+  private void getSurveyCustomVariablesOrUpdate(Survey survey) {
+    if (!survey.getStatus().getVariables().isEmpty()) {
+      return;
+    }
+    httpEntity.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<String> entity = new HttpEntity<>(httpEntity.getHeaders());
+    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "", HttpMethod.PATCH, entity, Map.class);
+
+    ResponseEntity<Map> response = new RestTemplate().exchange(baseURL + "surveys/" + survey.getSurveyId(), HttpMethod.GET, httpEntity, Map.class);
   }
 
 }
