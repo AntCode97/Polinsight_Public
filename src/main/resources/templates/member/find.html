@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+      @import url('common.css');
+      .find_wrap {
+        width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+      }
+      .header_box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .header_box > input[type='radio'] {
+        display: none;
+      }
+      .header_box > label {
+        font-size: 14px;
+        padding: 10px 25px;
+        border-radius: 2px;
+        color: #444;
+        cursor: pointer;
+      }
+      .header_box > label:hover { background-color: hsla(0, 0%, 78%, .2); }
+      .header_box > input[type='radio']:checked + label {color: white; background-color: #4C99CF; }
+      .header_box > span {
+        padding: 0 10px;
+      }
+
+      .tab_box {
+        display: none;
+        justify-content: center;
+        margin-top: 50px;
+      }
+      .user_input_box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 25px;
+        position: relative;
+        font-size: 16px;
+      }
+      .user_input_box > .info_article {
+        width: 70px;
+        margin: 0;
+      }
+      .user_input_box > .user_info_input {
+        font-size: 16px;
+        width: 300px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        outline: none;
+        padding: 3px;
+      }
+      .err_msg {
+        color: tomato;
+        font-size: 14px;
+        margin: 10px 0;
+        display: none;
+      }
+
+      .mypage_btn {
+        background-color: #192739;
+        color: white;
+        padding: 7px 45px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+      .user_btn_wrap {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .info_msg { font-size: 12px; margin-bottom: 10px;}
+
+    </style>
+  </head>
+  <body>
+    <div class="find_wrap">
+      <div class="header_box">
+        <input type="radio" name="find_tab" id="tab01" checked>
+        <label for="tab01">아이디찾기</label>
+        <span>/</span>
+        <input type="radio" name="find_tab" id="tab02">
+        <label for="tab02">비밀번호찾기</label>
+      </div>
+      <div class="content_box">
+
+        <div class="tab_box box01" style="display: flex;">
+          <form action="" method="">
+            <div class="user_input_box">
+              <span class="info_article">이름</span>
+              <input type="text" class="user_info_input" name="name" required></input>
+            </div>
+            <div class="user_input_box">
+              <span class="info_article">전화번호</span>
+              <input type="text" class="user_info_input" name="phone" maxlength="11" onkeypress='return checkNumber(event)' required></input>
+            </div>
+            <div class="user_btn_wrap" style="justify-content: flex-start;">
+              <span class="err_msg">에러 메세지!!</span>
+            </div>
+            <div class="user_btn_wrap">
+              <button type="submit" class="mypage_btn update_btn">아이디 찾기</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tab_box box02">
+          <form action="" method="">
+            <div class="user_input_box">
+              <span class="info_article">아이디</span>
+              <input type="email" class="user_info_input" name="" required></input>
+            </div>
+            <div class="user_input_box">
+              <span class="info_article">이름</span>
+              <input type="text" class="user_info_input" name="" required></input>
+            </div>
+            <div class="user_btn_wrap" style="justify-content: flex-start;">
+              <span class="err_msg">에러 메세지!!</span>
+            </div>
+            <div class="user_btn_wrap">
+              <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
+              <button type="submit" class="mypage_btn update_btn">비밀번호 찾기</button>
+            </div>
+          </form>
+        </div>
+
+
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).on('focus', '.user_info_input', function(){
+      $(this).css('border-bottom', '1px solid #4C99CF');
+      $(this).prev('.info_article').css('color', '#4C99CF')
+      $(this).parent('.user_info_box').css('border', '1px solid #4C99CF');
+    });
+    $(document).on('blur', '.user_info_input', function(){
+      $(this).css('border-bottom', '1px solid #c5c7d0');
+      $(this).prev('.info_article').css('color', '#69666D')
+      $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
+    });
+
+    $(document).on('click', '.header_box > input', function(){
+      if($(this).is(':checked')) {
+        $('.tab_box').css('display', 'none');
+        const id = $(this).attr('id');
+        const num = id.substring(3,5);
+        const selector = ".box" + num;
+        $(selector).css('display', 'flex');
+      }
+    });
+
+    function checkNumber(event) {
+      if(event.key >= 0 && event.key <= 9) {
+        return true;
+      }
+      return false;
+    }
+  </script>
+</html>

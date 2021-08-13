@@ -129,7 +129,7 @@ public class ApiController {
       List<Survey> surveyList = null;
       if (type != null && type.equals("index")) {
         List<Survey> list = surveyService.findAll();
-        list.stream().filter(obj -> LocalDateTime.now().isBefore(obj.getEndAt())).collect(Collectors.toList()).sort((o1, o2) -> {
+        list.stream().filter(obj -> LocalDate.now().isBefore(obj.getEndAt())).collect(Collectors.toList()).sort((o1, o2) -> {
               if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
                 return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
               } else

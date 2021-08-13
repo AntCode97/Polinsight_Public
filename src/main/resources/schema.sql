@@ -104,16 +104,17 @@ CREATE TABLE IF NOT EXISTS attach
 
 CREATE TABLE IF NOT EXISTS survey
 (
-  id           BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  title        VARCHAR(500) NOT NULL,
-  survey_id    BIGINT       NOT NULL,
-  created_at   DATETIME(6)  NULL,
-  end_at       DATETIME(6)  NULL,
-  point        BIGINT       NOT NULL DEFAULT 0,
-  href         VARCHAR(500) NULL,
-  progress     VARCHAR(30)  NOT NULL DEFAULT 'BEFORE',
-  minimum_time INT          NOT NULL DEFAULT 30,
-  count        BIGINT       NOT NULL DEFAULT 0,
+  id             BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  title          VARCHAR(500) NOT NULL,
+  survey_id      BIGINT       NOT NULL,
+  created_at     DATETIME(6)  NULL,
+  end_at         DATETIME(6)  NULL,
+  point          BIGINT       NOT NULL DEFAULT 0,
+  href           VARCHAR(500) NULL,
+  progress       VARCHAR(30)  NOT NULL DEFAULT 'BEFORE',
+  minimum_time   INT          NOT NULL DEFAULT 30,
+  count          BIGINT       NOT NULL DEFAULT 0,
+  question_count BIGINT       NULL     DEFAULT 0,
   UNIQUE (survey_id)
 );
 

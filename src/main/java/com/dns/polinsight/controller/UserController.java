@@ -88,10 +88,11 @@ public class UserController {
   }
 
   @DeleteMapping("/user")
-  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto) throws Exception {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto, HttpSession session) throws Exception {
+
     try {
       userService.deleteUserById(userDto.getId());
+      session.invalidate();
       return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -122,7 +123,9 @@ public class UserController {
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/mypage");
-    mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
+    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    System.out.println(user);
+    mv.addObject("user", user);
     return mv;
   }
 
