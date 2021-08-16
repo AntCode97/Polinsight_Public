@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS collector
   participate_url VARCHAR(500) NULL,
   survey_id       BIGINT       NOT NULL,
   response_count  BIGINT       NOT NULL DEFAULT 0,
+  status          VARCHAR(40)  NOT NULL DEFAULT 'open',
   FOREIGN KEY (survey_id) REFERENCES survey (survey_id)
 );
 

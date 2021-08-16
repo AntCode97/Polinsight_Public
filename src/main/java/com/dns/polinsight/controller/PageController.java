@@ -4,6 +4,7 @@ import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,6 +87,11 @@ public class PageController {
     session.invalidate();
     session.setAttribute("basic_user", sessionUser);
     return new ModelAndView("redirect:/panelagreement");
+  }
+
+  @GetMapping("/test")
+  public ModelAndView testFunction() {
+    return new ModelAndView("test");
   }
 
 }

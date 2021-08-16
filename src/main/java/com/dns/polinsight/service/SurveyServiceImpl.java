@@ -4,10 +4,14 @@ import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.SurveyStatus;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
 import com.dns.polinsight.repository.CollectorRepository;
+import com.dns.polinsight.repository.SurveyJdbcTemplate;
 import com.dns.polinsight.repository.SurveyRepository;
+import com.dns.polinsight.types.CollectorStatusType;
+import com.dns.polinsight.types.ProgressType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +34,8 @@ import java.util.stream.Collectors;
 public class SurveyServiceImpl implements SurveyService {
 
   private final SurveyRepository surveyRepository;
+
+  private final SurveyJdbcTemplate surveyJdbcTemplate;
 
   private final CollectorRepository collectorRepository;
 
@@ -134,17 +140,18 @@ public class SurveyServiceImpl implements SurveyService {
                                                                               .survey(survey)
                                                                               .build())
                                         .collect(Collectors.toList());
-    collectors = this.getParticipateUrl(collectors);
-    return collectorRepository.saveAllAndFlush(collectors);
+    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors));
   }
 
   public List<Collector> getParticipateUrl(List<Collector> collectorsList) {
     return collectorsList.parallelStream().map(collector -> {
       ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "collectors/" + collector.getCollectorId(), HttpMethod.GET, httpEntity, Map.class);
       Map<String, String> map = res.getBody();
-      collector.setParticipateUrl(String.valueOf(map.get("url")));
-      collector.setResponseCount(Long.valueOf(map.get("response_count")));
-      return collector;
+      return Collector.builder()
+                      .participateUrl(String.valueOf(map.get("url")))
+                      .responseCount(Long.valueOf(map.get("response_count")))
+                      .status(CollectorStatusType.valueOf(String.valueOf(map.get("status"))))
+                      .build();
     }).collect(Collectors.toList());
   }
 
@@ -181,6 +188,15 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
     surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
+  }
+
+  @Override
+  public List<SurveyDto> findAllSurveyWithCollector(Pageable pageable) {
+    // TODO: 2021-08-17 : 쿼리 마무리
+    List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("progress");
+    list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("endAt"));
+    Collections.sort(list);
+    return list;
   }
 
   /**

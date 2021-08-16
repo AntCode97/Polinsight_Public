@@ -4,6 +4,7 @@ import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.PointRequestDto;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
@@ -123,15 +124,15 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                             @RequestParam(value = "type", required = false) String type) throws Exception {
+  public ApiUtils.ApiResult<List<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                @RequestParam(value = "type", required = false) String type) throws Exception {
     try {
-      List<Survey> surveyList = null;
+      List<SurveyDto> surveyList = null;
       if (type != null && type.equals("index")) {
-        List<Survey> list = surveyService.findAll();
+        List<SurveyDto> list = surveyService.findAllSurveyWithCollector(pageable);
         list.stream().filter(obj -> LocalDate.now().isBefore(obj.getEndAt())).collect(Collectors.toList()).sort((o1, o2) -> {
               if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
-                return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
+                return o1.getProgress().compareTo(o2.getProgress());
               } else
                 return o1.getEndAt().compareTo(o2.getEndAt());
             }
@@ -139,8 +140,8 @@ public class ApiController {
         surveyList = list;
       }
       if (surveyList == null)
-        surveyList = surveyService.findAll(pageable).getContent();
-
+        surveyList = surveyService.findAllSurveyWithCollector(pageable);
+      System.out.println(surveyList);
       return success(surveyList);
     } catch (Exception e) {
       throw new Exception();
@@ -388,6 +389,17 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
+  }
+
+  @GetMapping("/test/surveys")
+  public ApiUtils.ApiResult<List<SurveyDto>> testSurvey(@PageableDefault Pageable pageable) throws Exception {
+    try {
+      return success(surveyService.findAllSurveyWithCollector(pageable));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+
   }
 
 }
