@@ -8,13 +8,13 @@
         margin: 0;
       }
 
-      .post-row > *:nth-child(1) {width: 70px;}
+      .post-row > *:nth-child(1) {width: 50px;}
       .post-row > *:nth-child(2) {width: 500px;}
       tbody > .post-row > td:nth-child(2) {text-align: left;}
-      .post-row > *:nth-child(3) {width: 90px;}
-      .post-row > *:nth-child(4) {width: 150px;}
-      .post-row > *:nth-child(5) {width: 95px;}
-      .post-row > *:nth-child(6) {width: 95px;}
+      .post-row > *:nth-child(3) {width: 80px;}
+      .post-row > *:nth-child(4) {width: 140px;}
+      .post-row > *:nth-child(5) {width: 120px;}
+      .post-row > *:nth-child(6) {width: 100px;}
       .post-row > *:nth-child(7) {width: 120px;}
       .post-row > *:nth-child(8) {width: 120px;}
 
@@ -35,6 +35,15 @@
         left: 50%;
         transform: translate(-50% -50%);
       }
+      .status_wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+      .status_wrap > * {cursor: pointer;}
+      .status_box:nth-child(1) {color: mediumseagreen;}
+      .status_box:nth-child(2) {color: tomato;}
     </style>
   </th:block>
   <div class="admin_main_contents">
@@ -138,7 +147,7 @@
     };
 
     const surveyListHeader = () => {
-      let template = $(`<tr class="post-th"></tr>`);
+      let template = $(`<tr class="post-th post-row"></tr>`);
       template.append(`<th>번호</th>`);
       template.append(`<th>설문 이름</th>`);
       template.append(`<th>포인트</th>`);
