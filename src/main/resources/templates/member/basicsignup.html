@@ -139,6 +139,7 @@
       font-size: 16px;
       font-weight: bold;
       color: black;
+      cursor: pointer;
     }
 
     .btn_wrap {
@@ -164,6 +165,8 @@
       position: fixed;
       top: 50%;
       left: 50%;
+      width: 100%;
+      height: 100vh;
       transform: translate(-50%, -50%);
       background-color: rgba(0, 0, 0, 0.4);
     }
@@ -184,17 +187,22 @@
       word-break: break-word;
       color: #666;
     }
-
+    .popup_content > h3 {
+      text-align: center;
+    }
+    .popup_btn_wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 25px;
+    }
     .popup_box .popup_btn {
-      position: relative;
-      margin: auto;
-      width: 100px;
-      height: 40px;
-      background: #5d5d5d;
+      padding: 10px 25px;
+      background: #192739;
       color: white;
       text-align: center;
-      vertical-align: middle;
-      line-height: 40px;
+      border: none;
+      outline: none;
     }
 
     .popup_btn:hover {
@@ -326,14 +334,14 @@
     </div>
     <div class="popup_overlay">
       <div class="popup_box">
-        <div id="popup_close_btn" style="position: relative; float: right; margin: 10px; font-size: 20px; cursor:pointer;">
+        <div id="popup_close_btn" style="position: relative; float: right; margin: 7px 10px; font-size: 20px; cursor:pointer;">
           <i class="fas fa-times"></i>
         </div>
         <div class="popup_content">
           <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
         </div>
-        <div class="popup_btn">
-          확인
+        <div class="popup_btn_wrap">
+          <button type="button" class="popup_btn">확인</button>
         </div>
       </div>
     </div>

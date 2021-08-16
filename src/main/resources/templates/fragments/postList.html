@@ -38,7 +38,7 @@
 
       <div class='post-row' th:each='list : ${posts}'>
         <span th:text='${list.id}'></span>
-        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title'><strong th:text='${list.title}'></strong></a>
+        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title' th:text='${list.title}'></a>
         <span th:if='${list.newPost}'>New!</span>
         <span th:text='${list.user.name}'></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
@@ -48,12 +48,14 @@
           <i th:unless='${list.attaches.size() == 0}' class='fas fa-paperclip file_icon_yes'></i>
         </span>
         <span>
-          <button class='btn_del btn-support' th:onclick="|location.href='@{/admin/posts/{id}/edit (id=${list.id})}'|">수정</button>
-          <button class='btn_del btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>
+          <span class="btn_multi_wrap">
+            <button class='btn_udel btn-support' th:onclick="|location.href='@{/admin/posts/{id}/edit (id=${list.id})}'|">수정</button>
+            <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>
+          </span>
         </span>
       </div>
       <div class='post-bottom'>
-        <button class='btn_del btn-green' onclick="location.href='/admin/posts/new'">새 글쓰기</button>
+        <button class='btn-input btn-green' onclick="location.href='/admin/posts/new'">새 글쓰기</button>
       </div>
 
       <!-- 페이지네이션 -->

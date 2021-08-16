@@ -1,29 +1,25 @@
 <th:block>
   <style>
     footer {
-      height : 200px;
-    }
-
-    .footer_wrap {
+      margin-top       : 50px;
       position         : relative;
       padding          : 20px 20px 30px;
       display          : flex;
       align-items      : center;
       justify-content  : space-between;
       width            : 100%;
-      margin-top       : 60px;
       height           : 200px;
       background-color : #FFFFFF;
       color            : #000000;
       font-size        : 14px;
       left             : 0;
-      bottom           : 0;
+      bottom           : -10px;
       border-top       : 1px solid #444444;
     }
 
     .footer_container {
       width       : 1200px;
-      margin: 0 auto;
+      margin      : 0 auto;
       display     : flex;
       align-items : center;
       padding     : 0 15px;
@@ -68,7 +64,9 @@
   <footer>
     <div class="footer_wrap">
       <div class="footer_container">
-        <div class="footer_logo"></div>
+        <a th:href="@{/}">
+          <div class="footer_logo"></div>
+        </a>
         <div class="footer_left">
           <div class="footer_left_common footer_left_line1">
             <span><a href="#" class="point_color" style="font-weight: bold;">개인정보처리방침</a></span>

@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -76,8 +78,7 @@ public class User implements UserDetails, Serializable {
   @Column(name = "is_sms_receive")
   private Boolean isSmsReceive;
 
-  //  @Column(name = "registered_at")
-  //  private LocalDateTime registeredAt;
+  private LocalDate registeredAt;
 
   public User(UserDto dto) {
     this.id = dto.getId();
