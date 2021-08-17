@@ -4,7 +4,7 @@
     .panel_wrap {
       width: 900px;
       padding: 30px 0;
-      margin: 30px auto;
+      margin: 30px auto 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -65,7 +65,7 @@
       background-color: #e1eef6;
       width: 1000px;
       height: 100%;
-      margin: 0 auto 50px;
+      margin: 30px auto 50px;
     }
 
     .main_survey_list_title {
@@ -196,9 +196,8 @@
   <div>
     <th:block th:include="survey/surveylist" />
   </div>
-  <div>
-    <th:block th:include="layout/footer" />
-  </div>
+
+  <th:block th:include="layout/footer" />
   <script th:inline="javascript">
     $(function () {
       // Scroll TOP버튼 생성 및 TOP으로 이동

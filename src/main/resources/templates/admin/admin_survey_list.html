@@ -1,48 +1,22 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block>
   <th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
     <style>
       table, tr, th, td {
         width: 100%;
         margin: 0;
       }
 
-
-      .post-row > *:nth-child(1) {
-        width: 70px;
-      }
-
-      .post-row > *:nth-child(2) {
-        width: 500px;
-      }
-
-      tbody > .post-row > td:nth-child(2) {
-        text-align: left;
-      }
-
-      .post-row > *:nth-child(3) {
-        width: 90px;
-      }
-
-      .post-row > *:nth-child(4) {
-        width: 150px;
-      }
-
-      .post-row > *:nth-child(5) {
-        width: 95px;
-      }
-
-      .post-row > *:nth-child(6) {
-        width: 95px;
-      }
-
-      .post-row > *:nth-child(7) {
-        width: 120px;
-      }
-
-      .post-row > *:nth-child(8) {
-        width: 120px;
-      }
+      .post-row > *:nth-child(1) {width: 50px;}
+      .post-row > *:nth-child(2) {width: 500px;}
+      tbody > .post-row > td:nth-child(2) {text-align: left;}
+      .post-row > *:nth-child(3) {width: 80px;}
+      .post-row > *:nth-child(4) {width: 140px;}
+      .post-row > *:nth-child(5) {width: 120px;}
+      .post-row > *:nth-child(6) {width: 100px;}
+      .post-row > *:nth-child(7) {width: 120px;}
+      .post-row > *:nth-child(8) {width: 120px;}
 
       table {
         align: center;
@@ -61,6 +35,15 @@
         left: 50%;
         transform: translate(-50% -50%);
       }
+      .status_wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+      .status_wrap > * {cursor: pointer;}
+      .status_box:nth-child(1) {color: mediumseagreen;}
+      .status_box:nth-child(2) {color: tomato;}
     </style>
   </th:block>
   <div class="admin_main_contents">
@@ -73,12 +56,16 @@
     <div class="main_contents_wrap">
       <div class="post-search">
         <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
-      </div>
 
-      <!--관리자 페이지 설문 찾기 기능-->
-      <div class="search-box-container">
-        <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" placeholder="검색" type="text" />
+        <!--관리자 페이지 설문 찾기 기능-->
+        <div class='form-search'>
+          <div class='tbl-search'>
+            <div class='box-search'>
+              <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
+              <input type='submit' />
+            </div>
+          </div>
+        </div>
       </div>
 
       <table class="scroll-table">
@@ -130,7 +117,7 @@
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
             tmp.on('click', {page: i}, adminGetAllSurveys);
             if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold');
+              tmp.css('color', 'white').css('background-color', '#444');
             }
             paginationElement.append(tmp);
           }
@@ -160,7 +147,7 @@
     };
 
     const surveyListHeader = () => {
-      let template = $(`<tr class="post-th"></tr>`);
+      let template = $(`<tr class="post-th post-row"></tr>`);
       template.append(`<th>번호</th>`);
       template.append(`<th>설문 이름</th>`);
       template.append(`<th>포인트</th>`);
@@ -184,7 +171,7 @@
         template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
         template.append(`<td>${survey.status.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`);
+        template.append(`<td><button class="btn_udel btn-support">수정</button><span>  </span><button class="btn_udel btn-warn">삭제</button></td>`);
         return template
       }).map(elem => table.append(elem))
     };

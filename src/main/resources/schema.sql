@@ -54,24 +54,24 @@ CREATE TABLE IF NOT EXISTS user
   phone            VARCHAR(11)  NOT NULL,
   point            BIGINT       NULL DEFAULT 0,
   recommend        VARCHAR(11)  NULL,
-  role             VARCHAR(255) NULL DEFAULT 'USER',
+  role             VARCHAR(50) NULL DEFAULT 'USER',
   birth            DATETIME(6)  NULL,
-  birth_type       VARCHAR(255) NULL DEFAULT '양력',
-  education        VARCHAR(255) NULL,
+  birth_type       VARCHAR(30) NULL DEFAULT '양력',
+  education        VARCHAR(50) NULL DEFAULT '고졸 이하(재학 포함)',
   gender           VARCHAR(20)  NULL DEFAULT 'MALE',
-  industry         VARCHAR(255) NULL,
+  industry         VARCHAR(50) NULL DEFAULT '기타',
   registered_at    DATETIME(6)  NULL DEFAULT NOW(),
-  job              VARCHAR(255) NULL,
-  marry            BIT          NULL,
-  is_email_receive BIT          NULL,
-  is_sms_receive   BIT          NULL,
+  job              VARCHAR(50) NULL DEFAULT '기타',
+  marry            VARCHAR(30)  NULL DEFAULT '미혼',
+  is_email_receive BIT          NULL DEFAULT FALSE,
+  is_sms_receive   BIT          NULL DEFAULT FALSE,
   UNIQUE (email)
 );
 
 CREATE TABLE IF NOT EXISTS user_favorite
 (
   user_id  BIGINT       NOT NULL,
-  favorite VARCHAR(255) NULL,
+  favorite VARCHAR(50) NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS collector
   participate_url VARCHAR(500) NULL,
   survey_id       BIGINT       NOT NULL,
   response_count  BIGINT       NOT NULL DEFAULT 0,
+  status          VARCHAR(40)  NOT NULL DEFAULT 'open',
   FOREIGN KEY (survey_id) REFERENCES survey (survey_id)
 );
 

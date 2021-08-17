@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -40,5 +41,7 @@ public interface SurveyService {
 
 
   void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
+
+  List<SurveyDto> findAllSurveyWithCollector(Pageable pageable);
 
 }

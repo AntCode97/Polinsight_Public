@@ -11,7 +11,7 @@
 
     const makeSurveyCard = survey => {
       let template = $(`<div></div>`).addClass('main_survey_item')
-      if (survey.status.progress === 'ONGOING') {
+      if (survey.progress === 'ONGOING') {
         template.addClass('bg_color_item_white')
         template.append(`<p class="survey_run">진행중</p>`)
         template.on('mouseover', function () {
@@ -51,13 +51,14 @@
     }
 
     const getSurveyList = () => {
-      http.get('/api/surveys?type=index')
+      http
+          .get('/api/surveys?type=index')
           .then(res => {
             if (res.data.success) {
               makeSurveyCardList(res.data.response)
             }
           })
-          .catch(err => console.log(err))
+          .catch(console.log)
     }
 
 

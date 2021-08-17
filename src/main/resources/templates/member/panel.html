@@ -571,41 +571,8 @@
     </div>
   </div>
   <script type="text/javascript">
-    const setDateValue = () => {
-      let today = new Date();
-      let year = $('select[name=year]')
-      for (let i = 1930; i < today.getFullYear(); i++) {
-        year.append($("<option></option>").attr("value", i).text(i))
-      }
-      let month = $('select[name=month]')
-      for (let i = 1; i < 13; i++) {
-        month.append($("<option></option>").attr("value", i).text(i))
-      }
-    }
 
-    const setDay = (e) => {
-      const day = $('select[name=day]')
-      day.empty();
-      let month = $('select[name=month]').val()
-      day.append($("<option selected></option>").text("선택"))
-      if (month === 2) {
-        for (let i = 1; i <= 28; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
-      } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
-        for (let i = 1; i <= 31; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
-      } else {
-        for (let i = 1; i <= 30; i++) {
-          day.append($("<option></option>").attr("value", i).text(i))
-        }
-      }
-    }
 
-    const checkRequiredValue = () => {
-
-    }
 
     $(function () {
       setDateValue()

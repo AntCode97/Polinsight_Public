@@ -11,10 +11,11 @@
 
 html {
     height: 100%;
+    font-size: 14px;
 }
 
 body {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: 'Nanum Gothic', sans-serif;
     margin: 0;
     padding: 0;
     font-size: 14px;
@@ -78,7 +79,7 @@ form {
 }
 
 /* 버튼들 */
-button.btn {
+.btn {
     display: inline-block;
     font-weight: 600;
     text-align: center;
@@ -90,58 +91,58 @@ button.btn {
     outline: none;
 }
 
-button.btn-basic {
+.btn-basic {
     border: 1px solid #686f7a;
     background-color: white;
     color: #686f7a;
 }
 
-button.btn-basic:hover {
+.btn-basic:hover {
     color: #2F3138;
     border-color: #2F3138;
 }
 
-button.btn-primary {
+.btn-primary {
     background-color: #4C99CF;
     color: white;
 }
 
-button.btn-primary:hover {
+.btn-primary:hover {
     background-color: #2b90d9;
     border-color: transparent;
 }
 
-button.btn-support {
+.btn-support {
     background-color: #EBA444;
     color: white;
 }
 
-button.btn-support:hover {
+.btn-support:hover {
     background-color: #CA8420;
     border-color: transparent;
 }
 
-button.btn-warn {
+.btn-warn {
     background-color: tomato;
     color: white;
 }
 
-button.btn-warn:hover {
-    background-color: tomato;
+.btn-warn:hover {
+    background-color: #e75a40;
     border-color: transparent;
 }
 
-button.btn-green {
+.btn-green {
     background-color: mediumseagreen;
     color: white;
 }
 
-button.btn-green:hover {
+.btn-green:hover {
     background-color: #3CA071;
     border-color: transparent;
 }
 
-button.btn-big {
+.btn-big {
     width: 100%;
 }
 

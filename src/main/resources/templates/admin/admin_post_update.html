@@ -12,13 +12,13 @@
       <div id='metop_container'>
         <div class='metop_inner'>
           <div class='metop_board_wrap'>
-            <div class='metop_board_card'>
+            <div class='metop_board_card' style="border-top: 3px solid #EBA444;">
               <form id='frm_board' th:action='@{/admin/posts/{id}/edit (id=${postDTO.id})}' th:object='${postDTO}' method='POST' enctype='multipart/form-data'>
                 <div class='input_wrap register_top_wrap'>
                   <div class='board_div'>
                     <label for='board_title'><span>*</span>게시판</label>
                     <span class='board_span'>
-                                          <select class='board_input focus_input board_select' name='btype' id='board_type' th:field='*{postType}' autofocus required>
+                                          <select class='board_input focus_input board_select' name='btype' id='board_type' th:field='*{postType}' disabled required>
                                             <optgroup label='분류 선택'>
                                             <option value='NOTICE'>공지사항</option>
                                             <option value='ARCHIVES'>자료실</option>
@@ -88,9 +88,9 @@
                   											<button type='button' class='btn btn-basic cancel_btn' onclick='history.back()'>취소</button>
                   										</span>
                     <span>
-                  											<button type='button' class='btn btn-green insert_btn'
+                  											<button type='button' class='btn btn-support insert_btn'
                                                 onclick="document.getElementById('frm_board').submit();"
-                                        >등록</button>
+                                        >수정</button>
                   										</span>
 
                   </div>

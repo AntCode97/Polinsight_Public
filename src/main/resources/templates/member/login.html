@@ -45,6 +45,7 @@
 
     .login_content {
       margin     : 0 auto;
+      max-width  : 300px;
       text-align : center;
       width      : 25rem;
     }
@@ -105,10 +106,25 @@
     }
 
     .qnapw {
-      color        : #A9ABB7;
-      margin       : 15px 5px 0;
-      padding-left : 5px;
-      text-align   : right;
+      align-items     : center;
+      color           : #A9ABB7;
+      display         : flex;
+      justify-content : space-between;
+      margin          : 15px 5px 0;
+      padding-left    : 5px;
+      text-align      : right;
+    }
+
+    .qnapw > div > label {
+      align-items     : center;
+      cursor          : pointer;
+      display         : flex;
+      justify-content : flex-start;
+    }
+
+    .qnapw > div > input {
+      cursor : pointer;
+      margin : 0;
     }
 
     .qnapw > a {
@@ -253,11 +269,13 @@
             <div class="login_btn_wrap">
               <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
             </div>
-            <div>
-              <label>
-                자동 로그인
-                <input type="checkbox" name="rememberMe" value="true" />
-              </label>
+            <div class="qnapw">
+              <div>
+                <label>
+                  자동 로그인
+                  <input type="checkbox" name="rememberMe" value="true" />
+                </label>
+              </div>
             </div>
           </form>
           <div class="qnapw">

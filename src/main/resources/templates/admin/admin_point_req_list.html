@@ -1,6 +1,7 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block th:include="module/common" />
 <th:block>
+  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     table {
       width: 100%;
@@ -43,17 +44,21 @@
     </div>
 
     <div class="main_contents_wrap">
-      <div class="count_wrap">
-        <div>총 <strong></strong>개의 요청이 있습니다.</div>
-      </div>
-      <!--관리자 페이지 요청 찾기 기능-->
-      <div class="search-box-container">
-        <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" type="text" placeholder="검색" />
-      </div>
+      <div class="post-search">
+        <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
 
+        <!--관리자 페이지 설문 찾기 기능-->
+        <div class='form-search'>
+          <div class='tbl-search'>
+            <div class='box-search'>
+              <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
+              <input type='submit' />
+            </div>
+          </div>
+        </div>
+      </div>
       <div style="float: right">
-        <button class="btn_del btn-big btn-green">엑셀로 저장</button>
+        <button class="btn_udel btn-big btn-green">엑셀로 저장</button>
       </div>
 
       <table class="scroll-table">

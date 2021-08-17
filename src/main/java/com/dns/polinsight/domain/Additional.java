@@ -9,6 +9,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,10 +32,10 @@ public class Additional implements Serializable {
 
   private String education;
 
-  private Boolean marry;
+  private String marry;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private Date birth;
+  private LocalDate birth;
 
   private String birthType;
 
