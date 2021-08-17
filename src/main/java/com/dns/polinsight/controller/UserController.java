@@ -9,6 +9,7 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -148,32 +150,6 @@ public class UserController {
     return ResponseEntity.ok(map);
   }
 
-  @PostMapping("/findpwd")
-  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
-                              @RequestParam(name = "email") String email,
-                              @RequestParam(name = "name") String name,
-                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
-                                                                                        NoSuchAlgorithmException {
-    /*
-     *  메일 서비스 필요
-     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
-     * 해시값을 저장한 페이지를 리턴한다
-     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
-     * */
-    if (userService.isExistUser(email)) {
-      Map<String, Object> variables = new HashMap<>();
-      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
-      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
-      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
-      variables.put("date", LocalDateTime.now());
-      variables.put("hash", hash);
-      variables.put("name", name);
-      variables.put("email", email);
-      variables.put("callback", callbackBase + "/chpwd");
-      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
-    }
-    return new ModelAndView("redirect:/index");
-  }
 
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
@@ -277,5 +253,67 @@ public class UserController {
     return success(userService.countAllUserExcludeAdmin());
   }
 
+  // @Deprecated
+  @PostMapping("/findpwd")
+  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
+                              @RequestParam(name = "email") String email,
+                              @RequestParam(name = "name") String name,
+                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
+                                                                                        NoSuchAlgorithmException {
+    /*
+     *  메일 서비스 필요
+     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
+     * 해시값을 저장한 페이지를 리턴한다
+     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
+     * */
+    if (userService.isExistUser(email)) {
+      Map<String, Object> variables = new HashMap<>();
+      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
+      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
+      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
+      variables.put("date", LocalDateTime.now());
+      variables.put("hash", hash);
+      variables.put("name", name);
+      variables.put("email", email);
+      variables.put("callback", callbackBase + "/chpwd");
+      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    }
+    return new ModelAndView("redirect:/index");
+  }
+
+  @PostMapping("/find")
+  @Transactional
+  public ApiUtils.ApiResult<Object> findEmailOrPassword(@RequestBody UserDto userDto,
+                                                        @RequestParam("type") String type,
+                                                        @Value("${custom.hash.passwordsalt}") String salt,
+                                                        @Value("${custom.callback.base}") String callbackBase) throws Exception {
+    try {
+      if (type.equals("email")) {
+        Assert.notNull(userDto.getName());
+        Assert.notNull(userDto.getPhone());
+        User user = userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new);
+        return success(user.getEmail());
+      } else {
+        Assert.notNull(userDto.getEmail());
+        Assert.notNull(userDto.getName());
+        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("date", LocalDateTime.now());
+        variables.put("hash", hash);
+        variables.put("name", userDto.getName());
+        variables.put("email", userDto.getEmail());
+        variables.put("callback", callbackBase + "/chpwd");
+        changePasswordService.saveChangePwdDto(ChangePwdDto.builder()
+                                                           .hash(hash)
+                                                           .email(userDto.getEmail())
+                                                           .name(userDto.getName())
+                                                           .build());
+        emailService.sendTemplateMail(userDto.getEmail(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+        return success(Boolean.TRUE);
+      }
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
 
 }

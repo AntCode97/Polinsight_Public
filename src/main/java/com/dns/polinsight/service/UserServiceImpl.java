@@ -100,4 +100,9 @@ public class UserServiceImpl implements UserService {
     repository.adminUpdateUser(uid, roleType.name(), point);
   }
 
+  @Override
+  public Optional<User> findUserEmailByNameAndPhone(String name, String phone) {
+    return repository.findUserByNameAndPhone(name, phone);
+  }
+
 }

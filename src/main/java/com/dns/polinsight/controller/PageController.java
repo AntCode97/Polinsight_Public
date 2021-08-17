@@ -88,4 +88,9 @@ public class PageController {
     return new ModelAndView("redirect:/panelagreement");
   }
 
+  @GetMapping("/find")
+  public ModelAndView find() {
+    return new ModelAndView("member/find");
+  }
+
 }

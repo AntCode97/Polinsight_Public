@@ -125,6 +125,7 @@ custom :
       - /signup
       - /join
       - /index
+      - /find**
       - /error/**
       - /loginSuccess
       - /login

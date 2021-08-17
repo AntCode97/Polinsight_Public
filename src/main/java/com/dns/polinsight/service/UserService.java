@@ -41,4 +41,6 @@ public interface UserService extends UserDetailsService {
 
   void adminUserUpdate(long uid, UserRoleType roleType, long point);
 
+  Optional<User> findUserEmailByNameAndPhone(String name, String phone);
+
 }
