@@ -70,8 +70,6 @@ public class PostController {
       model.addAttribute("posts", posts);
     }
 
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
 
 
     return "admin/admin_post_list";
@@ -182,8 +180,6 @@ public class PostController {
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
     Page<Post> posts = postService.getPostList(pageable);
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
 
     posts.get().map(Post::toString);
 
