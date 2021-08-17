@@ -9,11 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.security.DenyAll;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
-import java.util.Map;
 
 @Getter
 @Builder
@@ -42,6 +40,16 @@ public class SurveyDto implements Comparable<SurveyDto> {
 
   @Enumerated(EnumType.STRING)
   private ProgressType progress;
+
+  public SurveyDto(Survey survey) {
+    this.point = survey.getPoint();
+    this.surveyId = survey.getSurveyId();
+    this.count = survey.getQuestionCount();
+    this.progress = survey.getStatus().getProgress();
+    this.minimumTime = survey.getStatus().getMinimumTime();
+    this.createdAt = survey.getCreatedAt();
+    this.endAt = survey.getEndAt();
+  }
 
 
   @Override

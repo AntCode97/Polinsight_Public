@@ -39,6 +39,7 @@ public class SurveyServiceImpl implements SurveyService {
 
   private final CollectorRepository collectorRepository;
 
+
   @Value("${custom.api.accessToken}")
   private String accessToken;
 
@@ -80,6 +81,7 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   // TODO: 2021-08-13 테스트 필요 --> 테스트 시 테스트용 서버 만들어서 사용할 것
+  // TODO: 2021-08-18 : 스케줄 주석 제거
   @Override
   @Transactional
   //  @Scheduled(cron = "0 0 0/1 * * *")
@@ -109,13 +111,6 @@ public class SurveyServiceImpl implements SurveyService {
     }
   }
 
-  @Override
-  public Set<Survey> getUserParticipateSurvey(User user) {
-    Set<Survey> ret = new HashSet<>();
-    for (var surveyId : user.getParticipateSurvey())
-      ret.add(this.findById(surveyId));
-    return ret;
-  }
 
   /**
    * CustomVariables, End Date 추가
@@ -192,7 +187,6 @@ public class SurveyServiceImpl implements SurveyService {
 
   @Override
   public List<SurveyDto> findAllSurveyWithCollector(Pageable pageable) {
-    // TODO: 2021-08-17 : 쿼리 마무리
     List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("BEFORE", 8);
     list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("ONGOING", 10));
     Collections.sort(list);

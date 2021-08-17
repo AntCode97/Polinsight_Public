@@ -36,9 +36,8 @@ public class User implements UserDetails, Serializable {
   private static final long serialVersionUID = 7723866521224716971L;
 
   @Builder.Default
-  @ElementCollection
-  @Column(name = "participate_survey_id")
-  private Set<Long> participateSurvey = new HashSet<>();
+  @OneToMany(targetEntity = ParticipateSurvey.class, cascade = CascadeType.REMOVE, mappedBy = "user")
+  private Set<ParticipateSurvey> participateSurvey = new HashSet<>();
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -102,9 +101,6 @@ public class User implements UserDetails, Serializable {
     //    this.registeredAt = dto.getRegisteredAt();
   }
 
-  public void addParticipateSurvey(long surveyId) {
-    this.participateSurvey.add(surveyId);
-  }
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;

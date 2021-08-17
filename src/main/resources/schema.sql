@@ -155,11 +155,13 @@ CREATE TABLE IF NOT EXISTS collector
 
 CREATE TABLE IF NOT EXISTS point_history
 (
-  id      BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id BIGINT NOT NULL,
-  amount  BIGINT NOT NULL,
-  sign    BIT    NOT NULL,
-  total   BIGINT NOT NULL,
+  id           BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  user_id      BIGINT       NOT NULL,
+  amount       BIGINT       NOT NULL,
+  sign         BIT          NOT NULL,
+  total        BIGINT       NOT NULL,
+  content      VARCHAR(500) NOT NULL,
+  requested_at DATETIME     NOT NULL DEFAULT NOW(),
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Email implements Serializable {
+public class Email implements Serializable{
 
   private String account;
 
@@ -21,5 +22,7 @@ public class Email implements Serializable {
   public String toString() {
     return account + "@" + domain;
   }
+
+
 
 }

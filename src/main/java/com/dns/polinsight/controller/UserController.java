@@ -2,11 +2,9 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Panel;
-import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
+import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.UserNotFoundException;
@@ -18,6 +16,8 @@ import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
@@ -30,7 +30,11 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
 
@@ -126,9 +130,7 @@ public class UserController {
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/mypage");
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    System.out.println(user);
-    mv.addObject("user", user);
+    mv.addObject("user", new UserDto(userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build())));
     return mv;
   }
 
@@ -202,7 +204,6 @@ public class UserController {
     return mv;
   }
 
-  // TODO: 2021-07-19 수정 필요
   @PostMapping("/api/point/{point}")
   public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
                                                                          @PathVariable(name = "point") Long point) throws Exception {
@@ -227,11 +228,13 @@ public class UserController {
     }
   }
 
-  @GetMapping("/api/user/participate")
-  public ApiUtils.ApiResult<Set<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
+  @GetMapping("/api/user/participate/{userid}")
+  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
     try {
-      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      return success(surveyService.getUserParticipateSurvey(user));
+      return success(participateSurveyService.findByUserId(userId).parallelStream()
+                                             .map(ParticipateSurveyDto::new)
+                                             .sorted()
+                                             .collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -241,7 +244,7 @@ public class UserController {
   public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.addParticipateSurvey(survey.getId());
+      user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
     } catch (Exception e) {

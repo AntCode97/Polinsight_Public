@@ -18,7 +18,12 @@
           $(this).css('cursor', 'pointer').css('box-shadow', '5px 5px 10px rgba(0,0,0, .3)').css('transition', 'box-shadow 0.5s ease-in-out')
         }).on('mouseleave', function () {
           $(this).css('cursor', 'default').css('box-shadow', 'none')
-        }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
+        }).on('click', ()=>{
+          if(confirm(survey.title+'에 참여하시겠습니까?')){alert(survey.participateUrl)
+            location.replace(survey.participateUrl+'?hash=1234&email=이메일')
+          }
+        })
+            .on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
 
       } else {
         template.addClass('bg_color_item_gray')

@@ -363,16 +363,7 @@
     }
 
     const editHyphen = e => {
-      const phoneValue = e.target.value
-      let ret = "";
-      if (phoneValue.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
-        ret = phoneValue.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
-      } else {
-        phoneValue.substring(0, 11)
-        ret = phoneValue.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
-      }
-      e.target.value = ret
-      return ret;
+      return e.target.value = phoneToStringConverter(e.target.value)
     }
 
     /*
@@ -398,9 +389,9 @@
         const confirmValue = $("#pwdconfirm").val();
         const msg = $("#pwmsg")
 
-        if (passwordValue !== "" && confirmValue !== "") {
+        if (!passwordValue && !confirmValue) {
           if (passwordValue === confirmValue) {
-            if (passwordValueChecker(passwordValue)) {
+            if (passwordInputValidator(passwordValue)) {
               msg.text("사용 가능한 패스워드 입니다.").removeClass("err_msg").addClass("correct_msg")
               return
             }
@@ -454,7 +445,7 @@
       if (!emailValue) {
         msg.text("").removeClass("correct_msg").addClass("err_msg")
       } else {
-        if (email.match(regex) != null) {
+        if (emailInputValidator(email)) {
           debounceCallEmailCheck(email, function (status) {
                 if (status) {
                   msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")

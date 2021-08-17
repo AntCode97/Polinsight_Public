@@ -56,7 +56,7 @@ public class ApiController {
 
   private final CollectorService collectorService;
 
-  private PointHistoryService pointHistoryService;
+  private final PointHistoryService pointHistoryService;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -143,7 +143,7 @@ public class ApiController {
       }
       if (surveyList == null)
         surveyList = surveyService.findAllSurveyWithCollector(pageable);
-      System.out.println(surveyList);
+
       return success(surveyList);
     } catch (Exception e) {
       throw new Exception();
@@ -284,9 +284,11 @@ public class ApiController {
       userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
       pointHistoryService.saveOrUpdate(PointHistory.builder()
                                                    .amount(pointRequestDto.getPoint())
+                                                   .content("포인트 정산 요청")
                                                    .total(sessionUser.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
                                                    .userId(sessionUser.getId())
+                                                   .requestedAt(pointRequestDto.getRequestedAt())
                                                    .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -400,6 +402,16 @@ public class ApiController {
     try {
       return success(userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new).getEmail());
     } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/pointhistories/{userid}")
+  public ApiUtils.ApiResult<List<PointHistory>> findAllPointHistoryByUserId(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
+    try {
+      return success(pointHistoryService.findAllPointHistoryByUserId(userId, pageable));
+    } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
   }

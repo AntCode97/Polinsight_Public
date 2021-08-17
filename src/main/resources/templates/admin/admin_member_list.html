@@ -521,11 +521,11 @@
                                 <option>선택</option>
                               </select><label for="day"> 일</label>
                               <label>
-                                <input checked name="birth" type="radio" value="양력">
+                                <input checked name="birthType" type="radio" value="양력">
                                 양력
                               </label>
                               <label>
-                                <input name="birth" type="radio" value="음력">
+                                <input name="birthType" type="radio" value="음력">
                                 음력
                               </label>
                               <span class="err_msg"></span>
@@ -1056,7 +1056,6 @@
       $('#marry').find('input[name=marry]').each(function () {
         sameValueCheck(this, 'selected', user.marry)
       }).on('change', infoChangeHandler)
-      // TODO : 거주지
       $('select[name=state]').find('select').each(function () {
         sameValueCheck(this, 'selected', user.state)
       }).on('change', infoChangeHandler)
