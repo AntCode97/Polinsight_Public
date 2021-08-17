@@ -2,7 +2,7 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Additional;
+import com.dns.polinsight.domain.Panel;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
@@ -11,6 +11,7 @@ import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
@@ -73,7 +74,7 @@ public class UserController {
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Additional additional, HttpSession session) {
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel additional, HttpSession session) {
     session.invalidate();
     SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
     sessionUser = SessionUser.builder()
@@ -84,7 +85,7 @@ public class UserController {
                              .build();
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    user.getAdditional().update(additional);
+    user.getPanel().update(additional);
     userService.saveOrUpdate(user);
     return success(Boolean.TRUE);
   }
@@ -177,7 +178,7 @@ public class UserController {
 
   @GetMapping("/chpwd/{hash}/{name}/{email}")
   public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
-                                     @PathVariable(name = "email") String email,
+                                     @PathVariable(name = "email") Email email,
                                      @PathVariable(name = "name") String name,
                                      ModelAndView mv,
                                      HttpSession session
@@ -256,7 +257,7 @@ public class UserController {
   // @Deprecated
   @PostMapping("/findpwd")
   public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
-                              @RequestParam(name = "email") String email,
+                              @RequestParam(name = "email") Email email,
                               @RequestParam(name = "name") String name,
                               @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
                                                                                         NoSuchAlgorithmException {
@@ -266,9 +267,9 @@ public class UserController {
      * 해시값을 저장한 페이지를 리턴한다
      * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
      * */
-    if (userService.isExistUser(email)) {
+    if (userService.isExistEmail(email)) {
       Map<String, Object> variables = new HashMap<>();
-      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
+      String hash = new HashUtil().makeHash(Arrays.asList(email.toString(), name), salt);
       changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
       //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
       variables.put("date", LocalDateTime.now());
@@ -276,7 +277,7 @@ public class UserController {
       variables.put("name", name);
       variables.put("email", email);
       variables.put("callback", callbackBase + "/chpwd");
-      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+      emailService.sendTemplateMail(email.toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
     }
     return new ModelAndView("redirect:/index");
   }
@@ -296,7 +297,7 @@ public class UserController {
       } else {
         Assert.notNull(userDto.getEmail());
         Assert.notNull(userDto.getName());
-        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);
+        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail().toString(), userDto.getName()), salt);
         Map<String, Object> variables = new HashMap<>();
         variables.put("date", LocalDateTime.now());
         variables.put("hash", hash);
@@ -308,7 +309,7 @@ public class UserController {
                                                            .email(userDto.getEmail())
                                                            .name(userDto.getName())
                                                            .build());
-        emailService.sendTemplateMail(userDto.getEmail(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+        emailService.sendTemplateMail(userDto.getEmail().toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
         return success(Boolean.TRUE);
       }
     } catch (Exception e) {

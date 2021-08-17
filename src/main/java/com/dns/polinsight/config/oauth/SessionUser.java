@@ -1,6 +1,7 @@
 package com.dns.polinsight.config.oauth;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.*;
 
@@ -27,7 +28,7 @@ public class SessionUser implements Serializable {
   private Long id;
 
   @NotNull
-  private String email;
+  private Email email;
 
   private String picture;
 

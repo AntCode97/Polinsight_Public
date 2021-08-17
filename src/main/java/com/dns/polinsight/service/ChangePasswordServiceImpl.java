@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.repository.ChangePasswordRepository;
+import com.dns.polinsight.types.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,8 @@ public class ChangePasswordServiceImpl implements ChangePasswordService {
   private final ChangePasswordRepository repository;
 
   @Override
-  public ChangePwdDto findChangePwdDtoByEmail(String email) {
-    return repository.getById(email);
+  public ChangePwdDto findChangePwdDtoByEmail(Email email) {
+    return repository.getById(email.toString());
   }
 
   @Override

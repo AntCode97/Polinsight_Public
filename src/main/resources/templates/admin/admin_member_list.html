@@ -1,6 +1,5 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block>
-  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     table {
       width  : 100%;
@@ -536,13 +535,13 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="city">거주지</label>
+                              <label for="address">거주지</label>
                             </div>
-                            <div class="right_content">
-                              <select id="city" name="city">
+                            <div class="right_content" id="address">
+                              <select id="state" name="state">
                                 <option>시도</option>
                               </select>
-                              <select id="gu" name="gu">
+                              <select id="city" name="city">
                                 <option>시군구</option>
                               </select>
                               <span class="err_msg"></span>
@@ -1000,9 +999,6 @@
         table.append(makeAdminMemberRowTemplate(memberInfo))
     }
 
-    /*
-    * @Param  offset : 페이지 번호
-    * */
     const getMemberList = current => {
       http.get('/api/users', {
             params: {
@@ -1067,6 +1063,12 @@
         sameValueCheck(this, 'selected', user.marry)
       }).on('change', infoChangeHandler)
       // TODO : 거주지
+      $('select[name=state]').find('select').each(function () {
+        sameValueCheck(this, 'selected', user.state)
+      }).on('change', infoChangeHandler)
+      $('select[name=city]').find('select').each(function () {
+        sameValueCheck(this, 'selected', user.city)
+      }).on('change', infoChangeHandler)
       $('#industry').find('option').each(function () {
         sameValueCheck(this, 'selected', user.industry)
       }).on('change', infoChangeHandler)

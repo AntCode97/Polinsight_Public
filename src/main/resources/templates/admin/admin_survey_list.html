@@ -1,7 +1,6 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block>
   <th:block>
-    <link th:href="@{/css/table.css}" rel="stylesheet">
     <style>
       table, tr, th, td {
         width: 100%;
@@ -179,7 +178,7 @@
     const adminGetAllSurveys = e => {
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      http.get('/api/surveys' + regex, {
+      http.get('/api/test/surveys' + regex, {
             params: {size: 10, page: offset}
           })
           .then(res => {

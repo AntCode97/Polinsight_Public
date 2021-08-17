@@ -753,11 +753,11 @@
                             </div>
                             <div class="right_content">
                               <label>
-                                <input name="gender" type="radio" value="남성" th:checked="${user.additional.gender == 'MALE'}">
+                                <input name="gender" type="radio" value="남성" th:checked="${user.getPanel.gender == 'MALE'}">
                                 남성
                               </label>
                               <label>
-                                <input name="gender" type="radio" value="여성" th:checked="${user.additional.gender == 'FEMALE'}">
+                                <input name="gender" type="radio" value="여성" th:checked="${user.getPanel.gender == 'FEMALE'}">
                                 여성
                               </label>
                               <span class="err_msg">성별을 선택해주세요.</span>
@@ -821,10 +821,10 @@
                             <div class="right_content">
                               <select id="edu" name="edu" required>
                                 <option>선택</option>
-                                <option th:selected="${user.additional.education == '고졸 이하(재학 포함)'}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
-                                <option th:selected="${user.additional.education == '대학 재학'}" value="대학 재학">대학 재학</option>
-                                <option th:selected="${user.additional.education == '대학교 졸업(수료 포함)'}" value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
-                                <option th:selected="${user.additional.education == '대학원 이상'}" value="대학원 이상">대학원 이상</option>
+                                <option th:selected="${user.getPanel.education == '고졸 이하(재학 포함)'}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
+                                <option th:selected="${user.getPanel.education == '대학 재학'}" value="대학 재학">대학 재학</option>
+                                <option th:selected="${user.getPanel.education == '대학교 졸업(수료 포함)'}" value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
+                                <option th:selected="${user.getPanel.education == '대학원 이상'}" value="대학원 이상">대학원 이상</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -836,11 +836,11 @@
                             </div>
                             <div class="right_content">
                               <label>
-                                <input name="marry" type="radio" value="false" th:checked="${user.additional.marry}">
+                                <input name="marry" type="radio" value="false" th:checked="${user.getPanel.marry}">
                                 미혼
                               </label>
                               <label>
-                                <input name="marry" type="radio" value="true" th:checked="${user.additional.marry}">
+                                <input name="marry" type="radio" value="true" th:checked="${user.getPanel.marry}">
                                 기혼
                               </label>
                               <span class="err_msg"></span>
@@ -854,16 +854,16 @@
                             <div class="right_content">
                               <select id="job" name="job" required>
                                 <option>선택</option>
-                                <option th:selected="${user.additional.job == '학생'}" value="학생">학생</option>
-                                <option th:selected="${user.additional.job == '경영직'}" value="경영직">경영직</option>
-                                <option th:selected="${user.additional.job == '공무'}" value="공무">공무</option>
-                                <option th:selected="${user.additional.job == '회사원'}" value="회사원">회사원</option>
-                                <option th:selected="${user.additional.job == '자영업'}" value="자영업">자영업</option>
-                                <option th:selected="${user.additional.job == '생산기술직'}" value="생산기술직">생산기술직</option>
-                                <option th:selected="${user.additional.job == '예술인'}" value="예술인">예술인</option>
-                                <option th:selected="${user.additional.job == '프리랜서'}" value="프리랜서">프리랜서</option>
-                                <option th:selected="${user.additional.job == '무직'}" value="무직">무직</option>
-                                <option th:selected="${user.additional.job == '기타'}" value="기타">기타</option>
+                                <option th:selected="${user.getPanel.job == '학생'}" value="학생">학생</option>
+                                <option th:selected="${user.getPanel.job == '경영직'}" value="경영직">경영직</option>
+                                <option th:selected="${user.getPanel.job == '공무'}" value="공무">공무</option>
+                                <option th:selected="${user.getPanel.job == '회사원'}" value="회사원">회사원</option>
+                                <option th:selected="${user.getPanel.job == '자영업'}" value="자영업">자영업</option>
+                                <option th:selected="${user.getPanel.job == '생산기술직'}" value="생산기술직">생산기술직</option>
+                                <option th:selected="${user.getPanel.job == '예술인'}" value="예술인">예술인</option>
+                                <option th:selected="${user.getPanel.job == '프리랜서'}" value="프리랜서">프리랜서</option>
+                                <option th:selected="${user.getPanel.job == '무직'}" value="무직">무직</option>
+                                <option th:selected="${user.getPanel.job == '기타'}" value="기타">기타</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -877,21 +877,21 @@
                             <div class="right_content">
                               <select id="industry" name="industry">
                                 <option>선택</option>
-                                <option th:selected="${user.additional.industry == '제조업'}" value="제조업">제조업</option>
-                                <option th:selected="${user.additional.industry == '건설업(인테리어 포함)'}" value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
-                                <option th:selected="${user.additional.industry == '부동산업'}" value="부동산업">부동산업</option>
-                                <option th:selected="${user.additional.industry == '임대•대여업'}" value="임대•대여업">임대•대여업</option>
-                                <option th:selected="${user.additional.industry == '도매 및 소매업(유통업)'}" value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
-                                <option th:selected="${user.additional.industry == '음식업•외식업'}" value="음식업•외식업">음식업•외식업</option>
-                                <option th:selected="${user.additional.industry == '운수•여객•숙박업'}" value="운수•여객•숙박업">운수•여객•숙박업</option>
-                                <option th:selected="${user.additional.industry == '여가 관련 서비스업'}" value="여가 관련 서비스업">여가 관련 서비스업</option>
-                                <option th:selected="${user.additional.industry == '방송•언론•출판'}" value="방송•언론•출판">방송•언론•출판</option>
-                                <option th:selected="${user.additional.industry == '정보통신업'}" value="정보통신업">정보통신업</option>
-                                <option th:selected="${user.additional.industry == '금융업'}" value="금융업">금융업</option>
-                                <option th:selected="${user.additional.industry == '교육 서비스업'}" value="교육 서비스업">교육 서비스업</option>
-                                <option th:selected="${user.additional.industry == '의료•보건•사회복지'}" value="의료•보건•사회복지">의료•보건•사회복지</option>
-                                <option th:selected="${user.additional.industry == '시장조사•컨설팅•광고대행업'}" value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
-                                <option th:selected="${user.additional.industry == '기타'}" value="기타">기타</option>
+                                <option th:selected="${user.getPanel.industry == '제조업'}" value="제조업">제조업</option>
+                                <option th:selected="${user.getPanel.industry == '건설업(인테리어 포함)'}" value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
+                                <option th:selected="${user.getPanel.industry == '부동산업'}" value="부동산업">부동산업</option>
+                                <option th:selected="${user.getPanel.industry == '임대•대여업'}" value="임대•대여업">임대•대여업</option>
+                                <option th:selected="${user.getPanel.industry == '도매 및 소매업(유통업)'}" value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
+                                <option th:selected="${user.getPanel.industry == '음식업•외식업'}" value="음식업•외식업">음식업•외식업</option>
+                                <option th:selected="${user.getPanel.industry == '운수•여객•숙박업'}" value="운수•여객•숙박업">운수•여객•숙박업</option>
+                                <option th:selected="${user.getPanel.industry == '여가 관련 서비스업'}" value="여가 관련 서비스업">여가 관련 서비스업</option>
+                                <option th:selected="${user.getPanel.industry == '방송•언론•출판'}" value="방송•언론•출판">방송•언론•출판</option>
+                                <option th:selected="${user.getPanel.industry == '정보통신업'}" value="정보통신업">정보통신업</option>
+                                <option th:selected="${user.getPanel.industry == '금융업'}" value="금융업">금융업</option>
+                                <option th:selected="${user.getPanel.industry == '교육 서비스업'}" value="교육 서비스업">교육 서비스업</option>
+                                <option th:selected="${user.getPanel.industry == '의료•보건•사회복지'}" value="의료•보건•사회복지">의료•보건•사회복지</option>
+                                <option th:selected="${user.getPanel.industry == '시장조사•컨설팅•광고대행업'}" value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
+                                <option th:selected="${user.getPanel.industry == '기타'}" value="기타">기타</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -910,19 +910,19 @@
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox" value="건강일반" th:checked="${user.additional.favorite.contains('건강일반')}">
+                                      <input type="checkbox" value="건강일반" th:checked="${user.getPanel.favorite.contains('건강일반')}">
                                       건강일반
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="건강식품" th:checked="${user.additional.favorite.contains('건강식품')}">
+                                      <input type="checkbox" value="건강식품" th:checked="${user.getPanel.favorite.contains('건강식품')}">
                                       건강식품
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="다이어트" th:checked="${user.additional.favorite.contains('다이어트')}">
+                                      <input type="checkbox" value="다이어트" th:checked="${user.getPanel.favorite.contains('다이어트')}">
                                       다이어트
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="심리건강" th:checked="${user.additional.favorite.contains('심리건강')}">
+                                      <input type="checkbox" value="심리건강" th:checked="${user.getPanel.favorite.contains('심리건강')}">
                                       심리건강
                                     </label>
                                   </div>
@@ -934,39 +934,39 @@
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input name="favorite" type="checkbox" value="대중문화" th:checked="${user.additional.favorite.contains('대중문화')}">
+                                      <input name="favorite" type="checkbox" value="대중문화" th:checked="${user.getPanel.favorite.contains('대중문화')}">
                                       대중문화
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="음악" th:checked="${user.additional.favorite.contains('음악')}">
+                                      <input name="favorite" type="checkbox" value="음악" th:checked="${user.getPanel.favorite.contains('음악')}">
                                       음악
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="미술" th:checked="${user.additional.favorite.contains('미술')}">
+                                      <input name="favorite" type="checkbox" value="미술" th:checked="${user.getPanel.favorite.contains('미술')}">
                                       미술
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="공연•축제" th:checked="${user.additional.favorite.contains('공연•축제')}">
+                                      <input name="favorite" type="checkbox" value="공연•축제" th:checked="${user.getPanel.favorite.contains('공연•축제')}">
                                       공연•축제
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="여행" th:checked="${user.additional.favorite.contains('여행')}">
+                                      <input name="favorite" type="checkbox" value="여행" th:checked="${user.getPanel.favorite.contains('여행')}">
                                       여행
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="생활문화" th:checked="${user.additional.favorite.contains('생활문화')}">
+                                      <input name="favorite" type="checkbox" value="생활문화" th:checked="${user.getPanel.favorite.contains('생활문화')}">
                                       생활문화
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="장르예술" th:checked="${user.additional.favorite.contains('장르예술')}">
+                                      <input name="favorite" type="checkbox" value="장르예술" th:checked="${user.getPanel.favorite.contains('장르예술')}">
                                       장르예술
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="레저활동" th:checked="${user.additional.favorite.contains('레저활동')}">
+                                      <input name="favorite" type="checkbox" value="레저활동" th:checked="${user.getPanel.favorite.contains('레저활동')}">
                                       레저활동
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="생활체육" th:checked="${user.additional.favorite.contains('생활체육')}">
+                                      <input name="favorite" type="checkbox" value="생활체육" th:checked="${user.getPanel.favorite.contains('생활체육')}">
                                       생활체육
                                     </label>
                                   </div>
@@ -978,15 +978,15 @@
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input name="favorite" type="checkbox" value="제테크" th:checked="${user.additional.favorite.contains('제테크')}">
+                                      <input name="favorite" type="checkbox" value="제테크" th:checked="${user.getPanel.favorite.contains('제테크')}">
                                       제테크
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="창업" th:checked="${user.additional.favorite.contains('제테크')}">
+                                      <input name="favorite" type="checkbox" value="창업" th:checked="${user.getPanel.favorite.contains('제테크')}">
                                       창업
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="사회적 경제" th:checked="${user.additional.favorite.contains('사회적 경제')}">
+                                      <input name="favorite" type="checkbox" value="사회적 경제" th:checked="${user.getPanel.favorite.contains('사회적 경제')}">
                                       사회적 경제
                                     </label>
                                   </div>
@@ -998,39 +998,39 @@
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input name="favorite" type="checkbox" value="사회•복지일반" th:checked="${user.additional.favorite.contains('사회•복지일반')}">
+                                      <input name="favorite" type="checkbox" value="사회•복지일반" th:checked="${user.getPanel.favorite.contains('사회•복지일반')}">
                                       사회•복지일반
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="아동•청소년" th:checked="${user.additional.favorite.contains('아동•청소년')}">
+                                      <input name="favorite" type="checkbox" value="아동•청소년" th:checked="${user.getPanel.favorite.contains('아동•청소년')}">
                                       아동•청소년
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="청년" th:checked="${user.additional.favorite.contains('청년')}">
+                                      <input name="favorite" type="checkbox" value="청년" th:checked="${user.getPanel.favorite.contains('청년')}">
                                       청년
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="노인" th:checked="${user.additional.favorite.contains('노인')}">
+                                      <input name="favorite" type="checkbox" value="노인" th:checked="${user.getPanel.favorite.contains('노인')}">
                                       노인
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="장애인" th:checked="${user.additional.favorite.contains('장애인')}">
+                                      <input name="favorite" type="checkbox" value="장애인" th:checked="${user.getPanel.favorite.contains('장애인')}">
                                       장애인
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="다문화" th:checked="${user.additional.favorite.contains('다문화')}">
+                                      <input name="favorite" type="checkbox" value="다문화" th:checked="${user.getPanel.favorite.contains('다문화')}">
                                       다문화
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="민주인권" th:checked="${user.additional.favorite.contains('민주인권')}">
+                                      <input name="favorite" type="checkbox" value="민주인권" th:checked="${user.getPanel.favorite.contains('민주인권')}">
                                       민주인권
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="노동인권" th:checked="${user.additional.favorite.contains('노동인권')}">
+                                      <input name="favorite" type="checkbox" value="노동인권" th:checked="${user.getPanel.favorite.contains('노동인권')}">
                                       노동인권
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="자원봉사" th:checked="${user.additional.favorite.contains('자원봉사')}">
+                                      <input name="favorite" type="checkbox" value="자원봉사" th:checked="${user.getPanel.favorite.contains('자원봉사')}">
                                       자원봉사
                                     </label>
                                   </div>
@@ -1042,15 +1042,15 @@
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input name="favorite" type="checkbox" value="평생교육" th:checked="${user.additional.favorite.contains('평생교육')}">
+                                      <input name="favorite" type="checkbox" value="평생교육" th:checked="${user.getPanel.favorite.contains('평생교육')}">
                                       평생교육
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="초·중·고등교육" th:checked="${user.additional.favorite.contains('초·중·고등교육')}">
+                                      <input name="favorite" type="checkbox" value="초·중·고등교육" th:checked="${user.getPanel.favorite.contains('초·중·고등교육')}">
                                       초·중·고등교육
                                     </label>
                                     <label>
-                                      <input name="favorite" type="checkbox" value="대학교육" th:checked="${user.additional.favorite.contains('대학교육')}">
+                                      <input name="favorite" type="checkbox" value="대학교육" th:checked="${user.getPanel.favorite.contains('대학교육')}">
                                       대학교육
                                     </label>
                                   </div>

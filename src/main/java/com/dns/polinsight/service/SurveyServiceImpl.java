@@ -193,8 +193,8 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public List<SurveyDto> findAllSurveyWithCollector(Pageable pageable) {
     // TODO: 2021-08-17 : 쿼리 마무리
-    List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("progress");
-    list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("endAt"));
+    List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("BEFORE", 8);
+    list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("ONGOING", 10));
     Collections.sort(list);
     return list;
   }

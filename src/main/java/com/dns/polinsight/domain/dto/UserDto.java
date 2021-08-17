@@ -1,8 +1,7 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.types.GenderType;
-import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.types.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +12,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -28,11 +25,13 @@ public class UserDto {
 
   private Long point;
 
-  private String email;
+  private Email email;
 
-  private String phone;
+  private Phone phone;
 
-  private String recommend;
+  private Phone recommend;
+
+  private Address address;
 
   private String name;
 
@@ -73,14 +72,14 @@ public class UserDto {
     this.isEmailReceive = user.getIsEmailReceive();
     this.isSmsReceive = user.getIsSmsReceive();
     this.recommend = user.getRecommend();
-    this.gender = user.getAdditional().getGender();
-    this.education = user.getAdditional().getEducation();
-    this.marry = user.getAdditional().getMarry();
-    this.birth = user.getAdditional().getBirth();
-    this.birthType = user.getAdditional().getBirthType();
-    this.job = user.getAdditional().getJob();
-    this.industry = user.getAdditional().getIndustry();
-    this.favorite.addAll(user.getAdditional().getFavorite());
+    this.gender = user.getPanel().getGender();
+    this.education = user.getPanel().getEducation();
+    this.marry = user.getPanel().getMarry();
+    this.birth = user.getPanel().getBirth();
+    this.birthType = user.getPanel().getBirthType();
+    this.job = user.getPanel().getJob();
+    this.industry = user.getPanel().getIndustry();
+    this.favorite.addAll(user.getPanel().getFavorite());
     this.registeredAt = user.getRegisteredAt();
   }
 

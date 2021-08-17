@@ -1,6 +1,8 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +13,13 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-  boolean isExistUser(String email);
 
   List<User> findAll();
 
   Page<User> findAll(Pageable pageable);
 
-  void deleteUserByEmail(String email);
+
+  void deleteUserByEmail(Email email);
 
   User saveOrUpdate(User user);
 
@@ -31,9 +33,10 @@ public interface UserService extends UserDetailsService {
 
   long countAllUserExcludeAdmin();
 
-  Boolean isExistEmail(String email);
 
-  Boolean isExistPhone(String phone);
+  Boolean isExistEmail(Email email);
+
+  Boolean isExistPhone(Phone phone);
 
   void subUserPoint(long uid, long point);
 
@@ -41,6 +44,7 @@ public interface UserService extends UserDetailsService {
 
   void adminUserUpdate(long uid, UserRoleType roleType, long point);
 
-  Optional<User> findUserEmailByNameAndPhone(String name, String phone);
+
+  Optional<User> findUserEmailByNameAndPhone(String name, Phone phone);
 
 }

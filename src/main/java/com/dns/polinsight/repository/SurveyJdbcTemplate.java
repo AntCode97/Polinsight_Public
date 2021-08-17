@@ -37,10 +37,11 @@ public class SurveyJdbcTemplate {
     return LocalDate.parse(date);
   }
 
-  public List<SurveyDto> findAllSurveyWithCollector(String orderType) {
+  public List<SurveyDto> findAllSurveyWithCollector(String orderType, int lim) {
     return jdbcTemplate.query("SELECT s.title AS title, s.point AS point, s.survey_id AS surveyid, s.progress AS progress, s.minimum_time AS minimumtime, s.created_at AS createdat, s.end_at  AS " +
-            "endat, c.participate_url AS participateurl, s.question_count AS count, c.status AS status FROM survey s JOIN collector c ON s.survey_id = c.survey_id LIMIT 10", surveyDtoRowMapper,
-        orderType);
+            "endat, c.participate_url AS participateurl, s.question_count AS count, c.status AS status FROM survey s JOIN collector c ON s.survey_id = c.survey_id WHERE progress LIKE  ? LIMIT ?",
+        surveyDtoRowMapper,
+        orderType, lim);
   }
 
 }

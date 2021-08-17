@@ -51,18 +51,19 @@ CREATE TABLE IF NOT EXISTS user
   email            VARCHAR(255) NOT NULL,
   name             VARCHAR(255) NOT NULL,
   password         VARCHAR(255) NOT NULL,
-  phone            VARCHAR(11)  NOT NULL,
+  phone            VARCHAR(13)  NOT NULL,
   point            BIGINT       NULL DEFAULT 0,
-  recommend        VARCHAR(11)  NULL,
-  role             VARCHAR(50) NULL DEFAULT 'USER',
+  recommend        VARCHAR(13)  NULL,
+  role             VARCHAR(50)  NULL DEFAULT 'USER',
   birth            DATETIME(6)  NULL,
-  birth_type       VARCHAR(30) NULL DEFAULT '양력',
-  education        VARCHAR(50) NULL DEFAULT '고졸 이하(재학 포함)',
+  birth_type       VARCHAR(30)  NULL DEFAULT '양력',
+  education        VARCHAR(50)  NULL DEFAULT '고졸 이하(재학 포함)',
   gender           VARCHAR(20)  NULL DEFAULT 'MALE',
-  industry         VARCHAR(50) NULL DEFAULT '기타',
+  industry         VARCHAR(50)  NULL DEFAULT '기타',
   registered_at    DATETIME(6)  NULL DEFAULT NOW(),
-  job              VARCHAR(50) NULL DEFAULT '기타',
+  job              VARCHAR(50)  NULL DEFAULT '기타',
   marry            VARCHAR(30)  NULL DEFAULT '미혼',
+  address          VARCHAR(100) NULL DEFAULT '',
   is_email_receive BIT          NULL DEFAULT FALSE,
   is_sms_receive   BIT          NULL DEFAULT FALSE,
   UNIQUE (email)
@@ -70,7 +71,7 @@ CREATE TABLE IF NOT EXISTS user
 
 CREATE TABLE IF NOT EXISTS user_favorite
 (
-  user_id  BIGINT       NOT NULL,
+  user_id  BIGINT      NOT NULL,
   favorite VARCHAR(50) NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );

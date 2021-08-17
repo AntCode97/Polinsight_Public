@@ -11,6 +11,8 @@ import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.PointRequestProgressType;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,7 +100,7 @@ public class ApiController {
   }
 
   @DeleteMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable(name = "email") String email) throws Exception {
+  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable(name = "email") Email email) throws Exception {
     try {
       userService.deleteUserByEmail(email);
       return success(Boolean.TRUE);
@@ -301,16 +302,17 @@ public class ApiController {
 
   @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> isExistEmail(@Email @PathVariable("email") String email) throws NotFoundException {
+  public ApiUtils.ApiResult<Boolean> isExistEmail(@PathVariable("email") Email email) throws NotFoundException {
     try {
       return success(!userService.isExistEmail(email));
     } catch (RuntimeException e) {
+      e.printStackTrace();
       throw new NotFoundException("Email Number Not Found");
     }
   }
 
   @GetMapping("/user/recommend/{phone}")
-  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") String recommendPhone) throws NotFoundException {
+  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
     try {
       return success(!userService.isExistPhone(recommendPhone));
     } catch (Exception e) {
@@ -394,7 +396,7 @@ public class ApiController {
 
 
   @PostMapping("/find/email")
-  public ApiUtils.ApiResult<String> findEmail(@RequestBody UserDto userDto) throws Exception {
+  public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
     try {
       return success(userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new).getEmail());
     } catch (Exception e) {

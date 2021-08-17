@@ -23,7 +23,9 @@
       } else {
         template.addClass('bg_color_item_gray')
         template.append(`<p class="survey_stop">조사완료</p>`)
-        template.on('click', function () {
+        template.on('click', function (e) {
+          e.preventDefault();
+          e.returnValue = false
           alert('종료된 설문입니다.')
         })
       }
@@ -47,6 +49,12 @@
           item_wrap.append(makeSurveyCard(survey))
         }
         count++;
+      })
+
+      $('.main_survey_item_wrap').each(function () {
+        if ($(this).find('.main_survey_item').length < 3) {
+          $(this).remove()
+        }
       })
     }
 

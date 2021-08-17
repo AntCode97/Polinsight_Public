@@ -1,17 +1,15 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.GenderType;
+import com.dns.polinsight.types.convereter.AddressAttrConverter;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Embeddable
@@ -20,7 +18,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Additional implements Serializable {
+public class Panel implements Serializable {
 
   private static final long serialVersionUID = 4323740522466099195L;
 
@@ -43,15 +41,18 @@ public class Additional implements Serializable {
 
   private String industry;
 
-  public void update(Additional additional) {
-    this.gender = additional.getGender();
-    this.education = additional.getEducation();
-    this.marry = additional.getMarry();
-    this.birth = additional.getBirth();
-    this.birthType = additional.getBirthType();
-    this.job = additional.getJob();
-    this.industry = additional.getIndustry();
-    this.favorite.addAll(additional.getFavorite());
+  @Convert(converter = AddressAttrConverter.class, attributeName = "address")
+  private Address address;
+
+  public void update(Panel panel) {
+    this.gender = panel.getGender();
+    this.education = panel.getEducation();
+    this.marry = panel.getMarry();
+    this.birth = panel.getBirth();
+    this.birthType = panel.getBirthType();
+    this.job = panel.getJob();
+    this.industry = panel.getIndustry();
+    this.favorite.addAll(panel.getFavorite());
   }
 
 }

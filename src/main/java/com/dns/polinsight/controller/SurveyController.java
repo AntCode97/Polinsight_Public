@@ -89,7 +89,7 @@ public class SurveyController {
       Survey survey = surveyService.findSurveyBySurveyId(surveyId).orElseThrow(SurveyNotFoundException::new);
       log.info("user click survey info is : {}", survey.toString());
       // NOTE 2021-08-10 : 해시 생성 시, 이메일과 설문 아이디를 통해 해시를 생성한다
-      List<String> someVariables = Arrays.asList(sessionUser.getEmail(), survey.getSurveyId().toString());
+      List<String> someVariables = Arrays.asList(sessionUser.getEmail().toString(), survey.getSurveyId().toString());
       String sb = survey.getHref() +
           "?hash=" + new HashUtil().makeHash(someVariables, salt) +
           "&name=" + sessionUser.getEmail();
