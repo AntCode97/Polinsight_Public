@@ -8,6 +8,7 @@ import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
+import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.PointRequestProgressType;
 import com.dns.polinsight.types.UserRoleType;
@@ -385,6 +386,15 @@ public class ApiController {
           map.get("end"),
           map.get("progress"));
       return success(true);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PostMapping("/find/email")
+  public ApiUtils.ApiResult<String> findEmail(@RequestBody UserDto userDto) throws Exception {
+    try {
+      return success(userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new).getEmail());
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
