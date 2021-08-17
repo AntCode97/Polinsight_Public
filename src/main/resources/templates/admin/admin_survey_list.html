@@ -4,46 +4,82 @@
     <link th:href="@{/css/table.css}" rel="stylesheet">
     <style>
       table, tr, th, td {
-        width: 100%;
-        margin: 0;
+        margin : 0;
+        width  : 100%;
       }
 
-      .post-row > *:nth-child(1) {width: 50px;}
-      .post-row > *:nth-child(2) {width: 500px;}
-      tbody > .post-row > td:nth-child(2) {text-align: left;}
-      .post-row > *:nth-child(3) {width: 80px;}
-      .post-row > *:nth-child(4) {width: 140px;}
-      .post-row > *:nth-child(5) {width: 120px;}
-      .post-row > *:nth-child(6) {width: 100px;}
-      .post-row > *:nth-child(7) {width: 120px;}
-      .post-row > *:nth-child(8) {width: 120px;}
+      .post-row > *:nth-child(1) {
+        width : 50px;
+      }
+
+      .post-row > *:nth-child(2) {
+        width : 500px;
+      }
+
+      tbody > .post-row > td:nth-child(2) {
+        text-align : left;
+      }
+
+      .post-row > *:nth-child(3) {
+        width : 80px;
+      }
+
+      .post-row > *:nth-child(4) {
+        width : 140px;
+      }
+
+      .post-row > *:nth-child(5) {
+        width : 120px;
+      }
+
+      .post-row > *:nth-child(6) {
+        width : 100px;
+      }
+
+      .post-row > *:nth-child(7) {
+        width : 120px;
+      }
+
+      .post-row > *:nth-child(8) {
+        width : 120px;
+      }
 
       table {
-        align: center;
+        align : center;
       }
 
       .info_popup_container {
-        display: none;
-        width: 100%;
-        height: 100%;
-        background-color: red;
-        position: absolute;
+        background-color : red;
+        display          : none;
+        height           : 100%;
+        position         : absolute;
+        width            : 100%;
       }
 
       .info_popup {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50% -50%);
+        left      : 50%;
+        top       : 50%;
+        transform : translate(-50% -50%);
       }
+
       .status_wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
+        align-items     : center;
+        display         : flex;
+        gap             : 5px;
+        justify-content : center;
       }
-      .status_wrap > * {cursor: pointer;}
-      .status_box:nth-child(1) {color: mediumseagreen;}
-      .status_box:nth-child(2) {color: tomato;}
+
+      .status_wrap > * {
+        cursor : pointer;
+      }
+
+      .status_box:nth-child(1) {
+        color : mediumseagreen;
+      }
+
+      .status_box:nth-child(2) {
+        color : tomato;
+      }
     </style>
   </th:block>
   <div class="admin_main_contents">
@@ -58,11 +94,11 @@
         <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
 
         <!--관리자 페이지 설문 찾기 기능-->
-        <div class='form-search'>
-          <div class='tbl-search'>
-            <div class='box-search'>
-              <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
-              <input type='submit' />
+        <div class="form-search">
+          <div class="tbl-search">
+            <div class="box-search">
+              <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
+              <input type="submit" />
             </div>
           </div>
         </div>
@@ -117,7 +153,7 @@
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
             tmp.on('click', {page: i}, adminGetAllSurveys);
             if (current === i) {
-              tmp.css('color', 'white').css('background-color', '#444');
+              tmp.css('color', 'white').css('background-color', '#444444');
             }
             paginationElement.append(tmp);
           }
@@ -130,7 +166,8 @@
             regex: regexValue,
             page: current >= totalPage ? totalPage - 1 : current + 1
           }, adminGetAllSurveys);
-          paginationElement.append(first).append(prev);
+          if (current >= 1)
+            paginationElement.append(first).append(prev);
           for (let i = start; i < end; i++) {
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
             tmp.on('click', {page: i, regex: regexValue}, adminGetAllSurveys);
@@ -141,7 +178,8 @@
             }
             paginationElement.append(tmp);
           }
-          paginationElement.append(next).append(last);
+          if (current < totalPage - 1)
+            paginationElement.append(next).append(last);
         }
       }
     };
@@ -179,7 +217,7 @@
     const adminGetAllSurveys = e => {
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      http.get('/api/surveys' + regex, {
+      http.get('/api/test/surveys' + regex, {
             params: {size: 10, page: offset}
           })
           .then(res => {
