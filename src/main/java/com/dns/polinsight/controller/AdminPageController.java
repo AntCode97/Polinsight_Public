@@ -87,6 +87,7 @@ public class AdminPageController {
     return mv;
   }
 
+  @Deprecated
   @GetMapping("/surveyinfo/{id}")
   public ModelAndView adminGetSurveyDetailPage(@PathVariable("id") long surveyid) {
     ModelAndView mv = new ModelAndView("admin/admin_survey_info");
@@ -105,12 +106,5 @@ public class AdminPageController {
   public ModelAndView adminUserPointRequest() {
     return new ModelAndView("admin/admin_point_req_list");
   }
-
-
-  //  @GetMapping("/pointreqinfo")
-  //  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
-  //    mav.setViewName("admin/admin_survey_info");
-  //    return mav;
-  //  }
 
 }
