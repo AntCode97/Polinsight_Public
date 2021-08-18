@@ -58,7 +58,8 @@
         <span>
           <span class="btn_multi_wrap">
             <button class='btn_udel btn-support' th:onclick="|location.href='@{/admin/posts/{id}/edit (id=${list.id})}'|">수정</button>
-            <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>
+            <button class='btn_udel btn-warn delete-btn' th:value="${list.id}">삭제</button>
+<!--        <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>-->
           </span>
         </span>
       </div>

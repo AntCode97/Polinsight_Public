@@ -58,11 +58,9 @@ public class PostController {
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
         posts = postService.searchKeyword(keyword, pageable);
-
         model.addAttribute("posts", posts);
       }
     } else {
@@ -121,13 +119,9 @@ public class PostController {
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
+
       model.addAttribute("keyword", keyword);
       posts = postService.searchKeyword(keyword, pageable);
-      for (Post b :
-          posts) {
-        System.out.println(b.getId());
-      }
     } else {
       posts = postService.getPostList(pageable);
     }
@@ -187,7 +181,7 @@ public class PostController {
       model.addAttribute("postSearch", postSearch);
     }
     model.addAttribute("posts", posts);
-    //System.out.println(postSearch.toString());
+
 
     return "posts/postList";
   }
@@ -209,7 +203,7 @@ public class PostController {
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
-    System.out.println(postSearch.toString());
+
 
     return "posts/postList";
   }
@@ -230,14 +224,13 @@ public class PostController {
     //    }
     Post findPost = postService.findOne(postId);
     try {
-      System.out.println(session);
       long update_time = 0;
       if (session.getAttribute("update_time" + findPost.getId()) != null) {
         update_time = (long) session.getAttribute("update_time" + findPost.getId());
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        System.out.println("조회수 증가!!");
+        log.info("Post View COUNT");
         postService.upViewCnt(findPost);
         session.setAttribute("update_time" + findPost.getId(), current_time);
       } else
@@ -415,12 +408,16 @@ public class PostController {
     return "redirect:/posts";
   }
 
+  //Post로 바꿔도 될듯함
   @GetMapping("admin/posts/{postId}/delete")
-  public String adminDelete(@PathVariable("postId") Long postId, Model model) {
+  public String adminDelete(@PathVariable("postId") Long postId, Model model,@PageableDefault Pageable pageable) {
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
     postService.delete(post);
+    //Page<Post> posts = postService.getPostList(pageable);
+    //model.addAttribute("posts", posts);
     return "redirect:/admin/posts";
+    //return "fragments/postList";
   }
 
   @GetMapping("/api/post/search")
@@ -451,12 +448,9 @@ public class PostController {
 
 
     String keyword = paramMap.get("keyword").toString();
-    System.out.println(keyword);
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
     Page<Post> posts = postService.searchKeyword(keyword, pageable);
-    for (Post b : posts) {
-      System.out.println(b.getId());
-    }
+
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
 
@@ -489,7 +483,7 @@ public class PostController {
 
   @GetMapping("api/{file}/delete")
   public ResponseEntity asyncDeleteFile(@PathVariable("file") String filename, Model model) {
-    System.out.println("파일 삭제 성공!");
+    log.info("File Delete Success!!");
     attachService.delete(attachService.findByname(filename).get(0));
     return new ResponseEntity(HttpStatus.OK);
   }
