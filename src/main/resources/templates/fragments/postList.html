@@ -38,11 +38,13 @@
 
       <div class='post-row' th:each='list : ${posts}'>
         <span th:text='${list.id}'></span>
-        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title' th:text='${list.title}'>
-        </a>
-        <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(list.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(list.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(list.registeredAt)  }'>
+        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title'>
+          <span  th:text='${list.title}'></span>
+          <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(list.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(list.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(list.registeredAt)  }'>
           new
       </span>
+        </a>
+
 
 
 

@@ -142,10 +142,14 @@
         </div>
         <div class="post-row" th:each="post:${posts}">
           <span th:text="${post.id}"></span>
-          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title"><strong></strong></a>
-          <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'>
+          <a th:href="@{/posts/{id} (id=${post.id})}" class="post-title" >
+            <span th:text="${post.title}"></span>
+            <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'>
           new
       </span>
+            <strong></strong></a>
+<!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
+<!--          -->
           <span th:text="${post.user.name}"></span>
           <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
           <span th:text="${post.viewcnt}">52</span>

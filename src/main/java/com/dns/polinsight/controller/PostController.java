@@ -371,36 +371,7 @@ public class PostController {
     postDTO.setTitle(post.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     postDTO.setRegisteredAt(registeredAt);
-    //    try {
-    //      List<MultipartFile> mFiles =attachService.findMultipartFiles(postId);
-    //      for(MultipartFile m : mFiles){
-    //        System.out.println(m.getOriginalFilename());
-    //      }
-    //      postDTO.setFiles(mFiles);
-    //    } catch (Exception e){
-    //      System.out.println(e);
-    //    }
 
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
-
-    //    try{
-    //      File file = new File(post.getFilePath());
-    //      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
-    //      InputStream input = new FileInputStream(file);
-    //      OutputStream os = fileItem.getOutputStream();
-    //      IOUtils.copy(input, os);
-    //      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-    //      postDTO.setFile(multipartFile);
-    //      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
-    //
-    //    }catch (IOException ex){
-    //      System.out.println(ex);
-    //    }
-    //
-    //
-    //    model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
     return "admin/admin_post_update";
   }
