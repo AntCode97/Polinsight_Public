@@ -1,70 +1,72 @@
 <th:block>
   <style>
     footer {
-      margin-top: 50px;
-      position: relative;
-      padding: 20px 20px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      height: 200px;
-      background-color: #FFF;
-      color: #000;
-      font-size: 14px;
-      left: 0;
-      bottom: -10px;
-      border-top: 1px solid #444;
+      margin-top       : 50px;
+      position         : relative;
+      padding          : 20px 20px 30px;
+      display          : flex;
+      align-items      : center;
+      justify-content  : space-between;
+      width            : 100%;
+      height           : 200px;
+      background-color : #FFFFFF;
+      color            : #000000;
+      font-size        : 14px;
+      left             : 0;
+      bottom           : 0;
+      border-top       : 1px solid #444444;
     }
 
     .footer_container {
-      width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      padding: 0 15px;
+      width       : 1200px;
+      margin      : 0 auto;
+      display     : flex;
+      align-items : center;
+      padding     : 0 15px;
     }
 
     .footer_logo {
-      width: 200px;
-      height: 50px;
-      background-image: url("/img/logo/logo_color.png");
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: contain;
-      margin-right: 70px;
+      width               : 200px;
+      height              : 50px;
+      background-image    : url("/img/logo/logo_color.png");
+      background-repeat   : no-repeat;
+      background-position : center center;
+      background-size     : contain;
+      margin-right        : 70px;
     }
 
     .footer_href {
-      font-weight: bold;
+      font-weight : bold;
     }
 
     .footer_href::before {
-      content: '|';
-      display: inline-block;
-      color: #bdbdbd;
-      margin: 0 8px;
-      font-size: 14px;
+      content   : '|';
+      display   : inline-block;
+      color     : #BDBDBD;
+      margin    : 0 8px;
+      font-size : 14px;
     }
 
     .footer_conn::before {
-      content: '|';
-      display: inline-block;
-      color: #bdbdbd;
-      margin: 0 8px;
-      font-size: 14px;
+      content   : '|';
+      display   : inline-block;
+      color     : #BDBDBD;
+      margin    : 0 8px;
+      font-size : 14px;
     }
 
     .footer_left_common {
-      margin-bottom: 8px;
-      color: #444;
-      font-size: 14px;
+      margin-bottom : 8px;
+      color         : #444444;
+      font-size     : 14px;
     }
   </style>
   <footer>
     <div class="footer_wrap">
       <div class="footer_container">
-        <a th:href="@{/}"><div class="footer_logo"></div></a>
+        <a th:href="@{/}">
+          <div class="footer_logo"></div>
+        </a>
         <div class="footer_left">
           <div class="footer_left_common footer_left_line1">
             <span><a href="#" class="point_color" style="font-weight: bold;">개인정보처리방침</a></span>

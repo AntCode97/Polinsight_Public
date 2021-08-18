@@ -82,19 +82,15 @@ public class SurveyController {
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
     if (sessionUser == null) {
       throw new BadCredentialsException("UnAuthorized");
-      //      return new ModelAndView("redirect:/login");
     }
     try {
-      // TODO: 2021/07/27 : 값 넣기
       Survey survey = surveyService.findSurveyBySurveyId(surveyId).orElseThrow(SurveyNotFoundException::new);
       log.info("user click survey info is : {}", survey.toString());
-      // NOTE 2021-08-10 : 해시 생성 시, 이메일과 설문 아이디를 통해 해시를 생성한다
-      List<String> someVariables = Arrays.asList(sessionUser.getEmail(), survey.getSurveyId().toString());
-      //      String sb = "redirect:" +
+      List<String> someVariables = Arrays.asList(sessionUser.getEmail().toString(), survey.getSurveyId().toString());
       String sb = survey.getHref() +
           "?hash=" + new HashUtil().makeHash(someVariables, salt) +
           "&name=" + sessionUser.getEmail();
-      return success(sb.toString());
+      return success(sb);
     } catch (SurveyNotFoundException e) {
       throw new SurveyNotFoundException(e.getMessage());
     } catch (NoSuchAlgorithmException e) {

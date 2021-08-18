@@ -4,6 +4,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" type="text/css" href="/css/common.css">
+  <link href="/css/table.css" rel="stylesheet" />
   <script>
     const http = axios.create({
       baseURL: 'http://localhost:8080/',
@@ -11,5 +12,57 @@
         "Content-Type": "application/json;charset=utf-8",
       }
     })
+    const setDateValue = () => {
+      let today = new Date();
+      let year = $('select[name=year]')
+      for (let i = 1930; i <= today.getFullYear(); i++) {
+        year.append($("<option></option>").attr("value", i).text(i))
+      }
+      let month = $('select[name=month]')
+      for (let i = 1; i < 13; i++) {
+        month.append($("<option></option>").attr("value", i).text(i))
+      }
+    }
+
+    const setDay = (e) => {
+      const day = $('select[name=day]')
+      day.empty();
+      let month = $('select[name=month]').val()
+      day.append($("<option selected></option>").text("선택"))
+      if (month === 2) {
+        for (let i = 1; i <= 28; i++) {
+          day.append($("<option></option>").attr("value", i).text(i))
+        }
+      } else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+        for (let i = 1; i <= 31; i++) {
+          day.append($("<option></option>").attr("value", i).text(i))
+        }
+      } else {
+        for (let i = 1; i <= 30; i++) {
+          day.append($("<option></option>").attr("value", i).text(i))
+        }
+      }
+    }
+
+    const passwordInputValidator = pwd => {
+      return !!pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\]\[/\'\"\\\']{10,16}/);
+    }
+    const phoneInputValidator = phone => {
+      return !!phone.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/) || phone.match(/[0-9]{3}[0-9]{4}[0-9]{4}/)
+    }
+    const emailInputValidator = email => {
+      return !!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i);
+    }
+    const phoneToStringConverter = phone => {
+      if (phone.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
+        return phone.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
+      } else {
+        phone.substring(0, 11)
+        return phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3")
+      }
+    }
+    const blankOrNullChecker = val => {
+      return !(val.trim())
+    }
   </script>
 </div>

@@ -1,306 +1,420 @@
 <th:block th:include="admin/admin_sidebar" />
-<th:block th:include="module/common" />
 <th:block>
-  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     table {
-      width: 100%;
-      margin: 0;
+      margin : 0;
+      width  : 100%;
     }
 
-    .post-row > *:nth-child(1) {width: 50px;}
-    .post-row > *:nth-child(2) {width: 280px;}
-    tbody > .post-row > *:nth-child(2) {text-align: left;}
-    .post-row > *:nth-child(3) {width: 100px;}
-    .post-row > *:nth-child(4) {width: 150px;}
-    .post-row > *:nth-child(5) {width: 80px;}
-    .post-row > *:nth-child(6) {width: 70px;}
-    .post-row > *:nth-child(7) {width: 100px;}
-    .post-row > *:nth-child(8) {width: 120px;}
-    .post-row > span > button:first-child {margin-right: 3px;}
+    .post-row > *:nth-child(1) {
+      width : 50px;
+    }
+
+    .post-row > *:nth-child(2) {
+      width : 280px;
+    }
+
+    tbody > .post-row > *:nth-child(2) {
+      text-align : left;
+    }
+
+    .post-row > *:nth-child(3) {
+      width : 100px;
+    }
+
+    .post-row > *:nth-child(4) {
+      width : 150px;
+    }
+
+    .post-row > *:nth-child(5) {
+      width : 80px;
+    }
+
+    .post-row > *:nth-child(6) {
+      width : 70px;
+    }
+
+    .post-row > *:nth-child(7) {
+      width : 100px;
+    }
+
+    .post-row > *:nth-child(8) {
+      width : 120px;
+    }
+
+    .post-row > span > button:first-child {
+      margin-right : 3px;
+    }
 
     /* Modal Page Design */
     .modal_wrap {
-      position: fixed;
-      z-index: 1000;
-      background-color: rgba(0,0,0,0.4);
-      overflow: auto;
-      width: 100%;
-      height: 100%;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      top: 0;
+      align-items      : center;
+      background-color : rgba(0, 0, 0, 0.4);
+      display          : none;
+      height           : 100%;
+      justify-content  : center;
+      overflow         : auto;
+      position         : fixed;
+      top              : 0;
+      width            : 100%;
+      z-index          : 1000;
     }
+
     .modal_contents_box {
-      width: 1000px;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
-      position: relative;
-      background-color: white;
+      background-color : white;
+      border-radius    : 5px;
+      box-shadow       : 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+      padding          : 20px;
+      position         : relative;
+      width            : 1000px;
     }
+
     .btn_close {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      margin: 8px;
+      cursor   : pointer;
+      height   : 20px;
+      margin   : 8px;
+      position : absolute;
+      right    : 0;
+      top      : 0;
+      width    : 20px;
     }
+
     .btn_close > i {
-      color: #192739;
-      font-size: 25px;
-      display: block;
+      color     : #192739;
+      display   : block;
+      font-size : 25px;
     }
+
     .bottom_box {
-      display: flex;
-      justify-content: flex-start;
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      background-color: white;
-      margin-top: 10px;
+      background-color : white;
+      border-radius    : 5px;
+      display          : flex;
+      justify-content  : flex-start;
+      margin-top       : 10px;
+      overflow         : hidden;
+      padding          : 10px;
+      width            : 100%;
     }
+
     .left_box {
-      width: 200px;
-      padding: 10px 10px;
-      display: inline-block;
-      border-right: 1px solid #c5c7d0;
+      border-right : 1px solid #C5C7D0;
+      display      : inline-block;
+      padding      : 10px 10px;
+      width        : 200px;
     }
+
     .right_box {
-      width: calc(100% - 200px);
-      float: right;
+      float : right;
+      width : calc(100% - 200px);
     }
+
     .user_nav_btn_wrap {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
+      align-items     : center;
+      display         : flex;
+      flex-direction  : column;
+      height          : 100%;
+      justify-content : flex-start;
     }
-    .user_nav_btn_wrap > input[type='radio'] {display: none;}
+
+    .user_nav_btn_wrap > input[type='radio'] {
+      display : none;
+    }
+
     .user_nav_btn_wrap > input[type='radio'] + label {
-      width: 100%;
-      display: inline-block;
-      color: #444;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 15px 35px;
-      margin: 5px 0;
-      border-radius: 2px;
+      border-radius : 2px;
+      color         : #444444;
+      cursor        : pointer;
+      display       : inline-block;
+      font-size     : 14px;
+      margin        : 5px 0;
+      padding       : 15px 35px;
+      width         : 100%;
     }
+
     .user_nav_btn_wrap > input[type='radio'] + label:hover {
-      background-color: hsla(0, 0%, 78%, .2);
+      background-color : hsla(0, 0%, 78%, .2);
     }
-    .user_nav_btn_wrap > input[type='radio']:checked + label {color: white; background-color: #4C99CF; }
+
+    .user_nav_btn_wrap > input[type='radio']:checked + label {
+      background-color : #4C99CF;
+      color            : white;
+    }
+
     .tab_box {
-      display: none;
-      max-height: 85vh;
-      overflow: auto;
+      display    : none;
+      max-height : 85vh;
+      overflow   : auto;
     }
+
     .user_input_box {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-bottom: 10px;
-      position: relative;
+      align-items     : center;
+      display         : flex;
+      justify-content : flex-start;
+      margin-bottom   : 10px;
+      position        : relative;
     }
+
     .user_input_box > .info_article {
-      width: 105px;
-      margin: 0;
+      margin : 0;
+      width  : 105px;
     }
+
     .user_input_box > .user_info_input {
-      width: 200px;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      position: relative;
+      border        : none;
+      border-bottom : 1px solid #DDDDDD;
+      position      : relative;
+      width         : 200px;
     }
+
     .user_basic_wrap {
-      display: flex;
-      flex-direction: row;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
+      display        : flex;
+      flex-direction : row;
+      margin-bottom  : 1rem;
+      margin-top     : 0.5rem;
     }
 
     .user_info_box {
-      padding: 13px 20px;
-      flex: 1;
-      border: 1px solid #c5c7d0;
+      border  : 1px solid #C5C7D0;
+      flex    : 1;
+      padding : 13px 20px;
     }
+
     .info_article {
-      display: block;
-      color: #69666D;
-      font-size: 13px;
-      margin-bottom: .35rem;
+      color         : #69666D;
+      display       : block;
+      font-size     : 13px;
+      margin-bottom : .35rem;
     }
+
     .user_readonly_box {
-      background-color: #f1f2f7;
-      border: .1rem solid transparent;
-      flex: 1;
-      cursor: not-allowed;
+      background-color : #F1F2F7;
+      border           : .1rem solid transparent;
+      cursor           : not-allowed;
+      flex             : 1;
     }
+
     .user_basic_wrap > .user_info_box:first-child {
-      margin-right: 1rem;
+      margin-right : 1rem;
     }
+
     .user_info_input {
-      width: 100%;
-      outline: none;
-      font-size: 14px;
-      color: #333;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      height: 32px;
-      line-height: 32px;
+      border        : none;
+      border-bottom : 1px solid #DDDDDD;
+      color         : #333333;
+      font-size     : 14px;
+      height        : 32px;
+      line-height   : 32px;
+      outline       : none;
+      width         : 100%;
     }
-    .user_btn_wrap { display: flex;}
+
+    .user_btn_wrap {
+      display : flex;
+    }
+
     .mypage_btn {
-      color: white;
-      padding: 8px 15px;
-      background: #192739;
-      border-radius: 2px;
-      border: none;
-      font-size: 14px;
-      font-weight: normal;
-      cursor: pointer;
-      transition: box-shadow .2s cubic-bezier(.4,0,1,1), background-color .2s cubic-bezier(.4,0,.2,1);
+      background    : #192739;
+      border        : none;
+      border-radius : 2px;
+      color         : white;
+      cursor        : pointer;
+      font-size     : 14px;
+      font-weight   : normal;
+      padding       : 8px 15px;
+      transition    : box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1);
     }
+
     .mypage_btn:hover {
-      box-shadow: 0 14px 26px -12px hsl(0deg 0% 60% / 42%), 0 4px 23px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px hsl(0deg 0% 60% / 20%);
+      box-shadow : 0 14px 26px -12px hsl(0deg 0% 60% / 42%), 0 4px 23px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px hsl(0deg 0% 60% / 20%);
     }
+
     .item_header {
-      padding: 10px 15px;
-      background-color: white;
-      border-bottom: 1px solid #BBB;
-      color: #444;
-      font-size: 14px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items      : center;
+      background-color : white;
+      border-bottom    : 1px solid #BBBBBB;
+      color            : #444444;
+      display          : flex;
+      font-size        : 14px;
+      font-weight      : bold;
+      justify-content  : space-between;
+      padding          : 10px 15px;
     }
-    i { cursor: pointer; }
-    .item_content {background-color: white; padding: 7px 15px; }
-    .register_box { margin-bottom: 20px;}
+
+    i {
+      cursor : pointer;
+    }
+
+    .item_content {
+      background-color : white;
+      padding          : 7px 15px;
+    }
+
+    .register_box {
+      margin-bottom : 20px;
+    }
+
     .register_contents_wrap p {
-      color: black;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
+      color         : black;
+      font-size     : 18px;
+      font-weight   : bold;
+      margin-bottom : 8px;
     }
+
     .register_contents {
-      border-top: 1px solid #ddd;
+      border-top : 1px solid #DDDDDD;
     }
+
     .register_contents > ul > li {
-      display: flex;
-      align-items: center;
-      font-size: 13px;
-      border-bottom: 1px solid #ddd;
-      padding: 10px 0;
+      align-items   : center;
+      border-bottom : 1px solid #DDDDDD;
+      display       : flex;
+      font-size     : 13px;
+      padding       : 10px 0;
     }
+
     .left_content {
-      flex: 2;
+      flex : 2;
     }
+
     .right_content {
-      flex: 8;
+      flex : 8;
     }
+
     .left_content > label {
-      font-weight: bold;
-      padding: 0 15px;
-      overflow: hidden;
-      line-height: 18px;
-      cursor: pointer;
-      background: url('/img/etc/icon_required_input.png') right center no-repeat;
+      background  : url('/img/etc/icon_required_input.png') right center no-repeat;
+      cursor      : pointer;
+      font-weight : bold;
+      line-height : 18px;
+      overflow    : hidden;
+      padding     : 0 15px;
     }
+
     .right_content > input {
-      color: #333;
-      font-size: 14px;
-      margin: 0 3px;
-      outline: none;
+      color     : #333333;
+      font-size : 14px;
+      margin    : 0 3px;
+      outline   : none;
     }
+
     .info_msg, .err_msg {
-      font-size: 12px;
-      font-weight: normal;
-      padding: 0 5px;
+      font-size   : 12px;
+      font-weight : normal;
+      padding     : 0 5px;
     }
-    .info_msg {color: #a9a9a9;}
-    .err_msg {color: red; display: none;}
-    .no_need { background-image: url('')!important;}
+
+    .info_msg {
+      color : #A9A9A9;
+    }
+
+    .err_msg {
+      color   : red;
+      display : none;
+    }
+
+    .no_need {
+      background-image : url('') !important;
+    }
+
     .pannel_info_contents {
-      width: 800px;
-      margin: 40px auto 30px;
-      background-color: #EEE;
-      padding: 15px 0;
-      border-radius: 20px;
+      background-color : #EEEEEE;
+      border-radius    : 20px;
+      margin           : 40px auto 30px;
+      padding          : 15px 0;
+      width            : 800px;
     }
+
     .pannel_info_contents > * {
-      color: black;
-      text-align: center;
-      margin-bottom: 15px;
+      color         : black;
+      margin-bottom : 15px;
+      text-align    : center;
     }
+
     .pannel_info_contents > h1 {
-      font-size: 22px;
+      font-size : 22px;
     }
+
     .pannel_info_contents > p {
-      font-size: 16px;
-      font-weight: normal;
+      font-size   : 16px;
+      font-weight : normal;
     }
+
     .pannel_select {
-      margin: 0 auto;
-      width: 300px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
+      margin          : 0 auto;
+      width           : 300px;
     }
+
     .radio_wrap > label {
-      font-size: 16px;
-      font-weight: bold;
-      color: black;
+      color       : black;
+      font-size   : 16px;
+      font-weight : bold;
     }
+
     .right_content > label, .right_content > label > input {
-      cursor: pointer;
+      cursor : pointer;
     }
+
     .text_input {
-      width: 300px;
-      height: 32px;
-      border: 1px solid #ddd;
+      border : 1px solid #DDDDDD;
+      height : 32px;
+      width  : 300px;
     }
+
     .right_content > select {
-      width: 80px;
-      height: 32px;
-      cursor: pointer;
+      cursor : pointer;
+      height : 32px;
+      width  : 80px;
     }
-    #edu { width: 170px;}
-    #jobs { width: 120px;}
-    #industry { width: 200px;}
+
+    #edu {
+      width : 170px;
+    }
+
+    #jobs {
+      width : 120px;
+    }
+
+    #industry {
+      width : 200px;
+    }
+
     .input_content {
-      padding: 30px 30px;
+      padding : 30px 30px;
     }
+
     .introduce {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      border-bottom: 1px solid #ddd;
-      padding: 10px 0;
+      align-items     : center;
+      border-bottom   : 1px solid #DDDDDD;
+      display         : flex;
+      justify-content : flex-start;
+      padding         : 10px 0;
     }
+
     .introduce > .left_content {
-      flex: 3;
+      flex : 3;
     }
+
     .introduce > .right_content {
-      flex: 7;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+      align-items : center;
+      display     : flex;
+      flex        : 7;
+      flex-wrap   : wrap;
     }
+
     .introduce:nth-child(1) {
-      padding-top: 0;
+      padding-top : 0;
     }
+
     .introduce:nth-child(5) {
-      padding-bottom: 0;
-      border: none;
+      border         : none;
+      padding-bottom : 0;
     }
-    .post-row {cursor: pointer;}
+
+    .post-row {
+      cursor : pointer;
+    }
 
   </style>
   <!-- Modal Page: 회원정보 수정 -->
@@ -312,11 +426,13 @@
         <div class="left_box">
           <!-- 네비게이션 -->
           <div class="user_nav_btn_wrap">
-            <input type="radio" name="tabmenu" id="tab01" checked>
+            <input type="radio" name="tabmenu" id="tab01" checked />
             <label for="tab01">회원정보변경</label>
-            <input type="radio" name="tabmenu" id="tab02">
+            <input type="radio" name="tabmenu" id="tab02" />
             <label for="tab02">패널정보변경</label>
-            <input type="radio" name="tabmenu" id="tab03">
+            <input type="radio" name="tabmenu" id="tab03" />
+
+            <button id="admin_user_info_update_btn">업데이트</button>
           </div>
         </div>
         <div class="right_box">
@@ -330,31 +446,31 @@
                 <div class="user_basic_wrap">
                   <div class="user_info_box user_readonly_box">
                     <span class="info_article">아이디</span>
-                    <p>cherry02@google.com</p>
+                    <p id="user_email">cherry02@google.com</p>
                     <input type="hidden" name="">
                   </div>
                   <div class="user_info_box user_readonly_box">
                     <span class="info_article">추천인 전화번호</span>
-                    <p>010-1234-1235</p>
+                    <p id="user_recommend">010-1234-1235</p>
                     <input type="hidden" name="">
                   </div>
                 </div>
                 <div class="user_basic_wrap">
                   <div class="user_info_box user_name_box">
                     <span class="info_article">이름</span>
-                    <input type="text" class="user_info_input" name="name" value="최체리"></input>
+                    <input type="text" class="user_info_input" name="name" value="" />
                   </div>
                   <div class="user_info_box user_phone_box">
                     <span class="info_article">전화번호</span>
-                    <input type="tel" class="user_info_input" name="phone" value="01077779999" maxlength="11" onkeypress='return checkNumber(event)'></input>
+                    <input type="tel" class="user_info_input" name="phone" value="" maxlength="11" />
                   </div>
                 </div>
                 <div class="user_btn_wrap" style="justify-content: flex-start;">
                   <span class="err_msg">에러 메세지!!</span>
                 </div>
-                <div class="user_btn_wrap" style="justify-content: flex-end;">
-                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
-                </div>
+                <!--                <div class="user_btn_wrap" style="justify-content: flex-end;">-->
+                <!--                  <button name="basic_info_update" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>-->
+                <!--                </div>-->
               </div>
             </form>
           </div>
@@ -374,15 +490,15 @@
                         <ul>
                           <li>
                             <div class="left_content">
-                              <label for="user_sex">성별</label>
+                              <label>성별</label>
                             </div>
-                            <div class="right_content">
+                            <div id="gender" class="right_content">
                               <label>
-                                <input name="gender" type="radio" value="남성">
+                                <input name="gender" type="radio" value="MALE">
                                 남성
                               </label>
                               <label>
-                                <input name="gender" type="radio" value="여성">
+                                <input name="gender" type="radio" value="FEMALE">
                                 여성
                               </label>
                               <span class="err_msg">성별을 선택해주세요.</span>
@@ -405,11 +521,11 @@
                                 <option>선택</option>
                               </select><label for="day"> 일</label>
                               <label>
-                                <input checked name="birth" type="radio" value="양력">
+                                <input checked name="birthType" type="radio" value="양력">
                                 양력
                               </label>
                               <label>
-                                <input name="birth" type="radio" value="음력">
+                                <input name="birthType" type="radio" value="음력">
                                 음력
                               </label>
                               <span class="err_msg"></span>
@@ -419,13 +535,13 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="city">거주지</label>
+                              <label for="address">거주지</label>
                             </div>
-                            <div class="right_content">
-                              <select id="city" name="city">
+                            <div class="right_content" id="address">
+                              <select id="state" name="state">
                                 <option>시도</option>
                               </select>
-                              <select id="gu" name="gu">
+                              <select id="city" name="city">
                                 <option>시군구</option>
                               </select>
                               <span class="err_msg"></span>
@@ -435,15 +551,14 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="edu">최종학력</label>
+                              <label for="education">최종학력</label>
                             </div>
                             <div class="right_content">
-                              <select id="edu" name="edu">
-                                <option>선택</option>
-                                <option value="high">고졸 이하(재학 포함)</option>
-                                <option value="inuniversity">대학 재학</option>
-                                <option value="university">대학교 졸업(수료 포함)</option>
-                                <option value="graduate">대학원 이상</option>
+                              <select id="education" name="education">
+                                <option value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
+                                <option value="대학 재학">대학 재학</option>
+                                <option value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
+                                <option value="대학원 이상">대학원 이상</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -452,9 +567,9 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="">결혼여부</label>
+                              <label>결혼여부</label>
                             </div>
-                            <div class="right_content">
+                            <div id="marry" class="right_content">
                               <label>
                                 <input checked name="marry" type="radio" value="미혼">
                                 미혼
@@ -470,21 +585,21 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="jobs">직업</label>
+                              <label for="job">직업</label>
                             </div>
                             <div class="right_content">
-                              <select id="jobs" name="jobs">
+                              <select id="job" name="job">
                                 <option>선택</option>
-                                <option value="">학생</option>
-                                <option value="">경영직</option>
-                                <option value="">공무</option>
-                                <option value="">회사원</option>
-                                <option value="">자영업</option>
-                                <option value="">생산기술직</option>
-                                <option value="">예술인</option>
-                                <option value="">프리랜서</option>
-                                <option value="">무직</option>
-                                <option value="">기타</option>
+                                <option value="학생">학생</option>
+                                <option value="경영직">경영직</option>
+                                <option value="공무">공무</option>
+                                <option value="회사원">회사원</option>
+                                <option value="자영업">자영업</option>
+                                <option value="생산기술직">생산기술직</option>
+                                <option value="예술인">예술인</option>
+                                <option value="프리랜서">프리랜서</option>
+                                <option value="무직">무직</option>
+                                <option value="기타">기타</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -498,21 +613,21 @@
                             <div class="right_content">
                               <select id="industry" name="industry">
                                 <option>선택</option>
-                                <option value="">제조업</option>
-                                <option value="">건설업(인테리어 포함)</option>
-                                <option value="">부동산업</option>
-                                <option value="">임대•대여업</option>
-                                <option value="">도매 및 소매업(유통업)</option>
-                                <option value="">음식업•외식업</option>
-                                <option value="">운수•여객•숙박업</option>
-                                <option value="">여가 관련 서비스업</option>
-                                <option value="">방송•언론•출판</option>
-                                <option value="">정보통신업</option>
-                                <option value="">금융업</option>
-                                <option value="">교육 서비스업</option>
-                                <option value="">의료•보건•사회복지</option>
-                                <option value="">시장조사•컨설팅•광고대행업</option>
-                                <option value="">기타</option>
+                                <option value="제조업">제조업</option>
+                                <option value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
+                                <option value="부동산업">부동산업</option>
+                                <option value="임대•대여업">임대•대여업</option>
+                                <option value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
+                                <option value="음식업•외식업">음식업•외식업</option>
+                                <option value="운수•여객•숙박업">운수•여객•숙박업</option>
+                                <option value="여가 관련 서비스업">여가 관련 서비스업</option>
+                                <option value="방송•언론•출판">방송•언론•출판</option>
+                                <option value="정보통신업">정보통신업</option>
+                                <option value="금융업">금융업</option>
+                                <option value="교육 서비스업">교육 서비스업</option>
+                                <option value="의료•보건•사회복지">의료•보건•사회복지</option>
+                                <option value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
+                                <option value="기타">기타</option>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -521,29 +636,29 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="">관심분야</label>
+                              <label>관심분야</label>
                             </div>
                             <div class="right_content">
-                              <div class="type_box">
+                              <div id="favorite" class="type_box">
                                 <div class="introduce">
                                   <div class="left_content">
-                                    <label for="" class="no_need">건강, 헬스케어</label>
+                                    <label class="no_need">건강, 헬스케어</label>
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox" value="">
+                                      <input name="favorite" type="checkbox" value="건강일반" />
                                       건강일반
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="">
+                                      <input name="favorite" type="checkbox" value="건강식품" />
                                       건강식품
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="">
+                                      <input name="favorite" type="checkbox" value="다이어트" />
                                       다이어트
                                     </label>
                                     <label>
-                                      <input type="checkbox" value="">
+                                      <input name="favorite" type="checkbox" value="심리건강" />
                                       심리건강
                                     </label>
                                   </div>
@@ -551,43 +666,43 @@
 
                                 <div class="introduce">
                                   <div class="left_content">
-                                    <label for="" class="no_need">문화예술, 여가, 스포츠</label>
+                                    <label class="no_need">문화예술, 여가, 스포츠</label>
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="대중문화" />
                                       대중문화
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="음악" />
                                       음악
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="미술" />
                                       미술
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="공연•축제" />
                                       공연•축제
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="여행" />
                                       여행
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="생활문화" />
                                       생활문화
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="장르예술" />
                                       장르예술
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="레저활동" />
                                       레저활동
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="생활체육" />
                                       생활체육
                                     </label>
                                   </div>
@@ -595,67 +710,63 @@
 
                                 <div class="introduce">
                                   <div class="left_content">
-                                    <label for="" class="no_need">경제, 경영</label>
+                                    <label class="no_need">경제, 경영</label>
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox">
-                                      재테크
+                                      <input name="favorite" type="checkbox" value="제테크" />
+                                      제테크
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="창업" />
                                       창업
                                     </label>
                                     <label>
-                                      <input type="checkbox">
-                                      사회적경제
+                                      <input name="favorite" type="checkbox" value="사회적 경제" />
+                                      사회적 경제
                                     </label>
                                   </div>
                                 </div>
 
                                 <div class="introduce">
                                   <div class="left_content">
-                                    <label for="" class="no_need">사회, 복지</label>
+                                    <label class="no_need">사회, 복지</label>
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox">
-                                      사회, 복지일반
+                                      <input name="favorite" type="checkbox" value="사회•복지일반" />
+                                      사회•복지일반
                                     </label>
                                     <label>
-                                      <input type="checkbox">
-                                      아동, 청소년
+                                      <input name="favorite" type="checkbox" value="아동•청소년" />
+                                      아동•청소년
                                     </label>
                                     <label>
-                                      <input type="checkbox">
-                                      여성
-                                    </label>
-                                    <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="청년" />
                                       청년
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="노인" />
                                       노인
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="장애인" />
                                       장애인
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="다문화" />
                                       다문화
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="민주인권" />
                                       민주인권
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="노동인권" />
                                       노동인권
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="자원봉사" />
                                       자원봉사
                                     </label>
                                   </div>
@@ -663,19 +774,19 @@
 
                                 <div class="introduce">
                                   <div class="left_content">
-                                    <label for="" class="no_need">교육</label>
+                                    <label class="no_need">교육</label>
                                   </div>
                                   <div class="right_content">
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="평생교육">
                                       평생교육
                                     </label>
                                     <label>
-                                      <input type="checkbox">
-                                      초,중,고등학교
+                                      <input name="favorite" type="checkbox" value="초·중·고등교육">
+                                      초·중·고등교육
                                     </label>
                                     <label>
-                                      <input type="checkbox">
+                                      <input name="favorite" type="checkbox" value="대학교육">
                                       대학교육
                                     </label>
                                   </div>
@@ -694,15 +805,15 @@
                         <ul>
                           <li>
                             <div class="left_content">
-                              <label for="" class="no_need">SMS 수신동의</label>
+                              <label class="no_need">SMS 수신동의</label>
                             </div>
                             <div class="right_content">
                               <label>
-                                <input name="gender" type="radio" value="y">
+                                <input name="isSmsReceive" type="radio" value="true">
                                 동의함
                               </label>
                               <label>
-                                <input name="gender" type="radio" value="n">
+                                <input name="isSmsReceive" type="radio" value="false">
                                 동의안함
                               </label>
                               <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
@@ -712,15 +823,15 @@
 
                           <li>
                             <div class="left_content">
-                              <label for="" class="no_need">이메일 수신동의</label>
+                              <label class="no_need">이메일 수신동의</label>
                             </div>
                             <div class="right_content">
-                              <label >
-                                <input name="gender" type="radio" value="y">
+                              <label>
+                                <input name="isEmailReceive" type="radio" value="true">
                                 동의함
                               </label>
                               <label>
-                                <input name="gender" type="radio" value="n">
+                                <input name="isEmailReceive" type="radio" value="false">
                                 동의안함
                               </label>
                               <span class="err_msg">동의하지 않을 시 설문조사 안내를 받으실 수 없습니다.</span>
@@ -736,9 +847,9 @@
               <div class="user_btn_wrap" style="justify-content: flex-start;">
                 <span class="err_msg">에러 메세지!!</span>
               </div>
-              <div class="user_btn_wrap" style="justify-content: flex-end;">
-                <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
-              </div>
+              <!--              <div class="user_btn_wrap" style="justify-content: flex-end;">-->
+              <!--                <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>-->
+              <!--              </div>-->
             </form>
           </div>
         </div>
@@ -759,11 +870,11 @@
         <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
 
         <!--관리자 페이지 사용자 찾기 기능-->
-        <div class='form-search'>
-          <div class='tbl-search'>
-            <div class='box-search'>
-              <input type='text' id='searchinput' th:value='${keyword}' onchange='asyncFindBoard()' />
-              <input type='submit' />
+        <div class="form-search">
+          <div class="tbl-search">
+            <div class="box-search">
+              <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
+              <input type="submit" />
             </div>
           </div>
         </div>
@@ -778,9 +889,6 @@
   </div>
 
   <script>
-    const goUserInfoDetail = () => {
-
-    }
 
     const getHeader = () => {
       let header = $(`<tr class="post-th post-row"></tr>`)
@@ -815,23 +923,19 @@
           let next =
               $(`<div class="pagination_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`)
 
-          // first arrow
-          pagenationElem.append(gofirstArrow)
-          // prev arrow
-          pagenationElem.append(prev)
+          if (current >= 1)
+            pagenationElem.append(gofirstArrow).append(prev)
 
           for (let i = start; i < end; i++) {
             let tmp = $(`<div onclick="getMemberList(${i})" class="pagination_button">${i + 1}</div>`)
             // 활성화된 버튼에 대해 디자인 처리
             if (current === i) {
-              tmp.css('color', 'white').css('background-color', '#444');
+              tmp.css('color', 'white').css('background-color', '#444444');
             }
             pagenationElem.append(tmp)
           }
-          // next arrow
-          pagenationElem.append(next)
-          // last arrow
-          pagenationElem.append(goLastArrow)
+          if (current < totalPage-1)
+            pagenationElem.append(next).append(goLastArrow)
         } else {
           let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`)
           let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
@@ -842,8 +946,8 @@
           prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
           next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
 
-          pagenationElem.append(first)
-          pagenationElem.append(prev)
+          if (current >= 1)
+            pagenationElem.append(gofirstArrow).append(prev)
           for (let i = start; i < end; i++) {
             let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
             tmp.on('click', {page: i}, findUserByRegex);
@@ -855,10 +959,8 @@
             }
             pagenationElem.append(tmp)
           }
-          // // next arrow
-          pagenationElem.append(next)
-          // // last arrow
-          pagenationElem.append(last)
+          if (current < totalPage - 1)
+            pagenationElem.append(next).append(goLastArrow)
         }
       } else {
         $('.scroll-table>tbody').empty().append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
@@ -874,7 +976,12 @@
       template.append(`<td>${memberInfo.point}</td>`)
       template.append(`<td>${memberInfo.role}</td>`)
       template.append(`<td>${memberInfo.registeredAt}</td>`)
-      template.append(`<td><button class="btn_udel btn-support btn-open-modal">수정</button><span>  </span><button class="btn_udel btn-warn">삭제</button></td>`)
+      let tmpTableData = $(`<td></td>`)
+      tmpTableData.append($(`<button class="btn_udel btn-support btn-open-modal">수정</button>`).on('click', {userinfo: memberInfo}, openModalWithMemberInfo))
+      tmpTableData.append($(`<span>  </span>`))
+      tmpTableData.append($(`<button class="btn_udel btn-warn">삭제</button>`))
+      template.append(tmpTableData)
+      template.on('click', {userinfo: memberInfo}, openModalWithMemberInfo)
       return template;
     }
 
@@ -886,9 +993,6 @@
         table.append(makeAdminMemberRowTemplate(memberInfo))
     }
 
-    /*
-    * @Param  offset : 페이지 번호
-    * */
     const getMemberList = current => {
       http.get('/api/users', {
             params: {
@@ -902,6 +1006,90 @@
               makeAdminMemberListTemplate(res.data.response)
             }
           })
+    }
+
+    const sameValueCheck = (elem, prop, comp) => {
+      if ($(elem).val() === comp)
+        $(elem).prop(prop, true)
+      else
+        $(elem).prop(prop, false)
+    }
+
+    const infoChangeHandler = e => {
+      console.log(e.target.name, e.target.value)
+      if (e.target.name === 'favorite') {
+        if (updatedUser['favorite'].includes(e.target.value)) {
+          updatedUser['favorite'].pop(e.target.value)
+        } else {
+          updatedUser['favorite'].push(e.target.value)
+        }
+      } else
+        updatedUser[e.target.name] = e.target.value
+    }
+
+    const openModalWithMemberInfo = e => {
+      const user = e.data.userinfo;
+      updatedUser = {...user}
+      // 회원 정보 세팅
+      $('p#user_email').text(user.email)
+      $('p#user_recommend').text(user.recommend)
+      $('input[name=name]').val(user.name).on('keyup', infoChangeHandler)
+      $('input[name=phone]').val(user.phone).on('keyup', infoChangeHandler)
+      // 패널 정보 세팅
+      // 성별
+      $('#gender').find('input[name=gender]').each(function () {
+        sameValueCheck(this, 'checked', user.gender)
+      }).on('change', infoChangeHandler)
+      let birth = user.birth.substring(0, 10).split("-")
+      $('#year').val((birth[0] * 1)).prop('selected', true).on('change', infoChangeHandler)
+      $('#month').val((birth[1] * 1)).prop('selected', true).trigger('change').on('change', infoChangeHandler)
+      $('#day').val((birth[2] * 1)).prop('selected', true).on('change', infoChangeHandler)
+
+      $('#education').find('option').each(function () {
+        sameValueCheck(this, 'selected', user.education)
+      }).on('change', infoChangeHandler)
+      // 직업
+      $('#job').find('option').each(function () {
+        sameValueCheck(this, 'selected', user.job)
+      }).on('change', infoChangeHandler)
+      // 결혼
+      $('#marry').find('input[name=marry]').each(function () {
+        sameValueCheck(this, 'selected', user.marry)
+      }).on('change', infoChangeHandler)
+      $('select[name=state]').find('select').each(function () {
+        sameValueCheck(this, 'selected', user.state)
+      }).on('change', infoChangeHandler)
+      $('select[name=city]').find('select').each(function () {
+        sameValueCheck(this, 'selected', user.city)
+      }).on('change', infoChangeHandler)
+      $('#industry').find('option').each(function () {
+        sameValueCheck(this, 'selected', user.industry)
+      }).on('change', infoChangeHandler)
+      // 관심분야
+      $('#favorite').find('input[type=checkbox]').each(function () {
+        if (user.favorite.includes($(this).val()))
+          $(this).prop('checked', true)
+      }).on('change', infoChangeHandler)
+      // 수신 동의 - sms
+      $('input[name=isSmsReceive]').each(function () {
+        if (user.isSmsReceive === Boolean($(this).val())) {
+          $(this).prop('checked', true)
+        } else {
+          $(this).prop('checked', false)
+
+        }
+      }).on('change', infoChangeHandler)
+      // 수신 동의 - email
+      $('input[name=isEmailReceive]').each(function () {
+        if (user.isEmailReceive === Boolean($(this).val())) {
+          $(this).prop('checked', true)
+        } else {
+          $(this).prop('checked', false)
+        }
+      }).on('change', infoChangeHandler)
+      // 데이터 가져오기
+
+      $('.modal_wrap').css('display', 'flex');
     }
 
 
@@ -928,8 +1116,7 @@
         getMemberList(0);
       } else {
         countSearchUsers(findValue)
-        const offset = !e.data ? 0 : e.data.page
-        http.get('/api/user/find/' + findValue, {params: {size: 10, page: offset}})
+        http.get('/api/user/find/' + findValue, {params: {size: 10, page: !e.data ? 0 : e.data.page}})
             .then(res => {
               makeAdminMemberListTemplate(res.data.response)
               makePaginationButton(offset)
@@ -937,54 +1124,66 @@
       }
     }
 
+    let updatedUser = {}
+
     $(function () {
+      setDateValue()
+      $("#month").on('change selected', setDay)
+
       countAllUsers()
       getMemberList(0)  // 페이지 초기 값
       $('.scroll-table>thead').append(getHeader())
-      // $(document).on('click', 'tbody > tr.post-row', function () {
-      //   const userId = $(this).children('td:first-child').text()
-      //   location.href = `/admin/memberinfo/${userId}`
-      // })
 
       /*비동기 회원 찾기 및 화면 업데이트*/
       $('input[name=admin_find]').on('keyup', _.throttle(findUserByRegex, 300))
       $('button[name=admin_find_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
+      $('button#admin_user_info_update_btn').on('click', () => {
+        http.put('/user', updatedUser).then(res => {
+          if (res.data.success) {
+            alert('업데이트 성공')
+            location.reload()
+          } else {
+            alert('업데이트 실패')
+            location.reload()
+          }
+        }).catch(console.log)
+      })
     })
 
 
     /* 동적 웹디자인 및 유효성 체크 */
-    $(document).on('focus', '.user_info_input', function(){
+    $(document).on('focus', '.user_info_input', function () {
       $(this).css('border-bottom', '1px solid #4C99CF');
       $(this).prevAll('.info_article').css('color', '#4C99CF')
       $(this).parent('.user_info_box').css('border', '1px solid #4C99CF');
     });
-    $(document).on('blur', '.user_info_input', function(){
+    $(document).on('blur', '.user_info_input', function () {
       $(this).css('border-bottom', '1px solid #c5c7d0');
       $(this).prevAll('.info_article').css('color', '#69666D')
       $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
     });
 
-    $(document).on('click', '.user_nav_btn_wrap > input', function(){
-      if($(this).is(':checked')) {
+    $(document).on('click', '.user_nav_btn_wrap > input', function () {
+      if ($(this).is(':checked')) {
         $('.tab_box').css('display', 'none');
         const id = $(this).attr('id');
-        const num = id.substring(3,5);
+        const num = id.substring(3, 5);
         const selector = ".box" + num;
         $(selector).css('display', 'block');
       }
     });
-    $(document).on('click', '.btn_close', function(){
+    $(document).on('click', '.btn_close', function () {
       $('.modal_wrap').css('display', 'none');
     });
-    $(document).on('click', '.post-row > *', function(){
-      $('.modal_wrap').css('display', 'flex');
-    });
-    $(document).on('click', '.btn-open-modal', function(){
-      $('.modal_wrap').css('display', 'flex');
-    });
+    // $(document).on('click', '.post-row > *', function () {
+    //   $('.modal_wrap').css('display', 'flex');
+    // });
+    // $(document).on('click', '.btn-open-modal', function () {
+    //   $('.modal_wrap').css('display', 'flex');
+    // });
 
     function checkNumber(event) {
-      if(event.key >= 0 && event.key <= 9) {
+      if (event.key >= 0 && event.key <= 9) {
         return true;
       }
       return false;

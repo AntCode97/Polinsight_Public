@@ -1,11 +1,18 @@
 <th:block th:include="layout/header" />
-<h1>
-  포인트 적립 중 에러가 발생하였습니다.
-  관리자에게 문의해주세요
-</h1>
-<div>
-  <button onclick="location.replace('/')">홈화면으로</button>
-</div>
-<div>
-  <th:block th:include="layout/footer" />
-</div>
+<th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+  </style>
+  <h1>
+    포인트 적립 중 에러가 발생하였습니다.
+    관리자에게 문의해주세요
+  </h1>
+  <div>
+    <button onclick="location.replace('/')">홈화면으로</button>
+  </div>
+  <div>
+    <th:block th:include="layout/footer" />
+  </div>
+</th:block>

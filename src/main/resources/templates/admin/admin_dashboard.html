@@ -20,36 +20,6 @@
           .catch(console.log)
     }
 
-    const updateUserPoints = () => {
-      const checkedUpdateUser = $("input[name=check]:checked")
-    }
-
-    const getDataAsExcel = () => {
-
-    }
-
-    const deleteSurveyFromSurveyList = () => {
-    }
-
-    const setPointToSurvey = () => {
-
-    }
-
-    const deleteUser = () => {
-      http.delete('/user', {
-        data: {}
-      })
-    }
-
-    const getAllUsers = () => {
-      http.get('/users')
-          .then()
-          .catch()
-    }
-
-    const successPointPayment = () => {
-
-    }
 
     $(function () {
       $("#syncSurveyList").on('click', syncSurveyList)

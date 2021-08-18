@@ -1,9 +1,14 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.types.convereter.EmailAttrConverter;
+import com.dns.polinsight.types.convereter.PhoneAttrConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -24,14 +30,14 @@ import java.util.*;
 })
 @ToString
 @DynamicUpdate
+@DynamicInsert
 public class User implements UserDetails, Serializable {
 
   private static final long serialVersionUID = 7723866521224716971L;
 
   @Builder.Default
-  @ElementCollection
-  @Column(name = "participate_survey_id")
-  private Set<Long> participateSurvey = new HashSet<>();
+  @OneToMany(targetEntity = ParticipateSurvey.class, cascade = CascadeType.REMOVE, mappedBy = "user")
+  private Set<ParticipateSurvey> participateSurvey = new HashSet<>();
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -50,15 +56,18 @@ public class User implements UserDetails, Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String email;
+  @Convert(converter = EmailAttrConverter.class, attributeName = "email")
+  private Email email;
 
   private String password;
 
   private String name;
 
-  private String phone;
+  @Convert(converter = PhoneAttrConverter.class, attributeName = "phone")
+  private Phone phone;
 
-  private String recommend;
+  @Convert(converter = PhoneAttrConverter.class, attributeName = "recommend")
+  private Phone recommend;
 
   @PositiveOrZero
   @Builder.Default
@@ -66,7 +75,7 @@ public class User implements UserDetails, Serializable {
   private Long point = 0L;
 
   @Embedded
-  private Additional additional;
+  private Panel panel;
 
   /*이메일 수신 동의 여부*/
   @Column(name = "is_email_receive")
@@ -76,8 +85,8 @@ public class User implements UserDetails, Serializable {
   @Column(name = "is_sms_receive")
   private Boolean isSmsReceive;
 
-  //  @Column(name = "registered_at")
-  //  private LocalDateTime registeredAt;
+
+  private LocalDate registeredAt;
 
   public User(UserDto dto) {
     this.id = dto.getId();
@@ -92,9 +101,6 @@ public class User implements UserDetails, Serializable {
     //    this.registeredAt = dto.getRegisteredAt();
   }
 
-  public void addParticipateSurvey(long surveyId) {
-    this.participateSurvey.add(surveyId);
-  }
 
   public void setPosts(List<Post> posts) {
     this.posts = posts;
@@ -116,7 +122,7 @@ public class User implements UserDetails, Serializable {
 
   @Override
   public String getUsername() {
-    return this.email;
+    return this.email.toString();
   }
 
   @Override
@@ -139,5 +145,9 @@ public class User implements UserDetails, Serializable {
     return true;
   }
 
+  @PrePersist
+  public void setDefaultValue() {
+    this.registeredAt = LocalDate.now();
+  }
 
 }

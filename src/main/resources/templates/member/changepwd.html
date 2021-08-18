@@ -1,115 +1,111 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+<th:block>
   <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .login_input {
-      width: 100%;
-      outline: none;
-      border: none;
-      border-bottom: 1.5px solid #dde0ea;
-      color: #343236;
-      padding: 8px 0px;
-      height: 43px;
-      font-size: 16px;
+      width         : 100%;
+      outline       : none;
+      border        : none;
+      border-bottom : 1.5px solid #DDE0EA;
+      color         : #343236;
+      padding       : 8px 0px;
+      height        : 43px;
+      font-size     : 16px;
     }
 
     .login_btn_wrap > .btn-primary {
-      width: 30%;
-      font-weight: bold;
-      float: left;
+      width       : 30%;
+      font-weight : bold;
+      float       : left;
     }
 
     .btn-effect {
-      padding: 12px;
-      font-size: 18px;
-      text-align: center;
-      border-radius: 2px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      outline: none;
+      padding       : 12px;
+      font-size     : 18px;
+      text-align    : center;
+      border-radius : 2px;
+      cursor        : pointer;
+      border        : 1px solid transparent;
+      outline       : none;
     }
 
     .input_div {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
+      width         : 100%;
+      overflow      : hidden;
+      position      : relative;
+      margin-bottom : 20px;
     }
 
     .input_div > label > p {
-      font-size: 16px;
-      text-align: left;
-      color: #a5dff9;
+      font-size  : 16px;
+      text-align : left;
+      color      : #A5DFF9;
     }
 
     .vaild {
-      color: #00CC00;
+      color : #00CC00;
     }
 
     .invalid {
-      color: #FF0000;
+      color : #FF0000;
     }
   </style>
-</head>
-<body>
-<div>
   <div>
-    <form th:action="@{/changepwd}" method="POST">
-      <div class="input_div">
-        <label>
-          <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
-          <input class="pwdinput" name="pwd" placeholder="패스워드" required type="password">
-        </label>
-      </div>
-      <div class="input_div">
-        <label>
-          <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
-          <input class="pwdinput" placeholder="패스워드 확인" required type="password">
-        </label>
-        <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
-      </div>
+    <div>
+      <form th:action="@{/changepwd}" method="POST">
+        <div class="input_div">
+          <label>
+            <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
+            <input class="pwdinput" name="pwd" placeholder="패스워드" required type="password">
+          </label>
+        </div>
+        <div class="input_div">
+          <label>
+            <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
+            <input class="pwdinput" placeholder="패스워드 확인" required type="password">
+          </label>
+          <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
+        </div>
 
-      <div class="login_btn_wrap">
-        <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
-        <button type="submit" class="btn-primary btn-effect" id="btn_submit">변경하기</button>
-      </div>
-    </form>
+        <div class="login_btn_wrap">
+          <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
+          <button type="submit" class="btn-primary btn-effect" id="btn_submit">변경하기</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-<script th:inline="javascript">
+  <script th:inline="javascript">
 
-  const passwordChecker = () => {
-    const passwordValue = $("#pwd").val().trim();
-    const confirmValue = $("#pwdcfm").val().trim();
-    if (!passwordValue || !confirmValue)
-      return
+    const passwordChecker = () => {
+      const passwordValue = $("#pwd").val().trim();
+      const confirmValue = $("#pwdcfm").val().trim();
+      if (!passwordValue || !confirmValue)
+        return
 
-    const msg = $("#pwmsg")
-    if (passwordValue !== confirmValue) {
-      if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
-        msg.text("패스워드가 일치하지 않습니다. 확인해주세요.").removeClass("valid").addClass("invalid")
+      const msg = $("#pwmsg")
+      if (passwordValue !== confirmValue) {
+        if (confirmValue.replace(/\s/g, "").length !== 0 && passwordValue.replace(/\s/g, "").length !== 0) {
+          msg.text("패스워드가 일치하지 않습니다. 확인해주세요.").removeClass("valid").addClass("invalid")
+        }
+      } else {
+        msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
       }
-    } else {
-      msg.text("사용 가능한 패스워드 입니다.").removeClass("invalid").addClass("valid")
     }
-  }
 
-  $(function () {
-    $(document).on('focus', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #4C99CF');
-    });
-    $(document).on('blur', '.login_input', function () {
-      $(this).css('border-bottom', '1.5px solid #dde0ea');
-    });
+    $(function () {
+      $(document).on('focus', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #4C99CF');
+      });
+      $(document).on('blur', '.login_input', function () {
+        $(this).css('border-bottom', '1.5px solid #dde0ea');
+      });
 
-    $('.pwdinput').on('keyup', passwordChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
+      $('.pwdinput').on('keyup', passwordChecker).on('paste', () => alert('붙여넣기는 사용하실 수 없습니다.'));
 
 
-  })
-</script>
-</body>
-</html>
+    })
+  </script>
+</th:block>

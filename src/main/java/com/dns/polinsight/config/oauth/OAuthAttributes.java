@@ -1,6 +1,7 @@
 package com.dns.polinsight.config.oauth;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +19,12 @@ public class OAuthAttributes {
 
   private final String name;
 
-  private final String email;
+  private final Email email;
 
   private final String picture;
 
   @Builder
-  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
+  public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, Email email, String picture) {
     this.attributes = attributes;
     this.nameAttributeKey = nameAttributeKey;
     this.name = name;
@@ -51,7 +52,7 @@ public class OAuthAttributes {
     Map<String, Object> response = (Map<String, Object>) attributes.get("response");
     return OAuthAttributes.builder()
                           .name((String) attributes.get("name"))
-                          .email((String) attributes.get("email"))
+                          .email((Email) attributes.get("email"))
                           .picture((String) attributes.get("profile_image"))
                           .attributes(response)
                           .nameAttributeKey(userNameAttributeName)
@@ -64,7 +65,7 @@ public class OAuthAttributes {
     Map<String, Object> profiles = (Map<String, Object>) kakao_account.get("profile");
     return OAuthAttributes.builder()
                           .name((String) profiles.get("nickname")) // 카카오는 닉네임만 제공, 실명이 필요하다면 따로 받아야 함
-                          .email((String) kakao_account.get("email"))
+                          .email((Email) kakao_account.get("email"))
                           .picture((String) profiles.get("profile_image_url"))
                           .attributes(attributes)
                           .nameAttributeKey(userNameAttributeName)
@@ -76,7 +77,7 @@ public class OAuthAttributes {
     Map<String, Object> response = (Map<String, Object>) attributes.get("response");
     return OAuthAttributes.builder()
                           .name((String) response.get("name"))
-                          .email((String) response.get("email"))
+                          .email((Email) response.get("email"))
                           .picture((String) response.get("profile_image"))
                           .attributes(response)
                           .nameAttributeKey(userNameAttributeName)

@@ -1,28 +1,32 @@
 <th:block th:include="layout/header" />
 <th:block>
   <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .contract_wrap {
-      width: 1000px;
-      margin: 30px auto 50px;
-      position: relative;
+      width    : 1000px;
+      margin   : 30px auto 50px;
+      position : relative;
     }
 
     .contract_title {
-      color: black;
-      margin-bottom: 20px;
+      color         : black;
+      margin-bottom : 20px;
     }
 
     .contract_title > h1 {
-      font-size: 25px;
-      font-weight: bold;
-      text-align: center;
+      font-size   : 25px;
+      font-weight : bold;
+      text-align  : center;
     }
 
     .contract_contents_wrap > p {
-      color: black;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
+      color         : black;
+      font-size     : 18px;
+      font-weight   : bold;
+      margin-bottom : 8px;
     }
 
     .contract_contents {
@@ -32,177 +36,177 @@
     /* 여기서부터 추가  */
     /* header */
     .divsize {
-      margin: 0 auto;
-      box-sizing: border-box;
+      margin     : 0 auto;
+      box-sizing : border-box;
     }
 
     /* Container */
     #container {
-      position: relative;
+      position : relative;
     }
 
     #join_content {
-      margin: 0 auto;
+      margin : 0 auto;
     }
 
     .terms {
-      background-color: white;
-      border: 1px solid #dadada;
+      background-color : white;
+      border           : 1px solid #DADADA;
     }
 
     .terms_p {
-      position: relative;
-      margin: 0px;
-      padding: 15px;
-      display: block;
+      position : relative;
+      margin   : 0px;
+      padding  : 15px;
+      display  : block;
     }
 
     .terms_span {
-      position: relative;
-      display: block;
+      position : relative;
+      display  : block;
     }
 
     .terms_span > input {
-      position: absolute;
-      right: 1px;
-      top: 50%;
-      width: 22px;
-      height: 22px;
-      margin-top: -11px;
-      visibility: hidden;
+      position   : absolute;
+      right      : 1px;
+      top        : 50%;
+      width      : 22px;
+      height     : 22px;
+      margin-top : -11px;
+      visibility : hidden;
     }
 
     .terms_span > input:checked + label {
-      background-image: url("img/etc/check_on.gif");
+      background-image : url("img/etc/check_on.gif");
     }
 
     .terms_span > label {
-      font-size: 14px;
-      font-weight: 700;
-      top: -1px;
-      height: 25px;
-      line-height: 25px;
-      display: block;
-      cursor: pointer;
-      background: url("img/etc/check_off.gif") 100% 50% no-repeat;
+      font-size   : 14px;
+      font-weight : 700;
+      top         : -1px;
+      height      : 25px;
+      line-height : 25px;
+      display     : block;
+      cursor      : pointer;
+      background  : url("img/etc/check_off.gif") 100% 50% no-repeat;
     }
 
     #terms_ul {
-      padding-bottom: 7px;
+      padding-bottom : 7px;
     }
 
     #terms_ul > li {
-      display: block;
-      padding: 13px 15px 7px;
+      display : block;
+      padding : 13px 15px 7px;
     }
 
     #terms_ul_li1 {
-      border-top: 1px solid #f0f0f0;
+      border-top : 1px solid #F0F0F0;
     }
 
     .ul_li_span {
-      position: relative;
-      display: block;
-      height: 24px;
+      position : relative;
+      display  : block;
+      height   : 24px;
     }
 
     .ul_li_span > input {
-      position: absolute;
-      right: 1px;
-      top: 50%;
-      margin-top: -11px;
-      width: 22px;
-      height: 22px;
-      visibility: hidden;
+      position   : absolute;
+      right      : 1px;
+      top        : 50%;
+      margin-top : -11px;
+      width      : 22px;
+      height     : 22px;
+      visibility : hidden;
     }
 
     .ul_li_span > input:checked + label {
-      background-image: url("img/etc/check_on.gif");
+      background-image : url("img/etc/check_on.gif");
     }
 
     .ul_li_span > label {
-      background: url("img/etc/check_off.gif") 100% 50% no-repeat;
-      display: block;
+      background : url("img/etc/check_off.gif") 100% 50% no-repeat;
+      display    : block;
     }
 
     .label1 {
-      height: 24px;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 24px;
-      position: absolute;
-      color: #333;
-      top: 0px;
-      left: 0px;
-      width: 100%;
-      cursor: pointer;
+      height      : 24px;
+      font-size   : 14px;
+      font-weight : 700;
+      line-height : 24px;
+      position    : absolute;
+      color       : #333333;
+      top         : 0px;
+      left        : 0px;
+      width       : 100%;
+      cursor      : pointer;
     }
 
     .span_only {
-      color: #0d9900;
-      font-size: 12px;
-      font-weight: 400;
+      color       : #0D9900;
+      font-size   : 12px;
+      font-weight : 400;
     }
 
     .span_select {
-      color: #969696;
-      font-size: 12px;
-      font-weight: 400;
+      color       : #969696;
+      font-size   : 12px;
+      font-weight : 400;
     }
 
     .terms_box {
-      box-sizing: border-box;
-      position: relative;
-      height: 150px;
-      margin-top: 11px;
-      padding: 8px 10px;
-      border: 1px solid #f0f0f0;
-      background-color: #f7f7f7;
-      overflow: auto;
+      box-sizing       : border-box;
+      position         : relative;
+      height           : 150px;
+      margin-top       : 11px;
+      padding          : 8px 10px;
+      border           : 1px solid #F0F0F0;
+      background-color : #F7F7F7;
+      overflow         : auto;
     }
 
     .article {
-      margin-top: 0px;
+      margin-top : 0px;
     }
 
     h3.article_title {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 16px;
-      color: #666;
-      margin: 0;
-      padding: 0;
-      padding: 8px 0;
+      font-size   : 12px;
+      font-weight : 700;
+      line-height : 16px;
+      color       : #666666;
+      margin      : 0;
+      padding     : 0;
+      padding     : 8px 0;
     }
 
     .article > p {
-      display: block;
-      font-size: 12px;
-      line-height: 16px;
-      color: #666;
+      display     : block;
+      font-size   : 12px;
+      line-height : 16px;
+      color       : #666666;
     }
 
     #err_check_msg {
-      display: none;
-      color: tomato;
+      display : none;
+      color   : tomato;
     }
 
     .btn_wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 30px;
+      display         : flex;
+      justify-content : center;
+      align-items     : center;
+      margin-top      : 30px;
     }
 
     .btn_submit {
-      background-color: #4C99CF;
-      color: white;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      padding: 7px 45px;
-      font-size: 16px;
-      font-weight: bold;
+      background-color : #4C99CF;
+      color            : white;
+      border           : none;
+      outline          : none;
+      cursor           : pointer;
+      padding          : 7px 45px;
+      font-size        : 16px;
+      font-weight      : bold;
     }
   </style>
   <div class="contract_wrap">
