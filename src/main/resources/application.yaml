@@ -184,10 +184,10 @@ management :
 ---
 spring :
   datasource :
-    username :            root
-    password :            root
-    url :                 jdbc:mariadb://localhost:3306/polinsight
-    driver-class-name :   org.mariadb.jdbc.Driver
+    username :          root
+    password :          root
+    url :               jdbc:mariadb://localhost:3306/polinsight
+    driver-class-name : org.mariadb.jdbc.Driver
     hikari :
       pool-name :         Test DBCP Pool
       maximum-pool-size : 5
@@ -209,8 +209,8 @@ spring :
       ddl-auto : none
     properties :
       format_sql : true
-    show-sql :     true
-#    generate-ddl : true
+    show-sql : true
+  #    generate-ddl : true
 
   banner :
     location : banner-dev.txt
@@ -272,3 +272,7 @@ server :
 logging :
   file :
     name : ./polinsight_logs.log
+
+custom :
+  callback :
+    base : "http://dnslab.iptime.org"
