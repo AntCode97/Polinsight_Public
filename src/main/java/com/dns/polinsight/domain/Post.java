@@ -57,9 +57,6 @@ public class Post implements Serializable {
   @Column(name = "type")
   private PostType postType;
 
-  @Column(name = "is_new")
-  private Boolean newPost;
-
   @Setter
   @Column(name = "view_count")
   private Long viewcnt;
@@ -77,18 +74,6 @@ public class Post implements Serializable {
         .viewcnt(0L);
   }
 
-
-  //  //TODO: 게시글 업데이트도 포함해야함
-  //  public void update(String title, String content, LocalDateTime registeredAt){
-  //    this.title = title;
-  //    this.searchcontent = content;
-  //    this.viewcontent = content;
-  //    this.registeredAt =registeredAt;
-  //  }
-
-  public void setNewPost(Boolean time) {
-    this.newPost = time;
-  }
 
 
 }

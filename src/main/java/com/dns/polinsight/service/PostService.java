@@ -20,7 +20,6 @@ public interface PostService {
 
   Post addPost(PostDTO postDTO);
 
-  void renewPost();
 
   Page<Post> getPostList(Pageable pageable);
 

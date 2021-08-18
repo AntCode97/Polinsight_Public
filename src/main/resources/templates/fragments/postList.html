@@ -38,8 +38,16 @@
 
       <div class='post-row' th:each='list : ${posts}'>
         <span th:text='${list.id}'></span>
-        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title' th:text='${list.title}'></a>
-        <span th:if='${list.newPost}'>New!</span>
+        <a th:href='@{/admin/posts/{id} (id=${list.id})}' class='post-title'>
+          <span  th:text='${list.title}'></span>
+          <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(list.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(list.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(list.registeredAt)  }'>
+          new
+      </span>
+        </a>
+
+
+
+
         <span th:text='${list.user.name}'></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
         <span th:text='${list.viewcnt}'></span>
@@ -50,7 +58,8 @@
         <span>
           <span class="btn_multi_wrap">
             <button class='btn_udel btn-support' th:onclick="|location.href='@{/admin/posts/{id}/edit (id=${list.id})}'|">수정</button>
-            <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>
+            <button class='btn_udel btn-warn delete-btn' th:value="${list.id}">삭제</button>
+<!--        <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>-->
           </span>
         </span>
       </div>
@@ -60,7 +69,7 @@
 
       <!-- 페이지네이션 -->
       <div th:if='${keyword} !=null' class='page-button' th:with='start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})'>
-        <a th:href="${posts.first} ? '#' : @{/admin/posts/search(keyword=${keyword}, page=1)}" aria-label='First'>
+        <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/admin/posts/search(keyword=${keyword}, page=1)}" aria-label='First'>
           <i class='fas fa-angle-double-left'></i>
         </a>
         <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/admin/posts/search(keyword=${keyword}, page=${posts.number})}" aria-label='Prev'>
@@ -75,12 +84,13 @@
           <i class='fas fa-angle-double-right'></i>
         </a>
       </div>
+
       <div th:if='${keyword} == null' class='page-button' th:with='start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})'>
         <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/admin/posts/(page=1)}" aria-label='First'>
           <i class='fas fa-angle-double-left'></i>
         </a>
         <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/admin/posts/(page=${posts.number})}" aria-label='Prev'>
-          <i class='fas fa-angle-left'></i>
+          <i  class='fas fa-angle-left'></i>
         </a>
         <a th:unless='${page == 0}' class='current-page' th:each='page: ${#numbers.sequence(start, last)}' th:class="${page == posts.number + 1} ? 'active': 'not-active' " th:text='${page}'
            th:href='@{/admin/posts/(page=${page})}'></a>
