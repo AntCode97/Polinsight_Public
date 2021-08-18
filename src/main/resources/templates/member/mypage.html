@@ -1,6 +1,10 @@
 <th:block th:include="layout/header" />
 <th:block>
   <style type="text/css">
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .mypage_wrap {
       width           : 1000px;
       margin          : 20px auto;
@@ -1346,7 +1350,6 @@
 
 
         const init = () => {
-          $('.header_wrap').css('background-color', '#182838')
 
           let user_total_point = $('.point_info>span:first-child').text().replaceAll(/[^\d]/g, '') * 1
           let user_point = $('.point_info>span:last-child')

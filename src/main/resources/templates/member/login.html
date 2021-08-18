@@ -1,7 +1,10 @@
 <th:block th:include="layout/header" />
 <th:block>
   <style>
-    /* 모달 로그인 창 */
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .modal_wrap {
       align-items     : center;
       display         : flex;
@@ -306,8 +309,6 @@
     }
 
     $(function () {
-      $('.header_wrap').css('background-color', '#182838')
-
       errorChk()
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경

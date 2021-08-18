@@ -88,7 +88,7 @@
     <div class="modal_wrap">
       <div class="modal_content">
         <div class="modal_header">
-          <p class="modal_buttons"><i class="fas fa-times"></i></p>
+          <p class="modal_buttons modal_close_btn"><i class="fas fa-times"></i></p>
         </div>
         <div class="modal_body">
           <p class="notice"></p>
@@ -111,13 +111,6 @@
         }).on('mouseleave', function () {
           $(this).css('cursor', 'default').css('box-shadow', 'none')
         }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
-        // .on('click', () => {
-        //       if (confirm(survey.title + '에 참여하시겠습니까?')) {
-        //         alert(survey.participateUrl)
-        //         location.replace(survey.participateUrl + '?hash=1234&email=이메일')
-        //       }
-        //     })
-
       } else {
         template.addClass('bg_color_item_gray')
         template.append(`<p class="survey_stop">조사완료</p>`)
@@ -217,23 +210,25 @@
       const title = e.data.title
 
       $('.modal_container').css('display', 'flex')
-      $('button[name=participate_btn]').on('click', () => alert('참여'))
+
       $('p.notice').append(`<span class="modal_title">${title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
-      $('.popup_close_btn').on('click', () => {
+      // 참여하기 버튼 이벤트 등록
+      $('.participate_btn').on('click', () => {
+        http.get(`/api/survey/${surveyId}`)
+            .then(res => {
+              if (res.data.success) {
+                // window.open(res.data.response);
+                location.replace(res.data.response) // 참여 url로 리다이렉트
+              } else {
+                alert('에러 발생')
+                console.log(res)
+              }
+            }).catch(console.log)
+      })
+      $('.modal_close_btn').on('click', () => {
+        $('.participate_btn').off('click')
         $('.modal_container').fadeOut()
       })
-      // if (confirm(title + ' 설문을 진행하시겠습니까?')) {
-      //   http.get(`/api/survey/${surveyId}`)
-      //       .then(res => {
-      //         if (res.data.success) {
-      //           // window.open(res.data.response);
-      //           location.replace(res.data.response)
-      //         } else {
-      //           alert('에러 발생')
-      //           console.log(res)
-      //         }
-      //       }).catch(console.log)
-      // }
     }
 
     $(function () {

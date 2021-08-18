@@ -1,5 +1,10 @@
 <th:block th:include="layout/header" />
 <th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+  </style>
   <h1>
     포인트 적립 중 에러가 발생하였습니다.
     관리자에게 문의해주세요
@@ -10,9 +15,4 @@
   <div>
     <th:block th:include="layout/footer" />
   </div>
-  <script>
-    $(function () {
-      $('.header_wrap').css('background-color', '#182838')
-    })
-  </script>
 </th:block>
