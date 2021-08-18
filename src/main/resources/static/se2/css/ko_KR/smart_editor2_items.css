@@ -1,462 +1,2897 @@
 @charset "UTF-8";
 /* NHN Web Standardization Team (http://html.nhndesign.com/) HHJ 090226 */
 /* TEXT_TOOLBAR : FONTNAME */
-#smart_editor2 .se2_tool .se2_l_font_fam{width:202px;margin:0;padding:0}
-#smart_editor2 .se2_tool .se2_l_font_fam li{display:block;width:202px;height:21px;margin:0;padding:0;color:#333;cursor:pointer}
-#smart_editor2 .se2_l_font_fam .hover,#smart_editor2 .se2_l_font_fam .active{background:#ebebeb}
-#smart_editor2 .se2_l_font_fam button{width:200px;height:21px;margin:0;padding:2px 0 2px 0px;background:none;text-align:left}
-#smart_editor2 .se2_l_font_fam button span{display:block;visibility:visible;overflow:visible;position:relative;top:auto;left:auto;width:auto;height:auto;margin:0 0 0 4px;padding:0;font-size:12px;line-height:normal;color:#333}
-#smart_editor2 .se2_l_font_fam button span span{display:inline;visibility:visible;overflow:visible;width:auto;height:auto;margin:0 0 0 4px;font-family:Verdana;font-size:12px;line-height:14px;color:#888}
-#smart_editor2 .se2_l_font_fam button span em{visibility:visible;overflow:auto;position:static;width:auto;height:auto;margin-right:-4px;font-size:12px;color:#888}
-#smart_editor2 .se2_l_font_fam .se2_division{width:162px;height:2px !important;margin:1px 0 1px 0px;border:0;background:url("../../img/bg_line1.gif") 0 0 repeat-x;font-size:0;cursor:default}
+#smart_editor2 .se2_tool .se2_l_font_fam {
+  margin  : 0;
+  padding : 0
+  width   : 202px;
+}
+
+#smart_editor2 .se2_tool .se2_l_font_fam li {
+  color   : #333333;
+  cursor  : pointer
+  display : block;
+  height  : 21px;
+  margin  : 0;
+  padding : 0;
+  width   : 202px;
+}
+
+#smart_editor2 .se2_l_font_fam .hover, #smart_editor2 .se2_l_font_fam .active {
+  background : #EBEBEB
+}
+
+#smart_editor2 .se2_l_font_fam button {
+  background : none;
+  height     : 21px;
+  margin     : 0;
+  padding    : 2px 0 2px 0px;
+  text-align : left
+  width      : 200px;
+}
+
+#smart_editor2 .se2_l_font_fam button span {
+  color       : #333333
+  display     : block;
+  font-size   : 12px;
+  height      : auto;
+  left        : auto;
+  line-height : normal;
+  margin      : 0 0 0 4px;
+  overflow    : visible;
+  padding     : 0;
+  position    : relative;
+  top         : auto;
+  visibility  : visible;
+  width       : auto;
+}
+
+#smart_editor2 .se2_l_font_fam button span span {
+  color       : #888888
+  display     : inline;
+  font-family : Verdana;
+  font-size   : 12px;
+  height      : auto;
+  line-height : 14px;
+  margin      : 0 0 0 4px;
+  overflow    : visible;
+  visibility  : visible;
+  width       : auto;
+}
+
+#smart_editor2 .se2_l_font_fam button span em {
+  color        : #888888
+  font-size    : 12px;
+  height       : auto;
+  margin-right : -4px;
+  overflow     : auto;
+  position     : static;
+  visibility   : visible;
+  width        : auto;
+}
+
+#smart_editor2 .se2_l_font_fam .se2_division {
+  background : url("../../img/bg_line1.gif") 0 0 repeat-x;
+  border     : 0;
+  cursor     : default
+  font-size  : 0;
+  height     : 2px !important;
+  margin     : 1px 0 1px 0px;
+  width      : 162px;
+}
+
 /* TEXT_TOOLBAR : FONTSIZE */
-#smart_editor2 .se2_tool .se2_l_font_size{width:302px;margin:0;padding:0}
-#smart_editor2 .se2_tool .se2_l_font_size li{width:302px;margin:0;padding:0;color:#333;cursor:pointer}
-#smart_editor2 .se2_l_font_size .hover,#smart_editor2 .se2_l_font_size .active{background:#ebebeb}
-#smart_editor2 .se2_l_font_size button{width:300px;height:auto;margin:0;padding:2px 0 1px 0px;*padding:4px 0 1px 0px;background:none;text-align:left}
-#smart_editor2 .se2_l_font_size button span{display:block;visibility:visible;overflow:visible;position:relative;top:auto;left:auto;width:auto;height:auto;margin:0 0 0 4px;padding:0;line-height:normal;color:#373737;letter-spacing:0px}
-#smart_editor2 .se2_l_font_size button span span{display:inline;margin:0 0 0 5px;padding:0}
-#smart_editor2 .se2_l_font_size span em{visibility:visible;overflow:auto;position:static;width:auto;height:auto;color:#888}
+#smart_editor2 .se2_tool .se2_l_font_size {
+  margin  : 0;
+  padding : 0
+  width   : 302px;
+}
+
+#smart_editor2 .se2_tool .se2_l_font_size li {
+  color   : #333333;
+  cursor  : pointer
+  margin  : 0;
+  padding : 0;
+  width   : 302px;
+}
+
+#smart_editor2 .se2_l_font_size .hover, #smart_editor2 .se2_l_font_size .active {
+  background : #EBEBEB
+}
+
+#smart_editor2 .se2_l_font_size button {
+  background : none;
+  height     : auto;
+  margin     : 0;
+  *padding   : 4px 0 1px 0px;
+  padding    : 2px 0 1px 0px;
+  text-align : left
+  width      : 300px;
+}
+
+#smart_editor2 .se2_l_font_size button span {
+  color          : #373737;
+  display        : block;
+  height         : auto;
+  left           : auto;
+  letter-spacing : 0px
+  line-height    : normal;
+  margin         : 0 0 0 4px;
+  overflow       : visible;
+  padding        : 0;
+  position       : relative;
+  top            : auto;
+  visibility     : visible;
+  width          : auto;
+}
+
+#smart_editor2 .se2_l_font_size button span span {
+  display : inline;
+  margin  : 0 0 0 5px;
+  padding : 0
+}
+
+#smart_editor2 .se2_l_font_size span em {
+  color      : #888888
+  height     : auto;
+  overflow   : auto;
+  position   : static;
+  visibility : visible;
+  width      : auto;
+}
+
 /* TEXT_TOOLBAR : FONTCOLOR */
-#smart_editor2 .se2_palette{float:left;position:relative;width:225px;margin:0;padding:11px 0 10px 0}
-#smart_editor2 .se2_palette .se2_pick_color{_display:inline;float:left;clear:both;width:205px;margin:0 0 0 11px;padding:0}
-#smart_editor2 .se2_palette .se2_pick_color li{float:left;width:12px;height:12px;margin:0;padding:0}
-#smart_editor2 .se2_palette .se2_pick_color li button{width:11px;height:11px;border:0}
-#smart_editor2 .se2_palette .se2_pick_color li button span{display:block;visibility:visible;overflow:visible;position:absolute;top:1px;left:1px;width:11px;height:11px}
-#smart_editor2 .se2_palette .se2_pick_color li button span span{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0}
-#smart_editor2 .se2_palette .se2_pick_color .hover button,#smart_editor2 .se2_palette .se2_pick_color .active button{width:11px;height:11px;border:1px solid #666}
-#smart_editor2 .se2_palette .se2_pick_color .hover span,#smart_editor2 .se2_palette .se2_pick_color .active span{width:7px;height:7px;border:1px solid #fff}
-#smart_editor2 .se2_palette .se2_view_more{_display:inline;float:left;width:46px;height:23px;margin:1px 0 0 1px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -47px no-repeat}
-#smart_editor2 .se2_palette .se2_view_more2{_display:inline;float:left;width:46px;height:23px;margin:1px 0 0 1px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -24px no-repeat}
-#smart_editor2 .se2_palette h4{_display:inline;float:left;width:203px;margin:9px 0 0 11px;padding:10px 0 4px 0;background:url("../../img/bg_line1.gif") repeat-x;font-weight:normal;font-size:12px;line-height:14px;color:#333;letter-spacing:-1px}
-#smart_editor2 .se2_palette2{float:left;_float:none;width:214px;margin:9px 0 0 0;padding:11px 0 0 11px;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_palette2 .se2_color_set{float:left}
-#smart_editor2 .se2_palette2 .se2_selected_color{_display:inline;float:left;width:83px;height:18px;margin:0;border:1px solid #c7c7c7;background:#fff}
-#smart_editor2 .se2_palette2 .se2_selected_color span{_display:inline;float:left;width:79px;height:14px;margin:2px}
-#smart_editor2 .se2_palette2 .input_ty1{_display:inline;float:left;width:67px;height:16px;margin:0 3px 0 3px;padding:2px 2px 0 4px;font-family:tahoma;font-size:11px}
-#smart_editor2 .se2_palette2 button.se2_btn_insert{float:left;width:35px;height:21px;margin-left:2px;padding:0;background:url("../../img/ko_KR/btn_set.png?160622") -80px 0 no-repeat}
-#smart_editor2 .se2_gradation1{float:left;_float:none;width:201px;height:128px;margin:4px 0 0 0;border:1px solid #c7c7c7;cursor:crosshair}
-#smart_editor2 .se2_gradation2{float:left;_float:none;width:201px;height:10px;margin:4px 0 1px 0;border:1px solid #c7c7c7;cursor:crosshair}
+#smart_editor2 .se2_palette {
+  float    : left;
+  margin   : 0;
+  padding  : 11px 0 10px 0
+  position : relative;
+  width    : 225px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color {
+  _display : inline;
+  clear    : both;
+  float    : left;
+  margin   : 0 0 0 11px;
+  padding  : 0
+  width    : 205px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color li {
+  float   : left;
+  height  : 12px;
+  margin  : 0;
+  padding : 0
+  width   : 12px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color li button {
+  border : 0
+  height : 11px;
+  width  : 11px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color li button span {
+  display    : block;
+  height     : 11px
+  left       : 1px;
+  overflow   : visible;
+  position   : absolute;
+  top        : 1px;
+  visibility : visible;
+  width      : 11px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color li button span span {
+  height     : 0
+  left       : 0;
+  overflow   : hidden;
+  position   : absolute;
+  top        : 0;
+  visibility : hidden;
+  width      : 0;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color .hover button, #smart_editor2 .se2_palette .se2_pick_color .active button {
+  border : 1px solid #666666
+  height : 11px;
+  width  : 11px;
+}
+
+#smart_editor2 .se2_palette .se2_pick_color .hover span, #smart_editor2 .se2_palette .se2_pick_color .active span {
+  border : 1px solid #FFFFFF
+  height : 7px;
+  width  : 7px;
+}
+
+#smart_editor2 .se2_palette .se2_view_more {
+  _display   : inline;
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -47px no-repeat
+  float      : left;
+  height     : 23px;
+  margin     : 1px 0 0 1px;
+  width      : 46px;
+}
+
+#smart_editor2 .se2_palette .se2_view_more2 {
+  _display   : inline;
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -24px no-repeat
+  float      : left;
+  height     : 23px;
+  margin     : 1px 0 0 1px;
+  width      : 46px;
+}
+
+#smart_editor2 .se2_palette h4 {
+  _display       : inline;
+  background     : url("../../img/bg_line1.gif") repeat-x;
+  color          : #333333;
+  float          : left;
+  font-size      : 12px;
+  font-weight    : normal;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 9px 0 0 11px;
+  padding        : 10px 0 4px 0;
+  width          : 203px;
+}
+
+#smart_editor2 .se2_palette2 {
+  _float     : none;
+  background : url("../../img/bg_line1.gif") repeat-x
+  float      : left;
+  margin     : 9px 0 0 0;
+  padding    : 11px 0 0 11px;
+  width      : 214px;
+}
+
+#smart_editor2 .se2_palette2 .se2_color_set {
+  float : left
+}
+
+#smart_editor2 .se2_palette2 .se2_selected_color {
+  _display   : inline;
+  background : #FFFFFF
+  border     : 1px solid #C7C7C7;
+  float      : left;
+  height     : 18px;
+  margin     : 0;
+  width      : 83px;
+}
+
+#smart_editor2 .se2_palette2 .se2_selected_color span {
+  _display : inline;
+  float    : left;
+  height   : 14px;
+  margin   : 2px
+  width    : 79px;
+}
+
+#smart_editor2 .se2_palette2 .input_ty1 {
+  _display    : inline;
+  float       : left;
+  font-family : tahoma;
+  font-size   : 11px
+  height      : 16px;
+  margin      : 0 3px 0 3px;
+  padding     : 2px 2px 0 4px;
+  width       : 67px;
+}
+
+#smart_editor2 .se2_palette2 button.se2_btn_insert {
+  background  : url("../../img/ko_KR/btn_set.png?160622") -80px 0 no-repeat
+  float       : left;
+  height      : 21px;
+  margin-left : 2px;
+  padding     : 0;
+  width       : 35px;
+}
+
+#smart_editor2 .se2_gradation1 {
+  _float : none;
+  border : 1px solid #C7C7C7;
+  cursor : crosshair
+  float  : left;
+  height : 128px;
+  margin : 4px 0 0 0;
+  width  : 201px;
+}
+
+#smart_editor2 .se2_gradation2 {
+  _float : none;
+  border : 1px solid #C7C7C7;
+  cursor : crosshair
+  float  : left;
+  height : 10px;
+  margin : 4px 0 1px 0;
+  width  : 201px;
+}
+
 /* TEXT_TOOLBAR : BGCOLOR */
-#smart_editor2 .se2_palette_bgcolor{width:225px;margin:11px 0 0;padding:0}
-#smart_editor2 .se2_palette_bgcolor .se2_background{width:205px;margin:0 11px 0 11px}
-#smart_editor2 .se2_palette_bgcolor .se2_background li{width:68px;height:20px}
-#smart_editor2 .se2_palette_bgcolor .se2_background button{width:67px;height:19px;border:0}
-#smart_editor2 .se2_palette_bgcolor .se2_background span{left:0;display:block;visibility:visible;overflow:visible;width:65px;height:17px;padding:0}
-#smart_editor2 .se2_palette_bgcolor .se2_background span span{display:block;visibility:visible;overflow:visible;width:64px;height:16px;padding:3px 0 0 3px;font-size:11px;line-height:14px;text-align:left}
-#smart_editor2 .se2_palette_bgcolor .se2_background .hover span{width:65px;height:17px;border:1px solid #666}
-#smart_editor2 .se2_palette_bgcolor .se2_background .hover span span{width:62px;height:14px;padding:1px 0 0 1px;border:1px solid #fff}
+#smart_editor2 .se2_palette_bgcolor {
+  margin  : 11px 0 0;
+  padding : 0
+  width   : 225px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background {
+  margin : 0 11px 0 11px
+  width  : 205px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background li {
+  height : 20px
+  width  : 68px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background button {
+  border : 0
+  height : 19px;
+  width  : 67px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background span {
+  display    : block;
+  height     : 17px;
+  left       : 0;
+  overflow   : visible;
+  padding    : 0
+  visibility : visible;
+  width      : 65px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background span span {
+  display     : block;
+  font-size   : 11px;
+  height      : 16px;
+  line-height : 14px;
+  overflow    : visible;
+  padding     : 3px 0 0 3px;
+  text-align  : left
+  visibility  : visible;
+  width       : 64px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background .hover span {
+  border : 1px solid #666666
+  height : 17px;
+  width  : 65px;
+}
+
+#smart_editor2 .se2_palette_bgcolor .se2_background .hover span span {
+  border  : 1px solid #FFFFFF
+  height  : 14px;
+  padding : 1px 0 0 1px;
+  width   : 62px;
+}
+
 /* TEXT_TOOLBAR : LINEHEIGHT */
-#smart_editor2 .se2_l_line_height{width:107px;margin:0;padding:0}
-#smart_editor2 .se2_l_line_height li{width:107px;margin:0;padding:0;border-top:0;border-bottom:0;color:#333;cursor:pointer}
-#smart_editor2 .se2_l_line_height .hover{background:#ebebeb}
-#smart_editor2 .se2_l_line_height button{width:105px;height:19px;margin:0;padding:3px 0 2px 0px;background:none;text-align:left}
-#smart_editor2 .se2_l_line_height button span{visibility:visible;overflow:visible;position:relative;width:auto;height:auto;margin:0;padding:0 0 0 15px;font-size:12px;line-height:normal;color:#373737}
-#smart_editor2 .se2_l_line_height li button.active span{background:url("../../img/icon_set.gif?141007") 5px -30px no-repeat}
-#smart_editor2 .se2_l_line_height_user{clear:both;width:83px;margin:5px 0 0 12px;padding:10px 0 0 0;_padding:11px 0 0 0;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_l_line_height_user h3{margin:0 0 4px 0;_margin:0 0 2px -1px;padding:0;line-height:14px;color:#000;letter-spacing:-1px}
-#smart_editor2 .se2_l_line_height_user .bx_input{display:block;position:relative;width:83px}
-#smart_editor2 .se2_l_line_height_user .btn_up{position:absolute;top:2px;*top:3px;left:68px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat}
-#smart_editor2 .se2_l_line_height_user .btn_down{position:absolute;top:10px;*top:11px;left:68px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat}
-#smart_editor2 .se2_l_line_height_user .btn_area{margin:5px 0 10px 0}
-#smart_editor2 .se2_tool .btn_area .se2_btn_apply3{width:41px;height:24px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat}
-#smart_editor2 .se2_tool .btn_area .se2_btn_cancel3{width:39px;height:24px;margin-left:3px;background:url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat}
+#smart_editor2 .se2_l_line_height {
+  margin  : 0;
+  padding : 0
+  width   : 107px;
+}
+
+#smart_editor2 .se2_l_line_height li {
+  border-bottom : 0;
+  border-top    : 0;
+  color         : #333333;
+  cursor        : pointer
+  margin        : 0;
+  padding       : 0;
+  width         : 107px;
+}
+
+#smart_editor2 .se2_l_line_height .hover {
+  background : #EBEBEB
+}
+
+#smart_editor2 .se2_l_line_height button {
+  background : none;
+  height     : 19px;
+  margin     : 0;
+  padding    : 3px 0 2px 0px;
+  text-align : left
+  width      : 105px;
+}
+
+#smart_editor2 .se2_l_line_height button span {
+  color       : #373737
+  font-size   : 12px;
+  height      : auto;
+  line-height : normal;
+  margin      : 0;
+  overflow    : visible;
+  padding     : 0 0 0 15px;
+  position    : relative;
+  visibility  : visible;
+  width       : auto;
+}
+
+#smart_editor2 .se2_l_line_height li button.active span {
+  background : url("../../img/icon_set.gif?141007") 5px -30px no-repeat
+}
+
+#smart_editor2 .se2_l_line_height_user {
+  _padding   : 11px 0 0 0;
+  background : url("../../img/bg_line1.gif") repeat-x
+  clear      : both;
+  margin     : 5px 0 0 12px;
+  padding    : 10px 0 0 0;
+  width      : 83px;
+}
+
+#smart_editor2 .se2_l_line_height_user h3 {
+  _margin        : 0 0 2px -1px;
+  color          : #000000;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 0 0 4px 0;
+  padding        : 0;
+}
+
+#smart_editor2 .se2_l_line_height_user .bx_input {
+  display  : block;
+  position : relative;
+  width    : 83px
+}
+
+#smart_editor2 .se2_l_line_height_user .btn_up {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat
+  height     : 8px;
+  left       : 68px;
+  position   : absolute;
+  *top       : 3px;
+  top        : 2px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_l_line_height_user .btn_down {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat
+  height     : 8px;
+  left       : 68px;
+  position   : absolute;
+  *top       : 11px;
+  top        : 10px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_l_line_height_user .btn_area {
+  margin : 5px 0 10px 0
+}
+
+#smart_editor2 .se2_tool .btn_area .se2_btn_apply3 {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat
+  height     : 24px;
+  width      : 41px;
+}
+
+#smart_editor2 .se2_tool .btn_area .se2_btn_cancel3 {
+  background  : url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat
+  height      : 24px;
+  margin-left : 3px;
+  width       : 39px;
+}
+
 /* TEXT_TOOLBAR : QUOTE */
-#smart_editor2 .se2_quote{width:425px;height:56px}
-#smart_editor2 .se2_quote ul{_display:inline;float:left;margin:11px 0 0 9px;padding:0}
-#smart_editor2 .se2_quote li{_display:inline;float:left;margin:0 0 0 2px;padding:0}
-#smart_editor2 .se2_quote button{width:34px;height:34px;margin:0;padding:0;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat;cursor:pointer}
-#smart_editor2 .se2_quote button span{left:0;display:block;visibility:visible;overflow:visible;width:32px;height:32px;margin:0;padding:0;border:1px solid #c7c7c7}
-#smart_editor2 .se2_quote button span span{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0;margin:0;padding:0}
-#smart_editor2 .se2_quote .se2_quote1{background-position:1px -375px}
-#smart_editor2 .se2_quote .se2_quote2{background-position:-32px -375px}
-#smart_editor2 .se2_quote .se2_quote3{background-position:-65px -375px}
-#smart_editor2 .se2_quote .se2_quote4{background-position:-98px -375px}
-#smart_editor2 .se2_quote .se2_quote5{background-position:-131px -375px}
-#smart_editor2 .se2_quote .se2_quote6{background-position:-164px -375px}
-#smart_editor2 .se2_quote .se2_quote7{background-position:-197px -375px}
-#smart_editor2 .se2_quote .se2_quote8{background-position:-230px -375px}
-#smart_editor2 .se2_quote .se2_quote9{background-position:-263px -375px}
-#smart_editor2 .se2_quote .se2_quote10{background-position:-296px -375px}
-#smart_editor2 .se2_quote .hover button span,#smart_editor2 .se2_quote .active button span{width:30px;height:30px;margin:0;padding:0;border:2px solid #44b525}
-#smart_editor2 .se2_quote .hover button span span,#smart_editor2 .se2_quote .active button span span{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0;margin:0;padding:0}
-#smart_editor2 .se2_quote .se2_cancel2{float:left;width:40px;height:35px;margin:11px 0 0 5px;background:url("../../img/ko_KR/btn_set.png?160622") -46px -24px no-repeat}
-#smart_editor2 .se2_quote .se2_cancel2 span{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0;margin:0;padding:0}
+#smart_editor2 .se2_quote {
+  height : 56px
+  width  : 425px;
+}
+
+#smart_editor2 .se2_quote ul {
+  _display : inline;
+  float    : left;
+  margin   : 11px 0 0 9px;
+  padding  : 0
+}
+
+#smart_editor2 .se2_quote li {
+  _display : inline;
+  float    : left;
+  margin   : 0 0 0 2px;
+  padding  : 0
+}
+
+#smart_editor2 .se2_quote button {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat;
+  cursor     : pointer
+  height     : 34px;
+  margin     : 0;
+  padding    : 0;
+  width      : 34px;
+}
+
+#smart_editor2 .se2_quote button span {
+  border     : 1px solid #C7C7C7
+  display    : block;
+  height     : 32px;
+  left       : 0;
+  margin     : 0;
+  overflow   : visible;
+  padding    : 0;
+  visibility : visible;
+  width      : 32px;
+}
+
+#smart_editor2 .se2_quote button span span {
+  height     : 0;
+  left       : 0;
+  margin     : 0;
+  overflow   : hidden;
+  padding    : 0
+  position   : absolute;
+  top        : 0;
+  visibility : hidden;
+  width      : 0;
+}
+
+#smart_editor2 .se2_quote .se2_quote1 {
+  background-position : 1px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote2 {
+  background-position : -32px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote3 {
+  background-position : -65px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote4 {
+  background-position : -98px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote5 {
+  background-position : -131px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote6 {
+  background-position : -164px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote7 {
+  background-position : -197px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote8 {
+  background-position : -230px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote9 {
+  background-position : -263px -375px
+}
+
+#smart_editor2 .se2_quote .se2_quote10 {
+  background-position : -296px -375px
+}
+
+#smart_editor2 .se2_quote .hover button span, #smart_editor2 .se2_quote .active button span {
+  border  : 2px solid #44B525
+  height  : 30px;
+  margin  : 0;
+  padding : 0;
+  width   : 30px;
+}
+
+#smart_editor2 .se2_quote .hover button span span, #smart_editor2 .se2_quote .active button span span {
+  height     : 0;
+  left       : 0;
+  margin     : 0;
+  overflow   : hidden;
+  padding    : 0
+  position   : absolute;
+  top        : 0;
+  visibility : hidden;
+  width      : 0;
+}
+
+#smart_editor2 .se2_quote .se2_cancel2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -46px -24px no-repeat
+  float      : left;
+  height     : 35px;
+  margin     : 11px 0 0 5px;
+  width      : 40px;
+}
+
+#smart_editor2 .se2_quote .se2_cancel2 span {
+  height     : 0;
+  left       : 0;
+  margin     : 0;
+  overflow   : hidden;
+  padding    : 0
+  position   : absolute;
+  top        : 0;
+  visibility : hidden;
+  width      : 0;
+}
+
 /* TEXT_TOOLBAR : HYPERLINK */
-#smart_editor2 .se2_url2{width:281px;padding:11px 11px 6px 11px;color:#666}
-#smart_editor2 .se2_url2 .input_ty1{display:block;width:185px;height:16px;margin:0 5px 5px 0;*margin:-1px 5px 5px 0;padding:5px 2px 0 4px}
-#smart_editor2 .se2_url2 .se2_url_new{width:15px;height:15px;margin:-1px 3px 1px -1px;*margin:-2px 3px 2px -1px;vertical-align:middle}
-#smart_editor2 .se2_url2 label{font-size:11px;line-height:14px;vertical-align:middle}
-#smart_editor2 .se2_url2 .se2_apply{position:absolute;top:13px;right:51px;width:41px;height:24px;margin:-1px 3px 1px 0;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat}
-#smart_editor2 .se2_url2 .se2_cancel{position:absolute;top:13px;right:9px;width:39px;height:24px;margin:-1px 3px 1px 0;background:url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat}
+#smart_editor2 .se2_url2 {
+  color   : #666666
+  padding : 11px 11px 6px 11px;
+  width   : 281px;
+}
+
+#smart_editor2 .se2_url2 .input_ty1 {
+  display : block;
+  height  : 16px;
+  margin  : 0 5px 5px 0;
+  *margin : -1px 5px 5px 0;
+  padding : 5px 2px 0 4px
+  width   : 185px;
+}
+
+#smart_editor2 .se2_url2 .se2_url_new {
+  height         : 15px;
+  margin         : -1px 3px 1px -1px;
+  *margin        : -2px 3px 2px -1px;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_url2 label {
+  font-size      : 11px;
+  line-height    : 14px;
+  vertical-align : middle
+}
+
+#smart_editor2 .se2_url2 .se2_apply {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat
+  height     : 24px;
+  margin     : -1px 3px 1px 0;
+  position   : absolute;
+  right      : 51px;
+  top        : 13px;
+  width      : 41px;
+}
+
+#smart_editor2 .se2_url2 .se2_cancel {
+  background : url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat
+  height     : 24px;
+  margin     : -1px 3px 1px 0;
+  position   : absolute;
+  right      : 9px;
+  top        : 13px;
+  width      : 39px;
+}
+
 /* TEXT_TOOLBAR : SCHARACTER */
-#smart_editor2 .se2_bx_character{width:469px;height:272px;margin:0;padding:0;background:url("../../img/bx_set_110302.gif") 9px -1230px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char_tab{_display:inline;float:left;position:relative;width:443px;margin:11px 10px 200px 11px;padding:0 0 0 1px}
-#smart_editor2 .se2_bx_character .se2_char_tab li{position:static;margin:0 0 0 -1px;padding:0}
-#smart_editor2 .se2_bx_character .se2_char1{width:76px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -204px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char2{width:86px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -75px -204px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char3{width:68px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -160px -204px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char4{width:55px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -227px -204px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char5{width:97px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -281px -204px no-repeat}
-#smart_editor2 .se2_bx_character .se2_char6{width:66px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -377px -204px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char1{width:76px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -230px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char2{width:86px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -75px -230px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char3{width:68px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -160px -230px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char4{width:55px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -227px -230px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char5{width:97px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -281px -230px no-repeat}
-#smart_editor2 .se2_bx_character .active .se2_char6{width:66px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -377px -230px no-repeat}
-#smart_editor2 .se2_bx_character .se2_s_character{display:none;position:absolute;top:26px;left:0;width:448px;height:194px;margin:0;padding:0}
-#smart_editor2 .se2_bx_character .active .se2_s_character{display:block}
-#smart_editor2 .se2_bx_character .se2_s_character ul{float:left;width:422px;height:172px;margin:0;padding:9px 0 0 11px}
-#smart_editor2 .se2_bx_character .se2_s_character li{_display:inline;float:left;position:relative;width:20px;height:18px;margin:0 0 1px 1px;background:#fff}
-#smart_editor2 .se2_bx_character .se2_s_character button{width:20px;height:18px;margin:0;padding:2px;background:none}
-#smart_editor2 .se2_bx_character .se2_s_character .hover,#smart_editor2 .se2_bx_character .se2_s_character .active{background:url("../../img/ko_KR/btn_set.png?160622") -446px -274px no-repeat}
-#smart_editor2 .se2_bx_character .se2_s_character button span{left:0;display:block;visibility:visible;overflow:visible;width:14px;height:16px;margin:3px 0 0 3px;border:0;background:none;font-size:12px;line-height:normal}
-#smart_editor2 .se2_apply_character{clear:both;position:relative;padding:0 0 0 11px}
-#smart_editor2 .se2_apply_character label{margin:0 3px 0 0;font-size:12px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_apply_character .input_ty1{width:283px;height:17px;margin:-1px 5px 1px 0;padding:4px 0 0 5px;font-size:12px;color:#666;letter-spacing:0;vertical-align:middle}
-#smart_editor2 .se2_apply_character .se2_confirm{width:41px;height:24px;margin-right:3px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat;vertical-align:middle}
-#smart_editor2 .se2_apply_character .se2_cancel{width:39px;height:24px;background:url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat;vertical-align:middle}
+#smart_editor2 .se2_bx_character {
+  background : url("../../img/bx_set_110302.gif") 9px -1230px no-repeat
+  height     : 272px;
+  margin     : 0;
+  padding    : 0;
+  width      : 469px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char_tab {
+  _display : inline;
+  float    : left;
+  margin   : 11px 10px 200px 11px;
+  padding  : 0 0 0 1px
+  position : relative;
+  width    : 443px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char_tab li {
+  margin   : 0 0 0 -1px;
+  padding  : 0
+  position : static;
+}
+
+#smart_editor2 .se2_bx_character .se2_char1 {
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -204px no-repeat
+  height     : 26px;
+  width      : 76px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -75px -204px no-repeat
+  height     : 26px;
+  width      : 86px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char3 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -160px -204px no-repeat
+  height     : 26px;
+  width      : 68px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char4 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -227px -204px no-repeat
+  height     : 26px;
+  width      : 55px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char5 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -281px -204px no-repeat
+  height     : 26px;
+  width      : 97px;
+}
+
+#smart_editor2 .se2_bx_character .se2_char6 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -377px -204px no-repeat
+  height     : 26px;
+  width      : 66px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char1 {
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -230px no-repeat
+  height     : 26px;
+  width      : 76px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -75px -230px no-repeat
+  height     : 26px;
+  width      : 86px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char3 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -160px -230px no-repeat
+  height     : 26px;
+  width      : 68px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char4 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -227px -230px no-repeat
+  height     : 26px;
+  width      : 55px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char5 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -281px -230px no-repeat
+  height     : 26px;
+  width      : 97px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_char6 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -377px -230px no-repeat
+  height     : 26px;
+  width      : 66px;
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character {
+  display  : none;
+  height   : 194px;
+  left     : 0;
+  margin   : 0;
+  padding  : 0
+  position : absolute;
+  top      : 26px;
+  width    : 448px;
+}
+
+#smart_editor2 .se2_bx_character .active .se2_s_character {
+  display : block
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character ul {
+  float   : left;
+  height  : 172px;
+  margin  : 0;
+  padding : 9px 0 0 11px
+  width   : 422px;
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character li {
+  _display   : inline;
+  background : #FFFFFF
+  float      : left;
+  height     : 18px;
+  margin     : 0 0 1px 1px;
+  position   : relative;
+  width      : 20px;
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character button {
+  background : none
+  height     : 18px;
+  margin     : 0;
+  padding    : 2px;
+  width      : 20px;
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character .hover, #smart_editor2 .se2_bx_character .se2_s_character .active {
+  background : url("../../img/ko_KR/btn_set.png?160622") -446px -274px no-repeat
+}
+
+#smart_editor2 .se2_bx_character .se2_s_character button span {
+  background  : none;
+  border      : 0;
+  display     : block;
+  font-size   : 12px;
+  height      : 16px;
+  left        : 0;
+  line-height : normal
+  margin      : 3px 0 0 3px;
+  overflow    : visible;
+  visibility  : visible;
+  width       : 14px;
+}
+
+#smart_editor2 .se2_apply_character {
+  clear    : both;
+  padding  : 0 0 0 11px
+  position : relative;
+}
+
+#smart_editor2 .se2_apply_character label {
+  color          : #666666;
+  font-size      : 12px;
+  letter-spacing : -1px
+  margin         : 0 3px 0 0;
+}
+
+#smart_editor2 .se2_apply_character .input_ty1 {
+  color          : #666666;
+  font-size      : 12px;
+  height         : 17px;
+  letter-spacing : 0;
+  margin         : -1px 5px 1px 0;
+  padding        : 4px 0 0 5px;
+  vertical-align : middle
+  width          : 283px;
+}
+
+#smart_editor2 .se2_apply_character .se2_confirm {
+  background     : url("../../img/ko_KR/btn_set.png?160622") no-repeat;
+  height         : 24px;
+  margin-right   : 3px;
+  vertical-align : middle
+  width          : 41px;
+}
+
+#smart_editor2 .se2_apply_character .se2_cancel {
+  background     : url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat;
+  height         : 24px;
+  vertical-align : middle
+  width          : 39px;
+}
+
 /* TEXT_TOOLBAR : TABLECREATOR */
-#smart_editor2 .se2_table_set{position:relative;width:166px;margin:3px 11px 0 11px;padding:8px 0 0 0}
-#smart_editor2 .se2_table_set .se2_cell_num{float:left;width:73px}
-#smart_editor2 .se2_table_set .se2_cell_num dt{float:left;clear:both;width:17px;height:23px;margin:0;padding:0}
-#smart_editor2 .se2_table_set .se2_cell_num dt label{display:block;margin:5px 0 0 0;font-size:11px;color:#666}
-#smart_editor2 .se2_table_set .se2_cell_num dd{float:left;position:relative;width:54px;height:23px;margin:0;padding:0}
-#smart_editor2 .se2_table_set .se2_cell_num .input_ty2{display:block;width:32px;height:16px;*margin:-1px 0 0 0;padding:2px 19px 0 0px;border:1px solid #c7c7c7;font-family:tahoma,verdana,times New Roman;font-size:11px;color:#666;text-align:right;*direction:rtl}
-#smart_editor2 .se2_table_set .se2_cell_num .input_ty2::-ms-clear{display:none}
-#smart_editor2 .se2_table_set .se2_pre_table{float:right;width:91px;height:43px;background:#c7c7c7;border-spacing:1px}
-#smart_editor2 .se2_table_set .se2_pre_table tr{background:#fff}
-#smart_editor2 .se2_table_set .se2_pre_table td{font-size:0;line-height:0}
-#smart_editor2 .se2_table_set .se2_add{position:absolute;top:2px;right:3px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat}
-#smart_editor2 .se2_table_set .se2_del{position:absolute;top:10px;right:3px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat}
+#smart_editor2 .se2_table_set {
+  margin   : 3px 11px 0 11px;
+  padding  : 8px 0 0 0
+  position : relative;
+  width    : 166px;
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num {
+  float : left;
+  width : 73px
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num dt {
+  clear   : both;
+  float   : left;
+  height  : 23px;
+  margin  : 0;
+  padding : 0
+  width   : 17px;
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num dt label {
+  color     : #666666
+  display   : block;
+  font-size : 11px;
+  margin    : 5px 0 0 0;
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num dd {
+  float    : left;
+  height   : 23px;
+  margin   : 0;
+  padding  : 0
+  position : relative;
+  width    : 54px;
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num .input_ty2 {
+  border      : 1px solid #C7C7C7;
+  color       : #666666;
+  *direction  : rtl
+  display     : block;
+  font-family : tahoma, verdana, times New Roman;
+  font-size   : 11px;
+  height      : 16px;
+  *margin     : -1px 0 0 0;
+  padding     : 2px 19px 0 0px;
+  text-align  : right;
+  width       : 32px;
+}
+
+#smart_editor2 .se2_table_set .se2_cell_num .input_ty2::-ms-clear {
+  display : none
+}
+
+#smart_editor2 .se2_table_set .se2_pre_table {
+  background     : #C7C7C7;
+  border-spacing : 1px
+  float          : right;
+  height         : 43px;
+  width          : 91px;
+}
+
+#smart_editor2 .se2_table_set .se2_pre_table tr {
+  background : #FFFFFF
+}
+
+#smart_editor2 .se2_table_set .se2_pre_table td {
+  font-size   : 0;
+  line-height : 0
+}
+
+#smart_editor2 .se2_table_set .se2_add {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat
+  height     : 8px;
+  position   : absolute;
+  right      : 3px;
+  top        : 2px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_table_set .se2_del {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat
+  height     : 8px;
+  position   : absolute;
+  right      : 3px;
+  top        : 10px;
+  width      : 13px;
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR */
-#smart_editor2 .se2_table_set .se2_t_proper1{float:left;width:166px;margin:7px 0 0 0;padding:10px 0 5px;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_table_set .se2_t_proper1 dt{width:166px;margin:0 0 6px 0}
-#smart_editor2 .se2_table_set .se2_t_proper1 dd{width:166px}
-#smart_editor2 .se2_table_set .se2_t_proper1 dt input{width:15px;height:15px;margin:-1px 3px 1px 0;_margin:-2px 3px 2px 0;vertical-align:middle}
-#smart_editor2 .se2_table_set .se2_t_proper1 dt label{font-weight:bold;font-size:11px;color:#666;letter-spacing:-1px;vertical-align:middle}
-#smart_editor2 .se2_table_set .se2_t_proper1_1{float:left;position:relative;z-index:59;width:166px;margin:1px 0 0 0}
-#smart_editor2 .se2_table_set .se2_t_proper1_2{z-index:54;margin:0}
-#smart_editor2 .se2_table_set .se2_t_proper1_3{z-index:53;margin:0}
-#smart_editor2 .se2_table_set .se2_t_proper1_4{z-index:52;margin:0}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 dt{_display:inline;float:left;clear:both;width:66px;height:22px;margin:1px 0 0 18px}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 dt label{display:block;margin:4px 0 0 0;font-weight:normal;font-size:11px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 dd{float:left;position:relative;width:82px;height:23px}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 .input_ty1{width:72px;height:16px;*margin:-1px 0 0 0;padding:2px 2px 0 6px;font-family:tahoma,verdana,times New Roman;font-size:11px;color:#666}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 .input_ty3{float:left;width:49px;height:16px;margin:0 3px 0 0;padding:2px 4px 0 4px;border:1px solid #c7c7c7;font-family:tahoma,verdana,times New Roman;font-size:11px;color:#666}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_add{top:2px;right:2px}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_del{top:10px;right:2px}
-#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_color_set .input_ty1{_display:inline;float:left;width:67px;height:16px;margin:0 3px 0 3px;padding:2px 2px 0 4px;font-family:tahoma,verdana,times New Roman;font-size:11px}
-#smart_editor2 .se2_select_ty1{position:relative;width:80px;height:18px;border:1px solid #c7c7c7;background:#fff;font-size:11px;line-height:14px;text-align:left}
-#smart_editor2 .se2_select_ty1 span{float:left;width:54px;height:18px;margin:0 0 0 5px;font-size:11px;line-height:14px;color:#666}
-#smart_editor2 .se2_select_ty1 .se2_b_style0{position:relative;top:3px;left:-3px;white-space:nowrap}
-#smart_editor2 .se2_select_ty1 .se2_b_style1{height:15px;margin:3px 0 0 4px;font-size:11px;line-height:14px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_select_ty1 .se2_b_style2{background:url("../../img/bg_set.gif") 0 -50px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_b_style3{background:url("../../img/bg_set.gif") 0 -68px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_b_style4{background:url("../../img/bg_set.gif") 0 -85px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_b_style5{background:url("../../img/bg_set.gif") 0 -103px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_b_style6{background:url("../../img/bg_set.gif") 0 -121px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_b_style7{background:url("../../img/bg_set.gif") 0 -139px repeat-x}
-#smart_editor2 .se2_select_ty1 .se2_view_more{position:absolute;top:1px;right:1px;width:13px;height:16px;background:url("../../img/ko_KR/btn_set.png?160622") -112px -54px no-repeat}
-#smart_editor2 .se2_select_ty1 .se2_view_more2{position:absolute;top:1px;right:1px;width:13px;height:16px;background:url("../../img/ko_KR/btn_set.png?160622") -99px -54px no-repeat}
+#smart_editor2 .se2_table_set .se2_t_proper1 {
+  background : url("../../img/bg_line1.gif") repeat-x
+  float      : left;
+  margin     : 7px 0 0 0;
+  padding    : 10px 0 5px;
+  width      : 166px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1 dt {
+  margin : 0 0 6px 0
+  width  : 166px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1 dd {
+  width : 166px
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1 dt input {
+  _margin        : -2px 3px 2px 0;
+  height         : 15px;
+  margin         : -1px 3px 1px 0;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1 dt label {
+  color          : #666666;
+  font-size      : 11px;
+  font-weight    : bold;
+  letter-spacing : -1px;
+  vertical-align : middle
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 {
+  float    : left;
+  margin   : 1px 0 0 0
+  position : relative;
+  width    : 166px;
+  z-index  : 59;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_2 {
+  margin  : 0
+  z-index : 54;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_3 {
+  margin  : 0
+  z-index : 53;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_4 {
+  margin  : 0
+  z-index : 52;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 dt {
+  _display : inline;
+  clear    : both;
+  float    : left;
+  height   : 22px;
+  margin   : 1px 0 0 18px
+  width    : 66px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 dt label {
+  color          : #666666;
+  display        : block;
+  font-size      : 11px;
+  font-weight    : normal;
+  letter-spacing : -1px
+  margin         : 4px 0 0 0;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 dd {
+  float    : left;
+  height   : 23px
+  position : relative;
+  width    : 82px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 .input_ty1 {
+  color       : #666666
+  font-family : tahoma, verdana, times New Roman;
+  font-size   : 11px;
+  height      : 16px;
+  *margin     : -1px 0 0 0;
+  padding     : 2px 2px 0 6px;
+  width       : 72px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 .input_ty3 {
+  border      : 1px solid #C7C7C7;
+  color       : #666666
+  float       : left;
+  font-family : tahoma, verdana, times New Roman;
+  font-size   : 11px;
+  height      : 16px;
+  margin      : 0 3px 0 0;
+  padding     : 2px 4px 0 4px;
+  width       : 49px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_add {
+  right : 2px
+  top   : 2px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_del {
+  right : 2px
+  top   : 10px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper1_1 .se2_color_set .input_ty1 {
+  _display    : inline;
+  float       : left;
+  font-family : tahoma, verdana, times New Roman;
+  font-size   : 11px
+  height      : 16px;
+  margin      : 0 3px 0 3px;
+  padding     : 2px 2px 0 4px;
+  width       : 67px;
+}
+
+#smart_editor2 .se2_select_ty1 {
+  background  : #FFFFFF;
+  border      : 1px solid #C7C7C7;
+  font-size   : 11px;
+  height      : 18px;
+  line-height : 14px;
+  position    : relative;
+  text-align  : left
+  width       : 80px;
+}
+
+#smart_editor2 .se2_select_ty1 span {
+  color       : #666666
+  float       : left;
+  font-size   : 11px;
+  height      : 18px;
+  line-height : 14px;
+  margin      : 0 0 0 5px;
+  width       : 54px;
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style0 {
+  left        : -3px;
+  position    : relative;
+  top         : 3px;
+  white-space : nowrap
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style1 {
+  color          : #666666;
+  font-size      : 11px;
+  height         : 15px;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 3px 0 0 4px;
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style2 {
+  background : url("../../img/bg_set.gif") 0 -50px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style3 {
+  background : url("../../img/bg_set.gif") 0 -68px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style4 {
+  background : url("../../img/bg_set.gif") 0 -85px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style5 {
+  background : url("../../img/bg_set.gif") 0 -103px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style6 {
+  background : url("../../img/bg_set.gif") 0 -121px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_b_style7 {
+  background : url("../../img/bg_set.gif") 0 -139px repeat-x
+}
+
+#smart_editor2 .se2_select_ty1 .se2_view_more {
+  background : url("../../img/ko_KR/btn_set.png?160622") -112px -54px no-repeat
+  height     : 16px;
+  position   : absolute;
+  right      : 1px;
+  top        : 1px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_select_ty1 .se2_view_more2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -99px -54px no-repeat
+  height     : 16px;
+  position   : absolute;
+  right      : 1px;
+  top        : 1px;
+  width      : 13px;
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR > BORDER */
-#smart_editor2 .se2_table_set .se2_b_t_b1{border-top:1px solid #b1b1b1}
-#smart_editor2 .se2_layer_b_style{position:absolute;top:20px;right:0px;width:80px;padding-bottom:1px;border:1px solid #c7c7c7;border-top:1px solid #a8a8a8;background:#fff}
-#smart_editor2 .se2_layer_b_style ul{width:80px;margin:0;padding:1px 0 0 0}
-#smart_editor2 .se2_layer_b_style li{width:80px;height:18px;margin:0;padding:0}
-#smart_editor2 .se2_layer_b_style .hover,#smart_editor2 .se2_layer_b_style .active{background:#ebebeb}
-#smart_editor2 .se2_layer_b_style button{width:80px;height:18px;background:none}
-#smart_editor2 .se2_layer_b_style button span{left:0;display:block;visibility:visible;overflow:visible;width:71px;height:18px;margin:0 0 0 5px;font-size:11px;line-height:15px;text-align:left}
-#smart_editor2 .se2_layer_b_style button span span{visibility:hidden;overflow:hidden;position:absolute;top:0;left:0;width:0;height:0}
-#smart_editor2 .se2_layer_b_style .se2_b_style1 span{margin:3px 0 0 4px;font-size:11px;line-height:14px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_layer_b_style .se2_b_style2 span{background:url("../../img/bg_set.gif") 0 -50px repeat-x}
-#smart_editor2 .se2_layer_b_style .se2_b_style3 span{background:url("../../img/bg_set.gif") 0 -68px repeat-x}
-#smart_editor2 .se2_layer_b_style .se2_b_style4 span{background:url("../../img/bg_set.gif") 0 -86px repeat-x}
-#smart_editor2 .se2_layer_b_style .se2_b_style5 span{background:url("../../img/bg_set.gif") 0 -103px repeat-x}
-#smart_editor2 .se2_layer_b_style .se2_b_style6 span{background:url("../../img/bg_set.gif") 0 -121px repeat-x}
-#smart_editor2 .se2_layer_b_style .se2_b_style7 span{background:url("../../img/bg_set.gif") 0 -139px repeat-x}
+#smart_editor2 .se2_table_set .se2_b_t_b1 {
+  border-top : 1px solid #B1B1B1
+}
+
+#smart_editor2 .se2_layer_b_style {
+  background     : #FFFFFF
+  border         : 1px solid #C7C7C7;
+  border-top     : 1px solid #A8A8A8;
+  padding-bottom : 1px;
+  position       : absolute;
+  right          : 0px;
+  top            : 20px;
+  width          : 80px;
+}
+
+#smart_editor2 .se2_layer_b_style ul {
+  margin  : 0;
+  padding : 1px 0 0 0
+  width   : 80px;
+}
+
+#smart_editor2 .se2_layer_b_style li {
+  height  : 18px;
+  margin  : 0;
+  padding : 0
+  width   : 80px;
+}
+
+#smart_editor2 .se2_layer_b_style .hover, #smart_editor2 .se2_layer_b_style .active {
+  background : #EBEBEB
+}
+
+#smart_editor2 .se2_layer_b_style button {
+  background : none
+  height     : 18px;
+  width      : 80px;
+}
+
+#smart_editor2 .se2_layer_b_style button span {
+  display     : block;
+  font-size   : 11px;
+  height      : 18px;
+  left        : 0;
+  line-height : 15px;
+  margin      : 0 0 0 5px;
+  overflow    : visible;
+  text-align  : left
+  visibility  : visible;
+  width       : 71px;
+}
+
+#smart_editor2 .se2_layer_b_style button span span {
+  height     : 0
+  left       : 0;
+  overflow   : hidden;
+  position   : absolute;
+  top        : 0;
+  visibility : hidden;
+  width      : 0;
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style1 span {
+  color          : #666666;
+  font-size      : 11px;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 3px 0 0 4px;
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style2 span {
+  background : url("../../img/bg_set.gif") 0 -50px repeat-x
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style3 span {
+  background : url("../../img/bg_set.gif") 0 -68px repeat-x
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style4 span {
+  background : url("../../img/bg_set.gif") 0 -86px repeat-x
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style5 span {
+  background : url("../../img/bg_set.gif") 0 -103px repeat-x
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style6 span {
+  background : url("../../img/bg_set.gif") 0 -121px repeat-x
+}
+
+#smart_editor2 .se2_layer_b_style .se2_b_style7 span {
+  background : url("../../img/bg_set.gif") 0 -139px repeat-x
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR > COLOR */
-#smart_editor2 .se2_pre_color{float:left;width:18px;height:18px;border:1px solid #c7c7c7}
-#smart_editor2 .se2_pre_color button{float:left;width:14px;height:14px;margin:2px 0 0 2px;padding:0}
-#smart_editor2 .se2_pre_color button span{overflow:hidden;position:absolute;top:-10000px;left:-10000px;z-index:-100;width:0;height:0}
+#smart_editor2 .se2_pre_color {
+  border : 1px solid #C7C7C7
+  float  : left;
+  height : 18px;
+  width  : 18px;
+}
+
+#smart_editor2 .se2_pre_color button {
+  float   : left;
+  height  : 14px;
+  margin  : 2px 0 0 2px;
+  padding : 0
+  width   : 14px;
+}
+
+#smart_editor2 .se2_pre_color button span {
+  height   : 0
+  left     : -10000px;
+  overflow : hidden;
+  position : absolute;
+  top      : -10000px;
+  width    : 0;
+  z-index  : -100;
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR > DIMMED */
-#smart_editor2 .se2_table_set .se2_t_dim1{clear:both;position:absolute;top:71px;left:16px;z-index:60;width:157px;height:118px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_table_set .se2_t_dim2{position:absolute;top:116px;left:16px;z-index:55;width:157px;height:45px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_table_set .se2_t_dim3{clear:both;position:absolute;top:192px;left:16px;z-index:51;width:157px;height:39px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
+#smart_editor2 .se2_table_set .se2_t_dim1 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 118px;
+  left       : 16px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 71px;
+  width      : 157px;
+  z-index    : 60;
+}
+
+#smart_editor2 .se2_table_set .se2_t_dim2 {
+  background : #FAFAFA;
+  filter     : alpha(opacity=50)
+  height     : 45px;
+  left       : 16px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 116px;
+  width      : 157px;
+  z-index    : 55;
+}
+
+#smart_editor2 .se2_table_set .se2_t_dim3 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 39px;
+  left       : 16px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 192px;
+  width      : 157px;
+  z-index    : 51;
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR > STYLE PREVIEW */
-#smart_editor2 .se2_table_set .se2_t_proper2{float:left;position:relative;z-index:50;width:166px;margin:2px 0 0 0}
-#smart_editor2 .se2_table_set .se2_t_proper2 dt{float:left;width:84px;height:33px;margin:4px 0 0 0}
-#smart_editor2 .se2_table_set .se2_t_proper2 dt input{width:15px;height:15px;margin:-1px 3px 1px 0;_margin:-2px 3px 2px 0;vertical-align:middle}
-#smart_editor2 .se2_table_set .se2_t_proper2 dt label{font-weight:bold;font-size:11px;color:#666;letter-spacing:-1px;vertical-align:middle}
-#smart_editor2 .se2_table_set .se2_t_proper2 dd{float:left;width:66px;height:33px}
-#smart_editor2 .se2_select_ty2{position:relative;width:65px;height:31px;border:1px solid #c7c7c7;background:#fff;font-size:11px;line-height:14px;text-align:left}
-#smart_editor2 .se2_select_ty2 span{float:left;width:45px;height:25px;margin:3px 0 0 3px;background:url("../../img/ko_KR/btn_set.png?160622") repeat-x}
-#smart_editor2 .se2_select_ty2 .se2_t_style1{background-position:0 -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style2{background-position:-46px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style3{background-position:-92px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style4{background-position:-138px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style5{background-position:-184px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style6{background-position:-230px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style7{background-position:-276px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style8{background-position:-322px -410px}
-#smart_editor2 .se2_select_ty2 .se2_t_style9{background-position:0 -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style10{background-position:-46px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style11{background-position:-92px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style12{background-position:-138px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style13{background-position:-184px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style14{background-position:-230px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style15{background-position:-276px -436px}
-#smart_editor2 .se2_select_ty2 .se2_t_style16{background-position:-322px -436px}
-#smart_editor2 .se2_select_ty2 .se2_view_more{position:absolute;top:1px;right:1px;_right:0px;width:13px !important;height:29px !important;background:url("../../img/ko_KR/btn_set.png?160622") -353px -48px no-repeat !important}
-#smart_editor2 .se2_select_ty2 .se2_view_more2{position:absolute;top:1px;right:1px;_right:0px;width:13px !important;height:29px !important;background:url("../../img/ko_KR/btn_set.png?160622") -340px -48px no-repeat !important}
-#smart_editor2 .se2_select_ty2 .se2_view_more span{display:none}
+#smart_editor2 .se2_table_set .se2_t_proper2 {
+  float    : left;
+  margin   : 2px 0 0 0
+  position : relative;
+  width    : 166px;
+  z-index  : 50;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper2 dt {
+  float  : left;
+  height : 33px;
+  margin : 4px 0 0 0
+  width  : 84px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper2 dt input {
+  _margin        : -2px 3px 2px 0;
+  height         : 15px;
+  margin         : -1px 3px 1px 0;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper2 dt label {
+  color          : #666666;
+  font-size      : 11px;
+  font-weight    : bold;
+  letter-spacing : -1px;
+  vertical-align : middle
+}
+
+#smart_editor2 .se2_table_set .se2_t_proper2 dd {
+  float  : left;
+  height : 33px
+  width  : 66px;
+}
+
+#smart_editor2 .se2_select_ty2 {
+  background  : #FFFFFF;
+  border      : 1px solid #C7C7C7;
+  font-size   : 11px;
+  height      : 31px;
+  line-height : 14px;
+  position    : relative;
+  text-align  : left
+  width       : 65px;
+}
+
+#smart_editor2 .se2_select_ty2 span {
+  background : url("../../img/ko_KR/btn_set.png?160622") repeat-x
+  float      : left;
+  height     : 25px;
+  margin     : 3px 0 0 3px;
+  width      : 45px;
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style1 {
+  background-position : 0 -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style2 {
+  background-position : -46px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style3 {
+  background-position : -92px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style4 {
+  background-position : -138px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style5 {
+  background-position : -184px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style6 {
+  background-position : -230px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style7 {
+  background-position : -276px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style8 {
+  background-position : -322px -410px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style9 {
+  background-position : 0 -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style10 {
+  background-position : -46px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style11 {
+  background-position : -92px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style12 {
+  background-position : -138px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style13 {
+  background-position : -184px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style14 {
+  background-position : -230px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style15 {
+  background-position : -276px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_t_style16 {
+  background-position : -322px -436px
+}
+
+#smart_editor2 .se2_select_ty2 .se2_view_more {
+  _right     : 0px;
+  background : url("../../img/ko_KR/btn_set.png?160622") -353px -48px no-repeat !important
+  height     : 29px !important;
+  position   : absolute;
+  right      : 1px;
+  top        : 1px;
+  width      : 13px !important;
+}
+
+#smart_editor2 .se2_select_ty2 .se2_view_more2 {
+  _right     : 0px;
+  background : url("../../img/ko_KR/btn_set.png?160622") -340px -48px no-repeat !important
+  height     : 29px !important;
+  position   : absolute;
+  right      : 1px;
+  top        : 1px;
+  width      : 13px !important;
+}
+
+#smart_editor2 .se2_select_ty2 .se2_view_more span {
+  display : none
+}
+
 /* TEXT_TOOLBAR : TABLEEDITOR > STYLE */
-#smart_editor2 .se2_layer_t_style{position:absolute;top:33px;right:15px;width:208px;border:1px solid #c7c7c7;border-top:1px solid #a8a8a8;background:#fff}
-#smart_editor2 .se2_layer_t_style ul{width:204px;height:126px;margin:1px 2px;padding:1px 0 0 0;background:#fff}
-#smart_editor2 .se2_layer_t_style li{_display:inline;float:left;width:45px;height:25px;margin:1px;padding:1px;border:1px solid #fff}
-#smart_editor2 .se2_layer_t_style .hover,#smart_editor2 .se2_layer_t_style .active{border:1px solid #666;background:#fff}
-#smart_editor2 .se2_layer_t_style button{width:45px;height:25px;background:url("../../img/ko_KR/btn_set.png?160622") repeat-x !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style1{background-position:0 -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style2{background-position:-46px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style3{background-position:-92px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style4{background-position:-138px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style5{background-position:-184px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style6{background-position:-230px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style7{background-position:-276px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style8{background-position:-322px -410px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style9{background-position:0 -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style10{background-position:-46px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style11{background-position:-92px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style12{background-position:-138px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style13{background-position:-184px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style14{background-position:-230px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style15{background-position:-276px -436px !important}
-#smart_editor2 .se2_layer_t_style .se2_t_style16{background-position:-322px -436px !important}
-#smart_editor2 .se2_table_set .se2_btn_area{float:left;width:166px;margin:6px 0 0 0;padding:12px 0 8px 0;background:url("../../img/bg_line1.gif") repeat-x;text-align:center}
-#smart_editor2 .se2_table_set button.se2_apply{width:41px;height:24px;margin-right:3px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat}
-#smart_editor2 .se2_table_set button.se2_cancel{width:39px;height:24px;background:url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat}
-#smart_editor2 .se2_table_set .se2_rd{width:14px;height:14px;vertical-align:middle}
-#smart_editor2 .se2_table_set .se2_celltit{font-size:11px;font-size:11px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_table_set dt label.se2_celltit{display:inline}
+#smart_editor2 .se2_layer_t_style {
+  background : #FFFFFF
+  border     : 1px solid #C7C7C7;
+  border-top : 1px solid #A8A8A8;
+  position   : absolute;
+  right      : 15px;
+  top        : 33px;
+  width      : 208px;
+}
+
+#smart_editor2 .se2_layer_t_style ul {
+  background : #FFFFFF
+  height     : 126px;
+  margin     : 1px 2px;
+  padding    : 1px 0 0 0;
+  width      : 204px;
+}
+
+#smart_editor2 .se2_layer_t_style li {
+  _display : inline;
+  border   : 1px solid #FFFFFF
+  float    : left;
+  height   : 25px;
+  margin   : 1px;
+  padding  : 1px;
+  width    : 45px;
+}
+
+#smart_editor2 .se2_layer_t_style .hover, #smart_editor2 .se2_layer_t_style .active {
+  background : #FFFFFF
+  border     : 1px solid #666666;
+}
+
+#smart_editor2 .se2_layer_t_style button {
+  background : url("../../img/ko_KR/btn_set.png?160622") repeat-x !important
+  height     : 25px;
+  width      : 45px;
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style1 {
+  background-position : 0 -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style2 {
+  background-position : -46px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style3 {
+  background-position : -92px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style4 {
+  background-position : -138px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style5 {
+  background-position : -184px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style6 {
+  background-position : -230px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style7 {
+  background-position : -276px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style8 {
+  background-position : -322px -410px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style9 {
+  background-position : 0 -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style10 {
+  background-position : -46px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style11 {
+  background-position : -92px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style12 {
+  background-position : -138px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style13 {
+  background-position : -184px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style14 {
+  background-position : -230px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style15 {
+  background-position : -276px -436px !important
+}
+
+#smart_editor2 .se2_layer_t_style .se2_t_style16 {
+  background-position : -322px -436px !important
+}
+
+#smart_editor2 .se2_table_set .se2_btn_area {
+  background : url("../../img/bg_line1.gif") repeat-x;
+  float      : left;
+  margin     : 6px 0 0 0;
+  padding    : 12px 0 8px 0;
+  text-align : center
+  width      : 166px;
+}
+
+#smart_editor2 .se2_table_set button.se2_apply {
+  background   : url("../../img/ko_KR/btn_set.png?160622") no-repeat
+  height       : 24px;
+  margin-right : 3px;
+  width        : 41px;
+}
+
+#smart_editor2 .se2_table_set button.se2_cancel {
+  background : url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat
+  height     : 24px;
+  width      : 39px;
+}
+
+#smart_editor2 .se2_table_set .se2_rd {
+  height         : 14px;
+  vertical-align : middle
+  width          : 14px;
+}
+
+#smart_editor2 .se2_table_set .se2_celltit {
+  color          : #666666;
+  font-size      : 11px;
+  font-size      : 11px;
+  letter-spacing : -1px
+}
+
+#smart_editor2 .se2_table_set dt label.se2_celltit {
+  display : inline
+}
+
 /* TEXT_TOOLBAR : FINDREPLACE */
-#smart_editor2 .se2_bx_find_revise{position:relative;width:255px;margin:0;padding:0}
-#smart_editor2 .se2_bx_find_revise .se2_close{position:absolute;top:5px;right:8px;width:20px;height:20px;background:url("../../img/ko_KR/btn_set.png?160622") -151px -1px no-repeat}
-#smart_editor2 .se2_bx_find_revise h3{margin:0;padding:10px 0 13px 10px;background:url("../../img/bg_find_h3.gif") 0 -1px repeat-x;font-size:12px;line-height:14px;letter-spacing:-1px}
-#smart_editor2 .se2_bx_find_revise ul{position:relative;margin:8px 0 0 0;padding:0 0 0 12px}
-#smart_editor2 .se2_bx_find_revise ul li{_display:inline;float:left;position:static;margin:0 0 0 -1px;padding:0}
-#smart_editor2 .se2_bx_find_revise .se2_tabfind{width:117px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -100px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_tabrevise{width:117px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -116px -100px no-repeat}
-#smart_editor2 .se2_bx_find_revise .active .se2_tabfind{width:117px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -126px no-repeat}
-#smart_editor2 .se2_bx_find_revise .active .se2_tabrevise{width:117px;height:26px;background:url("../../img/ko_KR/btn_set.png?160622") -116px -126px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_in_bx_find dl{_display:inline;float:left;width:223px;margin:0 0 0 9px;padding:7px 0 13px 14px;background:url("../../img/bx_set_110302.gif") -289px -1518px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_in_bx_revise dl{_display:inline;float:left;width:223px;margin:0 0 0 9px;padding:7px 0 13px 14px;background:url("../../img/bx_set_110302.gif") -289px -1619px no-repeat}
-#smart_editor2 .se2_bx_find_revise dt{_display:inline;float:left;clear:both;width:47px;margin:1px 0 2px 0}
-#smart_editor2 .se2_bx_find_revise dd{float:left;margin:0 0 2px 0}
-#smart_editor2 .se2_bx_find_revise label{float:left;padding:5px 0 0 0;font-size:11px;color:#666;letter-spacing:-2px}
-#smart_editor2 .se2_bx_find_revise input{float:left;width:155px;height:12px;margin:1px 0 0 0;padding:3px 2px 3px 4px;font-size:12px;color:#666}
-#smart_editor2 .se2_bx_find_revise .se2_find_btns{float:left;clear:both;width:255px;padding:8px 0 10px 0;text-align:center}
-#smart_editor2 .se2_bx_find_revise .se2_find_next{width:65px;height:24px;margin:0 3px 0 0;background:url("../../img/ko_KR/btn_set.png?160622") -180px -48px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_find_next2{width:61px;height:24px;margin:0 3px 0 0;background:url("../../img/ko_KR/btn_set.png?160622") -180px -24px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_revise1{width:54px;height:24px;margin:0 3px 0 0;background:url("../../img/ko_KR/btn_set.png?160622") -245px -48px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_revise2{width:70px;height:24px;margin:0 3px 0 0;background:url("../../img/ko_KR/btn_set.png?160622") -245px -24px no-repeat}
-#smart_editor2 .se2_bx_find_revise .se2_cancel{width:39px;height:24px;background:url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat}
+#smart_editor2 .se2_bx_find_revise {
+  margin   : 0;
+  padding  : 0
+  position : relative;
+  width    : 255px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_close {
+  background : url("../../img/ko_KR/btn_set.png?160622") -151px -1px no-repeat
+  height     : 20px;
+  position   : absolute;
+  right      : 8px;
+  top        : 5px;
+  width      : 20px;
+}
+
+#smart_editor2 .se2_bx_find_revise h3 {
+  background     : url("../../img/bg_find_h3.gif") 0 -1px repeat-x;
+  font-size      : 12px;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 0;
+  padding        : 10px 0 13px 10px;
+}
+
+#smart_editor2 .se2_bx_find_revise ul {
+  margin   : 8px 0 0 0;
+  padding  : 0 0 0 12px
+  position : relative;
+}
+
+#smart_editor2 .se2_bx_find_revise ul li {
+  _display : inline;
+  float    : left;
+  margin   : 0 0 0 -1px;
+  padding  : 0
+  position : static;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_tabfind {
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -100px no-repeat
+  height     : 26px;
+  width      : 117px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_tabrevise {
+  background : url("../../img/ko_KR/btn_set.png?160622") -116px -100px no-repeat
+  height     : 26px;
+  width      : 117px;
+}
+
+#smart_editor2 .se2_bx_find_revise .active .se2_tabfind {
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -126px no-repeat
+  height     : 26px;
+  width      : 117px;
+}
+
+#smart_editor2 .se2_bx_find_revise .active .se2_tabrevise {
+  background : url("../../img/ko_KR/btn_set.png?160622") -116px -126px no-repeat
+  height     : 26px;
+  width      : 117px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_in_bx_find dl {
+  _display   : inline;
+  background : url("../../img/bx_set_110302.gif") -289px -1518px no-repeat
+  float      : left;
+  margin     : 0 0 0 9px;
+  padding    : 7px 0 13px 14px;
+  width      : 223px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_in_bx_revise dl {
+  _display   : inline;
+  background : url("../../img/bx_set_110302.gif") -289px -1619px no-repeat
+  float      : left;
+  margin     : 0 0 0 9px;
+  padding    : 7px 0 13px 14px;
+  width      : 223px;
+}
+
+#smart_editor2 .se2_bx_find_revise dt {
+  _display : inline;
+  clear    : both;
+  float    : left;
+  margin   : 1px 0 2px 0
+  width    : 47px;
+}
+
+#smart_editor2 .se2_bx_find_revise dd {
+  float  : left;
+  margin : 0 0 2px 0
+}
+
+#smart_editor2 .se2_bx_find_revise label {
+  color          : #666666;
+  float          : left;
+  font-size      : 11px;
+  letter-spacing : -2px
+  padding        : 5px 0 0 0;
+}
+
+#smart_editor2 .se2_bx_find_revise input {
+  color     : #666666
+  float     : left;
+  font-size : 12px;
+  height    : 12px;
+  margin    : 1px 0 0 0;
+  padding   : 3px 2px 3px 4px;
+  width     : 155px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_find_btns {
+  clear      : both;
+  float      : left;
+  padding    : 8px 0 10px 0;
+  text-align : center
+  width      : 255px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_find_next {
+  background : url("../../img/ko_KR/btn_set.png?160622") -180px -48px no-repeat
+  height     : 24px;
+  margin     : 0 3px 0 0;
+  width      : 65px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_find_next2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -180px -24px no-repeat
+  height     : 24px;
+  margin     : 0 3px 0 0;
+  width      : 61px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_revise1 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -245px -48px no-repeat
+  height     : 24px;
+  margin     : 0 3px 0 0;
+  width      : 54px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_revise2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -245px -24px no-repeat
+  height     : 24px;
+  margin     : 0 3px 0 0;
+  width      : 70px;
+}
+
+#smart_editor2 .se2_bx_find_revise .se2_cancel {
+  background : url("../../img/ko_KR/btn_set.png?160622") -41px 0 no-repeat
+  height     : 24px;
+  width      : 39px;
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE */
-#smart_editor2 .se2_qmax{position:absolute;width:18px;height:18px;background:url("../../img/ko_KR/btn_set.png?160622") -339px -169px no-repeat}
-#smart_editor2 .se2_qeditor{position:absolute;top:0;left:0;width:183px;margin:0;padding:0;border:1px solid #c7c7c7;border-right:1px solid #ababab;border-bottom:1px solid #ababab;background:#fafafa}
-#smart_editor2 .se2_qeditor label,#smart_editor2 .se2_qeditor span,#smart_editor2 .se2_qeditor dt{font-size:11px;color:#666;letter-spacing:-1px}
-#smart_editor2 .se2_qbar{position:relative;width:183px;height:11px;background:url("../../img/bx_set_110302.gif") 0 -731px no-repeat}
-#smart_editor2 .se2_qbar .se2_qmini{position:absolute;top:-1px;right:0;*right:-1px;_right:-3px;width:18px;height:14px;background:url("../../img/ko_KR/btn_set.png?160622") -315px -170px no-repeat}
-#smart_editor2 .se2_qbar .se2_qmini button{width:20px;height:14px;margin-top:-1px}
-#smart_editor2 .se2_qeditor .se2_qbody0{float:left;border:1px solid #fefefe}
-#smart_editor2 .se2_qeditor .se2_qbody{position:relative;z-index:90;width:174px;padding:4px 0 0 7px}
-#smart_editor2 .se2_qeditor .se2_qe1{overflow:hidden;width:174px}
-#smart_editor2 .se2_qeditor .se2_qe1 dt{float:left;width:22px;height:18px;padding:4px 0 0 0}
-#smart_editor2 .se2_qeditor .se2_qe1 dd{float:left;width:65px;height:22px}
-#smart_editor2 .se2_qeditor .se2_addrow{width:28px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -49px}
-#smart_editor2 .se2_qeditor .se2_addcol{width:29px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -49px}
-#smart_editor2 .se2_qeditor .se2_seprow{width:28px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -68px}
-#smart_editor2 .se2_qeditor .se2_sepcol{width:29px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -68px}
-#smart_editor2 .se2_qeditor .se2_delrow{width:28px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -106px}
-#smart_editor2 .se2_qeditor .se2_delcol{width:29px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -106px}
-#smart_editor2 .se2_qeditor .se2_merrow{width:57px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -125px}
-#smart_editor2 .se2_qeditor .se2_mercol{width:57px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -125px}
-#smart_editor2 .se2_qeditor .se2_seprow_off{width:28px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -87px}
-#smart_editor2 .se2_qeditor .se2_sepcol_off{width:29px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -87px}
-#smart_editor2 .se2_qeditor .se2_merrow_off{width:57px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -144px}
-#smart_editor2 .se2_qeditor .se2_mercol_off{width:57px;height:19px;background:url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -144px}
+#smart_editor2 .se2_qmax {
+  background : url("../../img/ko_KR/btn_set.png?160622") -339px -169px no-repeat
+  height     : 18px;
+  position   : absolute;
+  width      : 18px;
+}
+
+#smart_editor2 .se2_qeditor {
+  background    : #FAFAFA
+  border        : 1px solid #C7C7C7;
+  border-bottom : 1px solid #ABABAB;
+  border-right  : 1px solid #ABABAB;
+  left          : 0;
+  margin        : 0;
+  padding       : 0;
+  position      : absolute;
+  top           : 0;
+  width         : 183px;
+}
+
+#smart_editor2 .se2_qeditor label, #smart_editor2 .se2_qeditor span, #smart_editor2 .se2_qeditor dt {
+  color          : #666666;
+  font-size      : 11px;
+  letter-spacing : -1px
+}
+
+#smart_editor2 .se2_qbar {
+  background : url("../../img/bx_set_110302.gif") 0 -731px no-repeat
+  height     : 11px;
+  position   : relative;
+  width      : 183px;
+}
+
+#smart_editor2 .se2_qbar .se2_qmini {
+  _right     : -3px;
+  background : url("../../img/ko_KR/btn_set.png?160622") -315px -170px no-repeat
+  height     : 14px;
+  position   : absolute;
+  *right     : -1px;
+  right      : 0;
+  top        : -1px;
+  width      : 18px;
+}
+
+#smart_editor2 .se2_qbar .se2_qmini button {
+  height     : 14px;
+  margin-top : -1px
+  width      : 20px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qbody0 {
+  border : 1px solid #FEFEFE
+  float  : left;
+}
+
+#smart_editor2 .se2_qeditor .se2_qbody {
+  padding  : 4px 0 0 7px
+  position : relative;
+  width    : 174px;
+  z-index  : 90;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe1 {
+  overflow : hidden;
+  width    : 174px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe1 dt {
+  float   : left;
+  height  : 18px;
+  padding : 4px 0 0 0
+  width   : 22px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe1 dd {
+  float  : left;
+  height : 22px
+  width  : 65px;
+}
+
+#smart_editor2 .se2_qeditor .se2_addrow {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -49px
+  height     : 19px;
+  width      : 28px;
+}
+
+#smart_editor2 .se2_qeditor .se2_addcol {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -49px
+  height     : 19px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_qeditor .se2_seprow {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -68px
+  height     : 19px;
+  width      : 28px;
+}
+
+#smart_editor2 .se2_qeditor .se2_sepcol {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -68px
+  height     : 19px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_qeditor .se2_delrow {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -106px
+  height     : 19px;
+  width      : 28px;
+}
+
+#smart_editor2 .se2_qeditor .se2_delcol {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -106px
+  height     : 19px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_qeditor .se2_merrow {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -125px
+  height     : 19px;
+  width      : 57px;
+}
+
+#smart_editor2 .se2_qeditor .se2_mercol {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -125px
+  height     : 19px;
+  width      : 57px;
+}
+
+#smart_editor2 .se2_qeditor .se2_seprow_off {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -87px
+  height     : 19px;
+  width      : 28px;
+}
+
+#smart_editor2 .se2_qeditor .se2_sepcol_off {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -87px
+  height     : 19px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_qeditor .se2_merrow_off {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -385px -144px
+  height     : 19px;
+  width      : 57px;
+}
+
+#smart_editor2 .se2_qeditor .se2_mercol_off {
+  background : url("../../img/ko_KR/btn_set.png?160622") no-repeat -413px -144px
+  height     : 19px;
+  width      : 57px;
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > CELL_BACKGROUND */
-#smart_editor2 .se2_qeditor .se2_qe2{_display:inline;float:left;position:relative;z-index:100;width:165px;margin:2px 0 0 1px;padding:7px 0 0 0;background:url("../../img/bg_line1.gif") repeat-x;zoom:1}
-#smart_editor2 .se2_qeditor .se2_qe2_1 dt{float:left;width:62px;padding:3px 0 0 0}
-#smart_editor2 .se2_qeditor .se2_qe2_1 dt input{width:15px;height:15px;margin:-1px 1px 1px -1px;vertical-align:middle}
-#smart_editor2 .se2_qeditor .se2_qe2_1 dd{float:left;position:relative;zoom:1}
-#smart_editor2 .se2_qeditor .se2_qe2_3{padding:7px 0 6px 0}
+#smart_editor2 .se2_qeditor .se2_qe2 {
+  _display   : inline;
+  background : url("../../img/bg_line1.gif") repeat-x;
+  float      : left;
+  margin     : 2px 0 0 1px;
+  padding    : 7px 0 0 0;
+  position   : relative;
+  width      : 165px;
+  z-index    : 100;
+  zoom       : 1
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_1 dt {
+  float   : left;
+  padding : 3px 0 0 0
+  width   : 62px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_1 dt input {
+  height         : 15px;
+  margin         : -1px 1px 1px -1px;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_1 dd {
+  float    : left;
+  position : relative;
+  zoom     : 1
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_3 {
+  padding : 7px 0 6px 0
+}
+
 /* My글양식 없을때 */
-#smart_editor2 .se2_qeditor .se2_qe2_2{position:relative;_position:absolute}
-#smart_editor2 .se2_qeditor .se2_qe2_2 dt{float:left;width:50px;padding:3px 0 0 13px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 dt input{width:15px;height:15px;margin:-1px 2px 1px -1px;vertical-align:middle}
-#smart_editor2 .se2_qeditor .se2_qe2_2 dd{float:left}
+#smart_editor2 .se2_qeditor .se2_qe2_2 {
+  _position : absolute
+  position  : relative;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 dt {
+  float   : left;
+  padding : 3px 0 0 13px
+  width   : 50px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 dt input {
+  height         : 15px;
+  margin         : -1px 2px 1px -1px;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 dd {
+  float : left
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > STYLE */
-#smart_editor2 .se2_table_set .se2_qbody .se2_t_proper2{float:left;*float:none;position:static;width:166px;margin:5px 0 0 1px}
-#smart_editor2 .se2_qeditor .se2_qe3 dt{float:left;width:62px;padding:0}
-#smart_editor2 .se2_qeditor .se2_qe3 dt label{font-weight:normal}
-#smart_editor2 .se2_qeditor .se2_qe3 dt input{width:15px;height:15px;margin:-1px 1px 1px -1px;vertical-align:middle}
-#smart_editor2 .se2_qeditor .se2_qe3 dd .se2_qe3_table{position:relative}
+#smart_editor2 .se2_table_set .se2_qbody .se2_t_proper2 {
+  float    : left;
+  *float   : none;
+  margin   : 5px 0 0 1px
+  position : static;
+  width    : 166px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe3 dt {
+  float   : left;
+  padding : 0
+  width   : 62px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe3 dt label {
+  font-weight : normal
+}
+
+#smart_editor2 .se2_qeditor .se2_qe3 dt input {
+  height         : 15px;
+  margin         : -1px 1px 1px -1px;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe3 dd .se2_qe3_table {
+  position : relative
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > CELL_BACKGROUND PREWVIEW */
-#smart_editor2 .se2_qeditor .se2_pre_color{float:left;width:18px;height:18px;border:1px solid #c7c7c7}
-#smart_editor2 .se2_qeditor .se2_pre_color button{float:left;width:14px;height:14px;margin:2px 0 0 2px;padding:0}
-#smart_editor2 .se2_qeditor .se2_pre_color button span{overflow:hidden;position:absolute;top:-10000px;left:-10000px;z-index:-100;width:0;height:0}
+#smart_editor2 .se2_qeditor .se2_pre_color {
+  border : 1px solid #C7C7C7
+  float  : left;
+  height : 18px;
+  width  : 18px;
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_color button {
+  float   : left;
+  height  : 14px;
+  margin  : 2px 0 0 2px;
+  padding : 0
+  width   : 14px;
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_color button span {
+  height   : 0
+  left     : -10000px;
+  overflow : hidden;
+  position : absolute;
+  top      : -10000px;
+  width    : 0;
+  z-index  : -100;
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > CELL_BACKGROUND LAYER */
-#smart_editor2 .se2_qeditor .se2_layer{float:left;clear:both;position:absolute;top:20px;left:0;margin:0;padding:0;border:1px solid #c7c7c7;border-top:1px solid #9a9a9a;background:#fafafa}
-#smart_editor2 .se2_qeditor .se2_layer .se2_in_layer{float:left;margin:0;padding:0;border:1px solid #fff;background:#fafafa}
-#smart_editor2 .se2_qeditor .se2_layer button{vertical-align:top}
-#smart_editor2 .se2_qeditor .se2_layer .se2_pick_color li{position:relative}
+#smart_editor2 .se2_qeditor .se2_layer {
+  background : #FAFAFA
+  border     : 1px solid #C7C7C7;
+  border-top : 1px solid #9A9A9A;
+  clear      : both;
+  float      : left;
+  left       : 0;
+  margin     : 0;
+  padding    : 0;
+  position   : absolute;
+  top        : 20px;
+}
+
+#smart_editor2 .se2_qeditor .se2_layer .se2_in_layer {
+  background : #FAFAFA
+  border     : 1px solid #FFFFFF;
+  float      : left;
+  margin     : 0;
+  padding    : 0;
+}
+
+#smart_editor2 .se2_qeditor .se2_layer button {
+  vertical-align : top
+}
+
+#smart_editor2 .se2_qeditor .se2_layer .se2_pick_color li {
+  position : relative
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > CELL_BACKGROUND IMAGE */
-#smart_editor2 .se2_qeditor .se2_pre_bgimg{float:left;width:14px;height:14px;padding:2px;border:1px solid #c7c7c7}
-#smart_editor2 .se2_qeditor .se2_qe2_2 button{width:16px;height:16px;background:url("../../img/ko_KR/btn_set.png?160622") 0 -261px no-repeat}
+#smart_editor2 .se2_qeditor .se2_pre_bgimg {
+  border  : 1px solid #C7C7C7
+  float   : left;
+  height  : 14px;
+  padding : 2px;
+  width   : 14px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 button {
+  background : url("../../img/ko_KR/btn_set.png?160622") 0 -261px no-repeat
+  height     : 16px;
+  width      : 16px;
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > CELL_BACKGROUND IMAGE LAYER */
-#smart_editor2 .se2_cellimg_set{_display:inline;float:left;width:136px;margin:4px 3px 0 4px;padding-bottom:4px}
-#smart_editor2 .se2_cellimg_set li{_display:inline;float:left;width:16px;height:16px;margin:0 1px 1px 0}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg0{background-position:-255px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg1{background-position:0 -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg2{background-position:-17px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg3{background-position:-34px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg4{background-position:-51px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg5{background-position:-68px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg6{background-position:-85px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg7{background-position:-102px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg8{background-position:-119px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg9{background-position:-136px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg10{background-position:-153px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg11{background-position:-170px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg12{background-position:-187px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg13{background-position:-204px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg14{background-position:-221px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg15{background-position:-238px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg16{background-position:-255px -261px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg17{background-position:0 -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg18{background-position:-17px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg19{background-position:-34px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg20{background-position:-51px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg21{background-position:-68px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg22{background-position:-85px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg23{background-position:-102px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg24{background-position:-119px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg25{background-position:-136px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg26{background-position:-153px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg27{background-position:-170px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg28{background-position:-187px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg29{background-position:-204px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg30{background-position:-221px -278px}
-#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg31{background-position:-238px -278px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg button{width:14px;height:14px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg1{background-position:-1px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg2{background-position:-18px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg3{background-position:-35px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg4{background-position:-52px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg5{background-position:-69px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg6{background-position:-86px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg7{background-position:-103px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg8{background-position:-120px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg9{background-position:-137px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg10{background-position:-154px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg11{background-position:-171px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg12{background-position:-188px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg13{background-position:-205px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg14{background-position:-222px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg15{background-position:-239px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg16{background-position:-256px -262px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg17{background-position:-1px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg18{background-position:-18px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg19{background-position:-35px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg20{background-position:-52px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg21{background-position:-69px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg22{background-position:-86px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg23{background-position:-103px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg24{background-position:-120px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg25{background-position:-137px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg26{background-position:-154px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg27{background-position:-171px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg28{background-position:-188px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg29{background-position:-205px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg30{background-position:-222px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg31{background-position:-239px -279px}
-#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg32{background-position:-256px -279px}
+#smart_editor2 .se2_cellimg_set {
+  _display       : inline;
+  float          : left;
+  margin         : 4px 3px 0 4px;
+  padding-bottom : 4px
+  width          : 136px;
+}
+
+#smart_editor2 .se2_cellimg_set li {
+  _display : inline;
+  float    : left;
+  height   : 16px;
+  margin   : 0 1px 1px 0
+  width    : 16px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg0 {
+  background-position : -255px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg1 {
+  background-position : 0 -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg2 {
+  background-position : -17px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg3 {
+  background-position : -34px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg4 {
+  background-position : -51px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg5 {
+  background-position : -68px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg6 {
+  background-position : -85px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg7 {
+  background-position : -102px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg8 {
+  background-position : -119px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg9 {
+  background-position : -136px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg10 {
+  background-position : -153px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg11 {
+  background-position : -170px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg12 {
+  background-position : -187px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg13 {
+  background-position : -204px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg14 {
+  background-position : -221px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg15 {
+  background-position : -238px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg16 {
+  background-position : -255px -261px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg17 {
+  background-position : 0 -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg18 {
+  background-position : -17px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg19 {
+  background-position : -34px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg20 {
+  background-position : -51px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg21 {
+  background-position : -68px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg22 {
+  background-position : -85px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg23 {
+  background-position : -102px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg24 {
+  background-position : -119px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg25 {
+  background-position : -136px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg26 {
+  background-position : -153px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg27 {
+  background-position : -170px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg28 {
+  background-position : -187px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg29 {
+  background-position : -204px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg30 {
+  background-position : -221px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_qe2_2 .se2_cellimg31 {
+  background-position : -238px -278px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg button {
+  height : 14px
+  width  : 14px;
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg1 {
+  background-position : -1px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg2 {
+  background-position : -18px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg3 {
+  background-position : -35px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg4 {
+  background-position : -52px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg5 {
+  background-position : -69px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg6 {
+  background-position : -86px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg7 {
+  background-position : -103px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg8 {
+  background-position : -120px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg9 {
+  background-position : -137px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg10 {
+  background-position : -154px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg11 {
+  background-position : -171px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg12 {
+  background-position : -188px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg13 {
+  background-position : -205px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg14 {
+  background-position : -222px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg15 {
+  background-position : -239px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg16 {
+  background-position : -256px -262px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg17 {
+  background-position : -1px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg18 {
+  background-position : -18px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg19 {
+  background-position : -35px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg20 {
+  background-position : -52px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg21 {
+  background-position : -69px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg22 {
+  background-position : -86px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg23 {
+  background-position : -103px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg24 {
+  background-position : -120px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg25 {
+  background-position : -137px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg26 {
+  background-position : -154px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg27 {
+  background-position : -171px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg28 {
+  background-position : -188px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg29 {
+  background-position : -205px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg30 {
+  background-position : -222px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg31 {
+  background-position : -239px -279px
+}
+
+#smart_editor2 .se2_qeditor .se2_pre_bgimg .se2_cellimg32 {
+  background-position : -256px -279px
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_TABLE > MY REVIEW */
-#smart_editor2 .se2_btn_area{_display:inline;float:left;clear:both;width:166px;margin:5px 0 0 1px;padding:7px 0 6px 0;background:url("../../img/bg_line1.gif") repeat-x;text-align:center}
-#smart_editor2 .se2_btn_area .se2_btn_save{width:97px;height:21px;background:url("../../img/ko_KR/btn_set.png?160622") -369px -163px no-repeat}
+#smart_editor2 .se2_btn_area {
+  _display   : inline;
+  background : url("../../img/bg_line1.gif") repeat-x;
+  clear      : both;
+  float      : left;
+  margin     : 5px 0 0 1px;
+  padding    : 7px 0 6px 0;
+  text-align : center
+  width      : 166px;
+}
+
+#smart_editor2 .se2_btn_area .se2_btn_save {
+  background : url("../../img/ko_KR/btn_set.png?160622") -369px -163px no-repeat
+  height     : 21px;
+  width      : 97px;
+}
+
 /* TEXT_TOOLBAR : QUICKEDITOR_IMAGE */
-#smart_editor2 .se2_qe10{width:166px;margin:0;*margin:-2px 0 0 0}
-#smart_editor2 .se2_qe10 label{margin:0 1px 0 0;vertical-align:middle}
-#smart_editor2 .se2_qe10 .se2_sheight{margin-left:4px}
-#smart_editor2 .se2_qe10 .input_ty1{width:30px;height:13px;margin:0 0 1px 1px;padding:3px 4px 0 1px;font-size:11px;letter-spacing:0;text-align:right;vertical-align:middle}
-#smart_editor2 .se2_qe10 .se2_sreset{width:41px;height:19px;margin-left:3px;background:url("../../img/ko_KR/btn_set.png?160622") -401px -184px no-repeat;vertical-align:middle}
-#smart_editor2 .se2_qe10_1{margin-top:4px;padding:10px 0 3px;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_qe10_1 input{width:15px;height:15px;margin:-1px 3px 1px -1px;vertical-align:middle}
-#smart_editor2 .se2_qe11{float:left;width:166px;margin:4px 0 0 0;padding:7px 0 2px 0;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_qe11_1{float:left;width:99px}
-#smart_editor2 .se2_qe11_1 dt{float:left;width:56px;height:15px;padding:5px 0 0 0}
-#smart_editor2 .se2_qe11_1 dd{float:left;position:relative;width:38px;height:20px}
-#smart_editor2 .se2_qe11_1 .input_ty1{display:block;width:29px;height:15px;margin:0;*margin:-1px 0 1px 0;padding:3px 1px 0 5px;font-size:11px;letter-spacing:0;text-align:left}
-#smart_editor2 .se2_qe11_1 .se2_add{position:absolute;top:2px;right:3px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat}
-#smart_editor2 .se2_qe11_1 .se2_del{position:absolute;top:10px;right:3px;width:13px;height:8px;background:url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat}
-#smart_editor2 .se2_qe11_2{float:left;width:67px}
-#smart_editor2 .se2_qe11_2 dt{float:left;width:47px;margin:5px 0 0 0}
-#smart_editor2 .se2_qe11_2 dd{float:left;position:relative;width:20px}
-#smart_editor2 .se2_qe12{float:left;width:166px;margin:3px 0 0 0;padding:7px 0 0 0;background:url("../../img/bg_line1.gif") repeat-x}
-#smart_editor2 .se2_qe12 dt{float:left;margin:5px 4px 0 0}
-#smart_editor2 .se2_qe12 dd{float:left;padding:0 0 6px 0}
-#smart_editor2 .se2_qe12 .se2_align0{float:left;width:19px;height:21px;background:url("../../img/ko_KR/btn_set.png?160622") -276px -121px no-repeat}
-#smart_editor2 .se2_qe12 .se2_align1{float:left;width:19px;height:21px;background:url("../../img/ko_KR/btn_set.png?160622") -295px -121px no-repeat}
-#smart_editor2 .se2_qe12 .se2_align2{float:left;width:20px;height:21px;background:url("../../img/ko_KR/btn_set.png?160622") -314px -121px no-repeat}
-#smart_editor2 .se2_qe13{position:relative;z-index:10;zoom:1}
-#smart_editor2 .se2_qe13 dt{float:left;width:62px;padding:3px 0 0}
-#smart_editor2 .se2_qe13 dt input{width:15px;height:15px;margin:-1px 1px 1px -1px;vertical-align:middle;zoom:1}
-#smart_editor2 .se2_qe13 dt .se2_qdim2{width:32px}
-#smart_editor2 .se2_qe13 dd .se2_select_ty1{width:38px}
-#smart_editor2 .se2_qe13 dd .se2_select_ty1 span{width:15px}
-#smart_editor2 .se2_qe13 dd .input_ty1{width:20px}
-#smart_editor2 .se2_qe13 dd .se2_palette2 .input_ty1{width:67px}
-#smart_editor2 .se2_qe13 .se2_add{*top:3px}
-#smart_editor2 .se2_qe13 .se2_del{*top:11px}
-#smart_editor2 .se2_qe13 .se2_layer_b_style{right:-2px;_right:0}
-#smart_editor2 .se2_qe13 .se2_layer_b_style li span{width:auto;margin:0 4px 0 5px;padding-top:2px}
-#smart_editor2 .se2_qe13 dd{_display:inline;float:left;position:relative;width:29px;margin-right:5px;_margin-right:3px;zoom:1}
-#smart_editor2 .se2_qe13 dd .se2_palette h4{margin-top:9px;font-family:dotum;font-size:12px}
-#smart_editor2 .se2_qe13 dd.dd_type{width:38px}
-#smart_editor2 .se2_qe13 dd.dd_type2{width:37px;margin-right:3px}
-#smart_editor2 .se2_qe13 dd.dd_type2 .input_ty1{width:29px}
-#smart_editor2 .se2_qe13 dd.dd_type2 button{right:2px;_right:1px}
-#smart_editor2 .se2_qe13 dd.dd_type3{width:20px;margin:0}
-#smart_editor2 .se2_qe13_v1{_display:inline;float:left;margin:2px 0 1px}
-#smart_editor2 .se2_qe13_v1 dt{padding:4px 0 0 1px}
-#smart_editor2 .se2_qe13_v2{_display:inline;float:left;position:relative;z-index:100;width:165px;margin:4px 0 0 1px;zoom:1}
-#smart_editor2 .se2_qe13_v2 dd{width:18px;margin:0}
-#smart_editor2 .se2_qeditor .se2_qdim1{clear:both;position:absolute;top:25px;left:115px;width:60px;height:23px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim2{clear:both;position:absolute;top:55px;left:24px;z-index:110;width:70px;height:22px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim3{clear:both;position:absolute;top:55px;left:118px;z-index:110;width:56px;height:22px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim4{clear:both;position:absolute;top:81px;left:23px;z-index:35;width:116px;height:35px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim5{clear:both;position:absolute;top:31px;left:106px;width:68px;height:26px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim6c{clear:both;position:absolute;top:25px;left:28px;width:29px;height:23px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim6r{clear:both;position:absolute;top:25px;left:57px;width:29px;height:23px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_highedit{float:right;width:56px;height:21px;margin:-27px 8px 0 0;background:url("../../img/ko_KR/btn_set.png?160622") -329px -142px no-repeat}
-#smart_editor2 .se2_qeditor .se2_qdim7{clear:both;position:absolute;top:55px;left:24px;z-index:110;width:150px;height:48px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim8{clear:both;position:absolute;top:105px;left:24px;z-index:110;width:150px;height:37px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim9{clear:both;position:absolute;top:55px;left:111px;z-index:110;width:65px;height:24px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim10{clear:both;position:absolute;top:55px;left:100px;z-index:110;width:77px;height:24px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
-#smart_editor2 .se2_qeditor .se2_qdim11{clear:both;position:absolute;top:55px;left:65px;z-index:110;width:115px;height:24px;background:#fafafa;opacity:0.5;filter:alpha(opacity=50)}
+#smart_editor2 .se2_qe10 {
+  margin  : 0;
+  *margin : -2px 0 0 0
+  width   : 166px;
+}
+
+#smart_editor2 .se2_qe10 label {
+  margin         : 0 1px 0 0;
+  vertical-align : middle
+}
+
+#smart_editor2 .se2_qe10 .se2_sheight {
+  margin-left : 4px
+}
+
+#smart_editor2 .se2_qe10 .input_ty1 {
+  font-size      : 11px;
+  height         : 13px;
+  letter-spacing : 0;
+  margin         : 0 0 1px 1px;
+  padding        : 3px 4px 0 1px;
+  text-align     : right;
+  vertical-align : middle
+  width          : 30px;
+}
+
+#smart_editor2 .se2_qe10 .se2_sreset {
+  background     : url("../../img/ko_KR/btn_set.png?160622") -401px -184px no-repeat;
+  height         : 19px;
+  margin-left    : 3px;
+  vertical-align : middle
+  width          : 41px;
+}
+
+#smart_editor2 .se2_qe10_1 {
+  background : url("../../img/bg_line1.gif") repeat-x
+  margin-top : 4px;
+  padding    : 10px 0 3px;
+}
+
+#smart_editor2 .se2_qe10_1 input {
+  height         : 15px;
+  margin         : -1px 3px 1px -1px;
+  vertical-align : middle
+  width          : 15px;
+}
+
+#smart_editor2 .se2_qe11 {
+  background : url("../../img/bg_line1.gif") repeat-x
+  float      : left;
+  margin     : 4px 0 0 0;
+  padding    : 7px 0 2px 0;
+  width      : 166px;
+}
+
+#smart_editor2 .se2_qe11_1 {
+  float : left;
+  width : 99px
+}
+
+#smart_editor2 .se2_qe11_1 dt {
+  float   : left;
+  height  : 15px;
+  padding : 5px 0 0 0
+  width   : 56px;
+}
+
+#smart_editor2 .se2_qe11_1 dd {
+  float    : left;
+  height   : 20px
+  position : relative;
+  width    : 38px;
+}
+
+#smart_editor2 .se2_qe11_1 .input_ty1 {
+  display        : block;
+  font-size      : 11px;
+  height         : 15px;
+  letter-spacing : 0;
+  margin         : 0;
+  *margin        : -1px 0 1px 0;
+  padding        : 3px 1px 0 5px;
+  text-align     : left
+  width          : 29px;
+}
+
+#smart_editor2 .se2_qe11_1 .se2_add {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -54px no-repeat
+  height     : 8px;
+  position   : absolute;
+  right      : 3px;
+  top        : 2px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_qe11_1 .se2_del {
+  background : url("../../img/ko_KR/btn_set.png?160622") -86px -62px no-repeat
+  height     : 8px;
+  position   : absolute;
+  right      : 3px;
+  top        : 10px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_qe11_2 {
+  float : left;
+  width : 67px
+}
+
+#smart_editor2 .se2_qe11_2 dt {
+  float  : left;
+  margin : 5px 0 0 0
+  width  : 47px;
+}
+
+#smart_editor2 .se2_qe11_2 dd {
+  float    : left;
+  position : relative;
+  width    : 20px
+}
+
+#smart_editor2 .se2_qe12 {
+  background : url("../../img/bg_line1.gif") repeat-x
+  float      : left;
+  margin     : 3px 0 0 0;
+  padding    : 7px 0 0 0;
+  width      : 166px;
+}
+
+#smart_editor2 .se2_qe12 dt {
+  float  : left;
+  margin : 5px 4px 0 0
+}
+
+#smart_editor2 .se2_qe12 dd {
+  float   : left;
+  padding : 0 0 6px 0
+}
+
+#smart_editor2 .se2_qe12 .se2_align0 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -276px -121px no-repeat
+  float      : left;
+  height     : 21px;
+  width      : 19px;
+}
+
+#smart_editor2 .se2_qe12 .se2_align1 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -295px -121px no-repeat
+  float      : left;
+  height     : 21px;
+  width      : 19px;
+}
+
+#smart_editor2 .se2_qe12 .se2_align2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -314px -121px no-repeat
+  float      : left;
+  height     : 21px;
+  width      : 20px;
+}
+
+#smart_editor2 .se2_qe13 {
+  position : relative;
+  z-index  : 10;
+  zoom     : 1
+}
+
+#smart_editor2 .se2_qe13 dt {
+  float   : left;
+  padding : 3px 0 0
+  width   : 62px;
+}
+
+#smart_editor2 .se2_qe13 dt input {
+  height         : 15px;
+  margin         : -1px 1px 1px -1px;
+  vertical-align : middle;
+  width          : 15px;
+  zoom           : 1
+}
+
+#smart_editor2 .se2_qe13 dt .se2_qdim2 {
+  width : 32px
+}
+
+#smart_editor2 .se2_qe13 dd .se2_select_ty1 {
+  width : 38px
+}
+
+#smart_editor2 .se2_qe13 dd .se2_select_ty1 span {
+  width : 15px
+}
+
+#smart_editor2 .se2_qe13 dd .input_ty1 {
+  width : 20px
+}
+
+#smart_editor2 .se2_qe13 dd .se2_palette2 .input_ty1 {
+  width : 67px
+}
+
+#smart_editor2 .se2_qe13 .se2_add {
+  *top : 3px
+}
+
+#smart_editor2 .se2_qe13 .se2_del {
+  *top : 11px
+}
+
+#smart_editor2 .se2_qe13 .se2_layer_b_style {
+  _right : 0
+  right  : -2px;
+}
+
+#smart_editor2 .se2_qe13 .se2_layer_b_style li span {
+  margin      : 0 4px 0 5px;
+  padding-top : 2px
+  width       : auto;
+}
+
+#smart_editor2 .se2_qe13 dd {
+  _display      : inline;
+  _margin-right : 3px;
+  float         : left;
+  margin-right  : 5px;
+  position      : relative;
+  width         : 29px;
+  zoom          : 1
+}
+
+#smart_editor2 .se2_qe13 dd .se2_palette h4 {
+  font-family : dotum;
+  font-size   : 12px
+  margin-top  : 9px;
+}
+
+#smart_editor2 .se2_qe13 dd.dd_type {
+  width : 38px
+}
+
+#smart_editor2 .se2_qe13 dd.dd_type2 {
+  margin-right : 3px
+  width        : 37px;
+}
+
+#smart_editor2 .se2_qe13 dd.dd_type2 .input_ty1 {
+  width : 29px
+}
+
+#smart_editor2 .se2_qe13 dd.dd_type2 button {
+  _right : 1px
+  right  : 2px;
+}
+
+#smart_editor2 .se2_qe13 dd.dd_type3 {
+  margin : 0
+  width  : 20px;
+}
+
+#smart_editor2 .se2_qe13_v1 {
+  _display : inline;
+  float    : left;
+  margin   : 2px 0 1px
+}
+
+#smart_editor2 .se2_qe13_v1 dt {
+  padding : 4px 0 0 1px
+}
+
+#smart_editor2 .se2_qe13_v2 {
+  _display : inline;
+  float    : left;
+  margin   : 4px 0 0 1px;
+  position : relative;
+  width    : 165px;
+  z-index  : 100;
+  zoom     : 1
+}
+
+#smart_editor2 .se2_qe13_v2 dd {
+  margin : 0
+  width  : 18px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim1 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 23px;
+  left       : 115px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 25px;
+  width      : 60px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim2 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 22px;
+  left       : 24px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 70px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim3 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 22px;
+  left       : 118px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 56px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim4 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 35px;
+  left       : 23px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 81px;
+  width      : 116px;
+  z-index    : 35;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim5 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 26px;
+  left       : 106px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 31px;
+  width      : 68px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim6c {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 23px;
+  left       : 28px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 25px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim6r {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 23px;
+  left       : 57px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 25px;
+  width      : 29px;
+}
+
+#smart_editor2 .se2_highedit {
+  background : url("../../img/ko_KR/btn_set.png?160622") -329px -142px no-repeat
+  float      : right;
+  height     : 21px;
+  margin     : -27px 8px 0 0;
+  width      : 56px;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim7 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 48px;
+  left       : 24px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 150px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim8 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 37px;
+  left       : 24px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 105px;
+  width      : 150px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim9 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 24px;
+  left       : 111px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 65px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim10 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 24px;
+  left       : 100px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 77px;
+  z-index    : 110;
+}
+
+#smart_editor2 .se2_qeditor .se2_qdim11 {
+  background : #FAFAFA;
+  clear      : both;
+  filter     : alpha(opacity=50)
+  height     : 24px;
+  left       : 65px;
+  opacity    : 0.5;
+  position   : absolute;
+  top        : 55px;
+  width      : 115px;
+  z-index    : 110;
+}
+
 /* HELP : ACCESSIBILITY */
-#smart_editor2 .se2_accessibility{z-index:90}
-#smart_editor2 .se2_accessibility .se2_in_layer{width:568px;padding:0 10px;background:#fafafa;border:1px solid #bcbbbb}
-#smart_editor2 .se2_accessibility h3{margin:0 -10px;padding:6px 0 12px 0;background:url("../../img/bg_find_h3.gif") repeat-x;font-size:12px;line-height:14px;letter-spacing:-1px}
-#smart_editor2 .se2_accessibility h3 strong{display:inline-block;padding:4px 0 3px 11px;color:#333;letter-spacing:0}
-#smart_editor2 .se2_accessibility .se2_close{position:absolute;top:10px;right:12px;width:13px;height:12px;background:url("../../img/ko_KR/btn_set.png?160622") -155px -5px no-repeat}
-#smart_editor2 .se2_accessibility .box_help{padding:0 2px;margin-top:8px;background:url("../../img/bg_help.gif") 0 100% no-repeat}
-#smart_editor2 .se2_accessibility .box_help div{overflow:hidden;padding:20px 21px 24px;border-top:1px solid #d0d0d0;color:#333}
-#smart_editor2 .se2_accessibility .box_help strong{display:block;margin-bottom:2px}
-#smart_editor2 .se2_accessibility .box_help p{margin-bottom:28px;line-height:1.5}
-#smart_editor2 .se2_accessibility .box_help ul{width:150%;margin-top:10px}
-#smart_editor2 .se2_accessibility .box_help li{position:relative;float:left;width:252px;padding:5px 0 5px 9px;margin-right:40px;background:url("../../img/ko_KR/btn_set.png?160622") -475px -51px no-repeat;border-right:1px solid #f0f0f0;*zoom:1;line-height:1}
-#smart_editor2 .se2_accessibility .box_help li span{position:absolute;top:4px;left:138px;line-height:1.2}
-#smart_editor2 .se2_accessibility .se2_btns{padding:9px 0 10px;text-align:center}
-#smart_editor2 .se2_accessibility .se2_btns .se2_close2{width:39px;height:24px;background:url("../../img/ko_KR/btn_set.png?160622") -235px -120px no-repeat}
+#smart_editor2 .se2_accessibility {
+  z-index : 90
+}
+
+#smart_editor2 .se2_accessibility .se2_in_layer {
+  background : #FAFAFA;
+  border     : 1px solid #BCBBBB
+  padding    : 0 10px;
+  width      : 568px;
+}
+
+#smart_editor2 .se2_accessibility h3 {
+  background     : url("../../img/bg_find_h3.gif") repeat-x;
+  font-size      : 12px;
+  letter-spacing : -1px
+  line-height    : 14px;
+  margin         : 0 -10px;
+  padding        : 6px 0 12px 0;
+}
+
+#smart_editor2 .se2_accessibility h3 strong {
+  color          : #333333;
+  display        : inline-block;
+  letter-spacing : 0
+  padding        : 4px 0 3px 11px;
+}
+
+#smart_editor2 .se2_accessibility .se2_close {
+  background : url("../../img/ko_KR/btn_set.png?160622") -155px -5px no-repeat
+  height     : 12px;
+  position   : absolute;
+  right      : 12px;
+  top        : 10px;
+  width      : 13px;
+}
+
+#smart_editor2 .se2_accessibility .box_help {
+  background : url("../../img/bg_help.gif") 0 100% no-repeat
+  margin-top : 8px;
+  padding    : 0 2px;
+}
+
+#smart_editor2 .se2_accessibility .box_help div {
+  border-top : 1px solid #D0D0D0;
+  color      : #333333
+  overflow   : hidden;
+  padding    : 20px 21px 24px;
+}
+
+#smart_editor2 .se2_accessibility .box_help strong {
+  display       : block;
+  margin-bottom : 2px
+}
+
+#smart_editor2 .se2_accessibility .box_help p {
+  line-height   : 1.5
+  margin-bottom : 28px;
+}
+
+#smart_editor2 .se2_accessibility .box_help ul {
+  margin-top : 10px
+  width      : 150%;
+}
+
+#smart_editor2 .se2_accessibility .box_help li {
+  background   : url("../../img/ko_KR/btn_set.png?160622") -475px -51px no-repeat;
+  border-right : 1px solid #F0F0F0;
+  float        : left;
+  line-height  : 1
+  margin-right : 40px;
+  padding      : 5px 0 5px 9px;
+  position     : relative;
+  width        : 252px;
+  *zoom        : 1;
+}
+
+#smart_editor2 .se2_accessibility .box_help li span {
+  left        : 138px;
+  line-height : 1.2
+  position    : absolute;
+  top         : 4px;
+}
+
+#smart_editor2 .se2_accessibility .se2_btns {
+  padding    : 9px 0 10px;
+  text-align : center
+}
+
+#smart_editor2 .se2_accessibility .se2_btns .se2_close2 {
+  background : url("../../img/ko_KR/btn_set.png?160622") -235px -120px no-repeat
+  height     : 24px;
+  width      : 39px;
+}

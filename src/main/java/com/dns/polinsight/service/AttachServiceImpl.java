@@ -8,7 +8,6 @@ import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.storage.FileSystemStorageService;
 import lombok.RequiredArgsConstructor;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
@@ -69,7 +68,7 @@ public class AttachServiceImpl implements AttachService {
   public List<MultipartFile> findMultipartFiles(Long postId) throws IOException {
     List<Attach> attaches = repository.findByPostId(postId);
     List<MultipartFile> mFiles = new ArrayList<MultipartFile>();
-    for(Attach attach : attaches){
+    for (Attach attach : attaches) {
       File file = new File(attach.getFilePath());
       FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()), false, attach.getOriginalName(), (int) file.length(), file.getParentFile());
 
@@ -91,7 +90,6 @@ public class AttachServiceImpl implements AttachService {
   }
 
 
-
   @Override
   public Attach find(Attach attach) {
     return repository.findById(attach.getId()).orElseThrow(AttachNotFoundException::new);
@@ -111,30 +109,30 @@ public class AttachServiceImpl implements AttachService {
   public void addAttach(PostDTO postDTO) {
     //System.out.println(postDTO.getFile().getOriginalFilename());
     List<MultipartFile> files = postDTO.getFiles();
-    if(files != null){
-    if (!files.isEmpty()) {
-      List<Attach> attaches = new ArrayList<>();
-      for (MultipartFile file : files) {
-        if (!file.isEmpty()) {
-          UUID uuid = UUID.randomUUID();
-          Attach attach = Attach.builder()
-                                .fileName(uuid + file.getOriginalFilename())
-                                .fileSize(file.getSize())
-                                .originalName(file.getOriginalFilename())
-                                .filePath(baseLocation + uuid + file.getOriginalFilename())
-                                .post(Post.builder(postDTO).build())
-                                .build();
-          attaches.add(attach);
-          storageService.store(uuid.toString(), file);
+    if (files != null) {
+      if (!files.isEmpty()) {
+        List<Attach> attaches = new ArrayList<>();
+        for (MultipartFile file : files) {
+          if (!file.isEmpty()) {
+            UUID uuid = UUID.randomUUID();
+            Attach attach = Attach.builder()
+                                  .fileName(uuid + file.getOriginalFilename())
+                                  .fileSize(file.getSize())
+                                  .originalName(file.getOriginalFilename())
+                                  .filePath(baseLocation + uuid + file.getOriginalFilename())
+                                  .post(Post.builder(postDTO).build())
+                                  .build();
+            attaches.add(attach);
+            storageService.store(uuid.toString(), file);
+          }
         }
+        repository.saveAll(attaches);
+        postDTO.setAttaches(attaches);
+        postService.addPost(postDTO);
       }
-      repository.saveAll(attaches);
-      postDTO.setAttaches(attaches);
-      postService.addPost(postDTO);
-    }
-  }else {
+    } else {
       System.out.println("파일 리스트가 null임");
     }
-    }
+  }
 
 }

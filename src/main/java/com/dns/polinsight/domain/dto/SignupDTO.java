@@ -1,6 +1,8 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,7 +18,7 @@ import javax.validation.constraints.Size;
 public class SignupDTO {
 
   @NotEmpty
-  private String email;
+  private Email email;
 
   @NotEmpty
   private String password;
@@ -26,10 +28,10 @@ public class SignupDTO {
 
   @NotEmpty
   @Size(min = 11, max = 11)
-  private String phone;
+  private Phone phone;
 
   @Size(min = 11, max = 11)
-  private String recommend;
+  private Phone recommend;
 
   private boolean ispanel;
 

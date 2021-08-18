@@ -34,7 +34,7 @@ public class FileSystemStorageService implements StorageService {
         throw new StorageException("Failed to store empty file.");
       }
       Path destinationFile = this.rootLocation.resolve(
-          Paths.get(uuid + file.getOriginalFilename()))
+                                     Paths.get(uuid + file.getOriginalFilename()))
                                               .normalize().toAbsolutePath();
       if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
         // This is a security check
@@ -59,7 +59,7 @@ public class FileSystemStorageService implements StorageService {
         throw new StorageException("Failed to store empty file.");
       }
       Path destinationFile = this.rootLocation.resolve(
-          Paths.get(file.getOriginalFilename()))
+                                     Paths.get(file.getOriginalFilename()))
                                               .normalize().toAbsolutePath();
       if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
         // This is a security check

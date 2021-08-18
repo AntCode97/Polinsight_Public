@@ -3,10 +3,10 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
-import com.dns.polinsight.types.PostType;
 import com.dns.polinsight.exception.PostNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
+import com.dns.polinsight.types.PostType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -50,17 +47,6 @@ public class PostServiceImpl implements PostService {
     return repository.save(Post.builder(postDTO).build());
   }
 
-  @Transactional
-  @Override
-  public void renewPost() {
-    List<Post> posts = this.findAll();
-    for (Post post : posts) {
-      LocalDateTime writeTime = post.getRegisteredAt();
-      LocalDateTime now = LocalDateTime.now();
-      Duration duration = Duration.between(writeTime, now);
-      post.setNewPost(duration.getSeconds() < 3600 * 12);
-    }
-  }
 
   @Override
   public void delete(Post post) {

@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointHistory;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +15,7 @@ public interface PointHistoryService {
   Optional<PointHistory> findByPointHistoryById(long id);
 
   List<PointHistory> findAllPointHistorys();
+
+  List<PointHistory> findAllPointHistoryByUserId(long userId, Pageable pageable);
 
 }

@@ -1,11 +1,15 @@
 <th:block th:include="layout/header" />
 <th:block>
   <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .content-container {
-      margin-top: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : center;
+      margin-top      : 120px;
     }
 
     .content-wrap {
@@ -50,7 +54,6 @@
     }
 
     $(function () {
-      $('.header_wrap').css('background-color', '#182838')
 
       $("#allchk").on('change', () => {
         $('.agree').each(function () {

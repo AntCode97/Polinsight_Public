@@ -1,9 +1,8 @@
 package com.dns.polinsight.config.security;
 
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.object.ResponseObject;
 import com.dns.polinsight.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.dns.polinsight.types.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,11 +27,9 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
     response.setStatus(HttpStatus.OK.value());
-    request.getSession().setAttribute("user", new SessionUser(repository.findUserByEmail(authentication.getName()).get()));
+    String[] emails = authentication.getName().split("@");
+    request.getSession().setAttribute("user", new SessionUser(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get()));
     response.sendRedirect("/");
-    //    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder()
-    //                                                                                   .response(true)
-    //                                                                                   .build()).trim());
   }
 
 

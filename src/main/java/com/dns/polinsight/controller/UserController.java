@@ -2,22 +2,25 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.oauth.LoginUser;
 import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Additional;
-import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
+import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,7 +30,11 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
 
@@ -71,7 +78,7 @@ public class UserController {
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Additional additional, HttpSession session) {
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel additional, HttpSession session) {
     session.invalidate();
     SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
     sessionUser = SessionUser.builder()
@@ -82,16 +89,17 @@ public class UserController {
                              .build();
     session.invalidate();
     User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    user.getAdditional().update(additional);
+    user.getPanel().update(additional);
     userService.saveOrUpdate(user);
     return success(Boolean.TRUE);
   }
 
   @DeleteMapping("/user")
-  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto) throws Exception {
-    Map<String, Object> map = new HashMap<>();
+  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto, HttpSession session) throws Exception {
+
     try {
       userService.deleteUserById(userDto.getId());
+      session.invalidate();
       return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -122,7 +130,7 @@ public class UserController {
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/mypage");
-    mv.addObject("user", userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build()));
+    mv.addObject("user", new UserDto(userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build())));
     return mv;
   }
 
@@ -145,32 +153,6 @@ public class UserController {
     return ResponseEntity.ok(map);
   }
 
-  @PostMapping("/findpwd")
-  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
-                              @RequestParam(name = "email") String email,
-                              @RequestParam(name = "name") String name,
-                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
-                                                                                        NoSuchAlgorithmException {
-    /*
-     *  메일 서비스 필요
-     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
-     * 해시값을 저장한 페이지를 리턴한다
-     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
-     * */
-    if (userService.isExistUser(email)) {
-      Map<String, Object> variables = new HashMap<>();
-      String hash = new HashUtil().makeHash(Arrays.asList(email, name), salt);
-      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
-      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
-      variables.put("date", LocalDateTime.now());
-      variables.put("hash", hash);
-      variables.put("name", name);
-      variables.put("email", email);
-      variables.put("callback", callbackBase + "/chpwd");
-      emailService.sendTemplateMail(email, "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
-    }
-    return new ModelAndView("redirect:/index");
-  }
 
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
@@ -198,7 +180,7 @@ public class UserController {
 
   @GetMapping("/chpwd/{hash}/{name}/{email}")
   public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
-                                     @PathVariable(name = "email") String email,
+                                     @PathVariable(name = "email") Email email,
                                      @PathVariable(name = "name") String name,
                                      ModelAndView mv,
                                      HttpSession session
@@ -222,7 +204,6 @@ public class UserController {
     return mv;
   }
 
-  // TODO: 2021-07-19 수정 필요
   @PostMapping("/api/point/{point}")
   public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
                                                                          @PathVariable(name = "point") Long point) throws Exception {
@@ -247,11 +228,13 @@ public class UserController {
     }
   }
 
-  @GetMapping("/api/user/participate")
-  public ApiUtils.ApiResult<Set<Survey>> getParticipateSurveyList(@LoginUser SessionUser sessionUser) throws Exception {
+  @GetMapping("/api/user/participate/{userid}")
+  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
     try {
-      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      return success(surveyService.getUserParticipateSurvey(user));
+      return success(participateSurveyService.findByUserId(userId).parallelStream()
+                                             .map(ParticipateSurveyDto::new)
+                                             .sorted()
+                                             .collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -261,7 +244,7 @@ public class UserController {
   public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
     try {
       User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-      user.addParticipateSurvey(survey.getId());
+      user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -274,5 +257,67 @@ public class UserController {
     return success(userService.countAllUserExcludeAdmin());
   }
 
+  // @Deprecated
+  @PostMapping("/findpwd")
+  public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
+                              @RequestParam(name = "email") Email email,
+                              @RequestParam(name = "name") String name,
+                              @Value("${custom.hash.passwordsalt}") String salt) throws MessagingException,
+                                                                                        NoSuchAlgorithmException {
+    /*
+     *  메일 서비스 필요
+     *  등록한 주소로 메일 리다이렉팅 할 메일 전달
+     * 해시값을 저장한 페이지를 리턴한다
+     * 유저 이름, 이메일, 해시값을 디비에 저장해둔다.
+     * */
+    if (userService.isExistEmail(email)) {
+      Map<String, Object> variables = new HashMap<>();
+      String hash = new HashUtil().makeHash(Arrays.asList(email.toString(), name), salt);
+      changePasswordService.saveChangePwdDto(ChangePwdDto.builder().hash(hash).email(email).name(name).build());
+      //    비밀번호 찾기를 요청한 유저에게 패스워드 변경을 위한 이메일 전송
+      variables.put("date", LocalDateTime.now());
+      variables.put("hash", hash);
+      variables.put("name", name);
+      variables.put("email", email);
+      variables.put("callback", callbackBase + "/chpwd");
+      emailService.sendTemplateMail(email.toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+    }
+    return new ModelAndView("redirect:/index");
+  }
+
+  @PostMapping("/find")
+  @Transactional
+  public ApiUtils.ApiResult<Object> findEmailOrPassword(@RequestBody UserDto userDto,
+                                                        @RequestParam("type") String type,
+                                                        @Value("${custom.hash.passwordsalt}") String salt,
+                                                        @Value("${custom.callback.base}") String callbackBase) throws Exception {
+    try {
+      if (type.equals("email")) {
+        Assert.notNull(userDto.getName());
+        Assert.notNull(userDto.getPhone());
+        User user = userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new);
+        return success(user.getEmail());
+      } else {
+        Assert.notNull(userDto.getEmail());
+        Assert.notNull(userDto.getName());
+        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail().toString(), userDto.getName()), salt);
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("date", LocalDateTime.now());
+        variables.put("hash", hash);
+        variables.put("name", userDto.getName());
+        variables.put("email", userDto.getEmail());
+        variables.put("callback", callbackBase + "/chpwd");
+        changePasswordService.saveChangePwdDto(ChangePwdDto.builder()
+                                                           .hash(hash)
+                                                           .email(userDto.getEmail())
+                                                           .name(userDto.getName())
+                                                           .build());
+        emailService.sendTemplateMail(userDto.getEmail().toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+        return success(Boolean.TRUE);
+      }
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
 
 }

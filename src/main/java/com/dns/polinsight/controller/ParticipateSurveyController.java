@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -38,29 +39,24 @@ public class ParticipateSurveyController {
    * */
   @GetMapping("/callback")
   public ModelAndView callback(
-      //  public ModelAndView callback(@LoginUser SessionUser sessionUser,
       @RequestParam("hash") String hash,
       @RequestParam("email") String email) {
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
       throw new InvalidParameterException();
     }
     try {
-      // 해시값 체크, 유저 체크
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
-      User user = userService.findById(participateSurvey.getUserId()).orElseThrow(UserNotFoundException::new);
-      if (hash.equals(participateSurvey.getHash()) && email.equals(user.getEmail()) && user.getEmail().equals("testuser@gmail.com")) {
-        //      if (hash.equals(participateSurvey.getHash()) && email.equals(user.getEmail()) && user.getEmail().equals(sessionUser.getEmail())) {
+      User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
+      if (hash.equals(participateSurvey.getHash()) && email.toString().equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
-        // 참여 서베이(finished필드를 true로), , 포인트히스토리에 남기기
         this.processingPointSurveyHistory(user, participateSurvey);
-        log.info("user {} - finished survey {}", email, participateSurvey.getSurveyId());
+        log.info("user {} - finished survey {}", email, participateSurvey.getSurvey().getSurveyId());
         return new ModelAndView("redirect:/mypage");
       }
       throw new Exception();
     } catch (Exception | WrongAccessException e) {
-      // todo 에러페이지 설정
-      e.printStackTrace();
-      return new ModelAndView("redirect:에러페이지로 리다이렉트");
+      log.error(e.getMessage());
+      return new ModelAndView("redirect:error/point_accumulate_error");
     }
   }
 
@@ -76,7 +72,7 @@ public class ParticipateSurveyController {
       throw new Exception("SurveyHistory write Exception");
     }
     try {
-      user.addParticipateSurvey(participateSurvey.getSurveyId());
+      user.getParticipateSurvey().add(participateSurvey);
       user.setPoint(user.getPoint() + participateSurvey.getSurveyPoint());
       user = userService.saveOrUpdate(user);
       System.out.println(user.toString());
@@ -89,6 +85,8 @@ public class ParticipateSurveyController {
                                                    .amount(participateSurvey.getSurveyPoint())
                                                    .total(user.getPoint())
                                                    .sign(true)
+                                                   .content("설문 참여 보상")
+                                                   .requestedAt(LocalDateTime.now())
                                                    .userId(user.getId())
                                                    .build());
     } catch (Exception e) {

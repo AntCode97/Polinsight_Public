@@ -1,4 +1,81 @@
 <th:block>
+  <style>
+    .modal_container {
+      align-items      : center;
+      background-color : rgba(0, 0, 0, .0);
+      display          : none;
+      height           : 100%;
+      justify-content  : center;
+      left             : 0;
+      margin           : 0 auto;
+      overflow-y       : hidden;
+      position         : fixed;
+      top              : 0;
+      width            : 100%;
+      z-index          : 999;
+    }
+
+    .modal_wrap {
+      background-color : white;
+      box-shadow       : 5px 5px 5px rgba(0, 0, 0, 0.3);
+      height           : 250px;
+      padding          : 20px;
+      width            : 400px;
+
+    }
+
+    .modal_content {
+      align-items     : center;
+      display         : flex;
+      flex-direction  : column;
+      justify-content : center;
+      text-align      : center;
+    }
+
+
+    .modal_header {
+      display        : flex;
+      flex-direction : row-reverse;
+      height         : 10%;
+      width          : 100%;
+    }
+
+    .modal_body {
+      flex-grow : 1;
+      height    : 75%;
+      width     : 290px;
+    }
+
+    .modal_title {
+      font-size   : 20px;
+      font-weight : bold;
+    }
+
+    .modal_footer {
+      display         : flex;
+      height          : 15%;
+      justify-content : space-around;
+      width           : 100%;
+    }
+
+    .modal_buttons {
+      height : 40px;
+      width  : 40px;
+    }
+
+    .modal_buttons:hover {
+      color  : red;
+      cursor : pointer;
+    }
+
+
+    .modal_footer > .modal_buttons:hover {
+      background-color : #1F326A;
+      border           : 1px solid #091940;
+      color            : #FFFFFF;
+    }
+
+  </style>
   <div class="main_survey_list_wrap">
     <div class="main_survey_list_title">
       <p>진행중인 <span class="pol_color">온라인조사</span></p>
@@ -7,11 +84,26 @@
     <div class="main_survey_box">
     </div>
   </div>
+  <div class="modal_container">
+    <div class="modal_wrap">
+      <div class="modal_content">
+        <div class="modal_header">
+          <p class="modal_buttons modal_close_btn"><i class="fas fa-times"></i></p>
+        </div>
+        <div class="modal_body">
+          <p class="notice"></p>
+        </div>
+        <div class="modal_footer">
+          <button class="btn btn-primary" name="participate_btn">참여하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script th:inline="javascript">
 
     const makeSurveyCard = survey => {
       let template = $(`<div></div>`).addClass('main_survey_item')
-      if (survey.status.progress === 'ONGOING') {
+      if (survey.progress === 'ONGOING') {
         template.addClass('bg_color_item_white')
         template.append(`<p class="survey_run">진행중</p>`)
         template.on('mouseover', function () {
@@ -19,11 +111,12 @@
         }).on('mouseleave', function () {
           $(this).css('cursor', 'default').css('box-shadow', 'none')
         }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
-
       } else {
         template.addClass('bg_color_item_gray')
         template.append(`<p class="survey_stop">조사완료</p>`)
-        template.on('click', function () {
+        template.on('click', function (e) {
+          e.preventDefault();
+          e.returnValue = false
           alert('종료된 설문입니다.')
         })
       }
@@ -48,16 +141,23 @@
         }
         count++;
       })
+
+      $('.main_survey_item_wrap').each(function () {
+        if ($(this).find('.main_survey_item').length < 3) {
+          $(this).remove()
+        }
+      })
     }
 
     const getSurveyList = () => {
-      http.get('/api/surveys?type=index')
+      http
+          .get('/api/surveys?type=index')
           .then(res => {
             if (res.data.success) {
               makeSurveyCardList(res.data.response)
             }
           })
-          .catch(err => console.log(err))
+          .catch(console.log)
     }
 
 
@@ -109,23 +209,26 @@
       const surveyId = e.data.surveyid
       const title = e.data.title
 
-      if (confirm(title + ' 설문을 진행하시겠습니까?')) {
-// 서버에 서베이 정보 + 유저 정보 저장 ==> 이후 관리자 및 마이페이지에서 목록 조회 가능
-//         let dynamicNewForm = $(`<form action="/survey/${surveyId}" method="post"></form>`)
-//         dynamicNewForm.appendTo('body');
-//         dynamicNewForm.submit();
-        console.log(`/api/survey/${surveyId}`)
+      $('.modal_container').css('display', 'flex')
+
+      $('p.notice').append(`<span class="modal_title">${title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
+      // 참여하기 버튼 이벤트 등록
+      $('.participate_btn').on('click', () => {
         http.get(`/api/survey/${surveyId}`)
             .then(res => {
               if (res.data.success) {
                 // window.open(res.data.response);
-                location.replace(res.data.response)
+                location.replace(res.data.response) // 참여 url로 리다이렉트
               } else {
                 alert('에러 발생')
                 console.log(res)
               }
             }).catch(console.log)
-      }
+      })
+      $('.modal_close_btn').on('click', () => {
+        $('.participate_btn').off('click')
+        $('.modal_container').fadeOut()
+      })
     }
 
     $(function () {

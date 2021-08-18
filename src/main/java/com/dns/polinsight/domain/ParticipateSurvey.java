@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,15 @@ public class ParticipateSurvey implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long userId;
+  @JsonIgnore
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  @ManyToOne(targetEntity = User.class)
+  private User user;
 
-  private Long surveyId;
+  //  @JsonIgnore
+  @JoinColumn(name = "survey_Id", referencedColumnName = "survey_id")
+  @ManyToOne(targetEntity = Survey.class)
+  private Survey survey;
 
   private LocalDateTime participatedAt;
 

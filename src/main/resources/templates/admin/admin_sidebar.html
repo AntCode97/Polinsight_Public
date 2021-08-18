@@ -6,734 +6,735 @@
   <meta charset="UTF-8">
   <style>
     body {
-      background-color: #fafafa;
+      background-color : #FAFAFA;
     }
 
     .admin_main_contents {
-      display: block;
-      margin-left: 260px;
-      margin-top: 51px;
-      width: calc(100% - 260px);
-      height: calc(100% - 51px);
-      padding: 50px 50px 0;
+      display     : block;
+      height      : calc(100% - 51px);
+      margin-left : 260px;
+      margin-top  : 51px;
+      padding     : 20px 40px 40px;
+      width       : calc(100% - 260px);
     }
 
     .admin_sidebar, .admin_sidebar_wrap, .admin_main {
-      transition-property: top, bottom, width;
-      transition-duration: .2s, .2s, .35s;
-      transition-timing-function: linear, linear, ease;
+      transition-duration        : .2s, .2s, .35s;
+      transition-property        : top, bottom, width;
+      transition-timing-function : linear, linear, ease;
     }
 
     .admin_sidebar {
-      background-color: #191919;
-      height: 100%;
-      max-height: 100%;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 999;
-      width: 260px;
-      box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      background-color : #191919;
+      bottom           : 0;
+      box-shadow       : 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      height           : 100%;
+      left             : 0;
+      max-height       : 100%;
+      position         : fixed;
+      top              : 0;
+      width            : 260px;
+      z-index          : 999;
     }
 
     .admin_logo {
-      padding: 15px 0;
-      margin: 0;
-      display: block;
-      position: relative;
-      z-index: 4;
+      display  : block;
+      margin   : 0;
+      padding  : 15px 0;
+      position : relative;
+      z-index  : 4;
     }
 
     .admin_logo:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 15px;
-      height: 1px;
-      width: calc(100% - 30px);
-      background-color: hsla(0, 0%, 71%, .3);
+      background-color : hsla(0, 0%, 71%, .3);
+      bottom           : 0;
+      content          : "";
+      height           : 1px;
+      position         : absolute;
+      right            : 15px;
+      width            : calc(100% - 30px);
     }
 
     .logo-mini {
-      color: white;
-      transition: all .3s linear;
-      opacity: 1;
-      float: left;
-      width: 30px;
-      text-align: center;
-      margin-left: 23px;
-      margin-right: 15px;
+      color        : white;
+      float        : left;
+      margin-left  : 23px;
+      margin-right : 15px;
+      opacity      : 1;
+      text-align   : center;
+      transition   : all .3s linear;
+      width        : 30px;
     }
 
     .simple-text {
-      text-transform: uppercase;
-      padding: 5px 0;
-      display: inline-block;
-      font-size: 18px;
-      white-space: nowrap;
-      font-weight: 400;
-      line-height: 30px;
-      overflow: hidden;
+      display        : inline-block;
+      font-size      : 18px;
+      font-weight    : 400;
+      line-height    : 30px;
+      overflow       : hidden;
+      padding        : 5px 0;
+      text-transform : uppercase;
+      white-space    : nowrap;
     }
 
     .logo-normal {
-      display: block;
-      opacity: 1;
-      transform: translateZ(0);
-      color: white;
+      color     : white;
+      display   : block;
+      opacity   : 1;
+      transform : translateZ(0);
     }
 
     .admin_sidebar_wrap {
-      position: relative;
-      height: calc(100vh - 75px);
-      width: 260px;
-      z-index: 4;
-      padding-bottom: 30px;
+      height         : calc(100vh - 75px);
+      padding-bottom : 30px;
+      position       : relative;
+      width          : 260px;
+      z-index        : 4;
     }
 
 
     .ps {
-      overflow: hidden !important;
-      overflow-anchor: none;
-      touch-action: auto;
+      overflow        : hidden !important;
+      overflow-anchor : none;
+      touch-action    : auto;
     }
 
     .admin_user {
-      padding-bottom: 20px;
-      margin: 20px auto 0;
-      position: relative;
+      margin         : 20px auto 0;
+      padding-bottom : 20px;
+      position       : relative;
     }
 
     .admin_user_photo {
-      width: 34px;
-      height: 34px;
-      overflow: hidden;
-      float: left;
-      z-index: 5;
-      margin-right: 11px;
-      border-radius: 50%;
-      margin-left: 23px;
-      box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      border-radius : 50%;
+      box-shadow    : 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+      float         : left;
+      height        : 34px;
+      margin-left   : 23px;
+      margin-right  : 11px;
+      overflow      : hidden;
+      width         : 34px;
+      z-index       : 5;
     }
 
     .user-info > a {
-      color: white;
-      font-size: 14px;
-      line-height: 18px;
-      display: block;
-      padding: 8px 15px;
-      white-space: nowrap;
+      color       : white;
+      display     : block;
+      font-size   : 14px;
+      line-height : 18px;
+      padding     : 8px 15px;
+      white-space : nowrap;
     }
 
     .username {
-      display: block;
-      line-height: 18px;
-      font-size: 14px;
+      display     : block;
+      font-size   : 14px;
+      line-height : 18px;
     }
 
     .admin_user:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 15px;
-      height: 1px;
-      width: calc(100% - 30px);
-      background-color: hsla(0, 0%, 71%, .3);
+      background-color : hsla(0, 0%, 71%, .3);
+      bottom           : 0;
+      content          : "";
+      height           : 1px;
+      position         : absolute;
+      right            : 15px;
+      width            : calc(100% - 30px);
     }
 
     .admin_nav {
-      margin-top: 15px;
-      display: block;
-      flex-wrap: wrap;
-      padding-left: 0;
-      margin-bottom: 0;
-      list-style: none;
+      display       : block;
+      flex-wrap     : wrap;
+      list-style    : none;
+      margin-bottom : 0;
+      margin-top    : 15px;
+      padding-left  : 0;
     }
 
     .nav_link {
-      color: white;
-      margin: 10px 15px 0;
-      border-radius: 3px;
-      padding: .5rem 10px;
-      text-transform: capitalize;
-      font-size: 13px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      transition: all .15s ease-in;
+      align-items     : center;
+      border-radius   : 3px;
+      color           : white;
+      display         : flex;
+      font-size       : 13px;
+      justify-content : flex-start;
+      margin          : 10px 15px 0;
+      padding         : .5rem 10px;
+      text-transform  : capitalize;
+      transition      : all .15s ease-in;
     }
 
     .nav_link > i {
-      font-size: 20px;
-      margin-right: 15px;
-      line-height: 30px;
-      width: 30px;
-      text-align: center;
-      vertical-align: middle;
+      font-size      : 20px;
+      line-height    : 30px;
+      margin-right   : 15px;
+      text-align     : center;
+      vertical-align : middle;
+      width          : 30px;
     }
 
     .nav_link > p {
-      width: 100%;
-      margin: 0;
-      line-height: 30px;
-      font-size: 14px;
-      position: relative;
-      display: block;
-      height: auto;
-      white-space: nowrap;
+      display     : block;
+      font-size   : 14px;
+      height      : auto;
+      line-height : 30px;
+      margin      : 0;
+      position    : relative;
+      white-space : nowrap;
+      width       : 100%;
     }
 
     .nav-item:hover > a {
-      background-color: hsla(0, 0%, 78%, .2);
-      box-shadow: none;
+      background-color : hsla(0, 0%, 78%, .2);
+      box-shadow       : none;
     }
 
     .nav_link > p > i {
-      position: absolute;
-      right: 6px;
-      vertical-align: middle;
-      line-height: 30px;
+      line-height    : 30px;
+      position       : absolute;
+      right          : 6px;
+      vertical-align : middle;
     }
 
     .nav_dropdown {
-      padding-left: 40px;
+      padding-left : 40px;
     }
 
     .collapse-show {
-      height: 0;
-      overflow: hidden;
+      height   : 0;
+      overflow : hidden;
     }
 
     .admin_main {
-      width: calc(100% - 260px);
-      float: right;
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: 999;
+      float    : right;
+      height   : 130px;
+      position : fixed;
+      right    : 0;
+      top      : 0;
+      width    : calc(100% - 260px);
+      z-index  : 999;
     }
 
     .admin_main_header {
-      width: calc(100vw - 260px);
-      background-color: white;
-      height: 51px;
-      border-bottom: 1px solid #DDDDDD;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
+      align-items      : center;
+      background-color : white;
+      border-bottom    : 1px solid #DDDDDD;
+      display          : flex;
+      height           : 51px;
+      justify-content  : space-between;
+      padding          : 0 20px;
+      width            : calc(100vw - 260px);
     }
 
     .contents_title {
-      font-size: 1.4rem;
+      font-size : 1.0rem;
     }
 
     .right_menu > ul {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : center;
     }
 
     .right_menu > ul > li {
-      position: relative;
+      position : relative;
     }
 
     a.header_menu_item {
-      width: 35px;
-      height: 35px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-right: 20px;
-      cursor: pointer;
-      border-radius: 50%;
-      border: 1.5px solid transparent;
+      align-items     : center;
+      border          : 1.5px solid transparent;
+      border-radius   : 50%;
+      cursor          : pointer;
+      display         : flex;
+      height          : 35px;
+      justify-content : center;
+      margin-right    : 20px;
+      width           : 35px;
     }
 
     .right_menu > ul > li:hover > a {
-      border: 1.5px solid #dddddd;
-      box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+      border     : 1.5px solid #DDDDDD;
+      box-shadow : 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
     }
 
     .right_menu > ul > li:hover > .dropdown_user {
-      display: block;
+      display : block;
     }
 
     .header_menu_item > i {
-      font-size: 15px;
+      font-size : 15px;
     }
 
     .dropdown_user {
-      position: absolute;
-      right: 0;
-      background-color: white;
-      width: 160px;
-      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
-      border: 1.5px solid #dddddd;
-      padding: 5px 0;
-      z-index: 9999;
-      display: none;
+      background-color : white;
+      border           : 1.5px solid #DDDDDD;
+      box-shadow       : 0 2px 5px 0 rgb(0 0 0 / 26%);
+      display          : none;
+      padding          : 5px 0;
+      position         : absolute;
+      right            : 0;
+      width            : 160px;
+      z-index          : 9999;
     }
 
 
-    .dropdown_user:hover > a {
-      margin: 0 5px;
-      padding: 10px 24px;
-      display: block;
-      border-radius: 2px;
-      z-index: 9999;
+    .dropdown_user > a {
+      border-radius : 2px;
+      display       : block;
+      margin        : 0 5px;
+      padding       : 10px 24px;
+      z-index       : 9999;
     }
 
     .dropdown_user > a:hover {
-      color: white;
-      background-color: #3885CA;
-      box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
+      background-color : #3885CA;
+      box-shadow       : 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
+      color            : white;
     }
 
     .contents_title > a > i {
-      font-size: .9rem;
-      margin-right: 5px;
+      font-size    : .9rem;
+      margin-right : 5px;
     }
 
     .contents_title > a {
-      position: relative;
+      position : relative;
     }
 
     .next-link {
-      padding-left: 20px;
+      padding-left : 20px;
     }
 
     .next-link::before {
-      content: '';
-      background-image: url('/img/etc/dot_depth.gif');
-      background-repeat: no-repeat;
-      background-position: center center;
-      position: absolute;
-      height: 100%;
-      top: 2px;
-      left: 3px;
-      width: 10px;
+      background-image    : url('/img/etc/dot_depth.gif');
+      background-position : center center;
+      background-repeat   : no-repeat;
+      content             : '';
+      height              : 100%;
+      left                : 3px;
+      position            : absolute;
+      top                 : 2px;
+      width               : 10px;
     }
 
     .pagination {
-      display: block;
-      justify-items: center;
-      align-content: center;
-      text-align: center;
+      align-content : center;
+      display       : block;
+      justify-items : center;
+      margin        : 20px 0;
+      text-align    : center;
     }
 
     .pagination > .pagination_button {
-      display: inline-block;
-      width: 25px;
-      margin: 2px;
-      margin-top: 5px;
-      padding: 0;
-      text-align: center;
+      border      : 1px solid #E2E2E2;
+      cursor      : pointer;
+      display     : inline-block;
+      font-size   : 0.9rem;
+      line-height : 34px;
+      margin      : 0 2px;
+      text-align  : center;
+      width       : 30px;
     }
 
     .pagination_button:hover {
-      cursor: pointer;
-      text-decoration: underline;
+      cursor          : pointer;
+      text-decoration : underline;
     }
 
     .pagination_button_current {
-      color: rgba(32, 205, 195, 1);
-      background-color: rgba(255, 255, 255, .5);
-      font-weight: bolder;
-    }
-
-    .scroll-table > tbody > .post-row:hover {
-      cursor: pointer;
-      background-color: lightgray;
-      transition: background-color .3s;
+      background-color : rgba(255, 255, 255, .5);
+      color            : rgba(32, 205, 195, 1);
+      font-weight      : bolder;
     }
 
     .search-box-container {
-      width: 300px;
-      justify-items: center;
-      vertical-align: middle;
-      white-space: nowrap;
-      position: relative;
-      margin: 0 auto;
+      justify-items  : center;
+      margin         : 0 auto;
+      position       : relative;
+      vertical-align : middle;
+      white-space    : nowrap;
+      width          : 300px;
     }
 
-
     .search-box-container .admin_find {
-      width: 300px;
-      height: 50px;
-      background: white;
-      float: left;
-      color: #63717f;
-      padding-left: 45px;
-      border-radius: 5px;
-      border: 0.5px solid black;
+      background    : white;
+      border        : 0.5px solid black;
+      border-radius : 5px;
+      color         : #63717F;
+      float         : left;
+      height        : 50px;
+      padding-left  : 45px;
+      width         : 300px;
     }
 
     .search-box-container .search-icon {
-      position: absolute;
-      top: 50%;
-      margin-left: 17px;
-      margin-top: 17px;
-      z-index: 1;
-      color: #4f5b66;
-    }
-
-    .scroll-table {
-      margin-top: 50px;
-    }
-
-    .btn_del {
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
+      color       : #4F5B66;
+      margin-left : 17px;
+      margin-top  : 17px;
+      position    : absolute;
+      top         : 50%;
+      z-index     : 1;
     }
 
     .empty-data {
-      height: 500px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      height          : 500px;
+      justify-content : center;
     }
 
     .post-th {
-      border-top: 2px solid #7c7c7c;
-      background-color: #f2f2f2 !important;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #cfcfd1;
+      align-items      : center;
+      background-color : #F2F2F2 !important;
+      border-bottom    : 1px solid #CFCFD1;
+      border-top       : 2px solid #7C7C7C;
+      display          : flex;
+      justify-content  : space-between;
     }
 
     .post-th > * {
-      padding: 9px 10px;
-      display: inline-block;
-      font-size: 1rem;
-      line-height: 30px;
-      color: #666;
-      text-align: center;
+      color       : #666666;
+      display     : inline-block;
+      font-size   : 1rem;
+      line-height : 30px;
+      padding     : 9px 10px;
+      text-align  : center;
     }
 
     .post-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #cfcfd1;
-      background-color: #FFF;
+      align-items      : center;
+      background-color : #FFFFFF;
+      border-bottom    : 1px solid #CFCFD1;
+      display          : flex;
+      justify-content  : space-between;
     }
 
     .post-row > * {
-      padding: 9px 10px;
-      display: inline-block;
-      font-size: 1rem;
-      line-height: 30px;
-      color: #666;
-      text-align: center;
+      color       : #666666;
+      display     : inline-block;
+      font-size   : 1rem;
+      line-height : 30px;
+      padding     : 9px 0px;
+      text-align  : center;
     }
+
+    .btn_udel {
+      border        : none;
+      border-radius : 5px;
+      cursor        : pointer;
+      padding       : 5px 10px;
+    }
+
 
     /* 여기까지 전체적인 레이아웃 */
     /* 게시글판 디자인 */
     /* 여기까지 전체적인 레이아웃 */
     .main_item {
-      color: #000;
-      font-size: 2rem;
-      font-weight: bold;
-      padding: 10px 0 20px;
-      border-bottom: 1px dashed #dadada;
+      border-bottom : 1px dashed #DADADA;
+      color         : #000000;
+      font-size     : 2rem;
+      font-weight   : bold;
+      padding       : 10px 0 20px;
     }
 
     #metop_container {
-      justify-content: center;
-      align-items: center;
+      align-items     : center;
+      justify-content : center;
     }
 
     .metop_board_card {
-      width: 85%;
-      margin: 30px 0;
-      padding: 40px 30px 20px 30px;
-      border-radius: 2px;
-      background: white;
-      border-top: 3px solid mediumseagreen;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14),
+      background    : white;
+      border-radius : 2px;
+      border-top    : 3px solid mediumseagreen;
+      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14),
       0 3px 1px -2px rgba(0, 0, 0, .2),
       0 1px 5px 0 rgba(0, 0, 0, .12);
-      position: relative;
+      margin        : 30px 0;
+      padding       : 40px 30px 20px 30px;
+      position      : relative;
+      width         : 85%;
     }
 
     /* 카드 제목 */
     .register_top_wrap {
-      border-top: 2px solid #7c7c7c;
+      border-top : 2px solid #7C7C7C;
     }
 
     .register_bottom_wrap {
-      border-top: 1px solid #dadada;
-    }
-
-    .input_wrap {
-      align-items: center;
-      margin-bottom: 15px;
+      border-top : 1px solid #DADADA;
     }
 
     .uploadedList {
-      padding: 15px 0px 0px 0px;
-      display: flex;
+      display : flex;
+      padding : 15px 0px 0px 0px;
     }
 
     .uploadedList > li {
-      border-radius: 2px;
-      margin-right: 5px;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+      border-radius : 2px;
+      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+      margin-right  : 5px;
     }
 
     .board_div {
-      width: 100%;
-      height: 100%;
-      background-color: #eee;
-      border-bottom: 1px solid #dadada;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      align-items      : center;
+      background-color : #EEEEEE;
+      border-bottom    : 1px solid #DADADA;
+      display          : flex;
+      height           : 100%;
+      justify-content  : flex-start;
+      width            : 100%;
     }
 
     /* 작성자 */
 
     .board_div b {
-      font-size: 16px;
+      font-size : 16px;
     }
 
     .board_div > span {
-      font-size: 14px;
+      font-size : 14px;
     }
 
     .board_span {
-      display: block;
-      overflow: hidden;
-      padding: 9px 20px;
-      flex: 7;
-      background-color: #fff;
+      background-color : #FFFFFF;
+      display          : block;
+      flex             : 7;
+      overflow         : hidden;
+      padding          : 9px 20px;
     }
 
     .board_writer {
-      display: inline-block;
-      font-size: 16px;
-      line-height: 30px;
+      display     : inline-block;
+      font-size   : 16px;
+      line-height : 30px;
     }
 
     .board_type > option {
-      cursor: pointer;
+      cursor : pointer;
     }
 
     .board_input {
-      width: 100%;
-      border: 1px solid #dadada;
-      font-size: 15px;
-      outline: none;
-      height: 30px;
+      border    : 1px solid #DADADA;
+      font-size : 15px;
+      height    : 30px;
+      outline   : none;
+      width     : 100%;
     }
 
     .board_content {
-      width: 100%;
-      height: 300px;
-      border: 1px solid #dadada;
-      outline: none;
-      resize: none;
-      font-size: 14px;
+      border    : 1px solid #DADADA;
+      font-size : 14px;
+      height    : 300px;
+      outline   : none;
+      resize    : none;
+      width     : 100%;
     }
 
     .textarea_div {
-      align-items: flex-start;
-    }
-
-    .textarea_div > label {
-      margin-top: 10px;
+      align-items : flex-start;
+      padding     : 20px 0;
     }
 
     .form-group > label {
-      margin-top: 10px;
+      margin-top : 10px;
     }
 
     .form-group .board_div {
-      border: 1.5px dashed #dadada;
-      text-align: center;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #515151;
-      font-size: 15px;
+      align-items     : center;
+      border          : 1.5px dashed #DADADA;
+      color           : #515151;
+      display         : flex;
+      font-size       : 15px;
+      height          : 150px;
+      justify-content : center;
+      text-align      : center;
     }
 
     /* 등록/취소 버튼 */
     .btn_wrap {
-      border: 0;
-      border-radius: 0;
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 15px 10px 15px;
-      background-color: #fff;
+      border          : 0;
+      border-radius   : 0;
+      display         : flex;
+      justify-content : space-between;
+      margin-top      : 25px;
+      padding         : 10px 15px 10px 15px;
     }
 
     .insert_btn {
-      margin-right: -15px;
-      width: 80px;
+      margin-right : -15px;
+      width        : 80px;
     }
 
     .cancel_btn {
-      margin-left: -15px;
-      width: 80px;
+      margin-left : -15px;
+      width       : 80px;
     }
 
     .board_content_wrap {
-      width: 100%;
-      height: 100%;
+      height : 100%;
+      width  : 100%;
     }
 
     div#smart_editor2 {
-      width: 1040px !important;
+      width : 1040px !important;
     }
 
     .err_msg_wrap {
-      text-align: left;
-      display: none;
+      display    : none;
+      text-align : left;
     }
 
     .err_msg {
-      color: #d95339;
-      font-size: 14px;
-      display: block;
+      color     : #D95339;
+      display   : block;
+      font-size : 14px;
     }
 
     .board_div > label {
-      position: relative;
-      padding-left: 30px;
-      padding: 9px 15px 9px 25px;
-      background-color: #eee;
-      width: 150px;
-      font-size: 16px;
-      display: block;
-      line-height: 30px;
+      background-color : #EEEEEE;
+      display          : block;
+      font-size        : 16px;
+      line-height      : 30px;
+      padding          : 9px 15px 9px 25px;
+      padding-left     : 30px;
+      position         : relative;
+      width            : 150px;
     }
 
     .board_div > label > span {
-      position: absolute;
-      color: #d95339;
-      font-size: 20px;
-      left: 10px;
-      top: 9px;
+      color     : #D95339;
+      font-size : 20px;
+      left      : 10px;
+      position  : absolute;
+      top       : 9px;
     }
 
     #board_writer {
-      width: 150px;
+      width : 150px;
     }
 
     .size_limit_msg {
-      color: #999;
+      color : #999999;
     }
 
     .file_wrap {
-      border: 1px solid #dadada;
+      border : 1px solid #DADADA;
     }
 
     .file_item > label {
-      display: block;
-      width: 100px;
-      text-align: center;
+      display    : block;
+      text-align : center;
+      width      : 100px;
     }
 
     .file_item > div {
-      padding: 9px 10px;
-      background-color: #fff;
-      flex: 7;
-      display: flex;
-      align-items: center;
+      align-items      : center;
+      background-color : #FFFFFF;
+      display          : flex;
+      flex             : 7;
+      padding          : 9px 10px;
     }
 
     .file_item {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      background-color: #eee;
+      align-items      : center;
+      background-color : #EEEEEE;
+      display          : flex;
+      justify-content  : flex-start;
     }
 
     .btn-add, .btn-remove {
-      cursor: pointer;
-      width: 60px;
-      outline: none;
-      padding: 5px 7px;
-      margin-right: 5px;
+      cursor       : pointer;
+      margin-right : 5px;
+      outline      : none;
+      padding      : 5px 7px;
+      width        : 60px;
     }
 
     .btn-remove {
-      border: 1px solid tomato;
-      background-color: #fff;
-      color: tomato;
+      background-color : #FFFFFF;
+      border           : 1px solid tomato;
+      color            : tomato;
     }
 
     .other_file_item {
-      border-top: 1px solid #dadada;
+      border-top : 1px solid #DADADA;
     }
 
     .board_select {
-      width: 150px;
-      cursor: pointer;
+      cursor : pointer;
+      width  : 150px;
     }
 
     .board_file {
-      cursor: pointer;
+      cursor : pointer;
     }
 
     /*게시글 조회 파트*/
     .left_content {
-      flex: 1.5;
+      flex : 1.5;
     }
 
     .right_content {
-      flex: 8.5;
+      flex : 8.5;
     }
 
     .left_content > label {
-      font-weight: bold;
-      padding: 0 15px;
-      overflow: hidden;
-      line-height: 18px;
-      cursor: pointer;
-      background: url('img/etc/icon_required_input.png') right center no-repeat;
+      background  : url('img/etc/icon_required_input.png') right center no-repeat;
+      cursor      : pointer;
+      font-weight : bold;
+      line-height : 18px;
+      overflow    : hidden;
+      padding     : 0 15px;
     }
 
     .right_content > input {
-      border: 1px solid #ddd;
-      color: #333;
-      font-size: 14px;
-      width: 300px;
-      height: 32px;
-      line-height: 32px;
-      margin: 0 3px;
-      outline: none;
+      border      : 1px solid #DDDDDD;
+      color       : #333333;
+      font-size   : 14px;
+      height      : 32px;
+      line-height : 32px;
+      margin      : 0 3px;
+      outline     : none;
+      width       : 300px;
     }
 
     .right_content > select {
-      border: 1px solid #ddd;
-      color: #333;
-      font-size: 14px;
-      width: 200px;
-      height: 32px;
-      line-height: 32px;
-      margin: 0 3px;
-      outline: none;
-      text-align: center;
-      text-align-last: center;
-      display: inline-block;
+      border          : 1px solid #DDDDDD;
+      color           : #333333;
+      display         : inline-block;
+      font-size       : 14px;
+      height          : 32px;
+      line-height     : 32px;
+      margin          : 0 3px;
+      outline         : none;
+      text-align      : center;
+      text-align-last : center;
+      width           : 200px;
     }
 
     .info_msg, .err_msg {
-      font-size: 12px;
-      font-weight: normal;
-      padding: 0 5px;
+      font-size   : 12px;
+      font-weight : normal;
+      padding     : 0 5px;
     }
 
     .info_msg {
-      color: #a9a9a9;
+      color : #A9A9A9;
+    }
+
+    .page-button {
+      margin     : 20px 0;
+      text-align : center;
+    }
+
+    .page-button > a {
+      border      : 1px solid #E2E2E2;
+      cursor      : pointer;
+      display     : inline-block;
+      font-size   : 0.9rem;
+      line-height : 34px;
+      text-align  : center;
+      width       : 30px;
     }
   </style>
 </head>

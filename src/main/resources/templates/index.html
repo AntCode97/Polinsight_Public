@@ -2,176 +2,176 @@
 <th:block>
   <style>
     .panel_wrap {
-      width: 900px;
-      padding: 30px 0;
-      margin: 30px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1.5px solid #AAA;
+      align-items     : center;
+      border          : 1.5px solid #AAAAAA;
+      display         : flex;
+      justify-content : center;
+      margin          : 30px auto 0;
+      padding         : 30px 0;
+      width           : 900px;
     }
 
     .panel_item_horizontal {
-      display: flex;
+      display : flex;
     }
 
     .panel_item_vertical {
-      display: flex;
-      flex-direction: column;
+      display        : flex;
+      flex-direction : column;
     }
 
     .pol_color {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .panel_item > p {
-      font-size: 14px;
+      font-size : 14px;
     }
 
     .panel_big_item {
-      font-size: 25px !important;
-      font-weight: bold;
-      padding-bottom: 10px;
+      font-size      : 25px !important;
+      font-weight    : bold;
+      padding-bottom : 10px;
     }
 
     .panel_btn {
-      font-size: 14px;
-      padding: 7px 0;
-      text-align: center;
-      width: 110px;
+      font-size  : 14px;
+      padding    : 7px 0;
+      text-align : center;
+      width      : 110px;
     }
 
     .panel_btn_login {
-      background-color: #182838;
-      color: white;
-      margin-right: 5px;
+      background-color : #182838;
+      color            : white;
+      margin-right     : 5px;
     }
 
     .panel_btn_join {
-      background-color: #4C99CF;
-      color: white;
+      background-color : #4C99CF;
+      color            : white;
     }
 
     .panel_line {
-      width: 2px;
-      height: 65px;
-      background-color: #182838;
-      margin: 0 30px;
+      background-color : #182838;
+      height           : 65px;
+      margin           : 0 30px;
+      width            : 2px;
     }
 
     /* 진행중인 온라인 조사 */
     .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      height: 100%;
-      margin: 0 auto 50px;
+      background-color : #E1EEF6;
+      height           : 100%;
+      margin           : 30px auto 50px;
+      padding          : 20px 30px;
+      width            : 1000px;
     }
 
     .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
+      align-items     : flex-end;
+      display         : flex;
+      justify-content : flex-start;
+      margin-bottom   : 25px;
     }
 
     .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
+      font-size    : 25px;
+      font-weight  : bold;
+      margin-right : 10px;
     }
 
     .main_survey_item {
-      width: 300px;
-      padding: 10px;
+      padding : 10px;
+      width   : 300px;
     }
 
     .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 10px;
     }
 
     .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 45px;
     }
 
     .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
+      border-bottom  : 1px solid #DADADA;
+      font-weight    : bold;
+      padding-bottom : 5px;
     }
 
     .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
+      font-weight : bold;
+      padding     : 10px 0 20px;
+      text-align  : right;
     }
 
     .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
+      margin-bottom   : 20px;
     }
 
     .survey_run {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .survey_stop {
-      color: #000;
+      color : #000000;
     }
 
     .bg_color_item_white {
-      background-color: white;
+      background-color : white;
     }
 
     .bg_color_item_gray {
-      background-color: #dedede;
+      background-color : #DEDEDE;
     }
 
     .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 10px;
     }
 
     .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-      height: 2rem;
+      font-size     : 17px;
+      font-weight   : bold;
+      height        : 2rem;
+      margin-bottom : 45px;
     }
 
     .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
+      border-bottom  : 1px solid #DADADA;
+      font-weight    : bold;
+      padding-bottom : 5px;
     }
 
     .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
+      font-weight : bold;
+      padding     : 10px 0 20px;
+      text-align  : right;
     }
 
     .survey_run {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .survey_stop {
-      color: #000;
+      color : #000000;
     }
 
     .bg_color_item_white {
-      background-color: white;
+      background-color : white;
     }
 
     .bg_color_item_gray {
-      background-color: #dedede;
+      background-color : #DEDEDE;
     }
   </style>
   <div class="carasel_wrap"></div>
@@ -196,9 +196,8 @@
   <div>
     <th:block th:include="survey/surveylist" />
   </div>
-  <div>
-    <th:block th:include="layout/footer" />
-  </div>
+
+  <th:block th:include="layout/footer" />
   <script th:inline="javascript">
     $(function () {
       // Scroll TOP버튼 생성 및 TOP으로 이동

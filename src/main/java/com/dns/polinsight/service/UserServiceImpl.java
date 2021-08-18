@@ -2,6 +2,8 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.UserRepository;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +23,14 @@ public class UserServiceImpl implements UserService {
   private final UserRepository repository;
 
   @Override
-  public boolean isExistUser(String email) {
-    return repository.existsUserByEmail(email);
-  }
-
-  @Override
   public List<User> findAll() {
     return repository.findAll();
   }
 
   @Override
   public User loadUserByUsername(String username) throws UsernameNotFoundException {
-    return repository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
+    String[] emails = username.split("@");
+    return repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
   @Override
@@ -41,7 +39,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteUserByEmail(String email) {
+  public void deleteUserByEmail(Email email) {
     repository.deleteUserByEmail(email);
   }
 
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User findUserByEmail(User user) throws UsernameNotFoundException {
-    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail()));
+    return repository.findUserByEmail(user.getEmail()).orElseThrow(() -> new UsernameNotFoundException(user.getEmail().toString()));
   }
 
   @Override
@@ -76,13 +74,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Boolean isExistEmail(String email) {
+  public Boolean isExistEmail(Email email) {
     return repository.existsUserByEmail(email);
   }
 
   @Override
-  public Boolean isExistPhone(String phone) {
-    return repository.existsUserByEmail(phone);
+  public Boolean isExistPhone(Phone phone) {
+    return repository.existsUserByPhone(phone);
   }
 
   @Override
@@ -98,6 +96,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public void adminUserUpdate(long uid, UserRoleType roleType, long point) {
     repository.adminUpdateUser(uid, roleType.name(), point);
+  }
+
+  @Override
+  public Optional<User> findUserEmailByNameAndPhone(String name, Phone phone) {
+    return repository.findUserByNameAndPhone(name, phone);
   }
 
 }

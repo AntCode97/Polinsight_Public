@@ -1,7 +1,12 @@
-SET
-  foreign_key_checks = 0;
+DROP DATABASE polinsight;
+
+CREATE DATABASE polinsight;
+
+USE polinsight;
 
 DROP TABLE IF EXISTS post CASCADE;
+
+DROP TABLE IF EXISTS collector CASCADE;
 
 DROP TABLE IF EXISTS survey CASCADE;
 
@@ -31,52 +36,49 @@ DROP TABLE IF EXISTS user_participate_survey CASCADE;
 
 DROP TABLE IF EXISTS survey_variables CASCADE;
 
-SET
-  foreign_key_checks = 1;
-
-CREATE TABLE change_pwd_dto
+CREATE TABLE IF NOT EXISTS change_pwd_dto
 (
-  email VARCHAR(255) NOT NULL PRIMARY KEY,
+  id    BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL,
   hash  VARCHAR(255) NOT NULL,
   name  VARCHAR(255) NOT NULL,
   UNIQUE (hash),
   UNIQUE (email)
 );
 
-
-
-CREATE TABLE user
+CREATE TABLE IF NOT EXISTS user
 (
   id               BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
   email            VARCHAR(255) NOT NULL,
   name             VARCHAR(255) NOT NULL,
   password         VARCHAR(255) NOT NULL,
-  phone            VARCHAR(11)  NOT NULL,
+  phone            VARCHAR(13)  NOT NULL,
   point            BIGINT       NULL DEFAULT 0,
-  recommend        VARCHAR(11)  NULL,
-  role             VARCHAR(255) NULL DEFAULT 'USER',
-  birth            DATETIME(6)  NULL,
-  birth_type       VARCHAR(255) NULL DEFAULT '양력',
-  education        VARCHAR(255) NULL,
+  recommend        VARCHAR(13)  NULL,
+  role             VARCHAR(50)  NULL DEFAULT 'USER',
+  birth            DATE         NULL,
+  birth_type       VARCHAR(30)  NULL DEFAULT '양력',
+  education        VARCHAR(50)  NULL DEFAULT '고졸 이하(재학 포함)',
   gender           VARCHAR(20)  NULL DEFAULT 'MALE',
-  industry         VARCHAR(255) NULL,
-  registered_at    DATETIME(6)  NULL DEFAULT NOW(),
-  job              VARCHAR(255) NULL,
-  marry            BIT          NULL,
-  is_email_receive BIT          NULL,
-  is_sms_receive   BIT          NULL,
+  industry         VARCHAR(50)  NULL DEFAULT '기타',
+  registered_at    DATE         NULL DEFAULT NOW(),
+  job              VARCHAR(50)  NULL DEFAULT '기타',
+  marry            VARCHAR(30)  NULL DEFAULT '미혼',
+  address          VARCHAR(100) NULL DEFAULT '',
+  is_email_receive BIT          NULL DEFAULT FALSE,
+  is_sms_receive   BIT          NULL DEFAULT FALSE,
   UNIQUE (email)
 );
 
-CREATE TABLE user_favorite
+CREATE TABLE IF NOT EXISTS user_favorite
 (
-  user_id  BIGINT       NOT NULL,
-  favorite VARCHAR(255) NULL,
+  user_id  BIGINT      NOT NULL,
+  favorite VARCHAR(50) NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
 
-CREATE TABLE post
+CREATE TABLE IF NOT EXISTS post
 (
 
   pno            BIGINT        NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -91,7 +93,7 @@ CREATE TABLE post
   FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
-CREATE TABLE attach
+CREATE TABLE IF NOT EXISTS attach
 (
   id            BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
   file_path     VARCHAR(255) NULL,
@@ -102,22 +104,23 @@ CREATE TABLE attach
   FOREIGN KEY (pno) REFERENCES post (pno)
 );
 
-CREATE TABLE survey
+CREATE TABLE IF NOT EXISTS survey
 (
-  id           BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  title        VARCHAR(255) NOT NULL,
-  survey_id    BIGINT       NOT NULL,
-  created_at   DATETIME     NOT NULL,
-  end_at       DATETIME     NULL,
-  point        BIGINT       NOT NULL DEFAULT 0,
-  href         VARCHAR(255) NOT NULL,
-  progress     VARCHAR(255) NOT NULL DEFAULT 'BEFORE',
-  minimum_time INT          NOT NULL,
-  count        BIGINT       NOT NULL DEFAULT 0,
+  id             BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  title          VARCHAR(500) NOT NULL,
+  survey_id      BIGINT       NOT NULL,
+  created_at     DATE         NULL,
+  end_at         DATE         NULL,
+  point          BIGINT       NOT NULL DEFAULT 0,
+  href           VARCHAR(500) NULL,
+  progress       VARCHAR(30)  NOT NULL DEFAULT 'BEFORE',
+  minimum_time   INT          NOT NULL DEFAULT 30,
+  count          BIGINT       NOT NULL DEFAULT 0,
+  question_count BIGINT       NULL     DEFAULT 0,
   UNIQUE (survey_id)
 );
 
-CREATE TABLE participate_survey
+CREATE TABLE IF NOT EXISTS participate_survey
 (
   id              BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
   user_id         BIGINT       NOT NULL,
@@ -131,36 +134,39 @@ CREATE TABLE participate_survey
   FOREIGN KEY (survey_id) REFERENCES survey (id)
 );
 
-CREATE TABLE user_participate_survey
+CREATE TABLE IF NOT EXISTS user_participate_survey
 (
   user_id               BIGINT NOT NULL,
   participate_survey_id BIGINT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-CREATE TABLE collector
+CREATE TABLE IF NOT EXISTS collector
 (
-  id             BIGINT       NOT NULL AUTO_INCREMENT,
-  collector_id   BIGINT       NOT NULL UNIQUE,
-  name           VARCHAR(255) NULL,
-  href           VARCHAR(255) NULL,
-  participateurl VARCHAR(500) NULL,
-  survey_id      BIGINT,
-  response_count BIGINT,
-  FOREIGN KEY (survey_id) REFERENCES survey (id)
+  id              BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  collector_id    BIGINT       NOT NULL UNIQUE,
+  name            VARCHAR(255) NULL,
+  href            VARCHAR(500) NULL,
+  participate_url VARCHAR(500) NULL,
+  survey_id       BIGINT       NOT NULL,
+  response_count  BIGINT       NOT NULL DEFAULT 0,
+  status          VARCHAR(40)  NOT NULL DEFAULT 'open',
+  FOREIGN KEY (survey_id) REFERENCES survey (survey_id)
 );
 
-CREATE TABLE point_history
+CREATE TABLE IF NOT EXISTS point_history
 (
-  id      BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  user_id BIGINT NOT NULL,
-  amount  BIGINT NOT NULL,
-  sign    BIT    NOT NULL,
-  total   BIGINT NOT NULL,
+  id           BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  user_id      BIGINT       NOT NULL,
+  amount       BIGINT       NOT NULL,
+  sign         BIT          NOT NULL,
+  total        BIGINT       NOT NULL,
+  content      VARCHAR(500) NOT NULL,
+  requested_at DATETIME     NOT NULL DEFAULT NOW(),
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-CREATE TABLE point_request
+CREATE TABLE IF NOT EXISTS point_request
 (
   id            BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
   uid           BIGINT       NOT NULL,
@@ -172,7 +178,7 @@ CREATE TABLE point_request
   progress      VARCHAR(20)  NOT NULL DEFAULT 'REQUESTED'
 );
 
-CREATE TABLE survey_variables
+CREATE TABLE IF NOT EXISTS survey_variables
 (
   survey_id BIGINT       NOT NULL,
   variable  VARCHAR(255) NULL,

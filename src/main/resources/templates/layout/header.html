@@ -8,137 +8,149 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
     .header_wrap {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: transparent;
-      z-index: 9999;
+      background-color : transparent;
+      left             : 0;
+      position         : fixed;
+      top              : 0;
+      width            : 100%;
+      z-index          : 9999;
     }
 
     .header_box {
-      width: 1200px;
-      height: 80px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
+      align-items     : center;
+      color           : white;
+      display         : flex;
+      height          : 100%;
+      justify-content : space-between;
+      margin          : 0 auto;
+      width           : 1200px;
     }
 
     .header_logo a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 80px;
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : center;
     }
 
     .header_logo img {
-      width: 150px;
+      width : 150px;
     }
 
     .header_container_navi {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : space-between;
+      position        : relative;
     }
 
     .navi_box > li > a {
-      font-size: 18px;
-      display: block;
-      line-height: 80px;
-      padding: 0 40px;
+      display   : block;
+      font-size : 18px;
+      /*line-height: 100%;*/
+      height    : 100%;
+      padding   : 0 40px;
     }
 
     .navi_box > li:hover > a {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .navi_box > li:hover .dropdown {
-      height: 47px;
+      height : 47px;
     }
 
     .dropdown {
-      transition: 0.2s;
-      position: absolute;
-      top: 80px;
-      display: block;
-      background-color: #FFFFFF;
-      overflow: hidden;
-      height: 0px;
+      background-color : #FFFFFF;
+      display          : block;
+      height           : 0px;
+      overflow         : hidden;
+      position         : absolute;
+      top              : 80px;
+      transition       : 0.2s;
     }
 
     .dropdown_box {
-      display: flex;
-      align-items: center;
-      padding: 0 5px;
-      justify-content: space-between;
-      border: 1px solid #d4d4d4;
+      align-items     : center;
+      border          : 1px solid #D4D4D4;
+      display         : flex;
+      justify-content : space-between;
+      padding         : 0 5px;
     }
 
     .dropdown_element {
-      display: inline-block;
-      font-size: 14px;
-      color: #777;
-      font-weight: normal;
-      padding: 0 15px;
-      line-height: 45px;
+      color       : #777777;
+      display     : inline-block;
+      font-size   : 14px;
+      font-weight : normal;
+      line-height : 45px;
+      padding     : 0 15px;
     }
 
     .dropdown_element:hover {
-      text-decoration: underline;
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .header_container_login {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
     }
 
     .header_container_login {
-      padding: 0 20px;
-      margin-left: 25px;
+      margin-left : 25px;
+      padding     : 0 20px;
     }
 
     .header_container_login > a {
-      font-size: 18px;
+      font-size : 18px;
     }
 
     .header_container_login > a:hover {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .header_container_login > span {
-      display: inline-block;
-      width: 0.2px;
-      height: 15px;
-      background: white;
-      margin: 0 10px;
+      background : white;
+      display    : inline-block;
+      height     : 15px;
+      margin     : 0 10px;
+      width      : 0.2px;
     }
 
     /* 배너이미지 */
     .carasel_wrap::before {
-      content: '';
+      content  : '';
       /*background-color: #444;*/
       /*opacity: 0.4;*/
-      width: 100%;
-      height: 50vh;
-      position: absolute;
-      top: 0;
-      left: 0;
+      height   : 50vh;
+      left     : 0;
+      position : absolute;
+      top      : 0;
+      width    : 100%;
     }
 
     .carasel_wrap {
-      width: 100%;
-      height: 50vh;
-      position: relative;
-      overflow: hidden;
-      background-image: url('img/banner/polinsight_banner.jpg');
-      background-position: center, center;
-      background-size: cover;
+      background-image    : url('img/banner/polinsight_banner.jpg');
+      background-position : center, center;
+      background-size     : cover;
+      height              : 50vh;
+      overflow            : hidden;
+      position            : relative;
+      width               : 100%;
     }
+
+    .shrink {
+      height     : 50px;
+      transition : all .3s ease;
+    }
+
+    .expand {
+      height     : 80px;
+      transition : all .3s ease;
+    }
+
   </style>
 </head>
 <body>
@@ -146,7 +158,7 @@
   <i class="fas fa-arrow-up"></i>
   <span>TOP</span>
 </button>
-<div class="header_wrap">
+<div class="header_wrap expand">
   <div class="header_box">
     <div class="header_container_logo">
       <div class="header_logo">
@@ -237,22 +249,31 @@
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가
     $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.location.href.split('/').length > 0) {
-        $('.header_wrap').css('background-color', '#182838')
+      const header = $('.header_wrap')
+      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+        $('.top-btn').fadeIn().css("display", "flex");
+        header.css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+        header.css('background-color', '#192739');
       } else {
-        if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-          $('.top-btn').fadeIn().css("display", "flex");
-          $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-              .css('background-color', '#192739');
-        } else {
-          $('.top-btn').fadeOut();
-          $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
-        }
+        $('.top-btn').fadeOut();
+        header.css('box-shadow', 'none').css('background-color', 'transparent');
+      }
+
+      const dropdown = $('.dropdown')
+      if ($(window).scrollTop() >= 150) {
+        header.addClass('shrink').removeClass('expand')
+        dropdown.css('top', '50px')
+      } else {
+        header.addClass('expand').removeClass('shrink')
+        dropdown.css('top', '80px')
       }
     });
+
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });
   });
+
+
 </script>
 </html>

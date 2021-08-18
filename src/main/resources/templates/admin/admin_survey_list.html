@@ -3,63 +3,85 @@
   <th:block>
     <style>
       table, tr, th, td {
-        width: 100%;
-        margin: 0;
+        margin : 0;
+        width  : 100%;
       }
 
-
       .post-row > *:nth-child(1) {
-        width: 70px;
+        width : 50px;
       }
 
       .post-row > *:nth-child(2) {
-        width: 500px;
+        width : 500px;
       }
 
       tbody > .post-row > td:nth-child(2) {
-        text-align: left;
+        text-align : left;
       }
 
       .post-row > *:nth-child(3) {
-        width: 90px;
+        width : 80px;
       }
 
       .post-row > *:nth-child(4) {
-        width: 150px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(5) {
-        width: 95px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(6) {
-        width: 95px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(7) {
-        width: 120px;
+        width : 120px;
       }
 
       .post-row > *:nth-child(8) {
-        width: 120px;
+        width : 120px;
+      }
+
+      .post-row > *:nth-child(9) {
+        width : 120px;
       }
 
       table {
-        align: center;
+        align : center;
       }
 
       .info_popup_container {
-        display: none;
-        width: 100%;
-        height: 100%;
-        background-color: red;
-        position: absolute;
+        background-color : red;
+        display          : none;
+        height           : 100%;
+        position         : absolute;
+        width            : 100%;
       }
 
       .info_popup {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50% -50%);
+        left      : 50%;
+        top       : 50%;
+        transform : translate(-50% -50%);
+      }
+
+      .status_wrap {
+        align-items     : center;
+        display         : flex;
+        gap             : 5px;
+        justify-content : center;
+      }
+
+      .status_wrap > * {
+        cursor : pointer;
+      }
+
+      .status_box:nth-child(1) {
+        color : mediumseagreen;
+      }
+
+      .status_box:nth-child(2) {
+        color : tomato;
       }
     </style>
   </th:block>
@@ -73,12 +95,16 @@
     <div class="main_contents_wrap">
       <div class="post-search">
         <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
-      </div>
 
-      <!--관리자 페이지 설문 찾기 기능-->
-      <div class="search-box-container">
-        <span class="search-icon"><i class="fa fa-search"></i></span>
-        <input class="admin_find" name="admin_find" placeholder="검색" type="text" />
+        <!--관리자 페이지 설문 찾기 기능-->
+        <div class="form-search">
+          <div class="tbl-search">
+            <div class="box-search">
+              <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
+              <input type="submit" />
+            </div>
+          </div>
+        </div>
       </div>
 
       <table class="scroll-table">
@@ -119,52 +145,56 @@
         $('.scroll-table').empty().after(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
         $('.pagination').empty();
       } else {
-        if (!regexValue) {
-          first.on('click', {page: 0}, adminGetAllSurveys);
-          last.on('click', {page: totalPage}, adminGetAllSurveys);
-          prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, adminGetAllSurveys);
-          next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
-
+        // if (!regexValue) {
+        first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
+        last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
+        prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+        next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+        if (current > 0)
           paginationElement.append(first).append(prev);
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-            tmp.on('click', {page: i}, adminGetAllSurveys);
-            if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold');
-            }
-            paginationElement.append(tmp);
+        for (let i = start; i < end; i++) {
+          let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+          tmp.on('click', {page: i}, adminGetAllSurveys);
+          if (current === i) {
+            tmp.css('color', 'white').css('background-color', '#444444');
           }
-          paginationElement.append(next).append(last);
-        } else {
-          first.on('click', {regex: regexValue, page: 0}, adminGetAllSurveys);
-          last.on('click', {regex: regexValue, page: totalPage}, adminGetAllSurveys);
-          prev.on('click', {regex: regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
-          next.on('click', {
-            regex: regexValue,
-            page: current >= totalPage ? totalPage - 1 : current + 1
-          }, adminGetAllSurveys);
-          paginationElement.append(first).append(prev);
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-            tmp.on('click', {page: i, regex: regexValue}, adminGetAllSurveys);
-            if (current === i) {
-              tmp.addClass('pagination_button_current');
-            } else {
-              tmp.removeClass('pagination_button_current');
-            }
-            paginationElement.append(tmp);
-          }
-          paginationElement.append(next).append(last);
+          paginationElement.append(tmp);
         }
+        if (current < totalPage - 1)
+          paginationElement.append(next).append(last);
       }
-    };
+      // } else {
+      //   first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
+      //   last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
+      //   prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+      //   next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+      //
+      //   if (current >= 1)
+      //     paginationElement.append(first).append(prev);
+      //
+      //   for (let i = start; i < end; i++) {
+      //     let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+      //     tmp.on('click', {page: i, regex: regexValue}, adminGetAllSurveys);
+      //     if (current === i) {
+      //       tmp.addClass('pagination_button_current');
+      //     } else {
+      //       tmp.removeClass('pagination_button_current');
+      //     }
+      //     paginationElement.append(tmp);
+      //   }
+      //
+      //   if (current < totalPage - 1)
+      //     paginationElement.append(next).append(last);
+      // }
+    }
 
     const surveyListHeader = () => {
-      let template = $(`<tr class="post-th"></tr>`);
+      let template = $(`<tr class="post-th post-row"></tr>`);
       template.append(`<th>번호</th>`);
       template.append(`<th>설문 이름</th>`);
       template.append(`<th>포인트</th>`);
-      template.append(`<th>설문 기간</th>`);
+      template.append(`<th>설문 시작일</th>`);
+      template.append(`<th>설문 종료일</th>`);
       template.append(`<th>진행 상태</th>`);
       template.append(`<th>참여자 수</th>`);
       template.append(`<th>설문 아이디</th>`);
@@ -180,11 +210,12 @@
         template.append(`<td>${survey.id}</td>`);// 번호
         template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
         template.append(`<td>${!survey.point ? 0 : survey.point}</td>`);// 지급 포인트
-        template.append(`<td>${String(survey.createdAt).split('T')[0]} ~ ${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
+        template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
+        template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
         template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
         template.append(`<td>${survey.status.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class="btn_del btn-support">수정</button><span>  </span><button class="btn_del btn-warn">삭제</button></td>`);
+        template.append(`<td><button class="btn_udel btn-support">수정</button><span>  </span><button class="btn_udel btn-warn">삭제</button></td>`);
         return template
       }).map(elem => table.append(elem))
     };
@@ -192,7 +223,7 @@
     const adminGetAllSurveys = e => {
       const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
       const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      http.get('/api/surveys' + regex, {
+      http.get('/api/test/surveys' + regex, {
             params: {size: 10, page: offset}
           })
           .then(res => {
