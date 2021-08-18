@@ -50,17 +50,6 @@ public class PostServiceImpl implements PostService {
     return repository.save(Post.builder(postDTO).build());
   }
 
-  @Transactional
-  @Override
-  public void renewPost() {
-    List<Post> posts = this.findAll();
-    for (Post post : posts) {
-      LocalDateTime writeTime = post.getRegisteredAt();
-      LocalDateTime now = LocalDateTime.now();
-      Duration duration = Duration.between(writeTime, now);
-      post.setNewPost(duration.getSeconds() < 3600 * 12);
-    }
-  }
 
   @Override
   public void delete(Post post) {

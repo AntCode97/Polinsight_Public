@@ -58,11 +58,9 @@ public class PostController {
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
         posts = postService.searchKeyword(keyword, pageable);
-
         model.addAttribute("posts", posts);
       }
     } else {
@@ -70,8 +68,6 @@ public class PostController {
       model.addAttribute("posts", posts);
     }
 
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
 
 
     return "admin/admin_post_list";
@@ -123,13 +119,9 @@ public class PostController {
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
+
       model.addAttribute("keyword", keyword);
       posts = postService.searchKeyword(keyword, pageable);
-      for (Post b :
-          posts) {
-        System.out.println(b.getId());
-      }
     } else {
       posts = postService.getPostList(pageable);
     }
@@ -182,8 +174,6 @@ public class PostController {
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
     Page<Post> posts = postService.getPostList(pageable);
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
 
     posts.get().map(Post::toString);
 
@@ -191,7 +181,7 @@ public class PostController {
       model.addAttribute("postSearch", postSearch);
     }
     model.addAttribute("posts", posts);
-    //System.out.println(postSearch.toString());
+
 
     return "posts/postList";
   }
@@ -213,7 +203,7 @@ public class PostController {
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
-    System.out.println(postSearch.toString());
+
 
     return "posts/postList";
   }
@@ -234,14 +224,13 @@ public class PostController {
     //    }
     Post findPost = postService.findOne(postId);
     try {
-      System.out.println(session);
       long update_time = 0;
       if (session.getAttribute("update_time" + findPost.getId()) != null) {
         update_time = (long) session.getAttribute("update_time" + findPost.getId());
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        System.out.println("조회수 증가!!");
+        log.info("Post View COUNT");
         postService.upViewCnt(findPost);
         session.setAttribute("update_time" + findPost.getId(), current_time);
       } else
@@ -375,36 +364,7 @@ public class PostController {
     postDTO.setTitle(post.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     postDTO.setRegisteredAt(registeredAt);
-    //    try {
-    //      List<MultipartFile> mFiles =attachService.findMultipartFiles(postId);
-    //      for(MultipartFile m : mFiles){
-    //        System.out.println(m.getOriginalFilename());
-    //      }
-    //      postDTO.setFiles(mFiles);
-    //    } catch (Exception e){
-    //      System.out.println(e);
-    //    }
 
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
-
-    //    try{
-    //      File file = new File(post.getFilePath());
-    //      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
-    //      InputStream input = new FileInputStream(file);
-    //      OutputStream os = fileItem.getOutputStream();
-    //      IOUtils.copy(input, os);
-    //      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-    //      postDTO.setFile(multipartFile);
-    //      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
-    //
-    //    }catch (IOException ex){
-    //      System.out.println(ex);
-    //    }
-    //
-    //
-    //    model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
     return "admin/admin_post_update";
   }
@@ -448,12 +408,16 @@ public class PostController {
     return "redirect:/posts";
   }
 
+  //Post로 바꿔도 될듯함
   @GetMapping("admin/posts/{postId}/delete")
-  public String adminDelete(@PathVariable("postId") Long postId, Model model) {
+  public String adminDelete(@PathVariable("postId") Long postId, Model model,@PageableDefault Pageable pageable) {
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
     postService.delete(post);
+    //Page<Post> posts = postService.getPostList(pageable);
+    //model.addAttribute("posts", posts);
     return "redirect:/admin/posts";
+    //return "fragments/postList";
   }
 
   @GetMapping("/api/post/search")
@@ -484,12 +448,9 @@ public class PostController {
 
 
     String keyword = paramMap.get("keyword").toString();
-    System.out.println(keyword);
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
     Page<Post> posts = postService.searchKeyword(keyword, pageable);
-    for (Post b : posts) {
-      System.out.println(b.getId());
-    }
+
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
 
@@ -522,7 +483,7 @@ public class PostController {
 
   @GetMapping("api/{file}/delete")
   public ResponseEntity asyncDeleteFile(@PathVariable("file") String filename, Model model) {
-    System.out.println("파일 삭제 성공!");
+    log.info("File Delete Success!!");
     attachService.delete(attachService.findByname(filename).get(0));
     return new ResponseEntity(HttpStatus.OK);
   }

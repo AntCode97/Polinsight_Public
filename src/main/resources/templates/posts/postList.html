@@ -105,7 +105,7 @@
 
       <!-- Search Box -->
       <div class="post-search">
-        <div class="util-search">총 <strong></strong>개의 게시물이 있습니다.</div>
+        <div class="util-search">총 <strong th:text='${posts.getTotalElements()}'></strong>개의 게시물이 있습니다.</div>
         <div class='form-search'>
           <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
             <div class="search-box">
@@ -142,7 +142,14 @@
         </div>
         <div class="post-row" th:each="post:${posts}">
           <span th:text="${post.id}"></span>
-          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title"><strong></strong></a>
+          <a th:href="@{/posts/{id} (id=${post.id})}" class="post-title" >
+            <span th:text="${post.title}"></span>
+            <span class="new-span" th:if='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'>
+          new
+      </span>
+            <strong></strong></a>
+<!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
+<!--          -->
           <span th:text="${post.user.name}"></span>
           <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
           <span th:text="${post.viewcnt}">52</span>
@@ -158,21 +165,21 @@
       <!-- 페이지네이션 -->
       <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
         <div th:if="${postSearch.getPostType()} !=null">
-          <a th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First"><span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span></a>
+          <a th:class="${posts.first} ? 'disabled'" th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First"><span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span></a>
           <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/posts/search(page=${posts.number}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="Previous"><i class="fas fa-angle-left"></i></a>
           <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
              th:text="${page}"
              th:href="@{/posts/search(page=${page}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"></a>
           <a th:class="${posts.last} ? 'disabled'" th:href="${posts.last} ? '#' :  @{/posts/search(page=${posts.number+2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="Next"><i class="fas fa-angle-right"></i></a>
-          <a th:href="@{/posts/search(page=${posts.totalPages}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
+          <a th:class="${posts.last} ? 'disabled'" th:href="@{/posts/search(page=${posts.totalPages}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
         </div>
 
         <div th:if="${postSearch.getPostType()} ==null">
-          <a th:href="@{/posts(page=1)}" aria-label="First"><i class="fas fa-angle-double-left"></i></a>
+          <a th:class="${posts.first} ? 'disabled'" th:href="@{/posts(page=1)}" aria-label="First"><i class="fas fa-angle-double-left"></i></a>
           <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/posts(page=${posts.number})}" aria-label="Previous"><i class="fas fa-angle-left"></i></a>
           <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/posts(page=${page})}"></a>
           <a th:class="${posts.last} ? 'disabled'" th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2})}" aria-label="Next"><i class="fas fa-angle-right"></i></a>
-          <a th:href="@{/posts(page=${posts.totalPages})}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
+          <a th:class="${posts.last} ? 'disabled'" th:href="@{/posts(page=${posts.totalPages})}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
         </div>
       </div>
     </div>

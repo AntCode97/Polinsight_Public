@@ -210,3 +210,13 @@ form {
 .box-shadow {
     box-shadow: 5px 5px 25px 0 rgb(46 61 73 / 20%);
 }
+
+.new-span {
+    display: inline;
+    padding: 0;
+    color: #00CC00;
+}
+
+.disabled{
+    display: none !important;
+}
