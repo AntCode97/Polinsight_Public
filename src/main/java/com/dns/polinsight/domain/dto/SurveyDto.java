@@ -19,6 +19,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class SurveyDto implements Comparable<SurveyDto> {
 
+  private Long id;
+
   private String title;
 
   private String participateUrl;
@@ -42,13 +44,17 @@ public class SurveyDto implements Comparable<SurveyDto> {
   private ProgressType progress;
 
   public SurveyDto(Survey survey) {
+    this.id = survey.getId();
     this.point = survey.getPoint();
     this.surveyId = survey.getSurveyId();
-    this.count = survey.getQuestionCount();
+    this.count = survey.getCollector().stream().mapToLong(value -> Math.toIntExact(value.getResponseCount())).sum();
     this.progress = survey.getStatus().getProgress();
     this.minimumTime = survey.getStatus().getMinimumTime();
     this.createdAt = survey.getCreatedAt();
     this.endAt = survey.getEndAt();
+    this.participateUrl = survey.getCollector().get(0).getParticipateUrl();
+    this.status = survey.getCollector().get(0).getStatus();
+    this.title = survey.getTitle();
   }
 
 

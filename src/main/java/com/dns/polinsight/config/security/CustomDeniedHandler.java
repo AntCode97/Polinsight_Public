@@ -34,7 +34,6 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
       // 유저가 일반 권한을 갖고 있을 때
       if (authentication != null &&
           ((User) authentication.getPrincipal()).getAuthorities().contains(new SimpleGrantedAuthority("USER"))) {
-
         request.setAttribute("msg", "접근권한이 없는 사용자입니다.");
       } else {
         request.setAttribute("msg", "로그인 권한이 없는 사용자입니다.");

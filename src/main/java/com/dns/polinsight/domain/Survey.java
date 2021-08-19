@@ -1,5 +1,7 @@
 package com.dns.polinsight.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @ToString
 public class Survey implements Serializable {
 
-  private static final long serialVersionUID = -4701183897615758658L;
 
   @Setter
   @Embedded
@@ -35,7 +37,6 @@ public class Survey implements Serializable {
 
   private String title;
 
-  @Setter
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate createdAt;
 
@@ -49,11 +50,12 @@ public class Survey implements Serializable {
   private Long questionCount;
 
   @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private List<Collector> collectors;
+  private List<Collector> collector;
 
   public void setCreatedAt(LocalDate createdAt) {
     this.createdAt = createdAt;
     this.endAt = createdAt.plusMonths(3);
   }
+
 
 }

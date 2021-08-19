@@ -1,11 +1,9 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.types.CollectorStatusType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +12,8 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@ToString(exclude = "survey")
 public class Collector {
 
   @Id
@@ -24,15 +24,12 @@ public class Collector {
 
   private String name;
 
-  private String href;
-
-
   private String participateUrl;
 
+  private String href;
 
   private Long responseCount;
 
-  @JsonIgnore
   @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
   @ManyToOne
   private Survey survey;

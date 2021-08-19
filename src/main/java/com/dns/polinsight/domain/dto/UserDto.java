@@ -1,11 +1,10 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.types.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.dns.polinsight.types.Address;
+import com.dns.polinsight.types.GenderType;
+import com.dns.polinsight.types.UserRoleType;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.ElementCollection;
@@ -24,15 +23,16 @@ public class UserDto {
   @ElementCollection
   private final List<String> favorite = new ArrayList<>();
 
+  @Setter
   private Long id;
 
   private Long point;
 
-  private Email email;
+  private String email;
 
-  private Phone phone;
+  private String phone;
 
-  private Phone recommend;
+  private String recommend;
 
   private Address address;
 
@@ -65,13 +65,13 @@ public class UserDto {
   public UserDto(User user) {
     this.id = user.getId();
     this.point = user.getPoint();
-    this.email = user.getEmail();
+    this.email = user.getEmail().toString();
     this.name = user.getName();
-    this.phone = user.getPhone();
+    this.phone = user.getPhone().toString();
     this.role = user.getRole();
     this.isEmailReceive = user.getIsEmailReceive();
     this.isSmsReceive = user.getIsSmsReceive();
-    this.recommend = user.getRecommend();
+    this.recommend = user.getRecommend() == null ? "" : user.getRecommend().toString();
     this.gender = user.getPanel().getGender();
     this.education = user.getPanel().getEducation();
     this.marry = user.getPanel().getMarry();

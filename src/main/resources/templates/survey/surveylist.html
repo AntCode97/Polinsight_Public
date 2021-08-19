@@ -84,6 +84,7 @@
     <div class="main_survey_box">
     </div>
   </div>
+  <p id="more_survey"><i class="fas fa-plus"></i></p>
   <div class="modal_container">
     <div class="modal_wrap">
       <div class="modal_content">
@@ -152,6 +153,7 @@
     const getSurveyList = () => {
       http
           .get('/api/surveys?type=index')
+          // .get('/api/test')
           .then(res => {
             if (res.data.success) {
               makeSurveyCardList(res.data.response)
@@ -235,6 +237,7 @@
     $(function () {
       getSurveyList();
       $('input[name=searchInput]').on('keyup', asyncSurveySearch)
+      $('#more_survey').on('click', getSurveyList)
     })
   </script>
 </th:block>

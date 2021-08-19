@@ -19,9 +19,18 @@ public class Phone implements Serializable {
 
   private String third;
 
+  public static Phone of(String phone) {
+    String[] arr = phone.split("-");
+    return Phone.builder()
+                .first(arr[0])
+                .second(arr[1])
+                .third(arr[2])
+                .build();
+  }
+
   @Override
   public String toString() {
-    return first + "-" + second + "-" + third;
+    return first  + "-" + second + "-" + third;
   }
 
 }

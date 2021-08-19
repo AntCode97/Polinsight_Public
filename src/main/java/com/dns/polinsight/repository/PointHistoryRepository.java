@@ -16,4 +16,7 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Long
 
   List<PointHistory> findPointHistoriesByUserId(long userId, Pageable pageable);
 
+  List<PointHistory> findAllByUserId(long userId);
+
+
 }

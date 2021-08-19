@@ -10,6 +10,7 @@ import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
@@ -231,7 +232,7 @@ public class UserController {
   @GetMapping("/api/user/participate/{userid}")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(participateSurveyService.findByUserId(userId).parallelStream()
+      return success(participateSurveyService.findAllByUserId(userId).parallelStream()
                                              .map(ParticipateSurveyDto::new)
                                              .sorted()
                                              .collect(Collectors.toList()));
@@ -295,7 +296,7 @@ public class UserController {
       if (type.equals("email")) {
         Assert.notNull(userDto.getName());
         Assert.notNull(userDto.getPhone());
-        User user = userService.findUserEmailByNameAndPhone(userDto.getName(), userDto.getPhone()).orElseThrow(UserNotFoundException::new);
+        User user = userService.findUserEmailByNameAndPhone(userDto.getName(), Phone.of(userDto.getPhone())).orElseThrow(UserNotFoundException::new);
         return success(user.getEmail());
       } else {
         Assert.notNull(userDto.getEmail());
@@ -309,7 +310,7 @@ public class UserController {
         variables.put("callback", callbackBase + "/chpwd");
         changePasswordService.saveChangePwdDto(ChangePwdDto.builder()
                                                            .hash(hash)
-                                                           .email(userDto.getEmail())
+                                                           .email(Email.of(userDto.getEmail()))
                                                            .name(userDto.getName())
                                                            .build());
         emailService.sendTemplateMail(userDto.getEmail().toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);

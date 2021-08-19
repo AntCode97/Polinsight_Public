@@ -17,10 +17,17 @@ public class Email implements Serializable {
 
   private String domain;
 
+  public static Email of(String email) {
+    String[] arr = email.split("@");
+    return Email.builder()
+                .account(arr[0])
+                .domain(arr[1])
+                .build();
+  }
+
   @Override
   public String toString() {
     return account + "@" + domain;
   }
-
 
 }

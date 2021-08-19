@@ -21,6 +21,11 @@
     }
 
 
+    const getDataAsExcel = () => {
+      http
+          .get('/api/pointhistory/excel')
+    }
+
     $(function () {
       $("#syncSurveyList").on('click', syncSurveyList)
       $("#getExcelBtn").on('click', getDataAsExcel)

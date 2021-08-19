@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +65,11 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public Page<Survey> findAll(Pageable pageable) {
     return surveyRepository.findAll(pageable);
+  }
+
+  @Override
+  public Page<Survey> findAll(Pageable pageable, String title) {
+    return surveyRepository.findAllByTitleLikeOrderById(pageable, title);
   }
 
   @Override
@@ -119,7 +123,7 @@ public class SurveyServiceImpl implements SurveyService {
     ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
     Map<String, Object> map = res.getBody();
     survey.getStatus().setVariables(((Map<String, String>) map.get("custom_variables")).keySet());
-    survey.setQuestionCount((Long) map.get("question_count"));
+    survey.setQuestionCount((Long) map.get("question_count")); //--> 질문 갯수
     return survey;
   }
 
@@ -154,7 +158,7 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public List<Survey> findSurveysByEndDate(LocalDateTime endDate) {
+  public List<Survey> findSurveysByEndDate(LocalDate endDate) {
     return surveyRepository.findSurveysByEndAtLessThan(endDate);
   }
 

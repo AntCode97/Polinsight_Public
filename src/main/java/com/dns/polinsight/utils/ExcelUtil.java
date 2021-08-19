@@ -15,7 +15,7 @@ public class ExcelUtil<T> {
 
   public void createExcelToResponse(List<T> data, String filename, HttpServletResponse response) throws IllegalAccessException, IOException {
     HSSFWorkbook workbook = new HSSFWorkbook();
-    HSSFSheet sheet = workbook.createSheet("테스트 데이터");
+    HSSFSheet sheet = workbook.createSheet("sheet 1");
     rowNum = 0;
 
     createExcel(sheet, data);

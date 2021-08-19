@@ -100,7 +100,7 @@
         <div class="form-search">
           <div class="tbl-search">
             <div class="box-search">
-              <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
+              <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
               <input type="submit" />
             </div>
           </div>
@@ -206,31 +206,35 @@
       const table = $('.scroll-table>tbody');
       table.empty();
       surveys.map(survey => {
-        let template = $(`<tr class="post-row">`);
+        let template = $(`<tr class="post-row">`).on('click', {survey: survey}, updateBtnClickHandler);
         template.append(`<td>${survey.id}</td>`);// 번호
         template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
-        template.append(`<td>${!survey.point ? 0 : survey.point}</td>`);// 지급 포인트
+        template.append(`<td>${!survey.point ? '지정 안됨' : survey.point}</td>`);// 지급 포인트
         template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
         template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
-        template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
-        template.append(`<td>${survey.status.count}</td>`);// 참여자 수
+        template.append(`<td>${survey.progress}</td>`);// 진행 상태
+        template.append(`<td>${survey.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class="btn_udel btn-support">수정</button><span>  </span><button class="btn_udel btn-warn">삭제</button></td>`);
-        return template
-      }).map(elem => table.append(elem))
+        $(`<td></td>`)
+            .append($(`<button class="btn_udel btn-support">수정</button>`).on('click', {survey: survey}, updateBtnClickHandler))
+            .append($(`<span>  </span>`))
+            .append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {survey: survey}, deleteBtnClickHandler))
+        table.append(template)
+      })
     };
 
     const adminGetAllSurveys = e => {
-      const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
+      const regex = !e ? '' : !e.data.regex ? '' : `/${e.data.regex}`;
       const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      http.get('/api/test/surveys' + regex, {
+      http.get('/api/surveys' + regex, {
             params: {size: 10, page: offset}
           })
           .then(res => {
             if (res.data.success) {
               getTotalCount(regex);
               makePaginationsInAdminSurvey(offset);
-              adminMakeSurveySearchResults(res.data.response);
+              surveys.push(...res.data.response)
+              adminMakeSurveySearchResults(surveys);
             } else {
               console.log('data fetching error');
             }
@@ -250,18 +254,59 @@
       }
     };
 
+    const setDataInModal = survey => {
+    }
+
+    /* 수정 버튼 클릭 */
+    const updateBtnClickHandler = e => {
+      let survey = e.data.survey
+      setDataInModal(survey)
+      http.put('/api/survey', survey)
+          .then(res => {
+            if (res.data.success) {
+              location.replace('/admin/surveylist')
+            }
+          })
+          .catch(console.log)
+    }
+    /* 삭제 버튼 클릭 */
+    const deleteBtnClickHandler = e => {
+      /* 팝업 띄우고 확인 누르면 삭제 */
+      let survey = e.data.survey
+      http.delete('/api/survey')
+          .then(res => {
+            if (res.data.success) {
+              location.replace('/admin/surveylist')
+            }
+          })
+          .catch(console.log)
+    }
+
+    const surveys = []
+
     $(function () {
       $('.scroll-table>thead').append(surveyListHeader());
       getTotalCount();
       adminGetAllSurveys();
 
       /* 요소 클릭 이벤트 */
-      $(document).on('click', 'tbody > .post-row', function () {
-        const id = $(this).children('td:first-child').text();
-        location.href = `/admin/surveyinfo/${id}`
-      });
+      // $(document).on('click', 'tbody > .post-row', updateBtnClickHandler);
+
 
       $('input[name=admin_find]').on('keyup', _.throttle(adminGetAllSurveys, 300));
+
+      $('input:radio[name=sort_group]').on('click', function () {
+        // 필터
+        let filterValue = $(this).val()
+        if (filterValue !== 'ALL') {
+          tmpSurvey = surveys.filter(survey => survey.progress === filterValue)
+          $('.util-search>strong').text(tmpSurvey.length)
+          adminMakeSurveySearchResults(tmpSurvey)  // 렌더
+        } else {
+          $('.util-search>strong').text(surveys.length)
+          adminMakeSurveySearchResults(surveys)  // 렌더
+        }
+      })
     });
   </script>
 </th:block>
