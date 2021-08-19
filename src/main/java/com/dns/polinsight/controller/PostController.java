@@ -257,7 +257,7 @@ public class PostController {
       }
     }
 
-    return "posts/post";
+    return "redirect:posts/post";
   }
 
   @GetMapping("admin/posts/{postId}")
