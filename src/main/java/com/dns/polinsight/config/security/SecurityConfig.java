@@ -97,7 +97,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .invalidateHttpSession(true)
         .and()
         .sessionManagement()
-        .sessionAuthenticationErrorUrl("/login").invalidSessionUrl("/login")
+        .sessionAuthenticationErrorUrl("/login")
+        .invalidSessionUrl("/login")
         .sessionConcurrency(concurrencyControlConfigurer -> {
           concurrencyControlConfigurer.expiredUrl("/login");
           concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
