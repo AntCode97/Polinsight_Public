@@ -185,7 +185,7 @@ management :
 spring :
   datasource :
     username :          root
-    password :          159753
+    password :          root
     url :               jdbc:mariadb://localhost:3306/polinsight
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :

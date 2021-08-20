@@ -11,6 +11,7 @@
         <div class="tbl-search">
           <div class="box-search">
             <input type="text" id="searchinput" th:value="${keyword}" onkeyup="asyncFindBoard()"  />
+            <input class="disabled" type="button"></input>
             <input type="submit" />
           </div>
         </div>
@@ -109,6 +110,7 @@
     </div>
   </div>
   <script>
+
     const asyncFindBoard = () => {
       //e.preventDefault();
       const keyword = $('#searchinput').val();
@@ -119,7 +121,12 @@
       }).done(function (fragment) {
 
         $('#boardTable').replaceWith(fragment);
-        const keyword = $('#searchinput').val();
+        let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+        closeBtn.classList.remove("disabled");
+        if(keyword == "")
+          closeBtn.className = "disabled";
+
+
         $.ajax({
 
           url: '/api/admin/posts/search/count?keyword=' + keyword,
@@ -140,7 +147,14 @@
     // $(document).ready(init);
     const deleteNotice = (e) => {
       e.preventDefault();
-
     };
+
+    let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+    closeBtn.addEventListener("click", function (){
+      let searchInput = document.querySelector("#searchinput")
+      searchInput.value = "";
+      asyncFindBoard();
+    })
+
   </script>
 </div>

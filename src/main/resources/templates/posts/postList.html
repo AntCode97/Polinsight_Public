@@ -156,7 +156,8 @@
                 </optgroup>
               </select>
               <div class="box-search">
-                <input id="searchinput" th:field="*{searchValue}" type="text">
+                <input id="searchinput" th:field="*{searchValue}" type="text" onkeyup="makeCloseBtn()">
+                <input class="disabled" type="button"></input>
                 <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
               </div>
             </div>
@@ -232,3 +233,23 @@
     <th:block th:include="layout/footer" />
   </div>
 </th:block>
+<script>
+  let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+  let keyword = document.querySelector("#searchinput").value;
+  if(keyword == "")
+    closeBtn.className = "disabled";
+  else closeBtn.classList.remove("disabled");
+  closeBtn.addEventListener("click", function (){
+    let searchInput = document.querySelector("#searchinput")
+    searchInput.value = "";
+    location.href ="/posts"
+    //asyncFindBoard();
+  })
+  const makeCloseBtn = () =>{
+    let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+    closeBtn.classList.remove("disabled");
+    let keyword = document.querySelector("#searchinput").value;
+    if(keyword == "")
+      closeBtn.className = "disabled";
+  }
+</script>
