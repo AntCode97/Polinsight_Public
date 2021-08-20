@@ -1,18 +1,24 @@
-<div id="boardTable">
+<div >
   <div class="main_contents_wrap">
     <div class="post-search">
-      <div class="util-search">총 <strong th:text="${posts.getTotalElements()}"></strong>개의 게시물이 있습니다.</div>
+
+      <div  class="util-search" id="postCount">
+
+        <span th:unless="${keyword}==null" ><span th:unless="${keyword}==''"><strong th:text="${keyword}">2</strong>로 검색한 결과</span></span>
+
+        총 <strong th:text="${postCount}"></strong>개의 게시물이 있습니다.</div>
       <div class="form-search">
         <div class="tbl-search">
           <div class="box-search">
-            <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
+            <input type="text" id="searchinput" th:value="${keyword}" onkeyup="asyncFindBoard()"  />
+            <input class="disabled" type="button"></input>
             <input type="submit" />
           </div>
         </div>
       </div>
     </div>
 
-    <div class="scroll-table">
+    <div class="scroll-table" id="boardTable">
       <div class="post-th post-row">
         <span>번호</span>
         <a href="#">제목</a>
@@ -57,7 +63,7 @@
         <span>
           <span class="btn_multi_wrap">
             <button class="btn_udel btn-support" th:onclick="|location.href='@{/admin/posts/{id}/edit (id=${list.id})}'|">수정</button>
-            <button class="btn_udel btn-warn delete-btn" th:value="${list.id}">삭제</button>
+            <button class="btn_udel btn-warn delete_btn" th:value="${list.id}">삭제</button>
             <!--        <button class='btn_udel btn-warn' th:onclick="|location.href='@{/admin/posts/{id}/delete (id=${list.id})}'|">삭제</button>-->
           </span>
         </span>
@@ -103,4 +109,52 @@
       </div>
     </div>
   </div>
+  <script>
+
+    const asyncFindBoard = () => {
+      //e.preventDefault();
+      const keyword = $('#searchinput').val();
+      $.ajax({
+        url: '/api/admin/posts/search?keyword=' + keyword,
+        type: 'POST',
+        data: keyword
+      }).done(function (fragment) {
+
+        $('#boardTable').replaceWith(fragment);
+        let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+        closeBtn.classList.remove("disabled");
+        if(keyword == "")
+          closeBtn.className = "disabled";
+
+
+        $.ajax({
+
+          url: '/api/admin/posts/search/count?keyword=' + keyword,
+          type: 'POST',
+          data: keyword
+        }).done(function (frag) {
+          //console.log(frag)
+          $('#postCount').replaceWith(frag);
+
+        });
+      });
+
+    };
+    // const init = () => {
+    //   document.querySelector('#searchinput').addEventListener('keyup', asyncFindBoard);
+    // }
+    // window.load = init()
+    // $(document).ready(init);
+    const deleteNotice = (e) => {
+      e.preventDefault();
+    };
+
+    let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
+    closeBtn.addEventListener("click", function (){
+      let searchInput = document.querySelector("#searchinput")
+      searchInput.value = "";
+      asyncFindBoard();
+    })
+
+  </script>
 </div>

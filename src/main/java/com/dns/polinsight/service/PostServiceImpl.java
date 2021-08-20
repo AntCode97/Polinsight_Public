@@ -88,9 +88,10 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public void upViewCnt(Post post) {
+  public void upViewCnt(Long postId) {
     //post.setViewcnt(post.getViewcnt() +1);
-    repository.upViewCnt(post);
+    repository.upViewCnt(postId);
+    return ;
   }
 
 }

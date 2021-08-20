@@ -29,6 +29,6 @@ public interface PostService {
 
   Page<Post> searchKeyword(String keyword, Pageable pageable);
 
-  void upViewCnt(Post post);
+  void upViewCnt(Long postId);
 
 }
