@@ -174,8 +174,6 @@
           <div class="dropdown" style="left: 0px;">
             <div class="dropdown_box">
               <a class="dropdown_element" th:href="@{/}">인사말</a>
-              <a class="dropdown_element" th:href="@{/}">연혁</a>
-              <a class="dropdown_element" th:href="@{/}">설립목적</a>
               <a class="dropdown_element" th:href="@{/}">오시는길</a>
             </div>
           </div>
@@ -183,13 +181,12 @@
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/posts}">Board</a>
+          <a th:href="@{/posts}">Business</a>
           <div class="dropdown" style="left: 160.5px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
-              <a class="dropdown_element" th:href="@{/events}">이벤트</a>
-              <a class="dropdown_element" th:href="@{/qna}">Q & A</a>
-              <a class="dropdown_element" th:href="@{/faq}">FAQ</a>
+
+              <a class="dropdown_element" th:href="@{/}">분야별영역</a>
+              <a class="dropdown_element" th:href="@{/}">주요실적</a>
             </div>
           </div>
         </li>
@@ -200,23 +197,19 @@
           <a th:href="@{/}">Research</a>
           <div class="dropdown" style="left: 314.5px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents02</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
+              <a class="dropdown_element" th:href="@{/}">온라인조사</a>
+              <a class="dropdown_element" th:href="@{/}">폴'S인사이트</a>
             </div>
           </div>
         </li>
       </ul>
       <ul class="navi_box">
         <li>
-          <a th:href="@{/}">Research</a>
+          <a th:href="@{/}">Customer</a>
           <div class="dropdown" style="right: 0px;">
             <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents01</a>
-              <a class="dropdown_element" th:href="@{/}">Contents03</a>
-              <a class="dropdown_element" th:href="@{/}">Contents04</a>
+              <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
+              <a class="dropdown_element" th:href="@{/events}">이벤트</a>
             </div>
           </div>
         </li>
@@ -263,9 +256,11 @@
       if ($(window).scrollTop() >= 150) {
         header.addClass('shrink').removeClass('expand')
         dropdown.css('top', '50px')
+        $('.navi_box > li > a').css('line-height', '50px');
       } else {
         header.addClass('expand').removeClass('shrink')
         dropdown.css('top', '80px')
+        $('.navi_box > li > a').css('line-height', '80px');
       }
     });
 

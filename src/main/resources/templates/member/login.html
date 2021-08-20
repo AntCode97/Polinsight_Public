@@ -43,13 +43,13 @@
     }
 
     .login_logo_text {
-      min-width : 300px;
+      min-width : 320px;
       width: 22rem;
     }
 
     .login_content {
       margin     : 0 auto;
-      min-width  : 350px;
+      min-width  : 380px;
       text-align : center;
       width      : 25rem;
     }
@@ -113,7 +113,7 @@
       align-items     : center;
       color           : #A9ABB7;
       display         : flex;
-      justify-content : space-between;
+      justify-content : flex-end;
       margin          : 15px 5px 0;
       padding-left    : 5px;
       text-align      : right;
@@ -223,6 +223,7 @@
       padding       : 12px;
       text-align    : center;
     }
+    .auto_login {display: none;}
 
     @media (min-width : 320px) and (max-width : 480px) {
       .modal_content {
@@ -273,7 +274,7 @@
             <div class="login_btn_wrap">
               <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
             </div>
-            <div class="qnapw">
+            <div class="qnapw auto_login">
               <div>
                 <label>
                   자동 로그인
