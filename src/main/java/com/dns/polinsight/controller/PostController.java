@@ -108,7 +108,7 @@ public class PostController {
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setRegisteredAt(LocalDateTime.now());
       Post post = postService.addPost(postDTO);
@@ -168,7 +168,7 @@ public class PostController {
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setRegisteredAt(LocalDateTime.now());
       Post post = postService.addPost(postDTO);
@@ -336,7 +336,7 @@ public class PostController {
   public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setId(postId);
       postDTO.setRegisteredAt(LocalDateTime.now());
@@ -383,7 +383,7 @@ public class PostController {
   @PostMapping("admin/posts/{postId}/edit")
   public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + postId);
-    User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+    User admin = userService.findUserByEmail(user.getEmail());
     postDTO.setUser(admin);
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());

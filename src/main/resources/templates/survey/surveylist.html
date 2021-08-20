@@ -128,56 +128,43 @@
       return template;
     }
     const makeSurveyCardList = (surveyList) => {
-
       const survey_box = $(".main_survey_box");
+      if (totalSurveys <= (current * 10)) {
+        survey_box.append('<h1>마지막입니다</h1>')
+        current = totalSurveys / 10;
+        return
+      }
+      if (current === 0)
+        survey_box.empty().append('<div class="main_survey_item_wrap"></div>')
+
       let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-      let count = 0;
+
       surveyList.forEach(survey => {
-        if (count % 3 !== 0) {
+        if (item_wrap.find('.main_survey_item').length < 3) {
           item_wrap.append(makeSurveyCard(survey))
         } else {
-          survey_box.append('<div class="main_survey_item_wrap"></div>')
-          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-          item_wrap.append(makeSurveyCard(survey))
-        }
-        count++;
-      })
-
-      // 마지막 라인 지우기
-      $('.main_survey_item_wrap').each(function () {
-        if ($(this).find('.main_survey_item').length < 3) {
-          $(this).remove()
+          item_wrap = $('<div class="main_survey_item_wrap"></div>')
+          survey_box.append(item_wrap)
         }
       })
     }
 
     const getSurveyList = e => {
-      let type = !!e ? e.data.type : 'index'
-      if (type === 'more') {
-        current++;
-        console.log(current)
-        // TODO 쿼리 변경 필요
-        http
-            .get('/api/surveys?type=' + type, {page: current, size: 10})
-            .then(res => {
-              console.log(res)
-              if (res.data.success) {
-
-              }
-            })
-      } else {
-        http
-            .get('/api/surveys?type=' + type, {
-              page: current,
-              size: 10
-            })
-            .then(res => {
-              if (res.data.success) {
-                makeSurveyCardList(res.data.response)
-              }
-            })
-            .catch(console.log)
-      }
+      http
+          .get('/api/surveys?type=index', {
+            params:
+                {
+                  page: current,
+                  size: 10
+                }
+          })
+          .then(res => {
+            if (res.data.success) {
+              // surveys.push(...res.data.response)
+              makeSurveyCardList(res.data.response)
+            }
+          })
+          .catch(console.log)
     }
 
 
@@ -251,12 +238,22 @@
         $('.modal_container').fadeOut()
       })
     }
+
+    const getSurveyTotalCount = () => {
+      http.get('/api/survey/total').then(res => totalSurveys = res.data.success ? res.data.response : alert())
+    }
+
+    let totalSurveys = 0;
     let current = 0;
     const surveys = []
     $(function () {
+      getSurveyTotalCount();
       getSurveyList();
       $('input[name=searchInput]').on('keyup', asyncSurveySearch)
-      $('#more_survey').on('click', {type: 'more'}, getSurveyList)
+      $('#more_survey').on('click', () => {
+        current++;
+        getSurveyList()
+      })
     })
   </script>
 </th:block>

@@ -63,8 +63,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Page<Survey> findAll(Pageable pageable) {
-    return surveyRepository.findAll(pageable);
+  public List<SurveyDto> findAll(Pageable pageable) {
+    return surveyRepository.findAllSurveyWithCollector(pageable).parallelStream().map(SurveyDto::new).collect(Collectors.toList());
   }
 
   @Override
@@ -178,21 +178,16 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public long countAllSurvey() {
-    return surveyRepository.count();
+  public long countAllSurvey(String type) {
+    if (type == null || type.equals("ALL") || type.equals("index"))
+      return surveyRepository.countAllSurveyWithCollector();
+    else
+      return surveyRepository.countAllSurveyWithCollectorWithCondition(type);
   }
 
   @Override
   public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
     surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
-  }
-
-  @Override
-  public List<SurveyDto> findAllSurveyWithCollector(Pageable pageable) {
-    List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("BEFORE", 8);
-    list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("ONGOING", 10));
-    Collections.sort(list);
-    return list;
   }
 
   /**

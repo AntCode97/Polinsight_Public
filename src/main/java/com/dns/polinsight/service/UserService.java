@@ -7,6 +7,7 @@ import com.dns.polinsight.types.UserRoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public interface UserService extends UserDetailsService {
 
   void deleteUserById(long userId);
 
-  User findUserByEmail(User user);
+  User findUserByEmail(Email email) throws UsernameNotFoundException;
 
   long countAllUser();
 

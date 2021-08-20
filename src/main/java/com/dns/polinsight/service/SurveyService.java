@@ -15,7 +15,7 @@ public interface SurveyService {
 
   List<Survey> findAll();
 
-  Page<Survey> findAll(Pageable pageable);
+  List<SurveyDto> findAll(Pageable pageable);
 
   Page<Survey> findAll(Pageable pageable, String regex);
 
@@ -36,11 +36,10 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyBySurveyId(long surveyId);
 
-  long countAllSurvey();
+  long countAllSurvey(String type);
 
 
   void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
 
-  List<SurveyDto> findAllSurveyWithCollector(Pageable pageable);
 
 }

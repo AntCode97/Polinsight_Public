@@ -288,6 +288,7 @@
     </style>
   </th:block>
   <div class="modal_wrap">
+
     <div class="modal_contents_box">
       <div class="btn_close"><i class="fas fa-times"></i></div>
 
@@ -299,23 +300,23 @@
             </div>
             <div class="item_content">
               <div class="user_basic_wrap">
-                <div class="user_info_box user_readonly_box">
+                <div id="survey_id" class="user_info_box user_readonly_box">
                   <span class="info_article">설문아이디</span>
                   <p>2</p>
                   <input type="hidden" name="id" readonly>
                 </div>
-                <div class="user_info_box user_readonly_box" style="flex: 8;">
+                <div id="survey_title" class="user_info_box user_readonly_box" style="flex: 8;">
                   <span class="info_article">설문제목</span>
                   <p>2021년 전라남도 청소년 실태조사[대학생]</p>
                   <input type="hidden" name="title" readonly>
                 </div>
               </div>
-              <div class="user_basic_wrap">
+              <div id="survey_point" class="user_basic_wrap">
                 <div class="user_info_box user_point_box">
                   <span class="info_article">포인트</span>
-                  <input type="text" class="user_info_input" name="point" value="300" onkeypress="return checkNumber(event)"></input>
+                  <input type="text" class="user_info_input" name="point" value="300" />
                 </div>
-                <div class="user_info_box user_status_box">
+                <div id="survey_progress" class="user_info_box user_status_box">
                   <span class="info_article">진행상태</span>
                   <select name="progress" class="user_info_input" style="cursor: pointer;">
                     <option name="progress" value="BEFORE">등록</option>
@@ -327,10 +328,10 @@
               <div class="user_basic_wrap">
                 <div class="user_info_box user_regdate_box">
                   <span class="info_article">설문기간</span>
-                  <div class="date_wrap">
-                    <input type="date" name="create" class="user_info_input" style="cursor: pointer;">
+                  <div id="survey_duration" class="date_wrap">
+                    <input type="date" name="create" class="user_info_input" style="cursor: pointer;" />
                     <span> ~ </span>
-                    <input type="date" name="end" class="user_info_input" style="cursor: pointer;">
+                    <input type="date" name="end" class="user_info_input" style="cursor: pointer;" />
                   </div>
                 </div>
               </div>
@@ -339,9 +340,10 @@
                 <span class="err_msg">에러 메세지!!</span>
               </div>
               <div class="user_btn_wrap" style="justify-content: flex-end;">
-                <div class="btn_box">
-                  <button type="button" class="mypage_btn delete_btn"><i class="fas fa-trash-alt" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>삭제</button>
-                  <button type="button" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
+                <div class="btn_box" id="modal_btn">
+                  <button type="button" name="delete" class="mypage_btn delete_btn"><i class="fas fa-trash-alt" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>삭제
+                  </button>
+                  <button type="button" name="update" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
                 </div>
               </div>
             </div>
@@ -373,13 +375,13 @@
         </div>
       </div>
       <div class="survey_sort_wrap">
-        <input type="radio" name="sort_group" id="sort_all">
+        <input value="ALL" type="radio" name="sort_group" id="sort_all">
         <label for="sort_all" class="check_sort">전체</label>
-        <input type="radio" name="sort_group" id="sort_before">
+        <input value="BEFORE" type="radio" name="sort_group" id="sort_before">
         <label for="sort_before">등록</label>
-        <input type="radio" name="sort_group" id="sort_ongoing">
+        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing">
         <label for="sort_ongoing">진행</label>
-        <input type="radio" name="sort_group" id="sort_end">
+        <input value="END" type="radio" name="sort_group" id="sort_end">
         <label for="sort_end">종료</label>
       </div>
       <table class="scroll-table">
@@ -387,13 +389,6 @@
         <tbody></tbody>
       </table>
       <div class="pagination"></div>
-      <!--서베이 정보 팝업-->
-      <div class="info_popup_container">
-        <div class="info_popup">
-          <h1>정보 팝업</h1>
-        </div>
-      </div>
-
     </div>
   </div>
   <script>
@@ -416,8 +411,8 @@
       let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
 
       if (surveyCount === 0) {
-        console.log('length 0');
-        $('.scroll-table').empty().after(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
+        $('.scroll-table').empty()
+        $('.scroll-table').append(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
         $('.pagination').empty();
       } else {
         // if (!regexValue) {
@@ -473,27 +468,28 @@
       template.append(`<th>진행 상태</th>`);
       template.append(`<th>참여자 수</th>`);
       template.append(`<th>설문 아이디</th>`);
-      template.append(`<th>관리</th>`);
+      // template.append(`<th>관리</th>`);
       return template;
     };
 
     const adminMakeSurveySearchResults = surveys => {
+      console.log(surveys)
       const table = $('.scroll-table>tbody');
       table.empty();
       surveys.map(survey => {
-        let template = $(`<tr class="post-row">`).on('click', {survey: survey}, updateBtnClickHandler);
+        let template = $(`<tr class="post-row">`).on('click', {survey: survey}, setDataInModal);
         template.append(`<td>${survey.id}</td>`);// 번호
         template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
         template.append(`<td>${!survey.point ? '지정 안됨' : survey.point}</td>`);// 지급 포인트
         template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
         template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
-        template.append(`<td>${survey.progress}</td>`);// 진행 상태
+        template.append(`<td>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</td>`);// 진행 상태
         template.append(`<td>${survey.count}</td>`);// 참여자 수
         template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        $(`<td></td>`)
-            .append($(`<button class="btn_udel btn-support">수정</button>`).on('click', {survey: survey}, updateBtnClickHandler))
-            .append($(`<span>  </span>`))
-            .append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {survey: survey}, deleteBtnClickHandler))
+        // template.append($(`<td></td>`)
+        //     .append($(`<button class="btn_udel btn-support">수정</button>`).on('click', {survey: survey}, updateBtnClickHandler))
+        //     .append(`<span>  </span>`)
+        //     .append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {survey: survey}, deleteBtnClickHandler)))
         table.append(template)
       })
     };
@@ -506,10 +502,10 @@
           })
           .then(res => {
             if (res.data.success) {
+              surveys.push(...res.data.response)
               getTotalCount(regex);
               makePaginationsInAdminSurvey(offset);
-              surveys.push(...res.data.response)
-              adminMakeSurveySearchResults(surveys);
+              adminMakeSurveySearchResults(res.data.response);
             } else {
               console.log('data fetching error');
             }
@@ -529,16 +525,25 @@
       }
     };
 
-    const setDataInModal = survey => {
+    const setDataInModal = e => {
+      let survey = e.data.survey
+      $('#survey_id').find('p').text(survey.id)
+      $('#survey_title').find('p').text(survey.title)
+      $('#survey_point').find('input').val(!survey.point ? '지정 안됨' : survey.point)
+      $('#survey_progress').find('select').val(survey.progress)
+      $('#survey_duration').find('input[name=create]').val(survey.createdAt)
+      $('#survey_duration').find('input[name=end]').val(survey.endAt)
+      $('#modal_btn').find('button[name=update]').on('click', {survey: survey}, updateBtnClickHandler)
+      $('#modal_btn').find('button[name=delete]').on('click', {survey: survey}, deleteBtnClickHandler)
     }
 
     /* 수정 버튼 클릭 */
     const updateBtnClickHandler = e => {
       let survey = e.data.survey
-      setDataInModal(survey)
       http.put('/api/survey', survey)
           .then(res => {
             if (res.data.success) {
+              alert('설문 업데이트 성공')
               location.replace('/admin/surveylist')
             }
           })
@@ -548,16 +553,17 @@
     const deleteBtnClickHandler = e => {
       /* 팝업 띄우고 확인 누르면 삭제 */
       let survey = e.data.survey
-      http.delete('/api/survey')
+      http.delete('/api/survey', survey)
           .then(res => {
             if (res.data.success) {
+              alert('설문 삭제 성공')
               location.replace('/admin/surveylist')
             }
           })
           .catch(console.log)
     }
 
-    const surveys = []
+    let surveys = []
 
     $(function () {
       $('.scroll-table>thead').append(surveyListHeader());
@@ -569,17 +575,29 @@
 
       $('input[name=admin_find]').on('keyup', _.throttle(adminGetAllSurveys, 300));
 
-      $('input:radio[name=sort_group]').on('click', function () {
-        // 필터
+      // todo 타입 필터
+      $('input[name=sort_group]').on('click', function () {
         let filterValue = $(this).val()
-        if (filterValue !== 'ALL') {
-          tmpSurvey = surveys.filter(survey => survey.progress === filterValue)
-          $('.util-search>strong').text(tmpSurvey.length)
-          adminMakeSurveySearchResults(tmpSurvey)  // 렌더
-        } else {
-          $('.util-search>strong').text(surveys.length)
-          adminMakeSurveySearchResults(surveys)  // 렌더
-        }
+        $(this).each(function () {
+          if ($(this).val() === filterValue) {
+            $(this).addClass('check_sort')
+          } else {
+            $(this).removeClass('check_sort')
+          }
+        })
+
+        http.get('/api/surveys?type=' + filterValue)
+            .then(res => {
+                  if (res.data.success) {
+                    http.get('/api/survey/total?type=' + filterValue)
+                        .then(res => $('.util-search>strong').text(res.data.response))
+                        .catch(console.log);
+                    makePaginationsInAdminSurvey(0);
+                    adminMakeSurveySearchResults(res.data.response);
+                  }
+                }
+            )
+
       })
     });
 
