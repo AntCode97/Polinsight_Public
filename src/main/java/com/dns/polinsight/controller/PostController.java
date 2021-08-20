@@ -341,6 +341,7 @@ public class PostController {
       postDTO.setId(postId);
       postDTO.setRegisteredAt(LocalDateTime.now());
       postDTO.transViewcontent();
+      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
       List<MultipartFile> mFiles = postDTO.getFiles();
       if (mFiles != null) {
         for (MultipartFile m : file) {
@@ -386,7 +387,9 @@ public class PostController {
     postDTO.setUser(admin);
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());
+    postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
+    //TODO: 조회수 항목도 가져오기
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
       for (MultipartFile m : file) {

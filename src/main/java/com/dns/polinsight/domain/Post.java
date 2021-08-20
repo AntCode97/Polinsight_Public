@@ -71,7 +71,7 @@ public class Post implements Serializable {
         .registeredAt(postDTO.getRegisteredAt())
         .postType(postDTO.getPostType())
         .attaches(postDTO.getAttaches())
-        .viewcnt(0L);
+        .viewcnt(postDTO.getViewcnt());
   }
 
 
