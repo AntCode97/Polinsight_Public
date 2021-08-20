@@ -146,6 +146,7 @@
     }
 
     .delete_btn {
+      cursor : pointer;
       background-color : tomato;
     }
 
@@ -282,8 +283,9 @@
                         <span>
                           <a th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                         </span>
-                        <span>
-                          <a th:href="@{/admin/posts/{id}/delete (id=${post.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>
+                        <span class="board_btn delete_btn" th:value="${post.id}" >
+                          <i class="far fa-trash-alt"></i>삭제
+<!--                          <a th:href="@{/admin/posts/{id}/delete (id=${post.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>-->
                         </span>
                       </div>
                     </th:block>
@@ -296,6 +298,7 @@
       </div>
     </section>
   </div>
+  <div th:replace="fragments/post_delete_popup">
   <script type="text/javascript">
     $(function () {
       let file_item2 = document.getElementsByClassName('file_item2');

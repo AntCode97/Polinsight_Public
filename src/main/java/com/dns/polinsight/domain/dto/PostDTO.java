@@ -42,6 +42,7 @@ public class PostDTO {
 
   private List<MultipartFile> files;
 
+  private Long viewcnt=0L;
 
   public void transViewcontent() {
     this.viewcontent = this.content.replaceAll("\r\n", "<br>").replaceAll(" ", "&nbsp;");

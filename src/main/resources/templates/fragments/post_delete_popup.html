@@ -57,11 +57,11 @@
       margin-right : 25px;
     }
 
-    .delete_post {
-      font-size  : 1.3rem;
-      text-align : center !important;
-      width      : 100% !important;
-    }
+    /*.delete_post {*/
+    /*  font-size  : 1.3rem;*/
+    /*  text-align : center !important;*/
+    /*  width      : 100% !important;*/
+    /*}*/
   </style>
 </th:block>
 <th:block>
@@ -86,9 +86,9 @@
     // 팝업 관련 설정
     let postId;
     let deleteBtn;
-    $(".delete-btn").on('click', (e) => {
-      deleteBtn = e.target;
-      postId = e.target.value;
+    $(".delete_btn").on('click', (e) => {
+      deleteBtn = e.currentTarget;
+      postId = $(deleteBtn).attr('value');
       $(".popup_overlay").fadeIn(100)
     })
 
@@ -97,9 +97,9 @@
       $('.popup_overlay').fadeOut(100)
     })
     $(".popup_delete_btn").on('click', (e) => {
-      console.log(postId);
+      //console.log(postId);
       const parentDiv = deleteBtn.parentNode.parentNode.parentNode;
-      console.log(parentDiv)
+      //console.log(parentDiv)
       $.ajax({
         url: '/admin/posts/' + postId + '/delete',
         type: 'GET'

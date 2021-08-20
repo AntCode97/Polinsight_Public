@@ -56,7 +56,7 @@ public class PostController {
 
 
   @GetMapping("admin/posts")
-  public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap) {
+  public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
 
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
@@ -64,10 +64,17 @@ public class PostController {
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
         posts = postService.searchKeyword(keyword, pageable);
+
+        long postCount = posts.getTotalElements();
+        model.addAttribute("postCount", postCount);
+        session.setAttribute("postCount", postCount);
         model.addAttribute("posts", posts);
       }
     } else {
       posts = postService.getPostList(pageable);
+      long postCount = posts.getTotalElements();
+      model.addAttribute("postCount", postCount);
+      session.setAttribute("postCount", postCount);
       model.addAttribute("posts", posts);
     }
 
@@ -116,7 +123,7 @@ public class PostController {
 
   @GetMapping("admin/posts/search")
   public String adminsearch(@PageableDefault Pageable pageable, @RequestParam Map<String, Object> paramMap,
-                            Model model) {
+                            Model model, HttpSession session) {
 
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
@@ -127,7 +134,10 @@ public class PostController {
     } else {
       posts = postService.getPostList(pageable);
     }
+    long postCount = posts.getTotalElements();
 
+    model.addAttribute("postCount", postCount);
+    session.setAttribute("postCount", postCount);
     model.addAttribute("posts", posts);
 
 
@@ -224,24 +234,23 @@ public class PostController {
     //    if (user != null) {
     //      model.addAttribute("user", user);
     //    }
-    Post findPost = postService.findOne(postId);
+
     try {
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" +postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        log.info("Post View COUNT");
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
-      } else
-        System.out.println("하루가 지나야 조회수가 오름");
+        log.info("Post View COUNT UP");
+        postService.upViewCnt(postId);
+        session.setAttribute("update_time" + postId, current_time);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-
+    Post findPost = postService.findOne(postId);
 
     model.addAttribute("post", findPost);
     List<Post> allPosts = postService.findAll();
@@ -272,28 +281,26 @@ public class PostController {
     //      model.addAttribute("user", user);
     //    }
     model.addAttribute("user", user);
-    Post findPost = postService.findOne(postId);
+
+
     try {
-      System.out.println(session);
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" + postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        System.out.println("조회수 증가!!");
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
-      } else
-        System.out.println("하루가 지나야 조회수가 오름");
+        postService.upViewCnt(postId);
+        log.info("Post View COUNT UP");
+        session.setAttribute("update_time" + postId, current_time);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-
+    Post findPost = postService.findOne(postId);
     model.addAttribute("post", findPost);
-
 
     return "admin/admin_post_view";
   }
@@ -334,6 +341,7 @@ public class PostController {
       postDTO.setId(postId);
       postDTO.setRegisteredAt(LocalDateTime.now());
       postDTO.transViewcontent();
+      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
       List<MultipartFile> mFiles = postDTO.getFiles();
       if (mFiles != null) {
         for (MultipartFile m : file) {
@@ -379,7 +387,9 @@ public class PostController {
     postDTO.setUser(admin);
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());
+    postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
+    //TODO: 조회수 항목도 가져오기
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
       for (MultipartFile m : file) {
@@ -446,18 +456,32 @@ public class PostController {
   }
 
   @PostMapping("/api/admin/posts/search")
-  public String asyncAdminPostSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable, Model model) {
+  public String asyncAdminPostSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable, Model model, HttpSession session) {
 
 
     String keyword = paramMap.get("keyword").toString();
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
     Page<Post> posts = postService.searchKeyword(keyword, pageable);
-
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
+    session.setAttribute("postCount", posts.getTotalElements());
+    model.addAttribute("postCount", posts.getTotalElements());
+    return "fragments/postList :: #boardTable";
+  }
+  @PostMapping("/api/admin/posts/search/count")
+  public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
+    System.out.println(keyword);
+    model.addAttribute("keyword", keyword);
+//    String keyword = paramMap.get("keyword").toString();
+//    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
+//    Page<Post> posts = postService.searchKeyword(keyword, pageable);
+//    model.addAttribute("keyword", keyword);
+//    model.addAttribute("posts", posts);
+//    session.setAttribute("postCount", posts.getTotalElements());
+    model.addAttribute("postCount", session.getAttribute("postCount"));
 
-    return "fragments/postList";
+    return "fragments/postList :: #postCount";
   }
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
