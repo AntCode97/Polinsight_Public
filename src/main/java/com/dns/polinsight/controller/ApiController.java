@@ -132,11 +132,15 @@ public class ApiController {
                                                                 @RequestParam(value = "type", required = false) String type) throws Exception {
     try {
       List<Survey> surveyList = null;
-      if (type != null && type.equals("index")) {
+      if (type == null) {
+        surveyList = surveyService.findAll(pageable).getContent();
+      } else {
         surveyList = surveyService.findAll(pageable).getContent();
       }
-      if (surveyList == null)
-        surveyList = surveyService.findAll(pageable).getContent();
+      //      else {
+      //        // type is more
+      //
+      //      }
 
       return success(surveyList.parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
