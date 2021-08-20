@@ -19,4 +19,6 @@ public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSu
 
   Optional<ParticipateSurvey> findParticipateSurveyByHash(String hash);
 
+  List<ParticipateSurvey> findAllByUserId(Long userId);
+
 }

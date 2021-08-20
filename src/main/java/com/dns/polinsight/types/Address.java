@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address implements Serializable {
+public class Address {
 
   private String state;
 

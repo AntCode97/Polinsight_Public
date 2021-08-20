@@ -25,11 +25,12 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-    request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
-    response.setStatus(HttpStatus.OK.value());
     String[] emails = authentication.getName().split("@");
+    request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
     request.getSession().setAttribute("user", new SessionUser(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get()));
+
     response.sendRedirect("/");
+    response.setStatus(HttpStatus.OK.value());
   }
 
 

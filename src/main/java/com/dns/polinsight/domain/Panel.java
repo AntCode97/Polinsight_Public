@@ -4,6 +4,8 @@ import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.GenderType;
 import com.dns.polinsight.types.convereter.AddressAttrConverter;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,9 +22,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Panel implements Serializable {
 
-  private static final long serialVersionUID = 4323740522466099195L;
 
-  @ElementCollection
+  @Fetch(FetchMode.SELECT)
+  @ElementCollection(fetch = FetchType.EAGER)
   private final List<String> favorite = new ArrayList<>();
 
   @Enumerated(EnumType.STRING)

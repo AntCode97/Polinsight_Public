@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,9 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @Table(name = "participate_survey")
-public class ParticipateSurvey implements Serializable {
+public class ParticipateSurvey {
 
-  private static final long serialVersionUID = 2771063029297680262L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

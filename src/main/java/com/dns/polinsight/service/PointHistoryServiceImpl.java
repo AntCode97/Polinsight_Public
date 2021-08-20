@@ -42,4 +42,14 @@ public class PointHistoryServiceImpl implements PointHistoryService {
     return pointHistoryRepository.findPointHistoriesByUserId(userId, pageable);
   }
 
+  @Override
+  public List<PointHistory> findAllPointHistoryByUserId(long userId) {
+    return pointHistoryRepository.findAllByUserId(userId);
+  }
+
+  @Override
+  public List<PointHistory> findAll() {
+    return pointHistoryRepository.findAll();
+  }
+
 }

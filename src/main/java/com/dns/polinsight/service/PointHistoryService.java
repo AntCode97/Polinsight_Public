@@ -18,4 +18,8 @@ public interface PointHistoryService {
 
   List<PointHistory> findAllPointHistoryByUserId(long userId, Pageable pageable);
 
+  List<PointHistory> findAllPointHistoryByUserId(long userId);
+
+  List<PointHistory> findAll();
+
 }

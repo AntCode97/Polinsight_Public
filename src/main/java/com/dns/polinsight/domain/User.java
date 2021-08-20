@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,9 +30,8 @@ import java.util.*;
 @ToString
 @DynamicUpdate
 @DynamicInsert
-public class User implements UserDetails, Serializable {
+public class User implements UserDetails {
 
-  private static final long serialVersionUID = 7723866521224716971L;
 
   @Builder.Default
   @OneToMany(targetEntity = ParticipateSurvey.class, cascade = CascadeType.REMOVE, mappedBy = "user")
@@ -92,13 +90,12 @@ public class User implements UserDetails, Serializable {
     this.id = dto.getId();
     this.point = dto.getPoint();
     this.name = dto.getName();
-    this.email = dto.getEmail();
-    this.phone = dto.getPhone();
+    this.email = Email.of(dto.getEmail());
+    this.phone = Phone.of(dto.getPhone());
     this.isSmsReceive = dto.getIsSmsReceive();
     this.isEmailReceive = dto.getIsEmailReceive();
-    this.recommend = dto.getRecommend();
+    this.recommend = Phone.of(dto.getRecommend());
     this.participateSurvey = new HashSet<>();
-    //    this.registeredAt = dto.getRegisteredAt();
   }
 
 

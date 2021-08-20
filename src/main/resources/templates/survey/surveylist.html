@@ -84,6 +84,7 @@
     <div class="main_survey_box">
     </div>
   </div>
+  <p id="more_survey" style="width: 50px; height: 50px; border: 1px solid black; cursor: pointer"><i class="fas fa-plus" style="color: pink"></i></p>
   <div class="modal_container">
     <div class="modal_wrap">
       <div class="modal_content">
@@ -142,6 +143,7 @@
         count++;
       })
 
+      // 마지막 라인 지우기
       $('.main_survey_item_wrap').each(function () {
         if ($(this).find('.main_survey_item').length < 3) {
           $(this).remove()
@@ -149,15 +151,33 @@
       })
     }
 
-    const getSurveyList = () => {
-      http
-          .get('/api/surveys?type=index')
-          .then(res => {
-            if (res.data.success) {
-              makeSurveyCardList(res.data.response)
-            }
-          })
-          .catch(console.log)
+    const getSurveyList = e => {
+      let type = !!e ? e.data.type : 'index'
+      if (type === 'more') {
+        current++;
+        console.log(current)
+        // TODO 쿼리 변경 필요
+        http
+            .get('/api/surveys?type=' + type, {page: current, size: 10})
+            .then(res => {
+              console.log(res)
+              if (res.data.success) {
+
+              }
+            })
+      } else {
+        http
+            .get('/api/surveys?type=' + type, {
+              page: current,
+              size: 10
+            })
+            .then(res => {
+              if (res.data.success) {
+                makeSurveyCardList(res.data.response)
+              }
+            })
+            .catch(console.log)
+      }
     }
 
 
@@ -203,22 +223,23 @@
     const surveyCardClickEventHandler = (e) => {
       e.preventDefault()
       e.returnValue = false;
-      if (!loginChk(e.data.seq)) return
 
       const seq = e.data.seq
       const surveyId = e.data.surveyid
       const title = e.data.title
+      // FIXME
+      if (!loginChk(seq)) return
+
 
       $('.modal_container').css('display', 'flex')
 
       $('p.notice').append(`<span class="modal_title">${title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
-      // 참여하기 버튼 이벤트 등록
+
       $('.participate_btn').on('click', () => {
         http.get(`/api/survey/${surveyId}`)
             .then(res => {
               if (res.data.success) {
-                // window.open(res.data.response);
-                location.replace(res.data.response) // 참여 url로 리다이렉트
+                location.replace(res.data.response)
               } else {
                 alert('에러 발생')
                 console.log(res)
@@ -230,10 +251,12 @@
         $('.modal_container').fadeOut()
       })
     }
-
+    let current = 0;
+    const surveys = []
     $(function () {
       getSurveyList();
       $('input[name=searchInput]').on('keyup', asyncSurveySearch)
+      $('#more_survey').on('click', {type: 'more'}, getSurveyList)
     })
   </script>
 </th:block>

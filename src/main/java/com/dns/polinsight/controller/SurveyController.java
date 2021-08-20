@@ -16,7 +16,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +33,14 @@ public class SurveyController {
 
   private final ParticipateSurveyService participateSurveyService;
 
-  @GetMapping("/surveys")
-  public ModelAndView getSurveyById(HttpServletRequest request) {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("");
-    mv.addObject("survey", surveyService.findById(Long.parseLong(request.getParameter("surveyId"))));
-    return mv;
-  }
+  //  @Deprecated
+  //  @GetMapping("/surveys")
+  //  public ModelAndView getSurveyById(HttpServletRequest request) {
+  //    ModelAndView mv = new ModelAndView();
+  //    mv.setViewName("");
+  //    mv.addObject("survey", surveyService.findById(Long.parseLong(request.getParameter("surveyId"))));
+  //    return mv;
+  //  }
 
   /*
    * 서베이 몽키로 리다이렉팅
