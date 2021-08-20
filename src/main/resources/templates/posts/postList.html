@@ -188,12 +188,12 @@
           <span th:text="${post.user.name}"></span>
           <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
           <span th:text="${post.viewcnt}">52</span>
-          <span><i class="fas fa-paperclip file_icon_no"></i></span>
+<!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
           <!--          파일 유무에 따른 디자인 변경(색상)-->
-          <!--          <span>-->
-          <!--              <i th:if="${list.filecnt == 0}" class="fas fa-paperclip file_icon_no"></i>-->
-          <!--              <i th:unless="${list.filecnt == 0}" class="fas fa-paperclip file_icon_yes"></i>-->
-          <!--          </span>-->
+                    <span>
+                        <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
+                        <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
+                    </span>
         </div>
       </div>
 
