@@ -150,10 +150,110 @@
       height     : 80px;
       transition : all .3s ease;
     }
+    .navbar-toggle {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 22px;
+      color: white;
+      display: none;
+      cursor: pointer;
+    }
+    .header_container_right_wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-text-window {
+      position: fixed;
+      top: 0;
+      width: calc(100% - 20px);
+      margin: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      background-color: white;
+      z-index: 20000;
+      padding: 20px;
+      display: none;
+      box-shadow: 0 50px 100px rgb(50 50 93 / 10%), 0 15px 35px rgb(50 50 93 / 15%), 0 5px 15px rgb(0 0 0 / 10%);
+    }
+    .nav-window-header {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      padding-bottom: 1.1rem;
+      margin-bottom: 1.1rem;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+    }
+    .nav-window-logo {
+      width: 80px;
+    }
+    .nav-window-close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: rgba(0,0,0, .8);
+    }
+    .nav-window-close-btn > i {font-weight: 200;}
+    .navbar-hr { border: none; border-top: 1px solid rgba(0,0,0,.1); margin: 2rem 0;}
+    .navbar-nav {
+      display: flex;
+      flex-direction: column;
+      padding-left: 0;
+      margin-bottom: 0;
+      list-style: none;
+    }
+    .nav-link {
+      display: block;
+      padding: .8rem 0;
+      color: #172b4d!important;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+    .nav-link:hover {
+      color: #3885CA!important;
+      font-weight: bold;
+    }
+    .nav-link > i {margin-right: 4px;}
+
+
+
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      .header_box {width: 100%; padding: 0 20px; min-width: 320px;}
+      .header_logo img {width: 110px;}
+      .header_container_right_wrap {display: none;}
+      .navbar-toggle {display: block;}
+      .header_wrap {height: 50px; background: rgb(25, 39, 57)!important;}
+    }
 
   </style>
 </head>
 <body>
+<!-- 반응형 웹: 햄버거 버튼 클릭시 Window-->
+<div class="nav-text-window">
+  <div class="nav-window-header">
+    <div>
+      <a th:href="@{/}">
+        <img src="/img/logo/logo.png" class="nav-window-logo">
+      </a>
+    </div>
+    <div class="nav-window-close-btn"><i class="fas fa-times"></i></div>
+  </div>
+  <ul class="navbar-nav">
+    <li class="nav-item"><a th:href="@{/}" class="nav-link">Company</a></li>
+    <li class="nav-item"><a th:href="@{/}" class="nav-link">Business</a></li>
+    <li class="nav-item"><a th:href="@{/}" class="nav-link">Research</a></li>
+    <li class="nav-item"><a th:href="@{/posts}" class="nav-link">Customer</a></li>
+  </ul>
+  <hr class="navbar-hr">
+  <ul class="navbar-nav">
+    <li class="nav-item"><a th:href="@{/login}" class="nav-link"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
+    <li class="nav-item"><a th:href="@{/signup}" class="nav-link"><i class="fas fa-user"></i> JOIN</a></li>
+  </ul>
+</div>
+
+
+
+
 <button class="top-btn btn-circle">
   <i class="fas fa-arrow-up"></i>
   <span>TOP</span>
@@ -167,72 +267,75 @@
         </a>
       </div>
     </div>
-    <div class="header_container_navi">
-      <ul class="navi_box">
-        <li>
-          <a href="/">Company</a>
-          <div class="dropdown" style="left: 0px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">인사말</a>
-              <a class="dropdown_element" th:href="@{/}">오시는길</a>
+    <button class="navbar-toggle"><i class="fas fa-bars"></i></button>
+    <div class="header_container_right_wrap">
+      <div class="header_container_navi">
+        <ul class="navi_box">
+          <li>
+            <a href="/">Company</a>
+            <div class="dropdown" style="left: 0px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/}">인사말</a>
+                <a class="dropdown_element" th:href="@{/}">오시는길</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/posts}">Business</a>
-          <div class="dropdown" style="left: 160.5px;">
-            <div class="dropdown_box">
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
+            <a th:href="@{/posts}">Business</a>
+            <div class="dropdown" style="left: 160.5px;">
+              <div class="dropdown_box">
 
-              <a class="dropdown_element" th:href="@{/}">분야별영역</a>
-              <a class="dropdown_element" th:href="@{/}">주요실적</a>
+                <a class="dropdown_element" th:href="@{/}">분야별영역</a>
+                <a class="dropdown_element" th:href="@{/}">주요실적</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
 
-          <a th:href="@{/}">Research</a>
-          <div class="dropdown" style="left: 314.5px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/}">온라인조사</a>
-              <a class="dropdown_element" th:href="@{/}">폴'S인사이트</a>
+            <a th:href="@{/}">Research</a>
+            <div class="dropdown" style="left: 314.5px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/}">온라인조사</a>
+                <a class="dropdown_element" th:href="@{/}">폴'S인사이트</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/}">Customer</a>
-          <div class="dropdown" style="right: 0px;">
-            <div class="dropdown_box">
-              <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
-              <a class="dropdown_element" th:href="@{/events}">이벤트</a>
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
+            <a th:href="@{/}">Customer</a>
+            <div class="dropdown" style="right: 0px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
+                <a class="dropdown_element" th:href="@{/events}">이벤트</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
 
-    <div class="header_container_login">
-      <th:block th:if="${session.user} == null">
-        <!-- 비로그인 -->
-        <a th:href="@{/login}">LOGIN</a>
-        <span></span>
-        <a th:href="@{/signup}">JOIN</a>
-      </th:block>
-      <th:block th:unless="${session.user} == null">
-        <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
-          <a th:href="@{/mypage}">MY PAGE</a>
+      <div class="header_container_login">
+        <th:block th:if="${session.user} == null">
+          <!-- 비로그인 -->
+          <a th:href="@{/login}">LOGIN</a>
+          <span></span>
+          <a th:href="@{/signup}">JOIN</a>
         </th:block>
-        <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
-          <a th:href="@{/admin}">ADMIN</a>
+        <th:block th:unless="${session.user} == null">
+          <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
+            <a th:href="@{/mypage}">MY PAGE</a>
+          </th:block>
+          <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
+            <a th:href="@{/admin}">ADMIN</a>
+          </th:block>
+          <span></span>
+          <a th:href="@{/dologout}">LOGOUT</a>
         </th:block>
-        <span></span>
-        <a th:href="@{/dologout}">LOGOUT</a>
-      </th:block>
+      </div>
     </div>
   </div>
 </div>
@@ -264,8 +367,15 @@
       }
     });
 
-    $('.top-btn').click(function () {
+    $('.top-btn').click(function() {
       $('html, body').animate({scrollTop: 0}, 800);
+    });
+
+    $('.nav-window-close-btn').click(function() {
+      $('.nav-text-window').css('display', 'none');
+    })
+    $('.navbar-toggle').click(function() {
+      $('.nav-text-window').css('display', 'block');
     });
   });
 

@@ -21,7 +21,7 @@
       border-radius    : 2px;
       margin           : 0 auto;
       overflow         : hidden;
-      width            : 50%;
+      width            : 450px;
     }
 
     .login_close > button:hover {
@@ -43,13 +43,12 @@
     }
 
     .login_logo_text {
-      min-width : 320px;
-      width: 22rem;
+      width: 320px;
     }
 
     .login_content {
       margin     : 0 auto;
-      min-width  : 380px;
+      min-width  : 320px;
       text-align : center;
       width      : 25rem;
     }
@@ -154,6 +153,7 @@
     .login_btn_wrap > button {
       font-weight : bold;
       width       : 100%;
+      min-width: 320px;
     }
 
     .sns_btn_wrap a {
@@ -226,12 +226,17 @@
     .auto_login {display: none;}
 
     @media (min-width : 320px) and (max-width : 480px) {
+      .modal_wrap {
+        height: 100%;
+        margin-top: 50px;
+      }
       .modal_content {
-        width : 95%;
+        width : calc(100% - 20px);
+        margin: 0 10px;
       }
 
       .login_logo_text {
-        width : 100%;
+        display: none;
       }
 
       .login_content {
@@ -243,7 +248,7 @@
       }
 
       .modal_login {
-        min-width : 20rem;
+        min-width : 320px;
       }
     }
   </style>

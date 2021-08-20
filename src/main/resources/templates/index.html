@@ -173,7 +173,19 @@
     .bg_color_item_gray {
       background-color : #DEDEDE;
     }
+
+
+
+
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      .carasel_wrap {display: none;}
+      .panel_wrap {margin: 50px auto 0;}
+
+    }
   </style>
+
+
   <div class="carasel_wrap"></div>
   <th:block th:if="${session.user==null}">
     <div class="panel_wrap">
