@@ -234,23 +234,23 @@ public class PostController {
     //    if (user != null) {
     //      model.addAttribute("user", user);
     //    }
-    Post findPost = postService.findOne(postId);
+
     try {
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" +postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        log.info("Post View COUNT");
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
+        log.info("Post View COUNT UP");
+        postService.upViewCnt(postId);
+        session.setAttribute("update_time" + postId, current_time);
       }
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-
+    Post findPost = postService.findOne(postId);
 
     model.addAttribute("post", findPost);
     List<Post> allPosts = postService.findAll();
@@ -266,7 +266,7 @@ public class PostController {
       }
     }
 
-    return "redirect:posts/post";
+    return "posts/post";
   }
 
   @GetMapping("admin/posts/{postId}")
@@ -281,27 +281,26 @@ public class PostController {
     //      model.addAttribute("user", user);
     //    }
     model.addAttribute("user", user);
-    Post findPost = postService.findOne(postId);
+
+
     try {
-      System.out.println(session);
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" + postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
+        postService.upViewCnt(postId);
+        log.info("Post View COUNT UP");
+        session.setAttribute("update_time" + postId, current_time);
       }
-
 
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-
+    Post findPost = postService.findOne(postId);
     model.addAttribute("post", findPost);
-
 
     return "admin/admin_post_view";
   }
