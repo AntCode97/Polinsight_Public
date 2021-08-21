@@ -78,7 +78,7 @@ public class PageController {
 
   @GetMapping("/basictopanel")
   public ModelAndView changeBasicToPanel(@LoginUser SessionUser sessionUser, HttpSession session) {
-//    session.invalidate();
+    //    session.invalidate();
     session.setAttribute("basic_user", sessionUser);
     return new ModelAndView("redirect:/panel");
   }
@@ -88,5 +88,19 @@ public class PageController {
     return new ModelAndView("member/find");
   }
 
+  @GetMapping("/events")
+  public ModelAndView events() {
+    return new ModelAndView("posts/events");
+  }
+
+  @GetMapping("/qna")
+  public ModelAndView qna() {
+    return new ModelAndView("posts/qna");
+  }
+
+  @GetMapping("/faq")
+  public ModelAndView faq() {
+    return new ModelAndView("posts/faq");
+  }
 
 }

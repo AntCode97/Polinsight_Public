@@ -20,6 +20,7 @@ public interface PostService {
 
   Post addPost(PostDTO postDTO);
 
+  Page<Post> findPostsByType(PostType type, Pageable pageable);
 
   Page<Post> getPostList(Pageable pageable);
 

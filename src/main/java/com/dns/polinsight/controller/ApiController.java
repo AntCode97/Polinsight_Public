@@ -18,6 +18,7 @@ import com.dns.polinsight.utils.ExcelUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.scheduling.annotation.Async;
@@ -31,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -54,8 +56,6 @@ public class ApiController {
   private final PointRequestService pointRequestService;
 
   private final PostService postService;
-
-  private final CollectorService collectorService;
 
   private final PointHistoryService pointHistoryService;
 
@@ -437,6 +437,23 @@ public class ApiController {
       return success(pointHistoryService.findAllPointHistoryByUserId(userId, pageable));
     } catch (Exception e) {
       e.printStackTrace();
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("posts")
+  public ApiUtils.ApiResult<Page<Post>> fidnPostByTypes(@RequestParam(value = "type") String type,
+                                                        @PageableDefault Pageable pageable) throws Exception {
+
+    try {
+      Page<Post> pp = postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable);
+      log.warn("Total Element: " + pp.getTotalElements());
+      log.warn("Total Page: " + pp.getTotalPages());
+      log.warn("Size: " + pp.getSize());
+      log.warn("Number: " + pp.getNumber());
+      log.warn("Number of Elements: " + pp.getNumberOfElements());
+      return success(pp);
+    } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }

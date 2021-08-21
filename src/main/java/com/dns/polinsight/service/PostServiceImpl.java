@@ -47,6 +47,11 @@ public class PostServiceImpl implements PostService {
     return repository.save(Post.builder(postDTO).build());
   }
 
+  @Override
+  public Page<Post> findPostsByType(PostType type, Pageable pageable) {
+    return repository.findPostsByPostType(pageable, type);
+  }
+
 
   @Override
   public void delete(Post post) {
@@ -91,7 +96,7 @@ public class PostServiceImpl implements PostService {
   public void upViewCnt(Long postId) {
     //post.setViewcnt(post.getViewcnt() +1);
     repository.upViewCnt(postId);
-    return ;
+    return;
   }
 
 }

@@ -1,0 +1,30 @@
+<th:block>
+  <div class="main_item">
+    <p>Event</p>
+  </div>
+  <div class="main_contents_wrap">
+    <div class="post-search">
+      <div class="util-search">총 <strong></strong>개의 게시물이 있습니다.</div>
+    </div>
+    <div class="scroll-table">
+      <div class="post-row post-th">
+        <span>번호</span>
+        <a href="#">제목</a>
+        <span>작성자</span>
+        <span>작성일</span>
+        <span>조회수</span>
+        <span>첨부파일</span>
+      </div>
+    </div>
+    <div id="pagination"></div>
+  </div>
+  <script>
+
+    const init = () => {
+      getPostsByType('events')
+    }
+    $(function () {
+      init();
+    })
+  </script>
+</th:block>

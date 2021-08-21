@@ -81,5 +81,17 @@
         return {first: phone.substring(0, 3), second: phone.substring(3, 7), third: phone.substring(7)}
       }
     }
+
+    const getPostsByType = type => {
+      type = type.toUpperCase()
+      http
+          .get('/api/posts?type=' + type)
+          .then(res => {
+            if (res.data.success) {
+              return res.data.response;
+            }
+          })
+    }
+
   </script>
 </div>

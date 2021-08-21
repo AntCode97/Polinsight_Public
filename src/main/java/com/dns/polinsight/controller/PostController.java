@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -237,7 +238,7 @@ public class PostController {
 
     try {
       long update_time = 0;
-      if (session.getAttribute("update_time" +postId) != null) {
+      if (session.getAttribute("update_time" + postId) != null) {
         update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
@@ -468,17 +469,18 @@ public class PostController {
     model.addAttribute("postCount", posts.getTotalElements());
     return "fragments/postList :: #boardTable";
   }
+
   @PostMapping("/api/admin/posts/search/count")
   public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
     System.out.println(keyword);
     model.addAttribute("keyword", keyword);
-//    String keyword = paramMap.get("keyword").toString();
-//    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-//    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-//    model.addAttribute("keyword", keyword);
-//    model.addAttribute("posts", posts);
-//    session.setAttribute("postCount", posts.getTotalElements());
+    //    String keyword = paramMap.get("keyword").toString();
+    //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
+    //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
+    //    model.addAttribute("keyword", keyword);
+    //    model.addAttribute("posts", posts);
+    //    session.setAttribute("postCount", posts.getTotalElements());
     model.addAttribute("postCount", session.getAttribute("postCount"));
 
     return "fragments/postList :: #postCount";
@@ -513,5 +515,6 @@ public class PostController {
     attachService.delete(attachService.findByname(filename).get(0));
     return new ResponseEntity(HttpStatus.OK);
   }
+
 
 }
