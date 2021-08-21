@@ -7,11 +7,11 @@ import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
-import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
@@ -79,18 +79,11 @@ public class UserController {
 
   @PostMapping("/moreinfo")
   @Transactional
-  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel additional, HttpSession session) {
-    session.invalidate();
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel panel, HttpSession session) {
     SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
-    sessionUser = SessionUser.builder()
-                             .email(sessionUser.getEmail())
-                             .role(UserRoleType.PANEL)
-                             .name(sessionUser.getName())
-                             .point(sessionUser.getPoint())
-                             .build();
     session.invalidate();
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-    user.getPanel().update(additional);
+    User user = userService.findUserByEmail(sessionUser.getEmail());
+    user.setPanel(panel);
     userService.saveOrUpdate(user);
     return success(Boolean.TRUE);
   }
@@ -131,7 +124,7 @@ public class UserController {
   public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/mypage");
-    mv.addObject("user", new UserDto(userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build())));
+    mv.addObject("user", new UserDto(userService.findUserByEmail(sessionUser.getEmail())));
     return mv;
   }
 
@@ -140,7 +133,7 @@ public class UserController {
     Map<String, Object> map = new HashMap<>();
     try {
       String password = passwordEncoder.encode(user.getPassword());
-      user = userService.findUserByEmail(user);
+      user = userService.findUserByEmail(user.getEmail());
       user.setPassword(password);
       userService.saveOrUpdate(user);
       map.put("data", "user info has updated");
@@ -173,13 +166,13 @@ public class UserController {
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
     session.invalidate();
-    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+    User user = userService.findUserByEmail(sessionUser.getEmail());
     user.setPassword(passwordEncoder.encode(newPassword));
     userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
     return new ModelAndView("redirect:/index");
   }
 
-  @GetMapping("/chpwd/{hash}/{name}/{email}")
+  @GetMapping("/change/{hash}/{name}/{email}")
   public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
                                      @PathVariable(name = "email") Email email,
                                      @PathVariable(name = "name") String name,
@@ -193,7 +186,7 @@ public class UserController {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
         throw new IllegalAccessException();
       }
-      session.setAttribute("user", new SessionUser(userService.findUserByEmail(User.builder().email(email).build())));
+      session.setAttribute("user", new SessionUser(userService.findUserByEmail(email)));
     } catch (Exception e) {
       e.printStackTrace();
       session.invalidate();
@@ -212,7 +205,7 @@ public class UserController {
      * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
      * */
     try {
-      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      User user = userService.findUserByEmail(sessionUser.getEmail());
       pointRequestService.addUserPointRequest(user.getId(), point);
       return success(pointRequestService.getUserPointRequests(user.getId()));
     } catch (Exception e) {
@@ -244,7 +237,7 @@ public class UserController {
   @PostMapping("/api/survey/participate")
   public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
     try {
-      User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
+      User user = userService.findUserByEmail(sessionUser.getEmail());
       user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
@@ -292,22 +285,26 @@ public class UserController {
                                                         @RequestParam("type") String type,
                                                         @Value("${custom.hash.passwordsalt}") String salt,
                                                         @Value("${custom.callback.base}") String callbackBase) throws Exception {
+    System.out.println(userDto.toString());
     try {
       if (type.equals("email")) {
         Assert.notNull(userDto.getName());
         Assert.notNull(userDto.getPhone());
         User user = userService.findUserEmailByNameAndPhone(userDto.getName(), Phone.of(userDto.getPhone())).orElseThrow(UserNotFoundException::new);
-        return success(user.getEmail());
+        return success(user.getEmail().toString());
       } else {
         Assert.notNull(userDto.getEmail());
         Assert.notNull(userDto.getName());
-        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail().toString(), userDto.getName()), salt);
+        User user = userService.findUserByEmail(Email.of(userDto.getEmail()));
+        if (!user.getName().equals(userDto.getName()))
+          throw new InvalidValueException("Invalid Value Exception");
+        String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);
         Map<String, Object> variables = new HashMap<>();
         variables.put("date", LocalDateTime.now());
         variables.put("hash", hash);
         variables.put("name", userDto.getName());
         variables.put("email", userDto.getEmail());
-        variables.put("callback", callbackBase + "/chpwd");
+        variables.put("callback", callbackBase + "/change");
         changePasswordService.saveChangePwdDto(ChangePwdDto.builder()
                                                            .hash(hash)
                                                            .email(Email.of(userDto.getEmail()))
@@ -317,6 +314,7 @@ public class UserController {
         return success(Boolean.TRUE);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
   }

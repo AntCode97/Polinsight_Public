@@ -576,6 +576,20 @@
   </div>
   <script type="text/javascript">
 
+    const makeDateFormat = () => {
+      return $('select[name=year]').val() + '-' + $('select[name=month]').val() + '-' + $('select[name=day]').val()
+    }
+
+    const checkRequiredValue = info => {
+      let arr = ['birth', 'gender', 'birthType', 'education', 'marry', 'job', 'industry', 'address', 'favorite']
+
+      for (let key in arr) {
+        if (!info[key] || info[key].includes('선택') || info[key].includes('시도') || info[key].includes('시군구') || info[key].length <= 0) {
+          return false;
+        }
+      }
+      return true;
+    }
 
     $(function () {
       setDateValue()
@@ -598,13 +612,11 @@
         $('input[name=favorite]:checked').each((idx, item) => {
           info['favorite'].push(item.value);
         })
-
         if (checkRequiredValue(info)) {
           // 데이터 전달 후 확인까지
           http.post('/moreinfo', info)
               .then(res => {
-                console.log(res)
-                if (res.data.code === 200) {
+                if (res.data.success) {
                   location.replace("/success_panel")
                 }
               })
@@ -613,6 +625,8 @@
                 alert('가입 중 문제가 발생하였습니다.\n관리자에게 문의해주세요.')
               })
           location.replace("/")
+        } else {
+          alert('필수 입력값을 모두 입력해주세요')
         }
 
       })

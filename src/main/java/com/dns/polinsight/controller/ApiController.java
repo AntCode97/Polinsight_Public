@@ -10,11 +10,9 @@ import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
-import com.dns.polinsight.types.Email;
-import com.dns.polinsight.types.Phone;
-import com.dns.polinsight.types.PointRequestProgressType;
-import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import javassist.NotFoundException;
@@ -26,12 +24,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -60,6 +58,8 @@ public class ApiController {
   private final CollectorService collectorService;
 
   private final PointHistoryService pointHistoryService;
+
+  private final SurveyRepository surveyRepository;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -130,29 +130,31 @@ public class ApiController {
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<List<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                                 @RequestParam(value = "type", required = false) String type) throws Exception {
-    try {
-      List<Survey> surveyList = null;
-      if (type == null) {
-        surveyList = surveyService.findAll(pageable).getContent();
-      } else {
-        surveyList = surveyService.findAll(pageable).getContent();
-      }
-      //      else {
-      //        // type is more
-      //
-      //      }
 
-      return success(surveyList.parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
+    try {
+      if (type == null || type.equals("ALL") || type.equals("index")) {
+        return success(surveyService.findAll(pageable).stream()
+                                    .sorted(Comparator.comparing(SurveyDto::getProgress)
+                                                      .thenComparing(SurveyDto::getEndAt)
+                                                      .thenComparing(SurveyDto::getId))
+                                    .collect(Collectors.toList()));
+      } else {
+        return success(surveyService.findAll(pageable).stream()
+                                    .filter(dto -> dto.getProgress().equals(ProgressType.valueOf(type)))
+                                    .sorted(Comparator.comparing(SurveyDto::getProgress)
+                                                      .thenComparing(SurveyDto::getEndAt)
+                                                      .thenComparing(SurveyDto::getId))
+                                    .collect(Collectors.toList()));
+      }
     } catch (Exception e) {
       throw new Exception();
     }
   }
 
-
   @GetMapping("/survey/total")
-  public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
+  public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
     try {
-      return success(surveyService.countAllSurvey());
+      return success(surveyService.countAllSurvey(type));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -420,7 +422,6 @@ public class ApiController {
     }
   }
 
-
   @PostMapping("/find/email")
   public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
     try {
@@ -438,13 +439,6 @@ public class ApiController {
       e.printStackTrace();
       throw new Exception(e.getMessage());
     }
-  }
-
-
-  @GetMapping("/test")
-  public void testGet(HttpSession session) throws Exception {
-    log.debug(String.valueOf(session.getMaxInactiveInterval()));
-    log.debug(String.valueOf(session.getLastAccessedTime()));
   }
 
 }

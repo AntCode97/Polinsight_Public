@@ -53,7 +53,6 @@
 
     .left_content > label {
       background  : url('img/etc/icon_required_input.png') right center no-repeat;
-      cursor      : pointer;
       font-weight : bold;
       line-height : 18px;
       overflow    : hidden;
@@ -237,11 +236,9 @@
                     <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
                     <span>@</span>
                     <select name="domain" id="email_domain" required>
-                      <optgroup label="도메인">
-                        <option value="naver.com">naver.com</option>
-                        <option value="gmail.com">gmail.com</option>
-                        <option value="kakao.com">kakao.com</option>
-                      </optgroup>
+                      <option value="naver.com">naver.com</option>
+                      <option value="gmail.com">gmail.com</option>
+                      <option value="kakao.com">kakao.com</option>
                     </select>
                     <span id="email_msg"></span>
                     <!--                <span class="info_msg"></span>-->
@@ -266,7 +263,7 @@
                     </label>
                   </div>
                   <div class="right_content">
-                    <input class="pwdinput" name="pwdcfm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
+                    <input class="pwdinput" name="confirm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
                     <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
                     <span class="info_msg" id="pwmsg"></span>
                   </div>
@@ -367,7 +364,8 @@
     }
 
     const editHyphen = e => {
-      return e.target.value = phoneToStringConverter(e.target.value)
+      e.target.value = phoneToStringConverter(e.target.value)
+      return e.target.value
     }
 
     /*
@@ -389,8 +387,8 @@
       // else
       if ((48 <= keycode && keycode <= 57) || (65 <= keycode && keycode <= 90) || (96 <= keycode && keycode <= 105) ||
           re.test(e.originalEvent.key)) {
-        const passwordValue = $("#password").val();
-        const confirmValue = $("#pwdconfirm").val();
+        const passwordValue = $("input[name=password]").val();
+        const confirmValue = $("input[name=confirm]").val();
         const msg = $("#pwmsg")
 
         if (!passwordValue && !confirmValue) {
@@ -408,25 +406,18 @@
     // 필수 입력값 검사
     const checkNotNull = () => {
       let result = true
-      $("form").find('input').each(function (item) {
+      $("form").find('input').each(function () {
         let inputElem = $(this)
-        let label = inputElem.prev('div>label')
+        let label = inputElem.parent('.right_content').prev('.left_content').children('label')
         let inputValue = inputElem.val().trim()
         if ($(this).prop('required') && !inputValue) {
-          inputElem.focus()    // 입력이 안된 사항으로 포커싱
-          inputElem.val('') // 값 초기화
-          alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+          inputElem.focus()
+          inputElem.val('')
+          alert(label.text().trim() + " 항목은 필수 입력 사항입니다.") // todo : 모달창으로?
           result = false
-          return false;   // $.each를 break
+          return false;
         }
       })
-
-      const domainValue = $('select[name=domain] option:selected').val().trim()
-      if (!domainValue) {
-        $('select[name=domain]').focus()
-        alert('이메일 주소는 필수 입력 사항입니다.')
-        result = false;
-      }
 
       return result;
     }
@@ -441,7 +432,7 @@
     const emailChecker = (e) => {
       /* 5 ~ 20자 제한 */
       const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      const emailValue = $("input[name=email]").val().trim();
+      const emailValue = String($("input[name=email]").val()).trim();
       const emailDomain = $("#email_domain").val().trim();
       const email = emailValue + '@' + emailDomain;
       const msg = $("#email_msg")
@@ -490,7 +481,7 @@
         $(this).css('border-bottom', '1.5px solid #dde0ea');
       });
 
-      $(".pwdinput")
+      $("input[type=password]")
           .on("keyup change", passwordChecker)
           .on("paste", e => {
             e.preventDefault()
@@ -499,39 +490,39 @@
 
       $("#email").on("change keyup paste", emailChecker);
       $("#email_domain").on('change', () => {
-        if ($('input[name=email]').val().trim().length > 0) {
+        if ($('#email').val().trim().length > 0) {
           emailChecker()
         }
       });
 
       // 유저 전화번호
-      $("#phone").on("blur focus", editHyphen).on('keypress', (e) => {
+      $("#phone").on('keypress', (e) => {
         let keycode = e.keyCode
         if (!(48 <= keycode && keycode <= 57)) {
           e.preventDefault();
           e.returnValue = false;
           alert('숫자만 입력 가능합니다.')
         }
-      });
+      })
+      // .on("blur focus keyup", editHyphen)
 
       // 추천인 전화번호
-      $("#recommend").on("blur focus", editHyphen).on('keypress', (e) => {
+      $("#recommend").on('keypress', (e) => {
         let keycode = e.keyCode
         if (!(48 <= keycode && keycode <= 57)) {
           e.preventDefault();
           e.returnValue = false;
           alert('숫자만 입력 가능합니다.')
         }
-      });
+      })
+      // .on("blur focus keyup", editHyphen)
 
       $("input[name=ispanel]").on('click', (e) => {
         if (e.target.value === "false") {
           $(".popup_overlay").fadeIn(100)
         }
       })
-      // TODO : 팝업 관련 설정
       $("#popup_close_btn>i").on('click', (e) => {
-        // $(".popup_overlay").css('display', 'none')
         $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
         $('.popup_overlay').fadeOut(100)
       })
@@ -553,20 +544,21 @@
         if (checkNotNull()) {
           const info = getFormData()
           info['ispanel'] = $('input[name=ispanel]:checked').val() === 'true';
-
-          console.log(info)
+          info['email'] = stringToEmail(info['email'])
+          info['phone'] = stringToPhone(info['phone'])
+          if (!!info['recommend'])
+            info['recommend'] = stringToPhone(info['recommend'])
 
           http.post('/signup', info)
               .then(res => {
-                console.log(res.data)
                 if (res.data.response) {
                   if (info['ispanel']) {
-                    // alert('패널 가입을 위해서는 추가정보가 필요합니다.')
-                    location.replace('/panelagreement')
+                    location.replace('/panel')
                   } else {
-                    // alert('일반 유저 가입 성공!')
                     location.replace('/success_basic')
                   }
+                } else {
+                  alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
                 }
               })
               .catch(err => {
