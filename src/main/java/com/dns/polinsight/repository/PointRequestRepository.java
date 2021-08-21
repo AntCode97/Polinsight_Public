@@ -17,6 +17,7 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
   @Query(nativeQuery = true, value = "SELECT * FROM account LIKE %?1% OR requested_at LIKE %?1% OR bank_name LIKE %?1% OR request_point LIKE %?1%")
   Page<PointRequest> findPointRequestsByRegex(Pageable pageable, String regex);
 
+  @Query(nativeQuery = true)
   List<PointRequest> findPointRequestsByUid(long uid);
 
   Optional<PointRequest> findPointRequestByUidAndRequestPoint(long uid, long requestPoint);

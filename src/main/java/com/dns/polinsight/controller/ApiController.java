@@ -353,7 +353,12 @@ public class ApiController {
   @GetMapping("/points")
   public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      List<PointRequestDto> list = pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList());
+      User user = userService.findById(list.get(0).getUid()).orElseThrow(UserNotFoundException::new);
+      return success(list.parallelStream().map(dto -> {
+        dto.setName(user.getName());
+        return dto;
+      }).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
