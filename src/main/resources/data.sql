@@ -1,4 +1,4 @@
-INSERT INTO polinsight.user ( id, email, name, password, phone, point, recommend, role, birth, birth_type, education, gender, industry, registered_at, job, marry, address, is_email_receive, is_sms_receive )
+INSERT INTO user ( id, email, name, password, phone, point, recommend, role, birth, birth_type, education, gender, industry, registered_at, job, marry, address, is_email_receive, is_sms_receive )
 VALUES
   ( 1, 'testadmin@gmail.com', '관리자', '$2a$10$V9Z9tA4TZlyEfs3ghMrXpu3GJJLkCeHetQH/CgAWdn1zWZJpiKadW', '010-1233-2290', 987654321, '', 'ADMIN', '2020-01-01 00:00:00.000000', '양력', '대학 재학', 'MALE', '학생', '2021-08-17 21:04:51.696353', '학생', '0', '', TRUE, TRUE ),
   ( 2, 'testpanel@gmail.com', '테스트 패널', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, NULL, 'PANEL', '2021-08-06 14:34:49.000000', '양력',
