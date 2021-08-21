@@ -220,3 +220,37 @@ form {
 .disabled {
   display : none !important;
 }
+
+#loading {
+  display  : none;
+  height   : 100%;
+  left     : 0;
+  position : absolute;
+  top      : 0;
+  width    : 100%;
+}
+
+@keyframes spinner {
+  from {
+    transform : rotate(0deg)
+  }
+  to {
+    transform : rotate(360deg)
+  }
+}
+
+#loading .spinner {
+  animation           : spinner .8s ease infinite;
+  border              : 8px solid transparent;
+  border-bottom-color : #F19022;
+  border-radius       : 50%;
+  border-top-color    : #F19022;
+  box-sizing          : border-box;
+  height              : 64px;
+  left                : 50%;
+  margin-left         : 32px;
+  margin-top          : -32px;
+  position            : absolute;
+  top                 : 50%;
+  width               : 64px;
+}

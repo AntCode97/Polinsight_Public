@@ -296,6 +296,8 @@ public class UserController {
         Assert.notNull(userDto.getEmail());
         Assert.notNull(userDto.getName());
         User user = userService.findUserByEmail(Email.of(userDto.getEmail()));
+        log.debug(user.getName());
+        log.debug(userDto.getName());
         if (!user.getName().equals(userDto.getName()))
           throw new InvalidValueException("Invalid Value Exception");
         String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);

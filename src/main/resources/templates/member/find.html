@@ -121,7 +121,7 @@
         <form>
           <div class="user_input_box">
             <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="name" required />
+            <input type="text" class="user_info_input" name="finduser_name" required />
           </div>
           <div class="user_input_box">
             <span class="info_article">전화번호</span>
@@ -144,7 +144,7 @@
           </div>
           <div class="user_input_box">
             <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="name" required />
+            <input type="text" class="user_info_input" name="findpwd_name" required />
           </div>
           <div class="user_btn_wrap" style="justify-content: flex-start;">
             <span class="err_msg">에러 메세지!!</span>
@@ -208,15 +208,19 @@
       e.returnValue = false;
       let phone = $('input[name=phone]').val()
       let type = e.target.name
-      let name = $('input[name=name]').val()
+      let finduser_name = $('input[name=finduser_name]').val()
+      let findpwd_name = $('input[name=findpwd_name]').val()
       let email = $('input[name=email]').val()
-
+      if (type === 'user' && emailInputValidator(email)) {
+        alert('입력하신 이메일을 확인해주세요')
+        $('input[name=email]').val('').focus()
+      }
       http
           .post('/find?type=' + type, type === 'email' ? {
             phone: phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3"),
-            name: name
+            name: finduser_name
           } : {
-            name: name,
+            name: findpwd_name,
             email: email
           })
           .then(res => {
