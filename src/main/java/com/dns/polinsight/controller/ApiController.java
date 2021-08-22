@@ -10,6 +10,7 @@ import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.object.PostVO;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -442,8 +443,8 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<Post>> fidnPostByTypes(@RequestParam(value = "type") String type,
-                                                        @PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<PostVO>> fidnPostByTypes(@RequestParam(value = "type") String type,
+                                                          @PageableDefault Pageable pageable) throws Exception {
     try {
       return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
     } catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Attach;
+import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.PostType;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
@@ -42,7 +44,18 @@ public class PostDTO {
 
   private List<MultipartFile> files;
 
-  private Long viewcnt=0L;
+  private Long viewcnt = 0L;
+
+  public PostDTO(Post post) {
+    this.id = post.getId();
+    this.title = post.getTitle();
+    this.postType = post.getPostType();
+    this.content = post.getViewcontent();
+    this.user = post.getUser();
+    this.registeredAt = post.getRegisteredAt();
+    this.attaches = post.getAttaches();
+    this.viewcnt = post.getViewcnt();
+  }
 
   public void transViewcontent() {
     this.viewcontent = this.content.replaceAll("\r\n", "<br>").replaceAll(" ", "&nbsp;");

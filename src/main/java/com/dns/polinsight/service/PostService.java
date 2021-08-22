@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.object.PostVO;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public interface PostService {
 
   Post addPost(PostDTO postDTO);
 
-  Page<Post> findPostsByType(PostType type, Pageable pageable);
+  Page<PostVO> findPostsByType(PostType type, Pageable pageable);
 
   Page<Post> getPostList(Pageable pageable);
 
