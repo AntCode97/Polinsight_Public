@@ -2,6 +2,14 @@
   margin : 40px 0;
 }
 
+.main_item {
+  border-bottom : 1px dashed #DADADA;
+  color         : #000000;
+  font-size     : 2rem;
+  font-weight   : bold;
+  padding       : 10px 0 20px;
+}
+
 .post-search {
   display       : inline-block;
   margin-bottom : 41px;

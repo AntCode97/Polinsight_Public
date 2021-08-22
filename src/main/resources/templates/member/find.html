@@ -147,7 +147,7 @@
             <input type="text" class="user_info_input" name="findpwd_name" required />
           </div>
           <div class="user_btn_wrap" style="justify-content: flex-start;">
-            <span class="err_msg">에러 메세지!!</span>
+            <span class="err_msg">이메일 형식이 올바르지 않습니다.</span>
           </div>
           <div class="user_btn_wrap">
             <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
@@ -171,7 +171,6 @@
       $(this).prev('.info_article').css('color', '#69666D')
       $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
     });
-
     $(document).on('click', '.header_box > input', function () {
       if ($(this).is(':checked')) {
         $('.tab_box').css('display', 'none');
@@ -182,15 +181,14 @@
       }
     });
 
-    const emailChecker = () => {
+    const emailChecker = e => {
       const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      const email = $("input[name=email]");
+      const email = e.target.value;
 
-
-      if (email.val().match(regex) != null) {
-        email.next('span').css("display", "none");
+      if (email.match(regex) != null) {
+        $('.err_msg').css("display", "none");
       } else {
-        email.next('span').css("display", "block");
+        $('.err_msg').css("display", "block");
       }
     }
 
@@ -240,7 +238,7 @@
     }
 
     $(function () {
-
+      $('input[name=email]').on('keyup', _.throttle(emailChecker, 500))
       $('button').on('click', clickFindBtn)
     })
   </script>

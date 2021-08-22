@@ -76,9 +76,9 @@
     }
 
     #more_survey_btn {
-      cursor : pointer;
-      font-size: 14px;
-      font-weight: bold;
+      cursor      : pointer;
+      font-size   : 14px;
+      font-weight : bold;
     }
 
     #more_survey_btn:hover {
@@ -172,8 +172,6 @@
     }
 
     const getSurveyList = e => {
-      const spinner = $('#loading')
-      spinner.show()
       http
           .get('/api/surveys?type=index', {
             params:

@@ -82,16 +82,6 @@
       }
     }
 
-    const getPostsByType = type => {
-      type = type.toUpperCase()
-      http
-          .get('/api/posts?type=' + type)
-          .then(res => {
-            if (res.data.success) {
-              return res.data.response;
-            }
-          })
-    }
 
   </script>
 </div>

@@ -254,3 +254,11 @@ form {
   top                 : 50%;
   width               : 64px;
 }
+
+.main_item {
+  border-bottom : 1px dashed #DADADA;
+  color         : #000000;
+  font-size     : 2rem;
+  font-weight   : bold;
+  padding       : 10px 0 20px;
+}

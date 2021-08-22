@@ -444,15 +444,8 @@ public class ApiController {
   @GetMapping("posts")
   public ApiUtils.ApiResult<Page<Post>> fidnPostByTypes(@RequestParam(value = "type") String type,
                                                         @PageableDefault Pageable pageable) throws Exception {
-
     try {
-      Page<Post> pp = postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable);
-      log.warn("Total Element: " + pp.getTotalElements());
-      log.warn("Total Page: " + pp.getTotalPages());
-      log.warn("Size: " + pp.getSize());
-      log.warn("Number: " + pp.getNumber());
-      log.warn("Number of Elements: " + pp.getNumberOfElements());
-      return success(pp);
+      return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
