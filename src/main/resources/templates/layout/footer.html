@@ -60,8 +60,31 @@
       font-size     : 14px;
       margin-bottom : 8px;
     }
+    .react_footer_wrap {display: none; width: 100%;}
+    .react_footer_container {display: flex; flex-direction: column; gap: 10px;}
+    .react_footer_container > span {font-size: 14px;}
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      footer {height: 100%;}
+      .footer_wrap {display: none;}
+      .react_footer_wrap{display: flex; justify-content: center;}
+      .footer_logo {margin: 0 auto; width: 140px;}
+    }
   </style>
   <footer>
+    <!-- 반응형 디자인: footer   -->
+    <div class="react_footer_wrap">
+      <div class="react_footer_container">
+        <a th:href="@{/}">
+          <div class="footer_logo"></div>
+        </a>
+        <span>TEL : 062-374-7011</span>
+        <span>FAX : 062-374-7013</span>
+        <span>EMAIL : polinsight@gmail.com</span>
+      </div>
+    </div>
+
+    <!-- WEB 디자인: footer -->
     <div class="footer_wrap">
       <div class="footer_container">
         <a th:href="@{/}">

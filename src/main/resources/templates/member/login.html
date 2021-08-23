@@ -21,7 +21,7 @@
       border-radius    : 2px;
       margin           : 0 auto;
       overflow         : hidden;
-      width            : 50%;
+      width            : 450px;
     }
 
     .login_close > button:hover {
@@ -43,13 +43,12 @@
     }
 
     .login_logo_text {
-      min-width : 300px;
-      width: 22rem;
+      width: 320px;
     }
 
     .login_content {
       margin     : 0 auto;
-      min-width  : 350px;
+      min-width  : 320px;
       text-align : center;
       width      : 25rem;
     }
@@ -113,7 +112,7 @@
       align-items     : center;
       color           : #A9ABB7;
       display         : flex;
-      justify-content : space-between;
+      justify-content : flex-end;
       margin          : 15px 5px 0;
       padding-left    : 5px;
       text-align      : right;
@@ -154,6 +153,7 @@
     .login_btn_wrap > button {
       font-weight : bold;
       width       : 100%;
+      min-width: 320px;
     }
 
     .sns_btn_wrap a {
@@ -223,14 +223,20 @@
       padding       : 12px;
       text-align    : center;
     }
+    .auto_login {display: none;}
 
     @media (min-width : 320px) and (max-width : 480px) {
+      .modal_wrap {
+        height: 100%;
+        margin-top: 50px;
+      }
       .modal_content {
-        width : 95%;
+        width : calc(100% - 20px);
+        margin: 0 10px;
       }
 
       .login_logo_text {
-        width : 100%;
+        display: none;
       }
 
       .login_content {
@@ -242,7 +248,7 @@
       }
 
       .modal_login {
-        min-width : 20rem;
+        min-width : 320px;
       }
     }
   </style>
@@ -273,7 +279,7 @@
             <div class="login_btn_wrap">
               <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
             </div>
-            <div class="qnapw">
+            <div class="qnapw auto_login">
               <div>
                 <label>
                   자동 로그인
