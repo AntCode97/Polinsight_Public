@@ -41,8 +41,8 @@
       border       : 1px solid #CCD0D7;
       font-size    : 1.2rem;
       height       : 55px;
-      min-width    : 130px;
       padding-left : 20px;
+      flex: 1;
     }
 
     /* 게시글 목록 */
@@ -130,7 +130,9 @@
       width : 95px;
     }
 
-
+    @media (min-width : 320px) and (max-width : 480px) {
+      .select-box {flex: 1.5; padding-left: 10px; height: 35px; font-size: 14px;}
+    }
   </style>
   <div class="board_contents_wrap">
     <!-- Header Title -->

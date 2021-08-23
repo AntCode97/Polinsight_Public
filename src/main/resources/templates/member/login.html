@@ -227,16 +227,13 @@
 
     @media (min-width : 320px) and (max-width : 480px) {
       .modal_wrap {
-        height: 100%;
+        height: calc(100vh - 260px);
         margin-top: 50px;
       }
+      .modal_login {padding: 0;}
       .modal_content {
-        width : calc(100% - 20px);
-        margin: 0 10px;
-      }
-
-      .login_logo_text {
-        display: none;
+        width : calc(100% - 60px);
+        margin: 0 30px;
       }
 
       .login_content {
