@@ -10,6 +10,7 @@ import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyJdbcTemplate;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;
+import com.dns.polinsight.types.ProgressType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,8 +64,13 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public List<SurveyDto> findAll(Pageable pageable) {
-    return surveyRepository.findAllSurveyWithCollector(pageable).parallelStream().map(SurveyDto::new).collect(Collectors.toList());
+  public Page<SurveyDto> findAll(Pageable pageable) {
+    return surveyJdbcTemplate.findAllSurveys(pageable);
+  }
+
+  @Override
+  public Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type) {
+    return surveyJdbcTemplate.findAllSurveysByProgressType(type, pageable);
   }
 
   @Override

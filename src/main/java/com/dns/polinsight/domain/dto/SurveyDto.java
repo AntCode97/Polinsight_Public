@@ -1,7 +1,7 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.object.SurveyVO;
+import com.dns.polinsight.object.SurveyMapping;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
 import lombok.*;
@@ -53,20 +53,6 @@ public class SurveyDto {
     this.participateUrl = survey.getCollector().get(0).getParticipateUrl();
     this.status = survey.getCollector().get(0).getStatus();
     this.title = survey.getTitle();
-  }
-
-  public SurveyDto(SurveyVO vo) {
-    this.id = vo.getId();
-    this.point = vo.getPoint();
-    this.surveyId = vo.getSurveyId();
-    this.count = vo.getCount();
-    this.progress = vo.getProgress();
-    this.participateUrl = vo.getParticipateurl();
-    this.minimumTime = vo.getMinimumtime();
-    this.createdAt = LocalDate.parse(vo.getCreatedat());
-    this.endAt = LocalDate.parse(vo.getEndat());
-    this.title = vo.getTitle();
-    this.surveyId = vo.getSurveyId();
   }
 
 

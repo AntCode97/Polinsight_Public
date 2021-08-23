@@ -25,9 +25,9 @@ const makePostTemplate = (post) => {
   let template = $(`<div></div>`).addClass('post-row')
   template.append(`<div>${post.id}</div>`)
   template.append(`<div>${post.title}</div>`)
-  template.append(`<div>${post.user.name}</div>`)
-  template.append(`<div>${post.registeredAt}</div>`)
-  template.append(`<div>${post.viewcnt}</div>`)
+  template.append(`<div>${post.name}</div>`)
+  template.append(`<div>${post.registedAt}</div>`)
+  template.append(`<div>${post.viewCount}</div>`)
   template.append(`<div>-</div>`)
   template.on('click', {post: post}, e => {
     location.href = `/posts/${post.id}`

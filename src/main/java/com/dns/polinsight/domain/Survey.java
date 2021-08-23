@@ -1,7 +1,7 @@
 package com.dns.polinsight.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.dns.polinsight.types.ProgressType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @ToString
 public class Survey implements Serializable {
 
@@ -49,6 +49,7 @@ public class Survey implements Serializable {
   @Setter
   private Long questionCount;
 
+  @JsonManagedReference
   @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Collector> collector;
 

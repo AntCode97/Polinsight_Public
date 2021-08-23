@@ -1,7 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Post;
-import com.dns.polinsight.object.PostVO;
+import com.dns.polinsight.object.PostMapping;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,9 +45,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   )
   void upViewCnt(Long postId);
 
-  @Query(nativeQuery = true, value = "SELECT ROW_NUMBER() OVER () AS num, p.pno AS id, p.title AS title, p.type AS post_type, p.search_content AS content," +
-      "p.view_content AS view_content, u.name AS user, p.registered_at AS registered_at, p.view_count AS count FROM post p " +
-      "JOIN user u ON p.user_id = u.id WHERE p.type LIKE ?1")
-  Page<PostVO> findPostsByType(String postType, Pageable pageable);
+  Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
 }

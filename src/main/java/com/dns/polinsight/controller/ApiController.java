@@ -10,7 +10,7 @@ import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.object.PostVO;
+import com.dns.polinsight.object.SurveyMapping;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -20,7 +20,9 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +46,7 @@ import static com.dns.polinsight.utils.ApiUtils.success;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ApiController {
+
 
   private final UserService userService;
 
@@ -129,25 +131,21 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                                @RequestParam(value = "type", required = false) String type) throws Exception {
-
+  public ApiUtils.ApiResult<Page<?>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                        @RequestParam(value = "type", required = false) String type) throws Exception {
+    System.out.println(pageable);
+    //    Sort.by("statusProgress").ascending().and(
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        Sort.by("endAt").ascending().and(Sort.by("id")));
+    System.out.println(pageable);
     try {
-      if (type == null || type.equals("ALL") || type.equals("index")) {
-        return success(surveyService.findAll(pageable).stream()
-                                    .sorted(Comparator.comparing(SurveyDto::getProgress)
-                                                      .thenComparing(SurveyDto::getEndAt)
-                                                      .thenComparing(SurveyDto::getId))
-                                    .collect(Collectors.toList()));
+      if (type == null || type.equals("ALL") || type.equals("INDEX")) {
+        return success(surveyService.findAll(pageable));
       } else {
-        return success(surveyService.findAll(pageable).stream()
-                                    .filter(dto -> dto.getProgress().equals(ProgressType.valueOf(type)))
-                                    .sorted(Comparator.comparing(SurveyDto::getProgress)
-                                                      .thenComparing(SurveyDto::getEndAt)
-                                                      .thenComparing(SurveyDto::getId))
-                                    .collect(Collectors.toList()));
+        return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
       }
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception();
     }
   }
@@ -443,8 +441,8 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<PostVO>> fidnPostByTypes(@RequestParam(value = "type") String type,
-                                                          @PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.object.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+                                                                                         @PageableDefault Pageable pageable) throws Exception {
     try {
       return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
     } catch (Exception e) {

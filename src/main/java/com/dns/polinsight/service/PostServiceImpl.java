@@ -4,7 +4,7 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.PostNotFoundException;
-import com.dns.polinsight.object.PostVO;
+import com.dns.polinsight.object.PostMapping;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.types.PostType;
@@ -49,8 +49,8 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public Page<PostVO> findPostsByType(PostType type, Pageable pageable) {
-    return repository.findPostsByType(type.name(), pageable);
+  public Page<PostMapping> findPostsByType(PostType type, Pageable pageable) {
+    return repository.findAllByPostType(type, pageable);
   }
 
 
