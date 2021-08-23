@@ -4,20 +4,22 @@ const makePagination = (current, totalPage) => {
   let next = $(`<a><i class="fas fa-angle-right"></i></a>`).on('click', {page: current + 1 < totalPage - 1 ? current + 1 : totalPage - 1}, init);
   let last = $(`<a><i class="fas fa-angle-double-right"></i></a>`).on('click', {page: totalPage - 1}, init);
 
-  let pageStart = current - 5 <= 0 ? 0 : current - 5;
-  let pageEnd = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
+  let pageStart = Math.floor(current / 10) * 10
+  let pageEnd = pageStart + 10 >= totalPage ? totalPage : pageStart + 10
 
   let pagination = $('#pagination').empty()
   if (current > 0)
     pagination.append(first).append(prev)
-  for (let i = pageStart; i <= pageEnd; i++) {
+
+  for (let i = pageStart; i < pageEnd; i++) {
     let btn = $(`<a>${i + 1}</a>`).on('click', {page: i}, init)
     btn.removeClass('active')
     if (current === i)
       btn.addClass('active')
     pagination.append(btn)
   }
-  if (current < totalPage)
+
+  if (current < totalPage - 1)
     pagination.append(next).append(last)
 }
 

@@ -1,9 +1,8 @@
-package com.dns.polinsight.object;
+package com.dns.polinsight.mapper;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.PostType;
-import com.dns.polinsight.types.ProgressType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;

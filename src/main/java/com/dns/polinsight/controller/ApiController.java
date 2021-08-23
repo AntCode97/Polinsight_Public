@@ -437,7 +437,7 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<com.dns.polinsight.object.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
                                                                                          @PageableDefault Pageable pageable) throws Exception {
     try {
       return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));

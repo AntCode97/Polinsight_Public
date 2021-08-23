@@ -1,7 +1,6 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.object.SurveyMapping;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
 import lombok.*;

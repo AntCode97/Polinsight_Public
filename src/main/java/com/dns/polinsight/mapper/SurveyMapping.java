@@ -1,4 +1,4 @@
-package com.dns.polinsight.object;
+package com.dns.polinsight.mapper;
 
 import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.SurveyStatus;

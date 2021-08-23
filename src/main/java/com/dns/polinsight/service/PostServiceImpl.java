@@ -4,7 +4,7 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.PostNotFoundException;
-import com.dns.polinsight.object.PostMapping;
+import com.dns.polinsight.mapper.PostMapping;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.types.PostType;
