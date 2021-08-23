@@ -12,12 +12,15 @@
 html {
   font-size : 14px;
   height    : 100%;
+  margin    : 0;
+  padding   : 0;
 }
 
 body {
   color       : #69666D;
   font-family : 'Nanum Gothic', sans-serif;
   font-size   : 14px;
+  height      : 100%;
   margin      : 0;
   padding     : 0;
 }
@@ -261,4 +264,16 @@ form {
   font-size     : 2rem;
   font-weight   : bold;
   padding       : 10px 0 20px;
+}
+
+.flex-wrapper {
+  display        : flex;
+  flex-direction : column;
+  height         : 100%;
+  width          : 100%;
+}
+
+.flex-content {
+  flex        : 1;
+  padding-top : 120px;
 }

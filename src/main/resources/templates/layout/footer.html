@@ -6,14 +6,10 @@
       border-top       : 1px solid #444444;
       bottom           : 0;
       color            : #000000;
-      display          : flex;
       font-size        : 14px;
-      height           : 200px;
       justify-content  : space-between;
       left             : 0;
-      margin-top       : 50px;
       padding          : 20px 20px 30px;
-      position         : relative;
       width            : 100%;
     }
 
@@ -60,15 +56,40 @@
       font-size     : 14px;
       margin-bottom : 8px;
     }
-    .react_footer_wrap {display: none; width: 100%;}
-    .react_footer_container {display: flex; flex-direction: column; gap: 10px;}
-    .react_footer_container > span {font-size: 14px;}
+
+    .react_footer_wrap {
+      display : none;
+      width   : 100%;
+    }
+
+    .react_footer_container {
+      display        : flex;
+      flex-direction : column;
+      gap            : 10px;
+    }
+
+    .react_footer_container > span {
+      font-size : 14px;
+    }
 
     @media (min-width : 320px) and (max-width : 480px) {
-      footer {height: 100%;}
-      .footer_wrap {display: none;}
-      .react_footer_wrap{display: flex; justify-content: center;}
-      .footer_logo {margin: 0 auto; width: 140px;}
+      footer {
+        height : 100%;
+      }
+
+      .footer_wrap {
+        display : none;
+      }
+
+      .react_footer_wrap {
+        display         : flex;
+        justify-content : center;
+      }
+
+      .footer_logo {
+        margin : 0 auto;
+        width  : 140px;
+      }
     }
   </style>
   <footer>

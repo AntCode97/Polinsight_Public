@@ -107,57 +107,59 @@
     }
 
   </style>
-  <div class="find_wrap">
-    <div class="header_box">
-      <input type="radio" name="find_tab" id="tab01" checked>
-      <label for="tab01">아이디찾기</label>
-      <span>/</span>
-      <input type="radio" name="find_tab" id="tab02">
-      <label for="tab02">비밀번호찾기</label>
-    </div>
-    <div class="content_box">
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="find_wrap">
+        <div class="header_box">
+          <input type="radio" name="find_tab" id="tab01" checked>
+          <label for="tab01">아이디찾기</label>
+          <span>/</span>
+          <input type="radio" name="find_tab" id="tab02">
+          <label for="tab02">비밀번호찾기</label>
+        </div>
+        <div class="content_box">
 
-      <div class="tab_box box01" style="display: flex;">
-        <form>
-          <div class="user_input_box">
-            <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="finduser_name" required />
+          <div class="tab_box box01" style="display: flex;">
+            <form>
+              <div class="user_input_box">
+                <span class="info_article">이름</span>
+                <input type="text" class="user_info_input" name="finduser_name" required />
+              </div>
+              <div class="user_input_box">
+                <span class="info_article">전화번호</span>
+                <input type="number" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
+              </div>
+              <div class="user_btn_wrap" style="justify-content: flex-start;">
+                <span class="err_msg">에러 메세지!!</span>
+              </div>
+              <div class="user_btn_wrap">
+                <button name="email" class="mypage_btn update_btn">아이디 찾기</button>
+              </div>
+            </form>
           </div>
-          <div class="user_input_box">
-            <span class="info_article">전화번호</span>
-            <input type="number" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
-          </div>
-          <div class="user_btn_wrap" style="justify-content: flex-start;">
-            <span class="err_msg">에러 메세지!!</span>
-          </div>
-          <div class="user_btn_wrap">
-            <button name="email" class="mypage_btn update_btn">아이디 찾기</button>
-          </div>
-        </form>
-      </div>
 
-      <div class="tab_box box02">
-        <form>
-          <div class="user_input_box">
-            <span class="info_article">이메일</span>
-            <input type="email" class="user_info_input" name="email" required />
+          <div class="tab_box box02">
+            <form>
+              <div class="user_input_box">
+                <span class="info_article">이메일</span>
+                <input type="email" class="user_info_input" name="email" required />
+              </div>
+              <div class="user_input_box">
+                <span class="info_article">이름</span>
+                <input type="text" class="user_info_input" name="findpwd_name" required />
+              </div>
+              <div class="user_btn_wrap" style="justify-content: flex-start;">
+                <span class="err_msg">이메일 형식이 올바르지 않습니다.</span>
+              </div>
+              <div class="user_btn_wrap">
+                <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
+                <button name="password" class="mypage_btn update_btn">비밀번호 찾기</button>
+              </div>
+            </form>
           </div>
-          <div class="user_input_box">
-            <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="findpwd_name" required />
-          </div>
-          <div class="user_btn_wrap" style="justify-content: flex-start;">
-            <span class="err_msg">이메일 형식이 올바르지 않습니다.</span>
-          </div>
-          <div class="user_btn_wrap">
-            <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
-            <button name="password" class="mypage_btn update_btn">비밀번호 찾기</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="footer_wrap">
     <th:block th:include="layout/footer" />
   </div>
   <script type="text/javascript">

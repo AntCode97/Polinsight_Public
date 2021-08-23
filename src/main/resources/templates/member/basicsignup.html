@@ -215,141 +215,142 @@
       cursor : pointer;
     }
   </style>
-  <div>
-    <div class="register_wrap">
-      <div class="register_box">
-        <div class="register_title">
-          <h1>회원 가입</h1>
-        </div>
-        <div class="register_contents_wrap">
-          <form th:action="@{/signup}" id="signupfrm" method="post">
-            <p>기본정보</p>
-            <div class="register_contents">
-              <ul>
-                <li>
-                  <div class="left_content">
-                    <label for="email">
-                      아이디(이메일)
-                    </label>
-                  </div>
-                  <div class="right_content">
-                    <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
-                    <span>@</span>
-                    <select name="domain" id="email_domain" required>
-                      <option value="naver.com">naver.com</option>
-                      <option value="gmail.com">gmail.com</option>
-                      <option value="kakao.com">kakao.com</option>
-                    </select>
-                    <span id="email_msg"></span>
-                    <!--                <span class="info_msg"></span>-->
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="password">
-                      비밀번호
-                    </label>
-                  </div>
-                  <div class="right_content">
-                    <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
-                    <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
-                    <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="pwdconfirm">
-                      비밀번호 확인
-                    </label>
-                  </div>
-                  <div class="right_content">
-                    <input class="pwdinput" name="confirm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
-                    <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
-                    <span class="info_msg" id="pwmsg"></span>
-                  </div>
-                </li>
-                <li>
-                  <!--TODO : 특수문자 검증 필요-->
-                  <div class="left_content">
-                    <label for="user_name">이름</label>
-                  </div>
-                  <div class="right_content">
-                    <input class="login_input" id="user_name" name="name" required type="text" />
-                    <!--                <span>이름을 입력해주세요.</span>-->
-                    <span class="info_msg"></span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="phone">휴대전화</label>
-                  </div>
-                  <div class="right_content">
-                    <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
-                    <!--                <button id="phone_chk">인증</button>-->
-                    <!--                <span>휴대전화를 입력해 주세요</span>-->
-                    <span class="info_msg">(- 없이 입력해주세요.)</span>
-                  </div>
-                </li>
-                <li>
-                  <div class="left_content">
-                    <label for="recommend" class="no_need">추천인 휴대전화</label>
-                  </div>
-                  <div class="right_content">
-                    <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
-                    <!--                <button id="phone_rec_user_chk">확인</button>-->
-                    <span class="info_msg">(- 없이 입력해주세요.)</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
+  <div class="flex-wrapper">
+    <div class="flex-content">
 
-            <div class="pannelinfo_msg_wrap">
-              <div class="pannel_info_contents">
-                <h1>폴인사이트의 패널이 된다면?</h1>
-                <p>폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.</p>
-                <p>참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.</p>
-                <p>폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.</p>
-                <p>패널로 가입하시겠습니까?</p>
+      <div class="register_wrap">
+        <div class="register_box">
+          <div class="register_title">
+            <h1>회원 가입</h1>
+          </div>
+          <div class="register_contents_wrap">
+            <form th:action="@{/signup}" id="signupfrm" method="post">
+              <p>기본정보</p>
+              <div class="register_contents">
+                <ul>
+                  <li>
+                    <div class="left_content">
+                      <label for="email">
+                        아이디(이메일)
+                      </label>
+                    </div>
+                    <div class="right_content">
+                      <input id="email" name="email" required type="email" maxlength="20" minlength="5" />
+                      <span>@</span>
+                      <select name="domain" id="email_domain" required>
+                        <option value="naver.com">naver.com</option>
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="kakao.com">kakao.com</option>
+                      </select>
+                      <span id="email_msg"></span>
+                      <!--                <span class="info_msg"></span>-->
+                    </div>
+                  </li>
+                  <li>
+                    <div class="left_content">
+                      <label for="password">
+                        비밀번호
+                      </label>
+                    </div>
+                    <div class="right_content">
+                      <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
+                      <!--                <span>올바른 비밀번호를 입력하세요.</span>-->
+                      <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="left_content">
+                      <label for="pwdconfirm">
+                        비밀번호 확인
+                      </label>
+                    </div>
+                    <div class="right_content">
+                      <input class="pwdinput" name="confirm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
+                      <!--                <span>비밀번호가 일치하지 않습니다.</span>-->
+                      <span class="info_msg" id="pwmsg"></span>
+                    </div>
+                  </li>
+                  <li>
+                    <!--TODO : 특수문자 검증 필요-->
+                    <div class="left_content">
+                      <label for="user_name">이름</label>
+                    </div>
+                    <div class="right_content">
+                      <input class="login_input" id="user_name" name="name" required type="text" />
+                      <!--                <span>이름을 입력해주세요.</span>-->
+                      <span class="info_msg"></span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="left_content">
+                      <label for="phone">휴대전화</label>
+                    </div>
+                    <div class="right_content">
+                      <input class="login_input" id="phone" name="phone" required type="tel" maxlength="11">
+                      <!--                <button id="phone_chk">인증</button>-->
+                      <!--                <span>휴대전화를 입력해 주세요</span>-->
+                      <span class="info_msg">(- 없이 입력해주세요.)</span>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="left_content">
+                      <label for="recommend" class="no_need">추천인 휴대전화</label>
+                    </div>
+                    <div class="right_content">
+                      <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
+                      <!--                <button id="phone_rec_user_chk">확인</button>-->
+                      <span class="info_msg">(- 없이 입력해주세요.)</span>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div class="pannel_select">
-                <div class="radio_wrap">
-                  <label>
-                    <input name="ispanel" type="radio" value="true">
-                    가입하고 혜택받기
-                  </label>
+
+              <div class="pannelinfo_msg_wrap">
+                <div class="pannel_info_contents">
+                  <h1>폴인사이트의 패널이 된다면?</h1>
+                  <p>폴인사이트에서 진행하는 각종 조사에 참여하실 수 있습니다.</p>
+                  <p>참여한 조사에 따라 포인트를 현금으로 지급받으실 수 있습니다.</p>
+                  <p>폴's 인사이트 게시판을 통해 조사 주요 결과를 확인하실 수 있습니다.</p>
+                  <p>패널로 가입하시겠습니까?</p>
                 </div>
-                <div class="radio_wrap">
-                  <label>
-                    <input name="ispanel" type="radio" value="false">
-                    가입 안함
-                  </label>
+                <div class="pannel_select">
+                  <div class="radio_wrap">
+                    <label>
+                      <input name="ispanel" type="radio" value="true">
+                      가입하고 혜택받기
+                    </label>
+                  </div>
+                  <div class="radio_wrap">
+                    <label>
+                      <input name="ispanel" type="radio" value="false">
+                      가입 안함
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="btn_wrap">
-              <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
-            </div>
-          </form>
+              <div class="btn_wrap">
+                <button type="submit" class="btn_submit" id="frmsubmit">확인</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup_overlay">
+        <div class="popup_box">
+          <div id="popup_close_btn" style="position: relative; float: right; margin: 7px 10px; font-size: 20px; cursor:pointer;">
+            <i class="fas fa-times"></i>
+          </div>
+          <div class="popup_content">
+            <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
+          </div>
+          <div class="popup_btn_wrap">
+            <button type="button" class="popup_btn">확인</button>
+          </div>
         </div>
       </div>
     </div>
-    <div>
-      <th:block th:include="layout/footer" />
-    </div>
-    <div class="popup_overlay">
-      <div class="popup_box">
-        <div id="popup_close_btn" style="position: relative; float: right; margin: 7px 10px; font-size: 20px; cursor:pointer;">
-          <i class="fas fa-times"></i>
-        </div>
-        <div class="popup_content">
-          <h3>폴인사이트에서 진행하는 각종 조사에 참여하실 수 없습니다.</h3>
-        </div>
-        <div class="popup_btn_wrap">
-          <button type="button" class="popup_btn">확인</button>
-        </div>
-      </div>
-    </div>
-
+    <th:block th:include="layout/footer" />
   </div>
   <script>
     const phoneNumberChecker = () => {

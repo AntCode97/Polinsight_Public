@@ -194,31 +194,34 @@
     }
   </style>
 
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="carasel_wrap"></div>
+      <th:block th:if="${session.user==null}">
+        <div class="panel_wrap">
+          <div class="panel_item panel_item_vertical">
+            <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
+            <p>폴인사이트의 패널이 되어주세요.</p>
+          </div>
+          <div class="panel_line"></div>
+          <div class="panel_item panel_item_vertical">
+            <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
+            <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
+          </div>
+          <div class="panel_line"></div>
+          <div class="panel_item panel_item_horizontal">
+            <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
+            <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+          </div>
+        </div>
+      </th:block>
 
-  <div class="carasel_wrap"></div>
-  <th:block th:if="${session.user==null}">
-    <div class="panel_wrap">
-      <div class="panel_item panel_item_vertical">
-        <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
-        <p>폴인사이트의 패널이 되어주세요.</p>
-      </div>
-      <div class="panel_line"></div>
-      <div class="panel_item panel_item_vertical">
-        <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
-        <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
-      </div>
-      <div class="panel_line"></div>
-      <div class="panel_item panel_item_horizontal">
-        <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
-        <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+      <div>
+        <th:block th:include="survey/surveylist" />
       </div>
     </div>
-  </th:block>
-  <div>
-    <th:block th:include="survey/surveylist" />
+    <th:block th:include="layout/footer" />
   </div>
-
-  <th:block th:include="layout/footer" />
   <script th:inline="javascript">
     $(function () {
       // Scroll TOP버튼 생성 및 TOP으로 이동

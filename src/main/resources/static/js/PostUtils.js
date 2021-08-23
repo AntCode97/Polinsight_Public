@@ -49,3 +49,4 @@ const makeSurveyTemplate = (survey) => {
   template.append(`<div>${survey.surveyId}</div>`);// 서베이 아이디
   return template
 }
+
