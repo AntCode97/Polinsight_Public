@@ -1,17 +1,18 @@
-<div >
+<div>
   <div class="main_contents_wrap">
     <div class="post-search">
 
-      <div  class="util-search" id="postCount">
+      <div class="util-search" id="postCount">
 
-        <span th:unless="${keyword}==null" ><span th:unless="${keyword}==''"><strong th:text="${keyword}">2</strong>로 검색한 결과</span></span>
+        <span th:unless="${keyword}==null"><span th:unless="${keyword}==''"><strong th:text="${keyword}">2</strong>로 검색한 결과</span></span>
 
-        총 <strong th:text="${postCount}"></strong>개의 게시물이 있습니다.</div>
+        총 <strong th:text="${postCount}"></strong>개의 게시물이 있습니다.
+      </div>
       <div class="form-search">
         <div class="tbl-search">
           <div class="box-search">
-            <input type="text" id="searchinput" th:value="${keyword}" onkeyup="asyncFindBoard()"  />
-            <input class="disabled" type="button"></input>
+            <input type="text" id="searchinput" th:value="${keyword}" onkeyup="asyncFindBoard()" />
+            <input class="disabled" type="button" />
             <input type="submit" />
           </div>
         </div>
@@ -123,19 +124,17 @@
         $('#boardTable').replaceWith(fragment);
         let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
         closeBtn.classList.remove("disabled");
-        if(keyword == "")
+        if (keyword === "")
           closeBtn.className = "disabled";
 
 
         $.ajax({
-
           url: '/api/admin/posts/search/count?keyword=' + keyword,
           type: 'POST',
           data: keyword
         }).done(function (frag) {
           //console.log(frag)
           $('#postCount').replaceWith(frag);
-
         });
       });
 
@@ -150,7 +149,7 @@
     };
 
     let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
-    closeBtn.addEventListener("click", function (){
+    closeBtn.addEventListener("click", function () {
       let searchInput = document.querySelector("#searchinput")
       searchInput.value = "";
       asyncFindBoard();

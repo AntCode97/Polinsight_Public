@@ -104,6 +104,11 @@
   text-align  : center;
 }
 
+.post-row > h1 {
+  display : block;
+  width   : 100%;
+}
+
 .btn_multi_wrap {
   align-items     : center;
   display         : flex;

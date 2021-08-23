@@ -1,8 +1,6 @@
 <th:block th:include="layout/header" />
 <th:block>
   <style>
-
-
     .btn-effect {
       border        : 1px solid transparent;
       border-radius : 2px;
@@ -88,7 +86,6 @@
     const emailChecker = () => {
       const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
       const email = $("input[name=email]");
-
 
       if (email.val().match(regex) != null) {
         email.next('span').css("display", "none");

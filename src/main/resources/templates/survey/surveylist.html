@@ -101,9 +101,9 @@
   </div>
 
   <!-- 로딩 스피너 -->
-  <div id="loading">
-    <div class="spinner"></div>
-  </div>
+  <!--  <div id="loading">-->
+  <!--    <div class="spinner"></div>-->
+  <!--  </div>-->
   <div class="modal_container">
     <div class="modal_wrap">
       <div class="modal_content">
@@ -146,7 +146,7 @@
 
       return template;
     }
-    const makeSurveyCardList = (surveyList) => {
+    const makeSurveyCardList = surveyList => {
       const survey_box = $(".main_survey_box");
       if (totalSurveys <= (current * 10)) {
         // hide more button
@@ -183,11 +183,11 @@
           .then(res => {
             if (res.data.success) {
               // surveys.push(...res.data.response)
-              makeSurveyCardList(res.data.response)
+              makeSurveyCardList(res.data.response.content)
             }
           })
           .catch(console.log)
-      spinner.hide()
+      // spinner.hide()
     }
 
 
@@ -233,13 +233,10 @@
     const surveyCardClickEventHandler = (e) => {
       e.preventDefault()
       e.returnValue = false;
-
       const seq = e.data.seq
       const surveyId = e.data.surveyid
       const title = e.data.title
-      // FIXME
       if (!loginChk(seq)) return
-
 
       $('.modal_container').css('display', 'flex')
 

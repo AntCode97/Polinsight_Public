@@ -31,7 +31,6 @@ public interface PostMapping {
     return getUser().getName();
   }
 
-
   @JsonIgnore
   User getUser();
 

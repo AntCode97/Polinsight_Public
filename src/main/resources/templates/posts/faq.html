@@ -7,6 +7,7 @@
 
     .container {
       margin-top : 120px;
+      width      : 100%;
     }
   </style>
   <div class="container">
@@ -37,19 +38,19 @@
   </div>
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
-    async function getPostData(page) {
+    async function getPostData(e) {
+      let page = !e ? 0 : e.data.page
       const responseData = await http.get('/api/posts?type=FAQ', {
         params: {page: page, size: 10}
       })
       const data = responseData.data.response
-      console.log(data)
       return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
     }
 
     const init = e => {
       const spinner = $('#loading')
       spinner.show()
-      getPostData(!e ? 0 : e.data.page).then(obj => {
+      getPostData(e).then(obj => {
         $('#total_count').text(obj.total)
         $('.scroll-table').children('.post-row:not(:first-child)').remove()
         if (obj.total > 0) {

@@ -362,7 +362,7 @@
 
     <div class="main_contents_wrap">
       <div class="post-search">
-        <div class="util-search">총 <strong></strong>개의 설문이 있습니다.</div>
+        <div class="util-search">총 <strong id="total_count"></strong>개의 설문이 있습니다.</div>
 
         <!--관리자 페이지 설문 찾기 기능-->
         <div class="form-search">
@@ -375,155 +375,138 @@
         </div>
       </div>
       <div class="survey_sort_wrap">
-        <input value="ALL" type="radio" name="sort_group" id="sort_all">
-        <label for="sort_all" class="check_sort">전체</label>
-        <input value="BEFORE" type="radio" name="sort_group" id="sort_before">
-        <label for="sort_before">등록</label>
-        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing">
-        <label for="sort_ongoing">진행</label>
-        <input value="END" type="radio" name="sort_group" id="sort_end">
-        <label for="sort_end">종료</label>
+        <label for="sort_all" class="check_sort">
+          전체
+        </label>
+        <input value="ALL" type="radio" name="sort_group" id="sort_all" checked />
+        <label for="sort_before">
+          등록
+        </label>
+        <input value="BEFORE" type="radio" name="sort_group" id="sort_before" />
+        <label for="sort_ongoing">
+          진행
+        </label>
+        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing" />
+        <label for="sort_end">
+          종료
+        </label>
+        <input value="END" type="radio" name="sort_group" id="sort_end" />
       </div>
       <table class="scroll-table">
-        <thead></thead>
-        <tbody></tbody>
+        <thead>
+        <tr class="post-th post-row">
+          <th>번호</th>
+          <th>설문 이름</th>
+          <th>포인트</th>
+          <th>설문 시작일</th>
+          <th>설문 종료일</th>
+          <th>진행 상태</th>
+          <th>참여자 수</th>
+          <th>설문 아이디</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
       </table>
-      <div class="pagination"></div>
+      <div class="page-button" id="pagination"></div>
     </div>
   </div>
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
 
 
-    const makePaginationsInAdminSurvey = current => {
-      const regexValue = $('input[name=adminfindsurvey]').val();
-      const surveyCount = parseInt($('.util-search>strong').text());
-      const totalPage = Math.ceil(surveyCount / 10);
+    // const makePaginationsInAdminSurvey = current => {
+    //   const regexValue = $('input[name=adminfindsurvey]').val();
+    //   const surveyCount = parseInt($('.util-search>strong').text());
+    //   const totalPage = Math.ceil(surveyCount / 10);
+    //
+    //   let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`);
+    //   let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`);
+    //   let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`);
+    //   let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`);
+    //
+    //   const paginationElement = $('div.pagination');
+    //   paginationElement.empty();
+    //
+    //   let start = current - 5 <= 0 ? 0 : current - 5;
+    //   let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
+    //
+    //   if (surveyCount === 0) {
+    //     $('.scroll-table').empty()
+    //     $('.scroll-table').append(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
+    //     $('.pagination').empty();
+    //   } else {
+    //     // if (!regexValue) {
+    //     first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
+    //     last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
+    //     prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+    //     next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+    //     if (current > 0)
+    //       paginationElement.append(first).append(prev);
+    //     for (let i = start; i < end; i++) {
+    //       let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+    //       tmp.on('click', {page: i}, adminGetAllSurveys);
+    //       if (current === i) {
+    //         tmp.css('color', 'white').css('background-color', '#444444');
+    //       }
+    //       paginationElement.append(tmp);
+    //     }
+    //     if (current < totalPage - 1)
+    //       paginationElement.append(next).append(last);
+    //   }
+    // }
 
-      let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`);
-      let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`);
-      let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`);
-      let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`);
+    // const surveyListHeader = () => {
+    //   let template = $(`<tr class="post-th post-row"></tr>`);
+    //   template.append(`<th>번호</th>`);
+    //   template.append(`<th>설문 이름</th>`);
+    //   template.append(`<th>포인트</th>`);
+    //   template.append(`<th>설문 시작일</th>`);
+    //   template.append(`<th>설문 종료일</th>`);
+    //   template.append(`<th>진행 상태</th>`);
+    //   template.append(`<th>참여자 수</th>`);
+    //   template.append(`<th>설문 아이디</th>`);
+    //   return template;
+    // };
 
-      const paginationElement = $('div.pagination');
-      paginationElement.empty();
+    // const adminMakeSurveySearchResults = surveys => {
+    //   console.log(surveys)
+    //   const table = $('.scroll-table>tbody');
+    //   table.empty();
+    //   surveys.map(survey => {
+    //     let template = $(`<tr class="post-row">`).on('click', {survey: survey}, setDataInModal);
+    //     template.append(`<td>${survey.id}</td>`);// 번호
+    //     template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
+    //     template.append(`<td>${!survey.point ? '지정 안됨' : survey.point}</td>`);// 지급 포인트
+    //     template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
+    //     template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
+    //     template.append(`<td>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</td>`);// 진행 상태
+    //     template.append(`<td>${survey.count}</td>`);// 참여자 수
+    //     template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
+    //     table.append(template)
+    //   })
+    // };
 
-      let start = current - 5 <= 0 ? 0 : current - 5;
-      let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
+    // const adminGetAllSurveys = e => {
+    //   const regex = !e ? '' : !e.data.regex ? '' : `/${e.data.regex}`;
+    //   const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
+    //   http.get('/api/surveys' + regex, {
+    //         params: {size: 10, page: offset}
+    //       })
+    //       .then(res => {
+    //         if (res.data.success) {
+    //           // surveys.push(...res.data.response.cone)
+    //           getTotalCount(regex);
+    //           makePaginationsInAdminSurvey(offset);
+    //           adminMakeSurveySearchResults(res.data.response.content);
+    //         } else {
+    //           console.log('data fetching error');
+    //         }
+    //       })
+    //       .catch(console.log);
+    // };
 
-      if (surveyCount === 0) {
-        $('.scroll-table').empty()
-        $('.scroll-table').append(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
-        $('.pagination').empty();
-      } else {
-        // if (!regexValue) {
-        first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
-        last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
-        prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
-        next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
-        if (current > 0)
-          paginationElement.append(first).append(prev);
-        for (let i = start; i < end; i++) {
-          let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-          tmp.on('click', {page: i}, adminGetAllSurveys);
-          if (current === i) {
-            tmp.css('color', 'white').css('background-color', '#444444');
-          }
-          paginationElement.append(tmp);
-        }
-        if (current < totalPage - 1)
-          paginationElement.append(next).append(last);
-      }
-      // } else {
-      //   first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
-      //   last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
-      //   prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
-      //   next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
-      //
-      //   if (current >= 1)
-      //     paginationElement.append(first).append(prev);
-      //
-      //   for (let i = start; i < end; i++) {
-      //     let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
-      //     tmp.on('click', {page: i, regex: regexValue}, adminGetAllSurveys);
-      //     if (current === i) {
-      //       tmp.addClass('pagination_button_current');
-      //     } else {
-      //       tmp.removeClass('pagination_button_current');
-      //     }
-      //     paginationElement.append(tmp);
-      //   }
-      //
-      //   if (current < totalPage - 1)
-      //     paginationElement.append(next).append(last);
-      // }
-    }
-
-    const surveyListHeader = () => {
-      let template = $(`<tr class="post-th post-row"></tr>`);
-      template.append(`<th>번호</th>`);
-      template.append(`<th>설문 이름</th>`);
-      template.append(`<th>포인트</th>`);
-      template.append(`<th>설문 시작일</th>`);
-      template.append(`<th>설문 종료일</th>`);
-      template.append(`<th>진행 상태</th>`);
-      template.append(`<th>참여자 수</th>`);
-      template.append(`<th>설문 아이디</th>`);
-      // template.append(`<th>관리</th>`);
-      return template;
-    };
-
-    const adminMakeSurveySearchResults = surveys => {
-      console.log(surveys)
-      const table = $('.scroll-table>tbody');
-      table.empty();
-      surveys.map(survey => {
-        let template = $(`<tr class="post-row">`).on('click', {survey: survey}, setDataInModal);
-        template.append(`<td>${survey.id}</td>`);// 번호
-        template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
-        template.append(`<td>${!survey.point ? '지정 안됨' : survey.point}</td>`);// 지급 포인트
-        template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
-        template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
-        template.append(`<td>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</td>`);// 진행 상태
-        template.append(`<td>${survey.count}</td>`);// 참여자 수
-        template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        // template.append($(`<td></td>`)
-        //     .append($(`<button class="btn_udel btn-support">수정</button>`).on('click', {survey: survey}, updateBtnClickHandler))
-        //     .append(`<span>  </span>`)
-        //     .append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {survey: survey}, deleteBtnClickHandler)))
-        table.append(template)
-      })
-    };
-
-    const adminGetAllSurveys = e => {
-      const regex = !e ? '' : !e.data.regex ? '' : `/${e.data.regex}`;
-      const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      http.get('/api/surveys' + regex, {
-            params: {size: 10, page: offset}
-          })
-          .then(res => {
-            if (res.data.success) {
-              surveys.push(...res.data.response)
-              getTotalCount(regex);
-              makePaginationsInAdminSurvey(offset);
-              adminMakeSurveySearchResults(res.data.response);
-            } else {
-              console.log('data fetching error');
-            }
-          })
-          .catch(console.log);
-    };
-
-    const getTotalCount = regex => {
-      if (!regex) {
-        http.get('/api/survey/total')
-            .then(res => $('.util-search>strong').text(res.data.response))
-            .catch(console.log);
-      } else {
-        http.get('/api/survey/find/' + regex + '/total')
-            .then(res => $('.util-search>strong').text(res.data.response))
-            .catch(console.log);
-      }
-    };
 
     const setDataInModal = e => {
       let survey = e.data.survey
@@ -563,74 +546,81 @@
           .catch(console.log)
     }
 
-    let surveys = []
+    async function getSurveyData(page, type) {
+      const response = await http.get('/api/surveys?type=' + type, {params: {page: page, size: 10}})
+      if (response.data.success) {
+        const data = response.data.response
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+      }
+    }
+
+    const init = e => {
+      let dd = {
+        type: $('input[name=sort_group]:checked').val(),
+        page: !e ? 0 : !e.data.page ? 0 : e.data.page
+      }
+      getSurveyData(dd.page, dd.type).then(obj => {
+        $('#total_count').text(obj.total)
+        const table = $('.scroll-table')
+        table.children('.post-row:not(:first-child)').remove()
+
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage)
+          obj.content.forEach(survey => {
+            table.append(makeSurveyTemplate(survey))
+          })
+        } else {
+          table.children('.post-row:not(:first-child)').remove()
+          table.append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
+        }
+      })
+    }
 
     $(function () {
-      $('.scroll-table>thead').append(surveyListHeader());
-      getTotalCount();
-      adminGetAllSurveys();
+      init()
 
-      /* 요소 클릭 이벤트 */
-      // $(document).on('click', 'tbody > .post-row', updateBtnClickHandler);
-
-      $('input[name=admin_find]').on('keyup', _.throttle(adminGetAllSurveys, 300));
-
-      // todo 타입 필터
-      $('input[name=sort_group]').on('click', function () {
-        let filterValue = $(this).val()
-        $(this).each(function () {
-          if ($(this).val() === filterValue) {
-            $(this).addClass('check_sort')
+      $('input[name=sort_group]').on('click', {page: 0}, init).on('change', function (e) {
+        let id = e.target.id
+        $('input[name=sort_group]').each(function () {
+          if (id === $(this).attr('id')) {
+            $(this).prev().addClass('check_sort')
           } else {
-            $(this).removeClass('check_sort')
+            $(this).prev().removeClass('check_sort')
           }
         })
+      });
 
-        http.get('/api/surveys?type=' + filterValue)
-            .then(res => {
-                  if (res.data.success) {
-                    http.get('/api/survey/total?type=' + filterValue)
-                        .then(res => $('.util-search>strong').text(res.data.response))
-                        .catch(console.log);
-                    makePaginationsInAdminSurvey(0);
-                    adminMakeSurveySearchResults(res.data.response);
-                  }
-                }
-            )
+      $(document).on('click', '.btn-update', function () {
+        $('.modal_wrap').css('display', 'flex');
+      });
+      $(document).on('click', '.btn_close', function () {
+        $('.modal_wrap').css('display', 'none');
+      });
+      $(document).on('click', '.post-row > *', function () {
+        $('.modal_wrap').css('display', 'flex');
+      });
 
-      })
-    });
+      /* 동적 웹디자인 및 유효성 체크 */
+      $(document).on('focus', '.user_info_input', function () {
+        $(this).css('border-bottom', '1px solid #4C99CF');
+        $(this).prevAll('.info_article').css('color', '#4C99CF')
+        $(this).parent().prevAll('.info_article').css('color', '#4C99CF')
+        $(this).parents('.user_info_box').css('border', '1px solid #4C99CF');
+      });
+      $(document).on('blur', '.user_info_input', function () {
+        $(this).css('border-bottom', '1px solid #c5c7d0');
+        $(this).prevAll('.info_article').css('color', '#69666D')
+        $(this).parent().prevAll('.info_article').css('color', '#69666D')
+        $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
+      });
 
-    $(document).on('click', '.btn-update', function () {
-      $('.modal_wrap').css('display', 'flex');
-    });
-    $(document).on('click', '.btn_close', function () {
-      $('.modal_wrap').css('display', 'none');
-    });
-    $(document).on('click', '.post-row > *', function () {
-      $('.modal_wrap').css('display', 'flex');
-    });
-
-    /* 동적 웹디자인 및 유효성 체크 */
-    $(document).on('focus', '.user_info_input', function () {
-      $(this).css('border-bottom', '1px solid #4C99CF');
-      $(this).prevAll('.info_article').css('color', '#4C99CF')
-      $(this).parent().prevAll('.info_article').css('color', '#4C99CF')
-      $(this).parents('.user_info_box').css('border', '1px solid #4C99CF');
-    });
-    $(document).on('blur', '.user_info_input', function () {
-      $(this).css('border-bottom', '1px solid #c5c7d0');
-      $(this).prevAll('.info_article').css('color', '#69666D')
-      $(this).parent().prevAll('.info_article').css('color', '#69666D')
-      $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
-    });
-
-    /* 유효성체크: 숫자만 입력 */
-    function checkNumber(event) {
-      if (event.key >= 0 && event.key <= 9) {
-        return true;
+      /* 유효성체크: 숫자만 입력 */
+      function checkNumber(event) {
+        if (event.key >= 0 && event.key <= 9) {
+          return true;
+        }
+        return false;
       }
-      return false;
-    }
+    })
   </script>
 </th:block>

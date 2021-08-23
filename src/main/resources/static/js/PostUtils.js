@@ -35,3 +35,15 @@ const makePostTemplate = (post) => {
   return template;
 }
 
+const makeSurveyTemplate = (survey) => {
+  let template = $(`<div class="post-row">`).on('click', {survey: survey}, setDataInModal);
+  template.append(`<div>${survey.id}</div>`);// 번호
+  template.append(`<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`);// 설문 이름
+  template.append(`<div>${!survey.point ? '지정 안됨' : survey.point}</div>`);// 지급 포인트
+  template.append(`<div>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); // 설문 기간
+  template.append(`<div>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`)
+  template.append(`<div>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</div>`);// 진행 상태
+  template.append(`<div>${survey.count}</div>`);// 참여자 수
+  template.append(`<div>${survey.surveyId}</div>`);// 서베이 아이디
+  return template
+}

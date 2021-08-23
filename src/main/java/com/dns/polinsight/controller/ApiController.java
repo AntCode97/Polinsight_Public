@@ -10,7 +10,6 @@ import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.object.SurveyMapping;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -132,12 +131,9 @@ public class ApiController {
    * */
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<Page<?>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                        @RequestParam(value = "type", required = false) String type) throws Exception {
-    System.out.println(pageable);
-    //    Sort.by("statusProgress").ascending().and(
+                                                        @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
         Sort.by("endAt").ascending().and(Sort.by("id")));
-    System.out.println(pageable);
     try {
       if (type == null || type.equals("ALL") || type.equals("INDEX")) {
         return success(surveyService.findAll(pageable));
