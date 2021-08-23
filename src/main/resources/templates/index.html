@@ -62,10 +62,13 @@
     /* 진행중인 온라인 조사 */
     .main_survey_list_wrap {
       background-color : #E1EEF6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width            : 100%;
       height           : 100%;
       margin           : 30px auto 50px;
       padding          : 20px 30px;
-      width            : 1000px;
     }
 
     .main_survey_list_title {
@@ -79,11 +82,6 @@
       font-size    : 25px;
       font-weight  : bold;
       margin-right : 10px;
-    }
-
-    .main_survey_item {
-      padding : 10px;
-      width   : 300px;
     }
 
     .survey_run, .survey_stop {
@@ -111,10 +109,19 @@
     }
 
     .main_survey_item_wrap {
-      align-items     : center;
+      max-width: 940px;
       display         : flex;
-      justify-content : space-between;
+      align-items     : center;
+      justify-content : center;
+      gap: 20px;
       margin-bottom   : 20px;
+    }
+
+    .main_survey_item {
+      padding : 10px;
+      width   : calc(33% - 10px);
+      border-radius: 5px;
+      overflow: hidden;
     }
 
     .survey_run {
@@ -174,19 +181,55 @@
       background-color : #DEDEDE;
     }
 
+    .headline_wrap {
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: red;
+      font-size: 55px;
+
+
+    }
+    .small-headline {
+      font-size: 14px;
+    }
+
 
 
 
 
     @media (min-width : 320px) and (max-width : 480px) {
-      .carasel_wrap {display: none;}
-      .panel_wrap {margin: 50px auto 0;}
+      .carasel_wrap { height: 25vh; }
+      .headline_wrap { display: none;}
+      .panel_wrap {
+        flex-direction: column;
+        width: calc(100% - 20px);
+        margin: 20px 10px;
+        padding: 20px 0;
+      }
+      .panel_big_item { font-size: 20px!important; }
+      .panel_item > p {font-size: 12px;}
+      .panel_btn {font-size: 12px;}
+      .panel_wrap > .panel_item_vertical:nth-child(1) { display: none; }
+      .panel_wrap > .panel_line { display: none; }
+      .panel_item_vertical { align-items: center; }
+      .panel_item_horizontal { margin-top: 20px; }
+
 
     }
   </style>
 
 
-  <div class="carasel_wrap"></div>
+  <div class="carasel_wrap">
+    <div class="headline_wrap">
+      <span>고객화 함께 가치를</span>
+      <span>더해가는 기업</span>
+      <span class="small-headline">소제목 블라블라블라블라블라~</span>
+    </div>
+  </div>
   <th:block th:if="${session.user==null}">
     <div class="panel_wrap">
       <div class="panel_item panel_item_vertical">
