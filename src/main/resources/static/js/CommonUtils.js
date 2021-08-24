@@ -1,13 +1,3 @@
-const checkNotNull = inputValue => {
-  return !!inputValue
-}
-
-const http = axios.create({
-  baseURL: "[[${@environment.getProperty('custom.callback.base')}]]",
-  headers: {
-    "Content-Type": "application/json;charset=utf-8",
-  }
-})
 const setDateValue = () => {
   let today = new Date();
   let year = $('select[name=year]')
@@ -57,6 +47,15 @@ const phoneToStringConverter = phone => {
     return phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
   }
 }
+
+const phoneAddHypen = e => {
+  e.target.value = e.target.value.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
+}
+
+const phoneDelHypen = e => {
+  e.target.value = e.target.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
+}
+
 const blankOrNullChecker = val => {
   return !(val.trim())
 }

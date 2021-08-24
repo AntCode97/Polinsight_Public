@@ -28,7 +28,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -253,7 +252,7 @@ public class PostController {
     }
     Post findPost = postService.findOne(postId);
 
-    model.addAttribute("post", findPost);
+    model.addAttribute("post", new PostDTO(findPost));
     List<Post> allPosts = postService.findAll();
     for (int i = 0; i < allPosts.size(); i++) {
       if (allPosts.get(i).getId() == postId) {
@@ -301,8 +300,7 @@ public class PostController {
     }
 
     Post findPost = postService.findOne(postId);
-    model.addAttribute("post", findPost);
-
+    model.addAttribute("post", new PostDTO(findPost));
     return "admin/admin_post_view";
   }
 

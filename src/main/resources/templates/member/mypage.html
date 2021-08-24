@@ -1344,29 +1344,18 @@
     };
 
     const userInfoUpdate = () => {
-      let password_current = $('input[name=password_current]').val()
-      let password = $('input[name=password]').val()
-      let password_confirm = $('input[name=password_confirm]').val()
-      if (checkNotNull(password_current) && checkNotNull(password) && checkNotNull(password_confirm)) {
-        if (password_current !== password_confirm && password === password_confirm) {
-          http
-              .put('/update', {...userInfo})
-              .then(res => {
-                console.log(res);
-                alert('회원 정보가 업데이트 되었습니다.');
-                location.reload();
-              })
-              .catch(err => {
-                console.log(err);
-                alert('업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요');
-              });
-        } else {
-          alert('입력한 비밀번호를 확인해주세요')
-        }
-      } else {
-        alert('값을 모두 입력해주세요')
-      }
-    };
+      http
+          .put('/update', {...userInfo})
+          .then(res => {
+            console.log(res);
+            alert('회원 정보가 업데이트 되었습니다.');
+            location.reload();
+          })
+          .catch(err => {
+            console.log(err);
+            alert('업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요');
+          });
+    }
 
 
     const init = () => {
@@ -1377,11 +1366,14 @@
       user_point.text(`${(prefix * 10000).toLocaleString()} 포인트 현금전환 가능합니다`)
       $('input[name=point]').val((user_total_point).toLocaleString())
       $('input[name=able_point_info]').val((prefix * 10000).toLocaleString())
-
+      let sbox = $('select[name=reqpoint]')
       for (let i = 1; i <= prefix; i++) {
-        $('select[name=reqpoint]').append(`<option value="${i * 10000}">${i * 10000}</option>`)
+        sbox.append(`<option value="${i * 10000}">${i * 10000}</option>`)
       }
 
+      if (sbox.find('option').length <= 0) {
+        sbox.append(`<option>신청 불가</option>`)
+      }
 
     }
 
@@ -1389,11 +1381,7 @@
       const account = $('input[name=account]')
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
-      console.log({
-        'point': reqPoint.val(),
-        'account': account.val(),
-        'bank': bank.val()
-      })
+
       if (!account.val()) {
         account.focus();
         alert('계좌번호를 입력해 주세요');
@@ -1498,8 +1486,12 @@
     const pwdChecker = () => {
       if (blankOrNullChecker(userInfo['password_current']) && blankOrNullChecker(userInfo['password']) &&
           blankOrNullChecker(userInfo['password_confirm'])) {
-        if (userInfo['password'] === userInfo['password_confirm']) {
-          userInfoUpdate()
+        if (passwordInputValidator(userInfo['password_confirm'])) {
+          if (userInfo['password'] === userInfo['password_confirm']) {
+            userInfoUpdate()
+          }
+        } else {
+          alert('올바른 패스워드를 입력해주세요')
         }
       }
     }
@@ -1516,7 +1508,7 @@
       $('button[name=pointrequest_btn]').on('click', checkRequiredInput);
       $('button[name=user_delete]').on('click', userDelete)
       $('.right_content').find('input').on('keyup', inputChangeHandler).on('change', inputChangeHandler).find('select').on('change', inputChangeHandler)
-      $('button[name=user_info_update_btn]').on('click', userInfoUpdate)
+      $('button[name=user_info_update_btn]').on('click', pwdChecker)
       $('.input_content').find('input[type=password]').on('keyup blur change', inputChangeHandler)
     });
 

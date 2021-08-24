@@ -979,7 +979,7 @@
       let tmpTableData = $(`<td></td>`)
       tmpTableData.append($(`<button class="btn_udel btn-support btn-open-modal">수정</button>`).on('click', {userinfo: memberInfo}, openModalWithMemberInfo))
       tmpTableData.append($(`<span>  </span>`))
-      tmpTableData.append($(`<button class="btn_udel btn-warn">삭제</button>`))
+      tmpTableData.append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {email: memberInfo.email}, userDeleteButtonHandler))
       template.append(tmpTableData)
       template.on('click', {userinfo: memberInfo}, openModalWithMemberInfo)
       return template;
@@ -1016,7 +1016,7 @@
     }
 
     const infoChangeHandler = e => {
-      console.log(e.target.name, e.target.value)
+
       if (e.target.name === 'favorite') {
         if (updatedUser['favorite'].includes(e.target.value)) {
           updatedUser['favorite'].pop(e.target.value)
@@ -1124,6 +1124,20 @@
       }
     }
 
+    const userDeleteButtonHandler = (e) => {
+      http.delete('/api/user/' + e.data.email)
+          .then(res => {
+            if (res.data.success) {
+              alert('유저 삭제 성공')
+
+            } else {
+              alert('유저 삭제 실패\n관리자에게 문의해주세요')
+            }
+          })
+          .catch(console.log)
+          .finally(() => location.replace('/admin/memberlist'))
+    }
+
     let updatedUser = {}
 
     $(function () {
@@ -1148,6 +1162,10 @@
           }
         }).catch(console.log)
       })
+
+      $('input[name=phone]')
+          .on('focus', phoneDelHypen)
+          .on('blur', phoneAddHypen)
     })
 
 
@@ -1175,12 +1193,6 @@
     $(document).on('click', '.btn_close', function () {
       $('.modal_wrap').css('display', 'none');
     });
-    // $(document).on('click', '.post-row > *', function () {
-    //   $('.modal_wrap').css('display', 'flex');
-    // });
-    // $(document).on('click', '.btn-open-modal', function () {
-    //   $('.modal_wrap').css('display', 'flex');
-    // });
 
     function checkNumber(event) {
       if (event.key >= 0 && event.key <= 9) {

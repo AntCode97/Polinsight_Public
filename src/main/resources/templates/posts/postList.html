@@ -1,4 +1,3 @@
-<!--<th:block th:include="posts/PostCommon" />-->
 <th:block th:include="layout/header" />
 <th:block>
   <style>
@@ -7,10 +6,10 @@
     }
 
     .board_contents_wrap {
-      margin      : 80px auto 0;
-      max-width   : 1200px;
-      padding-top : 20px;
+      margin    : auto;
+      max-width : 1200px;
     }
+
 
     .main_item {
       border-bottom : 1px dashed #DADADA;
@@ -37,10 +36,10 @@
       appearance   : none;
       background   : #FFFFFF url("/img/etc/arrow-search.png") no-repeat right center;
       border       : 1px solid #CCD0D7;
+      flex         : 1;
       font-size    : 1.2rem;
       height       : 55px;
       padding-left : 20px;
-      flex: 1;
     }
 
     /* 게시글 목록 */
@@ -129,107 +128,114 @@
     }
 
     @media (min-width : 320px) and (max-width : 480px) {
-      .select-box {flex: 1.5; padding-left: 10px; height: 35px; font-size: 14px;}
+      .select-box {
+        flex         : 1.5;
+        font-size    : 14px;
+        height       : 35px;
+        padding-left : 10px;
+      }
     }
   </style>
-  <div class="board_contents_wrap">
-    <!-- Header Title -->
-    <div class="main_item"><p style="text-align: center;">공지사항</p></div>
-    <div class="main_contents_wrap">
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="board_contents_wrap">
+        <!-- Header Title -->
+        <div class="main_item"><p style="text-align: center;">공지사항</p></div>
+        <div class="main_contents_wrap">
 
-      <!-- Search Box -->
-      <div class="post-search">
-        <div class="util-search">총 <strong th:text="${posts.getTotalElements()}"></strong>개의 게시물이 있습니다.</div>
-        <div class="form-search">
-          <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
-            <div class="search-box">
-              <select th:field="*{postType}" class="select-box" name="classify" id="classify">
-                <optgroup label="분류 선택">
-                  <option selected value="NOTICE">공지</option>
-                  <option value="EVENT">이벤트</option>
-                </optgroup>
-              </select>
-              <select th:field="*{searchType}" name="search_item" class="select-box" id="type">
-                <optgroup label="통합검색">
-                  <option selected th:value="TITLE" th:text="제목"></option>
-                  <option th:value="CONTENT" th:text="내용"></option>
-                </optgroup>
-              </select>
-              <div class="box-search">
-                <input id="searchinput" th:field="*{searchValue}" type="text" onkeyup="makeCloseBtn()">
-                <input class="disabled" type="button"></input>
-                <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
-              </div>
+          <!-- Search Box -->
+          <div class="post-search">
+            <div class="util-search">총 <strong th:text="${posts.getTotalElements()}"></strong>개의 게시물이 있습니다.</div>
+            <div class="form-search">
+              <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
+                <div class="search-box">
+                  <select th:field="*{postType}" class="select-box" name="classify" id="classify">
+                    <optgroup label="분류 선택">
+                      <option selected value="NOTICE">공지</option>
+                      <option value="EVENT">이벤트</option>
+                    </optgroup>
+                  </select>
+                  <select th:field="*{searchType}" name="search_item" class="select-box" id="type">
+                    <optgroup label="통합검색">
+                      <option selected th:value="TITLE" th:text="제목"></option>
+                      <option th:value="CONTENT" th:text="내용"></option>
+                    </optgroup>
+                  </select>
+                  <div class="box-search">
+                    <input id="searchinput" th:field="*{searchValue}" type="text" onkeyup="makeCloseBtn()">
+                    <input class="disabled" type="button"></input>
+                    <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
+          </div>
 
-      <!-- 게시글 목록 -->
-      <div class="scroll-table">
-        <div class="post-row post-th">
-          <span>번호</span>
-          <a href="#">제목</a>
-          <span>작성자</span>
-          <span>작성일</span>
-          <span>조회수</span>
-          <span>첨부파일</span>
-        </div>
-        <div class="post-row" th:each="post:${posts}">
-          <span th:text="${post.id}"></span>
-          <a th:href="@{/posts/{id} (id=${post.id})}" class="post-title">
-            <span th:text="${post.title}"></span>
-            <span class="new-span"
-                  th:if="${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }">
+          <!-- 게시글 목록 -->
+          <div class="scroll-table">
+            <div class="post-row post-th">
+              <span>번호</span>
+              <a href="#">제목</a>
+              <span>작성자</span>
+              <span>작성일</span>
+              <span>조회수</span>
+              <span>첨부파일</span>
+            </div>
+            <div class="post-row" th:each="post:${posts}">
+              <span th:text="${post.id}"></span>
+              <a th:href="@{/posts/{id} (id=${post.id})}" class="post-title">
+                <span th:text="${post.title}"></span>
+                <span class="new-span"
+                      th:if="${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }">
           new
       </span>
-            <strong></strong></a>
-          <!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
-          <!--          -->
-          <span th:text="${post.user.name}"></span>
-          <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
-          <span th:text="${post.viewcnt}">52</span>
-          <!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
-          <!--          파일 유무에 따른 디자인 변경(색상)-->
-          <span>
+                <strong></strong></a>
+              <!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
+              <!--          -->
+              <span th:text="${post.user.name}"></span>
+              <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
+              <span th:text="${post.viewcnt}">52</span>
+              <!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
+              <!--          파일 유무에 따른 디자인 변경(색상)-->
+              <span>
                         <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
                         <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
                     </span>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      <!-- 페이지네이션 -->
-      <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
-        <div th:if="${postSearch.getPostType()} !=null">
-          <a th:class="${posts.first} ? 'disabled'"
-             th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First"><span
-              aria-hidden="true"><i class="fas fa-angle-double-left"></i></span></a>
-          <a th:class="${posts.first} ? 'disabled'"
-             th:href="${posts.first} ? '#' : @{/posts/search(page=${posts.number}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
-             aria-label="Previous"><i class="fas fa-angle-left"></i></a>
-          <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
-             th:text="${page}"
-             th:href="@{/posts/search(page=${page}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"></a>
-          <a th:class="${posts.last} ? 'disabled'"
-             th:href="${posts.last} ? '#' :  @{/posts/search(page=${posts.number+2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
-             aria-label="Next"><i class="fas fa-angle-right"></i></a>
-          <a th:class="${posts.last} ? 'disabled'"
-             th:href="@{/posts/search(page=${posts.totalPages}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}"
-             aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
-        </div>
+          <!-- 페이지네이션 -->
+          <div class="page-button" th:with="start=${T(Math).floor(posts.number/10)*10 + 1}, last=(${start + 9 < posts.totalPages ? start + 9 : posts.totalPages})">
+            <div th:if="${postSearch.getPostType()} !=null">
+              <a th:class="${posts.first} ? 'disabled'"
+                 th:href="@{/posts/search(page=1, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}" aria-label="First"><span
+                  aria-hidden="true"><i class="fas fa-angle-double-left"></i></span></a>
+              <a th:class="${posts.first} ? 'disabled'"
+                 th:href="${posts.first} ? '#' : @{/posts/search(page=${posts.number}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
+                 aria-label="Previous"><i class="fas fa-angle-left"></i></a>
+              <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
+                 th:text="${page}"
+                 th:href="@{/posts/search(page=${page}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"></a>
+              <a th:class="${posts.last} ? 'disabled'"
+                 th:href="${posts.last} ? '#' :  @{/posts/search(page=${posts.number+2}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue})}"
+                 aria-label="Next"><i class="fas fa-angle-right"></i></a>
+              <a th:class="${posts.last} ? 'disabled'"
+                 th:href="@{/posts/search(page=${posts.totalPages}, postType=${postSearch.postType}, searchType=${postSearch.searchType},searchValue=${postSearch.searchValue} )}"
+                 aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
+            </div>
 
-        <div th:if="${postSearch.getPostType()} ==null">
-          <a th:class="${posts.first} ? 'disabled'" th:href="@{/posts(page=1)}" aria-label="First"><i class="fas fa-angle-double-left"></i></a>
-          <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/posts(page=${posts.number})}" aria-label="Previous"><i class="fas fa-angle-left"></i></a>
-          <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
-             th:text="${page}" th:href="@{/posts(page=${page})}"></a>
-          <a th:class="${posts.last} ? 'disabled'" th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2})}" aria-label="Next"><i class="fas fa-angle-right"></i></a>
-          <a th:class="${posts.last} ? 'disabled'" th:href="@{/posts(page=${posts.totalPages})}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
+            <div th:if="${postSearch.getPostType()} ==null">
+              <a th:class="${posts.first} ? 'disabled'" th:href="@{/posts(page=1)}" aria-label="First"><i class="fas fa-angle-double-left"></i></a>
+              <a th:class="${posts.first} ? 'disabled'" th:href="${posts.first} ? '#' : @{/posts(page=${posts.number})}" aria-label="Previous"><i class="fas fa-angle-left"></i></a>
+              <a th:unless="${page == 0}" class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == posts.number + 1} ? 'active': 'not-active' "
+                 th:text="${page}" th:href="@{/posts(page=${page})}"></a>
+              <a th:class="${posts.last} ? 'disabled'" th:href="${posts.last} ? '#' : @{/posts(page=${posts.number + 2})}" aria-label="Next"><i class="fas fa-angle-right"></i></a>
+              <a th:class="${posts.last} ? 'disabled'" th:href="@{/posts(page=${posts.totalPages})}" aria-label="Last"><i class="fas fa-angle-double-right"></i></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div>
     <th:block th:include="layout/footer" />
   </div>
 </th:block>
