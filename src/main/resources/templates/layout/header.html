@@ -133,7 +133,7 @@
     }
 
     .carasel_wrap {
-      background-image    : url('img/banner/polinsight_banner.jpg');
+      background-image    : url('/img/banner/polinsight_banner.jpg');
       background-position : center, center;
       background-size     : cover;
       height              : 50vh;
@@ -251,7 +251,7 @@
   <ul class="navbar-nav">
     <li class="nav-item"><a th:href="@{/}" class="nav-link">Company</a></li>
     <li class="nav-item"><a th:href="@{/}" class="nav-link">Business</a></li>
-    <li class="nav-item"><a th:href="@{/}" class="nav-link">Research</a></li>
+    <li class="nav-item"><a th:href="@{/research/online}" class="nav-link">Research</a></li>
     <li class="nav-item"><a th:href="@{/posts}" class="nav-link">Customer</a></li>
   </ul>
   <hr class="navbar-hr">
@@ -320,8 +320,8 @@
             <a th:href="@{/}">Research</a>
             <div class="dropdown" style="left: 314.5px;">
               <div class="dropdown_box">
-                <a class="dropdown_element" th:href="@{/}">온라인조사</a>
-                <a class="dropdown_element" th:href="@{/}">폴'S인사이트</a>
+                <a class="dropdown_element" th:href="@{/research/online}">온라인조사</a>
+                <a class="dropdown_element" th:href="@{/research/pols}">폴'S인사이트</a>
               </div>
             </div>
           </li>

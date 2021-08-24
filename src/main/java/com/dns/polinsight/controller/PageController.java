@@ -5,6 +5,7 @@ import com.dns.polinsight.config.oauth.SessionUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,9 +49,7 @@ public class PageController {
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() {
-    return new ModelAndView("member/contract");
-  }
+  public ModelAndView contract() { return new ModelAndView("member/contract"); }
 
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
@@ -96,6 +95,18 @@ public class PageController {
   @GetMapping("/test")
   public ModelAndView testFunction() {
     return new ModelAndView("test");
+  }
+
+  @GetMapping("/research/online")
+  public String getResearchOnline(Model model) {
+    model.addAttribute("checked", "online");
+    return "research/onlineSurvey";
+  }
+
+  @GetMapping("/research/pols")
+  public String getResearchPols(Model model) {
+    model.addAttribute("checked", "pols");
+    return "research/pols";
   }
 
 }
