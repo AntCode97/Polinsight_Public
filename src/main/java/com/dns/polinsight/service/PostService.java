@@ -23,6 +23,12 @@ public interface PostService {
 
   Page<PostMapping> findPostsByType(PostType type, Pageable pageable);
 
+  Page<PostMapping> findPostsByTitle(String title, PostType type, Pageable pageable);
+
+  Page<PostMapping> findPostsBySearchcontent(String searchcontent, PostType type, Pageable pageable);
+
+  Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable);
+
   Page<Post> getPostList(Pageable pageable);
 
   Page<Post> searchTitle(String title, PostType postType, Pageable pageable);

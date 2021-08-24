@@ -50,9 +50,30 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Page<PostMapping> findPostsByType(PostType type, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
     return repository.findAllByPostType(type, pageable);
   }
 
+  @Override
+  public Page<PostMapping> findPostsByTitle(String title, PostType type, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
+    return repository.findPostMappingByTitleContainingAndPostType(title, type, pageable);
+  }
+
+  @Override
+  public Page<PostMapping> findPostsBySearchcontent(String searchcontent, PostType type, Pageable pageable) {
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
+    return repository.findPostMappingBySearchcontentContainingAndPostType(searchcontent, type, pageable);
+  }
+  @Override
+  public Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable){
+    int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
+    pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
+    return repository.findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(keyword,keyword, postType, pageable);
+  }
 
   @Override
   public void delete(Post post) {

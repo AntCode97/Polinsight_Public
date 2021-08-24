@@ -58,12 +58,13 @@ public class PostController {
   @GetMapping("admin/posts")
   public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
 
-    Page<Post> posts;
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
-        posts = postService.searchKeyword(keyword, pageable);
+        posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
 
         long postCount = posts.getTotalElements();
         model.addAttribute("postCount", postCount);
@@ -71,7 +72,7 @@ public class PostController {
         model.addAttribute("posts", posts);
       }
     } else {
-      posts = postService.getPostList(pageable);
+      posts = postService.findPostsByType(PostType.NOTICE, pageable);
       long postCount = posts.getTotalElements();
       model.addAttribute("postCount", postCount);
       session.setAttribute("postCount", postCount);
@@ -185,9 +186,10 @@ public class PostController {
   @GetMapping("posts")
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
-    Page<Post> posts = postService.getPostList(pageable);
+    //Page<Post> posts = postService.getPostList(pageable);
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
 
-    posts.get().map(Post::toString);
+    //posts.get().map(Post::toString);
 
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
@@ -203,11 +205,11 @@ public class PostController {
   public String search(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(postSearch.getSearchType() + postSearch.getSearchValue());
-    Page<Post> posts;
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (postSearch.getSearchType() == SearchType.TITLE) {
-      posts = postService.searchTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsByTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     } else {
-      posts = postService.searchContent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsBySearchcontent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     }
     model.addAttribute("posts", posts);
 
@@ -460,7 +462,10 @@ public class PostController {
 
     String keyword = paramMap.get("keyword").toString();
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-    Page<Post> posts = postService.searchKeyword(keyword, pageable);
+
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts =  postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
+
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
     session.setAttribute("postCount", posts.getTotalElements());
