@@ -41,34 +41,6 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_dashboard");
   }
 
-
-  //  /*
-  //   * 게시글 관리 페이지
-  //   * */
-  //  @GetMapping("/post/manage")
-  //  public ModelAndView getBoardManage() {
-  //    return new ModelAndView("admin/admin_board_list");
-  //  }
-  //
-  //  /*
-  //   * 공지사항 관리 페이지
-  //   * */
-  //  @GetMapping("/noti/manage")
-  //  public ModelAndView getNotiManage() {
-  //    return new ModelAndView("admin/admin_board_register");
-  //  }
-  //
-  //  @GetMapping("/user/manage")
-  //  public ModelAndView getUserManage() {
-  //    return new ModelAndView("admin/admin_board_view");
-  //  }
-  //
-  //
-  //  @GetMapping("/posts/notice")
-  //  public ModelAndView adminBoardnotice() {
-  //    return new ModelAndView("admin/");
-  //  }
-
   @GetMapping("/boards/download")
   public ModelAndView adminBoarddownload() {
     return new ModelAndView("admin_post_download");
@@ -105,6 +77,21 @@ public class AdminPageController {
   @GetMapping("/pointlist")
   public ModelAndView adminUserPointRequest() {
     return new ModelAndView("admin/admin_point_req_list");
+  }
+
+  @GetMapping("/events")
+  public ModelAndView events() {
+    return new ModelAndView("admin/admin_events");
+  }
+
+  @GetMapping("/qna")
+  public ModelAndView qna() {
+    return new ModelAndView("admin/admin_qna");
+  }
+
+  @GetMapping("/faq")
+  public ModelAndView faq() {
+    return new ModelAndView("admin/admin_faq");
   }
 
 }

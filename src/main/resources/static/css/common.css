@@ -12,12 +12,15 @@
 html {
   font-size : 14px;
   height    : 100%;
+  margin    : 0;
+  padding   : 0;
 }
 
 body {
   color       : #69666D;
   font-family : 'Nanum Gothic', sans-serif;
   font-size   : 14px;
+  height      : 100%;
   margin      : 0;
   padding     : 0;
 }
@@ -219,4 +222,58 @@ form {
 
 .disabled {
   display : none !important;
+}
+
+#loading {
+  display  : none;
+  height   : 100%;
+  left     : 0;
+  position : absolute;
+  top      : 0;
+  width    : 100%;
+}
+
+@keyframes spinner {
+  from {
+    transform : rotate(0deg)
+  }
+  to {
+    transform : rotate(360deg)
+  }
+}
+
+#loading .spinner {
+  animation           : spinner .8s ease infinite;
+  border              : 8px solid transparent;
+  border-bottom-color : #F19022;
+  border-radius       : 50%;
+  border-top-color    : #F19022;
+  box-sizing          : border-box;
+  height              : 64px;
+  left                : 50%;
+  margin-left         : 32px;
+  margin-top          : -32px;
+  position            : absolute;
+  top                 : 50%;
+  width               : 64px;
+}
+
+.main_item {
+  border-bottom : 1px dashed #DADADA;
+  color         : #000000;
+  font-size     : 2rem;
+  font-weight   : bold;
+  padding       : 10px 0 20px;
+}
+
+.flex-wrapper {
+  display        : flex;
+  flex-direction : column;
+  height         : 100%;
+  width          : 100%;
+}
+
+.flex-content {
+  flex        : 1;
+  padding-top : 120px;
 }

@@ -18,23 +18,18 @@ public class SurveyStatus {
 
   // 서베이몽키에서 등록한 설문의 커스텀 변수
   @ElementCollection
-  @Builder.Default
   @Column(name = "variable")
   @Setter
   private Set<String> variables = new HashSet<>();
 
   // 설문을 완료한 사람 수
-  @Builder.Default
   @Setter
-  private Long count = 0L;
+  private Long count;
 
   @Enumerated(EnumType.STRING)
-  @Builder.Default
   @Setter
   private ProgressType progress = ProgressType.BEFORE;
 
-  @Builder.Default
-  @Column(name = "minimum_time")
   private Integer minimumTime = 30;
 
 

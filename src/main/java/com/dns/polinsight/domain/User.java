@@ -72,6 +72,7 @@ public class User implements UserDetails {
   @Setter
   private Long point = 0L;
 
+  @Setter
   @Embedded
   private Panel panel;
 

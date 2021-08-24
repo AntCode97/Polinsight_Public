@@ -10,29 +10,30 @@ import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
-import com.dns.polinsight.types.Email;
-import com.dns.polinsight.types.Phone;
-import com.dns.polinsight.types.PointRequestProgressType;
-import com.dns.polinsight.types.UserRoleType;
+import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -44,6 +45,7 @@ import static com.dns.polinsight.utils.ApiUtils.success;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ApiController {
+
 
   private final UserService userService;
 
@@ -57,9 +59,9 @@ public class ApiController {
 
   private final PostService postService;
 
-  private final CollectorService collectorService;
-
   private final PointHistoryService pointHistoryService;
+
+  private final SurveyRepository surveyRepository;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -128,31 +130,26 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                                @RequestParam(value = "type", required = false) String type) throws Exception {
+  public ApiUtils.ApiResult<Page<?>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                        @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        Sort.by("endAt").ascending().and(Sort.by("id")));
     try {
-      List<Survey> surveyList = null;
-      if (type == null) {
-        surveyList = surveyService.findAll(pageable).getContent();
+      if (type == null || type.equals("ALL") || type.equals("INDEX")) {
+        return success(surveyService.findAll(pageable));
       } else {
-        surveyList = surveyService.findAll(pageable).getContent();
+        return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
       }
-      //      else {
-      //        // type is more
-      //
-      //      }
-
-      return success(surveyList.parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception();
     }
   }
 
-
   @GetMapping("/survey/total")
-  public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
+  public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
     try {
-      return success(surveyService.countAllSurvey());
+      return success(surveyService.countAllSurvey(type));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -353,7 +350,12 @@ public class ApiController {
   @GetMapping("/points")
   public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      List<PointRequestDto> list = pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList());
+      User user = userService.findById(list.get(0).getUid()).orElseThrow(UserNotFoundException::new);
+      return success(list.parallelStream().map(dto -> {
+        dto.setName(user.getName());
+        return dto;
+      }).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -415,7 +417,6 @@ public class ApiController {
     }
   }
 
-
   @PostMapping("/find/email")
   public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
     try {
@@ -435,11 +436,14 @@ public class ApiController {
     }
   }
 
-
-  @GetMapping("/test")
-  public void testGet(HttpSession session) throws Exception {
-    log.debug(String.valueOf(session.getMaxInactiveInterval()));
-    log.debug(String.valueOf(session.getLastAccessedTime()));
+  @GetMapping("posts")
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+                                                                                         @PageableDefault Pageable pageable) throws Exception {
+    try {
+      return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
   }
 
 }

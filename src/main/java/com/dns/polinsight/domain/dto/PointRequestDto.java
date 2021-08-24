@@ -2,12 +2,9 @@ package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.types.BankType;
-import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.PointRequestProgressType;
-import com.dns.polinsight.types.convereter.EmailAttrConverter;
 import lombok.*;
 
-import javax.persistence.Convert;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
@@ -42,8 +39,10 @@ public class PointRequestDto {
   private String account;
 
   @Setter
-  @Convert(converter = EmailAttrConverter.class, attributeName = "email")
-  private Email email;
+  private String email;
+
+  @Setter
+  private String name;
 
   public PointRequestDto(PointRequest pointRequest) {
     this.id = pointRequest.getId();
@@ -52,7 +51,7 @@ public class PointRequestDto {
     this.account = pointRequest.getAccount();
     this.bank = pointRequest.getBank();
     this.progress = pointRequest.getProgress();
-    this.email = pointRequest.getEmail();
+    this.email = pointRequest.getEmail().toString();
   }
 
 }

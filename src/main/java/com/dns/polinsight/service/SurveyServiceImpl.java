@@ -10,6 +10,7 @@ import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyJdbcTemplate;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;
+import com.dns.polinsight.types.ProgressType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,8 +64,13 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Page<Survey> findAll(Pageable pageable) {
-    return surveyRepository.findAll(pageable);
+  public Page<SurveyDto> findAll(Pageable pageable) {
+    return surveyJdbcTemplate.findAllSurveys(pageable);
+  }
+
+  @Override
+  public Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type) {
+    return surveyJdbcTemplate.findAllSurveysByProgressType(type, pageable);
   }
 
   @Override
@@ -178,21 +184,16 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public long countAllSurvey() {
-    return surveyRepository.count();
+  public long countAllSurvey(String type) {
+    if (type == null || type.equals("ALL") || type.equals("index"))
+      return surveyRepository.countAllSurveyWithCollector();
+    else
+      return surveyRepository.countAllSurveyWithCollectorWithCondition(type);
   }
 
   @Override
   public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
     surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
-  }
-
-  @Override
-  public List<SurveyDto> findAllSurveyWithCollector(Pageable pageable) {
-    List<SurveyDto> list = surveyJdbcTemplate.findAllSurveyWithCollector("BEFORE", 8);
-    list.addAll(surveyJdbcTemplate.findAllSurveyWithCollector("ONGOING", 10));
-    Collections.sort(list);
-    return list;
   }
 
   /**

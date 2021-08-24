@@ -75,21 +75,35 @@
       color            : #FFFFFF;
     }
 
+    #more_survey_btn {
+      cursor      : pointer;
+      font-size   : 14px;
+      font-weight : bold;
+    }
+
+    #more_survey_btn:hover {
+      color : #4C99CF;
+    }
+
   </style>
   <div class="main_survey_list_wrap">
     <div class="main_survey_list_title">
       <div>
+      <!-- 서베이 추가 로딩 버튼-->
+      <p id="more_survey_btn"><i class="fas fa-plus"></i>불러오기</p>
         <div class="survey_title_wrap">
           <p>진행중인 <span class="pol_color">온라인조사</span></p>
           <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
         </div>
-        <span class="survey_plus"><i class="fas fa-plus"></i>더보기</span>
       </div>
-
     </div>
     <div class="main_survey_box">
     </div>
   </div>
+<!--   로딩 스피너 -->
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
   <div class="modal_container">
     <div class="modal_wrap">
       <div class="modal_content">
@@ -132,57 +146,48 @@
 
       return template;
     }
-    const makeSurveyCardList = (surveyList) => {
-
+    const makeSurveyCardList = surveyList => {
       const survey_box = $(".main_survey_box");
+      if (totalSurveys <= (current * 10)) {
+        // hide more button
+        $('#more_survey').hide()
+        current = totalSurveys / 10;
+        return
+      } else {
+        $('#more_survey').show()
+      }
+      if (current === 0)
+        survey_box.empty().append('<div class="main_survey_item_wrap"></div>')
+
       let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-      let count = 0;
+
       surveyList.forEach(survey => {
-        if (count % 3 !== 0) {
+        if (item_wrap.find('.main_survey_item').length < 3) {
           item_wrap.append(makeSurveyCard(survey))
         } else {
-          survey_box.append('<div class="main_survey_item_wrap"></div>')
-          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-          item_wrap.append(makeSurveyCard(survey))
-        }
-        count++;
-      })
-
-      // 마지막 라인 지우기
-      $('.main_survey_item_wrap').each(function () {
-        if ($(this).find('.main_survey_item').length < 3) {
-          $(this).remove()
+          item_wrap = $('<div class="main_survey_item_wrap"></div>')
+          survey_box.append(item_wrap)
         }
       })
     }
 
     const getSurveyList = e => {
-      let type = !!e ? e.data.type : 'index'
-      if (type === 'more') {
-        current++;
-        console.log(current)
-        // TODO 쿼리 변경 필요
-        http
-            .get('/api/surveys?type=' + type, {page: current, size: 10})
-            .then(res => {
-              console.log(res)
-              if (res.data.success) {
-
-              }
-            })
-      } else {
-        http
-            .get('/api/surveys?type=' + type, {
-              page: current,
-              size: 10
-            })
-            .then(res => {
-              if (res.data.success) {
-                makeSurveyCardList(res.data.response)
-              }
-            })
-            .catch(console.log)
-      }
+      http
+          .get('/api/surveys?type=INDEX', {
+            params:
+                {
+                  page: current,
+                  size: 10
+                }
+          })
+          .then(res => {
+            if (res.data.success) {
+              // surveys.push(...res.data.response)
+              makeSurveyCardList(res.data.response.content)
+            }
+          })
+          .catch(console.log)
+      // spinner.hide()
     }
 
 
@@ -228,13 +233,10 @@
     const surveyCardClickEventHandler = (e) => {
       e.preventDefault()
       e.returnValue = false;
-
       const seq = e.data.seq
       const surveyId = e.data.surveyid
       const title = e.data.title
-      // FIXME
       if (!loginChk(seq)) return
-
 
       $('.modal_container').css('display', 'flex')
 
@@ -256,12 +258,23 @@
         $('.modal_container').fadeOut()
       })
     }
+
+    const getSurveyTotalCount = () => {
+      http.get('/api/survey/total').then(res => totalSurveys = res.data.success ? res.data.response : alert())
+    }
+
+    let totalSurveys = 0;
     let current = 0;
     const surveys = []
     $(function () {
+      getSurveyTotalCount();
       getSurveyList();
       $('input[name=searchInput]').on('keyup', asyncSurveySearch)
-      $('#more_survey').on('click', {type: 'more'}, getSurveyList)
+      $('#more_survey_btn').on('click', () => {
+        current++;
+        getSurveyList()
+        document.body.scrollTop = document.body.scrollHeight - 180;
+      })
     })
   </script>
 </th:block>

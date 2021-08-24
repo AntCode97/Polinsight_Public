@@ -61,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
-        .cors().disable()
+        .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
         .antMatchers(permission.getTemplate().toArray(new String[0])).permitAll()
@@ -97,20 +97,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .invalidateHttpSession(true)
         .and()
         .sessionManagement()
-        .sessionAuthenticationErrorUrl("/login")
-        .invalidSessionUrl("/login")
+        .sessionAuthenticationErrorUrl("/")
+        .invalidSessionUrl("/")
         .sessionConcurrency(concurrencyControlConfigurer -> {
           concurrencyControlConfigurer.expiredUrl("/login");
           concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
           concurrencyControlConfigurer.maxSessionsPreventsLogin(true);
         })
         .and()
-        .httpBasic().disable()
-        .oauth2Login()
-        .loginPage("/login")
-        .successHandler(successHandler)
-        .userInfoEndpoint()
-        .userService(customOAuth2Service);
+        .httpBasic().disable();
+    //        .oauth2Login()
+    //        .loginPage("/login")
+    //        .successHandler(successHandler)
+    //        .userInfoEndpoint()
+    //        .userService(customOAuth2Service);
   }
 
   @Bean
@@ -118,16 +118,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration corsConfiguration = new CorsConfiguration();
-    corsConfiguration.addAllowedHeader("*");
-    corsConfiguration.addAllowedOrigin("*");
-    corsConfiguration.addAllowedMethod("*");
-    corsConfiguration.setAllowCredentials(true);
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", corsConfiguration);
-    return source;
-  }
+  //  @Bean
+  //  public CorsConfigurationSource corsConfigurationSource() {
+  //    CorsConfiguration corsConfiguration = new CorsConfiguration();
+  //    corsConfiguration.addAllowedHeader("*");
+  //    corsConfiguration.addAllowedOrigin("*");
+  //    corsConfiguration.addAllowedMethod("*");
+  //    corsConfiguration.setAllowCredentials(true);
+  //    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+  //    source.registerCorsConfiguration("/**", corsConfiguration);
+  //    return source;
+  //  }
 
 }

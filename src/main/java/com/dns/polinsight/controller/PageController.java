@@ -65,11 +65,6 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/panelagreement")
-  public ModelAndView panelAgreement() {
-    return new ModelAndView("member/pagree");
-  }
-
   @GetMapping("/success_basic")
   public ModelAndView successBasicMemberSignUp() {
     return new ModelAndView("member/success_basicmember");
@@ -82,9 +77,9 @@ public class PageController {
 
   @GetMapping("/basictopanel")
   public ModelAndView changeBasicToPanel(@LoginUser SessionUser sessionUser, HttpSession session) {
-    session.invalidate();
+    //    session.invalidate();
     session.setAttribute("basic_user", sessionUser);
-    return new ModelAndView("redirect:/panelagreement");
+    return new ModelAndView("redirect:/panel");
   }
 
   @GetMapping("/find")
@@ -92,9 +87,19 @@ public class PageController {
     return new ModelAndView("member/find");
   }
 
-  @GetMapping("/test")
-  public ModelAndView testFunction() {
-    return new ModelAndView("test");
+  @GetMapping("/events")
+  public ModelAndView events() {
+    return new ModelAndView("posts/events");
+  }
+
+  @GetMapping("/qna")
+  public ModelAndView qna() {
+    return new ModelAndView("posts/qna");
+  }
+
+  @GetMapping("/faq")
+  public ModelAndView faq() {
+    return new ModelAndView("posts/faq");
   }
 
   @GetMapping("/research/online")

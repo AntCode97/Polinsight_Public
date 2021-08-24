@@ -1,7 +1,5 @@
 <th:block th:include="admin/admin_sidebar" />
-<th:block th:include="module/common" />
 <th:block>
-  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     table {
       margin : 0;
@@ -90,9 +88,11 @@
 
     }
     const makePointRequestTemplate = req => {
+      console.log(req)
       let template = $(`<tr class="post-row"></tr>`);
       template.append(`<td>${req.id}</td>`);
       template.append(`<td>${req.email}</td>`);
+      template.append(`<td>${req.name}</td>`);
       template.append(`<td>${req.point}</td>`);
       template.append(`<td>${req.bank}은행</td>`);
       template.append(`<td>${req.account}</td>`);
@@ -129,6 +129,7 @@
 
     const makeheader = () => {
       let template = $(`<tr>`).addClass('post-row').addClass('post-th');
+      template.append(`<th>#</th>`);
       template.append(`<th>요청 아이디</th>`);
       template.append(`<th>요청인</th>`);
       template.append(`<th>요청 포인트</th>`);

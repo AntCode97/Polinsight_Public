@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +16,9 @@ public interface SurveyService {
 
   List<Survey> findAll();
 
-  Page<Survey> findAll(Pageable pageable);
+  Page<SurveyDto> findAll(Pageable pageable);
+
+  Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type);
 
   Page<Survey> findAll(Pageable pageable, String regex);
 
@@ -36,11 +39,10 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyBySurveyId(long surveyId);
 
-  long countAllSurvey();
+  long countAllSurvey(String type);
 
 
   void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
 
-  List<SurveyDto> findAllSurveyWithCollector(Pageable pageable);
 
 }

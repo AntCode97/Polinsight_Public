@@ -1,7 +1,6 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.dto.SurveyDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,9 +31,11 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(nativeQuery = true, value = "UPDATE survey SET point = ?2 , created_at = ?3, end_at  = ?4, progress = ?5  WHERE id = ?1")
   void adminSurveyUpdate(long id, long point, String createdAt, String endAt, String progress);
 
+  @Query(nativeQuery = true, value = "SELECT COUNT(s.title) FROM survey s JOIN collector c ON s.survey_id = c.survey_id")
+  long countAllSurveyWithCollector();
 
-  @Query(nativeQuery = true, value = "SELECT s.title AS title, s.point AS point, s.survey_id AS surveyid, s.progress AS progress, s.minimum_time AS minimumtime, s.created_at AS createdat, s.end_at " +
-      "AS endat, c.participate_url AS participateurl, s.question_count AS count FROM survey s JOIN collector c ON s.survey_id = c.survey_id;")
-  List<SurveyDto> findAllSurveyWithCollector();
+  @Query(nativeQuery = true, value = "SELECT COUNT(s.title) FROM survey s JOIN collector c ON s.survey_id = c.survey_id WHERE s.progress LIKE ?1")
+  long countAllSurveyWithCollectorWithCondition(String condition);
+
 
 }
