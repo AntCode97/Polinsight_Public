@@ -45,6 +45,10 @@
       position        : relative;
     }
 
+    .navi_box > li {
+      line-height : 80px;
+    }
+
     .navi_box > li > a {
       display   : block;
       font-size : 18px;
@@ -261,6 +265,18 @@
         background : rgb(25, 39, 57) !important;
         height     : 50px;
       }
+
+      /* TOP Button */
+      .top-btn {
+        bottom : 20px;
+        height : 45px;
+        right  : 10px;
+        width  : 45px;
+      }
+
+      .top-btn > span {
+        display : none;
+      }
     }
 
   </style>
@@ -375,6 +391,7 @@
     </div>
   </div>
 </div>
+
 </body>
 <script th:inline="javascript">
   $(function () {
