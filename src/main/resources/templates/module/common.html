@@ -6,8 +6,9 @@
   <link rel="stylesheet" type="text/css" href="/css/common.css" />
   <link rel="stylesheet" type="text/css" href="/css/table.css" />
   <script>
+    const baseURL = "[[${@environment.getProperty('custom.callback.base')}]]"
     const http = axios.create({
-      baseURL: 'http://localhost:8080/',
+      baseURL: baseURL,
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       }

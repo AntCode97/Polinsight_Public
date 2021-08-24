@@ -33,9 +33,11 @@ import java.util.*;
 public class User implements UserDetails {
 
 
-  @Builder.Default
-  @OneToMany(targetEntity = ParticipateSurvey.class, cascade = CascadeType.REMOVE, mappedBy = "user")
-  private Set<ParticipateSurvey> participateSurvey = new HashSet<>();
+  //  @Builder.Default
+  @ToString.Exclude
+  @JsonIgnore
+  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
+  private Set<ParticipateSurvey> participateSurvey;
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
