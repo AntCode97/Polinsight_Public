@@ -53,8 +53,8 @@
       color : #FF0000;
     }
   </style>
-  <div>
-    <div>
+  <div class="flex-wrapper">
+    <div class="flex-content">
       <form th:action="@{/changepwd}" method="POST">
         <div class="input_div">
           <label>
@@ -76,6 +76,7 @@
         </div>
       </form>
     </div>
+    <th:block th:include="layout/footer" />
   </div>
   <script th:inline="javascript">
 

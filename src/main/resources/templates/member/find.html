@@ -107,57 +107,59 @@
     }
 
   </style>
-  <div class="find_wrap">
-    <div class="header_box">
-      <input type="radio" name="find_tab" id="tab01" checked>
-      <label for="tab01">아이디찾기</label>
-      <span>/</span>
-      <input type="radio" name="find_tab" id="tab02">
-      <label for="tab02">비밀번호찾기</label>
-    </div>
-    <div class="content_box">
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="find_wrap">
+        <div class="header_box">
+          <input type="radio" name="find_tab" id="tab01" checked>
+          <label for="tab01">아이디찾기</label>
+          <span>/</span>
+          <input type="radio" name="find_tab" id="tab02">
+          <label for="tab02">비밀번호찾기</label>
+        </div>
+        <div class="content_box">
 
-      <div class="tab_box box01" style="display: flex;">
-        <form>
-          <div class="user_input_box">
-            <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="name" required />
+          <div class="tab_box box01" style="display: flex;">
+            <form>
+              <div class="user_input_box">
+                <span class="info_article">이름</span>
+                <input type="text" class="user_info_input" name="finduser_name" required />
+              </div>
+              <div class="user_input_box">
+                <span class="info_article">전화번호</span>
+                <input type="number" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
+              </div>
+              <div class="user_btn_wrap" style="justify-content: flex-start;">
+                <span class="err_msg">에러 메세지!!</span>
+              </div>
+              <div class="user_btn_wrap">
+                <button name="email" class="mypage_btn update_btn">아이디 찾기</button>
+              </div>
+            </form>
           </div>
-          <div class="user_input_box">
-            <span class="info_article">전화번호</span>
-            <input type="text" class="user_info_input" name="phone" maxlength="11" required />
-          </div>
-          <div class="user_btn_wrap" style="justify-content: flex-start;">
-            <span class="err_msg">에러 메세지!!</span>
-          </div>
-          <div class="user_btn_wrap">
-            <button name="email" class="mypage_btn update_btn">아이디 찾기</button>
-          </div>
-        </form>
-      </div>
 
-      <div class="tab_box box02">
-        <form>
-          <div class="user_input_box">
-            <span class="info_article">아이디</span>
-            <input type="email" class="user_info_input" name="email" required />
+          <div class="tab_box box02">
+            <form>
+              <div class="user_input_box">
+                <span class="info_article">이메일</span>
+                <input type="email" class="user_info_input" name="email" required />
+              </div>
+              <div class="user_input_box">
+                <span class="info_article">이름</span>
+                <input type="text" class="user_info_input" name="findpwd_name" required />
+              </div>
+              <div class="user_btn_wrap" style="justify-content: flex-start;">
+                <span class="err_msg">이메일 형식이 올바르지 않습니다.</span>
+              </div>
+              <div class="user_btn_wrap">
+                <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
+                <button name="password" class="mypage_btn update_btn">비밀번호 찾기</button>
+              </div>
+            </form>
           </div>
-          <div class="user_input_box">
-            <span class="info_article">이름</span>
-            <input type="text" class="user_info_input" name="name" required />
-          </div>
-          <div class="user_btn_wrap" style="justify-content: flex-start;">
-            <span class="err_msg">에러 메세지!!</span>
-          </div>
-          <div class="user_btn_wrap">
-            <div class="info_msg">※입력하신 아이디(이메일)로 비밀번호 관련 메일이 전송됩니다.</div>
-            <button name="pwd" class="mypage_btn update_btn">비밀번호 찾기</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-  <div>
     <th:block th:include="layout/footer" />
   </div>
   <script type="text/javascript">
@@ -171,7 +173,6 @@
       $(this).prev('.info_article').css('color', '#69666D')
       $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
     });
-
     $(document).on('click', '.header_box > input', function () {
       if ($(this).is(':checked')) {
         $('.tab_box').css('display', 'none');
@@ -182,15 +183,14 @@
       }
     });
 
-    const emailChecker = () => {
+    const emailChecker = e => {
       const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      const email = $("input[name=email]");
+      const email = e.target.value;
 
-
-      if (email.val().match(regex) != null) {
-        email.next('span').css("display", "none");
+      if (email.match(regex) != null || !email) {
+        $('.err_msg').css("display", "none");
       } else {
-        email.next('span').css("display", "block");
+        $('.err_msg').css("display", "block");
       }
     }
 
@@ -206,43 +206,45 @@
     const clickFindBtn = e => {
       e.preventDefault()
       e.returnValue = false;
+      let phone = $('input[name=phone]').val()
       let type = e.target.name
-      alert(type)
-      if (e.target.name === 'user') {
-        let phone = $('input[name=phone]').val()
-        let name = $('input[name=name]').val()
-        http.post('/find?type=email', {
-              phone: phone,
-              name: name
-            })
-            .then(res => {
-              if (res.data.success) {
+      let finduser_name = $('input[name=finduser_name]').val()
+      let findpwd_name = $('input[name=findpwd_name]').val()
+      let email = $('input[name=email]').val()
+      if (type === 'user' && emailInputValidator(email)) {
+        alert('입력하신 이메일을 확인해주세요')
+        $('input[name=email]').val('').focus()
+      }
+      http
+          .post('/find?type=' + type, type === 'email' ? {
+            phone: phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3"),
+            name: finduser_name
+          } : {
+            name: findpwd_name,
+            email: email
+          })
+          .then(res => {
+            if (res.data.success) {
+              if (type === 'email') {
                 alert('찾으시는 아이디는\n' + res.data.response + '  입니다.')
                 location.replace('/find')
-              }
-            })
-            .catch(console.log)
-      } else {
-        let email = $('input[name=email]').val()
-        let name = $('input[name=name]').val()
-        http.post('/find?type=pwd', {
-              name: name,
-              email: email
-            })
-            .then(res => {
-              if (res.data.success) {
-                alert('입력하신 이메일을 확인해주세요.')
+              } else {
+                alert('입력하신 이메일로 비밀번호 변경 메일을 보냈습니다. 확인해주세요.')
                 location.replace('/find')
               }
-            })
-            .catch(console.log)
-      }
-
+            } else {
+              alert('입력한 내용을 다시 한번 확인해주세요.')
+            }
+          })
+          .catch(console.log)
     }
 
     $(function () {
-
+      $('input[name=email]').on('keyup', _.throttle(emailChecker, 500))
       $('button').on('click', clickFindBtn)
+      $('input[name=find_tab]').on('click', () => {
+        $('.tab_box').find('input').val('')
+      })
     })
   </script>
 </th:block>

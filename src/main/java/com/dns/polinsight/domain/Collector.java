@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.types.CollectorStatusType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
@@ -30,6 +31,7 @@ public class Collector {
 
   private Long responseCount;
 
+  @JsonBackReference
   @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
   @ManyToOne
   private Survey survey;

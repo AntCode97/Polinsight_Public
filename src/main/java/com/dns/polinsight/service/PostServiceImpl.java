@@ -4,6 +4,7 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.PostNotFoundException;
+import com.dns.polinsight.mapper.PostMapping;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.types.PostType;
@@ -45,6 +46,11 @@ public class PostServiceImpl implements PostService {
   @Override
   public Post addPost(PostDTO postDTO) {
     return repository.save(Post.builder(postDTO).build());
+  }
+
+  @Override
+  public Page<PostMapping> findPostsByType(PostType type, Pageable pageable) {
+    return repository.findAllByPostType(type, pageable);
   }
 
 
@@ -91,7 +97,7 @@ public class PostServiceImpl implements PostService {
   public void upViewCnt(Long postId) {
     //post.setViewcnt(post.getViewcnt() +1);
     repository.upViewCnt(postId);
-    return ;
+    return;
   }
 
 }

@@ -1,8 +1,6 @@
 <!--<th:block th:include="posts/PostCommon" />-->
 <th:block th:include="layout/header" />
 <th:block>
-  <link th:href="@{/css/common.css}" rel="stylesheet">
-  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     .header_wrap {
       background-color : rgb(24, 40, 56) !important;
@@ -191,9 +189,9 @@
           <span th:text="${post.user.name}"></span>
           <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
           <span th:text="${post.viewcnt}">52</span>
-<!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
+          <!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
           <!--          파일 유무에 따른 디자인 변경(색상)-->
-                    <span>
+          <span>
                         <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
                         <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
                     </span>
@@ -238,20 +236,19 @@
 <script>
   let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
   let keyword = document.querySelector("#searchinput").value;
-  if(keyword == "")
+  if (keyword === "")
     closeBtn.className = "disabled";
   else closeBtn.classList.remove("disabled");
-  closeBtn.addEventListener("click", function (){
+  closeBtn.addEventListener("click", function () {
     let searchInput = document.querySelector("#searchinput")
     searchInput.value = "";
-    location.href ="/posts"
-    //asyncFindBoard();
+    location.href = "/posts"
   })
-  const makeCloseBtn = () =>{
+  const makeCloseBtn = () => {
     let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
     closeBtn.classList.remove("disabled");
     let keyword = document.querySelector("#searchinput").value;
-    if(keyword == "")
+    if (keyword === "")
       closeBtn.className = "disabled";
   }
 </script>

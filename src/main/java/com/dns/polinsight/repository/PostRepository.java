@@ -1,6 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Post;
+import com.dns.polinsight.mapper.PostMapping;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   )
   void upViewCnt(Long postId);
 
-  Page<Post> findPostsByPostType(Pageable pageable, PostType postType);
+  Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
 }

@@ -3,11 +3,7 @@ package com.dns.polinsight.domain.dto;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,7 +13,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyDto implements Comparable<SurveyDto> {
+@ToString
+public class SurveyDto {
 
   private Long id;
 
@@ -57,15 +54,5 @@ public class SurveyDto implements Comparable<SurveyDto> {
     this.title = survey.getTitle();
   }
 
-
-  @Override
-  public int compareTo(@NotNull SurveyDto o) {
-    if (this.getProgress().compareTo(o.getProgress()) < 0) {
-      return -1;
-    } else if (this.getProgress().compareTo(o.getProgress()) == 0) {
-      return this.getEndAt().compareTo(o.getEndAt());
-    }
-    return 1;
-  }
 
 }

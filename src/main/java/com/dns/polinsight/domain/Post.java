@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "Post")
 @Entity
 @ToString
 @Getter
@@ -46,7 +47,7 @@ public class Post implements Serializable {
   @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
