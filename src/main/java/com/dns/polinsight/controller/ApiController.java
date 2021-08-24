@@ -1,7 +1,5 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
@@ -24,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -207,19 +206,19 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser) throws Exception {
+  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception {
     try {
 
-      return success(participateSurveyService.findAllByUserId(sessionUser.getId()));
+      return success(participateSurveyService.findAllByUserId(user.getId()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
   @GetMapping("{userId}/pointrequest")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@LoginUser SessionUser sessionUser) throws Exception {
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@AuthenticationPrincipal User user) throws Exception {
     try {
-      return success(pointRequestService.getUserPointRequests(sessionUser.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      return success(pointRequestService.getUserPointRequests(user.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -281,29 +280,29 @@ public class ApiController {
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
-                                                                 @LoginUser SessionUser sessionUser) throws Exception {
-    if (sessionUser == null)
+                                                                 @AuthenticationPrincipal User user) throws Exception {
+    if (user == null)
       throw new UnAuthorizedException("Unauthorized error");
 
     try {
       PointRequest preq = PointRequest.builder()
-                                      .email(sessionUser.getEmail())
+                                      .email(user.getEmail())
                                       .requestPoint(pointRequestDto.getPoint())
                                       .account(pointRequestDto.getAccount())
                                       .requestedAt(LocalDateTime.now())
                                       .progress(PointRequestProgressType.REQUESTED)
                                       .bank(pointRequestDto.getBank())
-                                      .uid(sessionUser.getId())
+                                      .uid(user.getId())
                                       .build();
 
       pointRequestService.saveOrUpdate(preq);
-      userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
+      userService.subUserPoint(user.getId(), pointRequestDto.getPoint());
       pointHistoryService.saveOrUpdate(PointHistory.builder()
                                                    .amount(pointRequestDto.getPoint())
                                                    .content("포인트 정산 요청")
-                                                   .total(sessionUser.getPoint() - pointRequestDto.getPoint())
+                                                   .total(user.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-                                                   .userId(sessionUser.getId())
+                                                   .userId(user.getId())
                                                    .requestedAt(pointRequestDto.getRequestedAt())
                                                    .build());
       return success(Boolean.TRUE);

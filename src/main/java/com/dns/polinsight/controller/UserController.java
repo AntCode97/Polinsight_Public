@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -121,10 +122,11 @@ public class UserController {
   }
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@LoginUser SessionUser sessionUser) {
+  public ModelAndView myPage(@AuthenticationPrincipal User user) {
+    log.warn(user.toString());
     ModelAndView mv = new ModelAndView();
     mv.setViewName("member/mypage");
-    mv.addObject("user", new UserDto(userService.findUserByEmail(sessionUser.getEmail())));
+    mv.addObject("user", new UserDto(userService.findUserByEmail(user.getEmail())));
     return mv;
   }
 
@@ -149,7 +151,7 @@ public class UserController {
 
 
   @GetMapping("/changepwd")
-  public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @LoginUser SessionUser sessionUser) {
+  public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @AuthenticationPrincipal User user) {
     ModelAndView mv = new ModelAndView("member/changepwd");
     if (session.getAttribute("user") == null) {
       return new ModelAndView("redirect:/denied");
@@ -158,7 +160,7 @@ public class UserController {
   }
 
   @PostMapping("/changepwd")
-  public ModelAndView changePwd(@LoginUser SessionUser sessionUser,
+  public ModelAndView changePwd(@AuthenticationPrincipal User user,
                                 HttpSession session,
                                 @RequestParam(name = "pwd") String newPassword) throws Exception {
     /*
@@ -166,7 +168,7 @@ public class UserController {
      * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
      * */
     session.invalidate();
-    User user = userService.findUserByEmail(sessionUser.getEmail());
+    //    User user = userService.findUserByEmail(sessionUser.getEmail());
     user.setPassword(passwordEncoder.encode(newPassword));
     userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
     return new ModelAndView("redirect:/index");
@@ -199,13 +201,13 @@ public class UserController {
   }
 
   @PostMapping("/api/point/{point}")
-  public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@LoginUser SessionUser sessionUser,
+  public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@AuthenticationPrincipal User user,
                                                                          @PathVariable(name = "point") Long point) throws Exception {
     /*
      * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
      * */
     try {
-      User user = userService.findUserByEmail(sessionUser.getEmail());
+      //      User user = userService.findUserByEmail(sessionUser.getEmail());
       pointRequestService.addUserPointRequest(user.getId(), point);
       return success(pointRequestService.getUserPointRequests(user.getId()));
     } catch (Exception e) {
@@ -235,9 +237,9 @@ public class UserController {
   }
 
   @PostMapping("/api/survey/participate")
-  public ApiUtils.ApiResult<Boolean> participateSurvey(@LoginUser SessionUser sessionUser, Survey survey) throws Exception {
+  public ApiUtils.ApiResult<Boolean> participateSurvey(@AuthenticationPrincipal User user, Survey survey) throws Exception {
     try {
-      User user = userService.findUserByEmail(sessionUser.getEmail());
+      //      User user = userService.findUserByEmail(sessionUser.getEmail());
       user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
@@ -285,7 +287,6 @@ public class UserController {
                                                         @RequestParam("type") String type,
                                                         @Value("${custom.hash.passwordsalt}") String salt,
                                                         @Value("${custom.callback.base}") String callbackBase) throws Exception {
-    System.out.println(userDto.toString());
     try {
       if (type.equals("email")) {
         Assert.notNull(userDto.getName());
