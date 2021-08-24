@@ -183,7 +183,7 @@
             </div>
             <div class="post-row" th:each="post:${posts}">
               <span th:text="${post.id}"></span>
-              <a th:href="@{/posts/{id} (id=${post.id})}" class="post-title">
+              <a th:href="@{/posts/{id} (id=${post.id})}" onclick="makeBackUrl()" class="post-title">
                 <span th:text="${post.title}"></span>
                 <span class="new-span"
                       th:if="${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }">
@@ -257,4 +257,13 @@
     if (keyword === "")
       closeBtn.className = "disabled";
   }
+  const setCookie = function(name, value, exp) {
+    const date = new Date();
+    date.setTime(date.getTime() + exp*24*60*60*1000);
+    document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+  };
+  const makeBackUrl = () => {
+    setCookie("listBtnUrl", location.href, 1)
+  }
+
 </script>
