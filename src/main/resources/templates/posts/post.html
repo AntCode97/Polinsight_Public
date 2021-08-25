@@ -278,7 +278,7 @@
             </div>
 
             <div class="input_wrap textarea_div">
-              <div class="board_div" th:text="${post.viewcontent}">
+              <div class="board_div" th:text="${post.viewcontent}" style="white-space: pre;">
               </div>
             </div>
 
@@ -287,7 +287,7 @@
               <div class="board_div btn_wrap">
                 <div class="btn_wrap1">
               <span>
-                  <a href="/posts" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
+                  <a onclick="goList()" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
               </span>
                 </div>
                 <!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
@@ -397,5 +397,21 @@
         });
       });
     });
+
+
+    const getCookie = function(name) {
+      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return value? value[2] : null;
+    };
+
+    const goList = () => {
+      const listBtnUrl = getCookie("listBtnUrl");
+      if(listBtnUrl != null){
+        location.href= listBtnUrl;
+      } else{
+        location.href = "/posts"
+      }
+    }
+
   </script>
 </th:block>
