@@ -1,11 +1,11 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.SurveyService;
-import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,29 +30,7 @@ public class SurveyController {
 
   private final SurveyService surveyService;
 
-  private final UserService userService;
-
   private final ParticipateSurveyService participateSurveyService;
-
-  //  @Deprecated
-  //  @GetMapping("/surveys")
-  //  public ModelAndView getSurveyById(HttpServletRequest request) {
-  //    ModelAndView mv = new ModelAndView();
-  //    mv.setViewName("");
-  //    mv.addObject("survey", surveyService.findById(Long.parseLong(request.getParameter("surveyId"))));
-  //    return mv;
-  //  }
-
-  /*
-   * 서베이 몽키로 리다이렉팅
-   * */
-  //  @GetMapping("/survey/{surveyId}")
-  //  public void redirectToSurvey(@AuthenticationPrincipal User user, @PathVariable(name = "surveyId") Long surveyId) {
-  //    Survey userSelectedSurvey = surveyService.findById(Survey.builder().id(surveyId).build());
-  //    User user = userService.findUserByEmail(User.builder().email(sessionUser.getEmail()).build());
-  //    // 해시 발급 및 서베이 포인트와 결합하여 저장
-  //    participateSurveyService.saveAndUpdate(null);
-  //  }
 
   /*
    * 서베이의 포인트 적립을 위한 메서드
@@ -76,20 +55,28 @@ public class SurveyController {
   /*
    * 로그인한 사용자가 서베이 클릭시
    * */
-  @GetMapping("/api/survey/{surveyId}")
+  @GetMapping("/api/survey")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@AuthenticationPrincipal User user,
-                                                            @PathVariable("surveyId") long surveyId,
+                                                            @RequestParam("participate") String participateUrl,
+                                                            @RequestParam("surveyId") long surveyId,
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
     try {
-      Survey survey = surveyService.findSurveyBySurveyId(surveyId).orElseThrow(SurveyNotFoundException::new);
-      log.info("user click survey info is : {}", survey.toString());
+      Survey survey = surveyService.findSurveyBySurveyId(surveyId).get();
+      log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
       List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString());
-      String sb = survey.getHref() +
-          "?hash=" + new HashUtil().makeHash(someVariables, salt) +
-          "&name=" + user.getEmail();
+      String hash = new HashUtil().makeHash(someVariables, salt);
+      String sb = participateUrl + "?hash=" + hash + "&email=" + user.getEmail();
+      participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
+                                                                      .survey(survey)
+                                                                      .hash(hash)
+                                                                      .user(user)
+                                                                      .participatedAt(LocalDateTime.now())
+                                                                      .surveyPoint(survey.getPoint())
+                                                                      .finished(false)
+                                                                      .build());
       return success(sb);
     } catch (SurveyNotFoundException e) {
       throw new SurveyNotFoundException(e.getMessage());

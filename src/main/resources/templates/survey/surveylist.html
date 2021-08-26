@@ -119,7 +119,7 @@
       </div>
     </div>
   </div>
-  <script th:inline="javascript">
+  <script>
 
     const makeSurveyCard = survey => {
       let template = $(`<div></div>`).addClass('main_survey_item')
@@ -130,7 +130,7 @@
           $(this).css('cursor', 'pointer').css('box-shadow', '5px 5px 10px rgba(0,0,0, .3)').css('transition', 'box-shadow 0.5s ease-in-out')
         }).on('mouseleave', function () {
           $(this).css('cursor', 'default').css('box-shadow', 'none')
-        }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
+        }).on('click', {survey: survey}, surveyCardClickEventHandler)
       } else {
         template.addClass('bg_color_item_gray')
         template.append(`<p class="survey_stop">조사완료</p>`)
@@ -216,10 +216,7 @@
     }
 
     const loginChk = id => {
-      /*<![CDATA[*/
-      let sessionUser = /*[[${session.user}]]*/;
-      /*]]*/
-      console.log("surveyList. sessionUser : " + sessionUser)
+      let sessionUser = `[[${session.user}]]`
       if (!sessionUser) {
         alert('로그인을 먼저 해주세요')
         return false
@@ -233,17 +230,21 @@
     const surveyCardClickEventHandler = (e) => {
       e.preventDefault()
       e.returnValue = false;
-      const seq = e.data.seq
-      const surveyId = e.data.surveyid
-      const title = e.data.title
-      if (!loginChk(seq)) return
+      const survey = e.data.survey
+      if (!loginChk(survey.seq)) return
 
       $('.modal_container').css('display', 'flex')
 
-      $('p.notice').append(`<span class="modal_title">${title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
+      $('p.notice').append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
 
-      $('.participate_btn').on('click', () => {
-        http.get(`/api/survey/${surveyId}`)
+      $('button[name=participate_btn]').on('click', () => {
+        http.get(`/api/survey`, {
+              params:
+                  {
+                    participate: survey.participateUrl,
+                    surveyId: survey.surveyId
+                  }
+            })
             .then(res => {
               if (res.data.success) {
                 location.replace(res.data.response)

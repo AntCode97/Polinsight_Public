@@ -539,10 +539,18 @@
                             </div>
                             <div class="right_content" id="address">
                               <select id="state" name="state">
-                                <option>시도</option>
+                                <optgroup label="시도">
+                                  <option value="광주">광주</option>
+                                </optgroup>
                               </select>
                               <select id="city" name="city">
-                                <option>시군구</option>
+                                <optgroup label="구">
+                                  <option value="북구">북구</option>
+                                  <option value="남구">남구</option>
+                                  <option value="서구">서구</option>
+                                  <option value="동구">동구</option>
+                                  <option value="광산구">광산구</option>
+                                </optgroup>
                               </select>
                               <span class="err_msg"></span>
                               <span class="info_msg"></span>
@@ -867,145 +875,81 @@
 
     <div class="main_contents_wrap">
       <div class="post-search">
-        <div class="util-search">총 <strong></strong>명의 회원이 있습니다.</div>
+        <div class="util-search">총 <strong id="total_count"></strong>명의 회원이 있습니다.</div>
 
         <!--관리자 페이지 사용자 찾기 기능-->
         <div class="form-search">
           <div class="tbl-search">
             <div class="box-search">
-              <input type="text" id="searchinput" th:value="${keyword}" onchange="asyncFindBoard()" />
-              <input type="submit" />
+              <input type="text" name="admin_member_search" />
+              <input type="submit" name="admin_member_search_btn" />
             </div>
           </div>
         </div>
       </div>
 
-      <table class="scroll-table">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-      <div class="pagination"></div>
+      <div class="scroll-table">
+        <div class="post-row post-th">
+          <spane>번호</spane>
+          <spane>아이디(이메일)</spane>
+          <spane>이름</spane>
+          <spane>휴대전화</spane>
+          <spane>포인트</spane>
+          <spane>유형</spane>
+          <spane>가입일</spane>
+          <spane>관리</spane>
+        </div>
+      </div>
+      <div class="page-button" id="pagination"></div>
     </div>
   </div>
-
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
-
-    const getHeader = () => {
-      let header = $(`<tr class="post-th post-row"></tr>`)
-      header.append(`<td>번호</td>`)
-      header.append(`<td>아이디(이메일)</td>`)
-      header.append(`<td>이름</td>`)
-      header.append(`<td>휴대전화</td>`)
-      header.append(`<td>포인트</td>`)
-      header.append(`<td>유형</td>`)
-      header.append(`<td>가입일</td>`)
-      header.append(`<td>관리</td>`)
-      return header;
-    }
-
-    const makePaginationButton = current => {
-      const findValue = $('input[name=adminfinduserby]').val()
-
-      // 전체 요소 갯수 가져오기
-      const userCount = $('div.util-search').children('strong').text()
-      let totalPage = Math.ceil(userCount / 10)  // 총 페이지 수
-      const pagenationElem = $('div.pagination').css('text-align', 'center');
-      pagenationElem.empty()
-
-      let start = current - 5 <= 0 ? 0 : current - 5;
-      let end = current + 5 > totalPage ? totalPage : current + 5 < 10 ? 10 : current + 5;
-      // 못가게 되면 비활성화
-      if (userCount > 0) {
-        if (!findValue) {
-          let gofirstArrow = $(`<div class="pagination_button" onclick="getMemberList(${0})"><i class="fas fa-angle-double-left"></i></div>`)
-          let goLastArrow = $(`<div class="pagination_button" onclick="getMemberList(${totalPage - 1})"><i class="fas fa-angle-double-right"></i></div>`)
-          let prev = $(`<div class="pagination_button" onclick="getMemberList(${current - 1 < 0 ? 0 : current - 1})"><i class="fas fa-angle-left"></i></div>`)
-          let next =
-              $(`<div class="pagination_button" onclick="getMemberList(${current + 1 >= totalPage ? totalPage - 1 : current + 1})"><i class="fas fa-angle-right"></i></div>`)
-
-          if (current >= 1)
-            pagenationElem.append(gofirstArrow).append(prev)
-
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div onclick="getMemberList(${i})" class="pagination_button">${i + 1}</div>`)
-            // 활성화된 버튼에 대해 디자인 처리
-            if (current === i) {
-              tmp.css('color', 'white').css('background-color', '#444444');
-            }
-            pagenationElem.append(tmp)
-          }
-          if (current < totalPage - 1)
-            pagenationElem.append(next).append(goLastArrow)
-        } else {
-          let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`)
-          let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`)
-          let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`)
-          let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`)
-          first.on('click', {page: 0}, findUserByRegex)
-          last.on('click', {page: totalPage - 1}, findUserByRegex)
-          prev.on('click', {page: current - 1 >= 0 ? current - 1 : 0}, findUserByRegex)
-          next.on('click', {page: current + 1 >= totalPage ? totalPage - 1 : current + 1}, findUserByRegex)
-
-          if (current >= 1)
-            pagenationElem.append(gofirstArrow).append(prev)
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div class="pagination_button">${i + 1}</div>`)
-            tmp.on('click', {page: i}, findUserByRegex);
-
-            if (current === i) {
-              tmp.addClass('pagination_button_current')
-            } else {
-              tmp.removeClass('pagination_button_current')
-            }
-            pagenationElem.append(tmp)
-          }
-          if (current < totalPage - 1)
-            pagenationElem.append(next).append(goLastArrow)
-        }
-      } else {
-        $('.scroll-table>tbody').empty().append($(`<div><h2>검색 결과가 없습니다</h2></div>`))
-      }
-    }
 
     const makeAdminMemberRowTemplate = memberInfo => {
       let template = $(`<tr class="post-row"></tr>`)
-      template.append(`<td>${memberInfo.id}</td>`)
-      template.append(`<td>${memberInfo.email}</td>`)
-      template.append(`<td>${memberInfo.name}</td>`)
-      template.append(`<td>${!!memberInfo.phone ? memberInfo.phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3") : ''}</td>`)
-      template.append(`<td>${memberInfo.point}</td>`)
-      template.append(`<td>${memberInfo.role}</td>`)
-      template.append(`<td>${memberInfo.registeredAt}</td>`)
-      let tmpTableData = $(`<td></td>`)
+      template.append(`<div>${memberInfo.id}</div>`)
+      template.append(`<div>${memberInfo.email}</div>`)
+      template.append(`<div>${memberInfo.name}</div>`)
+      template.append(`<div>${!!memberInfo.phone ? memberInfo.phone.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/, "$1-$2-$3") : ''}</div>`)
+      template.append(`<div>${memberInfo.point}</div>`)
+      template.append(`<div>${memberInfo.role}</div>`)
+      template.append(`<div>${memberInfo.registeredAt}</div>`)
+      let tmpTableData = $(`<div></div>`)
       tmpTableData.append($(`<button class="btn_udel btn-support btn-open-modal">수정</button>`).on('click', {userinfo: memberInfo}, openModalWithMemberInfo))
       tmpTableData.append($(`<span>  </span>`))
-      tmpTableData.append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {email: memberInfo.email}, userDeleteButtonHandler))
+      tmpTableData.append($(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {member: memberInfo}, userDeleteButtonHandler))
       template.append(tmpTableData)
       template.on('click', {userinfo: memberInfo}, openModalWithMemberInfo)
       return template;
     }
 
-    const makeAdminMemberListTemplate = memberInfoList => {
-      if (!memberInfoList) return
-      const table = $('.scroll-table>tbody')
-      table.empty()
-      for (memberInfo of memberInfoList)
-        table.append(makeAdminMemberRowTemplate(memberInfo))
+
+    // TODO : 검색시 페이지 에러
+    async function getMemberData(e) {
+      let page = !e ? 0 : e.data.page
+      console.log(page)
+      let regex = String($('input[name=admin_member_search]').val()).trim()
+      const response = await http.get('/api/users', {params: {size: 10, page: page, regex: regex}})
+      if (response.data.success) {
+        const data = response.data.response
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+      } else {
+        alert('data fetch error')
+      }
     }
 
-    const getMemberList = current => {
-      http.get('/api/users', {
-            params: {
-              size: 10,
-              page: current
-            }
+    const init = e => {
+      getMemberData(e).then(obj => {
+        $('#total_count').text(obj.total)
+        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage)
+          obj.content.forEach(member => {
+            $('.scroll-table').append(makeAdminMemberRowTemplate(member))
           })
-          .then(res => {
-            if (res.data.response.length > 0) {
-              makePaginationButton(current)
-              makeAdminMemberListTemplate(res.data.response)
-            }
-          })
+        }
+      })
     }
 
     const sameValueCheck = (elem, prop, comp) => {
@@ -1016,7 +960,6 @@
     }
 
     const infoChangeHandler = e => {
-
       if (e.target.name === 'favorite') {
         if (updatedUser['favorite'].includes(e.target.value)) {
           updatedUser['favorite'].pop(e.target.value)
@@ -1025,6 +968,7 @@
         }
       } else
         updatedUser[e.target.name] = e.target.value
+      console.log(updatedUser)
     }
 
     const openModalWithMemberInfo = e => {
@@ -1042,7 +986,7 @@
       }).on('change', infoChangeHandler)
       let birth = user.birth.substring(0, 10).split("-")
       $('#year').val((birth[0] * 1)).prop('selected', true).on('change', infoChangeHandler)
-      $('#month').val((birth[1] * 1)).prop('selected', true).trigger('change').on('change', infoChangeHandler)
+      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', infoChangeHandler).trigger('change')
       $('#day').val((birth[2] * 1)).prop('selected', true).on('change', infoChangeHandler)
 
       $('#education').find('option').each(function () {
@@ -1092,44 +1036,15 @@
       $('.modal_wrap').css('display', 'flex');
     }
 
-
-    const countAllUsers = () => {
-      http.get('/api/user/total')
-          .then(res => {
-            $('div.util-search').children('strong').text(res.data.response)
-          })
-          .catch()
-    }
-
-    const countSearchUsers = regex => {
-      http.get('/api/user/find/' + regex + '/total')
-          .then(res => {
-            $('div.util-search').children('strong').text(res.data.response)
-          })
-          .catch()
-    }
-
-    const findUserByRegex = e => {
-      const findValue = $('input[name=admin_find]').val()
-      if (!findValue) {
-        countAllUsers()
-        getMemberList(0);
-      } else {
-        countSearchUsers(findValue)
-        http.get('/api/user/find/' + findValue, {params: {size: 10, page: !e.data ? 0 : e.data.page}})
-            .then(res => {
-              makeAdminMemberListTemplate(res.data.response)
-              makePaginationButton(offset)
-            }).catch(err => console.log(err))
-      }
-    }
-
     const userDeleteButtonHandler = (e) => {
-      http.delete('/api/user/' + e.data.email)
+      e.preventDefault();
+      e.returnValue = false;
+      e.stopPropagation();
+      let user = e.data.member;
+      http.delete(`/api/user/${user.id}`)
           .then(res => {
             if (res.data.success) {
               alert('유저 삭제 성공')
-
             } else {
               alert('유저 삭제 실패\n관리자에게 문의해주세요')
             }
@@ -1141,18 +1056,16 @@
     let updatedUser = {}
 
     $(function () {
+      init();
       setDateValue()
       $("#month").on('change selected', setDay)
 
-      countAllUsers()
-      getMemberList(0)  // 페이지 초기 값
-      $('.scroll-table>thead').append(getHeader())
-
       /*비동기 회원 찾기 및 화면 업데이트*/
-      $('input[name=admin_find]').on('keyup', _.throttle(findUserByRegex, 300))
-      $('button[name=admin_find_btn]').on('click', findUserByRegex).css('font-weight', 'bolder')
+      $('input[name=admin_member_search]').on('keyup', _.throttle(init, 300))
+      $('button[name=admin_member_search_btn]').on('click', init).css('font-weight', 'bolder')
       $('button#admin_user_info_update_btn').on('click', () => {
-        http.put('/user', updatedUser).then(res => {
+        http
+            .put('/admin/user', updatedUser).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
             location.reload()

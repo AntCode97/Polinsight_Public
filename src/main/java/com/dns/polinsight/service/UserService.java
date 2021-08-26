@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
@@ -17,8 +18,10 @@ public interface UserService extends UserDetailsService {
 
   List<User> findAll();
 
-  Page<User> findAll(Pageable pageable);
+  Page<UserDto> findAll(Pageable pageable);
 
+
+  Page<UserDto> findAllNotInAdmin(Pageable pageable);
 
   void deleteUserByEmail(Email email);
 
@@ -47,5 +50,7 @@ public interface UserService extends UserDetailsService {
 
 
   Optional<User> findUserEmailByNameAndPhone(String name, Phone phone);
+
+  Page<UserDto> testFindAllUser(Pageable pageable);
 
 }

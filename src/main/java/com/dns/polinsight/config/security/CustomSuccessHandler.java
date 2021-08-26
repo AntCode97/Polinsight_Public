@@ -1,6 +1,6 @@
 package com.dns.polinsight.config.security;
 
-import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.repository.UserRepository;
 import com.dns.polinsight.types.Email;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     String[] emails = authentication.getName().split("@");
     request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
-    SessionUser sessionUser = new SessionUser(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get());
-    request.getSession().setAttribute("user", sessionUser);
-    log.warn(sessionUser.getEmail().toString() + "login success");
+    UserDto userDto = new UserDto(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get());
+    request.getSession().setAttribute("user", userDto);
+    log.warn(userDto.getEmail() + "login success");
     response.sendRedirect("/");
     response.setStatus(HttpStatus.OK.value());
   }

@@ -1,8 +1,12 @@
 <th:block th:include="layout/header" />
 <th:block>
-  <style type="text/css">
+  <style>
     .header_wrap {
       background-color : rgb(24, 40, 56) !important;
+    }
+
+    .err_msg {
+      display : none;
     }
 
     .register_wrap {
@@ -209,11 +213,11 @@
                     </div>
                     <div class="right_content">
                       <label>
-                        <input name="gender" type="radio" value="남성">
+                        <input name="gender" type="radio" value="MALE" checked>
                         남성
                       </label>
                       <label>
-                        <input name="gender" type="radio" value="여성">
+                        <input name="gender" type="radio" value="FEMALE">
                         여성
                       </label>
                       <span class="err_msg">성별을 선택해주세요.</span>
@@ -244,11 +248,11 @@
                         일
                       </label>
                       <label>
-                        <input checked name="birthtype" type="radio" value="양력">
+                        <input checked name="birthType" type="radio" value="양력">
                         양력
                       </label>
                       <label>
-                        <input name="birthtype" type="radio" value="음력">
+                        <input name="birthType" type="radio" value="음력">
                         음력
                       </label>
                       <span class="err_msg"></span>
@@ -261,10 +265,18 @@
                     </div>
                     <div id="address" class="right_content">
                       <select id="state" name="state">
-                        <option>시도</option>
+                        <optgroup label="시도">
+                          <option value="광주">광주</option>
+                        </optgroup>
                       </select>
-                      <select id="city" name="city">
-                        <option>시군구</option>
+                      <select name="city" id="city">
+                        <optgroup label="구">
+                          <option value="북구">북구</option>
+                          <option value="남구">남구</option>
+                          <option value="서구">서구</option>
+                          <option value="동구">동구</option>
+                          <option value="광산구">광산구</option>
+                        </optgroup>
                       </select>
                       <span class="err_msg"></span>
                       <span class="info_msg"></span>
@@ -272,10 +284,10 @@
                   </li>
                   <li>
                     <div class="left_content">
-                      <label for="edu">최종학력</label>
+                      <label for="education">최종학력</label>
                     </div>
                     <div class="right_content">
-                      <select id="edu" name="edu" required>
+                      <select id="education" name="education" required>
                         <option>선택</option>
                         <option value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
                         <option value="대학 재학">대학 재학</option>
@@ -366,19 +378,19 @@
                           </div>
                           <div class="right_content">
                             <label>
-                              <input type="checkbox" value="건강일반">
+                              <input name="favorite" type="checkbox" value="건강일반">
                               건강일반
                             </label>
                             <label>
-                              <input type="checkbox" value="건강식품">
+                              <input name="favorite" type="checkbox" value="건강식품">
                               건강식품
                             </label>
                             <label>
-                              <input type="checkbox" value="다이어트">
+                              <input name="favorite" type="checkbox" value="다이어트">
                               다이어트
                             </label>
                             <label>
-                              <input type="checkbox" value="심리건강">
+                              <input name="favorite" type="checkbox" value="심리건강">
                               심리건강
                             </label>
                           </div>
@@ -533,7 +545,7 @@
                     </div>
                     <div class="right_content">
                       <label>
-                        <input name="isSmsReceive" type="radio" value="true">
+                        <input name="isSmsReceive" type="radio" value="true" checked>
                         동의함
                       </label>
                       <label>
@@ -551,7 +563,7 @@
                     </div>
                     <div class="right_content">
                       <label>
-                        <input name="isEmailReceive" type="radio" value="true">
+                        <input name="isEmailReceive" type="radio" value="true" checked>
                         동의함
                       </label>
                       <label>
@@ -574,47 +586,57 @@
     </div>
     <th:block th:include="layout/footer" />
   </div>
-  <script type="text/javascript">
-
-    const makeDateFormat = () => {
-      return $('select[name=year]').val() + '-' + $('select[name=month]').val() + '-' + $('select[name=day]').val()
-    }
-
+  <script>
     const checkRequiredValue = info => {
-      let arr = ['birth', 'gender', 'birthType', 'education', 'marry', 'job', 'industry', 'address', 'favorite']
+      let arr = ['birth', 'gender', 'birthType', 'education', 'marry', 'job', 'industry', 'address', 'city', 'state', 'isEmailReceive', 'isSmsReceive', 'year', 'month', 'day']
 
-      for (let key in arr) {
-        if (!info[key] || info[key].includes('선택') || info[key].includes('시도') || info[key].includes('시군구') || info[key].length <= 0) {
+      for (let idx in arr) {
+        let key = arr[idx]
+        if (!info[key] || info[key] === '선택') {
+          console.log('key: ' + key + ', value: ' + info[key])
           return false;
         }
       }
-      return true;
+      return !(!Array.isArray(info['favorite']) || info['favorite'].length <= 0);
+    }
+
+    const inputChangeHandler = e => {
+      let name = e.target.name
+      let value = e.target.value
+      if (name === 'favorite') {
+        if (userInfo[name].includes(value))
+          userInfo[name].pop(value)
+        else
+          userInfo[name].push(value)
+      } else {
+        userInfo[name] = value
+      }
+    }
+
+    const userInfo = {
+      favorite: []
     }
 
     $(function () {
       setDateValue()
       $("#month").on('change', setDay)
 
+      $('input[type=radio]:checked').on('click', inputChangeHandler).trigger('click')
+
+      $('input[name=gender]').trigger('change')
+      $('input').on('change', inputChangeHandler)
+      $('select').on('change', inputChangeHandler).trigger('change')
+
       $("button[name=panel_signup]").on('click', e => {
         e.preventDefault()
         e.returnValue = false
+        console.log(userInfo)
+        userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
+        userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
 
-        const info = {}
-        info['birth'] = makeDateFormat();
-        info['gender'] = $('input[name=gender]').val()
-        info['birthType'] = $('input[name=birthtype]').val()
-        info['education'] = $('select[name=edu]').val()
-        info['marry'] = $('input[name=marry]').val()
-        info['job'] = $('select[name=job]').val()
-        info['industry'] = $('select[name=industry]').val()
-        info['address'] = $('select[name=state]').val() + ' ' + $('select[name=city]').val()
-        info['favorite'] = []
-        $('input[name=favorite]:checked').each((idx, item) => {
-          info['favorite'].push(item.value);
-        })
-        if (checkRequiredValue(info)) {
-          // 데이터 전달 후 확인까지
-          http.post('/moreinfo', info)
+        if (checkRequiredValue(userInfo)) {
+          http
+              .post('/moreinfo', userInfo)
               .then(res => {
                 if (res.data.success) {
                   location.replace("/success_panel")

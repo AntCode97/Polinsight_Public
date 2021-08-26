@@ -1,6 +1,8 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.repository.UserJdbcTemplate;
 import com.dns.polinsight.repository.UserRepository;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
@@ -8,12 +10,14 @@ import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,6 +25,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository repository;
+
+  private final UserJdbcTemplate userJdbcTemplate;
 
   @Override
   public List<User> findAll() {
@@ -34,8 +40,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<User> findAll(Pageable pageable) {
-    return repository.findAll(pageable);
+  public Page<UserDto> findAll(Pageable pageable) {
+    Page<User> page = repository.findAll(pageable);
+    List<UserDto> dtoList = page.getContent().parallelStream().map(UserDto::new).collect(Collectors.toList());
+    return new PageImpl<>(dtoList, pageable, page.getTotalElements());
+  }
+
+  @Override
+  public Page<UserDto> findAllNotInAdmin(Pageable pageable) {
+    Page<User> page = repository.findAllByRoleIsNotLike(pageable, UserRoleType.ADMIN);
+    List<UserDto> dtoList = page.getContent().parallelStream().map(UserDto::new).collect(Collectors.toList());
+    return new PageImpl<>(dtoList, pageable, page.getTotalElements());
   }
 
   @Override
@@ -45,7 +60,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveOrUpdate(User user) {
-    return repository.save(user);
+    user = repository.saveAndFlush(user);
+    log.warn(this.getClass().getSimpleName() + " ::: " + user.toString());
+    return user;
   }
 
   @Override
@@ -101,6 +118,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public Optional<User> findUserEmailByNameAndPhone(String name, Phone phone) {
     return repository.findUserByNameAndPhone(name, phone);
+  }
+
+  @Override
+  public Page<UserDto> testFindAllUser(Pageable pageable) {
+    return userJdbcTemplate.findAllUser(pageable);
   }
 
 }

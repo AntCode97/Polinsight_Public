@@ -1,7 +1,5 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
@@ -17,10 +15,12 @@ import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
@@ -67,9 +68,9 @@ public class UserController {
     try {
       User user = userService.saveOrUpdate(signupDTO.toUser(passwordEncoder));
       if (signupDTO.isIspanel()) {
-        session.setAttribute("basic_user", new SessionUser(user));
+        session.setAttribute("basic_user", new UserDto(user));
       } else {
-        session.setAttribute("user", new SessionUser(user));
+        session.setAttribute("user", new UserDto(user));
       }
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -81,40 +82,77 @@ public class UserController {
   @PostMapping("/moreinfo")
   @Transactional
   public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel panel, HttpSession session) {
-    SessionUser sessionUser = (SessionUser) session.getAttribute("basic_user");
+    UserDto userDto = (UserDto) session.getAttribute("basic_user");
     session.invalidate();
-    User user = userService.findUserByEmail(sessionUser.getEmail());
+    User user = userService.findUserByEmail(new User(userDto).getEmail());
     user.setPanel(panel);
     userService.saveOrUpdate(user);
     return success(Boolean.TRUE);
   }
 
-  @DeleteMapping("/user")
-  public ApiUtils.ApiResult<Boolean> deleteUser(@RequestBody UserDto userDto, HttpSession session) throws Exception {
+  @PostMapping("/user/delete")
+  //  public ApiUtils.ApiResult<Boolean> deleteUser(@AuthenticationPrincipal User user, HttpServletResponse response, HttpSession session) throws Exception {
+  public void deleteUser(@AuthenticationPrincipal User user, HttpServletResponse response, HttpSession session) throws Exception {
 
     try {
-      userService.deleteUserById(userDto.getId());
+      log.warn(user.toString());
+      userService.deleteUserById(user.getId());
       session.invalidate();
-      return success(true);
+      SecurityContextHolder.clearContext();
+      log.warn("유저 삭제 완료");
+
+      response.sendRedirect("/");
+      //      return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
+    response.sendRedirect("/");
   }
 
+  // 모든 정보 변경 가능
+  @Transactional
   @PutMapping("/user")
-  public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto) throws Exception {
-    System.out.println(userDto.toString());
+  public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto,
+                                                @RequestParam(value = "type") String type,
+                                                @AuthenticationPrincipal User user) throws Exception {
+    if (type.isBlank())
+      throw new InvalidValueException();
+
     try {
-      return success(new UserDto(userService.saveOrUpdate(new User(userDto))));
+      log.warn(userDto.toString());
+      switch (type) {
+        case "basic":
+          user.setName(userDto.getName());
+          user.setPhone(Phone.of(userDto.getPhone()));
+          break;
+        case "password":
+          if (!passwordEncoder.matches(userDto.getNewPassword(), user.getPassword()))
+            user.setPassword(passwordEncoder.encode(userDto.getNewPassword()));
+          else
+            throw new InvalidValueException("이전 패스워드와 같은 패스워드는 사용할 수 없습니다");
+          break;
+        case "panel":
+          user.getPanel().setFavorite(userDto.getFavorite());
+          break;
+      }
+      
+      log.warn("after processing : " + user.toString());
+      return success(new UserDto(userService.saveOrUpdate(user)));
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
   }
 
+  // 비밀번호는 못바꾸고, 이름, 전화번호, 패널정보 정도만 바꿈
+  @Transactional
   @PutMapping("/admin/user")
   public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto userDto) throws Exception {
     try {
-      userService.adminUserUpdate(userDto.getId(), userDto.getRole(), userDto.getPoint());
+      User tuser = userService.findById(userDto.getId()).get();
+      User user = new User(userDto);
+      user.setPassword(tuser.getPassword());
+      userService.saveOrUpdate(user);
       return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -140,7 +178,7 @@ public class UserController {
       userService.saveOrUpdate(user);
       map.put("data", "user info has updated");
       session.invalidate();
-      session.setAttribute("user", new SessionUser(user));
+      session.setAttribute("user", new UserDto(user));
       log.info("User '{}' has requested change password", user.getEmail());
     } catch (Exception e) {
       e.printStackTrace();
@@ -188,7 +226,7 @@ public class UserController {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
         throw new IllegalAccessException();
       }
-      session.setAttribute("user", new SessionUser(userService.findUserByEmail(email)));
+      session.setAttribute("user", new UserDto(userService.findUserByEmail(email)));
     } catch (Exception e) {
       e.printStackTrace();
       session.invalidate();
@@ -313,12 +351,22 @@ public class UserController {
                                                            .email(Email.of(userDto.getEmail()))
                                                            .name(userDto.getName())
                                                            .build());
-        emailService.sendTemplateMail(userDto.getEmail().toString(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
+        emailService.sendTemplateMail(userDto.getEmail(), "폴인사이트에서 요청하신 비밀번호 변경 안내 메일입니다.", variables);
         return success(Boolean.TRUE);
       }
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/api/alluser")
+  public ApiUtils.ApiResult<Page<UserDto>> test(@PageableDefault Pageable pageable) {
+    try {
+      return success(userService.testFindAllUser(pageable));
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new InvalidValueException(e.getMessage());
     }
   }
 

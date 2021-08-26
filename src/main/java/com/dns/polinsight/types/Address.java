@@ -15,6 +15,16 @@ public class Address {
 
   private String city;
 
+  public static Address of(String address) {
+    if (address == null || address.isBlank() || address.isEmpty())
+      return null;
+    String[] arr = address.split(" ");
+    return Address.builder()
+                  .state(arr[0])
+                  .city(arr[1])
+                  .build();
+  }
+
   @Override
   public String toString() {
     return state + " " + city;

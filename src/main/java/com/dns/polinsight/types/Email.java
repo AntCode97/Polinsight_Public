@@ -18,6 +18,8 @@ public class Email implements Serializable {
   private String domain;
 
   public static Email of(String email) {
+    if (email == null || email.isBlank() || email.isEmpty())
+      return null;
     String[] arr = email.split("@");
     return Email.builder()
                 .account(arr[0])

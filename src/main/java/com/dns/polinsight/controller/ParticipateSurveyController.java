@@ -40,22 +40,24 @@ public class ParticipateSurveyController {
   @GetMapping("/callback")
   public ModelAndView callback(
       @RequestParam("hash") String hash,
-      @RequestParam("email") String email) {
+      @RequestParam("email") String name) {
+    log.warn("hash: " + hash + ", email: " + name + ", ");
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
       throw new InvalidParameterException();
     }
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
-      if (hash.equals(participateSurvey.getHash()) && email.toString().equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
+      if (hash.equals(participateSurvey.getHash()) && name.toString().equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
         this.processingPointSurveyHistory(user, participateSurvey);
-        log.info("user {} - finished survey {}", email, participateSurvey.getSurvey().getSurveyId());
+        log.info("user {} - finished survey {}", name, participateSurvey.getSurvey().getSurveyId());
         return new ModelAndView("redirect:/mypage");
       }
       throw new Exception();
     } catch (Exception | WrongAccessException e) {
       log.error(e.getMessage());
+      e.printStackTrace();
       return new ModelAndView("redirect:error/point_accumulate_error");
     }
   }

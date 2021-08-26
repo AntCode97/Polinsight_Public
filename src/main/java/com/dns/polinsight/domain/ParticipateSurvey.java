@@ -25,8 +25,7 @@ public class ParticipateSurvey {
   @ManyToOne(targetEntity = User.class)
   private User user;
 
-  //  @JsonIgnore
-  @JoinColumn(name = "survey_Id", referencedColumnName = "survey_id")
+  @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
   @ManyToOne(targetEntity = Survey.class)
   private Survey survey;
 

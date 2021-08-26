@@ -20,6 +20,8 @@ public class Phone implements Serializable {
   private String third;
 
   public static Phone of(String phone) {
+    if (phone == null || phone.isEmpty() || phone.isBlank())
+      return null;
     String[] arr = phone.split("-");
     return Phone.builder()
                 .first(arr[0])
@@ -30,7 +32,7 @@ public class Phone implements Serializable {
 
   @Override
   public String toString() {
-    return first  + "-" + second + "-" + third;
+    return first + "-" + second + "-" + third;
   }
 
 }

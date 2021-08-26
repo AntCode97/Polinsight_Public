@@ -34,7 +34,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -73,31 +72,11 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/user/find/{regex}")
-  public ApiUtils.ApiResult<List<UserDto>> adminUserFind(
-      @PageableDefault Pageable pageable,
-      @PathVariable(name = "regex") String regex) throws Exception {
+  @DeleteMapping("/user/{userId}")
+  @Transactional
+  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable("userId") Long userId) throws Exception {
     try {
-      return success(adminService.adminSerchUserByRegex(regex, pageable).stream().map(UserDto::new).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/user/find/{regex}/total")
-  public ApiUtils.ApiResult<Long> adminCountUserFind(
-      @PathVariable(name = "regex") String regex) throws Exception {
-    try {
-      return success(adminService.countUserFindRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @DeleteMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable(name = "email") Email email) throws Exception {
-    try {
-      userService.deleteUserByEmail(email);
+      userService.deleteUserById(userId);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -108,17 +87,13 @@ public class ApiController {
    * 회원 가입된 모든 유저 정보 반환
    * */
   @GetMapping("/users")
-  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<UserDto>> adminFindAllUsers(@PageableDefault Pageable pageable,
+                                                             @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
     try {
-      AtomicLong index = new AtomicLong(1);
-      return success(userService.findAll(pageable).getContent().parallelStream()
-                                .filter(user -> !user.getRole().equals(UserRoleType.ADMIN))
-                                .map(UserDto::new)
-                                .map(obj -> {
-                                  obj.setId(index.getAndIncrement());
-                                  return obj;
-                                }).sorted((o1, o2) -> Long.compare(o1.getId(), o2.getId()))
-                                .collect(Collectors.toList()));
+      if (regex.isBlank() || regex.isEmpty()) {
+        return success(userService.findAllNotInAdmin(pageable));
+      } else
+        return success(adminService.adminSerchUserByRegex(regex, pageable));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
@@ -129,8 +104,8 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<Page<?>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                        @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+  public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
         Sort.by("endAt").ascending().and(Sort.by("id")));
     try {

@@ -31,7 +31,7 @@ const setDay = (e) => {
 }
 
 const passwordInputValidator = pwd => {
-  return !!pwd.match(/[a-zA-Z0-9~!@#$%^&*()_+-|<>?:;`,{}\]\[/\'\"\\\']{10,16}/);
+  return !!pwd.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,16}$/);
 }
 const phoneInputValidator = phone => {
   return !!phone.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/) || phone.match(/[0-9]{3}[0-9]{4}[0-9]{4}/)
@@ -53,11 +53,11 @@ const phoneAddHypen = e => {
 }
 
 const phoneDelHypen = e => {
-  e.target.value = e.target.value.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")
+  e.target.value = e.target.value.replace(/^([0-9]{3})-([0-9]{4})-([0-9]{4})$/, "$1$2$3")
 }
 
 const blankOrNullChecker = val => {
-  return !(val.trim())
+  return !(String(val).trim())
 }
 
 function stringToEmail() {
@@ -72,7 +72,15 @@ function stringToPhone() {
   if (arguments.length > 2) {
     return {first: arguments[0], second: arguments[1], third: arguments[2]}
   } else if (arguments.length === 1 && !!arguments[0]) {
-    let phone = arguments[0].replaceAll('-', '')
+    let phone = String(arguments[0]).replaceAll('-', '')
     return {first: phone.substring(0, 3), second: phone.substring(3, 7), third: phone.substring(7)}
   }
+}
+
+function addressParser() {
+  return {state: arguments[0], city: arguments[1]}
+}
+
+function dateParser() {
+  return `${arguments[0]}-${arguments[1]}-${arguments[2]}`
 }
