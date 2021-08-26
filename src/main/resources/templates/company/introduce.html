@@ -1,0 +1,205 @@
+<th:block th:include="layout/header" />
+<th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
+    <style>
+        /* CASAREL 아래 nav-bar */
+        .headline_wrap {
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: red;
+            font-size: 55px;
+        }
+        .small-headline {
+            font-size: 14px;
+        }
+        .carasel_wrap {height: 35vh;}
+        .carasel_wrap::before {height: 35vh;}
+        .big_navigation {
+            width: 1200px;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .big_navigation_wrap {border-bottom: 1px solid #ddd;}
+        .big_navigation > li > a {
+            display: block;
+            color: white;
+            font-size: 15px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            overflow: hidden;
+            height: 50px;
+            line-height: 48px;
+            padding: 0 40px;
+            background: #CECECE;
+            margin: 0 -1px -1px 0;
+        }
+        .check_navigation {
+            background: #192739!important;
+        }
+
+        /* post DESIGN */
+        .pols_main_contents {
+            display     : block;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .pols_main_contents_item {
+            padding: 0 0 40px;
+            border-bottom : 1px solid #DADADA;
+        }
+        .main_item {
+            color         : #000000;
+            font-size     : 2.5rem;
+            font-weight   : bold;
+            padding       : 0 20px 10px;
+            text-align: center;
+        }
+        .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444;}
+        .logo_introduce_box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #DADADA;
+        }
+        .logo_introduce_box > img {
+            width: 150px;
+        }
+        .logo_introduce_box p {
+            font-size: 15px;
+            text-align: center;
+            color: #444;
+        }
+        .logo_introduce_box p:nth-child(1) {
+            margin-bottom: 10px;
+        }
+        .icon_introduce_box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .icon_introduce_box > div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            width: 250px;
+            border: 1px solid #E1E1E1;
+            height: 300px;
+        }
+        .icon_introduce_box > div > img {
+            width: 150px;
+        }
+        .icon_introduce_box > div > p {
+            font-size: 20px;
+            color: #4C99CF;
+        }
+        .tag_introduce_box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .tag_introduce_box:nth-child(1) {margin-top: 20px; margin-bottom: 10px;}
+        .tag_box {
+            color: #FFF;
+            background: #4C99CF;
+            width: 190px;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+
+        @media (min-width : 320px) and (max-width : 480px) {
+            .carasel_wrap { height: 25vh; }
+            .headline_wrap { display: none;}
+        }
+    </style>
+
+
+    <div class="carasel_wrap">
+        <div class="headline_wrap">
+            <span>고객화 함께 가치를</span>
+            <span>더해가는 기업</span>
+            <span class="small-headline">소제목 블라블라블라블라블라~</span>
+        </div>
+    </div>
+
+    <div class="big_navigation_wrap">
+        <ul class="big_navigation">
+            <li><a th:href="@{/company/introduce}" th:classappend="${checked} == 'intro' ? 'check_navigation'">인사말</a></li>
+            <li><a th:href="@{/company/map}" th:classappend="${checked} == 'map' ? 'check_navigation'">오시는길</a></li>
+        </ul>
+    </div>
+
+    <div class="pols_main_contents">
+        <div class="pols_main_contents_category">
+            <div class="pols_main_contents_item">
+                <p class="main_item">회사소개</p>
+                <span class="sub_item">고객과 함께 가치를 더해가는 기업</span>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="logo_introduce_box">
+                <img src="/img/logo/logo.png">
+                <div>
+                    <p>(주)폴인사이트의 POL은 긍정적인(Positive)사고를 가지고 목적, 목표(Objective)를 향해 높고 길게</p>
+                    <p>뛰어오른다(Leap)는 의미를 담고 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="icon_introduce_box">
+                <div class="intro_icon">
+                    <img src="/img/logo/logo.png">
+                    <p><strong>P</strong>ositive</p>
+                </div>
+                <div class="intro_icon">
+                    <img src="/img/logo/logo.png">
+                    <p><Strong>O</Strong>bjective</p>
+                </div>
+                <div class="intro_icon">
+                    <img src="/img/logo/logo.png">
+                    <p><strong>L</strong>eap</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="tag_introduce_box">
+                <div class="tag_box">정책연구</div>
+                <div class="tag_box">평가연구</div>
+                <div class="tag_box">만족도, 친절도</div>
+                <div class="tag_box">실태조사</div>
+            </div>
+            <div class="tag_introduce_box">
+                <div class="tag_box">통계분석</div>
+                <div class="tag_box">홍보마케팅</div>
+                <div class="tag_box">웹디자인</div>
+                <div class="tag_box">행사기획</div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <th:block th:include="layout/footer" />
+    <script th:inline="javascript">
+
+    </script>
+</th:block>

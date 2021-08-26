@@ -144,6 +144,8 @@ custom :
       - /actuator/**
       - /surveys/**
       - /research/**
+      - /company/**
+      - /business/**
       - /chpwd/**
       - /changepwd**
       - /survey/**

@@ -1,0 +1,190 @@
+<th:block th:include="layout/header" />
+<th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
+    <style>
+        /* CASAREL 아래 nav-bar */
+        .headline_wrap {
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: red;
+            font-size: 55px;
+        }
+        .small-headline {
+            font-size: 14px;
+        }
+        .carasel_wrap {height: 35vh;}
+        .carasel_wrap::before {height: 35vh;}
+        .big_navigation {
+            width: 1200px;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .big_navigation_wrap {border-bottom: 1px solid #ddd;}
+        .big_navigation > li > a {
+            display: block;
+            color: white;
+            font-size: 15px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            overflow: hidden;
+            height: 50px;
+            line-height: 48px;
+            padding: 0 40px;
+            background: #CECECE;
+            margin: 0 -1px -1px 0;
+        }
+        .check_navigation {
+            background: #192739!important;
+        }
+
+        /* post DESIGN */
+        .pols_main_contents {
+            display     : block;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .pols_main_contents_item {
+            padding: 0 0 40px;
+            border-bottom : 1px solid #DADADA;
+        }
+        .main_item {
+            color         : #000000;
+            font-size     : 2.5rem;
+            font-weight   : bold;
+            padding       : 0 20px 10px;
+            text-align: center;
+        }
+        .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444;}
+        .category_introduce_box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #DADADA;
+        }
+        .main_intro {
+            font-size: 24px;
+            color: #444;
+        }
+        .category_introduce_box p {font-size: 16px; color: #444; text-align: center;}
+        .category_introduce_box p:nth-child(1) {margin-bottom: 5px;}
+
+        .category_box_wrap {display: flex; flex-direction: column; gap: 40px;}
+        .category_box {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            gap: 40px;
+        }
+        .left_category_box {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #444;
+            height: 140px;
+        }
+        .left_category_box > img {width: 100px;}
+        .right_category_box {flex: 8;}
+        .right_category_box > * {font-size: 16px;}
+        .right_category_box > h3 {color: #4C99CF;}
+        .sub_title {padding: 15px 0 20px;}
+
+
+        @media (min-width : 320px) and (max-width : 480px) {
+            .carasel_wrap { height: 25vh; }
+            .headline_wrap { display: none;}
+        }
+    </style>
+
+
+    <div class="carasel_wrap">
+        <div class="headline_wrap">
+            <span>고객화 함께 가치를</span>
+            <span>더해가는 기업</span>
+            <span class="small-headline">소제목 블라블라블라블라블라~</span>
+        </div>
+    </div>
+
+    <div class="big_navigation_wrap">
+        <ul class="big_navigation">
+            <li><a th:href="@{/business/category}" th:classappend="${checked} == 'category' ? 'check_navigation'">분야별 영역</a></li>
+            <li><a th:href="@{/business/result}" th:classappend="${checked} == 'result' ? 'check_navigation'">주요실적</a></li>
+        </ul>
+    </div>
+
+    <div class="pols_main_contents">
+        <div class="pols_main_contents_category">
+            <div class="pols_main_contents_item">
+                <p class="main_item">분야별 영역</p>
+                <span class="sub_item">고객과 함께 가치를 더해가는 기업</span>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="category_introduce_box">
+                <div class="main_intro"><strong>과학적인 DATA분석으로 정확한 결과와 정책연구의 솔루션을 제공합니다.</strong></div>
+                <div>
+                    <p>사업의 새로운 가치를 창출할 수 있도록 적극적으로 나아가고 있습니다.</p>
+                    <p>열정과 헌신을 통해 진취적이고 빠른 추진력으로 고객에게 최고의 만족을 드리도록 하겠습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap category_box_wrap">
+            <div class="category_box">
+                <div class="left_category_box">
+                    <img src="/img/logo/logo.png">
+                </div>
+                <div class="right_category_box">
+                    <h3>POLL</h3>
+                    <p class="sub_title">여론조사</p>
+                    <p class="sub_content">경험만은 연구진의 축전된 노하우를 바탕으로 전략적 접근&대안 제시</p>
+                    <p class="sub_content">믿을만한 여론 동향 파악 및 솔루션 제공</p>
+                </div>
+            </div>
+            <div class="category_box">
+                <div class="left_category_box">
+                    <img src="/img/logo/logo.png">
+                </div>
+                <div class="right_category_box">
+                    <h3>PUBLIC DATA</h3>
+                    <p class="sub_title">공공데이터 분석</p>
+                    <p class="sub_content">공공데이터 분석으로 과학행정 지원</p>
+                    <p class="sub_content">GIS, 네트워크 분석 등을 활용한 데이터 시각화 제공</p>
+                </div>
+            </div>
+
+            <div class="category_box">
+                <div class="left_category_box">
+                    <img src="/img/logo/logo.png">
+                </div>
+                <div class="right_category_box">
+                    <h3>POLITICS</h3>
+                    <p class="sub_title">정책연구</p>
+                    <p class="sub_content">행정수요조사 및 정책연구</p>
+                    <p class="sub_content">행정서비스 및 만족도평가</p>
+                    <p class="sub_content">데이터에 기반한 인사이트 도출</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <th:block th:include="layout/footer" />
+    <script th:inline="javascript">
+
+    </script>
+</th:block>

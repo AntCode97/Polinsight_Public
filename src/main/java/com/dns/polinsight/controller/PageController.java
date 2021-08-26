@@ -114,4 +114,27 @@ public class PageController {
     return "research/pols";
   }
 
+  @GetMapping("/company/introduce")
+  public String getCompanyIntroduce(Model model) {
+    model.addAttribute("checked", "intro");
+    return "company/introduce";
+  }
+
+  @GetMapping("/company/map")
+  public String getCompanyMap(Model model) {
+    model.addAttribute("checked", "map");
+    return "company/map";
+  }
+
+  @GetMapping("/business/category")
+  public String getBusinessCategory(Model model) {
+    model.addAttribute("checked", "category");
+    return "business/category";
+  }
+
+  @GetMapping("/business/result")
+  public String getBusinessResult(Model model) {
+    model.addAttribute("checked", "result");
+    return "business/result";
+  }
 }

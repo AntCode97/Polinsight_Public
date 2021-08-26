@@ -143,6 +143,7 @@
       overflow            : hidden;
       /*top                 : 0;*/
       width               : 100%;
+      min-width: 1200px;
     }
 
     .shrink {
@@ -293,8 +294,8 @@
     <div class="nav-window-close-btn"><i class="fas fa-times"></i></div>
   </div>
   <ul class="navbar-nav">
-    <li class="nav-item"><a th:href="@{/}" class="nav-link">Company</a></li>
-    <li class="nav-item"><a th:href="@{/}" class="nav-link">Business</a></li>
+    <li class="nav-item"><a th:href="@{/company/introduce}" class="nav-link">Company</a></li>
+    <li class="nav-item"><a th:href="@{/business/category}" class="nav-link">Business</a></li>
     <li class="nav-item"><a th:href="@{/research/online}" class="nav-link">Research</a></li>
     <li class="nav-item"><a th:href="@{/posts}" class="nav-link">Customer</a></li>
   </ul>
@@ -338,8 +339,8 @@
             <a href="/">Company</a>
             <div class="dropdown" style="left: 0px;">
               <div class="dropdown_box">
-                <a class="dropdown_element" th:href="@{/}">인사말</a>
-                <a class="dropdown_element" th:href="@{/}">오시는길</a>
+                <a class="dropdown_element" th:href="@{/company/introduce}">인사말</a>
+                <a class="dropdown_element" th:href="@{/company/map}">오시는길</a>
               </div>
             </div>
           </li>
@@ -350,8 +351,8 @@
             <div class="dropdown" style="left: 160.5px;">
               <div class="dropdown_box">
 
-                <a class="dropdown_element" th:href="@{/}">분야별영역</a>
-                <a class="dropdown_element" th:href="@{/}">주요실적</a>
+                <a class="dropdown_element" th:href="@{/business/category}">분야별영역</a>
+                <a class="dropdown_element" th:href="@{/business/result}">주요실적</a>
               </div>
             </div>
           </li>

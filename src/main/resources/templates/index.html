@@ -69,6 +69,7 @@
       margin           : 30px auto 50px;
       padding          : 20px 30px;
       width            : 100%;
+      min-width: 1200px;
     }
 
     .main_survey_list_title {
@@ -222,17 +223,20 @@
       display         : flex;
       justify-content : space-between;
     }
+    .panel_plus_wrap {min-width: 1200px;}
 
 
     @media (min-width : 320px) and (max-width : 480px) {
       .carasel_wrap {
         height : 25vh;
+        width: 100%;
+        min-width: 0px;
       }
 
       .headline_wrap {
         display : none;
       }
-
+      .panel_plus_wrap {min-width: 0px;}
       .panel_wrap {
         flex-direction : column;
         margin         : 20px 10px;
@@ -291,6 +295,7 @@
       .main_survey_list_wrap {
         margin  : 20px auto 20px;
         padding : 20px 10px;
+        min-width: 0px;
       }
 
       .survey_run, .survey_stop {
@@ -323,27 +328,28 @@
     <div class="flex-content">
       <div class="carasel_wrap"></div>
       <th:block th:if="${session.user==null}">
-        <div class="panel_wrap">
-          <div class="panel_item panel_item_vertical">
-            <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
-            <p>폴인사이트의 패널이 되어주세요.</p>
-          </div>
-          <div class="panel_line"></div>
-          <div class="panel_item panel_item_vertical">
-            <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
-            <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
-          </div>
-          <div class="panel_line"></div>
-          <div class="panel_item panel_item_horizontal">
-            <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
-            <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+        <div class="panel_plus_wrap">
+          <div class="panel_wrap">
+            <div class="panel_item panel_item_vertical">
+              <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
+              <p>폴인사이트의 패널이 되어주세요.</p>
+            </div>
+            <div class="panel_line"></div>
+            <div class="panel_item panel_item_vertical">
+              <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
+              <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
+            </div>
+            <div class="panel_line"></div>
+            <div class="panel_item panel_item_horizontal">
+              <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
+              <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+            </div>
           </div>
         </div>
       </th:block>
 
       <div>
         <th:block th:include="survey/surveylist" />
-
       </div>
     </div>
     <th:block th:include="layout/footer" />

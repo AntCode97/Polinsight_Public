@@ -1,0 +1,150 @@
+<th:block th:include="layout/header" />
+<th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
+    <style>
+        /* CASAREL 아래 nav-bar */
+        .headline_wrap {
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: red;
+            font-size: 55px;
+        }
+        .small-headline {
+            font-size: 14px;
+        }
+        .carasel_wrap {height: 35vh;}
+        .carasel_wrap::before {height: 35vh;}
+        .big_navigation {
+            width: 1200px;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .big_navigation_wrap {border-bottom: 1px solid #ddd;}
+        .big_navigation > li > a {
+            display: block;
+            color: white;
+            font-size: 15px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            overflow: hidden;
+            height: 50px;
+            line-height: 48px;
+            padding: 0 40px;
+            background: #CECECE;
+            margin: 0 -1px -1px 0;
+        }
+        .check_navigation {
+            background: #192739!important;
+        }
+
+        /* post DESIGN */
+        .pols_main_contents {
+            display     : block;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .main_item {
+            color         : #000000;
+            font-size     : 2.5rem;
+            font-weight   : bold;
+            padding       : 0 20px 10px;
+            text-align: center;
+        }
+        .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444;}
+        .map_wrap {
+            width: 1000px;
+            height: 470px;
+            margin: 0 auto;
+            border: 1px solid #DADADA;
+        }
+        .contact_wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .contact_wrap > div { flex: 1;}
+        .contact_box {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .contact_box i {font-size: 40px; color: #4C99CF; padding-right: 20px;}
+        .contact_box p {font-size: 18px; color: #4C99CF; font-weight: bold;}
+        .contact_box span {font-size: 13px; color: #444; font-weight: bold;}
+
+        .main_contents_wrap { max-width: 1000px; margin: 40px auto;}
+
+
+
+
+        @media (min-width : 320px) and (max-width : 480px) {
+            .carasel_wrap { height: 25vh; }
+            .headline_wrap { display: none;}
+        }
+    </style>
+
+
+    <div class="carasel_wrap">
+        <div class="headline_wrap">
+            <span>고객화 함께 가치를</span>
+            <span>더해가는 기업</span>
+            <span class="small-headline">소제목 블라블라블라블라블라~</span>
+        </div>
+    </div>
+
+    <div class="big_navigation_wrap">
+        <ul class="big_navigation">
+            <li><a th:href="@{/company/introduce}" th:classappend="${checked} == 'intro' ? 'check_navigation'">인사말</a></li>
+            <li><a th:href="@{/company/map}" th:classappend="${checked} == 'map' ? 'check_navigation'">오시는길</a></li>
+        </ul>
+    </div>
+
+    <div class="pols_main_contents">
+        <div class="pols_main_contents_category">
+            <div class="pols_main_contents_item">
+                <p class="main_item">LOCATION</p>
+                <span class="sub_item">폴인사이트 찾아오시는 길을 안내해드립니다.</span>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="map_wrap">
+                <!-- KAKAO MAP API -->
+            </div>
+
+            <div class="contact_wrap">
+                <div class="contact_box">
+                    <div class="left_contact_box"><i class="fas fa-map-marked-alt"></i></div>
+                    <div class="right_contact_box">
+                        <p>광주광역시 광산구 첨단내촌로 70번길 55 404호</p>
+                        <span>(구주소 : 광주광역시 광산구 월계동 769-4)</span>
+                    </div>
+                </div>
+
+                <div class="contact_box">
+                    <div class="left_contact_box"><i class="fas fa-phone-square-alt"></i></div>
+                    <div class="right_contact_box">
+                        <p><Strong>062-374-7011</Strong></p>
+                        <span>FAX : 062-374-7013</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <th:block th:include="layout/footer" />
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
