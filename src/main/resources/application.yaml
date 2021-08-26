@@ -235,6 +235,8 @@ server :
   servlet :
     session :
       timeout : 5m
+
+
 custom :
   callback :
     base : "http://localhost:8080"

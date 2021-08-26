@@ -425,12 +425,5 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/test")
-  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable,
-                                    @RequestParam(value = "type", required = false, defaultValue = "") String type,
-                                    @RequestParam("regex") String regex) {
-    //    return success(surveyService.findAllAndRegex(pageable, regex));
-    return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
-  }
 
 }
