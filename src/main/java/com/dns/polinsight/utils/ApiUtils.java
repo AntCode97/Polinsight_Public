@@ -2,6 +2,7 @@ package com.dns.polinsight.utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.ResponseEntity;
 
 public class ApiUtils<T> {
 
@@ -11,6 +12,12 @@ public class ApiUtils<T> {
 
   public static ApiResult<?> error(String message, int status) {
     return new ApiResult<>(false, null, new ApiError(message, status));
+  }
+
+  public static ResponseEntity toResponseEntity(ApiError error) {
+    return ResponseEntity
+            .status(error.getStatus())
+            .body(error.getMessage());
   }
 
   @Getter
