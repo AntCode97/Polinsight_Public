@@ -1,5 +1,7 @@
 package com.dns.polinsight.exception;
 
+import java.util.function.Supplier;
+
 public class SurveyNotFoundException extends RuntimeException {
 
   public SurveyNotFoundException() {
@@ -9,5 +11,6 @@ public class SurveyNotFoundException extends RuntimeException {
   public SurveyNotFoundException(String message) {
     super(message);
   }
+
 
 }

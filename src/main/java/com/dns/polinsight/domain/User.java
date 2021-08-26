@@ -32,11 +32,10 @@ import java.util.*;
 public class User implements UserDetails {
 
 
-  //  @Builder.Default
   @ToString.Exclude
   @JsonIgnore
-  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
-  private Set<ParticipateSurvey> participateSurvey;
+  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
+  private List<ParticipateSurvey> participateSurvey;
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -99,7 +98,7 @@ public class User implements UserDetails {
     this.isSmsReceive = dto.getIsSmsReceive();
     this.isEmailReceive = dto.getIsEmailReceive();
     this.recommend = Phone.of(dto.getRecommend());
-    this.participateSurvey = new HashSet<>();
+    this.participateSurvey = new ArrayList<>();
     this.role = dto.getRole();
     this.registeredAt = dto.getRegisteredAt();
     this.panel = Panel.builder()

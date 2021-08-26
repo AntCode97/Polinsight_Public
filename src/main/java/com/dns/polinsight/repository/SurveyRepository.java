@@ -1,6 +1,8 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +15,14 @@ import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
+
+  @Query("select s from Survey s where s.status.progress = :progress and (s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex or " +
+      "s.createdAt = :regex or s.endAt = :regex)")
+  Page<SurveyDto> findAllByStatusProgressByRegex(ProgressType progress, String regex, Pageable pageable);
+
+  @Query("select s from Survey s where s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex or " +
+      "s.createdAt = :regex or s.endAt = :regex")
+  Page<SurveyDto> findAllByRegex(String regex, Pageable pageable);
 
   Page<Survey> findAllByTitleLikeOrderById(Pageable pageable, String title);
 
@@ -36,6 +46,5 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   @Query(nativeQuery = true, value = "SELECT COUNT(s.title) FROM survey s JOIN collector c ON s.survey_id = c.survey_id WHERE s.progress LIKE ?1")
   long countAllSurveyWithCollectorWithCondition(String condition);
-
 
 }

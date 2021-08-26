@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,14 +104,22 @@ public class ApiController {
    * */
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                 @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
-    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-        Sort.by("endAt").ascending().and(Sort.by("id")));
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
       if (type == null || type.equals("ALL") || type.equals("INDEX")) {
-        return success(surveyService.findAll(pageable));
+        if (regex.isBlank()) {
+          return success(surveyService.findAll(pageable));
+        } else {
+          return success(surveyService.findAllAndRegex(pageable, regex));
+        }
       } else {
-        return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+        if (regex.isBlank()) {
+          return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+        } else {
+          return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -199,32 +206,45 @@ public class ApiController {
     }
   }
 
-  @Async
-  @GetMapping("/pointhistory/excel")
-  public void getExcelFromAllRequests(HttpServletResponse response,
-                                      @RequestParam(value = "userId", required = false, defaultValue = "-1") Long userId) {
+  @GetMapping("/points/excel/{userId}")
+  public void getExcelFromAllPointRequests(HttpServletResponse response,
+                                           @PathVariable(value = "userId", required = false) Long userId) {
     try {
-      ExcelUtil<PointHistory> excelUtil = new ExcelUtil<>();
-      if (userId == -1) {
-        excelUtil.createExcelToResponse(pointHistoryService.findAll(), String.format("%s-%s", "data", LocalDate.now()), response);
+      ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
+      if (userId == 0) {
+        excelUtil.createExcelToResponse(pointRequestService.findAll(), String.format("%s-%s", "point_request", LocalDate.now()), response);
       } else {
-        excelUtil.createExcelToResponse(pointHistoryService.findAllPointHistoryByUserId(userId), String.format("%s-%s", "data", LocalDate.now()), response);
+        excelUtil.createExcelToResponse(pointRequestService.getUserPointRequests(userId), String.format("%s-%s", "point_request", LocalDate.now()), response);
       }
     } catch (IllegalAccessException | IOException e) {
       e.printStackTrace();
     }
   }
 
-  @Async
+  @GetMapping("/pointhistory/excel")
+  public void getExcelFromAllHistories(HttpServletResponse response,
+                                       @RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
+    try {
+      ExcelUtil<PointHistory> excelUtil = new ExcelUtil<>();
+      if (userId == 0) {
+        excelUtil.createExcelToResponse(pointHistoryService.findAll(), String.format("%s-%s", "point_history", LocalDate.now()), response);
+      } else {
+        excelUtil.createExcelToResponse(pointHistoryService.findAllPointHistoryByUserId(userId), String.format("%s-%s", "point_history", LocalDate.now()), response);
+      }
+    } catch (IllegalAccessException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   @GetMapping("/participates/excel")
   public void getExcelFromAllParticipates(HttpServletResponse response,
                                           @RequestParam(value = "userId", required = false, defaultValue = "-1") Long userId) {
     try {
       ExcelUtil<ParticipateSurvey> excelUtil = new ExcelUtil<>();
       if (userId == -1) {
-        excelUtil.createExcelToResponse(participateSurveyService.findAll(), String.format("%s-%s", "data", LocalDate.now()), response);
+        excelUtil.createExcelToResponse(participateSurveyService.findAll(), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
       } else {
-        excelUtil.createExcelToResponse(participateSurveyService.findAllByUserId(userId), String.format("%s-%s", "data", LocalDate.now()), response);
+        excelUtil.createExcelToResponse(participateSurveyService.findAllByUserId(userId), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
       }
     } catch (IllegalAccessException | IOException e) {
       e.printStackTrace();
@@ -322,24 +342,9 @@ public class ApiController {
   }
 
   @GetMapping("/points")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
     try {
-      List<PointRequestDto> list = pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList());
-      User user = userService.findById(list.get(0).getUid()).orElseThrow(UserNotFoundException::new);
-      return success(list.parallelStream().map(dto -> {
-        dto.setName(user.getName());
-        return dto;
-      }).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/points/{regex}")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable,
-                                                                       @PathVariable("regex") String regex) throws Exception {
-    try {
-      return success(pointRequestService.getAllPointRequestsByRegex(pageable, regex).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      return success(pointRequestService.getAllPointRequests(pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -418,6 +423,14 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
+  }
+
+  @GetMapping("/test")
+  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable,
+                                    @RequestParam(value = "type", required = false, defaultValue = "") String type,
+                                    @RequestParam("regex") String regex) {
+    //    return success(surveyService.findAllAndRegex(pageable, regex));
+    return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
   }
 
 }

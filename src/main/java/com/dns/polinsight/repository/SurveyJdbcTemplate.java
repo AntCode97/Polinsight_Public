@@ -45,7 +45,7 @@ public class SurveyJdbcTemplate {
   public Page<SurveyDto> findAllSurveysByProgressType(ProgressType progressType, Pageable pageable) {
     String sql = "SELECT s.id AS id, s.title AS title, IFNULL(s.point, 0) AS point, s.survey_id AS surveyid, s.progress AS progress, s.minimum_time AS minimumtime, IFNULL" +
         "(DATE_FORMAT(s.created_at, '%Y-%m-%d'),DATE_FORMAT(NOW(), '%Y-%m-%d')) AS createdat, IFNULL(DATE_FORMAT(s.end_at, '%Y-%m-%d'), DATE_FORMAT(NOW(), '%Y-%m-%d'))AS endat, c.participate_url AS participateurl, s.question_count AS count" +
-        " FROM survey s LEFT JOIN collector c ON s.survey_id = c.survey_id WHERE s.progress LIKE '" +
+        " FROM survey s LEFT JOIN collector c ON s.survey_id = c.survey_id WHERE s.progress LIKE ' " +
         progressType.name() +
         "' LIMIT " +
         pageable.getPageSize() +
@@ -74,7 +74,8 @@ public class SurveyJdbcTemplate {
         "(DATE_FORMAT(s.created_at, '%Y-%m-%d'),DATE_FORMAT(NOW(), '%Y-%m-%d')) AS createdat, IFNULL(DATE_FORMAT(s.end_at, '%Y-%m-%d'), DATE_FORMAT(NOW(), " +
         "'%Y-%m-%d'))AS endat, c.participate_url AS participateurl, s.question_count AS count " +
         "FROM survey s LEFT JOIN collector c ON s.survey_id = c.survey_id " +
-        "LIMIT " +
+        "order by progress desc, end_at desc" +
+        " LIMIT " +
         pageable.getPageSize() +
         " OFFSET " + pageable.getOffset();
     List<SurveyDto> list = jdbcTemplate.query(sql, (rs, rowNum) -> SurveyDto.builder()

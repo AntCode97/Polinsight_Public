@@ -61,6 +61,8 @@ public class ParticipateSurveyController {
     }
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
+      // 설문 종료 표시
+      participateSurveyService.updateParticipateSurveyById(participateSurvey.getId());
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
       if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
@@ -137,14 +139,6 @@ public class ParticipateSurveyController {
                                                                       .surveyPoint(survey.getPoint())
                                                                       .finished(false)
                                                                       .build());
-      //      participateSurveyService.save(ParticipateSurvey.builder()
-      //                                                     .survey(survey)
-      //                                                     .hash(hash)
-      //                                                     .user(user)
-      //                                                     .participatedAt(LocalDateTime.now())
-      //                                                     .surveyPoint(survey.getPoint())
-      //                                                     .finished(false)
-      //                                                     .build());
       return success(sb);
     } catch (SurveyNotFoundException e) {
       throw new SurveyNotFoundException(e.getMessage());

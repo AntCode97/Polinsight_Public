@@ -1,19 +1,19 @@
 package com.dns.polinsight.domain.dto;
 
+import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.GenderType;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -25,8 +25,7 @@ public class UserDto implements Serializable {
   @Serial
   private static final long serialVersionUID = -2905913740026912191L;
 
-  @ElementCollection
-  private final List<String> favorite = new ArrayList<>();
+  private List<String> favorite;
 
   @Setter
   private Long id;
@@ -71,6 +70,9 @@ public class UserDto implements Serializable {
 
   private String industry;
 
+  // TODO: 2021-08-26 JSON으로 파싱
+  private List<ParticipateSurveyDto> participateSurvey;
+
   public UserDto(User user) {
     this.id = user.getId();
     this.point = user.getPoint();
@@ -88,8 +90,9 @@ public class UserDto implements Serializable {
     this.birthType = user.getPanel().getBirthType();
     this.job = user.getPanel().getJob();
     this.industry = user.getPanel().getIndustry();
-    this.favorite.addAll(user.getPanel().getFavorite());
+    this.favorite = user.getPanel().getFavorite();
     this.registeredAt = user.getRegisteredAt();
+    this.participateSurvey = user.getParticipateSurvey().parallelStream().filter(ParticipateSurvey::getFinished).map(ParticipateSurveyDto::new).collect(Collectors.toList());
   }
 
 }

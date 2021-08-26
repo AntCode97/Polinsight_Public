@@ -74,6 +74,16 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
+  public Page<SurveyDto> findAllAndRegex(Pageable pageable, String regex) {
+    return surveyRepository.findAllByRegex(regex, pageable);
+  }
+
+  @Override
+  public Page<SurveyDto> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex) {
+    return surveyRepository.findAllByStatusProgressByRegex(type, regex, pageable);
+  }
+
+  @Override
   public Page<Survey> findAll(Pageable pageable, String title) {
     return surveyRepository.findAllByTitleLikeOrderById(pageable, title);
   }

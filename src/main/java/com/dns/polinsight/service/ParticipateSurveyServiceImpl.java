@@ -47,4 +47,9 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   }
 
 
+  @Override
+  public void updateParticipateSurveyById(long pSurveyId) {
+    participateSurveyRepository.updateFinishedById(pSurveyId);
+  }
+
 }

@@ -3,6 +3,8 @@ package com.dns.polinsight.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,8 +14,11 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @Table(name = "participate_survey")
-public class ParticipateSurvey {
+public class ParticipateSurvey implements Serializable {
 
+
+  @Serial
+  private static final long serialVersionUID = -8790118046300244268L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

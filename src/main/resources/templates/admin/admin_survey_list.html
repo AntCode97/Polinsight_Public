@@ -546,8 +546,11 @@
           .catch(console.log)
     }
 
-    async function getSurveyData(page, type) {
-      const response = await http.get('/api/surveys?type=' + type, {params: {page: page, size: 10}})
+    async function getSurveyData(e) {
+      let type = $('input[name=sort_group]:checked').val()
+      let page = !e ? 0 : !e.data.page ? 0 : e.data.page
+      let regex = String($('input[name=admin_find]').val()).trim()
+      const response = await http.get('/api/surveys?type=' + type, {params: {page: page, size: 10, regex: regex}})
       if (response.data.success) {
         const data = response.data.response
         return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
@@ -555,11 +558,7 @@
     }
 
     const init = e => {
-      let dd = {
-        type: $('input[name=sort_group]:checked').val(),
-        page: !e ? 0 : !e.data.page ? 0 : e.data.page
-      }
-      getSurveyData(dd.page, dd.type).then(obj => {
+      getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total)
         const table = $('.scroll-table')
         table.children('.post-row:not(:first-child)').remove()
@@ -578,7 +577,7 @@
 
     $(function () {
       init()
-
+      $('input[name=admin_find]').on('keyup', {page: 0}, _.throttle(init, 300))
       $('input[name=sort_group]').on('click', {page: 0}, init).on('change', function (e) {
         let id = e.target.id
         $('input[name=sort_group]').each(function () {
@@ -614,13 +613,6 @@
         $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
       });
 
-      /* 유효성체크: 숫자만 입력 */
-      function checkNumber(event) {
-        if (event.key >= 0 && event.key <= 9) {
-          return true;
-        }
-        return false;
-      }
     })
   </script>
 </th:block>

@@ -1,44 +1,69 @@
 package com.dns.polinsight.utils;
 
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+@Slf4j
 public class ExcelUtil<T> {
 
   private int rowNum = 0;
 
   public void createExcelToResponse(List<T> data, String filename, HttpServletResponse response) throws IllegalAccessException, IOException {
-    HSSFWorkbook workbook = new HSSFWorkbook();
-    HSSFSheet sheet = workbook.createSheet("sheet 1");
+    SXSSFWorkbook workbook = new SXSSFWorkbook();
+    SXSSFSheet sheet = workbook.createSheet("sheet1");
     rowNum = 0;
+    log.warn("start download excel");
+    log.warn(String.valueOf(data.size()));
 
     createExcel(sheet, data);
 
-    response.setHeader("Set-Cookie", "fileDownload=true; path=/");
-    response.setContentType("application/vnd.ms-excel");
-    response.setHeader("Content-Disposition", String.format("attachment;filename=%s.xls", filename));
-    workbook.write(response.getOutputStream());
-    response.getOutputStream().flush();
-    response.getOutputStream().close();
+    log.warn("last row: " + sheet.getLastRowNum());
+    //    for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+    //      HSSFRow row = sheet.getRow(i);
+    //      if (row != null) {
+    //        for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+    //          HSSFCell cell = row.getCell(j);
+    //          if (cell == null)
+    //            continue;
+    //          else
+    //            System.out.println(cell.getCellFormula());
+    //        }
+    //      }
+    //    }
+
+    //    response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+    response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/msexcel");
+    response.setHeader("Content-Disposition", "attachment; filename=" + filename + ".xlsx");
+    ServletOutputStream out = response.getOutputStream();
+    workbook.write(out);
+    out.flush();
+    out.close();
   }
 
 
-  private void createExcel(HSSFSheet sheet, List<T> list) throws IllegalAccessException {
+  private void createExcel(SXSSFSheet sheet, List<T> list) throws IllegalAccessException {
     if (list.size() == 0)
       return;
 
-    HSSFRow row = sheet.createRow(rowNum++);
+    SXSSFRow row = sheet.createRow(rowNum++);
     int cellNum = 0;
-
+    System.out.println("=======================");
+    System.out.println(list);
+    System.out.println("=======================");
     for (Field field : list.get(0).getClass().getDeclaredFields()) {
       field.trySetAccessible();
-      row.createCell(cellNum++).setCellValue(field.getName());
+      Cell cell = row.createCell(cellNum++);
+      cell.setCellValue(field.getName());
     }
     for (T data : list) {
       row = sheet.createRow(rowNum++);

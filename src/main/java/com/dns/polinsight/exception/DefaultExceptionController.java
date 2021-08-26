@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import java.security.NoSuchAlgorithmException;
@@ -44,6 +45,13 @@ public class DefaultExceptionController {
   @ExceptionHandler(SurveyNotFoundException.class)
   public ApiUtils.ApiResult<?> handleSurveyNotFound(SurveyNotFoundException e) {
     return error("Survey Not Found", HttpStatus.INTERNAL_SERVER_ERROR.value());
+  }
+
+  @ExceptionHandler(WrongAccessException.class)
+  public ModelAndView handleWrongAccessException(WrongAccessException e) {
+    ModelAndView mv = new ModelAndView("redirect:/");
+    mv.addObject("msg", e.getMessage());
+    return mv;
   }
 
 }

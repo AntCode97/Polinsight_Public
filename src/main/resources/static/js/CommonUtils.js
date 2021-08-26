@@ -84,3 +84,21 @@ function addressParser() {
 function dateParser() {
   return `${arguments[0]}-${arguments[1]}-${arguments[2]}`
 }
+
+function checkNumber(event) {
+  if (event.key >= 0 && event.key <= 9) {
+    return true;
+  }
+  return false;
+}
+
+const saveByExcel = e => {
+  if (!e) {
+    alert('에러가 발생하였습니다.\n관리자에게 문의해주세요.')
+    return;
+  }
+  let url = e.data.url
+  const frm = $(`<form action="" method="get"></form>`)
+  $('body').append(frm)
+  frm.submit()
+}

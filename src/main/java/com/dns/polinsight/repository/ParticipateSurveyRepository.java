@@ -2,6 +2,8 @@ package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.ParticipateSurvey;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,5 +22,9 @@ public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSu
   Optional<ParticipateSurvey> findParticipateSurveyByHash(String hash);
 
   List<ParticipateSurvey> findAllByUserId(Long userId);
+
+  @Modifying
+  @Query("update ParticipateSurvey p set p.finished = true where p.id= :id")
+  void updateFinishedById(long id);
 
 }

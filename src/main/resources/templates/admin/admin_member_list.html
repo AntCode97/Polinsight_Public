@@ -864,8 +864,6 @@
       </div>
     </div>
   </div>
-
-
   <div class="admin_main_contents">
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
@@ -925,10 +923,8 @@
     }
 
 
-    // TODO : 검색시 페이지 에러
     async function getMemberData(e) {
       let page = !e ? 0 : e.data.page
-      console.log(page)
       let regex = String($('input[name=admin_member_search]').val()).trim()
       const response = await http.get('/api/users', {params: {size: 10, page: page, regex: regex}})
       if (response.data.success) {
@@ -1061,8 +1057,8 @@
       $("#month").on('change selected', setDay)
 
       /*비동기 회원 찾기 및 화면 업데이트*/
-      $('input[name=admin_member_search]').on('keyup', _.throttle(init, 300))
-      $('button[name=admin_member_search_btn]').on('click', init).css('font-weight', 'bolder')
+      $('input[name=admin_member_search]').on('keyup', {page: 0}, _.throttle(init, 300))
+      $('button[name=admin_member_search_btn]').on('click', {page: 0}, init).css('font-weight', 'bolder')
       $('button#admin_user_info_update_btn').on('click', () => {
         http
             .put('/admin/user', updatedUser).then(res => {
@@ -1107,11 +1103,6 @@
       $('.modal_wrap').css('display', 'none');
     });
 
-    function checkNumber(event) {
-      if (event.key >= 0 && event.key <= 9) {
-        return true;
-      }
-      return false;
-    }
+
   </script>
 </th:block>

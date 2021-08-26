@@ -1448,6 +1448,7 @@
       userInfo['industry'] = `[[${user.industry}]]`
       userInfo['registeredAt'] = `[[${user.registeredAt}]]`
       userInfo['favorite'] = `[[${user.favorite}]]`
+      userInfo['participate'] = `[[${user.participateSurvey}]]`
 
       let birth = userInfo['birth'].substring(0, 10).split("-")
       $('#year').val((birth[0] * 1)).prop('selected', true).on('change', inputChangeHandler)
@@ -1585,16 +1586,8 @@
       $('.box01').find('button').on('click', userBasicInfoUpdate)
       $('.box02').find('button').on('click', userPanelInfoUpdate)
       $('.box03').find('button').on('click', userPasswordUpdate)
-
-
+      // TODO : 엑셀 저장 버튼 만들기
+      $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
     });
-
-    function checkNumber(event) {
-      if (event.key >= 0 && event.key <= 9) {
-        return true;
-      }
-      return false;
-    }
-
   </script>
 </th:block>

@@ -20,15 +20,8 @@
           .catch(console.log)
     }
 
-
-    const getDataAsExcel = () => {
-      http
-          .get('/api/pointhistory/excel')
-    }
-
     $(function () {
-      $("#syncSurveyList").on('click', syncSurveyList)
-      $("#getExcelBtn").on('click', getDataAsExcel)
+      $("#getExcelBtn").on('click', {url: '/api/pointhistory/excel'}, saveByExcel)
     })
   </script>
 </th:block>
