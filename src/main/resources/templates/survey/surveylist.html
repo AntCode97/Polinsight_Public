@@ -235,7 +235,7 @@
 
       $('.modal_container').css('display', 'flex')
 
-      $('p.notice').append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
+      $('p.notice').empty().append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
 
       $('button[name=participate_btn]').on('click', () => {
         http.get(`/api/survey`, {

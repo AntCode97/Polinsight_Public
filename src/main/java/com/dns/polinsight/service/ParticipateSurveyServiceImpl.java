@@ -14,6 +14,7 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
 
   private final ParticipateSurveyRepository participateSurveyRepository;
 
+
   @Override
   public List<ParticipateSurvey> findAll() {
     return participateSurveyRepository.findAll();
@@ -44,5 +45,6 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   public ParticipateSurvey saveAndUpdate(ParticipateSurvey participateSurvey) {
     return participateSurveyRepository.saveAndFlush(participateSurvey);
   }
+
 
 }

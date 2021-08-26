@@ -1,6 +1,5 @@
 package com.dns.polinsight.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,12 +19,12 @@ public class ParticipateSurvey {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @JsonIgnore
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
+
+  @JoinColumn(name = "user_id")
   @ManyToOne(targetEntity = User.class)
   private User user;
 
-  @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
+  @JoinColumn(name = "survey_id")
   @ManyToOne(targetEntity = Survey.class)
   private Survey survey;
 

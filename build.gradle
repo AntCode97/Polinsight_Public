@@ -6,7 +6,6 @@ plugins {
 
 group = 'com.dns'
 version = '0.0.1'
-sourceCompatibility = "15"
 
 configurations {
     compileOnly {
@@ -69,4 +68,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-targetCompatibility = JavaVersion.VERSION_15

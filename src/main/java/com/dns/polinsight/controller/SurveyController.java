@@ -52,37 +52,5 @@ public class SurveyController {
     }
   }
 
-  /*
-   * 로그인한 사용자가 서베이 클릭시
-   * */
-  @GetMapping("/api/survey")
-  public ApiUtils.ApiResult<String> surveyClickEventHandler(@AuthenticationPrincipal User user,
-                                                            @RequestParam("participate") String participateUrl,
-                                                            @RequestParam("surveyId") long surveyId,
-                                                            @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
-    if (user == null) {
-      throw new BadCredentialsException("UnAuthorized");
-    }
-    try {
-      Survey survey = surveyService.findSurveyBySurveyId(surveyId).get();
-      log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
-      List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString());
-      String hash = new HashUtil().makeHash(someVariables, salt);
-      String sb = participateUrl + "?hash=" + hash + "&email=" + user.getEmail();
-      participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
-                                                                      .survey(survey)
-                                                                      .hash(hash)
-                                                                      .user(user)
-                                                                      .participatedAt(LocalDateTime.now())
-                                                                      .surveyPoint(survey.getPoint())
-                                                                      .finished(false)
-                                                                      .build());
-      return success(sb);
-    } catch (SurveyNotFoundException e) {
-      throw new SurveyNotFoundException(e.getMessage());
-    } catch (NoSuchAlgorithmException e) {
-      throw new NoSuchAlgorithmException(e.getMessage());
-    }
-  }
 
 }

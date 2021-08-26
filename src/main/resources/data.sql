@@ -1302,3 +1302,7 @@ SET point=777,
     end_at='2222-10-10',
     created_at='2020-10-10'
 WHERE id = 1;
+
+UPDATE collector
+SET participate_url = 'https://ko.research.net/r/5KJWSK2'
+WHERE collector_id = 1234567890;
