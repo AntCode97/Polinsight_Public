@@ -3,6 +3,8 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.AttachNotFoundException;
+import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
