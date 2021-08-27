@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+<th:block th:include="layout/header" />
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
   <style>
     .wrapper {
-      width: 1200px;
-      height: 500px;
-      margin: auto;
+      height : 500px;
+      margin : auto;
+      width  : 1200px;
     }
   </style>
 </head>
@@ -21,5 +21,6 @@
     <button onclick="location.replace('/')">홈화면으로</button>
   </div>
 </div>
-</body>
-</html>
+<div>
+  <th:block th:include="layout/footer" />
+</div>

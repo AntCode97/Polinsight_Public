@@ -1,29 +1,140 @@
-<th:block>
+<th:block xmlns:th="http://www.w3.org/1999/xhtml">
+  <style>
+    .modal_container {
+      align-items      : center;
+      background-color : rgba(0, 0, 0, .0);
+      display          : none;
+      height           : 100%;
+      justify-content  : center;
+      left             : 0;
+      margin           : 0 auto;
+      overflow-y       : hidden;
+      position         : fixed;
+      top              : 0;
+      width            : 100%;
+      z-index          : 999;
+    }
+
+    .modal_wrap {
+      background-color : white;
+      box-shadow       : 5px 5px 5px rgba(0, 0, 0, 0.3);
+      height           : 250px;
+      padding          : 20px;
+      width            : 400px;
+
+    }
+
+    .modal_content {
+      align-items     : center;
+      display         : flex;
+      flex-direction  : column;
+      justify-content : center;
+      text-align      : center;
+    }
+
+
+    .modal_header {
+      display        : flex;
+      flex-direction : row-reverse;
+      height         : 10%;
+      width          : 100%;
+    }
+
+    .modal_body {
+      flex-grow : 1;
+      height    : 75%;
+      width     : 290px;
+    }
+
+    .modal_title {
+      font-size   : 20px;
+      font-weight : bold;
+    }
+
+    .modal_footer {
+      display         : flex;
+      height          : 15%;
+      justify-content : space-around;
+      width           : 100%;
+    }
+
+    .modal_buttons {
+      height : 40px;
+      width  : 40px;
+    }
+
+    .modal_buttons:hover {
+      color  : red;
+      cursor : pointer;
+    }
+
+
+    .modal_footer > .modal_buttons:hover {
+      background-color : #1F326A;
+      border           : 1px solid #091940;
+      color            : #FFFFFF;
+    }
+
+    #more_survey_btn {
+      cursor      : pointer;
+      font-size   : 14px;
+      font-weight : bold;
+    }
+
+    #more_survey_btn:hover {
+      color : #4C99CF;
+    }
+
+  </style>
   <div class="main_survey_list_wrap">
     <div class="main_survey_list_title">
-      <p>진행중인 <span class="pol_color">온라인조사</span></p>
-      <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
+      <div>
+        <div class="survey_title_wrap">
+          <p>진행중인 <span class="pol_color">온라인조사</span></p>
+          <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
+        </div>
+        <p id="more_survey_btn"><i class="fas fa-plus"></i>불러오기</p>
+      </div>
     </div>
     <div class="main_survey_box">
     </div>
   </div>
-  <script th:inline="javascript">
-
+  <!--   로딩 스피너 -->
+  <div id="loading">
+    <div class="spinner"></div>
+  </div>
+  <div class="modal_container">
+    <div class="modal_wrap">
+      <div class="modal_content">
+        <div class="modal_header">
+          <p class="modal_buttons modal_close_btn"><i class="fas fa-times"></i></p>
+        </div>
+        <div class="modal_body">
+          <p class="notice"></p>
+        </div>
+        <div class="modal_footer">
+          <button class="btn btn-primary" name="participate_btn">참여하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
     const makeSurveyCard = survey => {
       let template = $(`<div></div>`).addClass('main_survey_item')
-      if (survey.status.progress === 'ONGOING') {
+      if (survey.progress === 'ONGOING') {
         template.addClass('bg_color_item_white')
         template.append(`<p class="survey_run">진행중</p>`)
         template.on('mouseover', function () {
           $(this).css('cursor', 'pointer').css('box-shadow', '5px 5px 10px rgba(0,0,0, .3)').css('transition', 'box-shadow 0.5s ease-in-out')
         }).on('mouseleave', function () {
           $(this).css('cursor', 'default').css('box-shadow', 'none')
-        }).on('click', {seq: survey.id, surveyid: survey.surveyId, title: survey.title}, surveyCardClickEventHandler)
-
+        }).on('click', {survey: survey}, surveyCardClickEventHandler)
       } else {
         template.addClass('bg_color_item_gray')
         template.append(`<p class="survey_stop">조사완료</p>`)
-        template.on('click', function () {
+        template.on('click', function (e) {
+          e.preventDefault();
+          e.returnValue = false
           alert('종료된 설문입니다.')
         })
       }
@@ -33,32 +144,48 @@
 
       return template;
     }
-    const makeSurveyCardList = (surveyList) => {
-
+    const makeSurveyCardList = surveyList => {
       const survey_box = $(".main_survey_box");
+      if (totalSurveys <= (current * 10)) {
+        // hide more button
+        $('#more_survey').hide()
+        current = totalSurveys / 10;
+        return
+      } else {
+        $('#more_survey').show()
+      }
+      if (current === 0)
+        survey_box.empty().append('<div class="main_survey_item_wrap"></div>')
+
       let item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-      let count = 0;
+
       surveyList.forEach(survey => {
-        if (count % 3 !== 0) {
+        if (item_wrap.find('.main_survey_item').length < 3) {
           item_wrap.append(makeSurveyCard(survey))
         } else {
-          survey_box.append('<div class="main_survey_item_wrap"></div>')
-          item_wrap = survey_box.find(".main_survey_item_wrap:last-child")
-          item_wrap.append(makeSurveyCard(survey))
+          item_wrap = $('<div class="main_survey_item_wrap"></div>')
+          survey_box.append(item_wrap)
         }
-        count++;
       })
     }
 
-    const getSurveyList = () => {
-      axios.get('/api/surveys?type=index')
+    const getSurveyList = e => {
+      http
+          .get('/api/surveys?type=INDEX', {
+            params:
+                {
+                  page: current,
+                  size: 10
+                }
+          })
           .then(res => {
-            console.log(res)
             if (res.data.success) {
-              makeSurveyCardList(res.data.response)
+              // surveys.push(...res.data.response)
+              makeSurveyCardList(res.data.response.content)
             }
           })
-          .catch(err => console.log(err))
+          .catch(console.log)
+      // spinner.hide()
     }
 
 
@@ -86,37 +213,67 @@
       }
     }
 
-    const loginChk = () => {
-      /*<![CDATA[*/
-      let sessionUser = /*[[${session.user}]]*/;
-      /*]]*/
+    const loginChk = id => {
+      let sessionUser = `[[${session.user}]]`
       if (!sessionUser) {
         alert('로그인을 먼저 해주세요')
         return false
+      } else if (sessionUser.role === 'ADMIN') {
+        location.href = `/admin/surveyinfo/${id}`
+        return false;
       }
       return true
     }
 
     const surveyCardClickEventHandler = (e) => {
-      if (!loginChk()) return
       e.preventDefault()
       e.returnValue = false;
+      const survey = e.data.survey
+      if (!loginChk(survey.seq)) return
 
-      const seq = e.data.seq
-      const surveyId = e.data.surveyid
-      const title = e.data.title
+      $('.modal_container').css('display', 'flex')
 
-      if (confirm(title + ' 설문을 진행하시겠습니까?')) {
-// 서버에 서베이 정보 + 유저 정보 저장 ==> 이후 관리자 및 마이페이지에서 목록 조회 가능
-//         let dynamicNewForm = $(`<form action="/survey/${surveyId}" method="post"></form>`)
-//           dynamicNewForm.appendTo('body');
-//           dynamicNewForm.submit();
-      }
+      $('p.notice').empty().append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`)
+
+      $('button[name=participate_btn]').on('click', () => {
+        http.get(`/api/survey`, {
+              params:
+                  {
+                    participate: survey.participateUrl,
+                    surveyId: survey.surveyId
+                  }
+            })
+            .then(res => {
+              if (res.data.success) {
+                location.replace(res.data.response)
+              } else {
+                alert('에러 발생')
+                console.log(res)
+              }
+            }).catch(console.log)
+      })
+      $('.modal_close_btn').on('click', () => {
+        $('.participate_btn').off('click')
+        $('.modal_container').fadeOut()
+      })
     }
 
+    const getSurveyTotalCount = () => {
+      http.get('/api/survey/total').then(res => totalSurveys = res.data.success ? res.data.response : alert())
+    }
+
+    let totalSurveys = 0;
+    let current = 0;
+    const surveys = []
     $(function () {
+      getSurveyTotalCount();
       getSurveyList();
       $('input[name=searchInput]').on('keyup', asyncSurveySearch)
+      $('#more_survey_btn').on('click', () => {
+        current++;
+        getSurveyList()
+        document.body.scrollTop = document.body.scrollHeight - 180;
+      })
     })
   </script>
 </th:block>

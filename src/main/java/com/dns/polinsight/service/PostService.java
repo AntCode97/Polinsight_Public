@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.mapper.PostMapping;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,13 @@ public interface PostService {
 
   Post addPost(PostDTO postDTO);
 
-  void renewPost();
+  Page<PostMapping> findPostsByType(PostType type, Pageable pageable);
+
+  Page<PostMapping> findPostsByTitle(String title, PostType type, Pageable pageable);
+
+  Page<PostMapping> findPostsBySearchcontent(String searchcontent, PostType type, Pageable pageable);
+
+  Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable);
 
   Page<Post> getPostList(Pageable pageable);
 
@@ -30,6 +37,6 @@ public interface PostService {
 
   Page<Post> searchKeyword(String keyword, Pageable pageable);
 
-  void upViewCnt(Post post);
+  void upViewCnt(Long postId);
 
 }

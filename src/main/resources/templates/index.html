@@ -1,52 +1,390 @@
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
 <th:block>
-  <div class="carasel_wrap"></div>
-  <th:block th:if="${session.user==null}">
-    <div class="panel_wrap">
-      <div class="panel_item panel_item_vertical">
-        <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
-        <p>폴인사이트의 패널이 되어주세요.</p>
-      </div>
-      <div class="panel_line"></div>
-      <div class="panel_item panel_item_vertical">
-        <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
-        <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
-      </div>
-        <div class="panel_line"></div>
-        <div class="panel_item panel_item_horizontal">
-          <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
-          <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
-        </div>
-      </div>
-  </th:block>
+  <style>
+    .panel_wrap {
+      align-items     : center;
+      border          : 1.5px solid #AAAAAA;
+      display         : flex;
+      justify-content : center;
+      margin          : 30px auto 0;
+      padding         : 30px 0;
+      width           : 900px;
+    }
 
-<!--<th:block th:include="survey/surveylist"></th:block>-->
-  <!-- 진행중인 온라인 조사 목록(Card 형식)-->
+    .panel_item_horizontal {
+      display : flex;
+    }
 
-  <th:block th:include="survey/surveylist" />
-</th:block>
-<th:block th:include="layout/footer" />
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script th:inline="javascript">
-  $(function () {
-    // Scroll TOP버튼 생성 및 TOP으로 이동
-    // + header 디자인 그림자 추가
-    $(window).scroll(function () { // 스크롤이 움직이면
-      if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-        $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#192739');
-      } else {
-        $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+    .panel_item_vertical {
+      display        : flex;
+      flex-direction : column;
+    }
+
+    .pol_color {
+      color : #4C99CF;
+    }
+
+    .panel_item > p {
+      font-size : 14px;
+    }
+
+    .panel_big_item {
+      font-size      : 25px !important;
+      font-weight    : bold;
+      padding-bottom : 10px;
+    }
+
+    .panel_btn {
+      font-size  : 14px;
+      padding    : 7px 0;
+      text-align : center;
+      width      : 110px;
+    }
+
+    .panel_btn_login {
+      background-color : #182838;
+      color            : white;
+      margin-right     : 5px;
+    }
+
+    .panel_btn_join {
+      background-color : #4C99CF;
+      color            : white;
+    }
+
+    .panel_line {
+      background-color : #182838;
+      height           : 65px;
+      margin           : 0 30px;
+      width            : 2px;
+    }
+
+    /* 진행중인 온라인 조사 */
+    .main_survey_list_wrap {
+      align-items      : center;
+      background-color : #E1EEF6;
+      display          : flex;
+      flex-direction   : column;
+      height           : 100%;
+      justify-content  : flex-start;
+      margin           : 30px auto 50px;
+      min-width        : 1200px;
+      padding          : 20px 30px;
+      width            : 100%;
+    }
+
+    .main_survey_list_title {
+      align-items     : flex-end;
+      display         : flex;
+      justify-content : space-between;
+      margin-bottom   : 25px;
+      width           : 940px;
+    }
+
+    .main_survey_list_title > div {
+      < < < < < < < HEAD
+      align-items     : flex-end;
+      /*display         : flex;*/
+      display         : flex;
+    = = = = = = = align-items: center;
+      justify-content : flex-start;
+      justify-content : space-between;
+    >>> >>> > origin / main width: 100 %;
+    }
+
+    .survey_plus {
+      color     : #444444;
+      cursor    : pointer;
+      font-size : 14px;
+    }
+
+    .survey_plus > i {
+      margin-right : 3px;
+    }
+
+    .main_survey_list_title p {
+
+      font-size    : 25px;
+      font-weight  : bold;
+      margin-right : 10px;
+    }
+
+    .survey_run, .survey_stop {
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 10px;
+    }
+
+    .survey_title {
+      color         : #444444;
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 45px;
+    }
+
+    .survey_point {
+      border-bottom  : 1px solid #C1C1C1;
+      font-weight    : bold;
+      padding-bottom : 5px;
+    }
+
+    .survey_date {
+      font-weight : bold;
+      padding     : 10px 0 20px;
+      text-align  : right;
+    }
+
+    .main_survey_item_wrap {
+      < < < < < < < HEAD
+      align-items     : center;
+      display         : flex;
+      gap             : 20px;
+      justify-content : flex-start;
+    = = = = = = = >>> >>> > origin / main margin-bottom: 20 px;
+      max-width       : 940px;
+    }
+
+    .main_survey_item {
+      border-radius : 5px;
+      overflow      : hidden;
+      padding       : 10px;
+      width         : 300px;
+    }
+
+    .survey_run {
+      color : #4C99CF;
+    }
+
+    .survey_stop {
+      color : #000000;
+    }
+
+    .bg_color_item_white {
+      background-color : white;
+    }
+
+    .bg_color_item_gray {
+      background-color : #DEDEDE;
+    }
+
+    .survey_run, .survey_stop {
+      font-size     : 17px;
+      font-weight   : bold;
+      margin-bottom : 10px;
+    }
+
+    .survey_title {
+      font-size     : 17px;
+      font-weight   : bold;
+      height        : 2rem;
+      margin-bottom : 45px;
+    }
+
+    .survey_point {
+      border-bottom  : 1px solid #DADADA;
+      font-weight    : bold;
+      padding-bottom : 5px;
+    }
+
+    .survey_date {
+      font-weight : bold;
+      padding     : 10px 0 20px;
+      text-align  : right;
+    }
+
+    .survey_run {
+      color : #4C99CF;
+    }
+
+    .survey_stop {
+      color : #000000;
+    }
+
+    .bg_color_item_white {
+      background-color : white;
+    }
+
+    .bg_color_item_gray {
+      background-color : #DEDEDE;
+    }
+
+    .headline_wrap {
+      align-items     : center;
+      color           : red;
+      display         : none;
+      flex-direction  : column;
+      font-size       : 55px;
+      gap             : 10px;
+      height          : 100%;
+      justify-content : center;
+
+
+    }
+
+    .small-headline {
+      font-size : 14px;
+    }
+
+    .survey_title_wrap {
+      align-items     : flex-end;
+      display         : flex;
+      justify-content : space-between;
+    }
+
+    .panel_plus_wrap {
+      min-width : 1200px;
+    }
+
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      .carasel_wrap {
+        height    : 25vh;
+        min-width : 0px;
+        width     : 100%;
       }
-    });
-    $('.top-btn').click(function () {
-      $('html, body').animate({scrollTop: 0}, 800);
-    });
-  });
-</script>
-</html>
 
+      .headline_wrap {
+        display : none;
+      }
+
+      .panel_plus_wrap {
+        min-width : 0px;
+      }
+
+      .panel_wrap {
+        flex-direction : column;
+        margin         : 20px 10px;
+        padding        : 20px 0;
+        width          : calc(100% - 20px);
+      }
+
+      .panel_big_item {
+        font-size : 20px !important;
+      }
+
+      .panel_item > p {
+        font-size : 12px;
+      }
+
+      .panel_btn {
+        font-size : 12px;
+      }
+
+      .panel_wrap > .panel_item_vertical:nth-child(1) {
+        display : none;
+      }
+
+      .panel_wrap > .panel_line {
+        display : none;
+      }
+
+      .panel_item_vertical {
+        align-items : center;
+      }
+
+      .panel_item_horizontal {
+        margin-top : 20px;
+      }
+
+      .main_survey_list_title {
+        width : 100%;
+      }
+
+      .main_survey_list_title p {
+        font-size : 17px;
+      }
+
+      .survey_title_wrap > span {
+        display : none;
+      }
+
+      .main_survey_item_wrap {
+        flex-direction : column;
+      }
+
+      .main_survey_item {
+        width : 100%;
+      }
+
+      .main_survey_list_wrap {
+        margin    : 20px auto 20px;
+        min-width : 0px;
+        padding   : 20px 10px;
+      }
+
+      .survey_run, .survey_stop {
+        font-size : 14px;
+      }
+
+      .survey_point, .survey_date {
+        font-size : 12px;
+      }
+
+      .survey_title {
+        font-size     : 14px;
+        height        : 100%;
+        margin-bottom : 15px;
+      }
+
+      .survey_date {
+        padding : 5px 0px;
+      }
+
+      .survey_plus {
+        font-size : 12px;
+      }
+
+
+    }
+  </style>
+
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="carasel_wrap"></div>
+      <th:block th:if="${session.user==null}">
+        <div class="panel_plus_wrap">
+          <div class="panel_wrap">
+            <div class="panel_item panel_item_vertical">
+              <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
+              <p>폴인사이트의 패널이 되어주세요.</p>
+            </div>
+            <div class="panel_line"></div>
+            <div class="panel_item panel_item_vertical">
+              <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
+              <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
+            </div>
+            <div class="panel_line"></div>
+            <div class="panel_item panel_item_horizontal">
+              <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
+              <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+            </div>
+          </div>
+        </div>
+      </th:block>
+
+      <div>
+        <th:block th:include="survey/surveylist" />
+      </div>
+    </div>
+    <th:block th:include="layout/footer" />
+  </div>
+  <script th:inline="javascript">
+    $(function () {
+      // Scroll TOP버튼 생성 및 TOP으로 이동
+      // + header 디자인 그림자 추가
+      $(window).scroll(function () { // 스크롤이 움직이면
+        if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+          $('.top-btn').fadeIn().css("display", "flex");
+          $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+              .css('background-color', '#192739');
+        } else {
+          $('.top-btn').fadeOut();
+          $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        }
+      });
+      $('.top-btn').click(function () {
+        $('html, body').animate({scrollTop: 0}, 800);
+      });
+    });
+  </script>
+</th:block>

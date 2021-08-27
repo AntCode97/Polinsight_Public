@@ -2,15 +2,19 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,8 +46,10 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  public List<User> adminSerchUserByRegex(String regex, Pageable pageable) {
-    return userRepository.findUsersByRegex(regex, pageable);
+  public Page<UserDto> adminSerchUserByRegex(String regex, Pageable pageable) {
+    Page<User> page = userRepository.findUsersByRegex(regex, pageable);
+    List<UserDto> list = page.getContent().parallelStream().map(UserDto::new).collect(Collectors.toList());
+    return new PageImpl<>(list, pageable, page.getTotalElements());
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.dto.PointRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,10 +23,13 @@ public interface PointRequestService {
 
   long countPointRequestsByRegex(String regex);
 
-  Page<PointRequest> getAllPointRequests(Pageable pageable);
+  Page<PointRequestDto> getAllPointRequests(Pageable pageable);
 
   Page<PointRequest> getAllPointRequestsByRegex(Pageable pageable, String regex);
 
   void deletePointRequestById(long id);
+
+
+  List<PointRequest> findAll();
 
 }

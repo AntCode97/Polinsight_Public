@@ -1,0 +1,130 @@
+<!--<th:block th:include="posts/PostCommon" />-->
+<th:block>
+  <style>
+    .popup_overlay {
+      background-color : rgba(0, 0, 0, 0.4);
+      display          : none;
+      height           : 100vh;
+      left             : 50%;
+      position         : fixed;
+      top              : 50%;
+      transform        : translate(-50%, -50%);
+      width            : 100%;
+    }
+
+    .popup_box {
+      background-color : white;
+      box-shadow       : 2px 5px 10px 0px rgba(0, 0, 0, 0.35);
+      left             : 50%;
+      position         : relative;
+      top              : 50%;
+      transform        : translate(-50%, -50%);
+      width            : 550px;
+    }
+
+    .popup_box .popup_content {
+      color      : #666666;
+      font-size  : 14px;
+      padding    : 50px;
+      word-break : break-word;
+    }
+
+    .popup_content > h3 {
+      text-align : center;
+    }
+
+    .popup_btn_wrap {
+      align-items     : center;
+      display         : flex;
+      justify-content : center;
+      padding-bottom  : 25px;
+    }
+
+    .popup_box .popup_btn {
+      background : #192739;
+      border     : none;
+      color      : white;
+      outline    : none;
+      padding    : 10px 25px;
+      text-align : center;
+    }
+
+    .popup_btn:hover {
+      cursor : pointer;
+    }
+
+    .popup_delete_btn {
+      margin-right : 25px;
+    }
+
+    /*.delete_post {*/
+    /*  font-size  : 1.3rem;*/
+    /*  text-align : center !important;*/
+    /*  width      : 100% !important;*/
+    /*}*/
+  </style>
+</th:block>
+<th:block>
+  <div class="popup_overlay">
+    <div class="popup_box">
+      <div id="popup_close_btn" style="position: relative; float: right; margin: 7px 10px; font-size: 20px; cursor:pointer;">
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="popup_content">
+        <h3>공지사항을 삭제하시겠습니까?<br>삭제하면 복구할 수 없습니다.</h3>
+      </div>
+      <div class="popup_btn_wrap">
+        <button type="button" class="popup_btn popup_delete_btn">삭제</button>
+        <button type="button" class="popup_btn">취소</button>
+      </div>
+    </div>
+  </div>
+
+</th:block>
+<script>
+  $(function () {
+    // 팝업 관련 설정
+    let postId;
+    let deleteBtn;
+    $(".delete_btn").on('click', (e) => {
+      deleteBtn = e.currentTarget;
+      postId = $(deleteBtn).attr('value');
+      $(".popup_overlay").fadeIn(100)
+    })
+
+    $("#popup_close_btn>i").on('click', (e) => {
+      // $(".popup_overlay").css('display', 'none')
+      $('.popup_overlay').fadeOut(100)
+    })
+    $(".popup_delete_btn").on('click', (e) => {
+      //console.log(postId);
+      const parentDiv = deleteBtn.parentNode.parentNode.parentNode;
+      //console.log(parentDiv)
+      $.ajax({
+        url: '/admin/posts/' + postId + '/delete',
+        type: 'GET'
+      }).done(
+          // setTimeout("location.reload()", 1000)
+          function () {
+            location.replace('/admin/posts')
+            // parentDiv.innerHTML =    '<span class="delete_post">삭제된 게시글</span>'
+            // console.log(parentDiv)
+            //  $('#boardTable').replaceWith(fragment);
+          }
+      )
+
+      $(".popup_overlay").fadeOut(100)
+    })
+
+    $(".popup_btn").on('click', (e) => {
+      $(".popup_overlay").fadeOut(100)
+    })
+
+    $('.popup_overlay').on('click', function () {
+      $(this).css('display', 'none')
+      // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+    })
+
+  })
+
+</script>

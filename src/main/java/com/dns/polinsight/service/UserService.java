@@ -1,40 +1,56 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.Phone;
+import com.dns.polinsight.types.UserRoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-  boolean isExistUser(String email);
 
   List<User> findAll();
 
-  Page<User> findAll(Pageable pageable);
+  Page<UserDto> findAll(Pageable pageable);
 
-  void deleteUserByEmail(String email);
 
-  User save(User user);
+  Page<UserDto> findAllNotInAdmin(Pageable pageable);
 
-  User update(User user);
+  void deleteUserByEmail(Email email);
 
+  User saveOrUpdate(User user);
 
   Optional<User> findById(long id);
 
-  void deleteUser(User user);
+  void deleteUserById(long userId);
 
-  User findUserByEmail(User user);
+  User findUserByEmail(Email email) throws UsernameNotFoundException;
 
   long countAllUser();
 
-  Boolean isExistEmail(String email);
+  long countAllUserExcludeAdmin();
 
-  Boolean isExistPhone(String phone);
+
+  Boolean isExistEmail(Email email);
+
+  Boolean isExistPhone(Phone phone);
 
   void subUserPoint(long uid, long point);
+
+  User addPointByUserId(long uid, long point);
+
+  void adminUserUpdate(long uid, UserRoleType roleType, long point);
+
+
+  Optional<User> findUserEmailByNameAndPhone(String name, Phone phone);
+
+  Page<UserDto> testFindAllUser(Pageable pageable);
 
 }

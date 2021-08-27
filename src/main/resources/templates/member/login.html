@@ -1,306 +1,328 @@
-<th:block th:include="module/common" />
 <th:block th:include="layout/header" />
 <th:block>
   <style>
-    /* 모달 로그인 창 */
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
     .modal_wrap {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : center;
     }
 
     .modal_login {
-      padding-bottom: 50px;
+      padding-bottom : 50px;
     }
 
     .modal_content {
-      width: 50%;
-      background-color: white;
-      border-radius: 2px;
-      overflow: hidden;
-      margin: 0 auto;
+      background-color : white;
+      border-radius    : 2px;
+      margin           : 0 auto;
+      overflow         : hidden;
+      width            : 450px;
     }
 
     .login_close > button:hover {
-      color: #EBA444;
+      color : #EBA444;
     }
 
     .login_logo > img {
-      max-width: 100px;
-      vertical-align: middle;
+      max-width      : 100px;
+      vertical-align : middle;
     }
 
     .login_title {
-      margin: 0 auto;
-      text-align: center;
+      margin     : 0 auto;
+      text-align : center;
     }
 
     .login_title > a {
-      display: block;
+      display : block;
     }
 
     .login_logo_text {
-      max-width: 25rem;
+      width : 320px;
     }
 
     .login_content {
-      width: 25rem;
-      margin: 0 auto;
-      text-align: center;
+      margin     : 0 auto;
+      min-width  : 320px;
+      text-align : center;
+      width      : 25rem;
     }
 
     .err_content {
-      margin: 8px 0;
-      padding: 30px 15px 15px 15px;
-      font-size: 15px;
-      text-align: left;
-      line-height: 20px;
+      color       : #521822;
+      display     : block;
+      font-size   : 15px;
+      line-height : 20px;
+      margin      : 8px 0;
       /*background-color: #faebeb;*/
-      color: #521822;
-      display: block;
+      padding     : 30px 15px 15px 15px;
+      text-align  : left;
     }
 
     input::placeholder {
-      color: #BBBBBB;
-      font-size: 14px;
+      color     : #BBBBBB;
+      font-size : 14px;
     }
 
     .input_div {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
+      margin-bottom : 20px;
+      overflow      : hidden;
+      position      : relative;
+      width         : 100%;
     }
 
     .input_div p {
-      font-size: 16px;
-      text-align: left;
-      color: #a5dff9;
+      color      : #A5DFF9;
+      font-size  : 16px;
+      text-align : left;
     }
 
     .login_input {
-      width: 100%;
-      outline: none;
-      border: none;
-      border-bottom: 1.5px solid #dde0ea;
-      color: #343236;
-      padding: 8px 0px;
-      height: 43px;
-      font-size: 16px;
+      border        : none;
+      border-bottom : 1.5px solid #DDE0EA;
+      color         : #343236;
+      font-size     : 16px;
+      height        : 43px;
+      outline       : none;
+      padding       : 8px 0px;
+      width         : 100%;
     }
 
     .pw_eye {
-      position: absolute;
-      color: #AAA;
-      font-size: 17px;
-      bottom: 0px;
-      right: 7px;
-      cursor: pointer;
-      height: 43px;
-      line-height: 45px;
-      width: 30px;
-      text-align: center;
-      display: flex;
-      align-items: center;
+      align-items : center;
+      bottom      : 0px;
+      color       : #AAAAAA;
+      cursor      : pointer;
+      display     : flex;
+      font-size   : 17px;
+      height      : 43px;
+      line-height : 45px;
+      position    : absolute;
+      right       : 7px;
+      text-align  : center;
+      width       : 30px;
     }
 
     .qnapw {
-      margin: 15px 5px 0;
-      text-align: right;
-      padding-left: 5px;
-      color: #a9abb7;
+      align-items     : center;
+      color           : #A9ABB7;
+      display         : flex;
+      justify-content : flex-end;
+      margin          : 15px 5px 0;
+      padding-left    : 5px;
+      text-align      : right;
+    }
+
+    .qnapw > div > label {
+      align-items     : center;
+      cursor          : pointer;
+      display         : flex;
+      justify-content : flex-start;
+    }
+
+    .qnapw > div > input {
+      cursor : pointer;
+      margin : 0;
     }
 
     .qnapw > a {
-      font-size: 14px;
-      letter-spacing: 0.8px;
-      color: inherit;
+      color          : inherit;
+      font-size      : 14px;
+      letter-spacing : 0.8px;
     }
 
     .qnapw > a:first-child {
-      padding-right: 10px;
-      margin-right: 10px;
-      border-right: 1px solid #dadada;
+      border-right  : 1px solid #DADADA;
+      margin-right  : 10px;
+      padding-right : 10px;
     }
 
     .qnapw > a:hover {
-      text-decoration: underline;
+      text-decoration : underline;
     }
 
     .login_btn_wrap {
-      margin-top: 30px;
+      margin-top : 30px;
     }
 
     .login_btn_wrap > button {
-      width: 100%;
-      font-weight: bold;
+      font-weight : bold;
+      min-width   : 320px;
+      width       : 100%;
     }
 
     .sns_btn_wrap a {
-      display: block;
-      width: 25rem;
-      height: 51px;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-image: url("img/icons/kakao_login_large_wide.png");
-      border-radius: 2px;
+      background-image    : url("img/icons/kakao_login_large_wide.png");
+      background-position : center;
+      background-repeat   : no-repeat;
+      background-size     : cover;
+      border-radius       : 2px;
+      display             : block;
+      height              : 51px;
+      width               : 25rem;
     }
 
     .login_or {
-      margin: 16px 0;
-      font-size: 14px;
-      overflow: hidden;
-      text-align: center;
-      font-weight: bold;
+      font-size   : 14px;
+      font-weight : bold;
+      margin      : 16px 0;
+      overflow    : hidden;
+      text-align  : center;
     }
 
     .btn-kakao {
-      cursor: pointer;
-      width: 100%;
+      cursor : pointer;
+      width  : 100%;
     }
 
     .privacy-info > span {
-      font-size: 11px;
-      color: rgb(142, 142, 142);
-      letter-spacing: .2px;
+      color          : rgb(142, 142, 142);
+      font-size      : 11px;
+      letter-spacing : .2px;
     }
 
     .privacy-info > span > a {
-      font-weight: bold;
+      font-weight : bold;
     }
 
     .login_line {
-      margin: 10px auto;
-      width: 110px;
-      border: 0.5px solid rgb(222, 222, 222);
+      border : 0.5px solid rgb(222, 222, 222);
+      margin : 10px auto;
+      width  : 110px;
     }
 
     .join_request_text {
-      text-align: center;
-      margin-top: -30px;
+      margin-top : -30px;
+      text-align : center;
     }
 
     .join_request_text > a {
-      margin-left: 5px;
-      color: rgb(51, 51, 51);
-      font-weight: bold;
-      font-size: 14px;
+      color       : rgb(51, 51, 51);
+      font-size   : 14px;
+      font-weight : bold;
+      margin-left : 5px;
     }
 
     .sns_btn_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
     }
 
     .btn-effect {
-      padding: 12px;
-      font-size: 18px;
-      text-align: center;
-      border-radius: 2px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      outline: none;
+      border        : 1px solid transparent;
+      border-radius : 2px;
+      cursor        : pointer;
+      font-size     : 18px;
+      outline       : none;
+      padding       : 12px;
+      text-align    : center;
     }
 
-    @media (min-width: 320px) and (max-width: 480px) {
-      .modal_content {
-        width: 95%;
-      }
+    .auto_login {
+      display : none;
+    }
 
-      .login_logo_text {
-        width: 100%;
-      }
-
-      .login_content {
-        width: 100%;
-      }
-
-      .sns_btn_wrap a {
-        max-width: 22.27rem;
+    @media (min-width : 320px) and (max-width : 480px) {
+      .modal_wrap {
+        height     : calc(100vh - 260px);
+        margin-top : 50px;
       }
 
       .modal_login {
-        min-width: 20rem;
+        padding : 0;
+      }
+
+      .modal_content {
+        margin : 0 30px;
+        width  : calc(100% - 60px);
+      }
+
+      .login_content {
+        width : 100%;
+      }
+
+      .sns_btn_wrap a {
+        max-width : 22.27rem;
+      }
+
+      .modal_login {
+        min-width : 320px;
       }
     }
   </style>
-</th:block>
-<th:block>
-  <div class="modal_wrap">
-    <div class="modal_content">
-      <div class="modal_login">
-        <div class="login_title">
-          <a th:href="@{/}">
-            <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" alt="" />
-          </a>
-        </div>
-        <div class="login_content">
-          <div class="err_content"></div>
-          <form class="frm_login" th:action="@{/dologin}" method="post">
-            <div class="input_div">
-              <label>
-                <p>이메일</p>
-                <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
-              </label>
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="modal_wrap">
+        <div class="modal_content">
+          <div class="modal_login">
+            <div class="login_title">
+              <a th:href="@{/}">
+                <img th:src="@{/img/logo/logo_color.png}" class="login_logo_text" alt="" />
+              </a>
             </div>
-            <div class="input_div">
-              <label>
-                <p>비밀번호</p>
-                <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
-                <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
-              </label>
+            <div class="login_content">
+              <div class="err_content"></div>
+              <form class="frm_login" th:action="@{/dologin}" method="post">
+                <div class="input_div">
+                  <label>
+                    <p>이메일</p>
+                    <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
+                  </label>
+                </div>
+                <div class="input_div">
+                  <label>
+                    <p>비밀번호</p>
+                    <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
+                    <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
+                  </label>
+                </div>
+                <div class="login_btn_wrap">
+                  <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
+                </div>
+                <div class="qnapw auto_login">
+                  <div>
+                    <label>
+                      자동 로그인
+                      <input type="checkbox" name="rememberMe" value="true" />
+                    </label>
+                  </div>
+                </div>
+              </form>
+              <div class="qnapw">
+                <a th:href="@{/signup}">회원가입</a>
+                <a th:href="@{/find}">아이디/비밀번호 찾기</a>
+              </div>
             </div>
-            <div class="login_btn_wrap">
-              <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
-            </div>
-            <div>
-              <label>
-                자동 로그인
-                <input type="checkbox" name="rememberMe" value="true" />
-              </label>
-            </div>
-          </form>
-          <div class="qnapw">
-            <a th:href="@{/signup}">회원가입</a>
-            <a th:href="@{/findpwd}">아이디/비밀번호 찾기</a>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
+      <div name="emailfindpopup" style="display: none;">
+        <p></p>
+      </div>
+    </div>
+    <th:block th:include="layout/footer" />
+  </div>
   <script>
-    const login = e => {
-      e.preventDefault()
-      e.returnValue = false
-      axios.post('/dologin', null, {
-            params: {
-              email: $('input[name=email]').val().trim(),
-              password: $('input[name=password]').val().trim(),
-              rememberMe: $('input[name=rememberMe]').val().trim()
-            }
-          })
-          .then(res => {
-            if (res.data.response) {
-              location.replace('/')
-            } else {
-              alert('로그인 실패\n아이디와 비밀번호를 확인해주세요.')
-              location.replace('/login')
-            }
-          })
-          .catch(err => {
-            alert('로그인 중 에러가 발생하였습니다.\n다시 시도해주세요')
-            location.replace('/login')
-          })
+    const errorChk = () => {
+      let params = location.href.split('?')
+      if (params.length >= 2) {
+        let param = params[1].split('=')
+        if (param[1]) {
+          alert('로그인 실패\n아이디와 비밀번호를 확인해주세요.')
+          location.replace("/login")
+        }
+      }
     }
 
     $(function () {
-      $('.header_wrap').css('background-color', '#182838')
-
-      $('form').on('submit', login)
+      errorChk()
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경
       $(document).on('focus', '.login_input', function () {
@@ -317,11 +339,11 @@
         if (code === 'password') {
           $(this).prev().attr('type', 'text');
           $(this).html('<i class="fas fa-eye"></i>')
-              .css('color', '#666');
+              .css('color', '#666666');
         } else {
           $(this).prev().attr('type', 'password');
           $(this).html('<i class="fas fa-eye-slash"></i>')
-              .css('color', '#AAA');
+              .css('color', '#AAAAAA');
         }
       });
     })

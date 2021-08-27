@@ -1,461 +1,449 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" dir="ltr" lang="en">
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="module/common" />
 <head>
   <title>폴인사이트</title>
   <link rel="icon" th:href="@{/favicon.ico}">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
   <style>
     .header_wrap {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: transparent;
-      /*background-color: #182838;*/
-      z-index: 9999;
+      background-color : transparent;
+      left             : 0;
+      position         : fixed;
+      top              : 0;
+      width            : 100%;
+      z-index          : 9999;
     }
 
     .header_box {
-      width: 1200px;
-      height: 80px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: white;
+      align-items     : center;
+      color           : white;
+      display         : flex;
+      height          : 100%;
+      justify-content : space-between;
+      margin          : 0 auto;
+      width           : 1200px;
     }
 
     .header_logo a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 80px;
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : center;
     }
 
     .header_logo img {
-      width: 150px;
+      width : 150px;
     }
 
     .header_container_navi {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : space-between;
+      position        : relative;
+    }
+
+    .navi_box > li {
+      line-height : 80px;
     }
 
     .navi_box > li > a {
-      font-size: 18px;
-      display: block;
-      line-height: 80px;
-      padding: 0 40px;
+      display   : block;
+      font-size : 18px;
+      /*line-height: 100%;*/
+      height    : 100%;
+      padding   : 0 40px;
     }
 
     .navi_box > li:hover > a {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .navi_box > li:hover .dropdown {
-      height: 47px;
+      height : 47px;
     }
 
     .dropdown {
-      transition: 0.2s;
-      position: absolute;
-      top: 80px;
-      display: block;
-      background-color: #FFFFFF;
-      overflow: hidden;
-      height: 0px;
+      background-color : #FFFFFF;
+      display          : block;
+      height           : 0px;
+      overflow         : hidden;
+      position         : absolute;
+      top              : 80px;
+      transition       : 0.2s;
     }
 
     .dropdown_box {
-      display: flex;
-      align-items: center;
-      padding: 0 5px;
-      justify-content: space-between;
-      border: 1px solid #d4d4d4;
+      align-items     : center;
+      border          : 1px solid #D4D4D4;
+      display         : flex;
+      justify-content : space-between;
+      padding         : 0 5px;
     }
 
     .dropdown_element {
-      display: inline-block;
-      font-size: 14px;
-      color: #777;
-      font-weight: normal;
-      padding: 0 15px;
-      line-height: 45px;
+      color       : #777777;
+      display     : inline-block;
+      font-size   : 14px;
+      font-weight : normal;
+      line-height : 45px;
+      padding     : 0 15px;
     }
 
     .dropdown_element:hover {
-      text-decoration: underline;
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .header_container_login {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
     }
 
     .header_container_login {
-      padding: 0 20px;
-      margin-left: 25px;
+      margin-left : 25px;
+      padding     : 0 20px;
     }
 
     .header_container_login > a {
-      font-size: 18px;
+      font-size : 18px;
     }
 
     .header_container_login > a:hover {
-      color: #4C99CF;
+      color : #4C99CF;
     }
 
     .header_container_login > span {
-      display: inline-block;
-      width: 0.2px;
-      height: 15px;
-      background: white;
-      margin: 0 10px;
+      background : white;
+      display    : inline-block;
+      height     : 15px;
+      margin     : 0 10px;
+      width      : 0.2px;
     }
 
     /* 배너이미지 */
     .carasel_wrap::before {
-      content: '';
+      content  : '';
       /*background-color: #444;*/
       /*opacity: 0.4;*/
-      width: 100%;
-      height: 50vh;
-      position: absolute;
-      top: 0;
-      left: 0;
+      height   : 50vh;
+      left     : 0;
+      position : absolute;
+      top      : 0;
+      width    : 100%;
     }
 
     .carasel_wrap {
-      width: 100%;
-      height: 50vh;
-      position: relative;
-      overflow: hidden;
-      background-image: url('img/banner/polinsight_banner.jpg');
-      background-position: center, center;
-      background-size: cover;
+      background-image    : url('/img/banner/polinsight_banner.jpg');
+      background-position : center, center;
+      background-size     : cover;
+      height              : 50vh;
+      overflow            : hidden;
+      /*top                 : 0;*/
+      width               : 100%;
+      min-width: 1200px;
+    }
+
+    .shrink {
+      height     : 50px;
+      transition : all .3s ease;
+    }
+
+    .expand {
+      height     : 80px;
+      transition : all .3s ease;
+    }
+
+    .navbar-toggle {
+      background : transparent;
+      border     : none;
+      color      : white;
+      cursor     : pointer;
+      display    : none;
+      font-size  : 22px;
+      outline    : none;
+    }
+
+    .header_container_right_wrap {
+      align-items     : center;
+      display         : flex;
+      justify-content : space-between;
+    }
+
+    .nav-text-window {
+      background-color : white;
+      border-radius    : 5px;
+      box-shadow       : 0 50px 100px rgb(50 50 93 / 10%), 0 15px 35px rgb(50 50 93 / 15%), 0 5px 15px rgb(0 0 0 / 10%);
+      display          : none;
+      margin           : 10px;
+      overflow         : hidden;
+      padding          : 20px;
+      position         : fixed;
+      top              : 0;
+      width            : calc(100% - 20px);
+      z-index          : 20000;
+    }
+
+    .nav-window-header {
+      align-items     : center;
+      border-bottom   : 1px solid rgba(0, 0, 0, .1);
+      display         : flex;
+      gap             : 10px;
+      justify-content : space-between;
+      margin-bottom   : 1.1rem;
+      padding-bottom  : 1.1rem;
+    }
+
+    .nav-window-logo {
+      width : 80px;
+    }
+
+    .nav-window-close-btn {
+      color     : rgba(0, 0, 0, .8);
+      cursor    : pointer;
+      font-size : 24px;
+    }
+
+    .nav-window-close-btn > i {
+      font-weight : 200;
+    }
+
+    .navbar-hr {
+      border     : none;
+      border-top : 1px solid rgba(0, 0, 0, .1);
+      margin     : 2rem 0;
+    }
+
+    .navbar-nav {
+      display        : flex;
+      flex-direction : column;
+      list-style     : none;
+      margin-bottom  : 0;
+      padding-left   : 0;
+    }
+
+    .nav-link {
+      color          : #172B4D !important;
+      display        : block;
+      font-size      : 1rem;
+      font-weight    : 500;
+      letter-spacing : 0;
+      padding        : .8rem 0;
+    }
+
+    .nav-link:hover {
+      color       : #3885CA !important;
+      font-weight : bold;
+    }
+
+    .nav-link > i {
+      margin-right : 4px;
     }
 
 
-    /* 여기서부터 index.html 내용 */
-    .panel_wrap {
-      width: 900px;
-      padding: 30px 0;
-      margin: 30px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 1.5px solid #AAA;
+    @media (min-width : 320px) and (max-width : 480px) {
+      .header_box {
+        min-width : 320px;
+        padding   : 0 20px;
+        width     : 100%;
+      }
+
+      .header_logo img {
+        width : 110px;
+      }
+
+      .header_container_right_wrap {
+        display : none;
+      }
+
+      .navbar-toggle {
+        display : block;
+      }
+
+      .header_wrap {
+        background : rgb(25, 39, 57) !important;
+        height     : 50px;
+      }
+
+      /* TOP Button */
+      .top-btn {
+        bottom : 20px;
+        height : 45px;
+        right  : 10px;
+        width  : 45px;
+      }
+
+      .top-btn > span {
+        display : none;
+      }
     }
 
-    .panel_item_horizontal {
-      display: flex;
-    }
-
-    .panel_item_vertical {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pol_color {
-      color: #4C99CF;
-    }
-
-    .panel_item > p {
-      font-size: 14px;
-    }
-
-    .panel_big_item {
-      font-size: 25px !important;
-      font-weight: bold;
-      padding-bottom: 10px;
-    }
-
-    .panel_btn {
-      font-size: 14px;
-      padding: 7px 0;
-      text-align: center;
-      width: 110px;
-    }
-
-    .panel_btn_login {
-      background-color: #182838;
-      color: white;
-      margin-right: 5px;
-    }
-
-    .panel_btn_join {
-      background-color: #4C99CF;
-      color: white;
-    }
-
-    .panel_line {
-      width: 2px;
-      height: 65px;
-      background-color: #182838;
-      margin: 0 30px;
-    }
-
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
-
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
-    .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-    }
-
-    .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
-    }
-
-    .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .survey_run {
-      color: #4C99CF;
-    }
-
-    .survey_stop {
-      color: #000;
-    }
-
-    .bg_color_item_white {
-      background-color: white;
-    }
-
-    .bg_color_item_gray {
-      background-color: #dedede;
-    }
-
-    /* 진행중인 온라인 조사 */
-    .main_survey_list_wrap {
-      padding: 20px 30px;
-      background-color: #e1eef6;
-      width: 1000px;
-      margin: 0 auto 50px;
-    }
-
-    .main_survey_list_title {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      margin-bottom: 25px;
-    }
-
-    .main_survey_list_title > p {
-      font-size: 25px;
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    .main_survey_item {
-      width: 300px;
-      padding: 10px;
-    }
-
-    .survey_run, .survey_stop {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .survey_title {
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 45px;
-      height: 2rem;
-    }
-
-    .survey_point {
-      font-weight: bold;
-      border-bottom: 1px solid #dadada;
-      padding-bottom: 5px;
-    }
-
-    .survey_date {
-      text-align: right;
-      font-weight: bold;
-      padding: 10px 0 20px;
-    }
-
-    .main_survey_item_wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .survey_run {
-      color: #4C99CF;
-    }
-
-    .survey_stop {
-      color: #000;
-    }
-
-    .bg_color_item_white {
-      background-color: white;
-    }
-
-    .bg_color_item_gray {
-      background-color: #dedede;
-    }
   </style>
 </head>
 <body>
+<!-- 반응형 웹: 햄버거 버튼 클릭시 Window-->
+<div class="nav-text-window">
+  <div class="nav-window-header">
+    <div>
+      <a th:href="@{/}">
+        <img src="/img/logo/logo.png" class="nav-window-logo">
+      </a>
+    </div>
+    <div class="nav-window-close-btn"><i class="fas fa-times"></i></div>
+  </div>
+  <ul class="navbar-nav">
+    <li class="nav-item"><a th:href="@{/company/introduce}" class="nav-link">Company</a></li>
+    <li class="nav-item"><a th:href="@{/business/category}" class="nav-link">Business</a></li>
+    <li class="nav-item"><a th:href="@{/research/online}" class="nav-link">Research</a></li>
+    <li class="nav-item"><a th:href="@{/posts}" class="nav-link">Customer</a></li>
+  </ul>
+  <hr class="navbar-hr">
+  <ul class="navbar-nav">
+    <th:block th:if="${session.user} == null">
+      <li class="nav-item"><a th:href="@{/login}" class="nav-link"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
+      <li class="nav-item"><a th:href="@{/signup}" class="nav-link"><i class="fas fa-user"></i> JOIN</a></li>
+    </th:block>
+    <th:block th:unless="${session.user} == null">
+      <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
+        <li class="nav-item"><a th:href="@{/mypage}" class="nav-link"><i class="fas fa-user-circle"></i> MY PAGE</a></li>
+      </th:block>
+      <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
+        <li class="nav-item"><a th:href="@{/admin}" class="nav-link"><i class="fas fa-users-cog"></i> ADMIN</a></li>
+      </th:block>
+      <li class="nav-item"><a th:href="@{/dologout}" class="nav-link"><i class="fas fa-sign-out-alt"></i> LOGOUT</a></li>
+    </th:block>
+  </ul>
+</div>
+
+
 <button class="top-btn btn-circle">
   <i class="fas fa-arrow-up"></i>
   <span>TOP</span>
 </button>
-<div class="header_wrap">
+<div class="header_wrap expand">
   <div class="header_box">
     <div class="header_container_logo">
       <div class="header_logo">
         <a th:href="@{/}">
-          <img th:src="@{/img/logo/white_logo.png}" alt="로고" />
+          <img alt="로고" th:src="@{/img/logo/white_logo.png}" />
         </a>
       </div>
     </div>
-    <div class="header_container_navi">
-      <ul class="navi_box">
-        <li>
-          <a href="/">Company</a>
-          <div class="dropdown" style="left: 0px;">
-            <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">인사말</a>
-              <a th:href="@{/}" class="dropdown_element">연혁</a>
-              <a th:href="@{/}" class="dropdown_element">설립목적</a>
-              <a th:href="@{/}" class="dropdown_element">오시는길</a>
+    <button class="navbar-toggle"><i class="fas fa-bars"></i></button>
+    <div class="header_container_right_wrap">
+      <div class="header_container_navi">
+        <ul class="navi_box">
+          <li>
+            <a href="/">Company</a>
+            <div class="dropdown" style="left: 0px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/company/introduce}">인사말</a>
+                <a class="dropdown_element" th:href="@{/company/map}">오시는길</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/posts}">Board</a>
-          <div class="dropdown" style="left: 160.5px;">
-            <div class="dropdown_box">
-              <a th:href="@{/posts}" class="dropdown_element">공지사항</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
+            <a th:href="@{/posts}">Business</a>
+            <div class="dropdown" style="left: 160.5px;">
+              <div class="dropdown_box">
 
-          <a th:href="@{/}">Research</a>
-          <div class="dropdown" style="left: 314.5px;">
-            <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents02</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
+                <a class="dropdown_element" th:href="@{/business/category}">분야별영역</a>
+                <a class="dropdown_element" th:href="@{/business/result}">주요실적</a>
+              </div>
             </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="navi_box">
-        <li>
-          <a th:href="@{/}">Research</a>
-          <div class="dropdown" style="right: 0px;">
-            <div class="dropdown_box">
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents01</a>
-              <a th:href="@{/}" class="dropdown_element">Contents03</a>
-              <a th:href="@{/}" class="dropdown_element">Contents04</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
 
-    <div class="header_container_login">
-      <th:block th:if="${session.user} == null">
-        <!-- 비로그인 -->
-        <a th:href="@{/login}">LOGIN</a>
-        <span></span>
-        <a th:href="@{/signup}">JOIN</a>
-      </th:block>
-      <th:block th:unless="${session.user} == null">
-        <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
-          <a th:href="@{/mypage}">MY PAGE</a>
+            <a th:href="@{/}">Research</a>
+            <div class="dropdown" style="left: 314.5px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/research/online}">온라인조사</a>
+                <a class="dropdown_element" th:href="@{/research/pols}">폴'S인사이트</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul class="navi_box">
+          <li>
+            <a th:href="@{/posts}">Customer</a>
+            <div class="dropdown" style="right: 0px;">
+              <div class="dropdown_box">
+                <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
+                <a class="dropdown_element" th:href="@{/events}">이벤트</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="header_container_login">
+        <th:block th:if="${session.user} == null">
+          <!-- 비로그인 -->
+          <a th:href="@{/login}">LOGIN</a>
+          <span></span>
+          <a th:href="@{/signup}">JOIN</a>
         </th:block>
-        <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
-          <a th:href="@{/admin}">ADMIN</a>
+        <th:block th:unless="${session.user} == null">
+          <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
+            <a th:href="@{/mypage}">MY PAGE</a>
+          </th:block>
+          <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
+            <a th:href="@{/admin}">ADMIN</a>
+          </th:block>
+          <span></span>
+          <a th:href="@{/dologout}">LOGOUT</a>
         </th:block>
-        <span></span>
-        <a th:href="@{/dologout}">LOGOUT</a>
-      </th:block>
+      </div>
     </div>
   </div>
 </div>
+
 </body>
 <script th:inline="javascript">
   $(function () {
     // Scroll TOP버튼 생성 및 TOP으로 이동
     // + header 디자인 그림자 추가
     $(window).scroll(function () { // 스크롤이 움직이면
+      const header = $('.header_wrap')
       if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
         $('.top-btn').fadeIn().css("display", "flex");
-        $('.header_wrap').css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
-            .css('background-color', '#192739');
+        header.css('box-shadow', '0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)')
+        header.css('background-color', '#192739');
       } else {
         $('.top-btn').fadeOut();
-        $('.header_wrap').css('box-shadow', 'none').css('background-color', 'transparent');
+        header.css('box-shadow', 'none').css('background-color', 'transparent');
+      }
+
+      const dropdown = $('.dropdown')
+      if ($(window).scrollTop() >= 150) {
+        header.addClass('shrink').removeClass('expand')
+        dropdown.css('top', '50px')
+        $('.navi_box > li > a').css('line-height', '50px');
+      } else {
+        header.addClass('expand').removeClass('shrink')
+        dropdown.css('top', '80px')
+        $('.navi_box > li > a').css('line-height', '80px');
       }
     });
+
     $('.top-btn').click(function () {
       $('html, body').animate({scrollTop: 0}, 800);
     });
+
+    $('.nav-window-close-btn').click(function () {
+      $('.nav-text-window').css('display', 'none');
+    })
+    $('.navbar-toggle').click(function () {
+      $('.nav-text-window').css('display', 'block');
+    });
   });
+
+
 </script>
 </html>

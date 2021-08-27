@@ -41,14 +41,17 @@ public class PointRequestDto {
   @Setter
   private String email;
 
+  @Setter
+  private String name;
+
   public PointRequestDto(PointRequest pointRequest) {
     this.id = pointRequest.getId();
     this.uid = pointRequest.getUid();
     this.point = pointRequest.getRequestPoint();
     this.account = pointRequest.getAccount();
-    this.bank = pointRequest.getBankName();
+    this.bank = pointRequest.getBank();
     this.progress = pointRequest.getProgress();
-    this.email = pointRequest.getEmail();
+    this.email = pointRequest.getEmail().toString();
   }
 
 }

@@ -1,10 +1,10 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.AttachNotFoundException;
+import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
@@ -23,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,33 +57,36 @@ public class PostController {
 
 
   @GetMapping("admin/posts")
-  public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap) {
+  public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
 
-    Page<Post> posts;
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
-        posts = postService.searchKeyword(keyword, pageable);
+        posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
 
+        long postCount = posts.getTotalElements();
+        model.addAttribute("postCount", postCount);
+        session.setAttribute("postCount", postCount);
         model.addAttribute("posts", posts);
       }
     } else {
-      posts = postService.getPostList(pageable);
+      posts = postService.findPostsByType(PostType.NOTICE, pageable);
+      long postCount = posts.getTotalElements();
+      model.addAttribute("postCount", postCount);
+      session.setAttribute("postCount", postCount);
       model.addAttribute("posts", posts);
     }
 
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
 
-
-    return "/admin/admin_post_list";
+    return "admin/admin_post_list";
   }
 
 
   @GetMapping("admin/posts/new")
-  public String adminCreateForm(Model model, @LoginUser SessionUser user) throws IOException {
+  public String adminCreateForm(Model model, @AuthenticationPrincipal User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
     //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -91,22 +95,22 @@ public class PostController {
     //    }
     //    return "index";
     //로그인이 안되서 일단 이렇게 진행
-    return "/admin/admin_post_register";
+    return "admin/admin_post_register";
   }
 
 
   @PostMapping("admin/posts/new")
-  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user, MultipartFile[] file) {
     log.info("Result: " + result + ", data: " + postDTO.toString());
 
     postDTO.setFiles(Arrays.asList(file));
     if (result.hasErrors()) {
-      return "/admin/admin_post_register";
+      return "admin/admin_post_register";
     }
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setRegisteredAt(LocalDateTime.now());
       Post post = postService.addPost(postDTO);
@@ -121,30 +125,29 @@ public class PostController {
 
   @GetMapping("admin/posts/search")
   public String adminsearch(@PageableDefault Pageable pageable, @RequestParam Map<String, Object> paramMap,
-                            Model model) {
+                            Model model, HttpSession session) {
 
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-      System.out.println(keyword);
+
       model.addAttribute("keyword", keyword);
       posts = postService.searchKeyword(keyword, pageable);
-      for (Post b :
-          posts) {
-        System.out.println(b.getId());
-      }
     } else {
       posts = postService.getPostList(pageable);
     }
+    long postCount = posts.getTotalElements();
 
+    model.addAttribute("postCount", postCount);
+    session.setAttribute("postCount", postCount);
     model.addAttribute("posts", posts);
 
 
-    return "/admin/admin_post_list";
+    return "admin/admin_post_list";
   }
 
   @GetMapping("posts/new")
-  public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
+  public String createForm(Model model, @AuthenticationPrincipal User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
     //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -153,12 +156,12 @@ public class PostController {
     //    }
     //    return "index";
     //로그인이 안되서 일단 이렇게 진행
-    return "/posts/createPostForm";
+    return "posts/createPostForm";
   }
 
 
   @PostMapping("posts/new")
-  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user, MultipartFile[] file) {
     postDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + postDTO.toString());
     if (result.hasErrors()) {
@@ -167,7 +170,7 @@ public class PostController {
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
       //    if (user != null) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setRegisteredAt(LocalDateTime.now());
       Post post = postService.addPost(postDTO);
@@ -184,19 +187,18 @@ public class PostController {
   @GetMapping("posts")
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
-    Page<Post> posts = postService.getPostList(pageable);
-    //    List<Post> posts = postService.findAll();
-    postService.renewPost();
+    //Page<Post> posts = postService.getPostList(pageable);
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
 
+    //posts.get().map(Post::toString);
 
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
     model.addAttribute("posts", posts);
-    //System.out.println(postSearch.toString());
 
 
-    return "/posts/postList";
+    return "posts/postList";
   }
 
 
@@ -204,11 +206,11 @@ public class PostController {
   public String search(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(postSearch.getSearchType() + postSearch.getSearchValue());
-    Page<Post> posts;
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (postSearch.getSearchType() == SearchType.TITLE) {
-      posts = postService.searchTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsByTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     } else {
-      posts = postService.searchContent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsBySearchcontent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     }
     model.addAttribute("posts", posts);
 
@@ -216,14 +218,14 @@ public class PostController {
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
-    System.out.println(postSearch.toString());
 
-    return "/posts/postList";
+
+    return "posts/postList";
   }
 
 
   @GetMapping("posts/{postId}")
-  public String content(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user, HttpSession session) {
+  public String content(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
@@ -235,27 +237,25 @@ public class PostController {
     //    if (user != null) {
     //      model.addAttribute("user", user);
     //    }
-    Post findPost = postService.findOne(postId);
+
     try {
-      System.out.println(session);
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" + postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        System.out.println("조회수 증가!!");
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
-      } else
-        System.out.println("하루가 지나야 조회수가 오름");
+        log.info("Post View COUNT UP");
+        postService.upViewCnt(postId);
+        session.setAttribute("update_time" + postId, current_time);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();
     }
+    Post findPost = postService.findOne(postId);
 
-
-    model.addAttribute("post", findPost);
+    model.addAttribute("post", new PostDTO(findPost));
     List<Post> allPosts = postService.findAll();
     for (int i = 0; i < allPosts.size(); i++) {
       if (allPosts.get(i).getId() == postId) {
@@ -269,11 +269,11 @@ public class PostController {
       }
     }
 
-    return "/posts//post";
+    return "posts/post";
   }
 
   @GetMapping("admin/posts/{postId}")
-  public String adminContent(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user, HttpSession session) {
+  public String adminContent(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
@@ -284,34 +284,31 @@ public class PostController {
     //      model.addAttribute("user", user);
     //    }
     model.addAttribute("user", user);
-    Post findPost = postService.findOne(postId);
+
+
     try {
-      System.out.println(session);
       long update_time = 0;
-      if (session.getAttribute("update_time" + findPost.getId()) != null) {
-        update_time = (long) session.getAttribute("update_time" + findPost.getId());
+      if (session.getAttribute("update_time" + postId) != null) {
+        update_time = (long) session.getAttribute("update_time" + postId);
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        System.out.println("조회수 증가!!");
-        postService.upViewCnt(findPost);
-        session.setAttribute("update_time" + findPost.getId(), current_time);
-      } else
-        System.out.println("하루가 지나야 조회수가 오름");
+        postService.upViewCnt(postId);
+        log.info("Post View COUNT UP");
+        session.setAttribute("update_time" + postId, current_time);
+      }
 
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-
-    model.addAttribute("post", findPost);
-
-
-    return "/admin/admin_post_view";
+    Post findPost = postService.findOne(postId);
+    model.addAttribute("post", new PostDTO(findPost));
+    return "admin/admin_post_view";
   }
 
   @GetMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user) {
+  public String updatePost(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user) {
 
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
@@ -338,14 +335,15 @@ public class PostController {
   }
 
   @PostMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @AuthenticationPrincipal User user, MultipartFile[] file) {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
-      User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+      User admin = userService.findUserByEmail(user.getEmail());
       postDTO.setUser(admin);
       postDTO.setId(postId);
       postDTO.setRegisteredAt(LocalDateTime.now());
       postDTO.transViewcontent();
+      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
       List<MultipartFile> mFiles = postDTO.getFiles();
       if (mFiles != null) {
         for (MultipartFile m : file) {
@@ -367,7 +365,8 @@ public class PostController {
   }
 
   @GetMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user) {
+
     Post post = postService.findOne(postId);
     PostDTO postDTO = new PostDTO();
     postDTO.setId(post.getId());
@@ -378,49 +377,22 @@ public class PostController {
     postDTO.setTitle(post.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     postDTO.setRegisteredAt(registeredAt);
-    //    try {
-    //      List<MultipartFile> mFiles =attachService.findMultipartFiles(postId);
-    //      for(MultipartFile m : mFiles){
-    //        System.out.println(m.getOriginalFilename());
-    //      }
-    //      postDTO.setFiles(mFiles);
-    //    } catch (Exception e){
-    //      System.out.println(e);
-    //    }
 
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
-
-    //    try{
-    //      File file = new File(post.getFilePath());
-    //      FileItem fileItem = new DiskFileItem("file", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length() , file.getParentFile());
-    //      InputStream input = new FileInputStream(file);
-    //      OutputStream os = fileItem.getOutputStream();
-    //      IOUtils.copy(input, os);
-    //      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-    //      postDTO.setFile(multipartFile);
-    //      System.out.println("파일 불러오기 성공" + multipartFile.getOriginalFilename());
-    //
-    //    }catch (IOException ex){
-    //      System.out.println(ex);
-    //    }
-    //
-    //
-    //    model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
-    return "/admin/admin_post_update";
+    return "admin/admin_post_update";
   }
 
 
   @PostMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @AuthenticationPrincipal User user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + postId);
-    User admin = userService.findUserByEmail(User.builder().email(user.getEmail()).build());
+    User admin = userService.findUserByEmail(user.getEmail());
     postDTO.setUser(admin);
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());
+    postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
+    //TODO: 조회수 항목도 가져오기
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
       for (MultipartFile m : file) {
@@ -451,17 +423,20 @@ public class PostController {
     return "redirect:/posts";
   }
 
+  //Post로 바꿔도 될듯함
   @GetMapping("admin/posts/{postId}/delete")
-  public String adminDelete(@PathVariable("postId") Long postId, Model model) {
+  public String adminDelete(@PathVariable("postId") Long postId, Model model, @PageableDefault Pageable pageable) {
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
     postService.delete(post);
+    //Page<Post> posts = postService.getPostList(pageable);
+    //model.addAttribute("posts", posts);
     return "redirect:/admin/posts";
+    //return "fragments/postList";
   }
 
   @GetMapping("/api/post/search")
   public ResponseEntity<Map<String, Object>> asyncPostSearch(HttpServletRequest request, @PageableDefault Pageable pageable) {
-    System.out.println("Hi");
     Map<String, Object> map = new HashMap<>();
     String type = request.getParameter("type");
     String cls = request.getParameter("classify");
@@ -484,21 +459,36 @@ public class PostController {
   }
 
   @PostMapping("/api/admin/posts/search")
-  public String asyncAdminPostSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable, Model model) {
+  public String asyncAdminPostSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable, Model model, HttpSession session) {
 
 
     String keyword = paramMap.get("keyword").toString();
-    System.out.println(keyword);
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-    for (Post b : posts) {
-      System.out.println(b.getId());
-    }
+
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
+
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
+    session.setAttribute("postCount", posts.getTotalElements());
+    model.addAttribute("postCount", posts.getTotalElements());
+    return "fragments/postList :: #boardTable";
+  }
 
+  @PostMapping("/api/admin/posts/search/count")
+  public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
-    return "/fragments/postList";
+    System.out.println(keyword);
+    model.addAttribute("keyword", keyword);
+    //    String keyword = paramMap.get("keyword").toString();
+    //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
+    //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
+    //    model.addAttribute("keyword", keyword);
+    //    model.addAttribute("posts", posts);
+    //    session.setAttribute("postCount", posts.getTotalElements());
+    model.addAttribute("postCount", session.getAttribute("postCount"));
+
+    return "fragments/postList :: #postCount";
   }
 
   //파일 클릭했을 때, 다운로드할 수 있게 함
@@ -526,27 +516,10 @@ public class PostController {
 
   @GetMapping("api/{file}/delete")
   public ResponseEntity asyncDeleteFile(@PathVariable("file") String filename, Model model) {
-    System.out.println("파일 삭제 성공!");
+    log.info("File Delete Success!!");
     attachService.delete(attachService.findByname(filename).get(0));
     return new ResponseEntity(HttpStatus.OK);
   }
-
-  //  @GetMapping("/api/admin/posts/search")
-  //  public String asyncAdminPostSearch2(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable,Model model){
-  //    String keyword = paramMap.get("keyword").toString();
-  //    System.out.println(paramMap);
-  //    System.out.println(keyword);
-  //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-  //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-  //    for(Post b : posts){
-  //      System.out.println(b.getId());
-  //    }
-  //    model.addAttribute("keyword", keyword);
-  //    model.addAttribute("posts", posts);
-  //
-  //
-  //    return "/fragments/postList";
-  //  }
 
 
 }

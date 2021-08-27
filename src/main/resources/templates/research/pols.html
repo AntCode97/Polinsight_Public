@@ -1,0 +1,268 @@
+<th:block th:include="layout/header" />
+<th:block>
+    <link th:href="@{/css/table.css}" rel="stylesheet">
+    <style>
+        /* CASAREL 아래 nav-bar */
+        .headline_wrap {
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: red;
+            font-size: 55px;
+        }
+        .small-headline {
+            font-size: 14px;
+        }
+        .carasel_wrap {height: 35vh;}
+        .carasel_wrap::before {height: 35vh;}
+        .big_navigation {
+            width: 1200px;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .big_navigation_wrap {border-bottom: 1px solid #ddd;}
+        .big_navigation > li > a {
+            display: block;
+            color: white;
+            font-size: 15px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            overflow: hidden;
+            height: 50px;
+            line-height: 48px;
+            padding: 0 40px;
+            background: #CECECE;
+            margin: 0 -1px -1px 0;
+        }
+        .check_navigation {
+            background: #192739!important;
+        }
+
+        /* post DESIGN */
+        .post_main_contents {
+            display     : block;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .post_main_contents_item {
+            padding: 10px 0;
+            border-bottom : 1px dashed #DADADA;
+        }
+        .main_item {
+            color         : #000000;
+            font-size     : 2.5rem;
+            font-weight   : bold;
+            padding       : 0 20px 10px;
+            text-align: center;
+        }
+        .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444;}
+        .tbl-search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .box-select {
+            appearance: none;
+            background: #fff url('/img/etc/arrow-search.png') no-repeat right center;
+            border: 1px solid #CCD0D7;
+            font-size: 1.2rem;
+            height: 55px;
+            line-height: 55px;
+            padding-left: 20px;
+            text-align: left;
+            flex: 1.5;
+            cursor: pointer;
+        }
+        .post-search .form-search {padding: 20px 200px;}
+        .scroll-card {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 13.3px;
+        }
+        .card-box {
+            width: 290px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card-img {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #444;
+            outline: none;
+        }
+        .card-title {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #444;
+            background: #EEEEEE;
+            border: 1px solid #EEEEEE;
+        }
+
+        .post-row > *:nth-child(1) {width : 70px;}
+        .post-row > *:nth-child(2) {width : 90px;}
+        .post-row > *:nth-child(3) {width : 500px;}
+        .post-row > *:nth-child(4) {width : 120px;}
+        .post-row > *:nth-child(5) {width : 180px;}
+        .post-row > *:nth-child(6) {width : 100px;}
+        .post-row > *:nth-child(7) {width : 120px;}
+        .status-bar {padding:0; background: #4C99CF; border-radius: 5px; color: #fff;}
+        .status-finish {background: #192739!important;}
+
+
+        @media (min-width : 320px) and (max-width : 480px) {
+            .carasel_wrap { height: 25vh; }
+            .headline_wrap { display: none;}
+        }
+    </style>
+
+
+    <div class="carasel_wrap">
+        <div class="headline_wrap">
+            <span>고객화 함께 가치를</span>
+            <span>더해가는 기업</span>
+            <span class="small-headline">소제목 블라블라블라블라블라~</span>
+        </div>
+    </div>
+
+    <div class="big_navigation_wrap">
+        <ul class="big_navigation">
+            <li><a th:href="@{/research/online}" th:classappend="${checked} == 'online' ? 'check_navigation'">온라인조사</a></li>
+            <li><a th:href="@{/research/pols}" th:classappend="${checked} == 'pols' ? 'check_navigation'">폴'S인사이트</a></li>
+        </ul>
+    </div>
+
+    <div class="post_main_contents">
+        <div class="post_main_contents_category">
+            <div class="post_main_contents_item">
+                <p class="main_item">폴'S인사이트</p>
+                <span class="sub_item">폴인사이트에서 진행하고 있는 연구조사입니다.</span>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="post-search">
+                <div class="form-search">
+                    <div class="tbl-search">
+                        <select name="category" class="box-select category-select">
+                            <option value="" selected>분류선택</option>
+                            <option value="">2018</option>
+                            <option value="">2019</option>
+                            <option value="">2020</option>
+                            <option value="">2021</option>
+                        </select>
+                        <select name="search" class="box-select search-select">
+                            <option value="" selected>통합검색</option>
+                            <option value="">제목</option>
+                        </select>
+                        <div class="box-search">
+                            <input type="text" />
+                            <input type="submit" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="survey-sort-wrap"></div>
+            <div class="scroll-card">
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+
+                <div class="card-box">
+                    <img src="" class="card-img" alt="">
+                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-button">
+        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
+            <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
+        </a> -->
+        <a href="#"><i class="fas fa-angle-double-left"></i></a>
+        <a href="#"><i class="fas fa-angle-left"></i></a>
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">6</a>
+        <a href="#">7</a>
+        <a href="#">8</a>
+        <a href="#">9</a>
+        <a href="#">10</a>
+        <a href="#"><i class="fas fa-angle-right"></i></a>
+        <a href="#"><i class="fas fa-angle-double-right"></i></a>
+        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
+            <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
+        </a>
+
+        <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
+
+        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
+            <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
+        </a> -->
+        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
+            <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
+        </a> -->
+    </div>
+
+
+
+    <th:block th:include="layout/footer" />
+    <script th:inline="javascript">
+
+    </script>
+</th:block>

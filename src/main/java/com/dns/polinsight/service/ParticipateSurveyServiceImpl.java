@@ -1,12 +1,10 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.ParticipateSurvey;
-import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.ParticipateSurveyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +16,13 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
 
 
   @Override
-  public List<ParticipateSurvey> findByUserId(long userId) {
-    return participateSurveyRepository.findParticipateSurveysByUserIdOrderByParticipatedAtDesc(userId);
+  public List<ParticipateSurvey> findAll() {
+    return participateSurveyRepository.findAll();
+  }
+
+  @Override
+  public List<ParticipateSurvey> findAllByUserId(long userId) {
+    return participateSurveyRepository.findAllByUserId(userId);
   }
 
   @Override
@@ -28,34 +31,8 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   }
 
   @Override
-  public List<ParticipateSurvey> findByUserIdAndParticipateAt(long userId, LocalDateTime participateAt) {
-    return participateSurveyRepository.findParticipateSurveyByUserIdAndParticipatedAt(userId, participateAt);
-  }
-
-  @Override
-  public List<ParticipateSurvey> findByUserIdAndSurveyPoint(long userId, long point) {
-    return participateSurveyRepository.findParticipateSurveyByUserIdAndSurveyPoint(userId, point);
-  }
-
-  @Override
   public ParticipateSurvey saveParticipateSurvey(ParticipateSurvey participateSurvey) {
     return participateSurveyRepository.save(participateSurvey);
-  }
-
-  @Override
-  public ParticipateSurvey getHashByEmail(String email) {
-    return null;
-  }
-
-  @Override
-  public ParticipateSurvey getPoint(User user) {
-    return null;
-  }
-
-
-  @Override
-  public ParticipateSurvey getParticipateSurveyByUserId(long userId) {
-    return null;
   }
 
   @Override
@@ -65,8 +42,14 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
 
 
   @Override
-  public void saveAndUpdate(ParticipateSurvey participateSurvey) {
+  public ParticipateSurvey saveAndUpdate(ParticipateSurvey participateSurvey) {
+    return participateSurveyRepository.saveAndFlush(participateSurvey);
+  }
 
+
+  @Override
+  public void updateParticipateSurveyById(long pSurveyId) {
+    participateSurveyRepository.updateFinishedById(pSurveyId);
   }
 
 }

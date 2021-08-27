@@ -1,12 +1,13 @@
 package com.dns.polinsight.domain.dto;
 
+import com.dns.polinsight.types.Email;
+import com.dns.polinsight.types.convereter.EmailAttrConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,7 +18,11 @@ import javax.validation.constraints.NotNull;
 public class ChangePwdDto {
 
   @Id
-  private String email;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
+
+  @Convert(converter = EmailAttrConverter.class, attributeName = "email")
+  private Email email;
 
   @NotNull
   private String name;

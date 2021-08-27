@@ -1,6 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Post;
+import com.dns.polinsight.mapper.PostMapping;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,16 +33,36 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   Page<Post> findBySearchcontent(String searchcontent, PostType postType, Pageable pageable);
 
   @Query(
-          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
-          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
+      value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
+      countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
   )
   Page<Post> findBySearchKeyword(String keyword, Pageable pageable);
 
   @Transactional
   @Modifying()
   @Query(
-    value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :#{#post.id}"
-          )
-  void upViewCnt(Post post);
+      value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId"
+  )
+  void upViewCnt(Long postId);
+
+  Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
+
+//  @Query(
+//          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType",
+//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType"
+//  )
+  Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
+
+//  @Query(
+//          value = "SELECT b FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType",
+//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType"
+//  )
+  Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title,  PostType postType, Pageable pageable);
+
+//  @Query(
+//          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%",
+//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%"
+//  )
+  Page<PostMapping> findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(String title, String searchcontent, PostType postType, Pageable pageable);
 
 }

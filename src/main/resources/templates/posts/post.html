@@ -1,418 +1,417 @@
-<!DOCTYPE html>
-<html lang="ko">
-<html xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <style>
-        a {
-            text-decoration: none
-        }
-
-        a:link,
-        a:visited,
-        a:hover {
-            color: #191919;
-        }
-
-
-
-        .web {
-            margin: auto;
-            width: 1200px;
-        }
-
-        img {
-            margin-left: -2px;
-            margin-right: -2px;
-            padding: 0;
-        }
-
-        .sub-main {
-            height: 50px;
-            padding-bottom: 0px;
-            border-bottom: 1px solid #EFEEEC;
-        }
-
-        ul li {
-            list-style-type: none;
-            float: left;
-        }
-
-        .sub-main li {
-            width: 150px;
-            height: 100%;
-            font-size: 20px;
-            color: white;
-            text-align: center;
-            line-height: 250%;
-        }
-
-        .notice {
-            background-color: #1A2738;
-            border: 1px solid #1A2738;
-        }
-
-        .qna {
-            background-color: #EFEEEC;
-            border: 1px solid #EFEEEC;
-        }
-
-        .sub-main-name {
-            width: 1000px;
-            padding-top: 50px;
-            padding-bottom: 50px;
-            margin-bottom: 50px;
-            font-size: 25px;
-            text-align: center;
-            border-bottom: 1px solid rgb(0, 0, 0);
-        }
-
-
-        .information {
-            /*height: 210px;*/
-            padding-bottom: 15px;
-        }
-
-
-        .information_title {
-            display: flex;
-            width: 1000px;
-            border-top: 2px solid rgb(0, 0, 0);
-            border-bottom: 1px solid gray;
-            line-height: 40px;
-        }
-
-        .titleContent {
-            width: 1000px;
-            height: 80px;
-            line-height: 80px;
-            background-color: #EFEEEC;
-            font-size: 20px;
-            padding-left: 20px;
-        }
-
-        .information_write {
-            width: 980px;
-            font-size: 14px;
-            display: flex;
-            border-bottom: 1px solid gray;
-            padding-left: 20px;
-        }
-
-        .margin {
-            font-size: 14px;
-            height: 40px;
-            line-height: 40px;
-            color: gray;
-            margin-right: 10px;
-        }
-
-        .information_name,
-        .information_date {
-            display: flex;
-            font-size: 14px;
-        }
-
-
-        .name,
-        .date {
-            height: 40px;
-            line-height: 40px;
-            font-size: 14px;
-        }
-
-        .nameContent,
-        .dateContent,
-        .information_count {
-            height: 40px;
-            line-height: 40px;
-            font-size: 14px;
-        }
-
-        .nameContent {
-            width: 100px;
-        }
-
-
-        .dateContent {
-            width: 200px;
-        }
-
-        .information_file {
-            display: flex;
-            width: 1000px;
-            /*height: 150px;*/
-            border-bottom: 1px solid gray;
-        }
-
-        .file {
-            width: 100px;
-            font-size: 20px;
-            line-height: 50px;
-            padding-left: 20px;
-        }
-
-        .fileContent {
-            line-height: 40px;
-            font-size: 15px;
-            padding-left: 5px;
-            /*height: 150px;*/
-            margin-top: 5px;
-        }
-
-
-        .file1,
-        .file2,
-        .file3 {
-            display: flex;
-            line-height: 45px;
-            font-size: 14px;
-        }
-
-        .fileName {
-            width: 800px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 14px;
-        }
-
-        .viewFile {
-            color: gray;
-            width: 100px;
-            height: 35px;
-            line-height: 35px;
-            margin-top: 5px;
-            padding-left: 4px;
-            border: 1px solid gray;
-            border-radius: 5px 5px 5px 5px;
-        }
-
-        .fileButton {
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-        }
-
-        .letter {
-            width: 1000px;
-            margin-top: 10px;
-        }
-
-        .postContent {
-            width: 1000px;
-            height: 200px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid lightgray;
-        }
-
-        .Button {
-            display: flex;
-            width:1000px;
-            height:50px;
-            padding-left: 800px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .modifyButton,
-        .listButton {
-            text-align: center;
-            line-height: 200%;
-            width: 90px;
-            height: 45px;
-            line-height: 45px;
-            font-size: 15px;
-            background-color: black;
-            color: white;
-            border-radius: 5px 5px 5px 5px;
-            border: 1px solid black;
-            margin-left: 8px;
-        }
-
-        .postList {
-            width: 1000px;
-            height: 80px;
-            background-color: rgb(241, 238, 238);
-        }
-
-        .nearPost {
-            display: flex;
-            height: 40px;
-            line-height: 40px;
-        }
-
-        .nearPostLetter {
-            width: 100px;
-            padding-left: 10px;
-            font-size: 15px;
-        }
-
-        .nearPostName{
-            width:800px;
-            font-size: 15px;
-        }
-
-        .nearPostDate{
-            width:200px;
-            font-size: 15px;
-        }
-        a.btn{
-            color:white;
-        }
-    </style>
-</head>
-
-<body class="PC">
-    <div class="web">
-        <div class="sub-main">
-            <span></span>
-            <ul>
-                <li class="notice">공지사항</li>
-                <li class="qna">문의사항</li>
-            </ul>
-        </div>
-
-        <div class="sub-main-name"><b>공지사항</b></div>
-
-        <div class="post" th:object="${post}">
-            <div class=information>
-                <div class="information_title">
-                    <div class="titleContent" th:text="*{title}"> <b>-제목-</b></div>
-                </div>
-                <div class="information_write">
-                    <div class="information_name">
-                        <div class="name">작성자&nbsp;: </div>
-                        <div class="nameContent" th:text="*{user.name}">관리자</div>
-                    </div>
-                    <div class="margin"><b> | </b></div>
-                    <div class="information_date">
-                        <div class="date">작성일 : </div>
-                        <div class="dateContent" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"> -작성일-</div>
-                    </div>
-                    <div class="margin"> <b> | </b> 조회수 :</div>
-                    <div class="information_count" th:text="${post.viewcnt}"> 조회수 </div>
-                </div>
-
-                <div class="information_file">
-                    <div class="file"><b>파일</b></div>
-                    <div class="fileContent">
-                        <div class="file1" th:each="file : ${post.attaches}">
-                            <div class="fileName" >
-                                <span class="file_item" th:text="'첨부파일#'"></span>
-                                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}" >
-
-
-                            </a>
-                            </div></div>
-
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="letter">
-                <div class="postContent">
-                    <div th:text="${post.viewcontent}"></div>
-                    <!--글 내용에 따라 높이 조정-->
-                </div>
-            </div>
-            <span th:unless="${user} == null">
-            <div class="Button" th:if="${user.role.toString()} =='ADMIN'">
-                <div class="modifyButton">
-                    <a  class="btn" th:href="@{/posts/{id}/edit (id=${post.id})}"> <b>수정</b></a>
-                </div>
-                <div class="listButton">
-                    <a  class="btn" href="/posts" > <b>목록</b></a>
-                </div>
-            </div>
-            </span>
-            <div class="postList">
-                <div class="nearPost" th:unless="${nextPost} ==null">
-                    <div class="nearPostLetter" > <b>다음글</b> &nbsp;&nbsp;&nbsp; | </div>
-                    <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
-                    <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-다음글 날짜</div>
-                </div>
-                <div class="nearPost" th:unless="${prevPost} ==null">
-                    <div class="nearPostLetter"> <b>이전글 </b>&nbsp;&nbsp;&nbsp; | </div>
-                    <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
-                    <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd HH:mm')}">-이전글 날짜</div>
-                </div>
-            </div>
-
-        </div>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript">
-    window.onload = function () {
-        let file_item = document.getElementsByClassName("file_item");
-        let fileCount = file_item.length;
-
-        console.log(fileCount, file_item);
-        for (let i = 1; i <= fileCount; i++) {
-            file_item[i - 1].innerText = "첨부파일#" + i;
-        }
+<th:block th:include="layout/header" />
+<th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
     }
 
+    .board_contents_wrap {
+      margin    : auto;
+      max-width : 1200px;
+    }
 
-    /* <![CDATA[ */
+    .main_item {
+      border-bottom : 1px dashed #DADADA;
+      color         : #000000;
+      font-size     : 2.5rem;
+      font-weight   : bold;
+      padding       : 10px 0 20px;
+    }
+
+    /* 카드 제목 */
+    .input_wrap {
+      align-items : center;
+      display     : flex;
+    }
+
+    .last_wrap {
+      margin-bottom : 10px;
+    }
+
+    .last_wrap > .board_div {
+      padding : 10px 0;
+    }
+
+    .board_div {
+      border-bottom : 1px solid #DADADA;
+      border-radius : 2px;
+      font-size     : 1rem;
+      height        : 100%;
+      padding       : 20px 10px;
+      width         : 100%;
+    }
+
+    /* 제목 */
+    .tile_info_wrap {
+      align-content   : center;
+      display         : flex;
+      justify-content : space-between;
+    }
+
+    .post_no {
+      color       : #515151;
+      font-size   : 13px;
+      font-weight : bold;
+    }
+
+    .title_text > span {
+      color     : #515151;
+      font-size : 20px;
+    }
+
+    .regdate {
+      color     : #515151;
+      font-size : 14px;
+    }
+
+    /* 작성자 */
+    .post_count_wrap > div {
+      border        : 1px solid #DDDDDD;
+      border-radius : 5px;
+      box-sizing    : border-box;
+      color         : #515151;
+      cursor        : pointer;
+      font-family   : sans-serif;
+      font-size     : 13px;
+      height        : 48px;
+      margin-left   : 5px;
+      min-width     : 48px;
+      overflow      : hidden;
+      position      : relative;
+      text-align    : center;
+    }
+
+    .post_count_wrap strong {
+      display     : block;
+      font-size   : 1rem;
+      font-weight : 400;
+      line-height : 26px;
+    }
+
+    .textarea_div {
+      align-items : flex-start;
+    }
+
+    /* 등록/취소 버튼 */
+    .btn {
+      font-size : 1rem;
+    }
+
+    .btn > i {
+      margin-right : 5px;
+    }
+
+    .btn_wrap {
+      border          : 0;
+      border-radius   : 0;
+      display         : flex;
+      justify-content : space-between;
+      margin-top      : 10px;
+    }
+
+    .board_btn {
+      background      : white;
+      border-radius   : 2px;
+      color           : white;
+      font-size       : 14px;
+      padding         : 12px 22px;
+      text-decoration : none;
+      transition      : box-shadow .2s cubic-bezier(.4, 0, 1, 1),
+      background-color .2s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .board_btn:hover {
+      box-shadow : 0 2px 2px 0 rgba(0, 0, 0, .14),
+      0 3px 1px -2px rgba(0, 0, 0, .2),
+      0 1px 5px 0 rgba(0, 0, 0, .12);
+      box-shadow : 0 14px 26px -12px hsla(0, 0%, 60%, .42),
+      0 4px 23px 0 rgba(0, 0, 0, .12),
+      0 8px 10px -5px hsla(0, 0%, 60%, .2);
+    }
+
+    .list_btn > i, .delete_btn > i, .update_btn > i {
+      font-size     : 17px;
+      font-weight   : normal;
+      padding-right : 5px;
+    }
+
+    .uploadedList > li {
+      border-radius : 2px;
+      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+      margin-right  : 5px;
+    }
+
+    /* 첨부파일 */
+    .title_div {
+      background-color : #F9F9F9;
+      border-top       : 2px solid #7C7C7C;
+    }
+
+    .board_div > label {
+      border-right  : 1px solid #EFEFEF;
+      font-weight   : bold;
+      margin-right  : 7px;
+      padding-right : 7px;
+    }
+
+    .label_padding {
+      padding-left : 20px;
+    }
+
+    .file_download {
+      color : #007791;
+    }
+
+    .file_download:hover {
+      text-decoration : underline;
+    }
+
+    .post-move {
+      margin-top : 20px;
+    }
+
+    .postList {
+      align-items      : flex-start;
+      background-color : #F9F9F9;
+      display          : flex;
+      flex-direction   : column;
+      justify-content  : center;
+      width            : 100%;
+    }
+
+    .nearPost {
+      align-items     : center;
+      cursor          : pointer;
+      display         : flex;
+      justify-content : space-between;
+      padding         : 10px;
+      width           : 100%;
+    }
+
+    .nearPost > div {
+      align-items     : center;
+      display         : flex;
+      justify-content : flex-start;
+    }
+
+    .nearPostLetter {
+      border-right  : 2px solid #DADADA;
+      color         : black;
+      margin-right  : 15px;
+      padding-right : 15px;
+    }
+
+    .metop_board_card {
+      margin-top : 30px;
+    }
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      .board_contents_wrap {
+        margin : 50px auto 0;
+      }
+
+      .metop_board_card {
+        margin : 20px 10px 0;
+      }
+
+      .post-move {
+        margin : 20px 10px 0;
+      }
+
+      .nearPostDate {
+        display : none !important;
+      }
+
+      .nearPostLetter {
+        margin-right  : 5px;
+        padding-right : 5px;
+      }
+
+      .board_contents_wrap {
+        min-height : calc(100vh - 260px);
+      }
+    }
+  </style>
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="board_contents_wrap">
+        <!-- Header Title -->
+        <div class="main_item"><p style="text-align: center;">공지사항</p></div>
+
+        <!-- 게시글 내용 -->
+        <section>
+          <div class="metop_board_card" th:object="${post}">
+            <div class="input_wrap title_div">
+              <div class="board_div">
+                <div class="tile_info_wrap">
+                  <div>
+                    <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
+                  </div>
+                </div>
+                <div class="title_text">
+                  <span th:text="*{title}"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="input_wrap">
+              <div class="board_div" id="writer_div">
+                <label>작성자</label>
+                <span th:text="*{user.name}"></span>
+              </div>
+            </div>
+
+            <div class="input_wrap">
+              <div class="board_div">
+                <label>작성일</label>
+                <span class="regdate" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+                <label class="label_padding">조회</label>
+                <span th:text="${post.viewcnt}"></span>
+              </div>
+            </div>
+
+            <div th:each="file : ${post.attaches}" class="input_wrap">
+              <div class="board_div">
+                <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
+                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>
+              </div>
+            </div>
+
+            <div class="input_wrap textarea_div">
+              <div class="board_div" th:text="${post.viewcontent}" style="white-space: pre;">
+              </div>
+            </div>
+
+            <!-- 취소 & 등록 버튼 -->
+            <div class="input_wrap last_wrap">
+              <div class="board_div btn_wrap">
+                <div class="btn_wrap1">
+              <span>
+                  <a onclick="goList()" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
+              </span>
+                </div>
+                <!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
+                <!--              <span>-->
+                <!--                  <a th:href="@{'/boards/modify/' + ${post.id}}" class="btn btn-support"><i class="fas fa-edit"></i>수정</a>-->
+                <!--              </span>-->
+                <!--              <span>-->
+                <!--                  <a href="#" class="btn btn-warn"><i class="far fa-trash-alt"></i>삭제</a>-->
+                <!--              </span>-->
+                <!--            </div>-->
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!--    -->
+        <div class="post-move" th:object="${post}">
+          <div class="postList">
+            <div class="nearPost" th:unless="${nextPost} ==null">
+              <div>
+                <div class="nearPostLetter"><b>다음글</b></div>
+                <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
+              </div>
+              <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd')}">-다음글 날짜</div>
+            </div>
+            <div class="nearPost" th:unless="${prevPost} ==null">
+              <div>
+                <div class="nearPostLetter"><b>이전글</b></div>
+                <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
+              </div>
+              <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd')}">-이전글 날짜</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <th:block th:include="layout/footer" />
+  </div>
+
+
+  <script type="text/javascript">
+    window.onload = function () {
+      let file_item2 = document.getElementsByClagssName("file_item2");
+      let fileCount = file_item2.length;
+
+      console.log(fileCount, file_item2);
+      for (let i = 1; i <= fileCount; i++) {
+        file_item2[i - 1].innerText = "첨부파일#" + i;
+      }
+    }
+
     var bno = [[${post.id}]];
-    /* ]]> */
+    $(function () {
+      $('.nav_action').click(function () {
+        var value = $(this).find('.arrow').attr('class');
+        if (value === 'fas fa-caret-down arrow') {
+          $(this).next('div').css('height', '100%');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
+        } else if (value === 'fas fa-caret-up arrow') {
+          $(this).next('div').css('height', '0');
+          $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
+        }
+      });
 
-    $(function() {
-        $('.nav_action').click(function() {
-            var value = $(this).find('.arrow').attr('class');
-            if(value == 'fas fa-caret-down arrow') {
-                $(this).next('div').css('height', '100%');
-                $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
-            }else if(value == 'fas fa-caret-up arrow') {
-                $(this).next('div').css('height', '0');
-                $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
+      // 삭제버튼 클릭시 모달창 Open
+      $('.delete_btn').click(function () {
+        if (reply_cnt === 0) { // 댓글이 없는 경우
+          $('#modal_msg_main_txt').text(bno + "번 게시글을 삭제하시겠습니까?");
+          $('#modal_msg_yes').css('display', 'block');
+          $('#modal_msg_cancle').text('취 소');
+        } else { // 댓글이 있는 경우
+          $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+          $('#modal_msg_yes').css('display', 'none');
+          $('#modal_msg_cancle').text('확 인');
+        }
+
+        $('.modal_msg_wrap').css('display', 'flex');
+      });
+
+      // 삭제 알림 모달창에서 확인버튼 Click -> 게시글 삭제
+      $('#modal_msg_yes').click(function () {
+        $.ajax({
+          type: 'DELETE',
+          url: '/posts/' + bno,
+          dataType: 'json',
+          contentType: 'application/json; charset=utf-8',
+          success: function (data) {
+            if (data === 0) {
+              $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
+              $('#modal_msg_yes').css('display', 'none');
+              $('#modal_msg_cancle').text('확 인');
+              $('.modal_msg_wrap').css('display', 'flex');
+            } else if (data === 9) {
+              $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
+              $('#modal_msg_yes').css('display', 'none');
+              $('#modal_msg_cancle').text('확 인');
+              $('.modal_msg_wrap').css('display', 'flex');
+            } else {
+              location.href = "/posts"
             }
+          },
+          error: function () {
+            alert('System ERROR:(');
+          }
         });
-
-        // 삭제버튼 클릭시 모달창 Open
-        $('.delete_btn').click(function(){
-            if(reply_cnt == 0) { // 댓글이 없는 경우
-                $('#modal_msg_main_txt').text(bno +"번 게시글을 삭제하시겠습니까?");
-                $('#modal_msg_yes').css('display', 'block');
-                $('#modal_msg_cancle').text('취 소');
-            } else { // 댓글이 있는 경우
-                $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
-                $('#modal_msg_yes').css('display', 'none');
-                $('#modal_msg_cancle').text('확 인');
-            }
-
-            $('.modal_msg_wrap').css('display', 'flex');
-        });
-
-        // 삭제 알림 모달창에서 확인버튼 Click -> 게시글 삭제
-        $('#modal_msg_yes').click(function(){
-            $.ajax({
-                type: 'DELETE',
-                url: '/posts/' + bno,
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                success: function(data) {
-                    if(data == 0) {
-                        $('#modal_msg_main_txt').text("댓글이 있는 게시글은 삭제할 수 없습니다.");
-                        $('#modal_msg_yes').css('display', 'none');
-                        $('#modal_msg_cancle').text('확 인');
-                        $('.modal_msg_wrap').css('display', 'flex');
-                    } else if(data == 9) {
-                        $('#modal_msg_main_txt').text("비정상적인 접근입니다.");
-                        $('#modal_msg_yes').css('display', 'none');
-                        $('#modal_msg_cancle').text('확 인');
-                        $('.modal_msg_wrap').css('display', 'flex');
-                    } else {
-                        location.href = "/posts"
-                    }
-                },
-                error: function() {
-                    alert('System ERROR:(');
-                }
-            });
-        });
+      });
     });
-</script>
-</html>
+
+
+    const getCookie = function(name) {
+      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return value? value[2] : null;
+    };
+
+    const goList = () => {
+      const listBtnUrl = getCookie("listBtnUrl");
+      if(listBtnUrl != null){
+        location.href= listBtnUrl;
+      } else{
+        location.href = "/posts"
+      }
+    }
+
+  </script>
+</th:block>

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "Post")
 @Entity
 @ToString
 @Getter
@@ -31,7 +32,7 @@ public class Post implements Serializable {
 
   @Id
   @Column(name = "pno")
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @PositiveOrZero
   private Long id;
 
@@ -39,24 +40,27 @@ public class Post implements Serializable {
   private String title;
 
   @NotEmpty
+  @Column(name = "search_content", length = 3000)
   private String searchcontent;
 
   @NotEmpty
+  @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
 
   private LocalDateTime registeredAt;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "type")
   private PostType postType;
 
-  private Boolean newPost;
-
   @Setter
-  private long viewcnt;
+  @Column(name = "view_count")
+  private Long viewcnt;
 
   public static PostBuilder builder(PostDTO postDTO) {
     return PostBuilder()
@@ -68,20 +72,7 @@ public class Post implements Serializable {
         .registeredAt(postDTO.getRegisteredAt())
         .postType(postDTO.getPostType())
         .attaches(postDTO.getAttaches())
-        .viewcnt(0);
-  }
-
-
-  //  //TODO: 게시글 업데이트도 포함해야함
-  //  public void update(String title, String content, LocalDateTime registeredAt){
-  //    this.title = title;
-  //    this.searchcontent = content;
-  //    this.viewcontent = content;
-  //    this.registeredAt =registeredAt;
-  //  }
-
-  public void setNewPost(Boolean time) {
-    this.newPost = time;
+        .viewcnt(postDTO.getViewcnt());
   }
 
 

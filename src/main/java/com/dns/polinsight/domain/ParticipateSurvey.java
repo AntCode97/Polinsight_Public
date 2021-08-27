@@ -2,10 +2,8 @@ package com.dns.polinsight.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -15,17 +13,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @ToString
+@Table(name = "participate_survey")
 public class ParticipateSurvey implements Serializable {
 
-  private static final long serialVersionUID = 2771063029297680262L;
+
+  @Serial
+  private static final long serialVersionUID = -8790118046300244268L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private Long userId;
 
-  private Long surveyId;
+  @JoinColumn(name = "user_id")
+  @ManyToOne(targetEntity = User.class)
+  private User user;
+
+  @JoinColumn(name = "survey_id")
+  @ManyToOne(targetEntity = Survey.class)
+  private Survey survey;
 
   private LocalDateTime participatedAt;
 

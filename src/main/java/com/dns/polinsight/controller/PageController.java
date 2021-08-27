@@ -1,10 +1,12 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +20,10 @@ import javax.servlet.http.HttpSession;
 public class PageController {
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(@LoginUser SessionUser user) {
+  public ModelAndView home(@AuthenticationPrincipal User user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
-      mv.addObject("user", user);
+      mv.addObject("user", new UserDto(user));
     }
     mv.setViewName("index");
     return mv;
@@ -48,9 +50,7 @@ public class PageController {
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() {
-    return new ModelAndView("member/contract");
-  }
+  public ModelAndView contract() { return new ModelAndView("member/contract"); }
 
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
@@ -66,11 +66,6 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/panelagreement")
-  public ModelAndView panelAgreement() {
-    return new ModelAndView("member/pagree");
-  }
-
   @GetMapping("/success_basic")
   public ModelAndView successBasicMemberSignUp() {
     return new ModelAndView("member/success_basicmember");
@@ -82,10 +77,65 @@ public class PageController {
   }
 
   @GetMapping("/basictopanel")
-  public ModelAndView changeBasicToPanel(@LoginUser SessionUser sessionUser, HttpSession session) {
-    session.invalidate();
-    session.setAttribute("basic_user", sessionUser);
-    return new ModelAndView("redirect:/panelagreement");
+  public ModelAndView changeBasicToPanel(@AuthenticationPrincipal User user, HttpSession session) {
+    // TODO: 2021-08-25  
+    session.setAttribute("basic_user", user);
+    return new ModelAndView("redirect:/panel");
   }
 
+  @GetMapping("/find")
+  public ModelAndView find() {
+    return new ModelAndView("member/find");
+  }
+
+  @GetMapping("/events")
+  public ModelAndView events() {
+    return new ModelAndView("posts/events");
+  }
+
+  @GetMapping("/qna")
+  public ModelAndView qna() {
+    return new ModelAndView("posts/qna");
+  }
+
+  @GetMapping("/faq")
+  public ModelAndView faq() {
+    return new ModelAndView("posts/faq");
+  }
+
+  @GetMapping("/research/online")
+  public String getResearchOnline(Model model) {
+    model.addAttribute("checked", "online");
+    return "research/onlineSurvey";
+  }
+
+  @GetMapping("/research/pols")
+  public String getResearchPols(Model model) {
+    model.addAttribute("checked", "pols");
+    return "research/pols";
+  }
+
+  @GetMapping("/company/introduce")
+  public String getCompanyIntroduce(Model model) {
+    model.addAttribute("checked", "intro");
+    return "company/introduce";
+  }
+
+  @GetMapping("/company/map")
+  public String getCompanyMap(Model model) {
+    model.addAttribute("checked", "map");
+    return "company/map";
+  }
+
+  @GetMapping("/business/category")
+  public String getBusinessCategory(Model model) {
+    model.addAttribute("checked", "category");
+    return "business/category";
+  }
+
+  @GetMapping("/business/result")
+  public String getBusinessResult(Model model) {
+    model.addAttribute("checked", "result");
+    return "business/result";
+  }
 }

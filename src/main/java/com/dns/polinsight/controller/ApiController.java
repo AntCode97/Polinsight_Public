@@ -1,35 +1,38 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
-import com.dns.polinsight.domain.Post;
-import com.dns.polinsight.domain.ParticipateSurvey;
-import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.PointRequestDto;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.exception.PointHistoryException;
 import com.dns.polinsight.exception.UnAuthorizedException;
+import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
-import com.dns.polinsight.types.PointRequestProgressType;
+import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
-import com.dns.polinsight.utils.PageHandler;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -39,6 +42,7 @@ import static com.dns.polinsight.utils.ApiUtils.success;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ApiController {
+
 
   private final UserService userService;
 
@@ -52,6 +56,10 @@ public class ApiController {
 
   private final PostService postService;
 
+  private final PointHistoryService pointHistoryService;
+
+  private final SurveyRepository surveyRepository;
+
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
     try {
@@ -63,40 +71,11 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/surveys/sync")
-  public ApiUtils.ApiResult<List<Survey>> surveySyncWithSM() throws Exception {
+  @DeleteMapping("/user/{userId}")
+  @Transactional
+  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable("userId") Long userId) throws Exception {
     try {
-      return success(surveyService.getSurveyListAndSyncPerHour());
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/user/find/{regex}")
-  public ApiUtils.ApiResult<List<UserDto>> adminUserFind(
-      @PageHandler Pageable pageable,
-      @PathVariable(name = "regex") String regex) throws Exception {
-    try {
-      return success(adminService.adminSerchUserByRegex(regex, pageable).stream().map(UserDto::new).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/user/find/{regex}/total")
-  public ApiUtils.ApiResult<Long> adminCountUserFind(
-      @PathVariable(name = "regex") String regex) throws Exception {
-    try {
-      return success(adminService.countUserFindRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @DeleteMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> adminUserDeleteByEmail(@PathVariable(name = "email") String email) throws Exception {
-    try {
-      userService.deleteUserByEmail(email);
+      userService.deleteUserById(userId);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -107,9 +86,13 @@ public class ApiController {
    * 회원 가입된 모든 유저 정보 반환
    * */
   @GetMapping("/users")
-  public ApiUtils.ApiResult<List<UserDto>> adminFindAllUsers(@PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<UserDto>> adminFindAllUsers(@PageableDefault Pageable pageable,
+                                                             @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
     try {
-      return success(userService.findAll(pageable).getContent().parallelStream().map(UserDto::new).collect(Collectors.toList()));
+      if (regex.isBlank() || regex.isEmpty()) {
+        return success(userService.findAllNotInAdmin(pageable));
+      } else
+        return success(adminService.adminSerchUserByRegex(regex, pageable));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
@@ -120,33 +103,34 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<List<Survey>> adminGetAllSurveys(@PageHandler Pageable pageable,
-                                                             @RequestParam(value = "type", required = false) String type) throws Exception {
+  public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
-      if (type != null && type.equals("index")) {
-        List<Survey> list = surveyService.findAll();
-        list.stream().filter(obj -> obj.getEndAt() != null).collect(Collectors.toList()).sort((o1, o2) -> {
-              if (o1.getEndAt().compareTo(o2.getEndAt()) == 0) {
-                return o1.getStatus().getProgress().compareTo(o2.getStatus().getProgress());
-              } else
-                return -o1.getEndAt().compareTo(o2.getEndAt());
-            }
-        );
-        System.out.println("리스트 테스트:" +
-            list.toString());
-        return success(list);
+      if (type == null || type.equals("ALL") || type.equals("INDEX")) {
+        if (regex.isBlank()) {
+          return success(surveyService.findAll(pageable));
+        } else {
+          return success(surveyService.findAllAndRegex(pageable, regex));
+        }
+      } else {
+        if (regex.isBlank()) {
+          return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+        } else {
+          return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
+        }
       }
-      return success(surveyService.findAll(pageable).getContent());
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception();
     }
   }
 
-
   @GetMapping("/survey/total")
-  public ApiUtils.ApiResult<Long> adminCountAllSurveys() throws Exception {
+  public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
     try {
-      return success(surveyService.countAllSurvey());
+      return success(surveyService.countAllSurvey(type));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -156,9 +140,9 @@ public class ApiController {
    * 정규식을 통한 다건 설문 검색
    * */
   @GetMapping("/surveys/{regex}")
-  public ApiUtils.ApiResult<List<Survey>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<List<SurveyDto>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(surveyService.findSurveysByTitleRegex(regex, pageable));
+      return success(surveyService.findSurveysByTitleRegex(regex, pageable).parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -177,10 +161,10 @@ public class ApiController {
   /*
    * 저장된 설문 목록 삭제를 위한 api
    * */
-  @DeleteMapping("/survey/{id}")
-  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@PathVariable(name = "id") Long surveyId) throws Exception {
+  @DeleteMapping("/survey")
+  public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@RequestBody Survey survey) throws Exception {
     try {
-      surveyService.deleteSurveyById(surveyId);
+      surveyService.deleteSurveyById(survey.getId());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -191,10 +175,10 @@ public class ApiController {
    * 저장된 서베이 목록 수정을 위한 api
    * */
   @PutMapping("/survey")
-  public ApiUtils.ApiResult<List<Survey>> adminUpdateSurveyById(Survey survey) throws Exception {
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(Survey survey) throws Exception {
     try {
       surveyService.update(survey);
-      return success(surveyService.findAll());
+      return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -204,31 +188,64 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@LoginUser SessionUser sessionUser) throws Exception {
+  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception {
     try {
 
-      return success(participateSurveyService.findByUserId(sessionUser.getId()));
+      return success(participateSurveyService.findAllByUserId(user.getId()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
   @GetMapping("{userId}/pointrequest")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@LoginUser SessionUser sessionUser) throws Exception {
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@AuthenticationPrincipal User user) throws Exception {
     try {
-      return success(pointRequestService.getUserPointRequests(sessionUser.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      return success(pointRequestService.getUserPointRequests(user.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
-  @GetMapping("{userId}/pointrequestlist/excel")
-  public void getExcelFromAllRequests(HttpServletResponse response,
-                                      @PathVariable("userId") long userId,
-                                      @RequestBody(required = false) PointRequest pointRequest) {
+  @GetMapping("/points/excel/{userId}")
+  public void getExcelFromAllPointRequests(HttpServletResponse response,
+                                           @PathVariable(value = "userId", required = false) Long userId) {
     try {
       ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
-      excelUtil.createExcelToResponse(pointRequestService.getUserPointRequests(userId), String.format("%s-%s", "data", LocalDate.now()), response);
+      if (userId == 0) {
+        excelUtil.createExcelToResponse(pointRequestService.findAll(), String.format("%s-%s", "point_request", LocalDate.now()), response);
+      } else {
+        excelUtil.createExcelToResponse(pointRequestService.getUserPointRequests(userId), String.format("%s-%s", "point_request", LocalDate.now()), response);
+      }
+    } catch (IllegalAccessException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @GetMapping("/pointhistory/excel")
+  public void getExcelFromAllHistories(HttpServletResponse response,
+                                       @RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
+    try {
+      ExcelUtil<PointHistory> excelUtil = new ExcelUtil<>();
+      if (userId == 0) {
+        excelUtil.createExcelToResponse(pointHistoryService.findAll(), String.format("%s-%s", "point_history", LocalDate.now()), response);
+      } else {
+        excelUtil.createExcelToResponse(pointHistoryService.findAllPointHistoryByUserId(userId), String.format("%s-%s", "point_history", LocalDate.now()), response);
+      }
+    } catch (IllegalAccessException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @GetMapping("/participates/excel")
+  public void getExcelFromAllParticipates(HttpServletResponse response,
+                                          @RequestParam(value = "userId", required = false, defaultValue = "-1") Long userId) {
+    try {
+      ExcelUtil<ParticipateSurvey> excelUtil = new ExcelUtil<>();
+      if (userId == -1) {
+        excelUtil.createExcelToResponse(participateSurveyService.findAll(), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
+      } else {
+        excelUtil.createExcelToResponse(participateSurveyService.findAllByUserId(userId), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
+      }
     } catch (IllegalAccessException | IOException e) {
       e.printStackTrace();
     }
@@ -239,6 +256,7 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
+   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -257,23 +275,31 @@ public class ApiController {
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
-                                                                 @LoginUser SessionUser sessionUser) throws Exception {
-    if (sessionUser == null)
+                                                                 @AuthenticationPrincipal User user) throws Exception {
+    if (user == null)
       throw new UnAuthorizedException("Unauthorized error");
 
     try {
       PointRequest preq = PointRequest.builder()
-                                      .email(sessionUser.getEmail())
+                                      .email(user.getEmail())
                                       .requestPoint(pointRequestDto.getPoint())
                                       .account(pointRequestDto.getAccount())
                                       .requestedAt(LocalDateTime.now())
                                       .progress(PointRequestProgressType.REQUESTED)
-                                      .bankName(pointRequestDto.getBank())
-                                      .uid(sessionUser.getId())
+                                      .bank(pointRequestDto.getBank())
+                                      .uid(user.getId())
                                       .build();
 
       pointRequestService.saveOrUpdate(preq);
-      userService.subUserPoint(sessionUser.getId(), pointRequestDto.getPoint());
+      userService.subUserPoint(user.getId(), pointRequestDto.getPoint());
+      pointHistoryService.saveOrUpdate(PointHistory.builder()
+                                                   .amount(pointRequestDto.getPoint())
+                                                   .content("포인트 정산 요청")
+                                                   .total(user.getPoint() - pointRequestDto.getPoint())
+                                                   .sign(false)
+                                                   .userId(user.getId())
+                                                   .requestedAt(pointRequestDto.getRequestedAt())
+                                                   .build());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       if (e instanceof PointCalculateException) {
@@ -286,17 +312,19 @@ public class ApiController {
     }
   }
 
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> isExistEmail(@Email @PathVariable("email") String email) throws NotFoundException {
+  public ApiUtils.ApiResult<Boolean> isExistEmail(@PathVariable("email") Email email) throws NotFoundException {
     try {
       return success(!userService.isExistEmail(email));
     } catch (RuntimeException e) {
+      e.printStackTrace();
       throw new NotFoundException("Email Number Not Found");
     }
   }
 
   @GetMapping("/user/recommend/{phone}")
-  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") String recommendPhone) throws NotFoundException {
+  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
     try {
       return success(!userService.isExistPhone(recommendPhone));
     } catch (Exception e) {
@@ -314,19 +342,9 @@ public class ApiController {
   }
 
   @GetMapping("/points")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(pointRequestService.getAllPointRequests(pageable).stream().map(PointRequestDto::new).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/points/{regex}")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllPointRequests(@PageHandler Pageable pageable,
-                                                                       @PathVariable("regex") String regex) throws Exception {
-    try {
-      return success(pointRequestService.getAllPointRequestsByRegex(pageable, regex).stream().map(PointRequestDto::new).collect(Collectors.toList()));
+      return success(pointRequestService.getAllPointRequests(pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -362,5 +380,50 @@ public class ApiController {
       throw new Exception(e.getMessage());
     }
   }
+
+  @PutMapping("/admin/survey")
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
+    try {
+      surveyService.adminSurveyUpdate(
+          Long.parseLong(map.get("id")),
+          Long.parseLong(map.get("point")),
+          map.get("create"),
+          map.get("end"),
+          map.get("progress"));
+      return success(true);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PostMapping("/find/email")
+  public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
+    try {
+      return success(userService.findUserEmailByNameAndPhone(userDto.getName(), Phone.of(userDto.getPhone())).orElseThrow(UserNotFoundException::new).getEmail());
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/pointhistories/{userid}")
+  public ApiUtils.ApiResult<List<PointHistory>> findAllPointHistoryByUserId(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
+    try {
+      return success(pointHistoryService.findAllPointHistoryByUserId(userId, pageable));
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("posts")
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+                                                                                         @PageableDefault Pageable pageable) throws Exception {
+    try {
+      return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
 
 }

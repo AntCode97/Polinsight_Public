@@ -6,5 +6,6 @@ public enum ProgressType {
    * @Param ONGOING - 진행 중
    * @Param END - 설문 종료
    * */
-  ONGOING, BEFORE, END
+  ONGOING, END, BEFORE;
+
 }

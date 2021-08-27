@@ -443,3 +443,6 @@ application-dev.yaml
 **/upload_dir/
 **/app_log/
 *.out
+/upload-dir/
+/.gradle/
+/.jpb/

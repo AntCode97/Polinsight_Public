@@ -1,0 +1,72 @@
+<th:block th:include="layout/header" />
+<th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
+    .container {
+      margin-top : 120px;
+      width      : 100%;
+    }
+  </style>
+  <div class="container">
+    <div class="board_contents_wrap">
+      <div class="main_item">
+        <p>FAQ</p>
+      </div>
+      <div class="main_contents_wrap">
+        <div class="post-search">
+          <div class="util-search">총 <strong id="total_count"></strong>개의 게시물이 있습니다.</div>
+        </div>
+        <div class="scroll-table">
+          <div class="post-row post-th">
+            <span>번호</span>
+            <a href="#">제목</a>
+            <span>작성자</span>
+            <span>작성일</span>
+            <span>조회수</span>
+            <span>첨부파일</span>
+          </div>
+        </div>
+        <div class="page-button" id="pagination"></div>
+      </div>
+    </div>
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <script th:src="@{/js/PostUtils.js}"></script>
+  <script>
+    async function getPostData(e) {
+      let page = !e ? 0 : e.data.page
+      const responseData = await http.get('/api/posts?type=FAQ', {
+        params: {page: page, size: 10}
+      })
+      const data = responseData.data.response
+      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+    }
+
+    const init = e => {
+      const spinner = $('#loading')
+      spinner.show()
+      getPostData(e).then(obj => {
+        $('#total_count').text(obj.total)
+        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage)
+          obj.content.forEach(post => {
+            $('.scroll-table').append(makePostTemplate(post))
+          })
+        } else
+          $('.scroll-table').append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
+      })
+      spinner.hide()
+    }
+
+    $(function () {
+      init();
+    })
+  </script>
+</th:block>
+<th:block th:include="layout/footer" />

@@ -25,6 +25,7 @@ public class FileSystemStorageService implements StorageService {
   @Autowired
   public FileSystemStorageService(StorageProperties properties) {
     this.rootLocation = Paths.get(properties.getLocation());
+    this.init();
   }
 
 
@@ -34,7 +35,7 @@ public class FileSystemStorageService implements StorageService {
         throw new StorageException("Failed to store empty file.");
       }
       Path destinationFile = this.rootLocation.resolve(
-          Paths.get(uuid + file.getOriginalFilename()))
+                                     Paths.get(uuid + file.getOriginalFilename()))
                                               .normalize().toAbsolutePath();
       if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
         // This is a security check
@@ -59,7 +60,7 @@ public class FileSystemStorageService implements StorageService {
         throw new StorageException("Failed to store empty file.");
       }
       Path destinationFile = this.rootLocation.resolve(
-          Paths.get(file.getOriginalFilename()))
+                                     Paths.get(file.getOriginalFilename()))
                                               .normalize().toAbsolutePath();
       if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
         // This is a security check
@@ -137,7 +138,8 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public void init() {
     try {
-      Files.createDirectories(rootLocation);
+      if(!Files.exists(rootLocation))
+        Files.createDirectories(rootLocation);
     } catch (IOException e) {
       throw new StorageException("Could not initialize storage", e);
     }

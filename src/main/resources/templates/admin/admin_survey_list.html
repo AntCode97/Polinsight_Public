@@ -1,218 +1,618 @@
-<th:block th:include='admin/admin_sidebar' />
-<th:block th:include='module/common' />
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
   <th:block>
     <style>
       table, tr, th, td {
-        width: 100%;
-        margin: 0;
+        margin : 0;
+        width  : 100%;
       }
 
-
       .post-row > *:nth-child(1) {
-        width: 70px;
+        width : 50px;
       }
 
       .post-row > *:nth-child(2) {
-        width: 500px;
+        width : 500px;
       }
 
       tbody > .post-row > td:nth-child(2) {
-        text-align: left;
+        text-align : left;
       }
 
       .post-row > *:nth-child(3) {
-        width: 90px;
+        width : 80px;
       }
 
       .post-row > *:nth-child(4) {
-        width: 150px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(5) {
-        width: 95px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(6) {
-        width: 95px;
+        width : 100px;
       }
 
       .post-row > *:nth-child(7) {
-        width: 120px;
+        width : 120px;
       }
 
       .post-row > *:nth-child(8) {
-        width: 120px;
+        width : 120px;
+      }
+
+      .post-row > *:nth-child(9) {
+        width : 120px;
       }
 
       table {
-        align: center;
+        align : center;
+      }
+
+      .info_popup_container {
+        background-color : red;
+        display          : none;
+        height           : 100%;
+        position         : absolute;
+        width            : 100%;
+      }
+
+      .info_popup {
+        left      : 50%;
+        top       : 50%;
+        transform : translate(-50% -50%);
+      }
+
+      .status_wrap {
+        align-items     : center;
+        display         : flex;
+        gap             : 5px;
+        justify-content : center;
+      }
+
+      .status_wrap > * {
+        cursor : pointer;
+      }
+
+      .status_box:nth-child(1) {
+        color : mediumseagreen;
+      }
+
+      .status_box:nth-child(2) {
+        color : tomato;
+      }
+
+      .survey_sort_wrap {
+        align-items     : center;
+        display         : flex;
+        gap             : 15px;
+        justify-content : flex-start;
+        padding-bottom  : 10px;
+        padding-left    : 10px;
+      }
+
+      .survey_sort_wrap > input {
+        display : none;
+      }
+
+      .survey_sort_wrap > label {
+        color       : inherit;
+        cursor      : pointer;
+        display     : inline-block;
+        font-size   : 1.2rem;
+        font-weight : normal;
+      }
+
+      .check_sort {
+        color           : tomato !important;
+        text-decoration : underline;
+      }
+
+      /* MODAL DESIGN */
+      /* Modal Page Design */
+      .modal_wrap {
+        align-items      : center;
+        background-color : rgba(0, 0, 0, 0.4);
+        display          : none;
+        height           : 100%;
+        justify-content  : center;
+        overflow         : auto;
+        position         : fixed;
+        top              : 0;
+        width            : 100%;
+        z-index          : 1000;
+      }
+
+      .modal_contents_box {
+        background-color : white;
+        border-radius    : 5px;
+        box-shadow       : 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%);
+        padding          : 20px;
+        position         : relative;
+      }
+
+      .btn_close {
+        cursor   : pointer;
+        height   : 20px;
+        margin   : 8px;
+        position : absolute;
+        right    : 0;
+        top      : 0;
+        width    : 20px;
+      }
+
+      .btn_close > i {
+        color     : #192739;
+        display   : block;
+        font-size : 25px;
+      }
+
+      .bottom_box {
+        background-color : white;
+        border-radius    : 5px;
+        display          : flex;
+        font-size        : 1rem;
+        justify-content  : center;
+        margin-top       : 10px;
+        overflow         : hidden;
+        padding          : 10px;
+        width            : 100%;
+      }
+
+      .tab_box {
+        display    : none;
+        max-height : 85vh;
+        overflow   : auto;
+      }
+
+      .user_input_box {
+        align-items     : center;
+        display         : flex;
+        justify-content : flex-start;
+        margin-bottom   : 10px;
+        position        : relative;
+      }
+
+      .user_input_box > .info_article {
+        margin : 0;
+        width  : 105px;
+      }
+
+      .user_input_box > .user_info_input {
+        border        : none;
+        border-bottom : 1px solid #DDDDDD;
+        position      : relative;
+        width         : 200px;
+      }
+
+      .user_basic_wrap {
+        display        : flex;
+        flex-direction : row;
+        gap            : 10px;
+        margin-bottom  : 1rem;
+        margin-top     : 0.5rem;
+        min-width      : 750px;
+      }
+
+      .user_info_box {
+        border  : 1px solid #C5C7D0;
+        flex    : 1;
+        padding : 13px 20px;
+      }
+
+      .info_article {
+        color         : #69666D;
+        display       : block;
+        font-size     : 1.1rem;
+        margin-bottom : .35rem;
+      }
+
+      .user_readonly_box {
+        background-color : #F1F2F7;
+        border           : .1rem solid transparent;
+        cursor           : not-allowed;
+        flex             : 1;
+      }
+
+      .user_info_input {
+        border        : none;
+        border-bottom : 1px solid #DDDDDD;
+        color         : #333333;
+        font-size     : 14px;
+        height        : 32px;
+        line-height   : 32px;
+        outline       : none;
+        width         : 100%;
+      }
+
+      .user_btn_wrap {
+        display : flex;
+      }
+
+      .mypage_btn {
+        background    : #192739;
+        border        : none;
+        border-radius : 2px;
+        color         : white;
+        cursor        : pointer;
+        font-size     : 14px;
+        font-weight   : normal;
+        padding       : 8px 15px;
+        transition    : box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1);
+      }
+
+      .mypage_btn:hover {
+        box-shadow : 0 14px 26px -12px hsl(0deg 0% 60% / 42%), 0 4px 23px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px hsl(0deg 0% 60% / 20%);
+      }
+
+      .delete_btn {
+        background-color : tomato;
+      }
+
+      .btn_box {
+        align-items : center;
+        display     : flex;
+        gap         : 5px;
+      }
+
+      .item_header {
+        align-items     : center;
+        display         : flex;
+        font-size       : 1.3rem;
+        gap             : 5px;
+        justify-content : flex-start;
+        margin-bottom   : 20px;
+      }
+
+      .status_wrap > * {
+        cursor : pointer;
+      }
+
+      .status_box:nth-child(1) {
+        color : mediumseagreen;
+      }
+
+      .status_box:nth-child(2) {
+        color : tomato;
+      }
+
+      .date_wrap {
+        align-items     : center;
+        display         : flex;
+        gap             : 10px;
+        justify-content : center;
+        width           : 100%;
       }
     </style>
   </th:block>
-  <div class='admin_main_contents'>
-    <div class='admin_main_contents_category'>
-      <div class='admin_main_contents_item'>
-        <p class='main_item'>설문 목록</p>
+  <div class="modal_wrap">
+
+    <div class="modal_contents_box">
+      <div class="btn_close"><i class="fas fa-times"></i></div>
+
+      <div class="bottom_box">
+        <div class="tab_box box01" style="display: block;">
+          <form action="" method="">
+            <div class="item_header">
+              <span><i class="fas fa-poll-h" style="padding-right: 3px; color: #4C99CF;"></i>설문정보</span>
+            </div>
+            <div class="item_content">
+              <div class="user_basic_wrap">
+                <div id="survey_id" class="user_info_box user_readonly_box">
+                  <span class="info_article">설문아이디</span>
+                  <p>2</p>
+                  <input type="hidden" name="id" readonly>
+                </div>
+                <div id="survey_title" class="user_info_box user_readonly_box" style="flex: 8;">
+                  <span class="info_article">설문제목</span>
+                  <p>2021년 전라남도 청소년 실태조사[대학생]</p>
+                  <input type="hidden" name="title" readonly>
+                </div>
+              </div>
+              <div id="survey_point" class="user_basic_wrap">
+                <div class="user_info_box user_point_box">
+                  <span class="info_article">포인트</span>
+                  <input type="text" class="user_info_input" name="point" value="300" />
+                </div>
+                <div id="survey_progress" class="user_info_box user_status_box">
+                  <span class="info_article">진행상태</span>
+                  <select name="progress" class="user_info_input" style="cursor: pointer;">
+                    <option name="progress" value="BEFORE">등록</option>
+                    <option name="progress" value="ONGOING">진행</option>
+                    <option name="progress" value="END">종료</option>
+                  </select>
+                </div>
+              </div>
+              <div class="user_basic_wrap">
+                <div class="user_info_box user_regdate_box">
+                  <span class="info_article">설문기간</span>
+                  <div id="survey_duration" class="date_wrap">
+                    <input type="date" name="create" class="user_info_input" style="cursor: pointer;" />
+                    <span> ~ </span>
+                    <input type="date" name="end" class="user_info_input" style="cursor: pointer;" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="user_btn_wrap" style="justify-content: flex-start;">
+                <span class="err_msg">에러 메세지!!</span>
+              </div>
+              <div class="user_btn_wrap" style="justify-content: flex-end;">
+                <div class="btn_box" id="modal_btn">
+                  <button type="button" name="delete" class="mypage_btn delete_btn"><i class="fas fa-trash-alt" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>삭제
+                  </button>
+                  <button type="button" name="update" class="mypage_btn update_btn"><i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-
-    <div class='main_contents_wrap'>
-      <div class='post-search'>
-        <div class='util-search'>총 <strong></strong>개의 설문이 있습니다.</div>
-      </div>
-
-      <!--관리자 페이지 설문 찾기 기능-->
-      <div class='search-box-container'>
-        <span class='search-icon'><i class='fa fa-search'></i></span>
-        <input class='admin_find' name='admin_find' type='text' placeholder='검색' />
-      </div>
-
-      <table class='scroll-table'>
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-      <div class='pagination'></div>
-
     </div>
   </div>
+
+  <div class="admin_main_contents">
+    <div class="admin_main_contents_category">
+      <div class="admin_main_contents_item">
+        <p class="main_item">설문 목록</p>
+      </div>
+    </div>
+
+    <div class="main_contents_wrap">
+      <div class="post-search">
+        <div class="util-search">총 <strong id="total_count"></strong>개의 설문이 있습니다.</div>
+
+        <!--관리자 페이지 설문 찾기 기능-->
+        <div class="form-search">
+          <div class="tbl-search">
+            <div class="box-search">
+              <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
+              <input type="submit" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="survey_sort_wrap">
+        <label for="sort_all" class="check_sort">
+          전체
+        </label>
+        <input value="ALL" type="radio" name="sort_group" id="sort_all" checked />
+        <label for="sort_before">
+          등록
+        </label>
+        <input value="BEFORE" type="radio" name="sort_group" id="sort_before" />
+        <label for="sort_ongoing">
+          진행
+        </label>
+        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing" />
+        <label for="sort_end">
+          종료
+        </label>
+        <input value="END" type="radio" name="sort_group" id="sort_end" />
+      </div>
+      <table class="scroll-table">
+        <thead>
+        <tr class="post-th post-row">
+          <th>번호</th>
+          <th>설문 이름</th>
+          <th>포인트</th>
+          <th>설문 시작일</th>
+          <th>설문 종료일</th>
+          <th>진행 상태</th>
+          <th>참여자 수</th>
+          <th>설문 아이디</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+      <div class="page-button" id="pagination"></div>
+    </div>
+  </div>
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
 
 
-    const makePaginationsInAdminSurvey = current => {
-      const regexValue = $('input[name=adminfindsurvey]').val();
-      const surveyCount = parseInt($('.util-search>strong').text());
-      const totalPage = Math.ceil(surveyCount / 10);
+    // const makePaginationsInAdminSurvey = current => {
+    //   const regexValue = $('input[name=adminfindsurvey]').val();
+    //   const surveyCount = parseInt($('.util-search>strong').text());
+    //   const totalPage = Math.ceil(surveyCount / 10);
+    //
+    //   let first = $(`<div class="pagination_button" ><i class="fas fa-angle-double-left"></i></div>`);
+    //   let last = $(`<div class="pagination_button" ><i class="fas fa-angle-double-right"></i></div>`);
+    //   let prev = $(`<div class="pagination_button" ><i class="fas fa-angle-left"></i></div>`);
+    //   let next = $(`<div class="pagination_button" ><i class="fas fa-angle-right"></i></div>`);
+    //
+    //   const paginationElement = $('div.pagination');
+    //   paginationElement.empty();
+    //
+    //   let start = current - 5 <= 0 ? 0 : current - 5;
+    //   let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
+    //
+    //   if (surveyCount === 0) {
+    //     $('.scroll-table').empty()
+    //     $('.scroll-table').append(`<div class="empty-data"><h1>결과가 없습니다</h1></div>`);
+    //     $('.pagination').empty();
+    //   } else {
+    //     // if (!regexValue) {
+    //     first.on('click', {regex: !regexValue ? '' : regexValue, page: 0}, adminGetAllSurveys);
+    //     last.on('click', {regex: !regexValue ? '' : regexValue, page: totalPage}, adminGetAllSurveys);
+    //     prev.on('click', {regex: !regexValue ? '' : regexValue, page: current - 1 <= 0 ? 0 : current - 1}, adminGetAllSurveys);
+    //     next.on('click', {regex: !regexValue ? '' : regexValue, page: current >= totalPage ? totalPage - 1 : current + 1}, adminGetAllSurveys);
+    //     if (current > 0)
+    //       paginationElement.append(first).append(prev);
+    //     for (let i = start; i < end; i++) {
+    //       let tmp = $(`<div class="pagination_button">${i + 1}</div>`);
+    //       tmp.on('click', {page: i}, adminGetAllSurveys);
+    //       if (current === i) {
+    //         tmp.css('color', 'white').css('background-color', '#444444');
+    //       }
+    //       paginationElement.append(tmp);
+    //     }
+    //     if (current < totalPage - 1)
+    //       paginationElement.append(next).append(last);
+    //   }
+    // }
 
-      let first = $(`<div class='pagination_button' ><i class='fas fa-angle-double-left'></i></div>`);
-      let last = $(`<div class='pagination_button' ><i class='fas fa-angle-double-right'></i></div>`);
-      let prev = $(`<div class='pagination_button' ><i class='fas fa-angle-left'></i></div>`);
-      let next = $(`<div class='pagination_button' ><i class='fas fa-angle-right'></i></div>`);
+    // const surveyListHeader = () => {
+    //   let template = $(`<tr class="post-th post-row"></tr>`);
+    //   template.append(`<th>번호</th>`);
+    //   template.append(`<th>설문 이름</th>`);
+    //   template.append(`<th>포인트</th>`);
+    //   template.append(`<th>설문 시작일</th>`);
+    //   template.append(`<th>설문 종료일</th>`);
+    //   template.append(`<th>진행 상태</th>`);
+    //   template.append(`<th>참여자 수</th>`);
+    //   template.append(`<th>설문 아이디</th>`);
+    //   return template;
+    // };
 
-      const paginationElement = $('div.pagination');
-      paginationElement.empty();
+    // const adminMakeSurveySearchResults = surveys => {
+    //   console.log(surveys)
+    //   const table = $('.scroll-table>tbody');
+    //   table.empty();
+    //   surveys.map(survey => {
+    //     let template = $(`<tr class="post-row">`).on('click', {survey: survey}, setDataInModal);
+    //     template.append(`<td>${survey.id}</td>`);// 번호
+    //     template.append(`<td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</td>`);// 설문 이름
+    //     template.append(`<td>${!survey.point ? '지정 안됨' : survey.point}</td>`);// 지급 포인트
+    //     template.append(`<td>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
+    //     template.append(`<td>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`)
+    //     template.append(`<td>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</td>`);// 진행 상태
+    //     template.append(`<td>${survey.count}</td>`);// 참여자 수
+    //     template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
+    //     table.append(template)
+    //   })
+    // };
 
-      let start = current - 5 <= 0 ? 0 : current - 5;
-      let end = totalPage < 10 ? totalPage : current + 5 > totalPage ? totalPage : current + 5 <= 10 ? current + 5 : 10;
+    // const adminGetAllSurveys = e => {
+    //   const regex = !e ? '' : !e.data.regex ? '' : `/${e.data.regex}`;
+    //   const offset = !e ? 0 : !e.data.page ? 0 : e.data.page;
+    //   http.get('/api/surveys' + regex, {
+    //         params: {size: 10, page: offset}
+    //       })
+    //       .then(res => {
+    //         if (res.data.success) {
+    //           // surveys.push(...res.data.response.cone)
+    //           getTotalCount(regex);
+    //           makePaginationsInAdminSurvey(offset);
+    //           adminMakeSurveySearchResults(res.data.response.content);
+    //         } else {
+    //           console.log('data fetching error');
+    //         }
+    //       })
+    //       .catch(console.log);
+    // };
 
-      if (surveyCount === 0) {
-        console.log('length 0');
-        $('.scroll-table').empty().after(`<div class='empty-data'><h1>결과가 없습니다</h1></div>`);
-        $('.pagination').empty();
-      } else {
-        if (!regexValue) {
-          first.on('click', { offset: 0 }, adminGetAllSurveys);
-          last.on('click', { offset: totalPage }, adminGetAllSurveys);
-          prev.on('click', { offset: current - 1 >= 0 ? current - 1 : 0 }, adminGetAllSurveys);
-          next.on('click', { offset: current + 1 >= totalPage ? totalPage - 1 : current + 1 }, adminGetAllSurveys);
 
-          paginationElement.append(first).append(prev);
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div class='pagination_button'>${i + 1}</div>`);
-            tmp.on('click', { offset: i }, adminGetAllSurveys);
-            if (current === i) {
-              tmp.css('color', 'rgba(32, 205, 195, 1)').css('background-color', 'rgba(240, 240, 240, 1)').css('font-weight', 'bold');
+    const setDataInModal = e => {
+      let survey = e.data.survey
+      $('#survey_id').find('p').text(survey.id)
+      $('#survey_title').find('p').text(survey.title)
+      $('#survey_point').find('input').val(!survey.point ? '지정 안됨' : survey.point)
+      $('#survey_progress').find('select').val(survey.progress)
+      $('#survey_duration').find('input[name=create]').val(survey.createdAt)
+      $('#survey_duration').find('input[name=end]').val(survey.endAt)
+      $('#modal_btn').find('button[name=update]').on('click', {survey: survey}, updateBtnClickHandler)
+      $('#modal_btn').find('button[name=delete]').on('click', {survey: survey}, deleteBtnClickHandler)
+    }
+
+    /* 수정 버튼 클릭 */
+    const updateBtnClickHandler = e => {
+      let survey = e.data.survey
+      http.put('/api/survey', survey)
+          .then(res => {
+            if (res.data.success) {
+              alert('설문 업데이트 성공')
+              location.replace('/admin/surveylist')
             }
-            paginationElement.append(tmp);
-          }
-          paginationElement.append(next).append(last);
+          })
+          .catch(console.log)
+    }
+    /* 삭제 버튼 클릭 */
+    const deleteBtnClickHandler = e => {
+      /* 팝업 띄우고 확인 누르면 삭제 */
+      let survey = e.data.survey
+      http.delete('/api/survey', survey)
+          .then(res => {
+            if (res.data.success) {
+              alert('설문 삭제 성공')
+              location.replace('/admin/surveylist')
+            }
+          })
+          .catch(console.log)
+    }
+
+    async function getSurveyData(e) {
+      let type = $('input[name=sort_group]:checked').val()
+      let page = !e ? 0 : !e.data.page ? 0 : e.data.page
+      let regex = String($('input[name=admin_find]').val()).trim()
+      const response = await http.get('/api/surveys?type=' + type, {params: {page: page, size: 10, regex: regex}})
+      if (response.data.success) {
+        const data = response.data.response
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+      }
+    }
+
+    const init = e => {
+      getSurveyData(e).then(obj => {
+        $('#total_count').text(obj.total)
+        const table = $('.scroll-table')
+        table.children('.post-row:not(:first-child)').remove()
+
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage)
+          obj.content.forEach(survey => {
+            table.append(makeSurveyTemplate(survey))
+          })
         } else {
-          first.on('click', { regex: regexValue, offset: 0 }, adminGetAllSurveys);
-          last.on('click', { regex: regexValue, offset: totalPage }, adminGetAllSurveys);
-          prev.on('click', { regex: regexValue, offset: current - 1 <= 0 ? 0 : current - 1 }, adminGetAllSurveys);
-          next.on('click', { regex: regexValue, offset: current >= totalPage ? totalPage - 1 : current + 1 }, adminGetAllSurveys);
-          paginationElement.append(first).append(prev);
-          for (let i = start; i < end; i++) {
-            let tmp = $(`<div class='pagination_button'>${i + 1}</div>`);
-            tmp.on('click', { offset: i, regex: regexValue }, adminGetAllSurveys);
-            if (current === i) {
-              tmp.addClass('pagination_button_current');
-            } else {
-              tmp.removeClass('pagination_button_current');
-            }
-            paginationElement.append(tmp);
-          }
-          paginationElement.append(next).append(last);
+          table.children('.post-row:not(:first-child)').remove()
+          table.append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
         }
-      }
-    };
+      })
+    }
 
-    const surveyListHeader = () => {
-      let template = $(`<tr class='post-row post-th'></tr>`);
-      template.append(`<th>번호</th>`);
-      template.append(`<th>설문 이름</th>`);
-      template.append(`<th>포인트</th>`);
-      template.append(`<th>설문 기간</th>`);
-      template.append(`<th>진행 상태</th>`);
-      template.append(`<th>참여자 수</th>`);
-      template.append(`<th>설문 아이디</th>`);
-      template.append(`<th>관리</th>`);
-      return template;
-    };
-
-    const adminMakeSurveySearchResults = surveys => {
-      const table = $('.scroll-table>tbody');
-      table.empty();
-
-      for (survey of surveys) {
-        let template = $(`<tr class='post-row'>`);
-        template.append(`<td>${survey.id}</td>`);// 번호
-        template.append(`<td style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${survey.title}</td>`);// 설문 이름
-        template.append(`<td>${!survey.point ? 0 : survey.point}</td>`);// 지급 포인트
-        template.append(`<td>${String(survey.createdAt).split('T')[0]} ~ ${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</td>`); // 설문 기간
-        template.append(`<td>${survey.status.progress}</td>`);// 진행 상태
-        template.append(`<td>${survey.status.count}</td>`);// 참여자 수
-        template.append(`<td>${survey.surveyId}</td>`);// 서베이 아이디
-        template.append(`<td><button class='btn_del btn-support'>수정</button><span>  </span><button class='btn_del btn-warn'>삭제</button></td>`);
-        table.append(template);
-      }
-    };
-
-    const adminGetAllSurveys = e => {
-      const regex = !e ? '' : !e.data.regex ? '' : '/' + e.data.regex;
-      const offset = !e ? 0 : !e.data.offset ? 0 : e.data.offset;
-      axios.get('/api/surveys' + regex, {
-          params: { size: 10, offset: offset }
-        })
-        .then(res => {
-          console.log(res);
-          if (res.data.success) {
-            getTotalCount(regex);
-            makePaginationsInAdminSurvey(offset);
-            adminMakeSurveySearchResults(res.data.response);
+    $(function () {
+      init()
+      $('input[name=admin_find]').on('keyup', {page: 0}, _.throttle(init, 300))
+      $('input[name=sort_group]').on('click', {page: 0}, init).on('change', function (e) {
+        let id = e.target.id
+        $('input[name=sort_group]').each(function () {
+          if (id === $(this).attr('id')) {
+            $(this).prev().addClass('check_sort')
           } else {
-            console.log('data fetching error');
+            $(this).prev().removeClass('check_sort')
           }
         })
-        .catch(console.log);
-    };
-
-    const getTotalCount = regex => {
-      if (!regex) {
-        axios.get('/api/survey/total')
-          .then(res => $('.util-search>strong').text(res.data.response))
-          .catch(console.log);
-      } else {
-        axios.get('/api/survey/find/' + regex + '/total')
-          .then(res => $('.util-search>strong').text(res.data.response))
-          .catch(console.log);
-      }
-    };
-
-    $(function() {
-      $('.scroll-table>thead').append(surveyListHeader());
-      getTotalCount();
-      adminGetAllSurveys();
-
-      $(document).on('click', '.post-row:not(:first-of-type)', function(e) {
-        const id = $(this).children('span:first-child').text();
-        // 클릭시 디테일 페이지 ==> 폼 만들고 submit
-        const form = $(`<form action='/admin/survey/${id}' method='get'></form>`);
-        $('body').append(form);
-        form.submit();
       });
 
-      $('input[name=admin_find]').on('keyup', _.throttle(adminGetAllSurveys, 300));
-    });
+      $(document).on('click', '.btn-update', function () {
+        $('.modal_wrap').css('display', 'flex');
+      });
+      $(document).on('click', '.btn_close', function () {
+        $('.modal_wrap').css('display', 'none');
+      });
+      $(document).on('click', '.post-row > *', function () {
+        $('.modal_wrap').css('display', 'flex');
+      });
+
+      /* 동적 웹디자인 및 유효성 체크 */
+      $(document).on('focus', '.user_info_input', function () {
+        $(this).css('border-bottom', '1px solid #4C99CF');
+        $(this).prevAll('.info_article').css('color', '#4C99CF')
+        $(this).parent().prevAll('.info_article').css('color', '#4C99CF')
+        $(this).parents('.user_info_box').css('border', '1px solid #4C99CF');
+      });
+      $(document).on('blur', '.user_info_input', function () {
+        $(this).css('border-bottom', '1px solid #c5c7d0');
+        $(this).prevAll('.info_article').css('color', '#69666D')
+        $(this).parent().prevAll('.info_article').css('color', '#69666D')
+        $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
+      });
+
+    })
   </script>
 </th:block>

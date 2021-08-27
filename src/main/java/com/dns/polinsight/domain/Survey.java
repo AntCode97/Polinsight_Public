@@ -1,21 +1,25 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.types.ProgressType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @ToString
 public class Survey implements Serializable {
 
-  private static final long serialVersionUID = -4701183897615758658L;
 
   @Setter
   @Embedded
@@ -26,18 +30,33 @@ public class Survey implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "survey_id")
   private Long surveyId;
 
   private String href;
 
   private String title;
 
-  @Setter
-  private LocalDateTime createdAt;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate createdAt;
 
   @Setter
-  private LocalDateTime endAt;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate endAt;
 
   private Long point;
+
+  @Setter
+  private Long questionCount;
+
+  @JsonManagedReference
+  @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private List<Collector> collector;
+
+  public void setCreatedAt(LocalDate createdAt) {
+    this.createdAt = createdAt;
+    this.endAt = createdAt.plusMonths(3);
+  }
+
 
 }

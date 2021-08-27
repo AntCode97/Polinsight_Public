@@ -18,25 +18,22 @@ public class SurveyStatus {
 
   // 서베이몽키에서 등록한 설문의 커스텀 변수
   @ElementCollection
-  @Builder.Default
-  @Column(name = "variables")
+  @Column(name = "variable")
   @Setter
   private Set<String> variables = new HashSet<>();
 
   // 설문을 완료한 사람 수
-  @Builder.Default
   @Setter
-  private Integer count = 0;
+  private Long count;
 
   @Enumerated(EnumType.STRING)
-  @Builder.Default
+  @Setter
   private ProgressType progress = ProgressType.BEFORE;
 
-  // 포인트가 지급 될 수 있는 최소 시간
-  private LocalDateTime minimumTime;
+  private Integer minimumTime = 30;
 
 
-  public void setProgress(LocalDateTime endDateTime) {
+  public void setProgressByDate(LocalDateTime endDateTime) {
     try {
       int cmp = LocalDateTime.now().compareTo(endDateTime);
       if (cmp < 0) {

@@ -1,14 +1,14 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface SurveyService {
 
@@ -16,7 +16,15 @@ public interface SurveyService {
 
   List<Survey> findAll();
 
-  Page<Survey> findAll(Pageable pageable);
+  Page<SurveyDto> findAll(Pageable pageable);
+
+  Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type);
+
+  Page<SurveyDto> findAllAndRegex(Pageable pageable, String regex);
+
+  Page<SurveyDto> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex);
+
+  Page<Survey> findAll(Pageable pageable, String regex);
 
   Survey findById(long surveyId);
 
@@ -24,16 +32,21 @@ public interface SurveyService {
 
   List<Survey> getSurveyListAndSyncPerHour();
 
-  Set<Survey> getUserParticipateSurvey(User user);
 
-  void deleteSurveyById(Long surveyId);
+  void deleteSurveyById(long surveyId);
 
-  List<Survey> findSurveysByEndDate(LocalDateTime endDate);
+  List<Survey> findSurveysByEndDate(LocalDate endDate);
 
   List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable);
 
   Optional<Survey> findSurveyById(long surveyId);
 
-  long countAllSurvey();
+  Optional<Survey> findSurveyBySurveyId(long surveyId);
+
+  long countAllSurvey(String type);
+
+
+  void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
+
 
 }

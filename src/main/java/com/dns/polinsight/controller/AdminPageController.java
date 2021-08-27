@@ -1,6 +1,8 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.service.SurveyService;
+import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminPageController {
 
   private final SurveyService surveyService;
+
+  private final UserService userService;
 
   @GetMapping("/memberlist")
   public ModelAndView adminMemberList() {
@@ -37,43 +41,15 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_dashboard");
   }
 
+  @GetMapping("/boards/download")
+  public ModelAndView adminBoarddownload() {
+    return new ModelAndView("admin_post_download");
+  }
 
-//  /*
-//   * 게시글 관리 페이지
-//   * */
-//  @GetMapping("/post/manage")
-//  public ModelAndView getBoardManage() {
-//    return new ModelAndView("admin/admin_board_list");
-//  }
-//
-//  /*
-//   * 공지사항 관리 페이지
-//   * */
-//  @GetMapping("/noti/manage")
-//  public ModelAndView getNotiManage() {
-//    return new ModelAndView("admin/admin_board_register");
-//  }
-//
-//  @GetMapping("/user/manage")
-//  public ModelAndView getUserManage() {
-//    return new ModelAndView("admin/admin_board_view");
-//  }
-//
-  //
-  //  @GetMapping("/posts/notice")
-  //  public ModelAndView adminBoardnotice() {
-  //    return new ModelAndView("admin/");
-  //  }
-
-    @GetMapping("/boards/download")
-    public ModelAndView adminBoarddownload() {
-      return new ModelAndView("admin_post_download");
-    }
-
-    @GetMapping("/boards/qna")
-    public ModelAndView adminBoardQnA() {
-      return new ModelAndView("admin_post_qna");
-    }
+  @GetMapping("/boards/qna")
+  public ModelAndView adminBoardQnA() {
+    return new ModelAndView("admin_post_qna");
+  }
 
   @GetMapping("/survey/{id}")
   public ModelAndView adminGetSurveyDetailInfo(@PathVariable("id") long surveyId) {
@@ -83,10 +59,19 @@ public class AdminPageController {
     return mv;
   }
 
-  @GetMapping("/surveyinfo")
-  public ModelAndView adminGetDetailPage(ModelAndView mav) {
-    mav.setViewName("admin/admin_survey_info");
-    return mav;
+  @Deprecated
+  @GetMapping("/surveyinfo/{id}")
+  public ModelAndView adminGetSurveyDetailPage(@PathVariable("id") long surveyid) {
+    ModelAndView mv = new ModelAndView("admin/admin_survey_info");
+    mv.addObject("survey", surveyService.findSurveyById(surveyid).get());
+    return mv;
+  }
+
+  @GetMapping("/memberinfo/{id}")
+  public ModelAndView adminGetMemberDetailPage(@PathVariable("id") long memberId) {
+    ModelAndView mv = new ModelAndView("admin/admin_member_info");
+    mv.addObject("user", new UserDto(userService.findById(memberId).get()));
+    return mv;
   }
 
   @GetMapping("/pointlist")
@@ -94,10 +79,19 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_point_req_list");
   }
 
-  //  @GetMapping("/pointreqinfo")
-  //  public ModelAndView adminUserPointRequestInfo(ModelAndView mav) {
-  //    mav.setViewName("admin/admin_survey_info");
-  //    return mav;
-  //  }
+  @GetMapping("/events")
+  public ModelAndView events() {
+    return new ModelAndView("admin/admin_events");
+  }
+
+  @GetMapping("/qna")
+  public ModelAndView qna() {
+    return new ModelAndView("admin/admin_qna");
+  }
+
+  @GetMapping("/faq")
+  public ModelAndView faq() {
+    return new ModelAndView("admin/admin_faq");
+  }
 
 }

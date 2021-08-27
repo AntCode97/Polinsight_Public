@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.repository.ParticipateSurveyRepository;
 import com.dns.polinsight.repository.PointRequestRepository;
 import com.dns.polinsight.repository.UserRepository;
@@ -57,8 +58,8 @@ public class PointRequestServiceImpl implements PointRequestService {
 
 
   @Override
-  public Page<PointRequest> getAllPointRequests(Pageable pageable) {
-    return pointRequestRepository.findAll(pageable);
+  public Page<PointRequestDto> getAllPointRequests(Pageable pageable) {
+    return pointRequestRepository.findAllPointRequest(pageable);
   }
 
   @Override
@@ -71,5 +72,10 @@ public class PointRequestServiceImpl implements PointRequestService {
     pointRequestRepository.deleteById(id);
   }
 
+
+  @Override
+  public List<PointRequest> findAll() {
+    return pointRequestRepository.findAll();
+  }
 
 }

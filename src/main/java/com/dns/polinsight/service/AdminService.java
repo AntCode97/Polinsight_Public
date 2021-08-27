@@ -2,6 +2,8 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.io.File;
@@ -17,7 +19,7 @@ public interface AdminService {
 
   void requestPointPayment(User user, Long reqestPoint);
 
-  List<User> adminSerchUserByRegex(String regex, Pageable pageable);
+  Page<UserDto> adminSerchUserByRegex(String regex, Pageable pageable);
 
   List<Survey> adminSerchSurveyByRegex(String regex, Pageable pageable);
 
