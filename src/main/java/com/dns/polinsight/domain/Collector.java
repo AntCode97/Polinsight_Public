@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -15,7 +16,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @ToString(exclude = "survey")
-public class Collector {
+public class Collector implements Serializable {
+
+  private static final long serialVersionUID = 4837730403775276600L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

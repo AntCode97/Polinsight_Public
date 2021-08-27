@@ -97,7 +97,7 @@
 
     .point_table > .data_line > span:nth-child(1) {
       flex       : 5;
-      text-align : left;
+      text-align : center;
     }
 
     .point_table > .data_head > span:nth-child(2) {
@@ -123,7 +123,7 @@
 
     .survey_table > .data_line > span:nth-child(1) {
       flex       : 7;
-      text-align : left;
+      text-align : center;
     }
 
     .survey_table > .data_line > span:nth-child(2) {
@@ -1290,20 +1290,10 @@
       }
     });
 
-    // TODO
     const userDelete = e => {
+      console.log('user delete process')
       if (canDelete) {
-        const tmp = $(`<form method="post" th:action="@{/user/delete}"></form>`)
-        $('body').append(tmp)
-        tmp.submit()
-        // http
-        //     .post(`/user/delete`)
-        //     .then(res => {
-        //       if (res.data.success) {
-        //         alert('회원 탈퇴 완료')
-        //         location.replace('/')
-        //       }
-        //     }).catch(console.log)
+        http.post('/user/delete')
       } else {
         alert('안내사항에 동의해주세요')
       }
@@ -1338,23 +1328,11 @@
       }
     };
 
-    const getAllParticipateSurveys = () => {
-      http.get('/api/participate')
-          .then(res => {
-            if (res.data.success) {
-              // mkae participate survey list
-              makeParticipateList(res.data.response);
-            }
-          })
-          .catch(console.log);
-    };
-
     const getAllPointRequest = () => {
       http.get('/api/points')
           .then(res => {
             if (res.data.success) {
-              // make req list
-              makePointRequestList(res.data.response);
+              makePointRequestList(res.data.response.content);
             }
           })
           .catch(err => console.log(err));
@@ -1448,7 +1426,6 @@
       userInfo['industry'] = `[[${user.industry}]]`
       userInfo['registeredAt'] = `[[${user.registeredAt}]]`
       userInfo['favorite'] = `[[${user.favorite}]]`
-      userInfo['participate'] = `[[${user.participateSurvey}]]`
 
       let birth = userInfo['birth'].substring(0, 10).split("-")
       $('#year').val((birth[0] * 1)).prop('selected', true).on('change', inputChangeHandler)
@@ -1499,7 +1476,6 @@
       } else {
         userInfo[name] = value
       }
-      console.log(userInfo)
     }
 
     const getPointHistoryList = () => {
@@ -1530,12 +1506,11 @@
 
     const getUserParticipateSurvey = () => {
       http
-          .get(`/api/user/participate/${$('input[name=user_id]').val()}`, {params: {size: 5, page: 0}})
+          .get(`/api/participate`, {params: {size: 5, page: 0}})
           .then(res => {
             if (res.data.success) {
-              const table = $('div.point_table')
+              const table = $('div.survey_table')
               table.children('.data_line:not(:first-child)').remove()
-              console.log(res.data.response)
               res.data.response.forEach(survey => {
                 let template = $(`<div class="data_line"></div>`)
                 template.append($(`<span>${survey.title}</span>`))
@@ -1556,8 +1531,9 @@
       for (let i = 1; i <= size; i++) {
         // 더미 추가
         let template = $(`<div class="data_line"></div>`)
-        for (let j = 0; j < colsize; j++)
-          template.append($(`<span>1</span>`))
+        template.append($(`<span>-</span>`))
+        for (let j = 0; j < colsize - 1; j++)
+          template.append($(`<span>N/A</span>`))
         parent.append(template)
       }
     }
@@ -1565,11 +1541,16 @@
     let canDelete = false;
 
     $(function () {
+      let link = document.location.href
+      if (link.split('?').length > 1)
+        location.replace('/index')
+
       init();
       getAllPointRequest();
       setDateValue()
       $("#month").on('change selected', setDay)
       getPointHistoryList()
+      getUserParticipateSurvey()
 
       $('button[name=pointrequest_btn]').on('click', checkRequiredInput);
       $('button[name=user_delete]').on('click', userDelete)

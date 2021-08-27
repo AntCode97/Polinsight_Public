@@ -14,12 +14,6 @@ public class ApiUtils<T> {
     return new ApiResult<>(false, null, new ApiError(message, status));
   }
 
-  public static ResponseEntity toResponseEntity(ApiError error) {
-    return ResponseEntity
-            .status(error.getStatus())
-            .body(error.getMessage());
-  }
-
   @Getter
   @Setter
   public static class ApiResult<T> {

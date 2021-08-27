@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,6 @@ import java.time.LocalDateTime;
 public class ParticipateSurvey implements Serializable {
 
 
-  @Serial
   private static final long serialVersionUID = -8790118046300244268L;
 
   @Id

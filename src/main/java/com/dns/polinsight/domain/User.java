@@ -17,7 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,11 +34,12 @@ import java.util.*;
 @DynamicUpdate
 public class User implements UserDetails {
 
-
   @ToString.Exclude
+  @Builder.Default
   @JsonIgnore
   @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
-  private List<ParticipateSurvey> participateSurvey;
+  private List<ParticipateSurvey> participateSurvey = new ArrayList<>();
+
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -70,8 +74,9 @@ public class User implements UserDetails {
   private Phone recommend;
 
   @PositiveOrZero
-  @Builder.Default
+
   @Setter
+  @Builder.Default
   private Long point = 0L;
 
   @Setter
@@ -87,7 +92,8 @@ public class User implements UserDetails {
   private Boolean isSmsReceive;
 
 
-  private LocalDate registeredAt;
+  @Builder.Default
+  private LocalDate registeredAt = LocalDate.now();
 
   public User(UserDto dto) {
     this.id = dto.getId();

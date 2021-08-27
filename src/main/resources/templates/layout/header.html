@@ -123,15 +123,15 @@
       width      : 0.2px;
     }
 
-    /* 배너이미지 */
+    /*배너이미지*/
     .carasel_wrap::before {
+      /*background-color : #444444;*/
       content  : '';
-      /*background-color: #444;*/
       /*opacity: 0.4;*/
       height   : 50vh;
       left     : 0;
       position : absolute;
-      top      : 0;
+      /*top              : -80px;*/
       width    : 100%;
     }
 
@@ -140,10 +140,9 @@
       background-position : center, center;
       background-size     : cover;
       height              : 50vh;
+      min-width           : 1200px;
       overflow            : hidden;
-      /*top                 : 0;*/
       width               : 100%;
-      min-width: 1200px;
     }
 
     .shrink {

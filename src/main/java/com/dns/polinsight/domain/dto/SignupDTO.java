@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain.dto;
 
+import com.dns.polinsight.domain.Panel;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
@@ -34,6 +35,9 @@ public class SignupDTO {
   private Phone recommend;
 
   private boolean ispanel;
+
+  @Builder.Default
+  private Panel panel = new Panel();
 
 
   public User toUser(PasswordEncoder passwordEncoder) {

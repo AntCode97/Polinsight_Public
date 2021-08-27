@@ -33,7 +33,8 @@ public class PointRequest {
 
   private Long requestPoint;
 
-  private LocalDateTime requestedAt;
+  @Builder.Default
+  private LocalDateTime requestedAt = LocalDateTime.now();
 
   @Enumerated(EnumType.STRING)
   private BankType bank;
@@ -41,8 +42,9 @@ public class PointRequest {
   private String account;
 
   @Setter
+  @Builder.Default
   @Enumerated(EnumType.STRING)
-  private PointRequestProgressType progress;
+  private PointRequestProgressType progress = PointRequestProgressType.REQUESTED;
 
   public PointRequest of(PointRequestDto dto) {
     this.requestedAt = dto.getRequestedAt();

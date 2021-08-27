@@ -7,6 +7,7 @@ import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.exception.WrongAccessException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
@@ -16,12 +17,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -64,9 +70,11 @@ public class UserController {
 
   @PostMapping("/signup")
   public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
-    System.out.println(signupDTO);
+    log.warn(signupDTO.toString());
     try {
       User user = userService.saveOrUpdate(signupDTO.toUser(passwordEncoder));
+      log.warn(user.toString());
+      log.info(String.valueOf(signupDTO.isIspanel()));
       if (signupDTO.isIspanel()) {
         session.setAttribute("basic_user", new UserDto(user));
       } else {
@@ -90,26 +98,27 @@ public class UserController {
     return success(Boolean.TRUE);
   }
 
+  // TODO: 2021-08-27  
+  @Transactional
   @PostMapping("/user/delete")
-  //  public ApiUtils.ApiResult<Boolean> deleteUser(@AuthenticationPrincipal User user, HttpServletResponse response, HttpSession session) throws Exception {
-  public void deleteUser(@AuthenticationPrincipal User user, HttpServletResponse response, HttpSession session) throws Exception {
-
+  public void deleteUser(@AuthenticationPrincipal User user,
+                         ModelAndView mv,
+                         HttpServletRequest request,
+                         HttpServletResponse response) throws Exception {
     try {
-      log.warn(user.toString());
+      Long userId = user.getId();
+      String email = user.getEmail().toString();
       userService.deleteUserById(user.getId());
-      session.invalidate();
+      new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
       SecurityContextHolder.clearContext();
-      log.warn("유저 삭제 완료");
-
-      response.sendRedirect("/");
+      log.info("ID : {} - {} has deleted", userId, email);
       //      return success(Boolean.TRUE);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
-    response.sendRedirect("/");
   }
 
-  // 모든 정보 변경 가능
   @Transactional
   @PutMapping("/user")
   public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto,
@@ -135,7 +144,7 @@ public class UserController {
           user.getPanel().setFavorite(userDto.getFavorite());
           break;
       }
-      
+
       log.warn("after processing : " + user.toString());
       return success(new UserDto(userService.saveOrUpdate(user)));
     } catch (Exception e) {
@@ -144,7 +153,6 @@ public class UserController {
     }
   }
 
-  // 비밀번호는 못바꾸고, 이름, 전화번호, 패널정보 정도만 바꿈
   @Transactional
   @PutMapping("/admin/user")
   public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto userDto) throws Exception {
@@ -160,12 +168,20 @@ public class UserController {
   }
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@AuthenticationPrincipal User user) {
-    log.warn(user.toString());
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/mypage");
-    mv.addObject("user", new UserDto(userService.findUserByEmail(user.getEmail())));
-    return mv;
+  public ModelAndView myPage(@AuthenticationPrincipal User user) throws WrongAccessException, Exception {
+    if (user == null)
+      throw new WrongAccessException("잘못된 접근입니다.");
+
+    try {
+      ModelAndView mv = new ModelAndView();
+      UserDto dto = new UserDto(userService.findUserByEmail(user.getEmail()));
+      mv.setViewName("member/mypage");
+      mv.addObject("user", dto);
+      return mv;
+    } catch (UsernameNotFoundException e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
+    }
   }
 
   @PostMapping("/update")
@@ -264,8 +280,9 @@ public class UserController {
 
   @GetMapping("/api/user/participate/{userid}")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("participatedAt"));
     try {
-      return success(participateSurveyService.findAllByUserId(userId).parallelStream()
+      return success(participateSurveyService.findAllByUserId(userId, pageable).parallelStream()
                                              .map(ParticipateSurveyDto::new)
                                              .sorted()
                                              .collect(Collectors.toList()));

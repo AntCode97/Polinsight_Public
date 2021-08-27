@@ -4,6 +4,8 @@ import com.dns.polinsight.types.ProgressType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,10 +15,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Embeddable
 @Getter
-public class SurveyStatus {
+public class SurveyStatus implements Serializable {
 
+  private static final long serialVersionUID = 4278696733416424086L;
 
   // 서베이몽키에서 등록한 설문의 커스텀 변수
+  @Builder.Default
   @ElementCollection
   @Column(name = "variable")
   @Setter
@@ -26,10 +30,12 @@ public class SurveyStatus {
   @Setter
   private Long count;
 
+  @Builder.Default
   @Enumerated(EnumType.STRING)
   @Setter
   private ProgressType progress = ProgressType.BEFORE;
 
+  @Builder.Default
   private Integer minimumTime = 30;
 
 

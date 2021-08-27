@@ -1,13 +1,11 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
-import com.dns.polinsight.exception.PointCalculateException;
-import com.dns.polinsight.exception.PointHistoryException;
-import com.dns.polinsight.exception.UnAuthorizedException;
-import com.dns.polinsight.exception.UserNotFoundException;
+import com.dns.polinsight.exception.*;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -188,12 +186,11 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception {
+  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception, WrongAccessException {
     try {
-
-      return success(participateSurveyService.findAllByUserId(user.getId()));
+      return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
-      throw new Exception(e.getMessage());
+      throw new WrongAccessException(e.getMessage());
     }
   }
 
@@ -425,5 +422,16 @@ public class ApiController {
     }
   }
 
+  @GetMapping("/testtest")
+  public ApiUtils.ApiResult<UserDto> myPage() {
+    //    ModelAndView mv = new ModelAndView();
+    //    mv.setViewName("member/mypage");
+    //    mv.addObject("user", new UserDto(userService.findUserByEmail(Email.of("testpanel@gmail.com"))));
+    User user = userService.findUserByEmail(Email.builder().account("testuser").domain("gmail.com").build());
+    log.warn(user.toString());
+    UserDto dto = new UserDto(user);
+    log.warn(dto.toString());
+    return success(dto);
+  }
 
 }

@@ -24,7 +24,8 @@ public class PageController {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
       mv.addObject("user", new UserDto(user));
-    }
+    } else
+      mv.clear();
     mv.setViewName("index");
     return mv;
   }
@@ -50,7 +51,9 @@ public class PageController {
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() { return new ModelAndView("member/contract"); }
+  public ModelAndView contract() {
+    return new ModelAndView("member/contract");
+  }
 
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
@@ -78,7 +81,6 @@ public class PageController {
 
   @GetMapping("/basictopanel")
   public ModelAndView changeBasicToPanel(@AuthenticationPrincipal User user, HttpSession session) {
-    // TODO: 2021-08-25  
     session.setAttribute("basic_user", user);
     return new ModelAndView("redirect:/panel");
   }
@@ -138,4 +140,5 @@ public class PageController {
     model.addAttribute("checked", "result");
     return "business/result";
   }
+
 }

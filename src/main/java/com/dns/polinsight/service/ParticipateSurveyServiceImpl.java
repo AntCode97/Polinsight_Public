@@ -3,6 +3,7 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.repository.ParticipateSurveyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,10 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   }
 
   @Override
+  public List<ParticipateSurvey> findAllByUserId(long userId, Pageable pageable) {
+    return participateSurveyRepository.findAllByUserId(userId, pageable);
+  }
+
   public List<ParticipateSurvey> findAllByUserId(long userId) {
     return participateSurveyRepository.findAllByUserId(userId);
   }

@@ -26,6 +26,7 @@ public class Post implements Serializable {
   private static final long serialVersionUID = 5170758413872517587L;
 
   @OneToMany(mappedBy = "post")
+
   @Builder.Default
   @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
