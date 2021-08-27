@@ -71,6 +71,11 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
+  public Page<SurveyDto> findAllByExcludedTypes(Pageable pageable, ProgressType type) {
+    return surveyJdbcTemplate.findAllSurveysByExcludedProgressType(type, pageable);
+  }
+
+  @Override
   public Page<SurveyMapping> findAllAndRegex(Pageable pageable, String regex) {
     return surveyRepository.findAllByRegex(regex, pageable);
   }

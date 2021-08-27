@@ -166,7 +166,7 @@
                             <option value="">제목</option>
                         </select>
                         <div class="box-search">
-                            <input type="text" />
+                            <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
                             <input type="submit" />
                         </div>
                     </div>
@@ -174,95 +174,65 @@
             </div>
             <div class="survey-sort-wrap"></div>
             <div class="scroll-card">
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
 
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
-
-                <div class="card-box">
-                    <img src="" class="card-img" alt="">
-                    <div class="card-title">광산구 청소년 노동인권 실태조사</div>
-                </div>
             </div>
         </div>
     </div>
 
-    <div class="page-button">
-        <!-- <a th:href="@{/boards(page=1)}" aria-label="First">
-            <span aria-hidden="true"><img class="button" src="/img/board/first_page.png" alt="처음 페이지로 이동"></span>
-        </a> -->
-        <a href="#"><i class="fas fa-angle-double-left"></i></a>
-        <a href="#"><i class="fas fa-angle-left"></i></a>
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#">5</a>
-        <a href="#">6</a>
-        <a href="#">7</a>
-        <a href="#">8</a>
-        <a href="#">9</a>
-        <a href="#">10</a>
-        <a href="#"><i class="fas fa-angle-right"></i></a>
-        <a href="#"><i class="fas fa-angle-double-right"></i></a>
-        <!-- <a th:class="${boards.first} ? 'disabled'"th:href="${boards.first} ? '#' : @{/boards(page=${boards.number})}" aria-label="Previous">
-            <img class="button" src="/img/board/list_prev.png" alt="이전 페이지로 이동">
-        </a>
+    <div class="page-button"  id="pagination">
 
-        <a class="current-page" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == boards.number + 1} ? 'active': 'not-active' " th:text="${page}" th:href="@{/boards(page=${page})}"></a>
-
-        <a th:class="${boards.last} ? 'disabled'" th:href="${boards.last} ? '#' : @{/boards(page=${boards.number + 2})}" aria-label="Next">
-            <img class="button" src="/img/board/list_next.png" alt="다음 페이지로 이동">
-        </a> -->
-        <!-- <a th:href="@{/boards(page=${boards.totalPages})}" aria-label="Last">
-            <img class="button" src="/img/board/last_page.png" alt="마지막 페이지로 이동">
-        </a> -->
     </div>
 
 
 
     <th:block th:include="layout/footer" />
     <script th:inline="javascript">
+    </script>
+    <script th:src="@{/js/PostUtils.js}"></script>
+    <script>
+        async function getSurveyData(e) {
+            let page = !e ? 0 : !e.data.page ? 0 : e.data.page
+            let regex = String($('input[name=admin_find]').val()).trim()
+            const response = await http.get('/api/surveys/notAdmin?type=ALL', {params: {page: page, size: 10, regex: regex}})
+            if (response.data.success) {
+                const data = response.data.response
+                return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+            }
+        }
 
+
+        const init = e => {
+            const spinner = $('#loading')
+            spinner.show()
+            getSurveyData(e).then(obj => {
+                if (obj.total > 0) {
+                    makePagination(obj.current, obj.totalPage)
+                    obj.content.forEach(post => {
+                        $('.scroll-card').append(makeSurveyTemplate2(post))
+                    })
+                } else
+                    $('.scroll-card').append(`<div><h1>게시물이 없습니다.</h1></div>`)
+            })
+            spinner.hide()
+        }
+
+
+        const makeSurveyTemplate2 = (survey) => {
+            if(survey.progress != 'BEFORE'){
+            let template = $(`<div class="card-box"></div>`);
+                template.append(`<div class="card-box">
+            <img src="/img/logo/logo.png" class="card-img" alt="">
+                <div class="card-title">${survey.title}</div></div>`);// 카드
+                return template
+            }
+
+        }
+
+
+
+        $(function () {
+            init()
+
+        })
     </script>
 </th:block>

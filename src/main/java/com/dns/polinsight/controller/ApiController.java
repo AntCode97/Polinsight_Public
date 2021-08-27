@@ -141,6 +141,31 @@ public class ApiController {
     }
   }
 
+  @GetMapping("/surveys/notAdmin")
+  public ApiUtils.ApiResult<Page<SurveyDto>> getAllSurvey(@PageableDefault Pageable pageable,
+                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
+    try {
+      if (type == null || type.equals("ALL") || type.equals("INDEX")) {
+        if (regex.isBlank()) {
+          return success(surveyService.findAllByExcludedTypes(pageable,ProgressType.BEFORE));
+        } else {
+          return success(surveyService.findAllAndRegex(pageable, regex));
+        }
+      } else {
+        if (regex.isBlank()) {
+          return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+        } else {
+          return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception();
+    }
+  }
+
   @GetMapping("/survey/total")
   public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
     try {
