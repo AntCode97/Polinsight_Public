@@ -21,7 +21,7 @@ public interface SurveyService {
   Page<SurveyMapping> findAllByTypes(Pageable pageable, ProgressType type);
 
 
-  Page<SurveyDto> findAllByExcludedTypes(Pageable pageable, ProgressType type);
+  Page<SurveyMapping> findAllSurveysByProgressTypeNotLike(Pageable pageable, ProgressType type);
 
   Page<SurveyMapping> findAllAndRegex(Pageable pageable, String regex);
 
