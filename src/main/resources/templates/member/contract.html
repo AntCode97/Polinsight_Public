@@ -206,6 +206,22 @@
       outline          : none;
       padding          : 7px 45px;
     }
+    .contract_box {max-width: 1000px; min-width: 550px; margin: 0 auto;}
+
+    @media (min-width : 320px) and (max-width : 480px) {
+      .contract_box {
+        min-width: 0px;
+        width: calc(100% - 20px);
+        margin: 0 10px;
+      }
+      .contract_contents_wrap > p {display: none;}
+      .terms_span > label {padding-right: 25px;}
+      .terms_p {font-size: 12px;}
+      .terms_span > label {
+        height: 100%;
+        font-size: 12px;
+      }
+    }
 
   </style>
   <div class="flex-wrapper">

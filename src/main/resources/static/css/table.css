@@ -3,9 +3,8 @@
 }
 
 .main_item {
-  border-bottom : 1px dashed #DADADA;
   color         : #000000;
-  font-size     : 2rem;
+  font-size     : 2.5rem;
   font-weight   : bold;
   padding       : 10px 0 20px;
 }
@@ -144,6 +143,9 @@
 .page-button {
   margin     : 20px 0;
   text-align : center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .page-button a {
@@ -154,11 +156,12 @@
   line-height : 34px;
   text-align  : center;
   width       : 30px;
+  margin-left: -1px;
 }
 
 .active {
   background-color : #444444;
-  border           : 1px solid #000066;
+  border           : 1px solid #000066!important;
   color            : white;
 }
 
@@ -199,7 +202,7 @@
   .post-search .box-search > input[type=submit] {width: 30px; height: 35px; background-size: 15px;}
   .post-search .box-search input {padding-right: 15px;}
   .post-row > *:nth-child(1) {display: none;}
-  .post-row > *:nth-child(4) {width: 180px;}
+  .post-row > *:nth-child(4) {width: 190px!important;}
   .post-row > *:nth-child(3) {display: none;}
   .post-row > *:nth-child(5) {display: none;}
   .post-row > *:nth-child(6) {display: none;}

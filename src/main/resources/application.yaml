@@ -143,6 +143,9 @@ custom :
       - /actuator**
       - /actuator/**
       - /surveys/**
+      - /research/**
+      - /company/**
+      - /business/**
       - /chpwd/**
       - /changepwd**
       - /survey/**
@@ -189,8 +192,8 @@ management :
 ---
 spring :
   datasource :
-    username :          root
-    password :          root
+    username :          polinsight
+    password :          polinsight
     url :               jdbc:mariadb://localhost:3306/polinsight
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :

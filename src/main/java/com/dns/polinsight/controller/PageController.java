@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,9 +50,7 @@ public class PageController {
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() {
-    return new ModelAndView("member/contract");
-  }
+  public ModelAndView contract() { return new ModelAndView("member/contract"); }
 
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
@@ -104,4 +103,39 @@ public class PageController {
     return new ModelAndView("posts/faq");
   }
 
+  @GetMapping("/research/online")
+  public String getResearchOnline(Model model) {
+    model.addAttribute("checked", "online");
+    return "research/onlineSurvey";
+  }
+
+  @GetMapping("/research/pols")
+  public String getResearchPols(Model model) {
+    model.addAttribute("checked", "pols");
+    return "research/pols";
+  }
+
+  @GetMapping("/company/introduce")
+  public String getCompanyIntroduce(Model model) {
+    model.addAttribute("checked", "intro");
+    return "company/introduce";
+  }
+
+  @GetMapping("/company/map")
+  public String getCompanyMap(Model model) {
+    model.addAttribute("checked", "map");
+    return "company/map";
+  }
+
+  @GetMapping("/business/category")
+  public String getBusinessCategory(Model model) {
+    model.addAttribute("checked", "category");
+    return "business/category";
+  }
+
+  @GetMapping("/business/result")
+  public String getBusinessResult(Model model) {
+    model.addAttribute("checked", "result");
+    return "business/result";
+  }
 }
