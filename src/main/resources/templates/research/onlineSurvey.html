@@ -118,7 +118,7 @@
       width           : 100%;
     }
 
-    .survey-sort-wrap > a {
+    .survey-sort-wrap > label {
       border        : 1px solid #444444;
       border-radius : 5px;
       color         : #444444;
@@ -127,6 +127,10 @@
       padding       : 5px 0;
       text-align    : center;
       width         : 70px;
+    }
+
+    .survey-sort-wrap > input {
+      display: none;
     }
 
     .sort-active {
@@ -225,16 +229,25 @@
               <option value="">포인트순</option>
             </select>
             <div class="box-search">
-              <input type="text" />
+              <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
               <input type="submit" />
             </div>
           </div>
         </div>
       </div>
       <div class="survey-sort-wrap">
-        <a th:href="@{/}" class="sort-active">전체</a>
-        <a th:href="@{/}">진행중</a>
-        <a th:href="@{/}">마감</a>
+        <label for="sort_all" class="check_sort sort-active">
+          전체
+        </label>
+        <input value="ALL" type="radio" name="sort_group" id="sort_all" checked />
+        <label for="sort_ongoing">
+          진행
+        </label>
+        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing" />
+        <label for="sort_end">
+          종료
+        </label>
+        <input value="END" type="radio" name="sort_group" id="sort_end" />
       </div>
       <div class="scroll-table">
         <div class="post-row post-th">
@@ -271,7 +284,73 @@
   <div class="page-button" id="pagination">
   </div>
   <th:block th:include="layout/footer" />
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
 
+
+    async function getSurveyData(e) {
+      let type = $('input[name=sort_group]:checked').val()
+      let page = !e ? 0 : !e.data.page ? 0 : e.data.page
+      let regex = String($('input[name=admin_find]').val()).trim()
+      const response = await http.get('/api/surveys/notAdmin?type=' + type, {params: {page: page, size: 10, regex: regex}})
+      if (response.data.success) {
+        const data = response.data.response
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+      }
+    }
+
+
+    const init = e => {
+      const spinner = $('#loading')
+      spinner.show()
+      getSurveyData(e).then(obj => {
+        $('#total_count').text(obj.total)
+        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage)
+          obj.content.forEach(post => {
+            $('.scroll-table').append(makeSurveyTemplate2(post))
+          })
+        } else
+          $('.scroll-table').append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
+      })
+      spinner.hide()
+    }
+
+    const makeSurveyTemplate2 = (survey) => {
+      if(survey.progress != 'BEFORE') {
+        let template = $(`<div class="post-row"></div>`);
+
+
+        template.append(`<div>${survey.id}</div>`);// 번호
+        if (survey.progress === 'ONGOING') template.append(`<div class="status-bar">진행중</div>`) //설문 종류
+        else if (survey.progress === 'END') template.append(`<div class="status-bar status-finish">마감</div>`)
+        template.append(`<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`);// 설문 이름
+        template.append(`<div>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`) //종료 일자
+        template.append(`<div>${survey.count}</div>`);// 참여자 수
+        template.append(`<div>${!survey.point ? '지정 안됨' : survey.point}</div>`);// 지급 포인트
+        template.append(`<div>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); // 설문 기간
+
+
+        return template
+      }
+    }
+
+
+
+    $(function () {
+      init()
+      $('input[name=admin_find]').on('keyup', {page: 0}, _.throttle(init, 300))
+      $('input[name=sort_group]').on('click', {page: 0}, init).on('change', function (e) {
+        let id = e.target.id
+        $('input[name=sort_group]').each(function () {
+          if (id === $(this).attr('id')) {
+            $(this).prev().addClass('sort-active')
+          } else {
+            $(this).prev().removeClass('sort-active')
+          }
+        })
+      });
+    })
   </script>
 </th:block>

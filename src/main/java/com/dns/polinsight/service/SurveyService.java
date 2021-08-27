@@ -20,6 +20,8 @@ public interface SurveyService {
 
   Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type);
 
+  Page<SurveyDto> findAllByExcludedTypes(Pageable pageable, ProgressType type);
+
   Page<SurveyDto> findAllAndRegex(Pageable pageable, String regex);
 
   Page<SurveyDto> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex);
