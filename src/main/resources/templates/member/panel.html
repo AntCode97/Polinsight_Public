@@ -636,7 +636,7 @@
 
         if (checkRequiredValue(userInfo)) {
           http
-              .post('/moreinfo', userInfo)
+              .post('/panel_signup', userInfo)
               .then(res => {
                 if (res.data.success) {
                   location.replace("/success_panel")
@@ -646,7 +646,6 @@
                 console.log(err)
                 alert('가입 중 문제가 발생하였습니다.\n관리자에게 문의해주세요.')
               })
-          location.replace("/")
         } else {
           alert('필수 입력값을 모두 입력해주세요')
         }

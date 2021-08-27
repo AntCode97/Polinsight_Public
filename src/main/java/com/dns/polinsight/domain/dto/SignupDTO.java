@@ -8,7 +8,6 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 public class SignupDTO {
 
   @NotEmpty
-  private Email email;
+  private String email;
 
   @NotEmpty
   private String password;
@@ -28,26 +27,13 @@ public class SignupDTO {
   private String name;
 
   @NotEmpty
-  @Size(min = 11, max = 11)
-  private Phone phone;
+  private String phone;
 
-  @Size(min = 11, max = 11)
-  private Phone recommend;
+  private String recommend;
 
   private boolean ispanel;
 
   @Builder.Default
   private Panel panel = new Panel();
-
-
-  public User toUser(PasswordEncoder passwordEncoder) {
-    return User.builder()
-               .email(this.email)
-               .password(passwordEncoder.encode(this.password))
-               .name(this.name)
-               .phone(this.phone)
-               .recommend(this.recommend)
-               .build();
-  }
 
 }

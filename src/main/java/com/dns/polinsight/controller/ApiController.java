@@ -6,6 +6,7 @@ import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
+import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -14,10 +15,7 @@ import com.dns.polinsight.utils.ExcelUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -101,18 +99,36 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
-    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
+  public ApiUtils.ApiResult<Page<SurveyMapping>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                    @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                    @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("status.progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
-      if (type == null || type.equals("ALL") || type.equals("INDEX")) {
+      if (type == null || type.equals("ALL")) {
         if (regex.isBlank()) {
           return success(surveyService.findAll(pageable));
         } else {
           return success(surveyService.findAllAndRegex(pageable, regex));
         }
+      } else if (type.equals("INDEX")) {
+        // TODO: 2021-08-28 정렬 다시 하기
+        Page<SurveyMapping> page = surveyService.findAll(pageable);
+        List<SurveyMapping> list = page.getContent().parallelStream().sorted((o1, o2) -> {
+          int progressComp = o1.getProgress().compareTo(o2.getProgress());
+          if (progressComp < 0)
+            return -1;
+          else if (progressComp == 0) {
+            int endAtComp = LocalDate.parse(o1.getEndAt()).compareTo(LocalDate.parse(o2.getEndAt()));
+            if (endAtComp > 0)
+              return -1;
+            else if (endAtComp == 0)
+              return o1.getId().compareTo(o2.getId());
+          }
+          return 1;
+        }).collect(Collectors.toList());
+        return success(new PageImpl<>(list, pageable, page.getTotalElements()));
       } else {
+        type = type.toUpperCase();
         if (regex.isBlank()) {
           return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
         } else {
