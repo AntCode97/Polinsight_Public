@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
@@ -8,7 +9,6 @@ import com.dns.polinsight.types.convereter.EmailAttrConverter;
 import com.dns.polinsight.types.convereter.PhoneAttrConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,13 +29,13 @@ import java.util.*;
 })
 @ToString
 @DynamicUpdate
-@DynamicInsert
 public class User implements UserDetails {
 
 
-  @Builder.Default
-  @OneToMany(targetEntity = ParticipateSurvey.class, cascade = CascadeType.REMOVE, mappedBy = "user")
-  private Set<ParticipateSurvey> participateSurvey = new HashSet<>();
+  @ToString.Exclude
+  @JsonIgnore
+  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
+  private List<ParticipateSurvey> participateSurvey;
 
   @Builder.Default
   @Enumerated(EnumType.STRING)
@@ -59,8 +59,10 @@ public class User implements UserDetails {
 
   private String password;
 
+  @Setter
   private String name;
 
+  @Setter
   @Convert(converter = PhoneAttrConverter.class, attributeName = "phone")
   private Phone phone;
 
@@ -96,7 +98,19 @@ public class User implements UserDetails {
     this.isSmsReceive = dto.getIsSmsReceive();
     this.isEmailReceive = dto.getIsEmailReceive();
     this.recommend = Phone.of(dto.getRecommend());
-    this.participateSurvey = new HashSet<>();
+    this.participateSurvey = new ArrayList<>();
+    this.role = dto.getRole();
+    this.registeredAt = dto.getRegisteredAt();
+    this.panel = Panel.builder()
+                      .gender(dto.getGender())
+                      .education(dto.getEducation())
+                      .marry(dto.getMarry())
+                      .birth(dto.getBirth())
+                      .birthType(dto.getBirthType())
+                      .industry(dto.getIndustry())
+                      .job(dto.getJob())
+                      .address(Address.of(dto.getAddress()))
+                      .build();
   }
 
 

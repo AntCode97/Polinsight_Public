@@ -502,7 +502,7 @@ VALUES
   ( 499, 'mrahlofdu@chronoengine.com', 'lmcnevindu', '', '155-2578-5680', 0, NULL, 'USER', '2021-03-16 04:24:06.000000', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', '0', '', TRUE, TRUE ),
   ( 500, 'aarendtdv@odnoklassniki.ru', 'cmullerdv', '', '101-6381-2720', 0, NULL, 'USER', '2021-06-18 09:28:58.000000', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', '0', '', TRUE, TRUE );
 
-INSERT INTO polinsight.post ( pno, is_new, registered_at, search_content, title, view_content, view_count, user_id, type )
+INSERT INTO post ( pno, is_new, registered_at, search_content, title, view_content, view_count, user_id, type )
 VALUES
   ( 1, FALSE, '2021-06-07 08:35:37.000000', 'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.', 'Nulla nisl.', 'Maecenas pulvinar lobortis est.', 0, 1, 'NOTICE' ),
   ( 2, TRUE, '2021-05-28 18:28:38.000000', 'Nullam porttitor lacus at turpis.', 'Etiam justo.', 'Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.', 0, 1, 'NOTICE' ),
@@ -1007,6 +1007,7 @@ VALUES
 
 INSERT INTO survey ( title, href, survey_id )
 VALUES
+  ( "테스트 설문입니다", "https://api.surveymonkey.net/v3/surveys/306951608", 1234567890 ),
   ( "2021년 광주광역시 평생교육 만족도 조사[일반]", "https://api.surveymonkey.net/v3/surveys/306951608", 306951608 ),
   ( "삶디센터 프로그램 만족도 조사 및 역량평가(사후)", "https://api.surveymonkey.net/v3/surveys/303608191", 303608191 ),
   ( "2021년 전라남도 청소년 실태조사[대학생]", "https://api.surveymonkey.net/v3/surveys/305562569", 305562569 ),
@@ -1258,6 +1259,7 @@ VALUES
 
 INSERT INTO collector ( collector_id, name, href, participate_url, survey_id, response_count, status )
 VALUES
+  ( 1234567890, 'Web Link 4', 'https://api.surveymonkey.net/v3/collectors/405411245', 'https://ko.surveymonkey.com/r/YLZ6QGQ', 1234567890, 0, 'open' ),
   ( 405411245, 'Web Link 4', 'https://api.surveymonkey.net/v3/collectors/405411245', 'https://ko.research.net/r/hillsGS', 291173891, 0, 'open' ),
   ( 402950602, '삶디센터조사용', 'https://api.surveymonkey.net/v3/collectors/402950602', 'https://ko.research.net/r/2021samdi_1', 303357643, 0, 'open' ),
   ( 402950709, '삶디센터 조사용', 'https://api.surveymonkey.net/v3/collectors/402950709', 'https://ko.research.net/r/2021samdi_3', 303608191, 0, 'open' ),
@@ -1293,3 +1295,14 @@ VALUES
 UPDATE survey
 SET progress='ONGOING'
 WHERE title LIKE 'DNSLAB_Test_Survey';
+
+UPDATE survey
+SET point=777,
+    progress='ONGOING',
+    end_at='2222-10-10',
+    created_at='2020-10-10'
+WHERE id = 1;
+
+UPDATE collector
+SET participate_url = 'https://ko.research.net/r/5KJWSK2'
+WHERE collector_id = 1234567890;

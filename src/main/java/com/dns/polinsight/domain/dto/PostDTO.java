@@ -50,7 +50,7 @@ public class PostDTO {
     this.id = post.getId();
     this.title = post.getTitle();
     this.postType = post.getPostType();
-    this.content = post.getViewcontent();
+    this.viewcontent = post.getViewcontent().replaceAll("&nbsp;", " ").replaceAll("<br>", "\r\n");
     this.user = post.getUser();
     this.registeredAt = post.getRegisteredAt();
     this.attaches = post.getAttaches();

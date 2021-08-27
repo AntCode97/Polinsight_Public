@@ -1,6 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.PointRequest;
+import com.dns.polinsight.domain.dto.PointRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,8 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
   List<PointRequest> findPointRequestsByUid(long uid);
 
   Optional<PointRequest> findPointRequestByUidAndRequestPoint(long uid, long requestPoint);
+
+  @Query("select pr from PointRequest pr")
+  Page<PointRequestDto> findAllPointRequest(Pageable pageable);
 
 }

@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.GenderType;
 import com.dns.polinsight.types.convereter.AddressAttrConverter;
@@ -23,9 +24,10 @@ import java.util.List;
 public class Panel implements Serializable {
 
 
+  @Setter
   @Fetch(FetchMode.SELECT)
   @ElementCollection(fetch = FetchType.EAGER)
-  private final List<String> favorite = new ArrayList<>();
+  private List<String> favorite = new ArrayList<>();
 
   @Enumerated(EnumType.STRING)
   private GenderType gender;
@@ -45,6 +47,17 @@ public class Panel implements Serializable {
 
   @Convert(converter = AddressAttrConverter.class, attributeName = "address")
   private Address address;
+
+  public static Panel of(UserDto dto) {
+    return Panel.builder()
+                .address(Address.of(dto.getAddress()))
+                .job(dto.getJob())
+                .industry(dto.getIndustry())
+                .birth(dto.getBirth())
+                .birthType(dto.getBirthType())
+                .marry(dto.getMarry())
+                .build();
+  }
 
   public void update(Panel panel) {
     this.gender = panel.getGender();

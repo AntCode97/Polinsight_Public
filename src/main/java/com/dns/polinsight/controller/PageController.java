@@ -1,9 +1,10 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
+import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +20,10 @@ import javax.servlet.http.HttpSession;
 public class PageController {
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(@LoginUser SessionUser user) {
+  public ModelAndView home(@AuthenticationPrincipal User user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
-      mv.addObject("user", user);
+      mv.addObject("user", new UserDto(user));
     }
     mv.setViewName("index");
     return mv;
@@ -76,9 +77,9 @@ public class PageController {
   }
 
   @GetMapping("/basictopanel")
-  public ModelAndView changeBasicToPanel(@LoginUser SessionUser sessionUser, HttpSession session) {
-    //    session.invalidate();
-    session.setAttribute("basic_user", sessionUser);
+  public ModelAndView changeBasicToPanel(@AuthenticationPrincipal User user, HttpSession session) {
+    // TODO: 2021-08-25  
+    session.setAttribute("basic_user", user);
     return new ModelAndView("redirect:/panel");
   }
 

@@ -146,8 +146,8 @@
     }
 
     .delete_btn {
-      cursor : pointer;
       background-color : tomato;
+      cursor           : pointer;
     }
 
     .btn_wrap1 {
@@ -265,8 +265,7 @@
                   </div>
                 </div>
                 <div class="input_wrap textarea_div">
-                  <div class="board_div2" th:text="${post.viewcontent}">
-
+                  <div class="board_div2" th:text="${post.viewcontent}" style="white-space: pre;">
                   </div>
                 </div>
 
@@ -274,8 +273,8 @@
                 <div class="last_wrap">
                   <div class="board_div2 btn_wrap">
                     <div class="btn_wrap1">
-                      <span>
-                        <a th:href="@{/admin/posts}" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
+                      <span th:onclick="|history.back()|">
+                        <a href="#" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                       </span>
                     </div>
                     <th:block>
@@ -283,9 +282,9 @@
                         <span>
                           <a th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                         </span>
-                        <span class="board_btn delete_btn" th:value="${post.id}" >
+                        <span class="board_btn delete_btn" th:value="${post.id}">
                           <i class="far fa-trash-alt"></i>삭제
-<!--                          <a th:href="@{/admin/posts/{id}/delete (id=${post.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>-->
+                                                          <!--                          <a th:href="@{/admin/posts/{id}/delete (id=${post.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>-->
                         </span>
                       </div>
                     </th:block>
@@ -299,13 +298,17 @@
     </section>
   </div>
   <div th:replace="fragments/post_delete_popup">
-  <script type="text/javascript">
-    $(function () {
-      let file_item2 = document.getElementsByClassName('file_item2');
-      let fileCount = file_item2.length;
-      for (let i = 1; i <= fileCount; i++) {
-        file_item2[i - 1].innerText = '첨부파일#' + i;
+    <script type="text/javascript">
+      $(function () {
+        let file_item2 = document.getElementsByClassName('file_item2');
+        let fileCount = file_item2.length;
+        for (let i = 1; i <= fileCount; i++) {
+          file_item2[i - 1].innerText = '첨부파일#' + i;
+        }
+      });
+      const goAdminPostList =  () => {
+        history.back();
       }
-    });
-  </script>
+    </script>
+  </div>
 </th:block>

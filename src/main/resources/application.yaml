@@ -161,6 +161,7 @@ custom :
       - /events
       - /qna
       - /faq
+      - /api/callback**
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
@@ -212,10 +213,10 @@ spring :
     activate :
       on-profile : dev
   jpa :
-    hibernate :
-      ddl-auto : validate
     properties :
-      format_sql : true
+      hibernate :
+        ddl-auto :   validate
+        format_sql : true
     show-sql :     true
     generate-ddl : true
 
@@ -237,6 +238,11 @@ server :
   servlet :
     session :
       timeout : 5m
+
+
+custom :
+  callback :
+    base : "http://localhost:8080"
 ---
 spring :
   datasource :

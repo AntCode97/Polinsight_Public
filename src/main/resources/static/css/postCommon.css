@@ -1,0 +1,647 @@
+.header_wrap {
+background-color : #182838;
+}
+
+.web {
+margin : auto;
+width  : 1200px;
+}
+
+.sub-main {
+border-bottom  : 1px solid #EFEEEC;
+height         : 50px;
+padding-bottom : 0px;
+}
+
+.sub-main li {
+color       : white;
+font-size   : 20px;
+height      : 100%;
+line-height : 250%;
+text-align  : center;
+width       : 150px;
+}
+
+.notice {
+background-color : #1A2738;
+border           : 1px solid #1A2738;
+}
+
+.qna {
+background-color : #EFEEEC;
+border           : 1px solid #EFEEEC;
+}
+
+.sub-main-name {
+border-bottom  : 1px solid rgb(0, 0, 0);
+font-size      : 25px;
+margin-bottom  : 50px;
+padding-bottom : 50px;
+padding-top    : 50px;
+text-align     : center;
+width          : 1200px;
+}
+
+.writeBoard {
+display       : flex;
+font-size     : 25px;
+height        : 40px;
+margin-bottom : 10px;
+}
+
+.admin_main_contents {
+padding : 20px 40px 40px;
+width   : 100%;
+}
+
+.contents_title > a > i {
+font-size    : .9rem;
+margin-right : 5px;
+}
+
+.contents_title > a {
+position : relative;
+}
+
+.next-link {
+padding-left : 20px;
+}
+
+.next-link::before {
+background-image    : url('imgs/dot_depth.gif');
+background-position : center center;
+background-repeat   : no-repeat;
+content             : '';
+height              : 15px;
+left                : 3px;
+position            : absolute;
+top                 : 2px;
+width               : 10px;
+}
+
+
+#metop_container {
+align-items     : center;
+justify-content : center;
+}
+
+.metop_board_card {
+background    : white;
+border-radius : 2px;
+border-top    : 3px solid mediumseagreen;
+box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14),
+0 3px 1px -2px rgba(0, 0, 0, .2),
+0 1px 5px 0 rgba(0, 0, 0, .12);
+margin        : 30px 0;
+padding       : 40px 30px 20px 30px;
+position      : relative;
+width         : 100%;
+}
+
+/* 카드 제목 */
+.register_top_wrap {
+border-top : 2px solid #7C7C7C;
+}
+
+.register_bottom_wrap {
+border-top : 1px solid #DADADA;
+}
+
+.input_wrap {
+align-items   : center;
+margin-bottom : 15px;
+}
+
+.uploadedList {
+display : flex;
+padding : 15px 0px 0px 0px;
+}
+
+.uploadedList > li {
+border-radius : 2px;
+box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+margin-right  : 5px;
+}
+
+.board_div {
+align-items      : center;
+background-color : #EEEEEE;
+border-bottom    : 1px solid #DADADA;
+display          : flex;
+height           : 100%;
+justify-content  : flex-start;
+width            : 100%;
+}
+
+.board_div b {
+font-size : 16px;
+}
+
+.board_div > span {
+font-size : 14px;
+}
+
+.board_span {
+background-color : #FFFFFF;
+display          : block;
+flex             : 7;
+overflow         : hidden;
+padding          : 9px 20px;
+}
+
+.board_writer {
+display     : inline-block;
+font-size   : 16px;
+line-height : 30px;
+}
+
+.board_type > option {
+cursor : pointer;
+}
+
+.board_input {
+border    : 1px solid #DADADA;
+font-size : 15px;
+height    : 30px;
+outline   : none;
+width     : 100%;
+}
+
+.board_content {
+border    : 1px solid #DADADA;
+font-size : 14px;
+height    : 300px;
+outline   : none;
+resize    : none;
+width     : 100%;
+}
+
+.textarea_div {
+align-items : flex-start;
+}
+
+.textarea_div > label {
+margin-top : 10px;
+}
+
+.form-group > label {
+margin-top : 10px;
+}
+
+.form-group .board_div {
+align-items     : center;
+border          : 1.5px dashed #DADADA;
+color           : #515151;
+display         : flex;
+font-size       : 15px;
+height          : 150px;
+justify-content : center;
+text-align      : center;
+}
+
+/* 등록/취소 버튼 */
+.btn_wrap {
+background-color : #FFFFFF;
+border           : 0;
+border-radius    : 0;
+display          : flex;
+justify-content  : space-between;
+padding          : 10px 15px 10px 15px;
+}
+
+.insert_btn {
+margin-right : -15px;
+width        : 80px;
+}
+
+.cancel_btn {
+margin-left : -15px;
+width       : 80px;
+}
+
+.board_content_wrap {
+height : 100%;
+width  : 100%;
+}
+
+div#smart_editor2 {
+width : 1040px !important;
+}
+
+.err_msg_wrap {
+display    : none;
+text-align : left;
+}
+
+.err_msg {
+color     : #D95339;
+display   : block;
+font-size : 14px;
+}
+
+.board_div > label {
+background-color : #EEEEEE;
+display          : block;
+font-size        : 16px;
+line-height      : 30px;
+padding          : 9px 15px 9px 25px;
+padding-left     : 30px;
+position         : relative;
+width            : 150px;
+}
+
+.board_div > label > span {
+color     : #D95339;
+font-size : 20px;
+left      : 10px;
+position  : absolute;
+top       : 9px;
+}
+
+#board_writer {
+width : 150px;
+}
+
+.size_limit_msg {
+color : #999999;
+}
+
+.file_wrap {
+border : 1px solid #DADADA;
+}
+
+.file_item > label {
+display    : block;
+text-align : center;
+width      : 100px;
+}
+
+.file_item > div {
+align-items      : center;
+background-color : #FFFFFF;
+display          : flex;
+flex             : 7;
+padding          : 9px 10px;
+}
+
+.file_item {
+align-items      : center;
+background-color : #EEEEEE;
+display          : flex;
+justify-content  : flex-start;
+}
+
+.file_item2 > label {
+display    : block;
+text-align : center;
+width      : 100px;
+}
+
+.file_item2 > div {
+align-items      : center;
+background-color : #FFFFFF;
+display          : flex;
+flex             : 7;
+padding          : 9px 10px;
+}
+
+.file_item2 {
+/*display: flex;*/
+align-items     : center;
+justify-content : flex-start;
+/*background-color: #eee;*/
+}
+
+.btn-add, .btn-remove {
+cursor       : pointer;
+margin-right : 5px;
+outline      : none;
+padding      : 5px 7px;
+width        : 60px;
+}
+
+.btn-remove {
+background-color : #FFFFFF;
+border           : 1px solid tomato;
+color            : tomato;
+}
+
+.other_file_item {
+border-top : 1px solid #DADADA;
+}
+
+.board_select {
+cursor : pointer;
+width  : 150px;
+}
+
+.board_file {
+cursor : pointer;
+}
+
+.information {
+padding-bottom : 15px;
+}
+
+
+.information_title {
+border-bottom : 1px solid gray;
+border-top    : 2px solid rgb(0, 0, 0);
+display       : flex;
+line-height   : 40px;
+width         : 1000px;
+}
+
+.titleContent {
+align-items      : center;
+background-color : #EFEEEC;
+display          : flex;
+font-size        : 20px;
+line-height      : 1.6;
+max-height       : 10vh;
+min-height       : 6vh;
+padding-left     : 20px;
+width            : 1000px;
+}
+
+.information_write {
+border-bottom : 1px solid gray;
+display       : flex;
+font-size     : 14px;
+padding-left  : 20px;
+width         : 980px;
+}
+
+.information_name,
+.information_date {
+display   : flex;
+font-size : 14px;
+}
+
+.name,
+.date {
+font-size   : 14px;
+height      : 40px;
+line-height : 40px;
+}
+
+.nameContent,
+.dateContent,
+.information_count {
+font-size   : 14px;
+height      : 40px;
+line-height : 40px;
+}
+
+.nameContent {
+width : 100px;
+}
+
+.dateContent {
+width : 200px;
+}
+
+.information_file {
+border-bottom : 1px solid gray;
+display       : flex;
+/*height: 150px;*/
+width         : 1000px;
+}
+
+.file {
+font-size    : 20px;
+line-height  : 50px;
+padding-left : 20px;
+width        : 100px;
+}
+
+.fileContent {
+font-size    : 15px;
+line-height  : 40px;
+margin-top   : 5px;
+/*height: 150px;*/
+padding-left : 5px;
+}
+
+.file1,
+.file2,
+.file3 {
+display     : flex;
+font-size   : 14px;
+line-height : 45px;
+}
+
+.fileName {
+font-size   : 14px;
+height      : 50px;
+line-height : 50px;
+width       : 800px;
+}
+
+.viewFile {
+border        : 1px solid gray;
+border-radius : 5px 5px 5px 5px;
+color         : gray;
+height        : 35px;
+line-height   : 35px;
+margin-top    : 5px;
+padding-left  : 4px;
+width         : 100px;
+}
+
+.fileButton {
+height      : 20px;
+margin-left : 10px;
+width       : 20px;
+}
+
+.letter {
+margin-top : 10px;
+width      : 1000px;
+}
+
+.postContent {
+border-bottom : 1px solid lightgray;
+height        : 200px;
+margin-bottom : 10px;
+width         : 1000px;
+}
+
+.Button {
+display       : flex;
+height        : 50px;
+margin-bottom : 20px;
+margin-top    : 20px;
+padding-left  : 800px;
+width         : 1000px;
+}
+
+.modifyButton,
+.listButton {
+background-color : black;
+border           : 1px solid black;
+border-radius    : 5px 5px 5px 5px;
+color            : white;
+font-size        : 15px;
+height           : 45px;
+line-height      : 200%;
+line-height      : 45px;
+margin-left      : 8px;
+text-align       : center;
+width            : 90px;
+}
+
+.modifyButton b, .listButton b {
+color : white;
+}
+
+.postList {
+background-color : rgb(241, 238, 238);
+/*height: 80px;*/
+width            : 1000px;
+}
+
+.nearPost {
+align-items : center;
+display     : flex;
+height      : auto;
+line-height : 1.7;
+max-height  : 6vh;
+min-height  : 4vh;
+}
+
+.nearPostLetter {
+font-size    : 15px;
+padding-left : 10px;
+width        : 100px;
+}
+
+.nearPostName {
+cursor    : pointer;
+font-size : 15px;
+width     : 800px;
+}
+
+.nearPostDate {
+font-size : 15px;
+width     : 200px;
+}
+
+
+.popup {
+display : table;
+}
+
+.message {
+font-size  : 17px;
+height     : 50px;
+margin-top : 20px;
+text-align : center;
+width      : 280px;
+}
+
+.buttonDiv {
+height     : 30px;
+margin-top : 20px;
+text-align : center;
+width      : 250px;
+}
+
+.button {
+border-radius : 5px;
+/*width: 60px;*/
+color         : white;
+/*background-color: gray;*/
+height        : 25px;
+margin-bottom : 20px;
+}
+
+.search-btn {
+margin-left : 30px;
+}
+
+.disabled {
+background-color : #FFFFFF;
+border-color     : #DEE2E6;
+color            : #6C757D;
+display          : none;
+pointer-events   : none;
+text-decoration  : none;
+}
+
+.tblList {
+border-collapse : collapse;
+border-spacing  : 0;
+}
+
+.tblList thead th {
+background-color : #EFEEEC;
+border-bottom    : 1px solid rgb(0, 0, 0);
+border-top       : 1px solid rgb(0, 0, 0);
+padding-left     : 20px;
+}
+
+.tblList tbody td {
+border-bottom : 2px solid #EFEEEC;
+height        : 50px;
+padding-left  : 20px;
+}
+
+.writeButton {
+float      : right;
+margin-top : 20px;
+}
+
+.write {
+border        : 1px solid black;
+border-radius : 5px 5px 5px 5px;
+color         : black;
+font-size     : 15px;
+height        : 30px;
+line-height   : 200%;
+text-align    : center;
+width         : 100px;
+}
+
+.current-page {
+margin-left  : 5px;
+margin-right : 5px;
+}
+
+.button {
+height         : 25px;
+min-width      : 25px;
+vertical-align : text-top;
+}
+
+.PC {
+height     : 100%;
+margin-top : 80px;
+}
+
+.metop_board_card {
+background    : white;
+border-radius : 2px;
+border-top    : 3px solid rgb(235, 161, 92);
+box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14),
+0 3px 1px -2px rgba(0, 0, 0, .2),
+0 1px 5px 0 rgba(0, 0, 0, .12);
+margin        : 30px 0;
+padding       : 40px 30px 20px 30px;
+position      : relative;
+width         : 100%;
+}
+
+
+div.listButton > a.btn {
+color : white;
+}
+
+div.modifyButton > a.btn {
+color : white;
+}
+
+.board_contents_wrap {
+margin    : auto;
+max-width : 1200px;
+}

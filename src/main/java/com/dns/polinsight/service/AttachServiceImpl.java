@@ -8,9 +8,10 @@ import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.storage.FileSystemStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AttachServiceImpl implements AttachService {
 
   private final AttachRepository repository;
@@ -131,7 +133,7 @@ public class AttachServiceImpl implements AttachService {
         postService.addPost(postDTO);
       }
     } else {
-      System.out.println("파일 리스트가 null임");
+      log.info("File List is null");
     }
   }
 

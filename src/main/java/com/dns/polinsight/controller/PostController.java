@@ -1,10 +1,10 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.config.oauth.LoginUser;
-import com.dns.polinsight.config.oauth.SessionUser;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.AttachNotFoundException;
+import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
@@ -23,12 +23,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,12 +59,13 @@ public class PostController {
   @GetMapping("admin/posts")
   public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
 
-    Page<Post> posts;
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
       if (keyword.equals("")) {
         model.addAttribute("keyword", keyword);
-        posts = postService.searchKeyword(keyword, pageable);
+        posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
 
         long postCount = posts.getTotalElements();
         model.addAttribute("postCount", postCount);
@@ -72,7 +73,7 @@ public class PostController {
         model.addAttribute("posts", posts);
       }
     } else {
-      posts = postService.getPostList(pageable);
+      posts = postService.findPostsByType(PostType.NOTICE, pageable);
       long postCount = posts.getTotalElements();
       model.addAttribute("postCount", postCount);
       session.setAttribute("postCount", postCount);
@@ -85,7 +86,7 @@ public class PostController {
 
 
   @GetMapping("admin/posts/new")
-  public String adminCreateForm(Model model, @LoginUser SessionUser user) throws IOException {
+  public String adminCreateForm(Model model, @AuthenticationPrincipal User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
     //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -99,7 +100,7 @@ public class PostController {
 
 
   @PostMapping("admin/posts/new")
-  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user, MultipartFile[] file) {
     log.info("Result: " + result + ", data: " + postDTO.toString());
 
     postDTO.setFiles(Arrays.asList(file));
@@ -146,7 +147,7 @@ public class PostController {
   }
 
   @GetMapping("posts/new")
-  public String createForm(Model model, @LoginUser SessionUser user) throws IOException {
+  public String createForm(Model model, @AuthenticationPrincipal User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
     //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -160,7 +161,7 @@ public class PostController {
 
 
   @PostMapping("posts/new")
-  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user, MultipartFile[] file) {
     postDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + postDTO.toString());
     if (result.hasErrors()) {
@@ -186,9 +187,10 @@ public class PostController {
   @GetMapping("posts")
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
-    Page<Post> posts = postService.getPostList(pageable);
+    //Page<Post> posts = postService.getPostList(pageable);
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
 
-    posts.get().map(Post::toString);
+    //posts.get().map(Post::toString);
 
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
@@ -204,11 +206,11 @@ public class PostController {
   public String search(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(postSearch.getSearchType() + postSearch.getSearchValue());
-    Page<Post> posts;
+    Page<com.dns.polinsight.mapper.PostMapping> posts;
     if (postSearch.getSearchType() == SearchType.TITLE) {
-      posts = postService.searchTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsByTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     } else {
-      posts = postService.searchContent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsBySearchcontent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     }
     model.addAttribute("posts", posts);
 
@@ -223,7 +225,7 @@ public class PostController {
 
 
   @GetMapping("posts/{postId}")
-  public String content(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user, HttpSession session) {
+  public String content(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
@@ -253,7 +255,7 @@ public class PostController {
     }
     Post findPost = postService.findOne(postId);
 
-    model.addAttribute("post", findPost);
+    model.addAttribute("post", new PostDTO(findPost));
     List<Post> allPosts = postService.findAll();
     for (int i = 0; i < allPosts.size(); i++) {
       if (allPosts.get(i).getId() == postId) {
@@ -271,7 +273,7 @@ public class PostController {
   }
 
   @GetMapping("admin/posts/{postId}")
-  public String adminContent(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user, HttpSession session) {
+  public String adminContent(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
@@ -301,13 +303,12 @@ public class PostController {
     }
 
     Post findPost = postService.findOne(postId);
-    model.addAttribute("post", findPost);
-
+    model.addAttribute("post", new PostDTO(findPost));
     return "admin/admin_post_view";
   }
 
   @GetMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user) {
+  public String updatePost(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user) {
 
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
@@ -334,7 +335,7 @@ public class PostController {
   }
 
   @PostMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @AuthenticationPrincipal User user, MultipartFile[] file) {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
       User admin = userService.findUserByEmail(user.getEmail());
@@ -364,7 +365,8 @@ public class PostController {
   }
 
   @GetMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model, @LoginUser SessionUser user) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model, @AuthenticationPrincipal User user) {
+
     Post post = postService.findOne(postId);
     PostDTO postDTO = new PostDTO();
     postDTO.setId(post.getId());
@@ -382,7 +384,7 @@ public class PostController {
 
 
   @PostMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @LoginUser SessionUser user, MultipartFile[] file) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @AuthenticationPrincipal User user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + postId);
     User admin = userService.findUserByEmail(user.getEmail());
     postDTO.setUser(admin);
@@ -462,7 +464,10 @@ public class PostController {
 
     String keyword = paramMap.get("keyword").toString();
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-    Page<Post> posts = postService.searchKeyword(keyword, pageable);
+
+
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
+
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
     session.setAttribute("postCount", posts.getTotalElements());

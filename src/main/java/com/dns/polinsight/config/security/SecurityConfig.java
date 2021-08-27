@@ -1,6 +1,5 @@
 package com.dns.polinsight.config.security;
 
-import com.dns.polinsight.config.oauth.CustomOAuth2Service;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -31,8 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final UserService userService;
 
   private final LogoutSuccessHandler logoutSuccessHandler;
-
-  private final CustomOAuth2Service customOAuth2Service;
 
   private final AuthenticationFailureHandler failureHandler;
 

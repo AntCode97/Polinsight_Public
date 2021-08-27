@@ -6,10 +6,8 @@
     }
 
     .board_contents_wrap {
-      margin      : 80px auto 0;
-      max-width   : 1200px;
-      min-height  : 100vh;
-      padding-top : 20px;
+      margin    : auto;
+      max-width : 1200px;
     }
 
     .main_item {
@@ -202,110 +200,135 @@
       margin-right  : 15px;
       padding-right : 15px;
     }
-    .metop_board_card {margin-top: 30px;}
+
+    .metop_board_card {
+      margin-top : 30px;
+    }
 
     @media (min-width : 320px) and (max-width : 480px) {
-      .board_contents_wrap {margin: 50px auto 0;}
-      .metop_board_card {margin: 20px 10px 0;}
-      .post-move {margin: 20px 10px 0;}
-      .nearPostDate{display: none!important;}
-      .nearPostLetter{margin-right: 5px; padding-right: 5px;}
-      .board_contents_wrap {min-height: calc(100vh - 260px);}
+      .board_contents_wrap {
+        margin : 50px auto 0;
+      }
+
+      .metop_board_card {
+        margin : 20px 10px 0;
+      }
+
+      .post-move {
+        margin : 20px 10px 0;
+      }
+
+      .nearPostDate {
+        display : none !important;
+      }
+
+      .nearPostLetter {
+        margin-right  : 5px;
+        padding-right : 5px;
+      }
+
+      .board_contents_wrap {
+        min-height : calc(100vh - 260px);
+      }
     }
   </style>
-  <div class="board_contents_wrap">
-    <!-- Header Title -->
-    <div class="main_item"><p style="text-align: center;">공지사항</p></div>
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div class="board_contents_wrap">
+        <!-- Header Title -->
+        <div class="main_item"><p style="text-align: center;">공지사항</p></div>
 
-    <!-- 게시글 내용 -->
-    <section>
-      <div class="metop_board_card" th:object="${post}">
-        <div class="input_wrap title_div">
-          <div class="board_div">
-            <div class="tile_info_wrap">
-              <div>
-                <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
+        <!-- 게시글 내용 -->
+        <section>
+          <div class="metop_board_card" th:object="${post}">
+            <div class="input_wrap title_div">
+              <div class="board_div">
+                <div class="tile_info_wrap">
+                  <div>
+                    <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
+                  </div>
+                </div>
+                <div class="title_text">
+                  <span th:text="*{title}"></span>
+                </div>
               </div>
             </div>
-            <div class="title_text">
-              <span th:text="*{title}"></span>
+
+            <div class="input_wrap">
+              <div class="board_div" id="writer_div">
+                <label>작성자</label>
+                <span th:text="*{user.name}"></span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="input_wrap">
-          <div class="board_div" id="writer_div">
-            <label>작성자</label>
-            <span th:text="*{user.name}"></span>
-          </div>
-        </div>
+            <div class="input_wrap">
+              <div class="board_div">
+                <label>작성일</label>
+                <span class="regdate" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+                <label class="label_padding">조회</label>
+                <span th:text="${post.viewcnt}"></span>
+              </div>
+            </div>
 
-        <div class="input_wrap">
-          <div class="board_div">
-            <label>작성일</label>
-            <span class="regdate" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
-            <label class="label_padding">조회</label>
-            <span th:text="${post.viewcnt}"></span>
-          </div>
-        </div>
+            <div th:each="file : ${post.attaches}" class="input_wrap">
+              <div class="board_div">
+                <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
+                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>
+              </div>
+            </div>
 
-        <div th:each="file : ${post.attaches}" class="input_wrap">
-          <div class="board_div">
-            <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
-            <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>
-          </div>
-        </div>
+            <div class="input_wrap textarea_div">
+              <div class="board_div" th:text="${post.viewcontent}" style="white-space: pre;">
+              </div>
+            </div>
 
-        <div class="input_wrap textarea_div">
-          <div class="board_div" th:text="${post.viewcontent}">
-          </div>
-        </div>
-
-        <!-- 취소 & 등록 버튼 -->
-        <div class="input_wrap last_wrap">
-          <div class="board_div btn_wrap">
-            <div class="btn_wrap1">
+            <!-- 취소 & 등록 버튼 -->
+            <div class="input_wrap last_wrap">
+              <div class="board_div btn_wrap">
+                <div class="btn_wrap1">
               <span>
-                  <a href="/posts" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
+                  <a onclick="goList()" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
               </span>
+                </div>
+                <!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
+                <!--              <span>-->
+                <!--                  <a th:href="@{'/boards/modify/' + ${post.id}}" class="btn btn-support"><i class="fas fa-edit"></i>수정</a>-->
+                <!--              </span>-->
+                <!--              <span>-->
+                <!--                  <a href="#" class="btn btn-warn"><i class="far fa-trash-alt"></i>삭제</a>-->
+                <!--              </span>-->
+                <!--            </div>-->
+              </div>
             </div>
-            <!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
-            <!--              <span>-->
-            <!--                  <a th:href="@{'/boards/modify/' + ${post.id}}" class="btn btn-support"><i class="fas fa-edit"></i>수정</a>-->
-            <!--              </span>-->
-            <!--              <span>-->
-            <!--                  <a href="#" class="btn btn-warn"><i class="far fa-trash-alt"></i>삭제</a>-->
-            <!--              </span>-->
-            <!--            </div>-->
+
+          </div>
+        </section>
+
+        <!--    -->
+        <div class="post-move" th:object="${post}">
+          <div class="postList">
+            <div class="nearPost" th:unless="${nextPost} ==null">
+              <div>
+                <div class="nearPostLetter"><b>다음글</b></div>
+                <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
+              </div>
+              <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd')}">-다음글 날짜</div>
+            </div>
+            <div class="nearPost" th:unless="${prevPost} ==null">
+              <div>
+                <div class="nearPostLetter"><b>이전글</b></div>
+                <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
+              </div>
+              <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd')}">-이전글 날짜</div>
+            </div>
           </div>
         </div>
 
-      </div>
-    </section>
-
-    <!--    -->
-    <div class="post-move" th:object="${post}">
-      <div class="postList">
-        <div class="nearPost" th:unless="${nextPost} ==null">
-          <div>
-            <div class="nearPostLetter"><b>다음글</b></div>
-            <div class="nearPostName" th:text="${nextPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"> -다음글 제목-</div>
-          </div>
-          <div class="nearPostDate" th:text="${#temporals.format(nextPost.registeredAt, 'yyyy-MM-dd')}">-다음글 날짜</div>
-        </div>
-        <div class="nearPost" th:unless="${prevPost} ==null">
-          <div>
-            <div class="nearPostLetter"><b>이전글</b></div>
-            <div class="nearPostName" th:text="${prevPost.title}" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"> -이전글 제목-</div>
-          </div>
-          <div class="nearPostDate" th:text="${#temporals.format(prevPost.registeredAt, 'yyyy-MM-dd')}">-이전글 날짜</div>
-        </div>
       </div>
     </div>
-
+    <th:block th:include="layout/footer" />
   </div>
 
-  <th:block th:include="layout/footer" />
 
   <script type="text/javascript">
     window.onload = function () {
@@ -318,9 +341,7 @@
       }
     }
 
-    /* <![CDATA[ */
     var bno = [[${post.id}]];
-    /* ]]> */
     $(function () {
       $('.nav_action').click(function () {
         var value = $(this).find('.arrow').attr('class');
@@ -376,5 +397,21 @@
         });
       });
     });
+
+
+    const getCookie = function(name) {
+      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return value? value[2] : null;
+    };
+
+    const goList = () => {
+      const listBtnUrl = getCookie("listBtnUrl");
+      if(listBtnUrl != null){
+        location.href= listBtnUrl;
+      } else{
+        location.href = "/posts"
+      }
+    }
+
   </script>
 </th:block>

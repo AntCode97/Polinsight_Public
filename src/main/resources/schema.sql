@@ -134,12 +134,12 @@ CREATE TABLE IF NOT EXISTS participate_survey
   FOREIGN KEY (survey_id) REFERENCES survey (id)
 );
 
-CREATE TABLE IF NOT EXISTS user_participate_survey
-(
-  user_id               BIGINT NOT NULL,
-  participate_survey_id BIGINT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user (id)
-);
+# CREATE TABLE IF NOT EXISTS user_participate_survey
+# (
+#   user_id               BIGINT NOT NULL,
+#   participate_survey_id BIGINT NOT NULL,
+#   FOREIGN KEY (user_id) REFERENCES user (id)
+# );
 
 CREATE TABLE IF NOT EXISTS collector
 (

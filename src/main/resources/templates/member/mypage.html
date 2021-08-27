@@ -152,7 +152,7 @@
     }
 
     .user_img {
-      background-image    : url('cherry.JPG');
+      background-image    : url('/img/icons/kakao-talk.svg');
       background-position : center center;
       background-repeat   : no-repeat;
       background-size     : cover;
@@ -731,15 +731,15 @@
                     </div>
                     <div class="user_info_box user_phone_box">
                       <span class="info_article">전화번호</span>
-                      <input type="tel" class="user_info_input" name="phone" th:value="${user.phone}" />
+                      <input type="tel" maxlength="11" class="user_info_input" name="phone" th:value="${user.phone}" />
                     </div>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-start;">
                     <span class="err_msg">에러 메세지!!</span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-end;">
-                    <button name="user_info_update_btn" type="button" class="mypage_btn update_btn"><i class="fas fa-edit"
-                                                                                                       style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
+                    <button name="user_info_update_btn" type="button" class="mypage_btn update_btn">
+                      <i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
                     </button>
                   </div>
                 </div>
@@ -765,11 +765,11 @@
                               </div>
                               <div class="right_content">
                                 <label>
-                                  <input name="gender" type="radio" value="남성" th:checked="${user.gender == 'MALE'}">
+                                  <input name="gender" type="radio" value="MALE" th:checked="${#strings.equals(user.gender,'MALE')}">
                                   남성
                                 </label>
                                 <label>
-                                  <input name="gender" type="radio" value="여성" th:checked="${user.gender == 'FEMALE'}">
+                                  <input name="gender" type="radio" value="FEMALE" th:checked="${#strings.equals(user.gender,'FEMALE')}">
                                   여성
                                 </label>
                                 <span class="err_msg">성별을 선택해주세요.</span>
@@ -817,10 +817,18 @@
                               </div>
                               <div class="right_content">
                                 <select id="city" name="city">
-                                  <option>시도</option>
+                                  <optgroup label="시도">
+                                    <option value="광주">광주</option>
+                                  </optgroup>
                                 </select>
                                 <select id="gu" name="gu">
-                                  <option>시군구</option>
+                                  <optgroup label="구">
+                                    <option value="북구">북구</option>
+                                    <option value="남구">남구</option>
+                                    <option value="서구">서구</option>
+                                    <option value="동구">동구</option>
+                                    <option value="광산구">광산구</option>
+                                  </optgroup>
                                 </select>
                                 <span class="err_msg"></span>
                                 <span class="info_msg"></span>
@@ -833,10 +841,10 @@
                               <div class="right_content">
                                 <select id="edu" name="edu" required>
                                   <option>선택</option>
-                                  <option th:selected="${user.education == '고졸 이하(재학 포함)'}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
-                                  <option th:selected="${user.education == '대학 재학'}" value="대학 재학">대학 재학</option>
-                                  <option th:selected="${user.education == '대학교 졸업(수료 포함)'}" value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
-                                  <option th:selected="${user.education == '대학원 이상'}" value="대학원 이상">대학원 이상</option>
+                                  <option th:selected="${#strings.equals(user.education,'고졸 이하(재학 포함)')}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
+                                  <option th:selected="${#strings.equals(user.education,'대학 재학')}" value="대학 재학">대학 재학</option>
+                                  <option th:selected="${#strings.equals(user.education,'대학교 졸업(수료 포함)')}" value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
+                                  <option th:selected="${#strings.equals(user.education,'대학원 이상')}" value="대학원 이상">대학원 이상</option>
                                 </select>
                                 <span class="err_msg"></span>
                                 <span class="info_msg"></span>
@@ -848,11 +856,11 @@
                               </div>
                               <div class="right_content">
                                 <label>
-                                  <input name="marry" type="radio" value="false" th:checked="${user.marry}">
+                                  <input name="marry" type="radio" value="false" th:checked="${#strings.equals(user.marry,'미혼')}">
                                   미혼
                                 </label>
                                 <label>
-                                  <input name="marry" type="radio" value="true" th:checked="${user.marry}">
+                                  <input name="marry" type="radio" value="true" th:checked="${#strings.equals(user.marry,'기혼')}">
                                   기혼
                                 </label>
                                 <span class="err_msg"></span>
@@ -866,16 +874,16 @@
                               <div class="right_content">
                                 <select id="job" name="job" required>
                                   <option>선택</option>
-                                  <option th:selected="${user.job == '학생'}" value="학생">학생</option>
-                                  <option th:selected="${user.job == '경영직'}" value="경영직">경영직</option>
-                                  <option th:selected="${user.job == '공무'}" value="공무">공무</option>
-                                  <option th:selected="${user.job == '회사원'}" value="회사원">회사원</option>
-                                  <option th:selected="${user.job == '자영업'}" value="자영업">자영업</option>
-                                  <option th:selected="${user.job == '생산기술직'}" value="생산기술직">생산기술직</option>
-                                  <option th:selected="${user.job == '예술인'}" value="예술인">예술인</option>
-                                  <option th:selected="${user.job == '프리랜서'}" value="프리랜서">프리랜서</option>
-                                  <option th:selected="${user.job == '무직'}" value="무직">무직</option>
-                                  <option th:selected="${user.job == '기타'}" value="기타">기타</option>
+                                  <option th:selected="${#strings.equals(user.job , '학생')}" value="학생">학생</option>
+                                  <option th:selected="${#strings.equals(user.job , '경영직')}" value="경영직">경영직</option>
+                                  <option th:selected="${#strings.equals(user.job , '공무')}" value="공무">공무</option>
+                                  <option th:selected="${#strings.equals(user.job , '회사원')}" value="회사원">회사원</option>
+                                  <option th:selected="${#strings.equals(user.job , '자영업')}" value="자영업">자영업</option>
+                                  <option th:selected="${#strings.equals(user.job , '생산기술직')}" value="생산기술직">생산기술직</option>
+                                  <option th:selected="${#strings.equals(user.job , '예술인')}" value="예술인">예술인</option>
+                                  <option th:selected="${#strings.equals(user.job , '프리랜서')}" value="프리랜서">프리랜서</option>
+                                  <option th:selected="${#strings.equals(user.job , '무직')}" value="무직">무직</option>
+                                  <option th:selected="${#strings.equals(user.job , '기타')}" value="기타">기타</option>
                                 </select>
                                 <span class="err_msg"></span>
                                 <span class="info_msg"></span>
@@ -889,21 +897,21 @@
                               <div class="right_content">
                                 <select id="industry" name="industry">
                                   <option>선택</option>
-                                  <option th:selected="${user.industry == '제조업'}" value="제조업">제조업</option>
-                                  <option th:selected="${user.industry == '건설업(인테리어 포함)'}" value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
-                                  <option th:selected="${user.industry == '부동산업'}" value="부동산업">부동산업</option>
-                                  <option th:selected="${user.industry == '임대•대여업'}" value="임대•대여업">임대•대여업</option>
-                                  <option th:selected="${user.industry == '도매 및 소매업(유통업)'}" value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
-                                  <option th:selected="${user.industry == '음식업•외식업'}" value="음식업•외식업">음식업•외식업</option>
-                                  <option th:selected="${user.industry == '운수•여객•숙박업'}" value="운수•여객•숙박업">운수•여객•숙박업</option>
-                                  <option th:selected="${user.industry == '여가 관련 서비스업'}" value="여가 관련 서비스업">여가 관련 서비스업</option>
-                                  <option th:selected="${user.industry == '방송•언론•출판'}" value="방송•언론•출판">방송•언론•출판</option>
-                                  <option th:selected="${user.industry == '정보통신업'}" value="정보통신업">정보통신업</option>
-                                  <option th:selected="${user.industry == '금융업'}" value="금융업">금융업</option>
-                                  <option th:selected="${user.industry == '교육 서비스업'}" value="교육 서비스업">교육 서비스업</option>
-                                  <option th:selected="${user.industry == '의료•보건•사회복지'}" value="의료•보건•사회복지">의료•보건•사회복지</option>
-                                  <option th:selected="${user.industry == '시장조사•컨설팅•광고대행업'}" value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
-                                  <option th:selected="${user.industry == '기타'}" value="기타">기타</option>
+                                  <option th:selected="${#strings.equals(user.industry , '제조업')}" value="제조업">제조업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '건설업(인테리어 포함)')}" value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
+                                  <option th:selected="${#strings.equals(user.industry , '부동산업')}" value="부동산업">부동산업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '임대•대여업')}" value="임대•대여업">임대•대여업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '도매 및 소매업(유통업)')}" value="도매 및 소매업(유통업)">도매 및 소매업(유통업)</option>
+                                  <option th:selected="${#strings.equals(user.industry , '음식업•외식업')}" value="음식업•외식업">음식업•외식업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '운수•여객•숙박업')}" value="운수•여객•숙박업">운수•여객•숙박업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '여가 관련 서비스업')}" value="여가 관련 서비스업">여가 관련 서비스업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '방송•언론•출판')}" value="방송•언론•출판">방송•언론•출판</option>
+                                  <option th:selected="${#strings.equals(user.industry , '정보통신업')}" value="정보통신업">정보통신업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '금융업')}" value="금융업">금융업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '교육 서비스업')}" value="교육 서비스업">교육 서비스업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '의료•보건•사회복지')}" value="의료•보건•사회복지">의료•보건•사회복지</option>
+                                  <option th:selected="${#strings.equals(user.industry , '시장조사•컨설팅•광고대행업')}" value="시장조사•컨설팅•광고대행업">시장조사•컨설팅•광고대행업</option>
+                                  <option th:selected="${#strings.equals(user.industry , '기타')}" value="기타">기타</option>
                                 </select>
                                 <span class="err_msg"></span>
                                 <span class="info_msg"></span>
@@ -1124,8 +1132,8 @@
                           <span class="err_msg">에러 메세지!!</span>
                         </div>
                         <div class="user_btn_wrap" style="justify-content: flex-end;">
-                          <button type="button" class="mypage_btn update_btn" name="user_info_update_btn"><i class="fas fa-edit"
-                                                                                                             style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
+                          <button type="button" class="mypage_btn update_btn" name="user_info_update_btn">
+                            <i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
                           </button>
                         </div>
                       </div>
@@ -1164,8 +1172,8 @@
                     <span class="err_msg">에러 메세지!!</span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-end;">
-                    <button name="user_info_update_btn" type="button" class="mypage_btn update_btn"><i class="fas fa-edit"
-                                                                                                       style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
+                    <button name="user_info_update_btn" type="button" class="mypage_btn update_btn">
+                      <i class="fas fa-edit" style="padding-right: 5px; font-weight: normal; font-size: 17px;"></i>수정
                     </button>
                   </div>
                 </div>
@@ -1282,14 +1290,23 @@
       }
     });
 
+    // TODO
     const userDelete = e => {
-      http.delete('user').then(res => {
-        if (res.data.success) {
-          // todo : 팝업으로 대체
-          alert('회원 탈퇴 완료')
-          location.replace('/')
-        }
-      }).catch(console.log)
+      if (canDelete) {
+        const tmp = $(`<form method="post" th:action="@{/user/delete}"></form>`)
+        $('body').append(tmp)
+        tmp.submit()
+        // http
+        //     .post(`/user/delete`)
+        //     .then(res => {
+        //       if (res.data.success) {
+        //         alert('회원 탈퇴 완료')
+        //         location.replace('/')
+        //       }
+        //     }).catch(console.log)
+      } else {
+        alert('안내사항에 동의해주세요')
+      }
     }
 
     const makePointRequestList = requests => {
@@ -1343,46 +1360,107 @@
           .catch(err => console.log(err));
     };
 
-    const userInfoUpdate = () => {
-      http
-          .put('/update', {...userInfo})
-          .then(res => {
-            console.log(res);
-            alert('회원 정보가 업데이트 되었습니다.');
-            location.reload();
-          })
-          .catch(err => {
-            console.log(err);
-            alert('업데이트 중 에러가 발생하였습니다.\n관리자에게 문의하세요');
-          });
-    };
+    function userBasicInfoUpdate() {
+      let info = {
+        name: userInfo['name'],
+        phone: userInfo['phone'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
+      }
+      http.put('/user?type=basic', info).then(res => {
+        if (res.data.success) {
+          alert('업데이트 성공')
+        } else {
+          alert('업데이트 실패')
+        }
+      }).catch(console.log)
+          .finally(() => location.replace('/mypage'))
+    }
+
+    function userPasswordUpdate() {
+      if ((userInfo['password'] !== userInfo['password_current']) && userInfo['password'] === userInfo['password_confirm']) {
+        let info = {
+          newPassword: userInfo['password'],
+          password: userInfo['password_current']
+        }
+        http.put('/user?type=password', info).then(res => {
+          if (res.data.success) {
+            alert('업데이트 성공')
+          } else {
+            alert('업데이트 실패')
+          }
+        }).catch(console.log)
+            .finally(() => location.replace('/mypage'))
+      } else {
+        alert('입력한 패스워드를 다시 한번 확인해주세요')
+      }
+    }
+
+    function userPanelInfoUpdate() {
+      let info = {...userInfo}
+      delete info.name
+      delete info.password_confirm
+      delete info.password
+      delete info.password_current
+      delete info.phone
+      delete info.recommend
+
+      http.put('/user?type=panel', info).then(res => {
+        if (res.data.success) {
+          alert('업데이트 성공')
+        } else {
+          alert('업데이트 실패')
+        }
+      }).catch(console.log)
+          .finally(() => location.replace('/mypage'))
+    }
 
 
     const init = () => {
-
       let user_total_point = $('.point_info>span:first-child').text().replaceAll(/[^\d]/g, '') * 1
       let user_point = $('.point_info>span:last-child')
       let prefix = Math.floor(user_total_point / 10000)
       user_point.text(`${(prefix * 10000).toLocaleString()} 포인트 현금전환 가능합니다`)
       $('input[name=point]').val((user_total_point).toLocaleString())
       $('input[name=able_point_info]').val((prefix * 10000).toLocaleString())
-
+      let sbox = $('select[name=reqpoint]')
       for (let i = 1; i <= prefix; i++) {
-        $('select[name=reqpoint]').append(`<option value="${i * 10000}">${i * 10000}</option>`)
+        sbox.append(`<option value="${i * 10000}">${i * 10000}</option>`)
       }
 
+      if (sbox.find('option').length <= 0) {
+        sbox.append(`<option>신청 불가</option>`)
+      }
 
+      userInfo['id'] = `[[${user.id}]]`
+      userInfo['point'] = `[[${user.point}]]`
+      userInfo['email'] = `[[${user.email}]]`
+      userInfo['name'] = `[[${user.name}]]`
+      userInfo['phone'] = `[[${user.phone}]]`
+      userInfo['role'] = `[[${user.role}]]`
+      userInfo['isEmailReceive'] = `[[${user.isEmailReceive}]]`
+      userInfo['isSmsReceive'] = `[[${user.isSmsReceive}]]`
+      userInfo['recommend'] = `[[${user.recommend}]]`
+      userInfo['gender'] = `[[${user.gender}]]`
+      userInfo['education'] = `[[${user.education}]]`
+      userInfo['marry'] = `[[${user.marry}]]`
+      userInfo['birth'] = `[[${user.birth}]]`
+      userInfo['birthType'] = `[[${user.birthType}]]`
+      userInfo['job'] = `[[${user.job}]]`
+      userInfo['industry'] = `[[${user.industry}]]`
+      userInfo['registeredAt'] = `[[${user.registeredAt}]]`
+      userInfo['favorite'] = `[[${user.favorite}]]`
+      userInfo['participate'] = `[[${user.participateSurvey}]]`
+
+      let birth = userInfo['birth'].substring(0, 10).split("-")
+      $('#year').val((birth[0] * 1)).prop('selected', true).on('change', inputChangeHandler)
+      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', inputChangeHandler).trigger('change')
+      $('#day').val((birth[2] * 1)).prop('selected', true).on('change', inputChangeHandler)
     }
 
     const checkRequiredInput = () => {
       const account = $('input[name=account]')
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
-      console.log({
-        'point': reqPoint.val(),
-        'account': account.val(),
-        'bank': bank.val()
-      })
+
       if (!account.val()) {
         account.focus();
         alert('계좌번호를 입력해 주세요');
@@ -1483,17 +1561,8 @@
         parent.append(template)
       }
     }
-
-    const pwdChecker = () => {
-      if (blankOrNullChecker(userInfo['password_current']) && blankOrNullChecker(userInfo['password']) &&
-          blankOrNullChecker(userInfo['password_confirm'])) {
-        if (userInfo['password'] === userInfo['password_confirm']) {
-          userInfoUpdate()
-        }
-      }
-    }
-
     const userInfo = {}
+    let canDelete = false;
 
     $(function () {
       init();
@@ -1504,17 +1573,21 @@
 
       $('button[name=pointrequest_btn]').on('click', checkRequiredInput);
       $('button[name=user_delete]').on('click', userDelete)
-      $('.right_content').find('input').on('keyup', inputChangeHandler).on('change', inputChangeHandler).find('select').on('change', inputChangeHandler)
-      $('button[name=user_info_update_btn]').on('click', userInfoUpdate)
+      $('.right_content').find('input').on('keyup change', inputChangeHandler)
+          .find('select').on('change', inputChangeHandler)
+      // $('button[name=user_info_update_btn]').on('click', pwdChecker)
       $('.input_content').find('input[type=password]').on('keyup blur change', inputChangeHandler)
+      $('.user_info_input').on('keyup blur change', inputChangeHandler)
+      $('#exit_checked').on('change', () => {
+        canDelete = !canDelete;
+      })
+      $('input[name=phone]').on('focus', phoneDelHypen)
+          .on('blur', phoneAddHypen)
+      $('.box01').find('button').on('click', userBasicInfoUpdate)
+      $('.box02').find('button').on('click', userPanelInfoUpdate)
+      $('.box03').find('button').on('click', userPasswordUpdate)
+      // TODO : 엑셀 저장 버튼 만들기
+      $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
     });
-
-    function checkNumber(event) {
-      if (event.key >= 0 && event.key <= 9) {
-        return true;
-      }
-      return false;
-    }
-
   </script>
 </th:block>

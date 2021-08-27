@@ -21,4 +21,6 @@ public interface ParticipateSurveyService {
 
   ParticipateSurvey saveAndUpdate(ParticipateSurvey participateSurvey);
 
+  void updateParticipateSurveyById(long pSurveyId);
+
 }

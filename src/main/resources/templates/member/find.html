@@ -127,7 +127,7 @@
               </div>
               <div class="user_input_box">
                 <span class="info_article">전화번호</span>
-                <input type="number" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
+                <input type="tel" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
               </div>
               <div class="user_btn_wrap" style="justify-content: flex-start;">
                 <span class="err_msg">에러 메세지!!</span>
@@ -245,6 +245,10 @@
       $('input[name=find_tab]').on('click', () => {
         $('.tab_box').find('input').val('')
       })
+
+      $('input[type=tel]')
+          .on('focus', phoneDelHypen)
+          .on('blur', phoneAddHypen)
     })
   </script>
 </th:block>
