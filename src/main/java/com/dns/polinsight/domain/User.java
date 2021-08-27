@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.Email;
@@ -31,6 +32,7 @@ import java.util.List;
     @UniqueConstraint(columnNames = {"email"})
 })
 @ToString
+@EqualsAndHashCode()
 @DynamicUpdate
 public class User implements UserDetails {
 
@@ -94,6 +96,16 @@ public class User implements UserDetails {
 
   @Builder.Default
   private LocalDate registeredAt = LocalDate.now();
+
+  public User(SignupDTO dto) {
+    this.email = Email.of(dto.getEmail());
+    this.password = dto.getPassword();
+    this.name = dto.getName();
+    this.phone = Phone.of(dto.getPhone());
+    this.recommend = dto.getRecommend() != null ? Phone.of(dto.getRecommend()) : null;
+    this.role = UserRoleType.USER;
+    this.point = 0L;
+  }
 
   public User(UserDto dto) {
     this.id = dto.getId();

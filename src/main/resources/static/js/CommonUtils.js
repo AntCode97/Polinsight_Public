@@ -61,19 +61,20 @@ const blankOrNullChecker = val => {
 }
 
 function stringToEmail() {
-  if (arguments.length > 1) {
-    return {account: arguments[0], domain: arguments[1]}
-  } else if (!!arguments[0]) {
-    return {account: arguments[0].split('@')[0], domain: arguments[0].split('@')[1]}
-  }
+  return arguments[0] + '@' + arguments[1]
+  // if (arguments.length > 1) {
+  //   return {account: arguments[0], domain: arguments[1]}
+  // } else if (!!arguments[0]) {
+  //   return {account: arguments[0].split('@')[0], domain: arguments[0].split('@')[1]}
+  // }
 }
 
 function stringToPhone() {
   if (arguments.length > 2) {
-    return {first: arguments[0], second: arguments[1], third: arguments[2]}
+    return `${arguments[0]}-${arguments[1]}-${arguments[2]}`
   } else if (arguments.length === 1 && !!arguments[0]) {
     let phone = String(arguments[0]).replaceAll('-', '')
-    return {first: phone.substring(0, 3), second: phone.substring(3, 7), third: phone.substring(7)}
+    return `${phone.substring(0, 3)}-${phone.substring(3, 7)}-${phone.substring(7)}`
   }
 }
 
@@ -82,7 +83,10 @@ function addressParser() {
 }
 
 function dateParser() {
-  return `${arguments[0]}-${arguments[1]}-${arguments[2]}`
+  let year = arguments[0]
+  let month = String(arguments[1]).length < 2 ? '0' + arguments[1] : arguments[1];
+  let day = String(arguments[2]).length < 2 ? '0' + arguments[2] : arguments[2];
+  return `${year}-${month}-${day}`
 }
 
 function checkNumber(event) {

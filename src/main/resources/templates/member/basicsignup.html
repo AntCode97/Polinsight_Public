@@ -476,9 +476,11 @@
       $("#frmsubmit").on('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        // TODO
+        console.log("user data ")
         console.log(userInfo)
+        userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
         if (checkNotNull()) {
-          userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
           userInfo['phone'] = stringToPhone(userInfo['phone'])
           if (!!userInfo['recommend'])
             userInfo['recommend'] = stringToPhone(userInfo['recommend'])
@@ -534,6 +536,7 @@
           $(this).next('span.err_msg').css('display', 'none')
         }
       })
+
       $('input[name=pwdconfirm]').on('keyup', (e) => {
         if (!passwordInputValidator(e.target.value)) {
           $(this).next('span.err_msg').css('display', 'block')

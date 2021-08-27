@@ -61,12 +61,15 @@
           <div class="success_icon"><i class="fas fa-check-circle" style="color: #4C99CF;"></i></div>
           <div class="success_title"><h1>회원가입 완료!</h1></div>
           <div>환영합니다.</div>
-          <div><span th:text="${session.user.name}"></span>님은 <strong>'일반회원'</strong>이십니다.</div>
+          <div>
+            <span th:text="${name}"></span>님은 <strong>'일반회원'</strong>이십니다.
+          </div>
           <div class="success_item_box">
             <div>일반회원은 조사참여가 제한됩니다.</div>
             <div>패널가입 하시고 온라인조사에 참여해주세요!</div>
           </div>
           <a th:href="@{/basictopanel}" class="btn_move">패널가입 바로가기</a>
+          <a th:href="@{/login}" class="btn_move">로그인하러 가기</a>
           <a th:href="@{/}" class="btn_move">메인화면으로</a>
         </div>
       </div>

@@ -5,24 +5,25 @@ import com.dns.polinsight.domain.dto.ChangePwdDto;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.SignupDTO;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.DataUpdateException;
 import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
+import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.jaas.SecurityContextLoginModule;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -58,27 +59,40 @@ public class UserController {
 
   private final PointRequestService pointRequestService;
 
-  private final HttpSession session;
-
   private final EmailService emailService;
-
-  private final SurveyService surveyService;
 
   private final PasswordEncoder passwordEncoder;
 
   private final ChangePasswordService changePasswordService;
 
+  private final LoginService loginService;
+
+  @Transactional
   @PostMapping("/signup")
-  public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO) throws Exception {
-    log.warn(signupDTO.toString());
+  public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO,
+                                                ModelAndView mv) throws Exception {
     try {
-      User user = userService.saveOrUpdate(signupDTO.toUser(passwordEncoder));
-      log.warn(user.toString());
-      log.info(String.valueOf(signupDTO.isIspanel()));
+      log.warn("Sing up Info - " + signupDTO.toString());
+      signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
+      User user = userService.saveOrUpdate(new User(signupDTO));
+      //      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
+      //      log.warn("Saved Info - " + user);
+      //      loginService.login(userDetails.getUsername(), inputPassword);
+      //      request.login(user.getEmail().toString(), inputPassword);
+      //      log.warn(SecurityContextHolder.getContext().getAuthentication().getName());
+
+      //      if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+      //        log.warn("유저 로그인 성공!!!");
+      //        session.setAttribute("user", new UserDto(user));
+      //      } else {
+      //        log.warn("유저 로그인 실패");
+      //      }
       if (signupDTO.isIspanel()) {
-        session.setAttribute("basic_user", new UserDto(user));
+        mv.setViewName("redirect:/panel");
       } else {
-        session.setAttribute("user", new UserDto(user));
+        mv.addObject("name", user.getName());
+        mv.addObject("email", user.getEmail());
+        mv.setViewName("redirect:/success_basic");
       }
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -87,18 +101,22 @@ public class UserController {
     }
   }
 
-  @PostMapping("/moreinfo")
+  @PostMapping("/panel_signup")
   @Transactional
-  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel panel, HttpSession session) {
-    UserDto userDto = (UserDto) session.getAttribute("basic_user");
-    session.invalidate();
-    User user = userService.findUserByEmail(new User(userDto).getEmail());
-    user.setPanel(panel);
-    userService.saveOrUpdate(user);
-    return success(Boolean.TRUE);
+  public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel panel, @AuthenticationPrincipal User user) throws WrongAccessException, DataUpdateException {
+    if (user.getRole() != UserRoleType.USER) {
+      throw new WrongAccessException("패널 가입은 일반 유저만 사용이 가능합니다.");
+    }
+    try {
+      user.setPanel(panel);
+      userService.saveOrUpdate(user);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new DataUpdateException("패널 정보를 업데이트하지 못하였습니다.");
+    }
   }
 
-  // TODO: 2021-08-27  
   @Transactional
   @PostMapping("/user/delete")
   public void deleteUser(@AuthenticationPrincipal User user,
@@ -168,7 +186,8 @@ public class UserController {
   }
 
   @GetMapping("/mypage")
-  public ModelAndView myPage(@AuthenticationPrincipal User user) throws WrongAccessException, Exception {
+  public ModelAndView myPage(@AuthenticationPrincipal User user, Authentication authentication) throws WrongAccessException, Exception {
+    log.warn("mypage -- " + authentication.getPrincipal().toString());
     if (user == null)
       throw new WrongAccessException("잘못된 접근입니다.");
 
@@ -374,16 +393,6 @@ public class UserController {
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/api/alluser")
-  public ApiUtils.ApiResult<Page<UserDto>> test(@PageableDefault Pageable pageable) {
-    try {
-      return success(userService.testFindAllUser(pageable));
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new InvalidValueException(e.getMessage());
     }
   }
 

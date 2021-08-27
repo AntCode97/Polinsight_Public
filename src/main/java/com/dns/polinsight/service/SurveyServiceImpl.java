@@ -3,11 +3,10 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.SurveyStatus;
-import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
+import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.repository.CollectorRepository;
-import com.dns.polinsight.repository.SurveyJdbcTemplate;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
@@ -32,8 +31,6 @@ import java.util.stream.Collectors;
 public class SurveyServiceImpl implements SurveyService {
 
   private final SurveyRepository surveyRepository;
-
-  private final SurveyJdbcTemplate surveyJdbcTemplate;
 
   private final CollectorRepository collectorRepository;
 
@@ -64,13 +61,13 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Page<SurveyDto> findAll(Pageable pageable) {
-    return surveyJdbcTemplate.findAllSurveys(pageable);
+  public Page<SurveyMapping> findAll(Pageable pageable) {
+    return surveyRepository.findAllSurveys(pageable);
   }
 
   @Override
-  public Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type) {
-    return surveyJdbcTemplate.findAllSurveysByProgressType(type, pageable);
+  public Page<SurveyMapping> findAllByTypes(Pageable pageable, ProgressType type) {
+    return surveyRepository.findAllByTypes(type, pageable);
   }
 
   @Override
@@ -79,12 +76,12 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Page<SurveyDto> findAllAndRegex(Pageable pageable, String regex) {
+  public Page<SurveyMapping> findAllAndRegex(Pageable pageable, String regex) {
     return surveyRepository.findAllByRegex(regex, pageable);
   }
 
   @Override
-  public Page<SurveyDto> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex) {
+  public Page<SurveyMapping> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex) {
     return surveyRepository.findAllByStatusProgressByRegex(type, regex, pageable);
   }
 
