@@ -18,11 +18,6 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
     request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
     response.sendRedirect("/");
-    //    response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseObject.builder()
-    //                                                                                   .statuscode(HttpStatus.OK.value())
-    //                                                                                   .msg("logout success")
-    //                                                                                   .build()));
-
   }
 
 }

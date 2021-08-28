@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -73,11 +74,12 @@ public class UserController {
                                                 ModelAndView mv) throws Exception {
     try {
       log.warn("Sing up Info - " + signupDTO.toString());
+      String inputPassword = signupDTO.getPassword();
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
       User user = userService.saveOrUpdate(new User(signupDTO));
-      //      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
-      //      log.warn("Saved Info - " + user);
-      //      loginService.login(userDetails.getUsername(), inputPassword);
+      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
+      log.warn("Saved Info - " + user);
+      loginService.login(userDetails.getUsername(), inputPassword);
       //      request.login(user.getEmail().toString(), inputPassword);
       //      log.warn(SecurityContextHolder.getContext().getAuthentication().getName());
 
@@ -187,7 +189,9 @@ public class UserController {
 
   @GetMapping("/mypage")
   public ModelAndView myPage(@AuthenticationPrincipal User user, Authentication authentication) throws WrongAccessException, Exception {
+    // TODO: 2021/08/28
     log.warn("mypage -- " + authentication.getPrincipal().toString());
+    log.warn("mypage -- User name: " + (user == null ? "Null" : user.toString()));
     if (user == null)
       throw new WrongAccessException("잘못된 접근입니다.");
 

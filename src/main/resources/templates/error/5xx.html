@@ -4,7 +4,7 @@
     background-color : rgb(24, 40, 56) !important;
   }
 
-  .contents {
+  .content-wrap {
     align-items     : center;
     display         : flex;
     flex-direction  : column;
@@ -16,12 +16,22 @@
 </style>
 <div class="flex-wrapper">
   <div class="flex-content">
-    <div class="contents">
+    <div class="content-wrap">
       <h1>Internal Server Error</h1>
       <div>
         처리 중 문제가 발생하였습니다. 잠시 후 다시 시도해주세요.
+      </div>
+      <div>
+        <button class="btn-primary btn-big">메인화면으로</button>
       </div>
     </div>
   </div>
   <th:block th:include="layout/footer" />
 </div>
+<script>
+  $(function () {
+    $('button').on('click', () => {
+      location.replace('/')
+    })
+  })
+</script>
