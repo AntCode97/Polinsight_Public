@@ -193,7 +193,7 @@
         async function getSurveyData(e) {
             let page = !e ? 0 : !e.data.page ? 0 : e.data.page
             let regex = String($('input[name=admin_find]').val()).trim()
-            const response = await http.get('/api/surveys/notAdmin?type=ALL', {params: {page: page, size: 10, regex: regex}})
+            const response = await http.get('/api/surveys/notAdmin', {params: {page: page, size: 10, regex: regex}})
             if (response.data.success) {
                 const data = response.data.response
                 return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
