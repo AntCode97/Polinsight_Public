@@ -40,8 +40,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User loadUserByUsername(String username) throws UsernameNotFoundException {
-    String[] emails = username.split("@");
-    return repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
+    return repository.findUserByEmail(Email.of(username)).orElseThrow(() -> new UsernameNotFoundException("Could not found user" + username));
   }
 
   @Override

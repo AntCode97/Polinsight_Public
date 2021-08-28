@@ -360,7 +360,8 @@
             <h1>회원 가입</h1>
           </div>
           <div class="register_contents_wrap">
-            <form th:action="@{/signup}" id="signupfrm" method="post">
+            <!--            <form th:action="@{/signup}" id="signupfrm" method="post">-->
+            <form>
               <p>기본정보</p>
               <div class="register_contents">
                 <ul>
@@ -466,7 +467,7 @@
                   </div>
                 </div>
                 <div class="btn_wrap">
-                  <button type="submit" class="btn_submit" id="basic_submit">확인</button>
+                  <button class="btn_submit" id="basic_submit">JOIN US</button>
                 </div>
               </div>
             </form>
@@ -475,7 +476,8 @@
       </div>
       <!--  패널 추가 정보-->
       <div class="register_wrap" id="more_info">
-        <form id="addfrm" th:action="@{/moreinfo}" method="POST">
+        <!--        <form id="addfrm" th:action="@{/moreinfo}" method="POST">-->
+        <form>
           <div class="register_box">
             <div class="register_title">
               <h1>패널 추가 정보</h1>
@@ -857,7 +859,7 @@
                 </ul>
               </div>
               <div class="btn_wrap">
-                <button name="panel_submit" class="btn_submit" type="submit">JOIN US</button>
+                <button id="panel_submit" class="btn_submit">JOIN US</button>
               </div>
             </div>
           </div>
@@ -898,7 +900,7 @@
       console.log(userInfo)
     }
 
-    const signUpDataProcess = () => {
+    const signUpDataProcess = (info) => {
       userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
       userInfo['phone'] = stringToPhone(userInfo['phone'])
       if (!!userInfo['recommend'])
@@ -932,18 +934,19 @@
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
-        delete userInfo.year
-        delete userInfo.month
-        delete userInfo.day
-        delete userInfo.state
-        delete userInfo.city
+        // delete userInfo.year
+        // delete userInfo.month
+        // delete userInfo.day
+        // delete userInfo.state
+        // delete userInfo.city
       }
 
-      delete userInfo.confirm
-      delete userInfo.domain
+      // delete userInfo.confirm
+      // delete userInfo.domain
     }
 
     const checkRequiredData = () => {
+      console.log('check required data')
       let result = true
       $("form").find('input').each(function () {
         let inputElem = $(this)
@@ -957,22 +960,27 @@
           return false;
         }
       })
-
+      console.log('requireddata all write')
       return result;
     }
 
     const signUp = e => {
-      if (!signUpDataProcess() || !checkRequiredData()) {
-        return false;
-      }
-
-      http.post('/signup', userInfo)
+      e.preventDefault();
+      e.returnValue = false;
+      // if (!signUpDataProcess() || !checkRequiredData()) {
+      //   return;
+      // }
+      signUpDataProcess()
+      http
+          .post('/testsignup', userInfo)
           .then(res => {
             if (res.data.success) {
               if (e.data.type === 'panel') {
                 // 패널 회원 가입
+                location.replace("/success_panel")
               } else {
                 // 일반 회원 가입
+                location.replace("/success_basic")
               }
             } else {
               alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
@@ -1016,8 +1024,6 @@
     const expand = () => {
       $('#panel_intend').fadeOut()
       $('#more_info').fadeIn()
-      $('button#basic_submit').off('click')
-      $('button#panel_submit').on('click', {type: 'panel'}, signUp)
       // $('.pannel_select').fadeOut()
       // $('.btn_wrap').fadeOut()
       // 날짜 선택 폼 설정
@@ -1028,8 +1034,6 @@
       openModal()
       $('#more_info').fadeOut()
       $('.popup_overlay').fadeIn(100)
-      $('button#panel_submit').off('click')
-      $('button#basic_submit').on('click', {type: 'basic'}, signUp)
       $('#panel_intend').fadeIn()
       $('input[name=ispanel][value="false"]').prop('checked', true)
       // $('.pannel_select').fadeIn()
@@ -1047,6 +1051,8 @@
     const init = () => {
       $('input').on('keyup change checked', inputHandler)
       $('select').on('keyup change', inputHandler).trigger('change')
+      $('button#panel_submit').on('click', {type: 'panel'}, signUp)
+      $('button#basic_submit').on('click', {type: 'basic'}, signUp)
 
       $('input[type=radio]:checked').each(function () {
         userInfo[$(this).attr('name')] = $(this).val()
@@ -1066,28 +1072,27 @@
       $('input[type=tel]')
           .on('focus', phoneDelHypen)
           .on('blur', phoneAddHypen)
-          .on('keypress', e => {
-            // 숫자키 입력 제한 이벤트
-            checkNumber(e)
-          })
+          .on('keypress', checkNumber)
 
       // 이메일 입력 검증
       $('input[name=email]').on('keyup change', checkEmail)
+      $('select[name=domain]').on('change', checkEmail)
       // 패스워드 입력 검증 및 안내 메시지
-      $('input[type=password]').on('keyup', function (e) {
+      $('input[type=password]').on('keyup change', function () {
         let input = $(this);
         let name = input.attr('name')
         let msg = input.next('.err_msg')
-        let inputValue = inputValue
-        if (!passwordInputValidator(inputValue)) {
-          if (name === 'confirm') {
-            if (inputValue !== $('input[name=password]').val()) {
+        let inputValue = input.val()
+
+        if (!!inputValue) {
+          if (!passwordInputValidator(inputValue)) {
+            msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요.')
+            if (name === 'confirm' && inputValue !== $('input[name=password]').val()) {
               msg.css('display', 'block').text('비밀번호가 일치하지 않습니다.')
             }
-            $(this).next('span.err_msg').css('display', 'block').text('올바른 비밀번호를 입력해주세요.')
+          } else if (!!inputValue || passwordInputValidator(inputValue)) {
+            msg.css('display', 'none').text('')
           }
-        } else if (!!inputValue || passwordInputValidator(inputValue)) {
-          msg.css('display', 'none').text('')
         }
       })
     }

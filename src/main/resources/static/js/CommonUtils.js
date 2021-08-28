@@ -80,7 +80,7 @@ function stringToPhone() {
 }
 
 function addressParser() {
-  return {state: arguments[0], city: arguments[1]}
+  return `${arguments[0]} ${arguments[1]}`
 }
 
 function dateParser() {

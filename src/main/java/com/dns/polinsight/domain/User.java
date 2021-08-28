@@ -105,6 +105,21 @@ public class User implements UserDetails {
     this.recommend = dto.getRecommend() != null ? Phone.of(dto.getRecommend()) : null;
     this.role = UserRoleType.USER;
     this.point = 0L;
+    if (dto.isIspanel()) {
+      this.panel = Panel.builder()
+                        .gender(dto.getGender())
+                        .education(dto.getEducation())
+                        .marry(dto.getMarry())
+                        .birth(LocalDate.parse(dto.getBirth()))
+                        .birthType(dto.getBirthType())
+                        .industry(dto.getIndustry())
+                        .job(dto.getJob())
+                        .address(Address.of(dto.getAddress()))
+                        .favorite(dto.getFavorite())
+                        .build();
+    } else {
+      this.panel = new Panel();
+    }
   }
 
   public User(UserDto dto) {

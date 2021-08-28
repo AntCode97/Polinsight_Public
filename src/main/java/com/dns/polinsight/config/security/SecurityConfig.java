@@ -3,12 +3,9 @@ package com.dns.polinsight.config.security;
 import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsUtils;
 
@@ -40,15 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final PathPermission permission;
 
-
-  @Autowired
-  @Qualifier("customSuccessHandler")
-  private CustomSuccessHandler successHandler;
-
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    //    auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
-  }
+  private final CustomSuccessHandler successHandler;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -62,13 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
         .anyRequest().authenticated().and()
         .formLogin()
-        //        .loginPage("/login")
-        //        .loginProcessingUrl("/dologin")
-        //        .usernameParameter("email")
-        //        .passwordParameter("password")
-        //        .successHandler(successHandler)
-        //        .failureHandler(failureHandler)
-        //        .permitAll()
+        .loginPage("/login")
+        .loginProcessingUrl("/dologin")
+        .usernameParameter("email")
+        .passwordParameter("password")
+        .successHandler(successHandler)
+        .failureHandler(failureHandler)
+        .permitAll()
         .and()
         .exceptionHandling()
         .authenticationEntryPoint(entryPoint)
@@ -82,18 +70,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .clearAuthentication(true)
         .invalidateHttpSession(true)
         .and()
-        .httpBasic().disable()
-        .addFilterBefore(customAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
+        .httpBasic().disable();
+    //        .addFilterBefore(customAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
     http.sessionManagement()
         .sessionAuthenticationErrorUrl("/")
-        .invalidSessionUrl("/")
-        .sessionConcurrency(concurrencyControlConfigurer -> {
-          concurrencyControlConfigurer.expiredUrl("/login");
-          concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
-          concurrencyControlConfigurer.maxSessionsPreventsLogin(false);
-        }).maximumSessions(1)
-        .maxSessionsPreventsLogin(false).expiredUrl("/");
+        .invalidSessionUrl("/login")
+        //        .sessionConcurrency(concurrencyControlConfigurer -> {
+        //          concurrencyControlConfigurer.expiredUrl("/login");
+        //          concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
+        //          concurrencyControlConfigurer.maxSessionsPreventsLogin(false);
+        //        })
+        .maximumSessions(1)
+        .maxSessionsPreventsLogin(false)
+        .expiredUrl("/");
   }
 
   @Bean
@@ -101,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
+  //  @Bean
   public CustomAuthenticationFilter customAuthenticationProcessingFilter() {
     CustomAuthenticationFilter filter = new CustomAuthenticationFilter("/dologin");
     filter.setAuthenticationManager(authenticationManager());
@@ -110,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return filter;
   }
 
-  @Bean
+  //  @Bean
   public AuthenticationManager authenticationManager() {
     return new CustomAuthManager(userService, passwordEncoder());
   }

@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
@@ -143,13 +144,13 @@ public class ApiController {
 
   @GetMapping("/surveys/notAdmin")
   public ApiUtils.ApiResult<Page<SurveyMapping>> getAllSurvey(@PageableDefault Pageable pageable,
-                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                              @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
       if (type == null || type.equals("ALL") || type.equals("INDEX")) {
         if (regex.isBlank()) {
-          return success(surveyService.findAllSurveysByProgressTypeNotLike(pageable,ProgressType.BEFORE));
+          return success(surveyService.findAllSurveysByProgressTypeNotLike(pageable, ProgressType.BEFORE));
         } else {
           return success(surveyService.findAllAndRegex(pageable, regex));
         }
@@ -227,7 +228,7 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception, WrongAccessException {
+  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
       return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
@@ -236,7 +237,7 @@ public class ApiController {
   }
 
   @GetMapping("{userId}/pointrequest")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@AuthenticationPrincipal User user) throws Exception {
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@CurrentUser User user) throws Exception {
     try {
       return success(pointRequestService.getUserPointRequests(user.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
@@ -313,7 +314,7 @@ public class ApiController {
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
-                                                                 @AuthenticationPrincipal User user) throws Exception {
+                                                                 @CurrentUser User user) throws Exception {
     if (user == null)
       throw new UnAuthorizedException("Unauthorized error");
 

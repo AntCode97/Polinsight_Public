@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpSession;
 public class PageController {
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(@AuthenticationPrincipal User user) {
+  public ModelAndView home(@CurrentUser User user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
       mv.addObject("user", new UserDto(user));
@@ -47,7 +48,7 @@ public class PageController {
 
   @GetMapping("/join")
   public ModelAndView signUp() {
-    return new ModelAndView("member/basicsignup");
+    return new ModelAndView("member/total_signup");
   }
 
 
@@ -81,7 +82,7 @@ public class PageController {
   }
 
   @GetMapping("/basictopanel")
-  public ModelAndView changeBasicToPanel(@AuthenticationPrincipal User user, HttpSession session) {
+  public ModelAndView changeBasicToPanel(@CurrentUser User user, HttpSession session) {
     session.setAttribute("basic_user", user);
     return new ModelAndView("redirect:/panel");
   }
@@ -145,7 +146,7 @@ public class PageController {
   @PermitAll
   @GetMapping("/test")
   public ModelAndView testPage() {
-    return new ModelAndView("member/TotalSignup");
+    return new ModelAndView("member/total_signup");
   }
 
 }

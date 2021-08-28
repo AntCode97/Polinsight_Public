@@ -20,7 +20,7 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-    log.warn("커스텀 필터");
+    // TODO: 2021-08-29 세션 검증 로직
     String username = request.getParameter("email");
     String password = request.getParameter("password");
     return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
