@@ -400,4 +400,23 @@ public class UserController {
     }
   }
 
+  @PostMapping("/testsignup")
+  public ModelAndView testSignup(@RequestBody SignupDTO signupDTO) throws Exception {
+    log.warn(signupDTO.toString());
+    ModelAndView mv = new ModelAndView();
+    try {
+
+      if (signupDTO.isIspanel()) {
+        // 패널 가입 완료 페이지로
+        mv.setViewName("");
+      } else {
+        // 일반 회원 가입 완료 페이지로
+        mv.setViewName("");
+      }
+      return mv;
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
 }

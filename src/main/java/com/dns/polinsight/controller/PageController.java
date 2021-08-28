@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpSession;
 
 @Slf4j
@@ -141,6 +142,7 @@ public class PageController {
     return "business/result";
   }
 
+  @PermitAll
   @GetMapping("/test")
   public ModelAndView testPage() {
     return new ModelAndView("member/TotalSignup");
