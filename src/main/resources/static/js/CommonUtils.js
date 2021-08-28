@@ -39,6 +39,7 @@ const phoneInputValidator = phone => {
 const emailInputValidator = email => {
   return !!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i);
 }
+
 const phoneToStringConverter = phone => {
   if (phone.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/)) {
     return phone.replace(/([0-9]{3})-([0-9]{4})-([0-9]{4})/, "$1$2$3")

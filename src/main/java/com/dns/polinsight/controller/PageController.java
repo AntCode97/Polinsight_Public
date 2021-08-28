@@ -141,4 +141,9 @@ public class PageController {
     return "business/result";
   }
 
+  @GetMapping("/test")
+  public ModelAndView testPage() {
+    return new ModelAndView("member/TotalSignup");
+  }
+
 }
