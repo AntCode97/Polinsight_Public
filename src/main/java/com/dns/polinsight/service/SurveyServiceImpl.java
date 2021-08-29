@@ -111,7 +111,8 @@ public class SurveyServiceImpl implements SurveyService {
     try {
       ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
       List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-      List<Survey> surveyList = tmplist.parallelStream().filter(objMap -> !surveySet.contains(objMap.get("id")))
+      List<Survey> surveyList = tmplist.parallelStream()
+                                       .filter(objMap -> !surveySet.contains(objMap.get("id")))
                                        .map(objmap -> Survey.builder()
                                                             .surveyId(Long.valueOf(objmap.get("id")))
                                                             .title(objmap.get("title"))
@@ -124,19 +125,20 @@ public class SurveyServiceImpl implements SurveyService {
                                        .map(survey -> this.getSurveyDetails(survey, httpEntity))
                                        .collect(Collectors.toList());
       log.info("Survey and Detail Info save success");
+
       surveyList = surveyRepository.saveAllAndFlush(surveyList);
       for(Survey survey: surveyList){
         getCollectorBySurveyId(survey);
       }
       //surveyList.parallelStream().map(this::getCollectorBySurveyId);
       return surveyList;
+
     } catch (TooManyRequestException e) {
       e.printStackTrace();
       log.error(e.getMessage());
       throw new TooManyRequestException(e.getMessage());
     }
   }
-
 
   /**
    * CustomVariables, End Date 추가
@@ -161,7 +163,9 @@ public class SurveyServiceImpl implements SurveyService {
                                                                               .survey(survey)
                                                                               .build())
                                         .collect(Collectors.toList());
+
     return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors, survey));
+
   }
 
   private List<Collector> getParticipateUrl(List<Collector> collectorsList, Survey survey) {
@@ -183,10 +187,6 @@ public class SurveyServiceImpl implements SurveyService {
     surveyRepository.deleteById(surveyId);
   }
 
-  @Override
-  public List<Survey> findSurveysByEndDate(LocalDate endDate) {
-    return surveyRepository.findSurveysByEndAtLessThan(endDate);
-  }
 
   @Override
   public List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable) {
@@ -201,14 +201,6 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public Optional<Survey> findSurveyBySurveyId(long surveyId) {
     return surveyRepository.findSurveyBySurveyId(surveyId);
-  }
-
-  @Override
-  public long countAllSurvey(String type) {
-    if (type == null || type.equals("ALL") || type.equals("index"))
-      return surveyRepository.countAllSurveyWithCollector();
-    else
-      return surveyRepository.countAllSurveyWithCollectorWithCondition(type);
   }
 
   @Override
