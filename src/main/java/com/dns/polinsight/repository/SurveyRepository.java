@@ -32,35 +32,31 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   Optional<Survey> findSurveyBySurveyId(long surveyId);
 
   @Query(nativeQuery = true, value = "UPDATE survey SET point = ?2 , created_at = ?3, end_at  = ?4, progress = ?5  WHERE id = ?1")
-  void adminSurveyUpdate(long id, long point, String createdAt, String endAt, String progress);
+  int adminSurveyUpdate(long id, long point, String createdAt, String endAt, String progress);
 
-  @Query(nativeQuery = true, value = "SELECT COUNT(s.title) FROM survey s JOIN collector c ON s.survey_id = c.survey_id")
-  long countAllSurveyWithCollector();
-
-  @Query(nativeQuery = true, value = "SELECT COUNT(s.title) FROM survey s JOIN collector c ON s.survey_id = c.survey_id WHERE s.progress LIKE ?1")
-  long countAllSurveyWithCollectorWithCondition(String condition);
-
-
-  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as survey_id, s.status.progress as progress, s.status.minimumTime as minimum_time, s.createdAt, s.endAt, s.questionCount " +
-      "as question_count, c.participateUrl as participateurl from Survey s left join fetch Collector c on " +
-      "s.surveyId = c.survey.surveyId where s.status.progress = :type")
+  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s.endAt, s.questionCount " +
+      "as questionCount, c.participateUrl as participateUrl from Survey s left join fetch Collector c on " +
+      "s.surveyId = c.survey.surveyId where s.status.progress = :type group by s.title")
   Page<SurveyMapping> findAllByTypes(ProgressType type, Pageable pageable);
 
-  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as survey_id, s.status.progress as progress, s.status.minimumTime as minimum_time, s.createdAt, s.endAt, s.questionCount " +
-      "as question_count, c.participateUrl as participateurl from Survey s left join fetch Collector c on " +
-      "s.surveyId = c.survey.surveyId")
+  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s.endAt, s.questionCount " +
+      "as questionCount, c.participateUrl as participateUrl from Survey s left join fetch Collector c on " +
+      "s.surveyId = c.survey.surveyId group by s.title")
   Page<SurveyMapping> findAllSurveys(Pageable pageable);
 
-  @Query("select s from Survey s where s.status.progress = :progress and (s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex or " +
-      "s.createdAt = :regex or s.endAt = :regex)")
+  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s.endAt, s.questionCount " +
+      "as questionCount, c.participateUrl as participateUrl from Survey s left join fetch Collector c " +
+      "where s.status.progress = :progress and (s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex) group by s.title")
   Page<SurveyMapping> findAllByStatusProgressByRegex(ProgressType progress, String regex, Pageable pageable);
 
-  @Query("select s from Survey s where s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex or " +
-      "s.createdAt = :regex or s.endAt = :regex")
+  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s.endAt, s.questionCount " +
+      "as questionCount, c.participateUrl as participateUrl from Survey s left join fetch Collector c " +
+      "where s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex group by s.title")
   Page<SurveyMapping> findAllByRegex(String regex, Pageable pageable);
 
-  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as survey_id, s.status.progress as progress, s.status.minimumTime as minimum_time, s.createdAt, s.endAt, s.questionCount " +
-          "as question_count, c.participateUrl as participateurl from Survey s left join fetch Collector c on " +
-          "s.surveyId = c.survey.surveyId where s.status.progress <> :type")
+  @Query("select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s.endAt, s.questionCount " +
+      "as questionCount, c.participateUrl as participateUrl from Survey s left join fetch Collector c " +
+      "on s.surveyId = c.survey.surveyId where s.status.progress <> :type group by s.title")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
+
 }
