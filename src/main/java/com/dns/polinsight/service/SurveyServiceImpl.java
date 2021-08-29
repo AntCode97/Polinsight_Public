@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -100,10 +101,11 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.save(survey);
   }
 
+
   @Override
   @Transactional
-  //  @Scheduled(cron = "0 0 0/1 * * *")
-  public void getSurveyListAndSyncPerHour() {
+  @Scheduled(cron = "0 0 0 * * ?")
+  public List<Survey> getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
     Set<Long> surveySet = new HashSet<>(surveyRepository.findAll().stream().parallel().map(Survey::getSurveyId).collect(Collectors.toSet()));
     try {
