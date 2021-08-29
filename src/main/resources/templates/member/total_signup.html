@@ -354,7 +354,7 @@
   <div class="flex-wrapper">
     <div class="flex-content">
 
-      <div class="register_wrap">
+      <div class="register_wrap" id="basic_info">
         <div class="register_box">
           <div class="register_title">
             <h1>회원 가입</h1>
@@ -1022,23 +1022,39 @@
     }
 
     const expand = () => {
-      $('#panel_intend').fadeOut()
-      $('#more_info').fadeIn()
-      // $('.pannel_select').fadeOut()
-      // $('.btn_wrap').fadeOut()
+      $('#more_info').animate({
+        left: 0,
+        'width': '1000px'
+      }).css('display', 'block')
+      $('#basic_info').animate({left: '-100%'}).css({'height': '0', 'width': '0', 'display': 'none'})
       // 날짜 선택 폼 설정
       setDateValue()
       $("#month").on('change', setDay)
     }
     const fold = () => {
       openModal()
-      $('#more_info').fadeOut()
+      $('#more_info').animate({left: '100%'}).css('display', 'none')
       $('.popup_overlay').fadeIn(100)
-      $('#panel_intend').fadeIn()
+      $('#basic_info').animate({left: 0}).css({'height': '100%', 'width': '1000px', 'display': 'block'})
       $('input[name=ispanel][value="false"]').prop('checked', true)
-      // $('.pannel_select').fadeIn()
-      // $('.btn_wrap').fadeIn()
       userInfo['ispanel'] = false;
+    }
+
+    const passwordChecker = e => {
+      let password = $('input[name=password]');
+      let confirm = $('input[name=confirm]');
+      let name = input.attr('name')
+      let msg = input.next('.err_msg')
+
+      if (!!password.val() || !!confirm.val()) {
+        if (passwordInputValidator(password.val()) && passwordInputValidator(confirm.val()))
+          if (password.val() !== confirm.val()) {
+            confirm.next('.err_msg').text('비밀번호가 일치하지 않습니다.')
+          } else {
+            !!password.val() && passwordInputValidator(password.val()) ? password.next('.err_msg').text('올바른 비밀번호를 입력해주세요') : password.next('.err_msg').text('')
+            !!confirm.val() && passwordInputValidator(confirm.val()) ? confirm.next('.err_msg').text('올바른 비밀번호를 입력해주세요') : confirm.next('.err_msg').text('')
+          }
+      }
     }
 
     const closeModal = () => {
@@ -1078,23 +1094,7 @@
       $('input[name=email]').on('keyup change', checkEmail)
       $('select[name=domain]').on('change', checkEmail)
       // 패스워드 입력 검증 및 안내 메시지
-      $('input[type=password]').on('keyup change', function () {
-        let input = $(this);
-        let name = input.attr('name')
-        let msg = input.next('.err_msg')
-        let inputValue = input.val()
-
-        if (!!inputValue) {
-          if (!passwordInputValidator(inputValue)) {
-            msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요.')
-            if (name === 'confirm' && inputValue !== $('input[name=password]').val()) {
-              msg.css('display', 'block').text('비밀번호가 일치하지 않습니다.')
-            }
-          } else if (!!inputValue || passwordInputValidator(inputValue)) {
-            msg.css('display', 'none').text('')
-          }
-        }
-      })
+      $('input[type=password]').on('keyup change', passwordChecker)
     }
 
     $(function () {
