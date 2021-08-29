@@ -8,7 +8,6 @@ import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
 import com.dns.polinsight.mapper.SurveyMapping;
-import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -103,7 +101,7 @@ public class ApiController {
                                                                     @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("status.progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
-      if (type == null || type.equals("ALL")) {
+      if (type.isBlank() || type.equals("ALL")) {
         if (regex.isBlank()) {
           return success(surveyService.findAll(pageable));
         } else {
@@ -112,16 +110,21 @@ public class ApiController {
       } else if (type.equals("INDEX")) {
         // TODO: 2021-08-28 정렬 다시 하기
         Page<SurveyMapping> page = surveyService.findAll(pageable);
+        log.warn(page.getContent().get(0).toString());
         List<SurveyMapping> list = page.getContent().parallelStream().sorted((o1, o2) -> {
           int progressComp = o1.getProgress().compareTo(o2.getProgress());
           if (progressComp < 0)
             return -1;
           else if (progressComp == 0) {
-            int endAtComp = LocalDate.parse(o1.getEndAt()).compareTo(LocalDate.parse(o2.getEndAt()));
-            if (endAtComp > 0)
-              return -1;
-            else if (endAtComp == 0)
+            if (!o1.getEnd().isBlank() && !o2.getEnd().isBlank()) {
+              int endAtComp = LocalDate.parse(o1.getEnd()).compareTo(LocalDate.parse(o2.getEnd()));
+              if (endAtComp > 0)
+                return -1;
+              else if (endAtComp == 0)
+                return o1.getId().compareTo(o2.getId());
+            } else {
               return o1.getId().compareTo(o2.getId());
+            }
           }
           return 1;
         }).collect(Collectors.toList());
@@ -162,15 +165,6 @@ public class ApiController {
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception();
-    }
-  }
-
-  @GetMapping("/survey/total")
-  public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
-    try {
-      return success(surveyService.countAllSurvey(type));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
     }
   }
 
