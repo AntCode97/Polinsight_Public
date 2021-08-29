@@ -114,16 +114,25 @@ public class SurveyServiceImpl implements SurveyService {
                                        .map(objmap -> Survey.builder()
                                                             .surveyId(Long.valueOf(objmap.get("id")))
                                                             .title(objmap.get("title"))
-                                                            .createdAt(LocalDate.parse(objmap.get("date_created")))
-                                                            .href(objmap.get("href"))
-                                                            .status(SurveyStatus.builder().variables(new HashSet<>()).build())
+                                                            .createdAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+                                               .endAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+                                                            .href(objmap.get("href")).point(0L)
+                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
                                                             .build())
+              .filter(survey -> survey.getSurveyId()==308896250)
                                        .map(survey -> this.getSurveyDetails(survey, httpEntity))
                                        .collect(Collectors.toList());
       log.info("Survey and Detail Info save success");
-      surveyRepository.saveAllAndFlush(surveyList);
-      surveyList.parallelStream().map(this::getCollectorBySurveyId);
+
+      surveyList = surveyRepository.saveAllAndFlush(surveyList);
+      for(Survey survey: surveyList){
+        getCollectorBySurveyId(survey);
+      }
+      //surveyList.parallelStream().map(this::getCollectorBySurveyId);
+      return surveyList;
+
     } catch (TooManyRequestException e) {
+      e.printStackTrace();
       log.error(e.getMessage());
       throw new TooManyRequestException(e.getMessage());
     }
@@ -138,7 +147,7 @@ public class SurveyServiceImpl implements SurveyService {
     ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
     Map<String, Object> map = res.getBody();
     survey.getStatus().setVariables(((Map<String, String>) map.get("custom_variables")).keySet());
-    survey.setQuestionCount((Long) map.get("question_count")); //--> 질문 갯수
+    survey.setQuestionCount(Long.valueOf(map.get("question_count")+ "")); //--> 질문 갯수
     return survey;
   }
 
@@ -152,11 +161,12 @@ public class SurveyServiceImpl implements SurveyService {
                                                                               .survey(survey)
                                                                               .build())
                                         .collect(Collectors.toList());
-    System.out.println("askldjalskd");
-    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors));
+
+    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors, survey));
+
   }
 
-  public List<Collector> getParticipateUrl(List<Collector> collectorsList) {
+  private List<Collector> getParticipateUrl(List<Collector> collectorsList, Survey survey) {
     return collectorsList.parallelStream().map(collector -> {
       ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "collectors/" + collector.getCollectorId(), HttpMethod.GET, httpEntity, Map.class);
       Map<String, String> map = res.getBody();
@@ -164,6 +174,8 @@ public class SurveyServiceImpl implements SurveyService {
                       .participateUrl(String.valueOf(map.get("url")))
                       .responseCount(Long.valueOf(String.valueOf(map.get("response_count"))))
                       .status(CollectorStatusType.valueOf(String.valueOf(map.get("status"))))
+              .collectorId(Long.parseLong(map.get("id")))
+              .survey(survey)
                       .build();
     }).collect(Collectors.toList());
   }
