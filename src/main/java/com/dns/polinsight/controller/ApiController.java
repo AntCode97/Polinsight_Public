@@ -55,8 +55,6 @@ public class ApiController {
 
   private final PointHistoryService pointHistoryService;
 
-  private final SurveyRepository surveyRepository;
-
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
     try {
@@ -462,18 +460,6 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
-  }
-
-  @GetMapping("/testtest")
-  public ApiUtils.ApiResult<UserDto> myPage() {
-    //    ModelAndView mv = new ModelAndView();
-    //    mv.setViewName("member/mypage");
-    //    mv.addObject("user", new UserDto(userService.findUserByEmail(Email.of("testpanel@gmail.com"))));
-    User user = userService.findUserByEmail(Email.builder().account("testuser").domain("gmail.com").build());
-    log.warn(user.toString());
-    UserDto dto = new UserDto(user);
-    log.warn(dto.toString());
-    return success(dto);
   }
 
 }
