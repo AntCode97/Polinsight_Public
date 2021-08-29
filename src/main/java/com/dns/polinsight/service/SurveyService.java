@@ -46,7 +46,7 @@ public interface SurveyService {
 
   void deleteSurveyById(long surveyId);
 
-  void adminSurveyUpdate(long id, long point, String create, String end, String progressType);
+  int adminSurveyUpdate(long id, long point, String create, String end, String progressType);
 
 
 }

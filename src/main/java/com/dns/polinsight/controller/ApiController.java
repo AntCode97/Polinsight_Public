@@ -456,10 +456,4 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/test/survey")
-  public  List<Survey> surveytest (){
-
-      return surveyService.getSurveyListAndSyncPerHour();
-    }
-
 }
