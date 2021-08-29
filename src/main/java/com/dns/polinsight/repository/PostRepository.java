@@ -59,10 +59,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 //  )
   Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title,  PostType postType, Pageable pageable);
 
-//  @Query(
-//          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%",
-//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%"
-//  )
+  @Query(
+          value = "SELECT b FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)",
+          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)"
+  )
   Page<PostMapping> findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(String title, String searchcontent, PostType postType, Pageable pageable);
 
 }

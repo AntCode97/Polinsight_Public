@@ -464,10 +464,11 @@ public class PostController {
 
 
     String keyword = paramMap.get("keyword").toString();
+    String type = paramMap.get("type").toString();
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
 
 
-    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.NOTICE, pageable);
+    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.valueOf(type), pageable);
 
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
@@ -479,7 +480,6 @@ public class PostController {
   @PostMapping("/api/admin/posts/search/count")
   public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
-    System.out.println(keyword);
     model.addAttribute("keyword", keyword);
     //    String keyword = paramMap.get("keyword").toString();
     //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
