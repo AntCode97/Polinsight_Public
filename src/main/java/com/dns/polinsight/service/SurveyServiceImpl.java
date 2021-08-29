@@ -105,7 +105,7 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   @Transactional
   @Scheduled(cron = "0 0 0 * * ?")
-  public List<Survey> getSurveyListAndSyncPerHour() {
+  public void getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
     Set<Long> surveySet = new HashSet<>(surveyRepository.findAll().stream().parallel().map(Survey::getSurveyId).collect(Collectors.toSet()));
     try {
@@ -130,9 +130,6 @@ public class SurveyServiceImpl implements SurveyService {
       for (Survey survey : surveyList) {
         getCollectorBySurveyId(survey);
       }
-      //surveyList.parallelStream().map(this::getCollectorBySurveyId);
-      return surveyList;
-
     } catch (TooManyRequestException e) {
       e.printStackTrace();
       log.error(e.getMessage());
