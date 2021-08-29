@@ -116,7 +116,7 @@
       //e.preventDefault();
       const keyword = $('#searchinput').val();
       $.ajax({
-        url: '/api/admin/posts/search?keyword=' + keyword,
+        url: '/api/admin/posts/search?type=NOTICE&keyword=' + keyword,
         type: 'POST',
         data: keyword
       }).done(function (fragment) {
@@ -129,7 +129,7 @@
 
 
         $.ajax({
-          url: '/api/admin/posts/search/count?keyword=' + keyword,
+          url: '/api/admin/posts/search/count?type=NOTICE&keyword=' + keyword,
           type: 'POST',
           data: keyword
         }).done(function (frag) {
