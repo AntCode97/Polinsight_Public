@@ -1,6 +1,6 @@
 const makePagination = (current, totalPage) => {
   let first = $(`<a><i class="fas fa-angle-double-left"></i></a>`).on('click', {page: 0}, init);
-  let prev = $(`<a><i class="fas fa-angle-left"></i></a>`).on('click', {page: current - 1 > 1 ? current - 1 : 1}, init);
+  let prev = $(`<a><i class="fas fa-angle-left"></i></a>`).on('click', {page: current - 1 > 0 ? current - 1 : 0}, init);
   let next = $(`<a><i class="fas fa-angle-right"></i></a>`).on('click', {page: current + 1 < totalPage - 1 ? current + 1 : totalPage - 1}, init);
   let last = $(`<a><i class="fas fa-angle-double-right"></i></a>`).on('click', {page: totalPage - 1}, init);
 
@@ -45,8 +45,20 @@ const makeSurveyTemplate = (survey) => {
   template.append(`<div>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); // 설문 기간
   template.append(`<div>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`)
   template.append(`<div>${survey.progress === 'BEFORE' ? '등록' : survey.progress === 'ONGOING' ? '진행' : '종료'}</div>`);// 진행 상태
-  template.append(`<div>${survey.count}</div>`);// 참여자 수
+  template.append(`<div>${!survey.count ? 0 : survey.count}</div>`);// 참여자 수
   template.append(`<div>${survey.surveyId}</div>`);// 서베이 아이디
   return template
 }
 
+
+const searchMessage = (keyword, total) => {
+  let searchBox = $('.util-search').empty()
+  if (!keyword) {
+    searchBox
+        .append($(`<span><strong id="total_count">${total}</strong>개 검색</span>`))
+  } else {
+    searchBox
+        .append($(`<span id="keyword"><span><strong>${keyword}</strong> 검색 결과 </span></span>`))
+        .append($(`<span><strong id="total_count">${total}</strong>개 검색</span>`))
+  }
+}

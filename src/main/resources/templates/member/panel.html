@@ -592,7 +592,7 @@
 
       for (let idx in arr) {
         let key = arr[idx]
-        if (!info[key] || info[key] === '선택') {
+        if (!info[key] || info[key].includes('선택')) {
           console.log('key: ' + key + ', value: ' + info[key])
           return false;
         }
