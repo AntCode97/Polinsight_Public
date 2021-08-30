@@ -1,10 +1,8 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.domain.dto.PointRequestDto;
-import com.dns.polinsight.repository.ParticipateSurveyRepository;
+import com.dns.polinsight.mapper.PointRequestMapping;
 import com.dns.polinsight.repository.PointRequestRepository;
-import com.dns.polinsight.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,11 +18,6 @@ import java.util.Optional;
 public class PointRequestServiceImpl implements PointRequestService {
 
   private final PointRequestRepository pointRequestRepository;
-
-  private final ParticipateSurveyRepository participateSurveyRepository;
-
-  private final UserRepository userRepository;
-
 
   @Override
   public PointRequest saveOrUpdate(PointRequest pointRequest) {
@@ -46,25 +39,15 @@ public class PointRequestServiceImpl implements PointRequestService {
     return pointRequestRepository.findById(id);
   }
 
-  @Override
-  public long countAllPointRequests() {
-    return pointRequestRepository.count();
-  }
 
   @Override
-  public long countPointRequestsByRegex(String regex) {
-    return pointRequestRepository.countPointRequestsByRegex(regex);
-  }
-
-
-  @Override
-  public Page<PointRequestDto> getAllPointRequests(Pageable pageable) {
+  public Page<PointRequestMapping> findAllPointRequests(Pageable pageable) {
     return pointRequestRepository.findAllPointRequest(pageable);
   }
 
   @Override
-  public Page<PointRequest> getAllPointRequestsByRegex(Pageable pageable, String regex) {
-    return pointRequestRepository.findPointRequestsByRegex(pageable, regex);
+  public Page<PointRequestMapping> findAllPointRequestsByRegex(Pageable pageable, String regex) {
+    return pointRequestRepository.findAllByRegex(pageable, regex);
   }
 
   @Override

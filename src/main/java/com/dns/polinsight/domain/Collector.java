@@ -36,7 +36,7 @@ public class Collector implements Serializable {
 
   @JsonBackReference
   @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
-  @ManyToOne
+  @OneToOne
   private Survey survey;
 
 

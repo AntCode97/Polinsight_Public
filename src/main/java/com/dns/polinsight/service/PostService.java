@@ -39,4 +39,6 @@ public interface PostService {
 
   void upViewCnt(Long postId);
 
+  Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
+
 }

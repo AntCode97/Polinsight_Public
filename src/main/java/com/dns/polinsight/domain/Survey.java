@@ -1,6 +1,5 @@
 package com.dns.polinsight.domain;
 
-import com.dns.polinsight.types.ProgressType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -9,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Builder
@@ -23,6 +21,7 @@ public class Survey implements Serializable {
 
   @Setter
   @Embedded
+  @OrderBy("progress ASC")
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private SurveyStatus status;
 
@@ -49,9 +48,10 @@ public class Survey implements Serializable {
   @Setter
   private Long questionCount;
 
+
   @JsonManagedReference
-  @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private List<Collector> collector;
+  @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Collector collector;
 
   public void setCreatedAt(LocalDate createdAt) {
     this.createdAt = createdAt;

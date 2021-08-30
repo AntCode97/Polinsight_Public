@@ -36,13 +36,15 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress = :type group by s.title")
   Page<SurveyMapping> findAllByTypes(ProgressType type, Pageable pageable);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId group by s.title")
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId")
   Page<SurveyMapping> findAllSurveys(Pageable pageable);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c where s.status.progress = :progress and (s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex) group by s.title")
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress = :progress and (s.title like %:regex% or s.point = :regex or s.status.count = :regex " +
+      "or s.questionCount = :regex) group by s.title")
   Page<SurveyMapping> findAllByStatusProgressByRegex(ProgressType progress, String regex, Pageable pageable);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c where s.title like :regex or s.point = :regex or s.status.count = :regex or s.questionCount = :regex group by s.title")
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.title like %:regex% or s.point = :regex or s.status.count = :regex or s.questionCount" +
+      " = :regex group by s.title")
   Page<SurveyMapping> findAllByRegex(String regex, Pageable pageable);
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type group by s.title")

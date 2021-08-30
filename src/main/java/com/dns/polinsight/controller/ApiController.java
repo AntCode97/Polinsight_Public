@@ -7,6 +7,7 @@ import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
+import com.dns.polinsight.mapper.PointRequestMapping;
 import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
@@ -15,7 +16,10 @@ import com.dns.polinsight.utils.ExcelUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,7 +103,7 @@ public class ApiController {
   public ApiUtils.ApiResult<Page<SurveyMapping>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                                     @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                     @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
-    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("status.progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), ((Sort.by("id").ascending().and(Sort.by("endAt").descending()))));
     try {
       if (type.isBlank() || type.equals("ALL")) {
         if (regex.isBlank()) {
@@ -108,27 +112,8 @@ public class ApiController {
           return success(surveyService.findAllAndRegex(pageable, regex));
         }
       } else if (type.equals("INDEX")) {
-        // TODO: 2021-08-28 정렬 다시 하기
-        Page<SurveyMapping> page = surveyService.findAll(pageable);
-        log.warn(page.getContent().get(0).toString());
-        List<SurveyMapping> list = page.getContent().parallelStream().sorted((o1, o2) -> {
-          int progressComp = o1.getProgress().compareTo(o2.getProgress());
-          if (progressComp < 0)
-            return -1;
-          else if (progressComp == 0) {
-            if (!o1.getEnd().isBlank() && !o2.getEnd().isBlank()) {
-              int endAtComp = LocalDate.parse(o1.getEnd()).compareTo(LocalDate.parse(o2.getEnd()));
-              if (endAtComp > 0)
-                return -1;
-              else if (endAtComp == 0)
-                return o1.getId().compareTo(o2.getId());
-            } else {
-              return o1.getId().compareTo(o2.getId());
-            }
-          }
-          return 1;
-        }).collect(Collectors.toList());
-        return success(new PageImpl<>(list, pageable, page.getTotalElements()));
+        Page<SurveyMapping> page = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
+        return success(page);
       } else {
         type = type.toUpperCase();
         if (regex.isBlank()) {
@@ -287,7 +272,6 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
-   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -363,32 +347,19 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/points/total")
-  public ApiUtils.ApiResult<Long> countPointRequests() throws Exception {
-    try {
-      return success(pointRequestService.countAllPointRequests());
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
   @GetMapping("/points")
-  public ApiUtils.ApiResult<Page<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<PointRequestMapping>> getAllPointRequests(@PageableDefault Pageable pageable,
+                                                                           @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
     try {
-      return success(pointRequestService.getAllPointRequests(pageable));
+      if (regex.isBlank())
+        return success(pointRequestService.findAllPointRequests(pageable));
+      else
+        return success(pointRequestService.findAllPointRequestsByRegex(pageable, regex));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
-  @GetMapping("/points/{regex}/total")
-  public ApiUtils.ApiResult<Long> countPointRequests(@PathVariable("regex") String regex) throws Exception {
-    try {
-      return success(pointRequestService.countPointRequestsByRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
 
   @PutMapping("/points/{id}")
   public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId, @RequestBody PointRequestDto dto) throws Exception {
@@ -447,13 +418,23 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
+                                                                                         @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                                          @PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+      if (regex.isBlank())
+        return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+      else
+        return success(postService.findAllByTypesAndRegex(PostType.valueOf(type.toUpperCase(Locale.ROOT)), regex, pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
+  }
+
+  @GetMapping("/test")
+  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable) {
+    pageable = PageRequest.of(0, 10, Sort.by("progress").descending());
+    return success(surveyService.findAll(pageable));
   }
 
 }

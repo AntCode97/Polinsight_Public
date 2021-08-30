@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
         .antMatchers(permission.getTemplate().toArray(new String[0])).permitAll()
         .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
-        .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())  // Swagger 접근 허가
+        .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())
         .anyRequest().authenticated().and()
         .formLogin()
         .loginPage("/login")
@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     http.sessionManagement()
         .sessionAuthenticationErrorUrl("/")
-        .invalidSessionUrl("/login")
+        .invalidSessionUrl("/")
         //        .sessionConcurrency(concurrencyControlConfigurer -> {
         //          concurrencyControlConfigurer.expiredUrl("/login");
         //          concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
