@@ -452,7 +452,9 @@
     async function getSurveyData(e) {
       let type = $('input[name=sort_group]:checked').val();
       let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      let regex = !e ? '' : String(e.data.regex).trim();
+      let regex = $('input[name=admin_find]').val();
+      //let regex = !e ? '' : String(e.data.regex).trim();
+      //console.log(regex)
       const response = await http.get('/api/surveys?type=' + type, { params: { page: page, size: 10, regex: regex } });
       if (response.data.success) {
         const data = response.data.response;
