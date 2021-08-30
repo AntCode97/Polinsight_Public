@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.Survey;
@@ -117,7 +118,7 @@ public class ParticipateSurveyController {
    * 로그인한 사용자가 서베이 클릭시
    * */
   @GetMapping("/survey")
-  public ApiUtils.ApiResult<String> surveyClickEventHandler(@AuthenticationPrincipal User user,
+  public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
                                                             @RequestParam("participate") String participateUrl,
                                                             @RequestParam("surveyId") long surveyId,
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {

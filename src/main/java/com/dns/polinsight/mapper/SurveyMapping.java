@@ -1,12 +1,8 @@
 package com.dns.polinsight.mapper;
 
-import com.dns.polinsight.domain.Collector;
-import com.dns.polinsight.domain.SurveyStatus;
 import com.dns.polinsight.types.ProgressType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public interface SurveyMapping {
 
@@ -20,31 +16,37 @@ public interface SurveyMapping {
 
   ProgressType getProgress();
 
-  Integer getMinimumtime();
+  Integer getMinimumTime();
 
-  default String getCreatedAt() {
-    return getCreatedat() == null ? LocalDate.now().toString() : getCreatedat().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-  }
-
-  LocalDate getCreatedat();
-
-  LocalDate getEndat();
-
-  default String getEndAt() {
-    return getEndat() == null ? LocalDate.now().toString() : getEndat().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-  }
-
-  default String getParticipateurl() {
-    return getCollector().getParticipateUrl();
-  }
+  String getParticipateUrl();
 
   Long getQuestionCount();
 
-  @JsonIgnore
-  Collector getCollector();
+  LocalDate getCreatedAt();
 
-  @JsonIgnore
-  SurveyStatus getStatus();
+  default String getCreate() {
+    if (getCreatedAt() != null) {
+      return getCreatedAt().toString();
+    } else {
+      return LocalDate.parse("1900-01-01").toString();
+    }
+  }
 
+  LocalDate getEndAt();
+
+  default String getEnd() {
+    if (getEndAt() != null) {
+      return getEndAt().toString();
+    } else {
+      return LocalDate.parse("1900-01-01").toString();
+    }
+  }
+
+
+  //  @JsonIgnore
+  //  Collector getCollector();
+
+  //  @JsonIgnore
+  //  Survey getSurvey();
 
 }

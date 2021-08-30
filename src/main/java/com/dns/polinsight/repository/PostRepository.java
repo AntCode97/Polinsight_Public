@@ -47,22 +47,26 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
   Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
-//  @Query(
-//          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType",
-//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType"
-//  )
+  //  @Query(
+  //          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType",
+  //          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType"
+  //  )
   Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
 
-//  @Query(
-//          value = "SELECT b FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType",
-//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType"
-//  )
-  Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title,  PostType postType, Pageable pageable);
+  //  @Query(
+  //          value = "SELECT b FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType",
+  //          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType"
+  //  )
+  Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title, PostType postType, Pageable pageable);
 
-//  @Query(
-//          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%",
-//          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%"
-//  )
+  @Query(
+      value = "SELECT b FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)",
+      countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)"
+  )
   Page<PostMapping> findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(String title, String searchcontent, PostType postType, Pageable pageable);
+
+
+  @Query("select p from Post p where p.postType = :type and ( p.searchcontent like %:regex% or p.title like %:regex% or p.id = :regex or p.viewcnt = :regex )")
+  Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
 }

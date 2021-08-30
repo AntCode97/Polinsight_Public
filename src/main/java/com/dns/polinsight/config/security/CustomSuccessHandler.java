@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
     UserDto userDto = new UserDto(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get());
     request.getSession().setAttribute("user", userDto);
-    log.warn(userDto.getEmail() + "login success");
+    log.warn(userDto.getEmail() + "-- login success");
     response.sendRedirect("/");
     response.setStatus(HttpStatus.OK.value());
   }

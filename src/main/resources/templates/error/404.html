@@ -3,13 +3,35 @@
   .header_wrap {
     background-color : rgb(24, 40, 56) !important;
   }
+
+  .content-wrap {
+    align-items     : center;
+    display         : flex;
+    flex-direction  : column;
+    gap             : 30px;
+    height          : 100%;
+    justify-content : center;
+    margin          : auto;
+    max-width       : 1200px;
+  }
 </style>
 <div class="flex-wrapper">
   <div class="flex-content">
-    <div>
-      <h1>Page Not Found</h1>
+    <div class="content-wrap">
+      <div>
+        <h1>Page Not Found</h1>
+      </div>
+      <div>
+        <button class="btn-primary btn-big">메인화면으로</button>
+      </div>
     </div>
-
   </div>
   <th:block th:include="layout/footer" />
 </div>
+<script>
+  $(function () {
+    $('button').on('click', () => {
+      location.replace('/')
+    })
+  })
+</script>

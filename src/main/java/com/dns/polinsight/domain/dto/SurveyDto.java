@@ -44,13 +44,13 @@ public class SurveyDto {
     this.id = survey.getId();
     this.point = survey.getPoint();
     this.surveyId = survey.getSurveyId();
-    this.count = survey.getCollector().stream().mapToLong(value -> Math.toIntExact(value.getResponseCount())).sum();
+    this.count = survey.getCollector().getResponseCount();
     this.progress = survey.getStatus().getProgress();
     this.minimumTime = survey.getStatus().getMinimumTime();
     this.createdAt = survey.getCreatedAt();
     this.endAt = survey.getEndAt();
-    this.participateUrl = survey.getCollector().get(0).getParticipateUrl();
-    this.status = survey.getCollector().get(0).getStatus();
+    this.participateUrl = survey.getCollector().getParticipateUrl();
+    this.status = survey.getCollector().getStatus();
     this.title = survey.getTitle();
   }
 

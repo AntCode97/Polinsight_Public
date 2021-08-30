@@ -389,7 +389,7 @@
       const emailValue = String($("input[name=email]").val()).trim();
       const emailDomain = $("#email_domain").val().trim();
       const email = emailValue + '@' + emailDomain;
-      const msg = $("#email_msg")
+      const msg = $("#email_msg").css('display', 'block')
 
       if (!emailValue) {
         msg.text("").removeClass("correct_msg").addClass("err_msg")
@@ -419,6 +419,8 @@
       $(document).on('blur', '.login_input', function () {
         $(this).css('border-bottom', '1.5px solid #dde0ea');
       });
+
+      $('input[name=email]').on('keyup change', emailChecker)
 
       // 유저 전화번호
       $("#phone").on('keypress', (e) => {
@@ -474,9 +476,11 @@
       $("#frmsubmit").on('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        // TODO
+        console.log("user data ")
         console.log(userInfo)
+        userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
         if (checkNotNull()) {
-          userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
           userInfo['phone'] = stringToPhone(userInfo['phone'])
           if (!!userInfo['recommend'])
             userInfo['recommend'] = stringToPhone(userInfo['recommend'])
@@ -503,12 +507,13 @@
           }
           delete userInfo.confirm
           delete userInfo.domain
-
+          console.log(userInfo)
           http
               .post('/signup', userInfo)
               .then(res => {
-                if (res.data.response) {
-                  if (userInfo['ispanel']) {
+                if (res.data.success) {
+                  console.log(res.data, userInfo['ispanel'])
+                  if (String(userInfo['ispanel']).toUpperCase() === 'TRUE') {
                     location.replace('/panel')
                   } else {
                     location.replace('/success_basic')
@@ -531,6 +536,7 @@
           $(this).next('span.err_msg').css('display', 'none')
         }
       })
+
       $('input[name=pwdconfirm]').on('keyup', (e) => {
         if (!passwordInputValidator(e.target.value)) {
           $(this).next('span.err_msg').css('display', 'block')

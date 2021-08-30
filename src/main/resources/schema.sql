@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS user_favorite
 (
   user_id  BIGINT      NOT NULL,
   favorite VARCHAR(50) NULL,
-  FOREIGN KEY (user_id) REFERENCES user (id)
+  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
 
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS post
   view_count     BIGINT        NOT NULL DEFAULT 0,
   user_id        BIGINT        NOT NULL,
   type           VARCHAR(30)   NULL,
-  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
 CREATE TABLE IF NOT EXISTS attach
@@ -130,16 +130,16 @@ CREATE TABLE IF NOT EXISTS participate_survey
   hash            VARCHAR(255) NOT NULL,
   finished        BIT          NOT NULL DEFAULT FALSE,
   UNIQUE (hash),
-  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE,
   FOREIGN KEY (survey_id) REFERENCES survey (id)
 );
 
-# CREATE TABLE IF NOT EXISTS user_participate_survey
-# (
-#   user_id               BIGINT NOT NULL,
-#   participate_survey_id BIGINT NOT NULL,
-#   FOREIGN KEY (user_id) REFERENCES user (id)
-# );
+CREATE TABLE IF NOT EXISTS user_participate_survey
+(
+  user_id               BIGINT NOT NULL,
+  participate_survey_id BIGINT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
 
 CREATE TABLE IF NOT EXISTS collector
 (
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS collector
   survey_id       BIGINT       NOT NULL,
   response_count  BIGINT       NOT NULL DEFAULT 0,
   status          VARCHAR(40)  NOT NULL DEFAULT 'open',
-  FOREIGN KEY (survey_id) REFERENCES survey (survey_id)
+  FOREIGN KEY (survey_id) REFERENCES survey (survey_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS point_history
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS point_history
   total        BIGINT       NOT NULL,
   content      VARCHAR(500) NOT NULL,
   requested_at DATETIME     NOT NULL DEFAULT NOW(),
-  FOREIGN KEY (user_id) REFERENCES user (id)
+  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS point_request
@@ -182,5 +182,5 @@ CREATE TABLE IF NOT EXISTS survey_variables
 (
   survey_id BIGINT       NOT NULL,
   variable  VARCHAR(255) NULL,
-  FOREIGN KEY (survey_id) REFERENCES survey (id)
+  FOREIGN KEY (survey_id) REFERENCES survey (id) ON DELETE CASCADE
 );

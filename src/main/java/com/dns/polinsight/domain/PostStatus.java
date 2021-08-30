@@ -17,10 +17,10 @@ public class PostStatus {
 
 
   //  @JoinColumn(name = "view_user")
-  //  @Builder.Default
+  //  
   //  private List<User> viewer = new ArrayList<>();
 
-  //  @Builder.Default
+  //  
   //  @Temporal(TemporalType.TIMESTAMP)
   //  private List<LocalDateTime> viewDate = new ArrayList<>();
 }

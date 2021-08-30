@@ -1,11 +1,9 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.ParticipateSurvey;
-import com.dns.polinsight.types.Email;
 import lombok.*;
 
 import java.beans.ConstructorProperties;
-import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ParticipateSurveyDto {
 
-  private Email email;
+  private String email;
 
   private String title;
 
@@ -27,7 +25,7 @@ public class ParticipateSurveyDto {
 
   public ParticipateSurveyDto(ParticipateSurvey participateSurvey) {
     this.title = participateSurvey.getSurvey().getTitle();
-    this.email = participateSurvey.getUser().getEmail();
+    this.email = participateSurvey.getUser().getEmail().toString();
     this.point = participateSurvey.getSurveyPoint();
     this.participatedAt = String.valueOf(participateSurvey.getParticipatedAt());
     this.finished = participateSurvey.getFinished();

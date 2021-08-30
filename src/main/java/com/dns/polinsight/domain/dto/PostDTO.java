@@ -44,6 +44,7 @@ public class PostDTO {
 
   private List<MultipartFile> files;
 
+  @Builder.Default
   private Long viewcnt = 0L;
 
   public PostDTO(Post post) {

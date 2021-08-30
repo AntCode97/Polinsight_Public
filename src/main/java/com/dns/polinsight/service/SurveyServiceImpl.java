@@ -3,11 +3,10 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.SurveyStatus;
-import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
+import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.repository.CollectorRepository;
-import com.dns.polinsight.repository.SurveyJdbcTemplate;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 public class SurveyServiceImpl implements SurveyService {
 
   private final SurveyRepository surveyRepository;
-
-  private final SurveyJdbcTemplate surveyJdbcTemplate;
 
   private final CollectorRepository collectorRepository;
 
@@ -64,22 +62,27 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Page<SurveyDto> findAll(Pageable pageable) {
-    return surveyJdbcTemplate.findAllSurveys(pageable);
+  public Page<SurveyMapping> findAll(Pageable pageable) {
+    return surveyRepository.findAllSurveys(pageable);
   }
 
   @Override
-  public Page<SurveyDto> findAllByTypes(Pageable pageable, ProgressType type) {
-    return surveyJdbcTemplate.findAllSurveysByProgressType(type, pageable);
+  public Page<SurveyMapping> findAllByTypes(Pageable pageable, ProgressType type) {
+    return surveyRepository.findAllByTypes(type, pageable);
   }
 
   @Override
-  public Page<SurveyDto> findAllAndRegex(Pageable pageable, String regex) {
+  public Page<SurveyMapping> findAllSurveysByProgressTypeNotLike(Pageable pageable, ProgressType type) {
+    return surveyRepository.findByProgressTypeNotLike(type, pageable);
+  }
+
+  @Override
+  public Page<SurveyMapping> findAllAndRegex(Pageable pageable, String regex) {
     return surveyRepository.findAllByRegex(regex, pageable);
   }
 
   @Override
-  public Page<SurveyDto> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex) {
+  public Page<SurveyMapping> findAllByTypesAndRegex(Pageable pageable, ProgressType type, String regex) {
     return surveyRepository.findAllByStatusProgressByRegex(type, regex, pageable);
   }
 
@@ -98,37 +101,41 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.save(survey);
   }
 
-  // TODO: 2021-08-13 테스트 필요 --> 테스트 시 테스트용 서버 만들어서 사용할 것
-  // TODO: 2021-08-18 : 스케줄 주석 제거
+
   @Override
   @Transactional
-  //  @Scheduled(cron = "0 0 0/1 * * *")
-  public List<Survey> getSurveyListAndSyncPerHour() {
+  @Scheduled(cron = "0 0 0 * * ?")
+  public void getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
     Set<Long> surveySet = new HashSet<>(surveyRepository.findAll().stream().parallel().map(Survey::getSurveyId).collect(Collectors.toSet()));
     try {
       ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
       List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-      List<Survey> surveyList = tmplist.parallelStream().filter(objMap -> !surveySet.contains(objMap.get("id")))
+      List<Survey> surveyList = tmplist.parallelStream()
+                                       .filter(objMap -> !surveySet.contains(objMap.get("id")))
                                        .map(objmap -> Survey.builder()
                                                             .surveyId(Long.valueOf(objmap.get("id")))
                                                             .title(objmap.get("title"))
-                                                            .createdAt(LocalDate.parse(objmap.get("date_created")))
-                                                            .href(objmap.get("href"))
-                                                            .status(SurveyStatus.builder().variables(new HashSet<>()).build())
+                                                            .createdAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+                                                            .endAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+                                                            .href(objmap.get("href")).point(0L)
+                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
                                                             .build())
+                                       .filter(survey -> survey.getSurveyId() == 308896250)
                                        .map(survey -> this.getSurveyDetails(survey, httpEntity))
                                        .collect(Collectors.toList());
       log.info("Survey and Detail Info save success");
-      surveyRepository.saveAllAndFlush(surveyList);
-      surveyList.parallelStream().map(this::getCollectorBySurveyId);
-      return surveyRepository.saveAllAndFlush(surveyList);
+
+      surveyList = surveyRepository.saveAllAndFlush(surveyList);
+      for (Survey survey : surveyList) {
+        getCollectorBySurveyId(survey);
+      }
     } catch (TooManyRequestException e) {
+      e.printStackTrace();
       log.error(e.getMessage());
       throw new TooManyRequestException(e.getMessage());
     }
   }
-
 
   /**
    * CustomVariables, End Date 추가
@@ -139,7 +146,7 @@ public class SurveyServiceImpl implements SurveyService {
     ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
     Map<String, Object> map = res.getBody();
     survey.getStatus().setVariables(((Map<String, String>) map.get("custom_variables")).keySet());
-    survey.setQuestionCount((Long) map.get("question_count")); //--> 질문 갯수
+    survey.setQuestionCount(Long.valueOf(map.get("question_count") + "")); //--> 질문 갯수
     return survey;
   }
 
@@ -153,17 +160,21 @@ public class SurveyServiceImpl implements SurveyService {
                                                                               .survey(survey)
                                                                               .build())
                                         .collect(Collectors.toList());
-    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors));
+
+    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors, survey));
+
   }
 
-  public List<Collector> getParticipateUrl(List<Collector> collectorsList) {
+  private List<Collector> getParticipateUrl(List<Collector> collectorsList, Survey survey) {
     return collectorsList.parallelStream().map(collector -> {
       ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "collectors/" + collector.getCollectorId(), HttpMethod.GET, httpEntity, Map.class);
       Map<String, String> map = res.getBody();
       return Collector.builder()
                       .participateUrl(String.valueOf(map.get("url")))
-                      .responseCount(Long.valueOf(map.get("response_count")))
+                      .responseCount(Long.valueOf(String.valueOf(map.get("response_count"))))
                       .status(CollectorStatusType.valueOf(String.valueOf(map.get("status"))))
+                      .collectorId(Long.parseLong(map.get("id")))
+                      .survey(survey)
                       .build();
     }).collect(Collectors.toList());
   }
@@ -173,10 +184,6 @@ public class SurveyServiceImpl implements SurveyService {
     surveyRepository.deleteById(surveyId);
   }
 
-  @Override
-  public List<Survey> findSurveysByEndDate(LocalDate endDate) {
-    return surveyRepository.findSurveysByEndAtLessThan(endDate);
-  }
 
   @Override
   public List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable) {
@@ -194,16 +201,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public long countAllSurvey(String type) {
-    if (type == null || type.equals("ALL") || type.equals("index"))
-      return surveyRepository.countAllSurveyWithCollector();
-    else
-      return surveyRepository.countAllSurveyWithCollectorWithCondition(type);
-  }
-
-  @Override
-  public void adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
-    surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
+  public int adminSurveyUpdate(long id, long point, String create, String end, String progressType) {
+    return surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
   }
 
   /**

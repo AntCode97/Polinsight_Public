@@ -1,66 +1,66 @@
-<th:block th:include="admin/admin_sidebar" />
+<th:block th:include='admin/admin_sidebar' />
 <th:block>
   <style>
     table {
-      margin : 0;
-      width  : 100%;
+      margin: 0;
+      width: 100%;
     }
 
     .post-row > *:nth-child(1) {
-      width : 70px;
+      width: 70px;
     }
 
     .post-row > *:nth-child(2) {
-      width : 250px;
+      width: 250px;
     }
 
     .post-row > *:nth-child(3) {
-      width : 100px;
+      width: 100px;
     }
 
     .post-row > *:nth-child(4) {
-      width : 95px;
+      width: 95px;
     }
 
     .post-row > *:nth-child(5) {
-      width : 200px;
+      width: 200px;
     }
 
     .post-row > *:nth-child(6) {
-      width : 100px;
+      width: 100px;
     }
 
     .post-row > *:nth-child(7) {
-      width : 150px;
+      width: 150px;
     }
   </style>
-  <div class="admin_main_contents">
-    <div class="admin_main_contents_category">
-      <div class="admin_main_contents_item">
-        <p class="main_item">포인트 정산 요청 목록</p>
+  <div class='admin_main_contents'>
+    <div class='admin_main_contents_category'>
+      <div class='admin_main_contents_item'>
+        <p class='main_item'>포인트 정산 요청 목록</p>
       </div>
     </div>
 
-    <div class="main_contents_wrap">
-      <div class="post-search">
-        <div class="util-search">총 <strong id="total_count"></strong>개의 요청이 있습니다.</div>
+    <div class='main_contents_wrap'>
+      <div class='post-search'>
+        <div class='util-search'>총 <strong id='total_count'></strong>개의 요청이 있습니다.</div>
 
         <!--관리자 페이지 설문 찾기 기능-->
-        <div class="form-search">
-          <div class="tbl-search">
-            <div class="box-search">
-              <input type="text" id="admin_find" />
-              <input type="submit" />
+        <div class='form-search'>
+          <div class='tbl-search'>
+            <div class='box-search'>
+              <input type='text' name='admin_find' />
+              <input type='submit' />
             </div>
           </div>
         </div>
       </div>
-      <div style="float: right">
-        <button class="btn_udel btn-big btn-green" name="save_excel">엑셀로 저장</button>
+      <div style='float: right'>
+        <button class='btn_udel btn-big btn-green' name='save_excel'>엑셀로 저장</button>
       </div>
 
-      <div class="scroll-table">
-        <div class="post-row post-th">
+      <div class='scroll-table'>
+        <div class='post-row post-th'>
           <span>#</span>
           <span>요청 아이디</span>
           <span>요청인</span>
@@ -71,15 +71,15 @@
           <span>관리</span>
         </div>
       </div>
-      <div class="page-button" id="pagination"></div>
+      <div class='page-button' id='pagination'></div>
     </div>
   </div>
-  <script th:src="@{/js/PostUtils.js}"></script>
+  <script th:src='@{/js/PostUtils.js}'></script>
   <script>
 
     const makePointRequestTemplate = req => {
-      console.log(req)
-      let template = $(`<div class="post-row"></div>`);
+      console.log(req);
+      let template = $(`<div class='post-row'></div>`);
       template.append(`<span>${req.id}</span>`);
       template.append(`<span>${req.email}</span>`);
       template.append(`<span>${req.name}</span>`);
@@ -87,70 +87,67 @@
       template.append(`<span>${req.bank}은행</span>`);
       template.append(`<span>${req.account}</span>`);
       template.append(`<span>${req.progress}</span>`);
-      const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
-      const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
+      const modify_btn = $(`<button class='btn_udel btn-support'>상태 변경</button>`).on('click', { id: req.id, progress: req.progress }, progressUpdate);
+      const delete_btn = $(`<button class='btn_udel btn-warn'>삭제</button>`).on('click', { id: req.id }, deleteRequest);
       const tmp_cell = $(`<span></span>`).append(modify_btn).append(`<span>  </span>`).append(delete_btn);
       template.append(tmp_cell);
       return template;
-    }
+    };
 
     const deleteRequest = e => {
       if (confirm('정말로 요청을 삭제하시겠습니까?')) {
         http.delete(`/points/${e.data.id}`)
-            .then(res => {
-              if (res.data.success) {
-                getAllPointRequest();
-                alert('요청 삭제 완료');
-              }
-            });
+          .then(res => {
+            if (res.data.success) {
+              getAllPointRequest();
+              alert('요청 삭제 완료');
+            }
+          });
       }
     };
 
     const progressUpdate = e => {
-      console.log(e.data.id);
-      console.log(typeof e.data.id);
-      http.put(`/api/points/${e.data.id}`, {progress: e.data.progress})
-          .then(res => {
-            if (res.data.success) {
-              getAllPointRequest();
-            }
-          }).catch(console.log);
+      http.put(`/api/points/${e.data.id}`, { progress: e.data.progress })
+        .then(res => {
+          if (res.data.success) {
+            getAllPointRequest();
+          }
+        }).catch(console.log);
     };
 
     async function getPointRequestData(e) {
-      let page = !e ? 0 : e.data.page
-      const response = await http.get('/api/points', {params: {page: page, size: 10}})
-      console.log(response)
+      let page = !e ? 0 : e.data.page;
+      let regex = !e ? '' : String(e.data.regex).trim();
+      const response = await http.get('/api/points', { params: { page: page, size: 10, regex: regex } });
       if (response.data.success) {
-        const data = response.data.response
-        console.log(data.content)
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+        const data = response.data.response;
+        return { content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number };
       } else {
-        alert('data fetch error')
+        console.log('data fetch error');
       }
     }
 
     const init = e => {
       getPointRequestData(e).then(obj => {
-        $('#total_count').text(obj.total)
-        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+        $('#total_count').text(obj.total);
+        $('.scroll-table').children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
-          makePagination(obj.current, obj.totalPage)
+          makePagination(obj.current, obj.totalPage);
           obj.content.forEach(point_request => {
-            $('.scroll-table').append(makePointRequestTemplate(point_request))
-          })
+            $('.scroll-table').append(makePointRequestTemplate(point_request));
+          });
         } else
-          $('.scroll-table').append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
-      })
-    }
+          $('.scroll-table').append(`<div class='post-row'><h1>게시물이 없습니다.</h1></div>`);
+      });
+    };
 
 
-    $(function () {
-      init()
+    $(function() {
+      init();
       /*검색*/
-      // $('input[name=admin_find]').on('keyup', {regex: $('input[name=admin_find]').val()}, getPointRequest)
+      $('input[name=admin_find]').on('keyup', { page: 0, regex: $('input[name=admin_find]').val() }, _throttle(init, 300));
 
-      $('button[name=save_excel]').on('click', {url: '/api/points/excel'}, saveByExcel)
-    })
+      $('button[name=save_excel]').on('click', { url: '/api/points/excel' }, saveByExcel);
+    });
   </script>
 </th:block>

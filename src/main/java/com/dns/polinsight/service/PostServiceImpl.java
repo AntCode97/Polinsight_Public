@@ -68,11 +68,12 @@ public class PostServiceImpl implements PostService {
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
     return repository.findPostMappingBySearchcontentContainingAndPostType(searchcontent, type, pageable);
   }
+
   @Override
-  public Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable){
+  public Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
     pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "id");
-    return repository.findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(keyword,keyword, postType, pageable);
+    return repository.findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(keyword, keyword, postType, pageable);
   }
 
   @Override
@@ -119,6 +120,11 @@ public class PostServiceImpl implements PostService {
     //post.setViewcnt(post.getViewcnt() +1);
     repository.upViewCnt(postId);
     return;
+  }
+
+  @Override
+  public Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable) {
+    return repository.findAllByTypesAndRegex(type, regex, pageable);
   }
 
 }

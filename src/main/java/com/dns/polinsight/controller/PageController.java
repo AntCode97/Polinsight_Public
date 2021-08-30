@@ -1,5 +1,6 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpSession;
 
 @Slf4j
@@ -20,11 +22,12 @@ import javax.servlet.http.HttpSession;
 public class PageController {
 
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
-  public ModelAndView home(@AuthenticationPrincipal User user) {
+  public ModelAndView home(@CurrentUser User user) {
     ModelAndView mv = new ModelAndView();
     if (user != null) {
       mv.addObject("user", new UserDto(user));
-    }
+    } else
+      mv.clear();
     mv.setViewName("index");
     return mv;
   }
@@ -45,12 +48,14 @@ public class PageController {
 
   @GetMapping("/join")
   public ModelAndView signUp() {
-    return new ModelAndView("member/basicsignup");
+    return new ModelAndView("member/total_signup");
   }
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() { return new ModelAndView("member/contract"); }
+  public ModelAndView contract() {
+    return new ModelAndView("member/contract");
+  }
 
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
@@ -77,8 +82,7 @@ public class PageController {
   }
 
   @GetMapping("/basictopanel")
-  public ModelAndView changeBasicToPanel(@AuthenticationPrincipal User user, HttpSession session) {
-    // TODO: 2021-08-25  
+  public ModelAndView changeBasicToPanel(@CurrentUser User user, HttpSession session) {
     session.setAttribute("basic_user", user);
     return new ModelAndView("redirect:/panel");
   }
@@ -138,4 +142,11 @@ public class PageController {
     model.addAttribute("checked", "result");
     return "business/result";
   }
+
+  @PermitAll
+  @GetMapping("/test")
+  public ModelAndView testPage() {
+    return new ModelAndView("member/total_signup");
+  }
+
 }

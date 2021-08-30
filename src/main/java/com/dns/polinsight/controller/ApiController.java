@@ -1,14 +1,14 @@
 package com.dns.polinsight.controller;
 
+import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
+import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
-import com.dns.polinsight.exception.PointCalculateException;
-import com.dns.polinsight.exception.PointHistoryException;
-import com.dns.polinsight.exception.UnAuthorizedException;
-import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.repository.SurveyRepository;
+import com.dns.polinsight.exception.*;
+import com.dns.polinsight.mapper.PointRequestMapping;
+import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -57,8 +56,6 @@ public class ApiController {
   private final PostService postService;
 
   private final PointHistoryService pointHistoryService;
-
-  private final SurveyRepository surveyRepository;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -103,14 +100,43 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+  public ApiUtils.ApiResult<Page<SurveyMapping>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+                                                                    @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                    @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), ((Sort.by("id").ascending().and(Sort.by("endAt").descending()))));
+    try {
+      if (type.isBlank() || type.equals("ALL")) {
+        if (regex.isBlank()) {
+          return success(surveyService.findAll(pageable));
+        } else {
+          return success(surveyService.findAllAndRegex(pageable, regex));
+        }
+      } else if (type.equals("INDEX")) {
+        Page<SurveyMapping> page = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
+        return success(page);
+      } else {
+        type = type.toUpperCase();
+        if (regex.isBlank()) {
+          return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+        } else {
+          return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception();
+    }
+  }
+
+  @GetMapping("/surveys/notAdmin")
+  public ApiUtils.ApiResult<Page<SurveyMapping>> getAllSurvey(@PageableDefault Pageable pageable,
+                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                              @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").and((Sort.by("endAt").ascending().and(Sort.by("id")))));
     try {
       if (type == null || type.equals("ALL") || type.equals("INDEX")) {
         if (regex.isBlank()) {
-          return success(surveyService.findAll(pageable));
+          return success(surveyService.findAllSurveysByProgressTypeNotLike(pageable, ProgressType.BEFORE));
         } else {
           return success(surveyService.findAllAndRegex(pageable, regex));
         }
@@ -124,15 +150,6 @@ public class ApiController {
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception();
-    }
-  }
-
-  @GetMapping("/survey/total")
-  public ApiUtils.ApiResult<Long> adminCountAllSurveys(@RequestParam(value = "type", required = false) String type) throws Exception {
-    try {
-      return success(surveyService.countAllSurvey(type));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
     }
   }
 
@@ -188,17 +205,16 @@ public class ApiController {
    * 사용자가 참여한 서베이 목록 가져옴
    * */
   @GetMapping("participate")
-  public ApiUtils.ApiResult<List<ParticipateSurvey>> getUserParticipateSurvey(@AuthenticationPrincipal User user) throws Exception {
+  public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
-
-      return success(participateSurveyService.findAllByUserId(user.getId()));
+      return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
-      throw new Exception(e.getMessage());
+      throw new WrongAccessException(e.getMessage());
     }
   }
 
   @GetMapping("{userId}/pointrequest")
-  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@AuthenticationPrincipal User user) throws Exception {
+  public ApiUtils.ApiResult<List<PointRequestDto>> getAllRequestOfUser(@CurrentUser User user) throws Exception {
     try {
       return success(pointRequestService.getUserPointRequests(user.getId()).stream().map(PointRequestDto::new).collect(Collectors.toList()));
     } catch (Exception e) {
@@ -256,7 +272,6 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
-   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -275,7 +290,7 @@ public class ApiController {
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
-                                                                 @AuthenticationPrincipal User user) throws Exception {
+                                                                 @CurrentUser User user) throws Exception {
     if (user == null)
       throw new UnAuthorizedException("Unauthorized error");
 
@@ -332,32 +347,19 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/points/total")
-  public ApiUtils.ApiResult<Long> countPointRequests() throws Exception {
-    try {
-      return success(pointRequestService.countAllPointRequests());
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
   @GetMapping("/points")
-  public ApiUtils.ApiResult<Page<PointRequestDto>> getAllPointRequests(@PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<PointRequestMapping>> getAllPointRequests(@PageableDefault Pageable pageable,
+                                                                           @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
     try {
-      return success(pointRequestService.getAllPointRequests(pageable));
+      if (regex.isBlank())
+        return success(pointRequestService.findAllPointRequests(pageable));
+      else
+        return success(pointRequestService.findAllPointRequestsByRegex(pageable, regex));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
-  @GetMapping("/points/{regex}/total")
-  public ApiUtils.ApiResult<Long> countPointRequests(@PathVariable("regex") String regex) throws Exception {
-    try {
-      return success(pointRequestService.countPointRequestsByRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
 
   @PutMapping("/points/{id}")
   public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId, @RequestBody PointRequestDto dto) throws Exception {
@@ -416,14 +418,23 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> fidnPostByTypes(@RequestParam(value = "type") String type,
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
+                                                                                         @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                                          @PageableDefault Pageable pageable) throws Exception {
     try {
-      return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+      if (regex.isBlank())
+        return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+      else
+        return success(postService.findAllByTypesAndRegex(PostType.valueOf(type.toUpperCase(Locale.ROOT)), regex, pageable));
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
+  @GetMapping("/test")
+  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable) {
+    pageable = PageRequest.of(0, 10, Sort.by("progress").descending());
+    return success(surveyService.findAll(pageable));
+  }
 
 }
