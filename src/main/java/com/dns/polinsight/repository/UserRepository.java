@@ -1,18 +1,15 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.util.List;
 import java.util.Optional;
 
 @EnableJpaRepositories

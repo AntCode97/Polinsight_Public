@@ -1,6 +1,5 @@
 package com.dns.polinsight.domain.dto;
 
-import com.dns.polinsight.domain.Panel;
 import com.dns.polinsight.types.GenderType;
 import lombok.*;
 

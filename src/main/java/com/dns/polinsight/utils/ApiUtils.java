@@ -2,7 +2,6 @@ package com.dns.polinsight.utils;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.ResponseEntity;
 
 public class ApiUtils<T> {
 
