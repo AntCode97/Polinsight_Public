@@ -4,7 +4,6 @@ import com.dns.polinsight.types.ProgressType;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;

@@ -4,8 +4,6 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
-import com.dns.polinsight.exception.AttachNotFoundException;
-import com.dns.polinsight.exception.PointCalculateException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
@@ -24,7 +22,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -164,7 +161,7 @@ public class PostController {
   @PostMapping("posts/new")
   public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
     postDTO.setFiles(Arrays.asList(file));
-    log.info("Result: " + result + ", data: " + postDTO.toString());
+    log.info("Result: " + result + ", data: " + postDTO);
     if (result.hasErrors()) {
       return "/posts/createPostForm";
     }

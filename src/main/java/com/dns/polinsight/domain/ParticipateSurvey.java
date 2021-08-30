@@ -1,10 +1,8 @@
 package com.dns.polinsight.domain;
 
-import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

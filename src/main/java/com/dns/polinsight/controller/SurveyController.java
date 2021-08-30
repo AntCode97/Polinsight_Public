@@ -1,24 +1,14 @@
 package com.dns.polinsight.controller;
 
-import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.User;
-import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.utils.ApiUtils;
-import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.dns.polinsight.utils.ApiUtils.success;

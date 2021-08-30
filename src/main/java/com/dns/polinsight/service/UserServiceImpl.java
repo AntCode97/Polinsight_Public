@@ -1,6 +1,5 @@
 package com.dns.polinsight.service;
 
-import com.dns.polinsight.config.security.CustomAuthManager;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.repository.UserJdbcTemplate;
@@ -13,10 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +60,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public User saveOrUpdate(User user) {
     user = repository.saveAndFlush(user);
-    log.warn(this.getClass().getSimpleName() + " ::: " + user.toString());
+    log.warn(this.getClass().getSimpleName() + " ::: " + user);
     return user;
   }
 
