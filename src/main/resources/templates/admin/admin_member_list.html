@@ -929,7 +929,7 @@
       const response = await http.get('/api/users', {params: {size: 10, page: page, regex: regex}})
       if (response.data.success) {
         const data = response.data.response
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
       } else {
         alert('data fetch error')
       }
@@ -938,12 +938,16 @@
     const init = e => {
       getMemberData(e).then(obj => {
         $('#total_count').text(obj.total)
-        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+        let table = $('.scroll-table')
+        table.children('.post-row:not(:first-child)').remove()
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage)
+          searchMessage(obj.keyword, obj.total)
           obj.content.forEach(member => {
-            $('.scroll-table').append(makeAdminMemberRowTemplate(member))
+            table.append(makeAdminMemberRowTemplate(member))
           })
+        } else {
+          table.append(`<div class="post-row"><h1>존재하지 않습니다.</h1></div>`);
         }
       })
     }
@@ -1037,16 +1041,37 @@
       e.returnValue = false;
       e.stopPropagation();
       let user = e.data.member;
-      http.delete(`/api/user/${user.id}`)
-          .then(res => {
-            if (res.data.success) {
-              alert('유저 삭제 성공')
-            } else {
-              alert('유저 삭제 실패\n관리자에게 문의해주세요')
-            }
-          })
-          .catch(console.log)
-          .finally(() => location.replace('/admin/memberlist'))
+      if (prompt('정말 회원 정보를 삭제하시겠습니까?')) {
+        http.delete(`/api/user/${user.id}`)
+            .then(res => {
+              if (res.data.success) {
+                alert('유저 삭제 성공')
+              } else {
+                alert('유저 삭제 실패\n관리자에게 문의해주세요')
+              }
+            })
+            .catch(console.log)
+            .finally(() => location.replace('/admin/memberlist'))
+      }
+    }
+
+    const userInfoUpdateButtonHandler = () => {
+      if (!userNameChecker(updatedUser['name']) || !phoneNumberChecker(updatedUser['phone']) || !panelInfoChecker(updatedUser)) {
+        alert('필수 정보 입력을 확인해주세요')
+        return
+      }
+      if (prompt('정말 회원 정보를 업데이트 하시겠습니까?')) {
+        http
+            .put('/admin/user', updatedUser).then(res => {
+          if (res.data.success) {
+            alert('업데이트 성공')
+            location.reload()
+          } else {
+            alert('업데이트 실패')
+            location.reload()
+          }
+        }).catch(console.log)
+      }
     }
 
     let updatedUser = {}
@@ -1059,18 +1084,7 @@
       /*비동기 회원 찾기 및 화면 업데이트*/
       $('input[name=admin_member_search]').on('keyup', {page: 0}, _.throttle(init, 300))
       $('button[name=admin_member_search_btn]').on('click', {page: 0}, init).css('font-weight', 'bolder')
-      $('button#admin_user_info_update_btn').on('click', () => {
-        http
-            .put('/admin/user', updatedUser).then(res => {
-          if (res.data.success) {
-            alert('업데이트 성공')
-            location.reload()
-          } else {
-            alert('업데이트 실패')
-            location.reload()
-          }
-        }).catch(console.log)
-      })
+      $('button#admin_user_info_update_btn').on('click', userInfoUpdateButtonHandler)
 
       $('input[name=phone]')
           .on('focus', phoneDelHypen)

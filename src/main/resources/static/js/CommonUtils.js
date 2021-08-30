@@ -33,8 +33,8 @@ const setDay = (e) => {
 const passwordInputValidator = pwd => {
   return !!pwd.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,16}$/);
 }
-const phoneInputValidator = phone => {
-  return !!phone.match(/([0-9]{3})-([0-9]{4})-([0-9]{4})/) || phone.match(/[0-9]{3}[0-9]{4}[0-9]{4}/)
+const phoneNumberChecker = phone => {
+  return !!phone.match(/^([0-9]{3})-([0-9]{4})-([0-9]{4})$/) || phone.match(/^[0-9]{3}[0-9]{4}[0-9]{4}$/)
 }
 const emailInputValidator = email => {
   return !!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i);
@@ -57,7 +57,7 @@ const phoneDelHypen = e => {
   e.target.value = e.target.value.replace(/^([0-9]{3})-([0-9]{4})-([0-9]{4})$/, "$1$2$3")
 }
 
-const blankOrNullChecker = val => {
+const isNotBlank = val => {
   return !(String(val).trim())
 }
 
@@ -103,7 +103,27 @@ const saveByExcel = e => {
     return;
   }
   let url = e.data.url
-  const frm = $(`<form action="" method="get"></form>`)
+  const frm = $(`<form action="${url}" method="get"></form>`)
   $('body').append(frm)
   frm.submit()
+}
+
+const checkAccountNumber = account_number => {
+  account_number = String(account_number).trim()
+  return !!account_number.match(/([0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-])/)
+}
+
+const userNameChecker = user_name => {
+  user_name = String(user_name).trim()
+  return !!user_name.match(/^[가-힣]{2,10}$/)
+}
+
+const panelInfoChecker = info => {
+  let arr = ['birth', 'gender', 'birthType', 'education', 'marry', 'job', 'industry', 'address', 'city', 'state', 'isEmailReceive', 'isSmsReceive', 'year', 'month', 'day']
+  for (let idx in arr) {
+    if (!info[key] || info[key].includes('선택')) {
+      return false;
+    }
+  }
+  return true
 }

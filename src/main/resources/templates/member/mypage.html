@@ -1163,10 +1163,12 @@
                     <span class="info_article">새로운 비밀번호</span>
                     <input name="password" type="password" class="user_info_input" required />
                     <span class="info_msg">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
+                    <span class="err_msg"></span>
                   </div>
                   <div class="user_input_box">
                     <span class="info_article">비밀번호 확인</span>
                     <input name="password_confirm" type="password" class="user_info_input" value="" required />
+                    <span class="err_msg"></span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-start;">
                     <span class="err_msg">에러 메세지!!</span>
@@ -1291,9 +1293,10 @@
     });
 
     const userDelete = e => {
-      console.log('user delete process')
       if (canDelete) {
-        http.post('/user/delete')
+        if (prompt('정말 회원 탈퇴 하시겠습니까?')) {
+          http.post('/user/delete')
+        }
       } else {
         alert('안내사항에 동의해주세요')
       }
@@ -1339,18 +1342,28 @@
     };
 
     function userBasicInfoUpdate() {
+      if (userNameChecker(userInfo['name'])) {
+        alert('올바른 이름을 입력해주세요')
+        return
+      }
+      if (phoneNumberChecker(userInfo['phone'])) {
+        alert('올바른 전화번호를 입력해주세요')
+        return
+      }
       let info = {
         name: userInfo['name'],
         phone: userInfo['phone'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
       }
-      http.put('/user?type=basic', info).then(res => {
-        if (res.data.success) {
-          alert('업데이트 성공')
-        } else {
-          alert('업데이트 실패')
-        }
-      }).catch(console.log)
-          .finally(() => location.replace('/mypage'))
+      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+        http.put('/user?type=basic', info).then(res => {
+          if (res.data.success) {
+            alert('업데이트 성공')
+          } else {
+            alert('업데이트 실패')
+          }
+        }).catch(console.log)
+            .finally(() => location.replace('/mypage'))
+      }
     }
 
     function userPasswordUpdate() {
@@ -1359,14 +1372,16 @@
           newPassword: userInfo['password'],
           password: userInfo['password_current']
         }
-        http.put('/user?type=password', info).then(res => {
-          if (res.data.success) {
-            alert('업데이트 성공')
-          } else {
-            alert('업데이트 실패')
-          }
-        }).catch(console.log)
-            .finally(() => location.replace('/mypage'))
+        if (prompt('비밀번호를 변경하시겠습니까?')) {
+          http.put('/user?type=password', info).then(res => {
+            if (res.data.success) {
+              alert('업데이트 성공')
+            } else {
+              alert('업데이트 실패')
+            }
+          }).catch(console.log)
+              .finally(() => location.replace('/mypage'))
+        }
       } else {
         alert('입력한 패스워드를 다시 한번 확인해주세요')
       }
@@ -1381,14 +1396,21 @@
       delete info.phone
       delete info.recommend
 
-      http.put('/user?type=panel', info).then(res => {
-        if (res.data.success) {
-          alert('업데이트 성공')
-        } else {
-          alert('업데이트 실패')
-        }
-      }).catch(console.log)
-          .finally(() => location.replace('/mypage'))
+      if (!panelInfoChecker(info)) {
+        alert('필수 값들이 입력되었는지 확인해주세요')
+        return
+      }
+
+      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+        http.put('/user?type=panel', info).then(res => {
+          if (res.data.success) {
+            alert('업데이트 성공')
+          } else {
+            alert('업데이트 실패')
+          }
+        }).catch(console.log)
+            .finally(() => location.replace('/mypage'))
+      }
     }
 
 
@@ -1441,6 +1463,9 @@
       if (!account.val()) {
         account.focus();
         alert('계좌번호를 입력해 주세요');
+      } else if (!checkAccountNumber(account)) {
+        account.focus().val('')
+        alert('올바른 계좌번호를 입력해주세요')
       } else if (!bank.val()) {
         bank.focus()
       } else {
@@ -1557,18 +1582,29 @@
       $('.right_content').find('input').on('keyup change', inputChangeHandler)
           .find('select').on('change', inputChangeHandler)
       // $('button[name=user_info_update_btn]').on('click', pwdChecker)
-      $('.input_content').find('input[type=password]').on('keyup blur change', inputChangeHandler)
+      $('.input_content').find('input[type=password]')
+          .on('keyup blur change', inputChangeHandler)
+          .on('keyup blur change', function (e) {
+            let input = $(this)
+            let msg = input.next('.err_msg')
+            if (!passwordInputValidator(input.val())) {
+              msg.css('diplay', 'block').text('입력한 비밀번호를 확인해주세요')
+            }
+          })
       $('.user_info_input').on('keyup blur change', inputChangeHandler)
       $('#exit_checked').on('change', () => {
         canDelete = !canDelete;
       })
-      $('input[name=phone]').on('focus', phoneDelHypen)
+      $('input[type=tel]')
+          .on('focus', phoneDelHypen)
           .on('blur', phoneAddHypen)
       $('.box01').find('button').on('click', userBasicInfoUpdate)
       $('.box02').find('button').on('click', userPanelInfoUpdate)
       $('.box03').find('button').on('click', userPasswordUpdate)
       // TODO : 엑셀 저장 버튼 만들기
       $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
+
+      $('input[name=account]').on('keyup change')
     });
   </script>
 </th:block>

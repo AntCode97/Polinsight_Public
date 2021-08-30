@@ -1,46 +1,50 @@
-<th:block th:include='admin/admin_sidebar' />
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
   <style>
     .header_wrap {
-      background-color: rgb(24, 40, 56) !important;
+      background-color : rgb(24, 40, 56) !important;
     }
   </style>
-  <div class='admin_main_contents'>
-    <div class='board_contents_wrap'>
-      <div class='main_item'>
+  <div class="admin_main_contents">
+    <div class="board_contents_wrap">
+      <div class="main_item">
         <p>FAQ</p>
       </div>
-      <div class='main_contents_wrap'>
-        <div class='post-search'>
-          <div class='util-search'>총 <strong id='total_count'></strong>개의 게시물이 있습니다.</div>
+      <div class="main_contents_wrap">
+        <div class="post-search">
+          <div class="util-search">총 <strong id="total_count"></strong>개의 게시물이 있습니다.</div>
         </div>
-        <div class='scroll-table'>
-          <div class='post-row post-th'>
+        <div class="scroll-table">
+          <div class="post-row post-th">
             <span>번호</span>
-            <a href='#'>제목</a>
+            <a href="#">제목</a>
             <span>작성자</span>
             <span>작성일</span>
             <span>조회수</span>
             <span>첨부파일</span>
           </div>
         </div>
-        <div class='page-button' id='pagination'></div>
+        <div class="page-button" id="pagination"></div>
       </div>
     </div>
-    <div id='loading'>
-      <div class='spinner'></div>
+    <div id="loading">
+      <div class="spinner"></div>
     </div>
   </div>
-  <script th:src='@{/js/PostUtils.js}'></script>
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     async function getPostData(e) {
       let page = !e ? 0 : e.data.page;
-      let regex = !e ? '' : String(e.data.regex).trim();
+      let regex = !e ? '' : String($('input[name=admin_find'
+    ]).
+      val()
+    ).
+      trim();
       const responseData = await http.get('/api/posts?type=FAQ', {
-        params: { page: page, size: 10, regex: regex }
+        params: {page: page, size: 10, regex: regex}
       });
       const data = responseData.data.response;
-      return { content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number };
+      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number};
     }
 
     const init = e => {
@@ -60,9 +64,9 @@
       spinner.hide();
     };
 
-    $(function() {
+    $(function () {
       init();
-      $('input[name=admin_find]').on('keyup', { page: 0, regex: $('input[name=admin_find]').val() }, _throttle(init, 300));
+      $('input[name=admin_find]').on('keyup', {page: 0, regex: $('input[name=admin_find]').val()}, _throttle(init, 300));
     });
   </script>
 </th:block>
