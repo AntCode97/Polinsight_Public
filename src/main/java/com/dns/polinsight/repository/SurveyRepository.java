@@ -39,13 +39,13 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId")
   Page<SurveyMapping> findAllSurveys(Pageable pageable);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress = :progress and (s.title like %:regex% or s.point = :regex or s.status.count = :regex " +
-      "or s.questionCount = :regex) ")
-  Page<SurveyMapping> findAllByStatusProgressByRegex(ProgressType progress, String regex, Pageable pageable);
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress = :progress and (s.title like %:regex% or s.point = :regexL or s.status.count = :regexL " +
+      "or s.questionCount = :regexL) ")
+  Page<SurveyMapping> findAllByStatusProgressByRegex(ProgressType progress, String regex, Long regexL, Pageable pageable);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.title like %:regex% or s.point = :regex or s.status.count = :regex or s.questionCount" +
-      " = :regex ")
-  Page<SurveyMapping> findAllByRegex(String regex, Pageable pageable);
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.point = :regexL or s.status.count = :regexL or s.questionCount" +
+      " = :regexL or s.title like %:regex% ")
+  Page<SurveyMapping> findAllByRegex(String regex, Long regexL, Pageable pageable);
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type ")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
