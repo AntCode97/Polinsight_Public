@@ -32,6 +32,7 @@
     }
   </style>
   <div>
+
     <div class='admin_main_contents'>
       <div class='admin_main_contents_category'>
         <div class='admin_main_contents_item'>
@@ -46,5 +47,52 @@
   <div th:replace='fragments/post_delete_popup'>
   </div>
   <script>
+    // $(function () {
+    //   // 팝업 관련 설정
+    //   let postId;
+    //   let deleteBtn;
+    //   $(".delete_btn").on('click', (e) => {
+    //     deleteBtn = e.currentTarget;
+    //     postId = $(deleteBtn).attr('value');
+    //     $(".popup_overlay").fadeIn(100)
+    //   })
+    //
+    //   $("#popup_close_btn>i").on('click', (e) => {
+    //     // $(".popup_overlay").css('display', 'none')
+    //     $('.popup_overlay').fadeOut(100)
+    //   })
+    //   $(".popup_delete_btn").on('click', (e) => {
+    //     //console.log(postId);
+    //     const parentDiv = deleteBtn.parentNode.parentNode.parentNode;
+    //     //console.log(parentDiv)
+    //     $.ajax({
+    //       url: '/admin/posts/' + postId + '/delete',
+    //       type: 'GET'
+    //     }).done(
+    //             // setTimeout("location.reload()", 1000)
+    //             function () {
+    //               location.replace('/admin/posts')
+    //
+    //               // parentDiv.innerHTML =    '<span class="delete_post">삭제된 게시글</span>'
+    //               // console.log(parentDiv)
+    //               //  $('#boardTable').replaceWith(fragment);
+    //             }
+    //     )
+    //
+    //     $(".popup_overlay").fadeOut(100)
+    //   })
+    //
+    //   $(".popup_btn").on('click', (e) => {
+    //     $(".popup_overlay").fadeOut(100)
+    //   })
+    //
+    //   $('.popup_overlay').on('click', function () {
+    //     $(this).css('display', 'none')
+    //     // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
+    //   })
+    // })
+
+
+
   </script>
 </th:block>

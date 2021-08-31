@@ -273,8 +273,8 @@
                 <div class="last_wrap">
                   <div class="board_div2 btn_wrap">
                     <div class="btn_wrap1">
-                      <span th:onclick="|history.back()|">
-                        <a href="#" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
+                      <span >
+                        <a href="#" class="board_btn list_btn" onclick="goList()"> <i class="far fa-file-alt"></i>목록</a>
                       </span>
                     </div>
                     <th:block>
@@ -298,17 +298,32 @@
     </section>
   </div>
   <div th:replace="fragments/post_delete_popup">
-    <script type="text/javascript">
-      $(function () {
-        let file_item2 = document.getElementsByClassName('file_item2');
-        let fileCount = file_item2.length;
-        for (let i = 1; i <= fileCount; i++) {
-          file_item2[i - 1].innerText = '첨부파일#' + i;
-        }
-      });
-      const goAdminPostList =  () => {
-        history.back();
-      }
-    </script>
+
   </div>
+  <script type="text/javascript">
+    $(function () {
+      let file_item2 = document.getElementsByClassName('file_item2');
+      let fileCount = file_item2.length;
+      for (let i = 1; i <= fileCount; i++) {
+        file_item2[i - 1].innerText = '첨부파일#' + i;
+      }
+    });
+    const goAdminPostList =  () => {
+      history.back();
+    }
+    const getCookie = function(name) {
+      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      return value? value[2] : null;
+    };
+
+    const goList = () => {
+      const listBtnUrl = getCookie("listBtnUrl");
+      console.log(listBtnUrl)
+      if(listBtnUrl != null){
+        location.href= listBtnUrl;
+      } else{
+        location.href = "/admin/posts"
+      }
+    }
+  </script>
 </th:block>
