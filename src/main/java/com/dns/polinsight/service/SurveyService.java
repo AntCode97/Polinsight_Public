@@ -5,6 +5,7 @@ import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -38,10 +39,8 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyBySurveyId(long surveyId);
 
-  // TODO: 2021-08-13 테스트 필요 --> 테스트 시 테스트용 서버 만들어서 사용할 것
-  // TODO: 2021-08-18 : 스케줄 주석 제거
   @Transactional
-  //  @Scheduled(cron = "0 0 0/1 * * *")
+  @Scheduled(cron = "0 0 0 * * ?")
   void getSurveyListAndSyncPerHour();
 
   void deleteSurveyById(long surveyId);

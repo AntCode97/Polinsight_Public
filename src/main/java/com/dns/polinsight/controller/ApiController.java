@@ -154,28 +154,6 @@ public class ApiController {
   }
 
   /*
-   * 정규식을 통한 다건 설문 검색
-   * */
-  @GetMapping("/surveys/{regex}")
-  public ApiUtils.ApiResult<List<SurveyDto>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageableDefault Pageable pageable) throws Exception {
-    try {
-      return success(surveyService.findSurveysByTitleRegex(regex, pageable).parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/survey/find/{regex}/total")
-  public ApiUtils.ApiResult<Long> adminCountSurveyFindByRegex(
-      @PathVariable(name = "regex") String regex) throws Exception {
-    try {
-      return success(adminService.countUserFindRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  /*
    * 저장된 설문 목록 삭제를 위한 api
    * */
   @DeleteMapping("/survey")
@@ -204,7 +182,7 @@ public class ApiController {
   /*
    * 사용자가 참여한 서베이 목록 가져옴
    * */
-  @GetMapping("participate")
+  @GetMapping("participatelist")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
       return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
@@ -272,6 +250,7 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
+   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -338,6 +317,7 @@ public class ApiController {
     }
   }
 
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/user/recommend/{phone}")
   public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
     try {

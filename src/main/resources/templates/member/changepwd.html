@@ -5,76 +5,39 @@
       background-color : rgb(24, 40, 56) !important;
     }
 
-    .login_input {
-      border        : none;
-      border-bottom : 1.5px solid #DDE0EA;
-      color         : #343236;
-      font-size     : 16px;
-      height        : 43px;
-      outline       : none;
-      padding       : 8px 0px;
-      width         : 100%;
-    }
-
-    .login_btn_wrap > .btn-primary {
-      float       : left;
-      font-weight : bold;
-      width       : 30%;
-    }
-
-    .btn-effect {
-      border        : 1px solid transparent;
-      border-radius : 2px;
-      cursor        : pointer;
-      font-size     : 18px;
-      outline       : none;
-      padding       : 12px;
-      text-align    : center;
-    }
-
-    .input_div {
-      margin-bottom : 20px;
-      overflow      : hidden;
-      position      : relative;
-      width         : 100%;
-    }
-
-    .input_div > label > p {
-      color      : #A5DFF9;
-      font-size  : 16px;
-      text-align : left;
-    }
-
-    .vaild {
-      color : #00CC00;
-    }
-
-    .invalid {
-      color : #FF0000;
+    .content-wrap {
+      align-items     : center;
+      display         : flex;
+      height          : 100%;
+      justify-content : center;
+      margin          : auto;
+      width           : 500px;
     }
   </style>
   <div class="flex-wrapper">
     <div class="flex-content">
-      <form th:action="@{/changepwd}" method="POST">
-        <div class="input_div">
-          <label>
-            <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
-            <input class="pwdinput" name="pwd" placeholder="패스워드" required type="password">
-          </label>
-        </div>
-        <div class="input_div">
-          <label>
-            <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
-            <input class="pwdinput" placeholder="패스워드 확인" required type="password">
-          </label>
-          <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
-        </div>
+      <div class="content-wrap">
+        <form th:action="@{/changepwd}" method="POST">
+          <div class="input_div">
+            <label>
+              <p><i class="fas fa-lock"></i>변경 할&nbsp;패스워드</p>
+              <input class="pwdinput" name="pwd" placeholder="패스워드" required type="password">
+            </label>
+          </div>
+          <div class="input_div">
+            <label>
+              <p><i class="fas fa-lock"></i>&nbsp패스워드 확인</p>
+              <input class="pwdinput" placeholder="패스워드 확인" required type="password">
+            </label>
+            <span class="err_msg" id="pwmsg" style="display:none;">패스워드가 다릅니다. 다시 한번 확인해주세요.</span>
+          </div>
 
-        <div class="login_btn_wrap">
-          <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
-          <button type="submit" class="btn-primary btn-effect" id="btn_submit">변경하기</button>
-        </div>
-      </form>
+          <div class="login_btn_wrap">
+            <button class="btn-primary btn-effect" th:onclick="window.location.back()">돌아가기</button>
+            <button type="submit" class="btn-primary btn-effect" id="btn_submit">변경하기</button>
+          </div>
+        </form>
+      </div>
     </div>
     <th:block th:include="layout/footer" />
   </div>
