@@ -1306,3 +1306,13 @@ WHERE id = 1;
 UPDATE collector
 SET participate_url = 'https://ko.research.net/r/5KJWSK2'
 WHERE collector_id = 1234567890;
+
+INSERT INTO user ( email, name, password, phone, point, recommend, role, birth, birth_type, education, gender, industry, registered_at, job, marry, address, is_email_receive, is_sms_receive )
+VALUES
+  ( 'testpanel1@gmail.com', '테스트 패널1', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel2@gmail.com', '테스트 패널2', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel3@gmail.com', '테스트 패널3', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel4@gmail.com', '테스트 패널4', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel5@gmail.com', '테스트 패널5', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel6@gmail.com', '테스트 패널6', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
+  ( 'testpanel7@gmail.com', '테스트 패널7', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE );
