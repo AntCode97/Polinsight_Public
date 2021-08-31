@@ -52,6 +52,7 @@ public class ParticipateSurveyController {
    * 포인트 적립 실패 시 : 적립 에러 팝업 페이지
    * */
   @GetMapping("/callback")
+  @Transactional
   public ModelAndView callback(
       @RequestParam("hash") String hash,
       @RequestParam("email") String name) {
@@ -74,7 +75,7 @@ public class ParticipateSurveyController {
     } catch (Exception | WrongAccessException e) {
       log.error(e.getMessage());
       e.printStackTrace();
-      return new ModelAndView("redirect:error/point_accumulate_error");
+      return new ModelAndView("redirect:/accumulate_error");
     }
   }
 
