@@ -390,6 +390,7 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
+    if(postDTO.getPostType() == null) postDTO.setPostType(PostType.NOTICE);
     //TODO: 조회수 항목도 가져오기
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
@@ -422,8 +423,9 @@ public class PostController {
   }
 
   //Post로 바꿔도 될듯함
-  @GetMapping("admin/posts/{postId}/delete")
+  @GetMapping("/admin/posts/{postId}/delete")
   public String adminDelete(@PathVariable("postId") Long postId, Model model, @PageableDefault Pageable pageable) {
+
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
     postService.delete(post);
