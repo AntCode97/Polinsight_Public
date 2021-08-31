@@ -22,8 +22,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   List<Survey> findSurveysByTitleLike(String title, Pageable pageable);
 
-  @Query("select s from Survey s where s.surveyId = :surveyId")
-  Optional<Survey> findSurveyBySurveyId(long surveyId);
+  Optional<Survey> findSurveyBySurveyId(Long id);
 
   @Query(nativeQuery = true, value = "SELECT * FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   List<Survey> findSurveysByRegex(String regex, Pageable pageable);

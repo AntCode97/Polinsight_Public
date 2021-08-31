@@ -119,16 +119,16 @@ public class ParticipateSurveyController {
   @GetMapping("/participate")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
                                                             @RequestParam("participateUrl") String participateUrl,
-                                                            @RequestParam("surveyId") Long surveyId,
+                                                            @RequestParam("id") Long id,
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
 
-    log.warn("survey ID : {} --- participate URL : {}", surveyId, participateUrl);
+    log.warn("survey ID : {} --- participate URL : {}", id, participateUrl);
 
     try {
-      Survey survey = surveyService.findSurveyBySurveyId(surveyId).get();
+      Survey survey = surveyService.findSurveyById(id).get();
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
       List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString());
       String hash = new HashUtil().makeHash(someVariables, salt);

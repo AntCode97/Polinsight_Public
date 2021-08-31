@@ -37,7 +37,7 @@ public interface SurveyService {
 
   Optional<Survey> findSurveyById(long surveyId);
 
-  Optional<Survey> findSurveyBySurveyId(long surveyId);
+  Optional<Survey> findSurveyBySurveyId(Long surveyId);
 
   @Transactional
   @Scheduled(cron = "0 0 0 * * ?")

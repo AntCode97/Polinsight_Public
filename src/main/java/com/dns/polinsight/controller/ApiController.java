@@ -4,7 +4,6 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
-import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
 import com.dns.polinsight.mapper.PointRequestMapping;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -412,9 +412,14 @@ public class ApiController {
   }
 
   @GetMapping("/test")
-  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable) {
-    pageable = PageRequest.of(0, 10, Sort.by("progress").descending());
-    return success(surveyService.findAll(pageable));
+  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long surveyId) {
+    try {
+      return success(surveyService.findSurveyById(surveyId).orElseThrow(EntityNotFoundException::new));
+    } catch (EntityNotFoundException e) {
+      e.printStackTrace();
+      throw new EntityNotFoundException(e.getMessage());
+    }
+
   }
 
 }

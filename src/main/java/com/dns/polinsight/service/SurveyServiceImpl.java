@@ -81,7 +81,7 @@ public class SurveyServiceImpl implements SurveyService {
     try {
       Long regexL = Long.parseLong(regex);
       return surveyRepository.findAllByRegex(regex, regexL, pageable);
-    }catch (NumberFormatException e){
+    } catch (NumberFormatException e) {
       return surveyRepository.findAllByRegex(regex, -1L, pageable);
     }
 
@@ -92,10 +92,8 @@ public class SurveyServiceImpl implements SurveyService {
     try {
       Long regexL = Long.parseLong(regex);
       return surveyRepository.findAllByStatusProgressByRegex(type, regex, regexL, pageable);
-      //return surveyRepository.findAllByRegex(regex, regexL, pageable);
-    }catch (NumberFormatException e){
+    } catch (NumberFormatException e) {
       return surveyRepository.findAllByStatusProgressByRegex(type, regex, -1L, pageable);
-      //return surveyRepository.findAllByRegex(regex, -1L, pageable);
     }
 
 
@@ -211,7 +209,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Optional<Survey> findSurveyBySurveyId(long surveyId) {
+  public Optional<Survey> findSurveyBySurveyId(Long surveyId) {
+    log.warn("{} - id : {}", this.getClass().getSimpleName(), surveyId);
     return surveyRepository.findSurveyBySurveyId(surveyId);
   }
 
