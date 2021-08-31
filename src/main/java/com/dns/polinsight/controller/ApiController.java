@@ -412,9 +412,9 @@ public class ApiController {
   }
 
   @GetMapping("/test")
-  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long surveyId) {
+  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long id) {
     try {
-      return success(surveyService.findSurveyById(surveyId).orElseThrow(EntityNotFoundException::new));
+      return success(surveyService.findSurveyById(id).orElseThrow());
     } catch (EntityNotFoundException e) {
       e.printStackTrace();
       throw new EntityNotFoundException(e.getMessage());

@@ -201,7 +201,6 @@
         if (obj.total > 0) {
           const survey_box = $('.main_survey_box').empty().append('<div class="main_survey_item_wrap"></div>');
           obj.content.forEach(survey => {
-            console.log(survey)
             let item_wrap = survey_box.find('.main_survey_item_wrap:last-child');
             if (item_wrap.find('.main_survey_item').length < 3) {
               item_wrap.append(makeSurveyCard(survey));

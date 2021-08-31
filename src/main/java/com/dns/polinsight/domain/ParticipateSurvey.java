@@ -35,6 +35,7 @@ public class ParticipateSurvey implements Serializable {
 
   private Long surveyPoint;
 
+  @Column(unique = true)
   private String hash;
 
   @Setter

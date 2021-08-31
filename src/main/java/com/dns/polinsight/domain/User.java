@@ -61,6 +61,7 @@ public class User implements UserDetails {
   private Long id;
 
   @Convert(converter = EmailAttrConverter.class, attributeName = "email")
+  @Column(unique = true)
   private Email email;
 
   private String password;

@@ -35,11 +35,7 @@ public interface SurveyService {
 
   Survey update(Survey survey);
 
-  List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable);
-
   Optional<Survey> findSurveyById(long surveyId);
-
-  Optional<Survey> findSurveyBySurveyId(Long surveyId);
 
   @Transactional
   @Scheduled(cron = "0 0 0 * * ?")

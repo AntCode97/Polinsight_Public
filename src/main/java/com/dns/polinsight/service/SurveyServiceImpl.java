@@ -119,6 +119,11 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.save(survey);
   }
 
+  @Override
+  public Optional<Survey> findSurveyById(long surveyId) {
+    return surveyRepository.findById(surveyId);
+  }
+
 
   @Override
   @Transactional
@@ -200,22 +205,6 @@ public class SurveyServiceImpl implements SurveyService {
   @Override
   public void deleteSurveyById(long surveyId) {
     surveyRepository.deleteById(surveyId);
-  }
-
-
-  @Override
-  public List<Survey> findSurveysByTitleRegex(String titleRegex, Pageable pageable) {
-    return surveyRepository.findSurveysByTitleLike(titleRegex, pageable);
-  }
-
-  @Override
-  public Optional<Survey> findSurveyById(long surveyId) {
-    return surveyRepository.findById(surveyId);
-  }
-
-  @Override
-  public Optional<Survey> findSurveyBySurveyId(Long surveyId) {
-    return surveyRepository.findSurveyBySurveyId(surveyId);
   }
 
   @Override

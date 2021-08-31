@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @ToString
 public class Survey implements Serializable {
 
+  private static final long serialVersionUID = -9103994299951345908L;
 
   @Setter
   @Embedded
@@ -28,7 +29,7 @@ public class Survey implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "survey_id")
+  @Column(name = "survey_id", unique = true)
   private Long surveyId;
 
   private String href;
