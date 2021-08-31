@@ -192,14 +192,18 @@
          postId = $(deleteBtn).attr('value');
          console.log("postID:" + postId)
          $(".popup_overlay").fadeIn(100)
+
        })
 
+    }
 
+    $(function (){
+      makeDeleteBtn();
+      document.querySelector(".popup_delete_btn").addEventListener('click', deletePost);
       $("#popup_close_btn>i").on('click', (e) => {
         // $(".popup_overlay").css('display', 'none')
         $('.popup_overlay').fadeOut(100)
       })
-       document.querySelector(".popup_delete_btn").addEventListener('click', deletePost);
 
 
       $(".popup_btn").on('click', (e) => {
@@ -211,10 +215,6 @@
         // $('input[name=ispanel][type=radio][value=false]').prop('checked', false)
       })
 
-    }
-
-    $(function (){
-      makeDeleteBtn();
     })
   </script>
 </div>
