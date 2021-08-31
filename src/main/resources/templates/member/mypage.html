@@ -1531,7 +1531,7 @@
 
     const getUserParticipateSurvey = () => {
       http
-          .get(`/api/participate`, {params: {size: 5, page: 0}})
+          .get(`/api/participatelist`, {params: {size: 5, page: 0}})
           .then(res => {
             if (res.data.success) {
               const table = $('div.survey_table')

@@ -363,12 +363,14 @@ public class UserController {
                                                         @Value("${custom.hash.passwordsalt}") String salt,
                                                         @Value("${custom.callback.base}") String callbackBase) throws Exception {
     try {
+      // 아이디 찾기
       if (type.equals("email")) {
         Assert.notNull(userDto.getName());
         Assert.notNull(userDto.getPhone());
         User user = userService.findUserEmailByNameAndPhone(userDto.getName(), Phone.of(userDto.getPhone())).orElseThrow(UserNotFoundException::new);
         return success(user.getEmail().toString());
       } else {
+        // 비밀번호 찾기
         Assert.notNull(userDto.getEmail());
         Assert.notNull(userDto.getName());
         User user = userService.findUserByEmail(Email.of(userDto.getEmail()));

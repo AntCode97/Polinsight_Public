@@ -4,7 +4,6 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
-import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
 import com.dns.polinsight.mapper.PointRequestMapping;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -154,28 +154,6 @@ public class ApiController {
   }
 
   /*
-   * 정규식을 통한 다건 설문 검색
-   * */
-  @GetMapping("/surveys/{regex}")
-  public ApiUtils.ApiResult<List<SurveyDto>> adminGetSurveyByRegex(@PathVariable(name = "regex") String regex, @PageableDefault Pageable pageable) throws Exception {
-    try {
-      return success(surveyService.findSurveysByTitleRegex(regex, pageable).parallelStream().map(SurveyDto::new).collect(Collectors.toList()));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  @GetMapping("/survey/find/{regex}/total")
-  public ApiUtils.ApiResult<Long> adminCountSurveyFindByRegex(
-      @PathVariable(name = "regex") String regex) throws Exception {
-    try {
-      return success(adminService.countUserFindRegex(regex));
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
-
-  /*
    * 저장된 설문 목록 삭제를 위한 api
    * */
   @DeleteMapping("/survey")
@@ -204,7 +182,7 @@ public class ApiController {
   /*
    * 사용자가 참여한 서베이 목록 가져옴
    * */
-  @GetMapping("participate")
+  @GetMapping("participatelist")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
       return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
@@ -272,6 +250,7 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
+   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -338,6 +317,7 @@ public class ApiController {
     }
   }
 
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("/user/recommend/{phone}")
   public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
     try {
@@ -432,9 +412,14 @@ public class ApiController {
   }
 
   @GetMapping("/test")
-  public ApiUtils.ApiResult<?> test(@PageableDefault Pageable pageable) {
-    pageable = PageRequest.of(0, 10, Sort.by("progress").descending());
-    return success(surveyService.findAll(pageable));
+  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long surveyId) {
+    try {
+      return success(surveyService.findSurveyById(surveyId).orElseThrow(EntityNotFoundException::new));
+    } catch (EntityNotFoundException e) {
+      e.printStackTrace();
+      throw new EntityNotFoundException(e.getMessage());
+    }
+
   }
 
 }

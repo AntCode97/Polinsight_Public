@@ -116,16 +116,19 @@ public class ParticipateSurveyController {
   /*
    * 로그인한 사용자가 서베이 클릭시
    * */
-  @GetMapping("/survey")
+  @GetMapping("/participate")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
-                                                            @RequestParam("participate") String participateUrl,
-                                                            @RequestParam("surveyId") long surveyId,
+                                                            @RequestParam("participateUrl") String participateUrl,
+                                                            @RequestParam("id") Long id,
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
+
+    log.warn("survey ID : {} --- participate URL : {}", id, participateUrl);
+
     try {
-      Survey survey = surveyService.findSurveyBySurveyId(surveyId).get();
+      Survey survey = surveyService.findSurveyById(id).get();
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
       List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString());
       String hash = new HashUtil().makeHash(someVariables, salt);
@@ -141,8 +144,10 @@ public class ParticipateSurveyController {
                                                                       .build());
       return success(sb);
     } catch (SurveyNotFoundException e) {
+      e.printStackTrace();
       throw new SurveyNotFoundException(e.getMessage());
     } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
       throw new NoSuchAlgorithmException(e.getMessage());
     }
   }
