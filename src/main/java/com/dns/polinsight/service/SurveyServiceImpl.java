@@ -62,8 +62,8 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
-  public Optional<SurveyMapping> findSurveyById(Long id) {
-    return surveyRepository.findSurveyById(id);
+  public SurveyMapping findSurveyById(Long id) {
+    return surveyRepository.findSurveyMappingById(id);
   }
 
   @Override
@@ -215,7 +215,6 @@ public class SurveyServiceImpl implements SurveyService {
 
   @Override
   public Optional<Survey> findSurveyBySurveyId(Long surveyId) {
-    log.warn("{} - id : {}", this.getClass().getSimpleName(), surveyId);
     return surveyRepository.findSurveyBySurveyId(surveyId);
   }
 

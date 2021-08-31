@@ -216,12 +216,9 @@
 
     $(function () {
       init();
-      // $('input[name=searchInput]').on('keyup', asyncSurveySearch);
-      // $('#more_survey_btn').on('click', () => {
-      //   current++;
-      //   getSurveyList();
-      //   document.body.scrollTop = document.body.scrollHeight - 180;
-      // });
+      $('#more_survey_btn').on('click', () => {
+        location.assign('/research/pols')
+      });
     });
   </script>
 </th:block>

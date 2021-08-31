@@ -1,6 +1,7 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -52,25 +53,24 @@ public class AdminPageController {
   }
 
   @GetMapping("/survey/{id}")
-  public ModelAndView adminGetSurveyDetailInfo(@PathVariable("id") long surveyId) {
-    log.info("surveyid: " + surveyId);
+  public ModelAndView adminGetSurveyDetailInfo(@PathVariable("id") long id) {
     ModelAndView mv = new ModelAndView("redirect:admin/admin_survey_info");
-    mv.addObject("survey", surveyService.findSurveyById(surveyId));
+    mv.addObject("survey", surveyService.findSurveyById(id).orElseThrow(SurveyNotFoundException::new));
     return mv;
   }
 
   @Deprecated
   @GetMapping("/surveyinfo/{id}")
-  public ModelAndView adminGetSurveyDetailPage(@PathVariable("id") long surveyid) {
+  public ModelAndView adminGetSurveyDetailPage(@PathVariable("id") long id) {
     ModelAndView mv = new ModelAndView("admin/admin_survey_info");
-    mv.addObject("survey", surveyService.findSurveyById(surveyid).get());
+    mv.addObject("survey", surveyService.findSurveyById(id).orElseThrow(SurveyNotFoundException::new));
     return mv;
   }
 
   @GetMapping("/memberinfo/{id}")
   public ModelAndView adminGetMemberDetailPage(@PathVariable("id") long memberId) {
     ModelAndView mv = new ModelAndView("admin/admin_member_info");
-    mv.addObject("user", new UserDto(userService.findById(memberId).get()));
+    mv.addObject("user", new UserDto(userService.findById(memberId).orElseThrow(SurveyNotFoundException::new)));
     return mv;
   }
 
