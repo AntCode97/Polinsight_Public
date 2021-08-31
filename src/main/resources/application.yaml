@@ -271,7 +271,7 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : create-drop
+      ddl-auto : validate
     generate-ddl : false
 
   banner :

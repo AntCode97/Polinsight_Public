@@ -45,16 +45,12 @@ public class ParticipateSurveyController {
 
   private final ParticipateSurveyService participateSurveyService;
 
-  /*
-   * 포인트 적립 성공 시 : mypage,
-   * 포인트 적립 실패 시 : 적립 에러 팝업 페이지
-   * */
-  @GetMapping("/callback")
   @Transactional
+  @GetMapping("/callback")
   public ModelAndView callback(
       @RequestParam("hash") String hash,
       @RequestParam("email") String name) {
-    log.warn("hash: " + hash + ", email: " + name + ", ");
+    log.warn("callback ::: hash : " + hash + ", email: " + name + ", ");
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
       throw new InvalidParameterException();
     }
