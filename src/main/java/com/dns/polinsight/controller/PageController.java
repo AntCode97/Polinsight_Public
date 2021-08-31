@@ -148,4 +148,9 @@ public class PageController {
     return new ModelAndView("member/total_signup");
   }
 
+  @GetMapping("/accumulate_error")
+  public ModelAndView pointAccumulateError(){
+    return new ModelAndView("error/point_accumulate_error");
+  }
+
 }
