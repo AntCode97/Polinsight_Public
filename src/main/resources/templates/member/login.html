@@ -5,6 +5,11 @@
       background-color : rgb(24, 40, 56) !important;
     }
 
+    .err_msg {
+      color   : red;
+      display : none;
+    }
+
     .modal_wrap {
       align-items     : center;
       display         : flex;
@@ -275,6 +280,7 @@
                     <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
                   </label>
                 </div>
+                <span class="err_msg"></span>
                 <div class="input_div">
                   <label>
                     <p>비밀번호</p>
@@ -282,6 +288,7 @@
                     <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
                   </label>
                 </div>
+                <span class="err_msg"></span>
                 <div class="login_btn_wrap">
                   <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
                 </div>
@@ -323,6 +330,32 @@
 
     $(function () {
       errorChk()
+      // 이메일 유효성 검사
+      $('input[name=email]').on('keyup change', function (e) {
+        let emailValue = $(this).val()
+        console.log('이메일   ::   ' + emailValue)
+
+        let msg = $(this).parent('div.input_div').next('span.err_msg')
+        if (!!emailValue && emailInputValidator(emailValue)) {
+          console.log('에ㅓㄹ메시지')
+          msg.css('display', 'block').text('올바른 이메일을 입력해주세요')
+        } else {
+          console.log('에러 아님')
+          msg.css('display', 'none')
+        }
+      })
+      // 비밀번호 유효성 검사
+      $('input[name=password]').on('keyup change', function (e) {
+        let passwordValue = $(this).val()
+        console.log('패스워드   ::   ' + passwordValue)
+
+        let msg = $(this).parent('div.input_div').next('span.err_msg')
+        if (!!passwordValue && !passwordInputValidator(passwordValue)) {
+          msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요')
+        } else {
+          msg.css('display', 'none')
+        }
+      })
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경
       $(document).on('focus', '.login_input', function () {

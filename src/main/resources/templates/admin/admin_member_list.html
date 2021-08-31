@@ -1041,7 +1041,7 @@
       e.returnValue = false;
       e.stopPropagation();
       let user = e.data.member;
-      if (prompt('정말 회원 정보를 삭제하시겠습니까?')) {
+      if (confirm('정말 회원 정보를 삭제하시겠습니까?')) {
         http.delete(`/api/user/${user.id}`)
             .then(res => {
               if (res.data.success) {
@@ -1060,7 +1060,7 @@
         alert('필수 정보 입력을 확인해주세요')
         return
       }
-      if (prompt('정말 회원 정보를 업데이트 하시겠습니까?')) {
+      if (confirm('정말 회원 정보를 업데이트 하시겠습니까?')) {
         http
             .put('/admin/user', updatedUser).then(res => {
           if (res.data.success) {

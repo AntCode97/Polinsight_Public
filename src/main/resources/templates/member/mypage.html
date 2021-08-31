@@ -1294,7 +1294,7 @@
 
     const userDelete = e => {
       if (canDelete) {
-        if (prompt('정말 회원 탈퇴 하시겠습니까?')) {
+        if (confirm('정말 회원 탈퇴 하시겠습니까?')) {
           http.post('/user/delete')
         }
       } else {
@@ -1354,7 +1354,7 @@
         name: userInfo['name'],
         phone: userInfo['phone'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
       }
-      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
         http.put('/user?type=basic', info).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
@@ -1372,7 +1372,7 @@
           newPassword: userInfo['password'],
           password: userInfo['password_current']
         }
-        if (prompt('비밀번호를 변경하시겠습니까?')) {
+        if (confirm('비밀번호를 변경하시겠습니까?')) {
           http.put('/user?type=password', info).then(res => {
             if (res.data.success) {
               alert('업데이트 성공')
@@ -1401,7 +1401,7 @@
         return
       }
 
-      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
         http.put('/user?type=panel', info).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
