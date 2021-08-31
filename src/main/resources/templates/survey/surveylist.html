@@ -169,14 +169,7 @@
 
       $('button[name=participate_btn]').on('click', () => {
         http
-            .get(`/api/participate`, {
-              params:
-                  {
-                    participateUrl: survey.participateUrl,
-                    // surveyId: survey.surveyId,
-                    id : survey.id
-                  }
-            })
+            .get(`/api/participate${'/' + survey.id}`)
             .then(res => {
               if (res.data.success) {
                 location.replace(res.data.response);

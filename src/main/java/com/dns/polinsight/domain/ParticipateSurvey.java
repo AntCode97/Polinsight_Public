@@ -23,11 +23,11 @@ public class ParticipateSurvey implements Serializable {
   private Long id;
 
 
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   @ManyToOne(targetEntity = User.class)
   private User user;
 
-  @JoinColumn(name = "survey_id")
+  @JoinColumn(name = "survey_id", referencedColumnName = "id")
   @ManyToOne(targetEntity = Survey.class)
   private Survey survey;
 

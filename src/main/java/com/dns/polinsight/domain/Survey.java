@@ -59,4 +59,8 @@ public class Survey implements Serializable {
   }
 
 
+  public void updateCount() {
+    this.status.setCount(this.status.getCount() + 1);
+  }
+
 }
