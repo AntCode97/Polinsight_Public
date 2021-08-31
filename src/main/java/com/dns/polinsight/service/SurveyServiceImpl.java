@@ -62,6 +62,11 @@ public class SurveyServiceImpl implements SurveyService {
   }
 
   @Override
+  public Optional<SurveyMapping> findSurveyById(Long id) {
+    return surveyRepository.findSurveyById(id);
+  }
+
+  @Override
   public Page<SurveyMapping> findAll(Pageable pageable) {
     return surveyRepository.findAllSurveys(pageable);
   }

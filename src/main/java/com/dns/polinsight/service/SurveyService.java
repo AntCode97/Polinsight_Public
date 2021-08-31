@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ public interface SurveyService {
   Survey save(Survey survey);
 
   List<Survey> findAll();
+
+  Optional<SurveyMapping> findSurveyById(Long id);
 
   Page<SurveyMapping> findAll(Pageable pageable);
 

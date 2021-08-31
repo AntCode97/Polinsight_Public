@@ -8,6 +8,7 @@ import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
+import com.dns.polinsight.mapper.SurveyMapping;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
 import com.dns.polinsight.service.SurveyService;
@@ -19,10 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.InvalidParameterException;
@@ -90,11 +88,16 @@ public class ParticipateSurveyController {
     } catch (Exception e) {
       throw new Exception("SurveyHistory write Exception");
     }
+    try{
+      Survey survey = participateSurvey.getSurvey();
+      survey.updateCount();
+    }catch (Exception e){
+      throw new Exception("설문 카운트 갱신 오류");
+    }
     try {
       user.getParticipateSurvey().add(participateSurvey);
       user.setPoint(user.getPoint() + participateSurvey.getSurveyPoint());
       user = userService.saveOrUpdate(user);
-      System.out.println(user.toString());
     } catch (Exception e) {
       throw new Exception("User Info update Exception");
     }
@@ -117,26 +120,29 @@ public class ParticipateSurveyController {
   /*
    * 로그인한 사용자가 서베이 클릭시
    * */
-  @GetMapping("/participate")
+  @GetMapping("/participate/{surveyId}")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
-                                                            @RequestParam("participateUrl") String participateUrl,
-                                                            @RequestParam("id") Long id,
+                                                            @PathVariable("surveyId") Long id,
                                                             @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
-
-    log.warn("survey ID : {} --- participate URL : {}", id, participateUrl);
-
     try {
-      Survey survey = surveyService.findSurveyById(id).get();
+      SurveyMapping survey = surveyService.findSurveyById(id).get();
+
+      log.warn("survey ID : {}, surveyId : {}, Title : {} --- participate URL : {}", survey.getId(), survey.getSurveyId(), survey.getTitle(), survey.getParticipateUrl());
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
       List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString());
       String hash = new HashUtil().makeHash(someVariables, salt);
-      String sb = participateUrl + "?hash=" + hash + "&email=" + user.getEmail();
+      String sb = survey.getParticipateUrl() + "?hash=" + hash + "&email=" + user.getEmail();
       log.info("hash : {}, email : {}", hash, user.getEmail().toString());
       participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
-                                                                      .survey(survey)
+                                                                      .survey(Survey.builder()
+                                                                                    .surveyId(survey.getSurveyId())
+                                                                                    .id(survey.getId())
+                                                                                    .title(survey.getTitle())
+                                                                                    .point(survey.getPoint())
+                                                                                    .build())
                                                                       .hash(hash)
                                                                       .user(user)
                                                                       .participatedAt(LocalDateTime.now())
