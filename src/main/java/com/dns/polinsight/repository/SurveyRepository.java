@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,10 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   List<Survey> findSurveysByTitleLike(String title, Pageable pageable);
 
-  Optional<Survey> findSurveyBySurveyId(Long id);
+  Optional<Survey> findSurveyBySurveyId(long surveyId);
 
-  @Query(surveyJoinData + "from Survey s left join fetch Collector c on s.surveyId=c.survey.surveyId where s.id = :id")
-  Optional<SurveyMapping> findSurveyById(Long id);
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId=c.survey.surveyId where s.id = :id")
+  SurveyMapping findSurveyMappingById(long id);
 
   @Query(nativeQuery = true, value = "SELECT * FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   List<Survey> findSurveysByRegex(String regex, Pageable pageable);

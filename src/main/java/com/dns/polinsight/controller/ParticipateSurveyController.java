@@ -88,10 +88,10 @@ public class ParticipateSurveyController {
     } catch (Exception e) {
       throw new Exception("SurveyHistory write Exception");
     }
-    try{
+    try {
       Survey survey = participateSurvey.getSurvey();
       survey.updateCount();
-    }catch (Exception e){
+    } catch (Exception e) {
       throw new Exception("설문 카운트 갱신 오류");
     }
     try {
@@ -128,7 +128,7 @@ public class ParticipateSurveyController {
       throw new BadCredentialsException("UnAuthorized");
     }
     try {
-      SurveyMapping survey = surveyService.findSurveyById(id).get();
+      SurveyMapping survey = surveyService.findSurveyById(id);
 
       log.warn("survey ID : {}, surveyId : {}, Title : {} --- participate URL : {}", survey.getId(), survey.getSurveyId(), survey.getTitle(), survey.getParticipateUrl());
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
