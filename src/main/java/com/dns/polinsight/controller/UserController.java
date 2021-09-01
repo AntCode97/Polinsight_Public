@@ -11,6 +11,7 @@ import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -175,12 +177,14 @@ public class UserController {
 
   @Transactional
   @PutMapping("/admin/user")
-  public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto userDto) throws Exception {
+  public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto dto) throws Exception {
+    log.warn("Update User info : {}", dto.toString());
     try {
-      User tuser = userService.findById(userDto.getId()).get();
-      User user = new User(userDto);
+      User tuser = userService.findById(dto.getId()).get();
+      User user = new User(dto);
       user.setPassword(tuser.getPassword());
       userService.saveOrUpdate(user);
+      log.info("{} information updated at {}", user.getEmail().toString(), LocalDateTime.now());
       return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());

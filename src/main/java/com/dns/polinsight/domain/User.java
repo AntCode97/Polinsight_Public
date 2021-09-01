@@ -144,6 +144,7 @@ public class User implements UserDetails {
                       .industry(dto.getIndustry())
                       .job(dto.getJob())
                       .address(Address.of(dto.getAddress()))
+                      .favorite(dto.getFavorite())
                       .build();
   }
 

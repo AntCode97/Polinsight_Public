@@ -86,7 +86,7 @@ public class ApiController {
   public ApiUtils.ApiResult<Page<UserDto>> adminFindAllUsers(@PageableDefault Pageable pageable,
                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
     try {
-      if (regex.isBlank() || regex.isEmpty()) {
+      if (regex.isBlank()) {
         return success(userService.findAllNotInAdmin(pageable));
       } else
         return success(adminService.adminSerchUserByRegex(regex, pageable));
@@ -250,7 +250,6 @@ public class ApiController {
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
-   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
@@ -306,26 +305,6 @@ public class ApiController {
     }
   }
 
-  @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @GetMapping("/user/{email}")
-  public ApiUtils.ApiResult<Boolean> isExistEmail(@PathVariable("email") Email email) throws NotFoundException {
-    try {
-      return success(!userService.isExistEmail(email));
-    } catch (RuntimeException e) {
-      e.printStackTrace();
-      throw new NotFoundException("Email Number Not Found");
-    }
-  }
-
-  @CrossOrigin(origins = "*", allowedHeaders = "*")
-  @GetMapping("/user/recommend/{phone}")
-  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
-    try {
-      return success(!userService.isExistPhone(recommendPhone));
-    } catch (Exception e) {
-      throw new NotFoundException("Phone Number Not Found");
-    }
-  }
 
   @GetMapping("/points")
   public ApiUtils.ApiResult<Page<PointRequestMapping>> getAllPointRequests(@PageableDefault Pageable pageable,
@@ -339,7 +318,6 @@ public class ApiController {
       throw new Exception(e.getMessage());
     }
   }
-
 
   @PutMapping("/points/{id}")
   public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId, @RequestBody PointRequestDto dto) throws Exception {

@@ -5,11 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
+public class Address implements Serializable {
+
+  private static final long serialVersionUID = -6145234369745563876L;
 
   private String state;
 

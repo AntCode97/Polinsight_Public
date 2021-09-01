@@ -973,6 +973,7 @@
 
     const openModalWithMemberInfo = e => {
       const user = e.data.userinfo;
+      console.log("Download User Data ::: ", user)
       updatedUser = {...user}
       // 회원 정보 세팅
       $('p#user_email').text(user.email)
@@ -984,31 +985,24 @@
       $('#gender').find('input[name=gender]').each(function () {
         sameValueCheck(this, 'checked', user.gender)
       }).on('change', infoChangeHandler)
+      // 생년 월일
       let birth = user.birth.substring(0, 10).split("-")
       $('#year').val((birth[0] * 1)).prop('selected', true).on('change', infoChangeHandler)
       $('#month').val((birth[1] * 1)).prop('selected', true).on('change', infoChangeHandler).trigger('change')
       $('#day').val((birth[2] * 1)).prop('selected', true).on('change', infoChangeHandler)
-
-      $('#education').find('option').each(function () {
-        sameValueCheck(this, 'selected', user.education)
-      }).on('change', infoChangeHandler)
+      // 거주지
+      $('select[name=state]').val(user['address'].split(' ')[0]).prop('selected', true).on('change', infoChangeHandler)
+      $('select[name=city]').val(user['address'].split(' ')[1]).prop('selected', true).on('change', infoChangeHandler)
+      // 학력
+      $('select[name=education]').val(user.education).on('change', infoChangeHandler)
       // 직업
-      $('#job').find('option').each(function () {
-        sameValueCheck(this, 'selected', user.job)
-      }).on('change', infoChangeHandler)
+      $('select[name=job]').val(user.job).on('change', infoChangeHandler)
       // 결혼
       $('#marry').find('input[name=marry]').each(function () {
-        sameValueCheck(this, 'selected', user.marry)
+        sameValueCheck(this, 'checked', user.marry)
       }).on('change', infoChangeHandler)
-      $('select[name=state]').find('select').each(function () {
-        sameValueCheck(this, 'selected', user.state)
-      }).on('change', infoChangeHandler)
-      $('select[name=city]').find('select').each(function () {
-        sameValueCheck(this, 'selected', user.city)
-      }).on('change', infoChangeHandler)
-      $('#industry').find('option').each(function () {
-        sameValueCheck(this, 'selected', user.industry)
-      }).on('change', infoChangeHandler)
+      // 직종
+      $('select[name=industry]').val(user.industry).on('change', infoChangeHandler)
       // 관심분야
       $('#favorite').find('input[type=checkbox]').each(function () {
         if (user.favorite.includes($(this).val()))
@@ -1031,7 +1025,6 @@
           $(this).prop('checked', false)
         }
       }).on('change', infoChangeHandler)
-      // 데이터 가져오기
 
       $('.modal_wrap').css('display', 'flex');
     }
@@ -1056,13 +1049,23 @@
     }
 
     const userInfoUpdateButtonHandler = () => {
-      if (!userNameChecker(updatedUser['name']) || !phoneNumberChecker(updatedUser['phone']) || !panelInfoChecker(updatedUser)) {
+      let info = userDtoParser(updatedUser);
+      if (!userNameChecker(info['name']) || !phoneNumberChecker(info['phone']) || !adminPanelInfoChecker(info)) {
         alert('필수 정보 입력을 확인해주세요')
         return
       }
+      if ($(':radio[name=isEmailReceive]:checked').length < 1) {
+        alert('이메일 수신 여부를 확인해주세요')
+        return false;
+      }
+      if ($(':radio[name=isSmsReceive]:checked').length < 1) {
+        alert('SMS 수신 여부를 확인해주세요')
+        return false;
+      }
+
       if (confirm('정말 회원 정보를 업데이트 하시겠습니까?')) {
         http
-            .put('/admin/user', updatedUser).then(res => {
+            .put('/admin/user', info).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
             location.reload()
@@ -1073,6 +1076,11 @@
         }).catch(console.log)
       }
     }
+
+    // const addInputTrigger = () => {
+    //   $('input').on('keyup change')
+    //   $('select').on('change')
+    // }
 
     let updatedUser = {}
 
