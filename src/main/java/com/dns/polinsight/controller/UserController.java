@@ -167,7 +167,6 @@ public class UserController {
           break;
       }
 
-      log.warn("after processing : " + user.toString());
       return success(new UserDto(userService.saveOrUpdate(user)));
     } catch (Exception e) {
       e.printStackTrace();

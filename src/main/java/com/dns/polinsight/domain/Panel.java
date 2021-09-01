@@ -57,6 +57,7 @@ public class Panel implements Serializable {
                 .birth(dto.getBirth())
                 .birthType(dto.getBirthType())
                 .marry(dto.getMarry())
+                .favorite(dto.getFavorite())
                 .build();
   }
 

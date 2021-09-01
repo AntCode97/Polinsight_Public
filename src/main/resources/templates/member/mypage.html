@@ -437,7 +437,7 @@
     }
 
     .left_content > label {
-      background  : url('imgs/icon_required_input.png') right center no-repeat;
+      background  : url('img/etc/icon_required_input.png') right center no-repeat;
       cursor      : pointer;
       font-weight : bold;
       line-height : 18px;
@@ -813,21 +813,21 @@
                             </li>
                             <li>
                               <div class="left_content">
-                                <label for="city">거주지</label>
+                                <label for="state">거주지</label>
                               </div>
                               <div class="right_content">
-                                <select id="city" name="city">
+                                <select id="state" name="state`">
                                   <optgroup label="시도">
-                                    <option value="광주">광주</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[0],'광주')}" value="광주">광주</option>
                                   </optgroup>
                                 </select>
-                                <select id="gu" name="gu">
+                                <select id="city" name="city">
                                   <optgroup label="구">
-                                    <option value="북구">북구</option>
-                                    <option value="남구">남구</option>
-                                    <option value="서구">서구</option>
-                                    <option value="동구">동구</option>
-                                    <option value="광산구">광산구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'북구')}" value="북구">북구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'남구')}" value="남구">남구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'서구')}" value="서구">서구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'동구')}" value="동구">동구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'광산구')}" value="광산구">광산구</option>
                                   </optgroup>
                                 </select>
                                 <span class="err_msg"></span>
@@ -1390,13 +1390,14 @@
 
     function userPanelInfoUpdate() {
       let info = {...userInfo}
+      info['address'] = addressParser(info['state'], info['city'])
       delete info.name
       delete info.password_confirm
       delete info.password
       delete info.password_current
       delete info.phone
       delete info.recommend
-      console.log(info)
+      console.log("Update User Panel Info", info)
       if (!panelInfoChecker(info)) {
         alert('필수 값들이 입력되었는지 확인해주세요')
         return
@@ -1449,6 +1450,9 @@
       userInfo['industry'] = `[[${user.industry}]]`
       userInfo['registeredAt'] = `[[${user.registeredAt}]]`
       userInfo['favorite'] = `[[${user.favorite}]]`
+      let address = `[[${user.address}]]`
+      userInfo['state'] = address.split(' ')[0]
+      userInfo['city'] = address.split(' ')[1]
       console.log(userInfo)
       setDateValue()
       let birth = userInfo['birth'].substring(0, 10).split("-")
@@ -1493,11 +1497,9 @@
       let name = e.target.name
       let value = String(e.target.value).trim()
       if (name === 'favorite') {
-        if (userInfo[name].includes(value)) {
-          userInfo[name].pop(value)
-        } else {
-          userInfo[name].push(value)
-        }
+        let tmpArr = []
+        $('input[name=favorite]:checked').each((idx, elem) => tmpArr.push($(elem).val()))
+        userInfo["favorite"] = [...tmpArr]
       } else {
         userInfo[name] = value
       }
@@ -1562,7 +1564,7 @@
         parent.append(template)
       }
     }
-    const userInfo = {'favorite': []}
+    let userInfo = {favorite: []}
     let canDelete = false;
 
     $(function () {
