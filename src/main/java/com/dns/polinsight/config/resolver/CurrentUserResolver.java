@@ -31,7 +31,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     String principal = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     if (principal.equals("anonymousUser")) {
-      throw new UnAuthorizedException("로그인한 유저만 사용할 수 있습니다.");
+      return null;
     }
     return userService.loadUserByUsername(principal);
   }

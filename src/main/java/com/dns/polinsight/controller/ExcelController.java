@@ -6,6 +6,7 @@ import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.exception.InvalidValueException;
+import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
 import com.dns.polinsight.service.PointRequestService;
@@ -37,6 +38,9 @@ public class ExcelController {
   public void getExcelFromAllPointRequests(HttpServletResponse response,
                                            @CurrentUser User user,
                                            @PathVariable(value = "userId", required = false) Long userId) throws Exception {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     try {
       ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
       if (userId == 0) {
@@ -53,12 +57,18 @@ public class ExcelController {
 
   @GetMapping("/points/excel/count")
   public ApiUtils.ApiResult<Long> countExistsPointRequests(@CurrentUser User user) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     return success(pointRequestService.countExistsPointRequests());
   }
 
   @GetMapping("/points/excel/{userId}/count")
   public ApiUtils.ApiResult<Long> countExistsPointRequestsBYid(@CurrentUser User user,
                                                                @PathVariable("userId") Long userId) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     return success(pointRequestService.countExistsPointRequestsByUserId(userId));
   }
 
@@ -66,6 +76,9 @@ public class ExcelController {
   public void getExcelFromAllHistories(HttpServletResponse response,
                                        @CurrentUser User user,
                                        @RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     try {
       ExcelUtil<PointHistory> excelUtil = new ExcelUtil<>();
       if (userId == 0) {
@@ -81,6 +94,9 @@ public class ExcelController {
 
   @GetMapping("/pointhistory/excel/count")
   public ApiUtils.ApiResult<Long> countExistsPointhistories(@CurrentUser User user) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     return success(pointHistoryService.countPointHistories());
   }
 
@@ -88,6 +104,9 @@ public class ExcelController {
   public void getExcelFromAllParticipates(HttpServletResponse response,
                                           @CurrentUser User user,
                                           @RequestParam(value = "userId", required = false, defaultValue = "-1") Long userId) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     try {
       ExcelUtil<ParticipateSurvey> excelUtil = new ExcelUtil<>();
       if (userId == -1) {
@@ -103,6 +122,9 @@ public class ExcelController {
 
   @GetMapping("/participates/excel/count")
   public ApiUtils.ApiResult<Long> countExistParticipateSurvey(@CurrentUser User user) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
     return success(participateSurveyService.countExistParticipateSurvey());
   }
 
