@@ -31,13 +31,6 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/findpwd")
-  public ModelAndView findpassword() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/findpwd");
-    return mv;
-  }
-
   @GetMapping("/login")
   public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
@@ -47,7 +40,7 @@ public class PageController {
 
   @GetMapping("/join")
   public ModelAndView signUp() {
-    return new ModelAndView("signup");
+    return new ModelAndView("member/join");
   }
 
 
@@ -59,7 +52,7 @@ public class PageController {
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/panel");
+    mv.setViewName("_panel");
     return mv;
   }
 
