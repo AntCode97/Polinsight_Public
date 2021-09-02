@@ -28,4 +28,8 @@ public interface PointRequestService {
 
   List<PointRequest> findAll();
 
+  long countExistsPointRequests();
+
+  long countExistsPointRequestsByUserId(Long userId);
+
 }

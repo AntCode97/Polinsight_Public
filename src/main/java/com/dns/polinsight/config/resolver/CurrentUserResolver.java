@@ -1,6 +1,7 @@
 package com.dns.polinsight.config.resolver;
 
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
     String principal = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     if (principal.equals("anonymousUser")) {
-      return null;
+      throw new UnAuthorizedException("로그인한 유저만 사용할 수 있습니다.");
     }
     return userService.loadUserByUsername(principal);
   }

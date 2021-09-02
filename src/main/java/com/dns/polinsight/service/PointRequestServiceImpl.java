@@ -61,4 +61,14 @@ public class PointRequestServiceImpl implements PointRequestService {
     return pointRequestRepository.findAll();
   }
 
+  @Override
+  public long countExistsPointRequests() {
+    return pointRequestRepository.count();
+  }
+
+  @Override
+  public long countExistsPointRequestsByUserId(Long userId) {
+    return pointRequestRepository.countPointRequestsByUid(userId);
+  }
+
 }

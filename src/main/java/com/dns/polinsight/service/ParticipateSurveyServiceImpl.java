@@ -36,6 +36,11 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   }
 
   @Override
+  public long countExistParticipateSurvey() {
+    return participateSurveyRepository.count();
+  }
+
+  @Override
   public ParticipateSurvey saveParticipateSurvey(ParticipateSurvey participateSurvey) {
     return participateSurveyRepository.save(participateSurvey);
   }

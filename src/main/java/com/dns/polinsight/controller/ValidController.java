@@ -34,9 +34,14 @@ public class ValidController {
   }
 
   @GetMapping("/user/recommend/{phone}")
-  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") Phone recommendPhone) throws NotFoundException {
+  public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") String recommendPhone) throws NotFoundException {
     try {
-      return success(!userService.isExistPhone(recommendPhone));
+      log.warn("Recommend Phone Number : " + recommendPhone);
+      if (recommendPhone.isEmpty() || recommendPhone.length() < 11) {
+        return success(Boolean.FALSE);
+      } else {
+        return success(!userService.isExistPhone(Phone.of(recommendPhone)));
+      }
     } catch (Exception e) {
       throw new NotFoundException("Phone Number Not Found");
     }

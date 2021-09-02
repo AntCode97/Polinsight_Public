@@ -606,6 +606,9 @@
           <div class="item_box history_box">
             <div class="item_header">
               <span><i class="fas fa-star" style="padding-right: 3px; color: #4C99CF;"></i>포인트이력</span>
+              <span>
+                <button name="savePointHistoryBtn">다운로드</button>
+                </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
             <div class="item_content">
@@ -1606,6 +1609,7 @@
       $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
 
       $('input[name=account]').on('keyup change')
+      $('button[name=savePointHistoryBtn]').on('click', {},saveByExcel)
     });
   </script>
 </th:block>
