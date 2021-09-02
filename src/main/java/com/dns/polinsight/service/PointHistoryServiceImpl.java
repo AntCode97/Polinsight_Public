@@ -52,4 +52,9 @@ public class PointHistoryServiceImpl implements PointHistoryService {
     return pointHistoryRepository.findAll();
   }
 
+  @Override
+  public long countPointHistories() {
+    return pointHistoryRepository.count();
+  }
+
 }

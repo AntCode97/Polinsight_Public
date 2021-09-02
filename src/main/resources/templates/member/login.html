@@ -290,7 +290,7 @@
                   <span class="err_msg"></span>
                 </div>
                 <div class="login_btn_wrap">
-                  <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
+                  <button name="dologin" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
                 </div>
                 <div class="qnapw auto_login">
                   <div>
@@ -328,6 +328,28 @@
       }
     }
 
+    const login = (e) => {
+      let email = $('input[name=email]')
+      let password = $('input[name=password]')
+      // TODO : 알람창이 계속해서 발생 함
+      if (!email.val() || !emailInputValidator(email.val())) {
+        alert('정확한 이메일을 입력해주세요')
+        email.focus()
+        return
+      }
+      if (!password.val() || !passwordInputValidator(password.val())) {
+        alert('정확한 패스워드를 입력해주세요')
+        password.val('').focus()
+        return
+      }
+
+      let form = $(`<form></form>`)
+      form.append($(`<input name="email" value="${email}" />`))
+      form.append($(`<input name="password" value="${password}" />`))
+      $('body').append(form)
+      form.submit()
+    }
+
     $(function () {
       errorChk()
       // 이메일 유효성 검사
@@ -353,6 +375,8 @@
         } else {
           msg.css('display', 'none')
         }
+
+        $('button[name=dologin]').on('click', login)
       })
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경

@@ -30,4 +30,5 @@ public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSu
 
   List<ParticipateSurvey> findAllByUserId(long userId);
 
+
 }

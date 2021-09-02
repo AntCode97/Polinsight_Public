@@ -34,7 +34,8 @@ const passwordInputValidator = pwd => {
   return !!pwd.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,16}$/);
 }
 const phoneNumberChecker = phone => {
-  return !!phone.match(/^([0-9]{3})-([0-9]{4})-([0-9]{4})$/) || !!phone.match(/^[0-9]{3}[0-9]{4}[0-9]{4}$/)
+  phone = phone.replaceAll("-", "")
+  return !!phone.match(/^[0-9]{3}[0-9]{4}[0-9]{4}$/)
 }
 const emailInputValidator = email => {
   return !!email.match(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i);
@@ -63,11 +64,6 @@ const isNotBlank = val => {
 
 function stringToEmail() {
   return arguments[0] + '@' + arguments[1]
-  // if (arguments.length > 1) {
-  //   return {account: arguments[0], domain: arguments[1]}
-  // } else if (!!arguments[0]) {
-  //   return {account: arguments[0].split('@')[0], domain: arguments[0].split('@')[1]}
-  // }
 }
 
 function stringToPhone() {
@@ -97,15 +93,28 @@ function checkNumber(event) {
   return false;
 }
 
-const saveByExcel = e => {
+async function saveByExcel(e) {
   if (!e) {
     alert('에러가 발생하였습니다.\n관리자에게 문의해주세요.')
     return;
   }
   let url = e.data.url
-  const frm = $(`<form action="${url}" method="get"></form>`)
-  $('body').append(frm)
-  frm.submit()
+  let params = !e.data.param ? {} : e.data.param
+
+  const response = await http.get(url + '/count', {params: params})
+  if (response.data.success) {
+    if (response.data.response > 0) {
+      const frm = $(`<form action="${url}" method="get"></form>`)
+      $('body').append(frm)
+      frm.submit()
+    } else {
+      alert('다운로드 받을 데이터가 없습니다.')
+    }
+  } else {
+    alert('처리중 문제가 발생하였습니다.\n관리자에게 문의해주세요.')
+  }
+
+
 }
 
 const checkAccountNumber = account_number => {
@@ -143,6 +152,7 @@ const adminPanelInfoChecker = info => {
     }
     if (key === 'favorite') {
       if (info[key].length <= 0) return false;
+
     }
   }
   return true;

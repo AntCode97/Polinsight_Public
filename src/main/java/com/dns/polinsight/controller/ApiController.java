@@ -200,56 +200,14 @@ public class ApiController {
     }
   }
 
-  @GetMapping("/points/excel/{userId}")
-  public void getExcelFromAllPointRequests(HttpServletResponse response,
-                                           @PathVariable(value = "userId", required = false) Long userId) {
-    try {
-      ExcelUtil<PointRequest> excelUtil = new ExcelUtil<>();
-      if (userId == 0) {
-        excelUtil.createExcelToResponse(pointRequestService.findAll(), String.format("%s-%s", "point_request", LocalDate.now()), response);
-      } else {
-        excelUtil.createExcelToResponse(pointRequestService.getUserPointRequests(userId), String.format("%s-%s", "point_request", LocalDate.now()), response);
-      }
-    } catch (IllegalAccessException | IOException e) {
-      e.printStackTrace();
-    }
-  }
 
-  @GetMapping("/pointhistory/excel")
-  public void getExcelFromAllHistories(HttpServletResponse response,
-                                       @RequestParam(value = "userId", required = false, defaultValue = "0") Long userId) {
-    try {
-      ExcelUtil<PointHistory> excelUtil = new ExcelUtil<>();
-      if (userId == 0) {
-        excelUtil.createExcelToResponse(pointHistoryService.findAll(), String.format("%s-%s", "point_history", LocalDate.now()), response);
-      } else {
-        excelUtil.createExcelToResponse(pointHistoryService.findAllPointHistoryByUserId(userId), String.format("%s-%s", "point_history", LocalDate.now()), response);
-      }
-    } catch (IllegalAccessException | IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  @GetMapping("/participates/excel")
-  public void getExcelFromAllParticipates(HttpServletResponse response,
-                                          @RequestParam(value = "userId", required = false, defaultValue = "-1") Long userId) {
-    try {
-      ExcelUtil<ParticipateSurvey> excelUtil = new ExcelUtil<>();
-      if (userId == -1) {
-        excelUtil.createExcelToResponse(participateSurveyService.findAll(), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
-      } else {
-        excelUtil.createExcelToResponse(participateSurveyService.findAllByUserId(userId), String.format("%s-%s", "participate_survey", LocalDate.now()), response);
-      }
-    } catch (IllegalAccessException | IOException e) {
-      e.printStackTrace();
-    }
-  }
 
   /**
    * @param requestId
    *     : 변경할 포인트 지급 요청의 아이디
    * @param progressType
    *     : 변경할 요청의 상태
+   *
    * @return boolean : 요청 성공 여부
    */
   @PutMapping("{requestId}/pointrequest")
