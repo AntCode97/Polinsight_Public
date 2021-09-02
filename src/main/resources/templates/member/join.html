@@ -924,7 +924,7 @@
         alert('연락처와 추천인 연락처는 같을 수 없습니다.')
         return
       }
-      if (!userInfo['ispanel']) {
+      if (userInfo['ispanel'] === undefined || userInfo['ispanel'] === null) {
         $('input[name=ispanel]').val('').focus()
         alert('패널 가입 여부를 확인해주세요')
         return;
@@ -964,12 +964,9 @@
       return result;
     }
 
-    const signUp = e => {
+    const join = e => {
       e.preventDefault();
       e.returnValue = false;
-      // if (!signUpDataProcess() || !checkRequiredData()) {
-      //   return;
-      // }
       signUpDataProcess()
       http
           .post('/testsignup', userInfo)
@@ -1040,6 +1037,7 @@
       userInfo['ispanel'] = false;
     }
 
+    // TODO
     const passwordChecker = e => {
       let password = $('input[name=password]');
       let confirm = $('input[name=confirm]');
@@ -1067,8 +1065,8 @@
     const init = () => {
       $('input').on('keyup change checked', inputHandler)
       $('select').on('keyup change', inputHandler).trigger('change')
-      $('button#panel_submit').on('click', {type: 'panel'}, signUp)
-      $('button#basic_submit').on('click', {type: 'basic'}, signUp)
+      $('button#panel_submit').on('click', {type: 'panel'}, join)
+      $('button#basic_submit').on('click', {type: 'basic'}, join)
 
       $('input[type=radio]:checked').each(function () {
         userInfo[$(this).attr('name')] = $(this).val()

@@ -385,21 +385,18 @@
       </div>
 
       <div class="header_container_login">
-        <th:block th:if="${session.user} == null">
-          <!-- 비로그인 -->
-          <a th:href="@{/login}">LOGIN</a>
-          <span></span>
-          <a th:href="@{/signup}">JOIN</a>
+        <th:block sec:authorize="isAnonymous()">
+          <li class="nav-item"><a th:href="@{/login}" class="nav-link"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
+          <li class="nav-item"><a th:href="@{/signup}" class="nav-link"><i class="fas fa-user"></i> JOIN</a></li>
         </th:block>
-        <th:block th:unless="${session.user} == null">
-          <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">
-            <a th:href="@{/mypage}">MY PAGE</a>
+        <th:block sec:authorize="isAuthenticated()">
+          <th:block sec:authorize="hasAnyRole('USER','PANEL','BEST')">
+            <li class="nav-item"><a th:href="@{/mypage}" class="nav-link"><i class="fas fa-user-circle"></i> MY PAGE</a></li>
           </th:block>
-          <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">
-            <a th:href="@{/admin}">ADMIN</a>
+          <th:block sec:authorize="hasRole('ADMIN')">
+            <li class="nav-item"><a th:href="@{/admin}" class="nav-link"><i class="fas fa-users-cog"></i> ADMIN</a></li>
           </th:block>
-          <span></span>
-          <a th:href="@{/dologout}">LOGOUT</a>
+          <li class="nav-item"><a th:href="@{/dologout}" class="nav-link"><i class="fas fa-sign-out-alt"></i> LOGOUT</a></li>
         </th:block>
       </div>
     </div>

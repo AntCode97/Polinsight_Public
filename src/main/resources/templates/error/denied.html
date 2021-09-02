@@ -1,8 +1,11 @@
 <th:block th:include="layout/header" />
 <th:block>
-  <h1>Access Denied</h1>
-  <h3 th:text="${session.msg}"></h3>
-  <div>
-    <th:block th:include="layout/footer" />
-  </div>
+  <div class="flex-wrapper">
+    <div class="flex-content">
+      <div>
+        <h1>Access Denied</h1>
+        <h3 th:text="${session.msg}"></h3>
+      </div>
+      <th:block th:include="layout/footer" />
+    </div>
 </th:block>
