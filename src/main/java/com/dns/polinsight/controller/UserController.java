@@ -259,11 +259,8 @@ public class UserController {
   @PostMapping("/api/point/{point}")
   public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@CurrentUser User user,
                                                                          @PathVariable(name = "point") Long point) throws Exception {
-    /*
-     * 포인트 발급 요청 로그 남기기 --> 관리자 페이지 및 마이페이지에서 보여줄 것
-     * */
     try {
-      //      User user = userService.findUserByEmail(sessionUser.getEmail());
+      log.info("{} has left the request for point exchange", user.getEmail());
       pointRequestService.addUserPointRequest(user.getId(), point);
       return success(pointRequestService.getUserPointRequests(user.getId()));
     } catch (Exception e) {
@@ -388,7 +385,6 @@ public class UserController {
     log.warn(signupDTO.toString());
     try {
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
-      log.warn("==> {} <==",signupDTO.getPassword());
       User user = userService.saveOrUpdate(new User(signupDTO));
       session.setMaxInactiveInterval(60);
       session.setAttribute("name", user.getName());
