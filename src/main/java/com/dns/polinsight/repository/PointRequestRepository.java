@@ -24,4 +24,5 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
   Page<PointRequestMapping> findAllByRegex(Pageable pageable, String regex);
 
   long countPointRequestsByUid(Long userId);
+
 }

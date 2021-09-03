@@ -206,28 +206,43 @@
       outline          : none;
       padding          : 7px 45px;
     }
-    .contract_box {max-width: 1000px; min-width: 550px; margin: 0 auto;}
+
+    .contract_box {
+      margin    : 0 auto;
+      max-width : 1000px;
+      min-width : 550px;
+    }
 
     @media (min-width : 320px) and (max-width : 480px) {
       .contract_box {
-        min-width: 0px;
-        width: calc(100% - 20px);
-        margin: 0 10px;
+        margin    : 0 10px;
+        min-width : 0px;
+        width     : calc(100% - 20px);
       }
-      .contract_contents_wrap > p {display: none;}
-      .terms_span > label {padding-right: 25px;}
-      .terms_p {font-size: 12px;}
+
+      .contract_contents_wrap > p {
+        display : none;
+      }
+
       .terms_span > label {
-        height: 100%;
-        font-size: 12px;
+        padding-right : 25px;
+      }
+
+      .terms_p {
+        font-size : 12px;
+      }
+
+      .terms_span > label {
+        font-size : 12px;
+        height    : 100%;
       }
     }
 
   </style>
   <div class="flex-wrapper">
     <div class="flex-content">
-<!--      <div class="contract_wrap">-->
-<!--      </div>-->
+      <!--      <div class="contract_wrap">-->
+      <!--      </div>-->
       <div class="contract_box">
         <div class="contract_title"><h1>약관동의</h1></div>
         <div class="contract_contents_wrap">

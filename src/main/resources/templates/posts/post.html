@@ -399,16 +399,16 @@
     });
 
 
-    const getCookie = function(name) {
+    const getCookie = function (name) {
       const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      return value? value[2] : null;
+      return value ? value[2] : null;
     };
 
     const goList = () => {
       const listBtnUrl = getCookie("listBtnUrl");
-      if(listBtnUrl != null){
-        location.href= listBtnUrl;
-      } else{
+      if (listBtnUrl != null) {
+        location.href = listBtnUrl;
+      } else {
         location.href = "/posts"
       }
     }

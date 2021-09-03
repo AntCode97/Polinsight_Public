@@ -1,7 +1,6 @@
 package com.dns.polinsight.config.resolver;
 
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.exception.UnAuthorizedException;
 import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
