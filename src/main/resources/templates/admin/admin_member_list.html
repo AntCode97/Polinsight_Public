@@ -129,6 +129,7 @@
       margin        : 5px 0;
       padding       : 15px 35px;
       width         : 100%;
+      text-align: center;
     }
 
     .user_nav_btn_wrap > input[type='radio'] + label:hover {
@@ -416,6 +417,17 @@
       cursor : pointer;
     }
 
+    .btn-mem-update {
+      cursor: pointer;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+      padding: 10px 25px;
+      background: #EBA444;
+      color: white;
+      margin-top: 25px;
+    }
+
   </style>
   <!-- Modal Page: 회원정보 수정 -->
   <div class="modal_wrap">
@@ -432,7 +444,7 @@
             <label for="tab02">패널정보변경</label>
             <input type="radio" name="tabmenu" id="tab03" />
 
-            <button id="admin_user_info_update_btn">업데이트</button>
+            <button id="admin_user_info_update_btn" class="btn-mem-update">회원정보수정</button>
           </div>
         </div>
         <div class="right_box">
