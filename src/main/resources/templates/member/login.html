@@ -329,6 +329,8 @@
     }
 
     const login = (e) => {
+      e.preventDefault();
+      e.stopPropagation()
       let email = $('input[name=email]')
       let password = $('input[name=password]')
       // TODO : 알람창이 계속해서 발생 함
@@ -342,42 +344,50 @@
         password.val('').focus()
         return
       }
-
-      let form = $(`<form></form>`)
-      form.append($(`<input name="email" value="${email}" />`))
-      form.append($(`<input name="password" value="${password}" />`))
-      $('body').append(form)
-      form.submit()
+      if (canLogin) {
+        let form = $(`<form></form>`)
+        form.append($(`<input name="email" value="${email}" />`))
+        form.append($(`<input name="password" value="${password}" />`))
+        $('body').append(form)
+        form.submit()
+      }
     }
 
+    let canLogin = false
     $(function () {
       errorChk()
       // 이메일 유효성 검사
-      $('input[name=email]').on('keyup change', function (e) {
+      $('input[name=email]').on('keyup change', function () {
         let emailValue = $(this).val()
         let msg = $(this).parent('label').next('.err_msg')
         if (emailValue.length === 0) {
           msg.css('display', 'none')
+          canLogin = false;
         } else if (!emailValue || !emailInputValidator(emailValue)) {
           msg.css('display', 'block').text('올바른 이메일을 입력해주세요')
+          canLogin = true;
         } else {
           msg.css('display', 'none')
+          canLogin = false;
         }
       })
       // 비밀번호 유효성 검사
-      $('input[name=password]').on('keyup change', function (e) {
+      $('input[name=password]').on('keyup change', function () {
         let passwordValue = $(this).val()
         let msg = $(this).parent('label').next('.err_msg')
         if (passwordValue.length === 0) {
           msg.css('display', 'none')
+          canLogin = false;
         } else if (!passwordValue || !passwordInputValidator(passwordValue)) {
           msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요')
+          canLogin = true;
         } else {
           msg.css('display', 'none')
+          canLogin = false;
         }
-
-        $('button[name=dologin]').on('click', login)
       })
+
+      $(document).on('click', 'button[name=dologin]', login)
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경
       $(document).on('focus', '.login_input', function () {
