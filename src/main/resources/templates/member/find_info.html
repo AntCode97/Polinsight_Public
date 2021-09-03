@@ -126,7 +126,7 @@
                 <input type="text" class="user_info_input" name="finduser_name" required />
               </div>
               <div class="user_input_box">
-                <span class="info_article">전화번호</span>
+                <span class="info_article">휴대전화</span>
                 <input type="tel" class="user_info_input" name="phone" maxlength="11" required placeholder="' - ' 없이 입력해주세요." />
               </div>
               <div class="user_btn_wrap" style="justify-content: flex-start;">
@@ -147,6 +147,10 @@
               <div class="user_input_box">
                 <span class="info_article">이름</span>
                 <input type="text" class="user_info_input" name="findpwd_name" required />
+              </div>
+              <div class="user_input_box">
+                <span class="info_article">휴대전화</span>
+                <input type="tel" class="user_info_input" name="findpwd_phone" required placeholder="' - ' 없이 입력해주세요." />
               </div>
               <div class="user_btn_wrap" style="justify-content: flex-start;">
                 <span class="err_msg">이메일 형식이 올바르지 않습니다.</span>
@@ -210,6 +214,7 @@
       let type = e.target.name
       let finduser_name = $('input[name=finduser_name]').val()
       let findpwd_name = $('input[name=findpwd_name]').val()
+      let findpwd_phone = $('input[name=findpwd_phone]').val()
       let email = $('input[name=email]').val()
       if (type === 'user' && emailInputValidator(email)) {
         alert('입력하신 이메일을 확인해주세요')
@@ -221,7 +226,8 @@
             name: finduser_name
           } : {
             name: findpwd_name,
-            email: email
+            email: email,
+            phone: findpwd_phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
           })
           .then(res => {
             if (res.data.success) {
@@ -236,7 +242,11 @@
               alert('입력한 내용을 다시 한번 확인해주세요.')
             }
           })
-          .catch(console.log)
+          .catch(err => {
+            console.log(err)
+            alert('서버에 문제가 발생하였습니다. 잠시 후 다시 시도해주세요.')
+            location.replace('/find')
+          })
     }
 
     $(function () {

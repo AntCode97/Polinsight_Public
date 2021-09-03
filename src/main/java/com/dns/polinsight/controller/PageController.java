@@ -65,7 +65,7 @@ public class PageController {
 
   @GetMapping("/success_basic")
   public ModelAndView successBasicMemberSignUp() {
-    return new ModelAndView("success_basic");
+    return new ModelAndView("member/success_basic");
   }
 
   @GetMapping("/success_panel")
@@ -81,7 +81,7 @@ public class PageController {
 
   @GetMapping("/find")
   public ModelAndView find() {
-    return new ModelAndView("find_info");
+    return new ModelAndView("member/find_info");
   }
 
   @GetMapping("/events")
