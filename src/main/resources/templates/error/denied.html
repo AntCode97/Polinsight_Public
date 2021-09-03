@@ -1,10 +1,24 @@
 <th:block th:include="layout/header" />
 <th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+
+    .content {
+      display         : flex;
+      flex-direction  : column;
+      height          : 100vh;
+      justify-content : space-around;
+      margin          : auto;
+      width           : 100%;
+    }
+  </style>
   <div class="flex-wrapper">
     <div class="flex-content">
-      <div>
+      <div class="content">
         <h1>Access Denied</h1>
-        <h3 th:text="${session.msg}"></h3>
+        <h3 th:text="${msg}"></h3>
       </div>
       <th:block th:include="layout/footer" />
     </div>
