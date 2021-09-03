@@ -390,7 +390,8 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
-    if(postDTO.getPostType() == null) postDTO.setPostType(PostType.NOTICE);
+    if (postDTO.getPostType() == null)
+      postDTO.setPostType(PostType.NOTICE);
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
       for (MultipartFile m : file) {

@@ -17,8 +17,8 @@ body, .se2_inputarea {
 
 .se2_inputarea {
   margin      : 15px;
-  *word-break : break-all
-  *word-wrap  : normal;
+  *word-break : break-all *
+  word-wrap   : normal;
   word-wrap   : break-word;
 }
 
