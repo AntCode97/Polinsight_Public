@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  //  @Bean
+//  @Bean
   public CustomAuthenticationFilter customAuthenticationProcessingFilter() {
     CustomAuthenticationFilter filter = new CustomAuthenticationFilter("/dologin");
     filter.setAuthenticationManager(authenticationManager());
@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return filter;
   }
 
-  //  @Bean
+//  @Bean
   public AuthenticationManager authenticationManager() {
     return new CustomAuthManager(userService, passwordEncoder());
   }

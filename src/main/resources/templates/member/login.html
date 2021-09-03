@@ -333,7 +333,6 @@
       e.stopPropagation()
       let email = $('input[name=email]')
       let password = $('input[name=password]')
-      // TODO : 알람창이 계속해서 발생 함
       if (!email.val() || !emailInputValidator(email.val())) {
         alert('정확한 이메일을 입력해주세요')
         email.focus()
@@ -344,10 +343,13 @@
         password.val('').focus()
         return
       }
+      console.log('can Login:: ' + canLogin)
       if (canLogin) {
         let form = $(`<form></form>`)
-        form.append($(`<input name="email" value="${email}" />`))
-        form.append($(`<input name="password" value="${password}" />`))
+        form.attr('method', 'post')
+        form.attr('action', '/dologin')
+        form.append($(`<input type="hidden" name="email" value="${email.val()}" />`))
+        form.append($(`<input type="hidden" name="password" value="${password.val()}" />`))
         $('body').append(form)
         form.submit()
       }
@@ -362,13 +364,13 @@
         let msg = $(this).parent('label').next('.err_msg')
         if (emailValue.length === 0) {
           msg.css('display', 'none')
-          canLogin = false;
+          canLogin = true;
         } else if (!emailValue || !emailInputValidator(emailValue)) {
           msg.css('display', 'block').text('올바른 이메일을 입력해주세요')
-          canLogin = true;
+          canLogin = false;
         } else {
           msg.css('display', 'none')
-          canLogin = false;
+          canLogin = true;
         }
       })
       // 비밀번호 유효성 검사
@@ -377,13 +379,13 @@
         let msg = $(this).parent('label').next('.err_msg')
         if (passwordValue.length === 0) {
           msg.css('display', 'none')
-          canLogin = false;
+          canLogin = true;
         } else if (!passwordValue || !passwordInputValidator(passwordValue)) {
           msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요')
-          canLogin = true;
+          canLogin = false;
         } else {
           msg.css('display', 'none')
-          canLogin = false;
+          canLogin = true;
         }
       })
 

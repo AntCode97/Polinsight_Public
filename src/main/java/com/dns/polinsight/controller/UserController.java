@@ -388,6 +388,7 @@ public class UserController {
     log.warn(signupDTO.toString());
     try {
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
+      log.warn("==> {} <==",signupDTO.getPassword());
       User user = userService.saveOrUpdate(new User(signupDTO));
       session.setMaxInactiveInterval(60);
       session.setAttribute("name", user.getName());
