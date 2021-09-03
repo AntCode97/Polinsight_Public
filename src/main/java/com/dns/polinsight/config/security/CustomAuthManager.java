@@ -24,8 +24,6 @@ public class CustomAuthManager implements AuthenticationManager {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UserDetails details = userService.loadUserByUsername(String.valueOf(authentication.getPrincipal()));
     String inputPassword = authentication.getCredentials().toString();
-    log.debug("사용자 입력 패스워드 : " + inputPassword);
-    log.debug("DB에 저장된 패스워드 : " + details.getPassword());
 
     if (!passwordEncoder.matches(inputPassword, details.getPassword()))
       throw new BadCredentialsException("비밀번호가 일치하지 않습니다");
