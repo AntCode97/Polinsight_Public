@@ -1032,8 +1032,6 @@
     const passwordChecker = e => {
       let password = $('input[name=password]');
       let confirm = $('input[name=confirm]');
-      let name = input.attr('name')
-      let msg = input.next('.err_msg')
 
       if (!!password.val() || !!confirm.val()) {
         if (passwordInputValidator(password.val()) && passwordInputValidator(confirm.val()))
@@ -1084,7 +1082,38 @@
       $('input[name=email]').on('keyup change', checkEmail)
       $('select[name=domain]').on('change', checkEmail)
       // 패스워드 입력 검증 및 안내 메시지
-      $('input[type=password]').on('keyup change', passwordChecker)
+      $('input[name=password]').on('keyup change', function () {
+        let input = $(this)
+        let val = input.val()
+        let msg = input.next('.err_msg')
+        if (val.length < 1) {
+          msg.text('').css('display', 'none')
+          return
+        }
+        if (!passwordInputValidator(val)) {
+          msg.text('올바른 값을 입력해주세요').css('display', 'block')
+        } else {
+          msg.text('').css('display', 'none')
+        }
+      })
+      $('input[name=confirm]').on('keyup change', function () {
+        let input = $(this)
+        let val = input.val()
+        let msg = input.next('.err_msg')
+        let password = $('input[name=password]')
+        if (val.length < 1) {
+          msg.text('').css('display', 'none')
+          return
+        }
+        if (!passwordInputValidator(val)) {
+          msg.text('올바른 값을 입력해주세요').css('display', 'block')
+        } else {
+          if (password.val() !== val) {
+            msg.text('비밀번호가 일치하지 않습니다.').css('display', 'block')
+          } else
+            msg.text('').css('display', 'none')
+        }
+      })
     }
 
     const throttleRecommendChecker = _.throttle((recommend, callback) => {

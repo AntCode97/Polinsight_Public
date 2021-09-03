@@ -1,302 +1,238 @@
 <th:block th:include="layout/header" />
 <th:block>
-  <link th:href="@{/css/table.css}" rel="stylesheet">
-  <style>
-    /* CASAREL 아래 nav-bar */
-    .headline_wrap {
-      align-items     : center;
-      color           : red;
-      display         : none;
-      flex-direction  : column;
-      font-size       : 55px;
-      gap             : 10px;
-      height          : 100%;
-      justify-content : center;
-    }
+    <link th:href="@{/css/table.css}" rel="stylesheet">
+    <style>
+        /* CASAREL 아래 nav-bar */
+        .headline_wrap {
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: red;
+            font-size: 55px;
+        }
+        .small-headline {
+            font-size: 14px;
+        }
+        .carasel_wrap {height: 35vh;}
+        .carasel_wrap::before {height: 35vh;}
+        .big_navigation {
+            width: 1200px;
+            margin: -1px auto 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .big_navigation_wrap {border-bottom: 1px solid #ddd;}
+        .big_navigation > li > a {
+            display: block;
+            color: white;
+            font-size: 15px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            overflow: hidden;
+            height: 50px;
+            line-height: 48px;
+            padding: 0 40px;
+            background: #CECECE;
+            margin: 0 -1px -1px 0;
+        }
+        .check_navigation {
+            background: #192739!important;
+        }
 
-    .small-headline {
-      font-size : 14px;
-    }
+        /* post DESIGN */
+        .post_main_contents {
+            display     : block;
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+        }
+        .post_main_contents_item {
+            padding: 10px 0;
+            border-bottom : 1px dashed #DADADA;
+        }
+        .main_item {
+            color         : #000000;
+            font-size     : 2.5rem;
+            font-weight   : bold;
+            padding       : 0 20px 10px;
+            text-align: center;
+        }
+        .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444; margin-top: 40px; margin-bottom: 30px;}
+        .tbl-search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .box-select {
+            appearance: none;
+            background: #fff url('/img/etc/arrow-search.png') no-repeat right center;
+            border: 1px solid #CCD0D7;
+            font-size: 1.2rem;
+            height: 55px;
+            line-height: 55px;
+            padding-left: 20px;
+            text-align: left;
+            flex: 1.5;
+            cursor: pointer;
+        }
+        .post-search .form-search {padding: 20px 200px;}
+        .scroll-card {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 13.3px;
+        }
+        .card-box {
+            width: 290px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card-img {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #444;
+            outline: none;
+        }
+        .card-title {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #444;
+            background: #EEEEEE;
+            border: 1px solid #EEEEEE;
+        }
 
-    .carasel_wrap {
-      height : 35vh;
-    }
-
-    .carasel_wrap::before {
-      height : 35vh;
-    }
-
-    .big_navigation {
-      align-items     : center;
-      display         : flex;
-      justify-content : flex-start;
-      margin          : -1px auto 0;
-      width           : 1200px;
-    }
-
-    .big_navigation_wrap {
-      border-bottom : 1px solid #DDDDDD;
-    }
-
-    .big_navigation > li > a {
-      background     : #CECECE;
-      color          : white;
-      display        : block;
-      font-size      : 15px;
-      height         : 50px;
-      letter-spacing : -0.5px;
-      line-height    : 48px;
-      margin         : 0 -1px -1px 0;
-      overflow       : hidden;
-      padding        : 0 40px;
-      text-align     : center;
-    }
-
-    .check_navigation {
-      background : #192739 !important;
-    }
-
-    /* post DESIGN */
-    .post_main_contents {
-      display   : block;
-      margin    : 40px auto;
-      max-width : 1200px;
-      width     : 100%;
-    }
-
-    .post_main_contents_item {
-      border-bottom : 1px dashed #DADADA;
-      padding       : 10px 0;
-    }
-
-    .main_item {
-      color       : #000000;
-      font-size   : 2.5rem;
-      font-weight : bold;
-      padding     : 0 20px 10px;
-      text-align  : center;
-    }
-
-    .sub_item {
-      color         : #444444;
-      display       : block;
-      font-size     : 1.5rem;
-      margin-bottom : 30px;
-      margin-top    : 40px;
-      text-align    : center;
-    }
-
-    .tbl-search {
-      align-items     : center;
-      display         : flex;
-      gap             : 10px;
-      justify-content : center;
-    }
-
-    .box-select {
-      appearance   : none;
-      background   : #FFFFFF url('/img/etc/arrow-search.png') no-repeat right center;
-      border       : 1px solid #CCD0D7;
-      cursor       : pointer;
-      flex         : 1.5;
-      font-size    : 1.2rem;
-      height       : 55px;
-      line-height  : 55px;
-      padding-left : 20px;
-      text-align   : left;
-    }
-
-    .post-search .form-search {
-      padding : 20px 200px;
-    }
-
-    .scroll-card {
-      align-items : center;
-      display     : flex;
-      flex-wrap   : wrap;
-      gap         : 13.3px;
-    }
-
-    .card-box {
-      align-items    : center;
-      display        : flex;
-      flex-direction : column;
-      width          : 290px;
-    }
-
-    .card-img {
-      border  : 1px solid #444444;
-      height  : 300px;
-      outline : none;
-      width   : 100%;
-    }
-
-    .card-title {
-      background : #EEEEEE;
-      border     : 1px solid #EEEEEE;
-      color      : #444444;
-      font-size  : 14px;
-      padding    : 10px;
-      text-align : center;
-      width      : 100%;
-    }
-
-    .post-row > *:nth-child(1) {
-      width : 70px;
-    }
-
-    .post-row > *:nth-child(2) {
-      width : 90px;
-    }
-
-    .post-row > *:nth-child(3) {
-      width : 500px;
-    }
-
-    .post-row > *:nth-child(4) {
-      width : 120px;
-    }
-
-    .post-row > *:nth-child(5) {
-      width : 180px;
-    }
-
-    .post-row > *:nth-child(6) {
-      width : 100px;
-    }
-
-    .post-row > *:nth-child(7) {
-      width : 120px;
-    }
-
-    .status-bar {
-      background    : #4C99CF;
-      border-radius : 5px;
-      color         : #FFFFFF;
-      padding       : 0;
-    }
-
-    .status-finish {
-      background : #192739 !important;
-    }
+        .post-row > *:nth-child(1) {width : 70px;}
+        .post-row > *:nth-child(2) {width : 90px;}
+        .post-row > *:nth-child(3) {width : 500px;}
+        .post-row > *:nth-child(4) {width : 120px;}
+        .post-row > *:nth-child(5) {width : 180px;}
+        .post-row > *:nth-child(6) {width : 100px;}
+        .post-row > *:nth-child(7) {width : 120px;}
+        .status-bar {padding:0; background: #4C99CF; border-radius: 5px; color: #fff;}
+        .status-finish {background: #192739!important;}
 
 
-    @media (min-width : 320px) and (max-width : 480px) {
-      .carasel_wrap {
-        height : 25vh;
-      }
-
-      .headline_wrap {
-        display : none;
-      }
-    }
-  </style>
+        @media (min-width : 320px) and (max-width : 480px) {
+            .carasel_wrap { height: 25vh; }
+            .headline_wrap { display: none;}
+        }
+    </style>
 
 
-  <div class="carasel_wrap">
-    <div class="headline_wrap">
-      <span>고객화 함께 가치를</span>
-      <span>더해가는 기업</span>
-      <span class="small-headline">소제목 블라블라블라블라블라~</span>
-    </div>
-  </div>
-
-  <div class="big_navigation_wrap">
-    <ul class="big_navigation">
-      <li><a th:href="@{/research/online}" th:classappend="${checked} == 'online' ? 'check_navigation'">온라인조사</a></li>
-      <li><a th:href="@{/research/pols}" th:classappend="${checked} == 'pols' ? 'check_navigation'">폴'S인사이트</a></li>
-    </ul>
-  </div>
-
-  <div class="post_main_contents">
-    <div class="post_main_contents_category">
-      <div class="post_main_contents_item">
-        <p class="main_item">폴'S인사이트</p>
-        <span class="sub_item">폴인사이트에서 진행하고 있는 연구조사입니다.</span>
-      </div>
-    </div>
-
-    <div class="main_contents_wrap">
-      <div class="post-search">
-        <div class="form-search">
-          <div class="tbl-search">
-            <select name="category" class="box-select category-select">
-              <option value="" selected>분류선택</option>
-              <option value="">2018</option>
-              <option value="">2019</option>
-              <option value="">2020</option>
-              <option value="">2021</option>
-            </select>
-            <select name="search" class="box-select search-select">
-              <option value="" selected>통합검색</option>
-              <option value="">제목</option>
-            </select>
-            <div class="box-search">
-              <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
-              <input type="submit" />
-            </div>
-          </div>
+    <div class="carasel_wrap">
+        <div class="headline_wrap">
+            <span>고객화 함께 가치를</span>
+            <span>더해가는 기업</span>
+            <span class="small-headline">소제목 블라블라블라블라블라~</span>
         </div>
-      </div>
-      <div class="survey-sort-wrap"></div>
-      <div class="scroll-card">
-
-      </div>
     </div>
-  </div>
 
-  <div class="page-button" id="pagination">
+    <div class="big_navigation_wrap">
+        <ul class="big_navigation">
+            <li><a th:href="@{/research/online}" th:classappend="${checked} == 'online' ? 'check_navigation'">온라인조사</a></li>
+            <li><a th:href="@{/research/pols}" th:classappend="${checked} == 'pols' ? 'check_navigation'">폴'S인사이트</a></li>
+        </ul>
+    </div>
 
-  </div>
+    <div class="post_main_contents">
+        <div class="post_main_contents_category">
+            <div class="post_main_contents_item">
+                <p class="main_item">폴'S인사이트</p>
+                <span class="sub_item">폴인사이트에서 진행하고 있는 연구조사입니다.</span>
+            </div>
+        </div>
+
+        <div class="main_contents_wrap">
+            <div class="post-search">
+                <div class="form-search">
+                    <div class="tbl-search">
+                        <select name="category" class="box-select category-select">
+                            <option value="" selected>분류선택</option>
+                            <option value="">2018</option>
+                            <option value="">2019</option>
+                            <option value="">2020</option>
+                            <option value="">2021</option>
+                        </select>
+                        <select name="search" class="box-select search-select">
+                            <option value="" selected>통합검색</option>
+                            <option value="">제목</option>
+                        </select>
+                        <div class="box-search">
+                            <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
+                            <input type="submit" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="survey-sort-wrap"></div>
+            <div class="scroll-card">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="page-button"  id="pagination">
+
+    </div>
 
 
-  <th:block th:include="layout/footer" />
-  <script th:inline="javascript">
-  </script>
-  <script th:src="@{/js/PostUtils.js}"></script>
-  <script>
-    async function getSurveyData(e) {
-      let page = !e ? 0 : !e.data.page ? 0 : e.data.page
-      let regex = String($('input[name=admin_find]').val()).trim()
-      const response = await http.get('/api/surveys/notAdmin', {params: {page: page, size: 10, regex: regex}})
-      if (response.data.success) {
-        const data = response.data.response
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
-      }
-    }
+
+    <th:block th:include="layout/footer" />
+    <script th:inline="javascript">
+    </script>
+    <script th:src="@{/js/PostUtils.js}"></script>
+    <script>
+        async function getSurveyData(e) {
+            let page = !e ? 0 : !e.data.page ? 0 : e.data.page
+            let regex = String($('input[name=admin_find]').val()).trim()
+            const response = await http.get('/api/surveys/notAdmin', {params: {page: page, size: 10, regex: regex}})
+            if (response.data.success) {
+                const data = response.data.response
+                return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+            }
+        }
 
 
-    const init = e => {
-      const spinner = $('#loading')
-      spinner.show()
-      getSurveyData(e).then(obj => {
-        if (obj.total > 0) {
-          makePagination(obj.current, obj.totalPage)
-          obj.content.forEach(post => {
-            $('.scroll-card').append(makeSurveyTemplate2(post))
-          })
-        } else
-          $('.scroll-card').append(`<div><h1>게시물이 없습니다.</h1></div>`)
-      })
-      spinner.hide()
-    }
+        const init = e => {
+            const spinner = $('#loading')
+            spinner.show()
+            getSurveyData(e).then(obj => {
+                if (obj.total > 0) {
+                    makePagination(obj.current, obj.totalPage)
+                    obj.content.forEach(post => {
+                        $('.scroll-card').append(makeSurveyTemplate2(post))
+                    })
+                } else
+                    $('.scroll-card').append(`<div><h1>게시물이 없습니다.</h1></div>`)
+            })
+            spinner.hide()
+        }
 
 
-    const makeSurveyTemplate2 = (survey) => {
-      if (survey.progress != 'BEFORE') {
-        let template = $(`<div class="card-box"></div>`);
-        template.append(`<div class="card-box">
+        const makeSurveyTemplate2 = (survey) => {
+            if(survey.progress != 'BEFORE'){
+            let template = $(`<div class="card-box"></div>`);
+                template.append(`<div class="card-box">
             <img src="/img/logo/logo.png" class="card-img" alt="">
                 <div class="card-title">${survey.title}</div></div>`);// 카드
-        return template
-      }
+                return template
+            }
 
-    }
+        }
 
 
-    $(function () {
-      init()
 
-    })
-  </script>
+        $(function () {
+            init()
+
+        })
+    </script>
 </th:block>

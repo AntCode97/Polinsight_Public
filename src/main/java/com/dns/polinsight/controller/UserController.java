@@ -38,10 +38,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -76,16 +73,6 @@ public class UserController {
       User user = userService.saveOrUpdate(new User(signupDTO));
       UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
       log.warn("Saved Info - " + user);
-      //      loginService.login(userDetails.getUsername(), inputPassword);
-      //      request.login(user.getEmail().toString(), inputPassword);
-      //      log.warn(SecurityContextHolder.getContext().getAuthentication().getName());
-
-      //      if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-      //        log.warn("유저 로그인 성공!!!");
-      //        session.setAttribute("user", new UserDto(user));
-      //      } else {
-      //        log.warn("유저 로그인 실패");
-      //      }
       if (signupDTO.isIspanel()) {
         mv.setViewName("redirect:/panel");
       } else {
@@ -309,7 +296,6 @@ public class UserController {
   @PostMapping("/api/survey/participate")
   public ApiUtils.ApiResult<Boolean> participateSurvey(@CurrentUser User user, Survey survey) throws Exception {
     try {
-      //      User user = userService.findUserByEmail(sessionUser.getEmail());
       user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
@@ -323,7 +309,6 @@ public class UserController {
     return success(userService.countAllUserExcludeAdmin());
   }
 
-  // @Deprecated
   @PostMapping("/findpwd")
   public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
                               @RequestParam(name = "email") Email email,
@@ -368,12 +353,13 @@ public class UserController {
         // 비밀번호 찾기
         Assert.notNull(userDto.getEmail());
         Assert.notNull(userDto.getName());
+        Assert.notNull(userDto.getPhone());
         User user = userService.findUserByEmail(Email.of(userDto.getEmail()));
-        log.debug(user.getName());
-        log.debug(userDto.getName());
-        // TODO : 에러 발생시 프론트 엔드 처리 -- 서버에서 문제 발생 or 이메일을 확인해달라는 메시지 ==> find.html에서 변경 필요
         if (!user.getName().equals(userDto.getName()))
-          throw new InvalidValueException("Invalid Value Exception");
+          throw new InvalidValueException("User naem is not matching the data in DB");
+        if (!user.getPhone().toString().equals(userDto.getPhone())) {
+          throw new InputMismatchException("Phone Number is not matching the data in DB");
+        }
         String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);
         Map<String, Object> variables = new HashMap<>();
         variables.put("date", LocalDateTime.now());

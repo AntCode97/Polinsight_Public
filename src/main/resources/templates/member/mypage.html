@@ -10,7 +10,7 @@
       background-color : #F1F1F1;
       display          : flex;
       justify-content  : center;
-      margin-bottom    : -50px;
+      margin-bottom: -50px;
     }
 
     .mypage_wrap {
@@ -1610,7 +1610,7 @@
       $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
 
       $('input[name=account]').on('keyup change')
-      $('button[name=savePointHistoryBtn]').on('click', {}, saveByExcel)
+      $('button[name=savePointHistoryBtn]').on('click', {},saveByExcel)
     });
   </script>
 </th:block>
