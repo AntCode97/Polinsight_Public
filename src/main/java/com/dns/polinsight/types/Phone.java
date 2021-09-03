@@ -20,7 +20,7 @@ public class Phone implements Serializable {
   private String third;
 
   public static Phone of(String phone) {
-    if (phone == null || phone.isEmpty() || phone.isBlank())
+    if (phone.isEmpty() || phone.length() < 11)
       return null;
     String[] arr = phone.split("-");
     return Phone.builder()

@@ -22,4 +22,6 @@ public interface PointHistoryService {
 
   List<PointHistory> findAll();
 
+  long countPointHistories();
+
 }

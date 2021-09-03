@@ -5,6 +5,11 @@
       background-color : rgb(24, 40, 56) !important;
     }
 
+    .err_msg {
+      color   : red;
+      display : none;
+    }
+
     .modal_wrap {
       align-items     : center;
       display         : flex;
@@ -274,6 +279,7 @@
                     <p>이메일</p>
                     <input type="email" class="login_input" id="login_id" name="email" placeholder="이메일을 입력해 주세요" required autofocus>
                   </label>
+                  <span class="err_msg"></span>
                 </div>
                 <div class="input_div">
                   <label>
@@ -281,9 +287,10 @@
                     <input type="password" class="login_input" id="login_pw" name="password" minlength="10" maxlength="16" placeholder="비밀번호를 입력해 주세요" required>
                     <span class="pw_eye"><i class="fas fa-eye-slash"></i></span>
                   </label>
+                  <span class="err_msg"></span>
                 </div>
                 <div class="login_btn_wrap">
-                  <button type="submit" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
+                  <button name="dologin" id="btn-login" class="btn-primary btn-effect">로그인 하기</button>
                 </div>
                 <div class="qnapw auto_login">
                   <div>
@@ -321,8 +328,66 @@
       }
     }
 
+    const login = (e) => {
+      e.preventDefault();
+      e.stopPropagation()
+      let email = $('input[name=email]')
+      let password = $('input[name=password]')
+      // TODO : 알람창이 계속해서 발생 함
+      if (!email.val() || !emailInputValidator(email.val())) {
+        alert('정확한 이메일을 입력해주세요')
+        email.focus()
+        return
+      }
+      if (!password.val() || !passwordInputValidator(password.val())) {
+        alert('정확한 패스워드를 입력해주세요')
+        password.val('').focus()
+        return
+      }
+      if (canLogin) {
+        let form = $(`<form></form>`)
+        form.append($(`<input name="email" value="${email}" />`))
+        form.append($(`<input name="password" value="${password}" />`))
+        $('body').append(form)
+        form.submit()
+      }
+    }
+
+    let canLogin = false
     $(function () {
       errorChk()
+      // 이메일 유효성 검사
+      $('input[name=email]').on('keyup change', function () {
+        let emailValue = $(this).val()
+        let msg = $(this).parent('label').next('.err_msg')
+        if (emailValue.length === 0) {
+          msg.css('display', 'none')
+          canLogin = false;
+        } else if (!emailValue || !emailInputValidator(emailValue)) {
+          msg.css('display', 'block').text('올바른 이메일을 입력해주세요')
+          canLogin = true;
+        } else {
+          msg.css('display', 'none')
+          canLogin = false;
+        }
+      })
+      // 비밀번호 유효성 검사
+      $('input[name=password]').on('keyup change', function () {
+        let passwordValue = $(this).val()
+        let msg = $(this).parent('label').next('.err_msg')
+        if (passwordValue.length === 0) {
+          msg.css('display', 'none')
+          canLogin = false;
+        } else if (!passwordValue || !passwordInputValidator(passwordValue)) {
+          msg.css('display', 'block').text('올바른 비밀번호를 입력해주세요')
+          canLogin = true;
+        } else {
+          msg.css('display', 'none')
+          canLogin = false;
+        }
+      })
+
+      $(document).on('click', 'button[name=dologin]', login)
 
       // 로그인 input(id, pw)에 focus 되면 테두리색 변경
       $(document).on('focus', '.login_input', function () {

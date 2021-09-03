@@ -16,7 +16,7 @@ public class ChangePasswordServiceImpl implements ChangePasswordService {
 
   @Override
   public ChangePwdDto findChangePwdDtoByEmail(Email email) {
-    return repository.getById(email.toString());
+    return repository.findByEmail(email);
   }
 
   @Override

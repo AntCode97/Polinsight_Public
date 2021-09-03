@@ -86,6 +86,7 @@ public class UserDto implements Serializable {
       this.job = user.getPanel().getJob();
       this.industry = user.getPanel().getIndustry();
       this.favorite = user.getPanel().getFavorite();
+      this.address = user.getPanel().getAddress() == null ? "" : user.getPanel().getAddress().toString();
     }
   }
 

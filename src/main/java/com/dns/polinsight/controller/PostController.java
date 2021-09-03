@@ -391,7 +391,6 @@ public class PostController {
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
     postDTO.transViewcontent();
     if(postDTO.getPostType() == null) postDTO.setPostType(PostType.NOTICE);
-    //TODO: 조회수 항목도 가져오기
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
       for (MultipartFile m : file) {

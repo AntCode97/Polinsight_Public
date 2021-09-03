@@ -1,6 +1,6 @@
 <th:block th:include="layout/header" />
 <th:block>
-  <style type="text/css">
+  <style>
     .header_wrap {
       background-color : rgb(24, 40, 56) !important;
     }
@@ -438,7 +438,7 @@
     }
 
     .left_content > label {
-      background  : url('imgs/icon_required_input.png') right center no-repeat;
+      background  : url('img/etc/icon_required_input.png') right center no-repeat;
       cursor      : pointer;
       font-weight : bold;
       line-height : 18px;
@@ -607,6 +607,9 @@
           <div class="item_box history_box">
             <div class="item_header">
               <span><i class="fas fa-star" style="padding-right: 3px; color: #4C99CF;"></i>포인트이력</span>
+              <span>
+                <button name="savePointHistoryBtn">다운로드</button>
+                </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
             <div class="item_content">
@@ -814,21 +817,21 @@
                             </li>
                             <li>
                               <div class="left_content">
-                                <label for="city">거주지</label>
+                                <label for="state">거주지</label>
                               </div>
                               <div class="right_content">
-                                <select id="city" name="city">
+                                <select id="state" name="state`">
                                   <optgroup label="시도">
-                                    <option value="광주">광주</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[0],'광주')}" value="광주">광주</option>
                                   </optgroup>
                                 </select>
-                                <select id="gu" name="gu">
+                                <select id="city" name="city">
                                   <optgroup label="구">
-                                    <option value="북구">북구</option>
-                                    <option value="남구">남구</option>
-                                    <option value="서구">서구</option>
-                                    <option value="동구">동구</option>
-                                    <option value="광산구">광산구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'북구')}" value="북구">북구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'남구')}" value="남구">남구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'서구')}" value="서구">서구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'동구')}" value="동구">동구</option>
+                                    <option th:selected="${#strings.equals(user.address.split(' ')[1],'광산구')}" value="광산구">광산구</option>
                                   </optgroup>
                                 </select>
                                 <span class="err_msg"></span>
@@ -1271,6 +1274,7 @@
     </div>
     <th:block th:include="layout/footer" />
   </div>
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script type="text/javascript">
     $(document).on('focus', '.user_info_input', function () {
       $(this).css('border-bottom', '1px solid #4C99CF');
@@ -1295,7 +1299,7 @@
 
     const userDelete = e => {
       if (canDelete) {
-        if (prompt('정말 회원 탈퇴 하시겠습니까?')) {
+        if (confirm('정말 회원 탈퇴 하시겠습니까?')) {
           http.post('/user/delete')
         }
       } else {
@@ -1343,11 +1347,11 @@
     };
 
     function userBasicInfoUpdate() {
-      if (userNameChecker(userInfo['name'])) {
+      if (!userNameChecker(userInfo['name'])) {
         alert('올바른 이름을 입력해주세요')
         return
       }
-      if (phoneNumberChecker(userInfo['phone'])) {
+      if (!phoneNumberChecker(userInfo['phone'])) {
         alert('올바른 전화번호를 입력해주세요')
         return
       }
@@ -1355,7 +1359,7 @@
         name: userInfo['name'],
         phone: userInfo['phone'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
       }
-      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
         http.put('/user?type=basic', info).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
@@ -1373,7 +1377,7 @@
           newPassword: userInfo['password'],
           password: userInfo['password_current']
         }
-        if (prompt('비밀번호를 변경하시겠습니까?')) {
+        if (confirm('비밀번호를 변경하시겠습니까?')) {
           http.put('/user?type=password', info).then(res => {
             if (res.data.success) {
               alert('업데이트 성공')
@@ -1390,19 +1394,20 @@
 
     function userPanelInfoUpdate() {
       let info = {...userInfo}
+      info['address'] = addressParser(info['state'], info['city'])
       delete info.name
       delete info.password_confirm
       delete info.password
       delete info.password_current
       delete info.phone
       delete info.recommend
-
+      console.log("Update User Panel Info", info)
       if (!panelInfoChecker(info)) {
         alert('필수 값들이 입력되었는지 확인해주세요')
         return
       }
 
-      if (prompt('회원 정보를 업데이트 하시겠습니까?')) {
+      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
         http.put('/user?type=panel', info).then(res => {
           if (res.data.success) {
             alert('업데이트 성공')
@@ -1449,10 +1454,14 @@
       userInfo['industry'] = `[[${user.industry}]]`
       userInfo['registeredAt'] = `[[${user.registeredAt}]]`
       userInfo['favorite'] = `[[${user.favorite}]]`
-
+      let address = `[[${user.address}]]`
+      userInfo['state'] = address.split(' ')[0]
+      userInfo['city'] = address.split(' ')[1]
+      console.log(userInfo)
+      setDateValue()
       let birth = userInfo['birth'].substring(0, 10).split("-")
       $('#year').val((birth[0] * 1)).prop('selected', true).on('change', inputChangeHandler)
-      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', inputChangeHandler).trigger('change')
+      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', inputChangeHandler).on('change', setDay).trigger('change')
       $('#day').val((birth[2] * 1)).prop('selected', true).on('change', inputChangeHandler)
     }
 
@@ -1492,13 +1501,9 @@
       let name = e.target.name
       let value = String(e.target.value).trim()
       if (name === 'favorite') {
-        if (!userInfo[name])
-          userInfo[name] = []
-        if (userInfo[name].includes(value)) {
-          userInfo[name].pop(value)
-        } else {
-          userInfo[name].push(value)
-        }
+        let tmpArr = []
+        $('input[name=favorite]:checked').each((idx, elem) => tmpArr.push($(elem).val()))
+        userInfo["favorite"] = [...tmpArr]
       } else {
         userInfo[name] = value
       }
@@ -1563,7 +1568,7 @@
         parent.append(template)
       }
     }
-    const userInfo = {}
+    let userInfo = {favorite: []}
     let canDelete = false;
 
     $(function () {
@@ -1572,9 +1577,8 @@
         location.replace('/index')
 
       init();
+
       getAllPointRequest();
-      setDateValue()
-      $("#month").on('change selected', setDay)
       getPointHistoryList()
       getUserParticipateSurvey()
 
@@ -1606,6 +1610,7 @@
       $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
 
       $('input[name=account]').on('keyup change')
+      $('button[name=savePointHistoryBtn]').on('click', {},saveByExcel)
     });
   </script>
 </th:block>

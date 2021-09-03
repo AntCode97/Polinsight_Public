@@ -148,6 +148,8 @@ custom :
       - /business/**
       - /chpwd/**
       - /changepwd**
+      - /change/**
+      - /change**
       - /survey/**
       - /success_basic
       - /basictopanel

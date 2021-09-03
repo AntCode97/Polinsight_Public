@@ -31,13 +31,6 @@ public class PageController {
     return mv;
   }
 
-  @GetMapping("/findpwd")
-  public ModelAndView findpassword() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/findpwd");
-    return mv;
-  }
-
   @GetMapping("/login")
   public ModelAndView login() {
     ModelAndView mv = new ModelAndView();
@@ -47,7 +40,7 @@ public class PageController {
 
   @GetMapping("/join")
   public ModelAndView signUp() {
-    return new ModelAndView("member/total_signup");
+    return new ModelAndView("member/join");
   }
 
 
@@ -59,7 +52,7 @@ public class PageController {
   @GetMapping("/panel")
   public ModelAndView panelSignUp() {
     ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/panel");
+    mv.setViewName("_panel");
     return mv;
   }
 
@@ -72,7 +65,7 @@ public class PageController {
 
   @GetMapping("/success_basic")
   public ModelAndView successBasicMemberSignUp() {
-    return new ModelAndView("member/success_basicmember");
+    return new ModelAndView("success_basic");
   }
 
   @GetMapping("/success_panel")
@@ -88,7 +81,7 @@ public class PageController {
 
   @GetMapping("/find")
   public ModelAndView find() {
-    return new ModelAndView("member/find");
+    return new ModelAndView("find_info");
   }
 
   @GetMapping("/events")
@@ -145,11 +138,11 @@ public class PageController {
   @PermitAll
   @GetMapping("/test")
   public ModelAndView testPage() {
-    return new ModelAndView("member/total_signup");
+    return new ModelAndView("signup");
   }
 
   @GetMapping("/accumulate_error")
-  public ModelAndView pointAccumulateError(){
+  public ModelAndView pointAccumulateError() {
     return new ModelAndView("error/point_accumulate_error");
   }
 

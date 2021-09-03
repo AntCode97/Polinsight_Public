@@ -359,7 +359,7 @@
               <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
             </div>
             <div class="panel_line"></div>
-            <div class="panel_item panel_item_horizontal">
+            <div class="panel_item panel_item_horizontal" sec:authorize="isAnonymous()">
               <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
               <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
             </div>

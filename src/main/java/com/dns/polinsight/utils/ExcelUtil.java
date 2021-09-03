@@ -1,5 +1,6 @@
 package com.dns.polinsight.utils;
 
+import com.dns.polinsight.exception.InvalidValueException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
@@ -21,26 +22,14 @@ public class ExcelUtil<T> {
     SXSSFWorkbook workbook = new SXSSFWorkbook();
     SXSSFSheet sheet = workbook.createSheet("sheet1");
     rowNum = 0;
-    log.warn("start download excel");
-    log.warn(String.valueOf(data.size()));
 
+    log.info("start download excel");
+    if (data.size() < 1) {
+      throw new InvalidValueException("데이터가 존재하지 않습니다.");
+    }
     createExcel(sheet, data);
+    log.info("created row: " + sheet.getLastRowNum());
 
-    log.warn("last row: " + sheet.getLastRowNum());
-    //    for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-    //      HSSFRow row = sheet.getRow(i);
-    //      if (row != null) {
-    //        for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
-    //          HSSFCell cell = row.getCell(j);
-    //          if (cell == null)
-    //            continue;
-    //          else
-    //            System.out.println(cell.getCellFormula());
-    //        }
-    //      }
-    //    }
-
-    //    response.setHeader("Set-Cookie", "fileDownload=true; path=/");
     response.setCharacterEncoding("UTF-8");
     response.setContentType("application/msexcel");
     response.setHeader("Content-Disposition", "attachment; filename=" + filename + ".xlsx");
@@ -57,9 +46,6 @@ public class ExcelUtil<T> {
 
     SXSSFRow row = sheet.createRow(rowNum++);
     int cellNum = 0;
-    System.out.println("=======================");
-    System.out.println(list);
-    System.out.println("=======================");
     for (Field field : list.get(0).getClass().getDeclaredFields()) {
       field.trySetAccessible();
       Cell cell = row.createCell(cellNum++);

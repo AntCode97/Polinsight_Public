@@ -43,4 +43,12 @@ public class SurveyController {
   }
 
 
+  /**
+   * 서베이 몽키 수동 동기화
+   */
+  @GetMapping("/api/surveys/sync")
+  public void surveySyncWithSurveyMonkey() {
+    surveyService.getSurveyListAndSyncPerHour();
+  }
+
 }

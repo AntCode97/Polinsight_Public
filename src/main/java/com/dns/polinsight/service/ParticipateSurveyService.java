@@ -16,6 +16,7 @@ public interface ParticipateSurveyService {
 
   Optional<ParticipateSurvey> findBySurveyUserPairHash(String hash);
 
+  long  countExistParticipateSurvey();
 
   ParticipateSurvey saveParticipateSurvey(ParticipateSurvey participateSurvey);
 

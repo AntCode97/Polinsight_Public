@@ -437,6 +437,7 @@
                       <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
                       <!--                <button id="phone_rec_user_chk">확인</button>-->
                       <span class="info_msg">(- 없이 입력해주세요.)</span>
+                      <span class="err_msg"></span>
                     </div>
                   </li>
                 </ul>
@@ -485,7 +486,7 @@
             <div class="register_contents_wrap">
               <div style="display: flex; justify-content: space-between;">
                 <p>추가정보</p>
-                <p id="back_basic"><i class="fas fa-arrow-up"></i>접기</p>
+                <p id="back_basic"><i class="fas fa-arrow-left"></i>돌아가기</p>
               </div>
               <div class="register_contents">
                 <ul>
@@ -897,7 +898,6 @@
       } else {
         userInfo[name] = value
       }
-      console.log(userInfo)
     }
 
     const signUpDataProcess = (info) => {
@@ -924,7 +924,7 @@
         alert('연락처와 추천인 연락처는 같을 수 없습니다.')
         return
       }
-      if (!userInfo['ispanel']) {
+      if (userInfo['ispanel'] === undefined || userInfo['ispanel'] === null) {
         $('input[name=ispanel]').val('').focus()
         alert('패널 가입 여부를 확인해주세요')
         return;
@@ -934,19 +934,10 @@
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
-        // delete userInfo.year
-        // delete userInfo.month
-        // delete userInfo.day
-        // delete userInfo.state
-        // delete userInfo.city
       }
-
-      // delete userInfo.confirm
-      // delete userInfo.domain
     }
 
     const checkRequiredData = () => {
-      console.log('check required data')
       let result = true
       $("form").find('input').each(function () {
         let inputElem = $(this)
@@ -960,16 +951,12 @@
           return false;
         }
       })
-      console.log('requireddata all write')
       return result;
     }
 
-    const signUp = e => {
+    const join = e => {
       e.preventDefault();
       e.returnValue = false;
-      // if (!signUpDataProcess() || !checkRequiredData()) {
-      //   return;
-      // }
       signUpDataProcess()
       http
           .post('/testsignup', userInfo)
@@ -999,7 +986,7 @@
     }, 200)
 
     const checkEmail = e => {
-      let account = e.target.value
+      let account = $('input[name=email]').val()
       let domain = $('input[name=domain]').val()
       let email = `${account}@${domain}`.trim()
       let msg = $("#email_msg").css('display', 'block')
@@ -1030,6 +1017,7 @@
       // 날짜 선택 폼 설정
       setDateValue()
       $("#month").on('change', setDay)
+      userInfo['ispanel'] = true;
     }
     const fold = () => {
       openModal()
@@ -1040,6 +1028,7 @@
       userInfo['ispanel'] = false;
     }
 
+    // TODO
     const passwordChecker = e => {
       let password = $('input[name=password]');
       let confirm = $('input[name=confirm]');
@@ -1057,6 +1046,7 @@
       }
     }
 
+
     const closeModal = () => {
       $('.popup_overlay').fadeOut(100)
     }
@@ -1067,14 +1057,14 @@
     const init = () => {
       $('input').on('keyup change checked', inputHandler)
       $('select').on('keyup change', inputHandler).trigger('change')
-      $('button#panel_submit').on('click', {type: 'panel'}, signUp)
-      $('button#basic_submit').on('click', {type: 'basic'}, signUp)
+      $('button#panel_submit').on('click', {type: 'panel'}, join)
+      $('button#basic_submit').on('click', {type: 'basic'}, join)
 
       $('input[type=radio]:checked').each(function () {
         userInfo[$(this).attr('name')] = $(this).val()
       })
       // 모달 닫기 이벤트
-      $('button#popup_close_btn').on('click', closeModal)
+      $('#popup_close_btn').on('click', closeModal)
       $('button.popup_btn').on('click', closeModal)
       // 모달 열기 이벤트
 
@@ -1097,8 +1087,35 @@
       $('input[type=password]').on('keyup change', passwordChecker)
     }
 
+    const throttleRecommendChecker = _.throttle((recommend, callback) => {
+      http.get('/api/user/recommend/' + recommend)
+          .then(callback)
+          .catch(console.log)
+    }, 200)
+
     $(function () {
       init();
+
+      $('input[name=recommend]').on('change keyup', function (e) {
+        let recommend = $(this).val()
+        let msg = $(this).parents('.right_content').children('.err_msg')
+        // 비어있으면 리턴
+        if (!recommend) {
+          msg.text('').hide()
+          return
+        }
+        if (phoneNumberChecker(recommend)) {
+          if (recommend === $('input[name=phone]').val()) {
+            msg.show().text('추천인 번호는 사용자 번호와 같을 수 없습니다.')
+          } else {
+            throttleRecommendChecker(recommend, (ret) => {
+              !ret.data.response ? msg.text('사용할 수 있는 추천인 번호입니다.').show() : msg.text('사용할 수 없는 추천인 번호입니다.').hide()
+            })
+          }
+        } else {
+          msg.show().text('휴대전화 형식이 올바르지 않습니다.')
+        }
+      })
     })
   </script>
 </th:block>

@@ -2,10 +2,7 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
-import com.dns.polinsight.domain.dto.ChangePwdDto;
-import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
-import com.dns.polinsight.domain.dto.SignupDTO;
-import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.domain.dto.*;
 import com.dns.polinsight.exception.DataUpdateException;
 import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UserNotFoundException;
@@ -165,7 +162,6 @@ public class UserController {
           break;
       }
 
-      log.warn("after processing : " + user.toString());
       return success(new UserDto(userService.saveOrUpdate(user)));
     } catch (Exception e) {
       e.printStackTrace();
@@ -175,12 +171,14 @@ public class UserController {
 
   @Transactional
   @PutMapping("/admin/user")
-  public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto userDto) throws Exception {
+  public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto dto) throws Exception {
+    log.warn("Update User info : {}", dto.toString());
     try {
-      User tuser = userService.findById(userDto.getId()).get();
-      User user = new User(userDto);
+      User tuser = userService.findById(dto.getId()).get();
+      User user = new User(dto);
       user.setPassword(tuser.getPassword());
       userService.saveOrUpdate(user);
+      log.info("{} information updated at {}", user.getEmail().toString(), LocalDateTime.now());
       return success(true);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -225,53 +223,50 @@ public class UserController {
 
 
   @GetMapping("/changepwd")
-  public ModelAndView changePwd(HttpServletRequest request, HttpSession session, @CurrentUser User user) {
-    ModelAndView mv = new ModelAndView("member/changepwd");
-    if (session.getAttribute("user") == null) {
+  public ModelAndView changePwd(HttpSession session) {
+    log.warn("UserController :: changePWd() --- " + session.getAttribute("uid"));
+    if (session.getAttribute("uid") == null) {
+      log.error("UID Data Not Found");
       return new ModelAndView("redirect:/denied");
     }
-    return mv;
+    return new ModelAndView("change_password");
   }
 
-  @PostMapping("/changepwd")
-  public ModelAndView changePwd(@CurrentUser User user,
-                                HttpSession session,
-                                @RequestParam(name = "pwd") String newPassword) throws Exception {
-    /*
-     * 비밀번호 변경 처리 후 리다이렉팅
-     * 유저로부터 정보가 넘어오면, 디비에서 이메일, 이름, 해시값을 확인하고 맞다면 비밀번호 변경 후 리다이렉팅
-     * */
-    session.invalidate();
-    //    User user = userService.findUserByEmail(sessionUser.getEmail());
-    user.setPassword(passwordEncoder.encode(newPassword));
-    userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
-    return new ModelAndView("redirect:/index");
+  @PostMapping("/api/password/change")
+  public ApiUtils.ApiResult<Boolean> changePwd(@RequestBody ChangeRequest changeRequest) throws Exception {
+    log.warn(changeRequest.toString());
+    try {
+      User user = userService.findById(changeRequest.getId()).orElseThrow();
+      user.setPassword(passwordEncoder.encode(changeRequest.getPassword()));
+      userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
+    }
   }
 
   @GetMapping("/change/{hash}/{name}/{email}")
-  public ModelAndView changePassword(@PathVariable(name = "hash") String hash,
-                                     @PathVariable(name = "email") Email email,
-                                     @PathVariable(name = "name") String name,
-                                     ModelAndView mv,
-                                     HttpSession session
-  ) {
-    mv.clear();
-    mv = new ModelAndView("redirect:/changepwd");
+  public ModelAndView changePassword(HttpSession session,
+                                     @PathVariable(name = "hash") String hash,
+                                     @PathVariable(name = "email") String email,
+                                     @PathVariable(name = "name") String name) {
     try {
-      if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(email).getHash())) {
+      log.warn("changePassword() in UserController email : {}, name : {}, hash: {}", email, name, hash);
+      if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(Email.of(email)).getHash())) {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
+        log.error("넘어온 해시와 저장된 해시가 다릅니다");
         throw new IllegalAccessException();
       }
-      session.setAttribute("user", new UserDto(userService.findUserByEmail(email)));
+      User user = userService.findUserByEmail(Email.of(email));
+      session.setAttribute("uid", user.getId());
+      return new ModelAndView("redirect:/changepwd");
     } catch (Exception e) {
       e.printStackTrace();
-      session.invalidate();
-      ModelAndView errMav = new ModelAndView("redirect:error/denied");
+      ModelAndView errMav = new ModelAndView("redirect:/denied");
       errMav.addObject("msg", e.getCause());
       return errMav;
     }
-
-    return mv;
   }
 
   @PostMapping("/api/point/{point}")
@@ -376,6 +371,7 @@ public class UserController {
         User user = userService.findUserByEmail(Email.of(userDto.getEmail()));
         log.debug(user.getName());
         log.debug(userDto.getName());
+        // TODO : 에러 발생시 프론트 엔드 처리 -- 서버에서 문제 발생 or 이메일을 확인해달라는 메시지 ==> find.html에서 변경 필요
         if (!user.getName().equals(userDto.getName()))
           throw new InvalidValueException("Invalid Value Exception");
         String hash = new HashUtil().makeHash(Arrays.asList(userDto.getEmail(), userDto.getName()), salt);
