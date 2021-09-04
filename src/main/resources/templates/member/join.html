@@ -901,6 +901,7 @@
     }
 
     const signUpDataProcess = (info) => {
+
       userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
       userInfo['phone'] = stringToPhone(userInfo['phone'])
       if (!!userInfo['recommend'])
@@ -934,6 +935,11 @@
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
+        let industry =document.querySelector("#industry");
+        if(industry.value =="선택"){
+          alert("직종을 선택해 주세요");
+          return false;
+        }
       }
       return true;
     }
