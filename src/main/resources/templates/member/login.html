@@ -334,8 +334,6 @@
       e.stopPropagation()
       // 이메일 검증
       let email = $('input[name=email]')
-      console.log(email);
-      console.log(email.val());
       if (!isValidEmail(email.val())) {
         alert('정확한 이메일을 입력해주세요')
         email.focus()
