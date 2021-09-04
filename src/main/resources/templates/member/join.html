@@ -901,6 +901,7 @@
     }
 
     const signUpDataProcess = (info) => {
+
       userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
       userInfo['phone'] = stringToPhone(userInfo['phone'])
       if (!!userInfo['recommend'])
@@ -910,7 +911,7 @@
         $('input[name=confirm]').val('')
         $('input[name=password]').val('').focus()
         alert('비밀번호를 다시 확인해주세요')
-        return;
+        return false;
       } else if (!passwordInputValidator(userInfo['password'])) {
         $('input[name=confirm]').val('')
         $('input[name=password]').val('').focus()
@@ -922,19 +923,25 @@
         $('input[name=recommend]').val('').focus()
         // TODO 추천인 연락처 서버에 존재하는지 확인
         alert('연락처와 추천인 연락처는 같을 수 없습니다.')
-        return
+        return false
       }
       if (userInfo['ispanel'] === undefined || userInfo['ispanel'] === null) {
         $('input[name=ispanel]').val('').focus()
         alert('패널 가입 여부를 확인해주세요')
-        return;
+        return false;
       }
 
       // 패널 가입할 때
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
+        let industry =document.querySelector("#industry");
+        if(industry.value =="선택"){
+          alert("직종을 선택해 주세요");
+          return false;
+        }
       }
+      return true;
     }
 
     const checkRequiredData = () => {
@@ -956,8 +963,12 @@
 
     const join = e => {
       e.preventDefault();
-      e.returnValue = false;
-      signUpDataProcess()
+      e.stopPropagation();
+      if(!signUpDataProcess()){
+        location.href ="#top";
+        return;
+      }
+
       http
           .post('/testsignup', userInfo)
           .then(res => {
