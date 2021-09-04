@@ -125,7 +125,7 @@
     }
 
     .correct_msg {
-      color   : greenyellow;
+      color   : lightgreen;
       display : inline-block;
     }
 
@@ -935,8 +935,8 @@
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
-        let industry =document.querySelector("#industry");
-        if(industry.value =="선택"){
+        let industry = document.querySelector("#industry");
+        if (industry.value == "선택") {
           alert("직종을 선택해 주세요");
           return false;
         }
@@ -944,28 +944,28 @@
       return true;
     }
 
-    const checkRequiredData = () => {
-      let result = true
-      $("form").find('input').each(function () {
-        let inputElem = $(this)
-        let label = inputElem.parent('.right_content').prev('.left_content').children('label')
-        let inputValue = inputElem.val().trim()
-        if ($(this).prop('required') && !inputValue) {
-          inputElem.focus()
-          inputElem.val('')
-          alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
-          result = false
-          return false;
-        }
-      })
-      return result;
-    }
+    // const checkRequiredData = () => {
+    //   let result = true
+    //   $("form").find('input').each(function () {
+    //     let inputElem = $(this)
+    //     let label = inputElem.parent('.right_content').prev('.left_content').children('label')
+    //     let inputValue = inputElem.val().trim()
+    //     if ($(this).prop('required') && !inputValue) {
+    //       inputElem.focus()
+    //       inputElem.val('')
+    //       alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+    //       result = false
+    //       return false;
+    //     }
+    //   })
+    //   return result;
+    // }
 
     const join = e => {
       e.preventDefault();
       e.stopPropagation();
-      if(!signUpDataProcess()){
-        location.href ="#top";
+      if (!signUpDataProcess()) {
+        location.href = "#top";
         return;
       }
 
@@ -993,20 +993,23 @@
     const throttleEmailchecker = _.throttle((email, callback) => {
       http.get("/api/user/" + email)
           .then(res => callback(res.data.response))
-          .catch(err => console.log("error", err))
+          .catch(err => {
+            console.log("error", err)
+            callback(false)
+          })
     }, 200)
 
     const checkEmail = e => {
       let account = $('input[name=email]').val()
       let domain = $('input[name=domain]').val()
-      let email = `${account}@${domain}`.trim()
+      let emailValue = `${account}@${domain}`.trim()
       let msg = $("#email_msg").css('display', 'block')
 
       if (!account) {
         msg.text("").removeClass("correct_msg").addClass("err_msg")
       } else {
-        if (emailInputValidator(email)) {
-          throttleEmailchecker(email, function (status) {
+        if (isValidEmail(emailValue)) {
+          throttleEmailchecker(emailValue, function (status) {
             if (status) {
               msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
             } else {
@@ -1074,7 +1077,7 @@
         }
         // check basic info
         if (!isValidBasicInfo(`${email.val()}@${domain.val()}`, phone.val(), name.val(), password.val())) {
-          alert('필수 입력값들을 먼저 입력해주요요')
+          alert('필수 입력값들을 먼저 입력해주세요')
           return
         }
         expand()
@@ -1161,11 +1164,6 @@
 
     // 입력데이터 검증 및 메시지 처리
     $(document)
-        // .on('change keyup', 'input[name=email]', function () {
-        //   let emailValue = $(this).val()
-        //   let msg = $(this).closest('div').find('.err_msg')
-        //   emailValidateMessage(emailValue, msg)
-        // })
         .on('change keyup', 'input[name=password]', function () {
           let passwordValue = $(this).val()
           let msg = $(this).closest('div').find('.err_msg')
