@@ -11,7 +11,7 @@ const isValidPhone = (phoneValue) => {
 }
 
 const isValidName = (nameValue) => {
-  return (/[가-힣]{2,10}/).test(nameValue)
+  return (/^[가-힣]{2,10}$/).test(nameValue)
 }
 
 const emailValidateMessage = (emailValue, msg) => {
@@ -87,8 +87,15 @@ const isValidBasicInfo = (emailValue, phoneValue, nameValue, passwordValue) => {
   return isValidName(emailValue) && isValidPhone(phoneValue) && isValidName(nameValue) && isValidPassword(passwordValue)
 }
 
+const isValidNameAndPhone = (nameValue, phoneValue) => {
+  return isValidName(nameValue) && isValidPhone(phoneValue)
+}
+
 // post_password, new_password, new_password_confirm 패스워드 변경시에만 사용
-const isValidPasswordInfo = (before, password, confirm) => {
+const isValidPasswordForJoin = (password, confirm) => {
+  return isValidPassword(password) && isValidPassword(confirm)
+}
+const isValidPasswordForChange = (before, password, confirm) => {
   return isValidPassword(before) && isValidPassword(password) && isValidPassword(confirm)
 }
 

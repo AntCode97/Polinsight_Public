@@ -334,20 +334,19 @@
       e.stopPropagation()
       // 이메일 검증
       let email = $('input[name=email]')
-      if (isValidEmail(email.val())) {
+      if (!isValidEmail(email.val())) {
         alert('정확한 이메일을 입력해주세요')
         email.focus()
         return
       }
       // 패스워드 검증
       let password = $('input[name=password]')
-      if (isValidPassword(password.val())) {
+      if (!isValidPassword(password.val())) {
         alert('정확한 패스워드를 입력해주세요')
         password.val('').focus()
         return
       }
 
-      // if (canLogin) {
       let form = $(`<form></form>`)
       form.attr('method', 'post')
       form.attr('action', '/dologin')
@@ -355,7 +354,6 @@
       form.append($(`<input type="hidden" name="password" value="${password.val()}" />`))
       $('body').append(form)
       form.submit()
-      // }
     }
 
     let canLogin = false
@@ -366,12 +364,10 @@
           .on('click', 'button[name=dologin]', login) // 로그인 핸들러
           .on('keyup change', 'input[name=email]', function () {
             let emailValue = String($(this).val())
-            console.log("email" + emailValue)
             emailValidateMessage(emailValue, $(this).parent().find('.err_msg'))
           })
           .on('keyup change', 'input[name=password]', function () {
             let passwordValue = String($(this).val())
-            console.log("password" + passwordValue + " " + passwordValue.length)
             passwordValidateMessage(passwordValue, $(this).parent().find('.err_msg'))
           })
 

@@ -22,4 +22,6 @@ public interface PointRequestMapping {
 
   PointRequestProgressType getProgress();
 
+  String getName();
+
 }

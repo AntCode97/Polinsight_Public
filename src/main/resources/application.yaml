@@ -219,9 +219,9 @@ spring :
   jpa :
     properties :
       hibernate :
-        ddl-auto : validate
-    #        format_sql : true
-    #    show-sql :     true
+        ddl-auto :   validate
+        show-sql :   true
+        format_sql : true
     generate-ddl : true
 
   banner :
