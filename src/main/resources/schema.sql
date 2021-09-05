@@ -175,6 +175,7 @@ CREATE TABLE IF NOT EXISTS point_request
   requested_at  DATETIME     NOT NULL DEFAULT NOW(),
   bank          VARCHAR(20)  NOT NULL,
   account       VARCHAR(50)  NOT NULL,
+  name          VARCHAR(50)  NOT NULL,
   progress      VARCHAR(20)  NOT NULL DEFAULT 'REQUESTED'
 );
 

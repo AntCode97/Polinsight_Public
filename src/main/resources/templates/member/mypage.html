@@ -10,7 +10,7 @@
       background-color : #F1F1F1;
       display          : flex;
       justify-content  : center;
-      margin-bottom: -50px;
+      margin-bottom    : -50px;
     }
 
     .mypage_wrap {
@@ -608,8 +608,8 @@
             <div class="item_header">
               <span><i class="fas fa-star" style="padding-right: 3px; color: #4C99CF;"></i>포인트이력</span>
               <span>
-                <button name="savePointHistoryBtn">다운로드</button>
-                </span>
+                <button name="savePointHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
+              </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
             <div class="item_content">
@@ -652,6 +652,9 @@
           <div class="item_box history_box">
             <div class="item_header">
               <span><i class="fas fa-poll-h" style="padding-right: 3px; color: #4C99CF;"></i>서베이이력</span>
+              <span>
+                <button name="saveSurveyHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
+              </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
             <div class="item_content">
@@ -840,10 +843,10 @@
                             </li>
                             <li>
                               <div class="left_content">
-                                <label for="edu">최종학력</label>
+                                <label for="education">최종학력</label>
                               </div>
                               <div class="right_content">
-                                <select id="edu" name="edu" required>
+                                <select id="education" name="education" required>
                                   <option>선택</option>
                                   <option th:selected="${#strings.equals(user.education,'고졸 이하(재학 포함)')}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
                                   <option th:selected="${#strings.equals(user.education,'대학 재학')}" value="대학 재학">대학 재학</option>
@@ -1161,18 +1164,16 @@
                 <div class="input_content">
                   <div class="user_input_box">
                     <span class="info_article">현재 비밀번호 </span>
-                    <input name="password_current" type="password" class="user_info_input" required />
+                    <input name="before" type="password" class="user_info_input" required />
                   </div>
                   <div class="user_input_box">
                     <span class="info_article">새로운 비밀번호</span>
                     <input name="password" type="password" class="user_info_input" required />
                     <span class="info_msg">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)</span>
-                    <span class="err_msg"></span>
                   </div>
                   <div class="user_input_box">
                     <span class="info_article">비밀번호 확인</span>
                     <input name="password_confirm" type="password" class="user_info_input" value="" required />
-                    <span class="err_msg"></span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-start;">
                     <span class="err_msg">에러 메세지!!</span>
@@ -1222,7 +1223,7 @@
                       <option value="우리">우리</option>
                       <option value="케이">케이</option>
                     </select>
-                    <input name="account" type="text" class="user_info_input" placeholder="계좌번호를 입력해주세요." required />
+                    <input name="account" type="number" class="user_info_input" placeholder="계좌번호를 입력해주세요." required />
                     <span class="info_msg">(숫자만 입력해주세요.)</span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-start;">
@@ -1237,7 +1238,7 @@
 
             <!-- 회원탈퇴 -->
             <div class="tab_box box05">
-              <form action="" method="">
+              <form>
                 <div class="item_header">
                   <span><i class="fas fa-door-closed" style="padding-right: 3px; color: #4C99CF;"></i>회원탈퇴</span>
                 </div>
@@ -1264,6 +1265,7 @@
                     <button name="user_delete" type="submit" class="mypage_btn update_btn"><i class="fas fa-sign-in-alt" style="padding-right: 5px; font-size: 17px;"></i>탈퇴하기</button>
                   </div>
                 </div>
+                <input type="hidden" name="userId" th:value="${user.id}" />
               </form>
             </div>
           </div>
@@ -1275,6 +1277,7 @@
     <th:block th:include="layout/footer" />
   </div>
   <script th:src="@{/js/PostUtils.js}"></script>
+  <script th:src="@{/js/Validator.js}"></script>
   <script type="text/javascript">
     $(document).on('focus', '.user_info_input', function () {
       $(this).css('border-bottom', '1px solid #4C99CF');
@@ -1322,19 +1325,6 @@
         table.append(tmp);
       }
     };
-    const makeParticipateList = surveys => {
-      const table = $('.participate_survey_table>tbody');
-      table.empty();
-      for (survey of surveys) {
-        const tmp = $(`<tr class="table-row"></tr>`);
-        tmp.append(`<td>${survey.userId}</td>`);
-        tmp.append(`<td>${survey.title}</td>`);
-        tmp.append(`<td>${survey.participatedAt}</td>`);
-        tmp.append(`<td>${survey.point}</td>`);
-        tmp.append(`<td>${survey.finished}</td>`);
-        table.append(tmp);
-      }
-    };
 
     const getAllPointRequest = () => {
       http.get('/api/points')
@@ -1346,77 +1336,139 @@
           .catch(err => console.log(err));
     };
 
+    // 이름, 전화번호 업데이트 기능
     function userBasicInfoUpdate() {
-      if (!userNameChecker(userInfo['name'])) {
+      let name = $('input[name=name]')
+      let phone = $('input[name=phone]')
+      console.log('name: ' + name.val())
+      console.log(isValidName(name.val()))
+      if (!isValidName(name.val())) {
         alert('올바른 이름을 입력해주세요')
+        name.focus()
         return
       }
-      if (!phoneNumberChecker(userInfo['phone'])) {
+      if (!phoneNumberChecker(phone.val())) {
         alert('올바른 전화번호를 입력해주세요')
+        phone.focus()
         return
       }
-      let info = {
-        name: userInfo['name'],
-        phone: userInfo['phone'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
+      let sendData = {
+        name: name.val(),
+        phone: phone.val().replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
       }
       if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
-        http.put('/user?type=basic', info).then(res => {
-          if (res.data.success) {
-            alert('업데이트 성공')
-          } else {
-            alert('업데이트 실패')
-          }
-        }).catch(console.log)
+        http.put('/user?type=basic', sendData)
+            .then(res => {
+              if (res.data.success) {
+                alert('업데이트 성공')
+              } else {
+                alert('업데이트 실패')
+              }
+            }).catch(console.log)
             .finally(() => location.replace('/mypage'))
       }
     }
 
+    // 패스워드 변경
     function userPasswordUpdate() {
-      if ((userInfo['password'] !== userInfo['password_current']) && userInfo['password'] === userInfo['password_confirm']) {
-        let info = {
-          newPassword: userInfo['password'],
-          password: userInfo['password_current']
-        }
-        if (confirm('비밀번호를 변경하시겠습니까?')) {
-          http.put('/user?type=password', info).then(res => {
+      let before = $('input[name=before]')
+      let password = $('input[name=password]')
+      let confirm = $('input[name=confirm]')
+      // if (!isValidPassword(password.val()) || !isValidPassword(confirm.val()) || isValidPassword(before.val())) {
+      //   alert('올바른 패스워드를 입력해주세요')
+      //   password.focus()
+      //   return false;
+      // }
+      // // 이전 비밀번호 새 비밀번호 확인
+      // if (before.val() === password.val() || before.val() === confirm.val()) {
+      //   alert('새로운 비밀번호는 현재 비밀번호와 같을 수 없습니다.\n새로운 비밀번호를 입력해주세요')
+      //   password.focus()
+      //   return
+      // }
+      // // 비밀번호 확인 체크
+      // if (password.val() !== confirm.val()) {
+      //   alert('비밀번호가 일치하지 않습니다.\n다시 한번 확인해주세요')
+      //   password.focus()
+      //   return
+      // }
+      if (!isValidPasswordForChange(before.val(), password.val(), confirm.val())) {
+        alert('입력한 값을 확인해주세요')
+        return false
+      }
+      if (!confirm('비밀번호를 변경하시겠습니까?')) {
+        return false
+      }
+
+      let info = {
+        newPassword: password.val(),
+        password: before.val()
+      }
+      http
+          .put('/user?type=password', info)
+          .then(res => {
+            if (res.data.success) {
+              alert('패스워드 업데이트 성공')
+            } else {
+              alert('패스워드 업데이트 실패')
+            }
+          })
+          .catch(console.log)
+          .finally(() => location.replace('/mypage'))
+    }
+
+    // 추가 정보 업데이트
+    // gender, birth(yaer, month, day), birthType, address(state, city), education, marry, job, industry, favorite
+    function userPanelInfoUpdate() {
+      let gender = $('input[name=gender]:checked')
+      let year = $('select[name=year]')
+      let month = $('select[name=month]')
+      let day = $('select[name=day]')
+      let birthType = $('input[name=birthType]:checked')
+      let state = $('#state')
+      let city = $('select[name=city]')
+      let education = $('select[name=education]')
+      let marry = $('input[name=marry]:checked')
+      let job = $('select[name=job]')
+      let industry = $('select[name=industry]')
+      let favorite = $('input:checkbox[name=favorite]:checked')
+
+      let favList = []
+      favorite.each((index, value) => {
+        favList.push(value.value)
+      })
+
+      let info = {
+        gender: gender.val(),
+        birth: dateParser(year.val(), month.val(), day.val()),
+        birthType: birthType.val(),
+        address: addressParser(state.val(), city.val()),
+        education: education.val(),
+        marry: marry.val(),
+        job: job.val(),
+        industry: industry.val(),
+        favorite: favList
+      }
+
+      if (!isValidPanelInfo(info)) {
+        alert('필수 값들이 입력되었는지 확인해주세요')
+        return
+      }
+
+      if (!confirm('회원 정보를 업데이트 하시겠습니까?')) {
+        return;
+      }
+
+      http
+          .put('/user?type=panel', info)
+          .then(res => {
             if (res.data.success) {
               alert('업데이트 성공')
             } else {
               alert('업데이트 실패')
             }
-          }).catch(console.log)
-              .finally(() => location.replace('/mypage'))
-        }
-      } else {
-        alert('입력한 패스워드를 다시 한번 확인해주세요')
-      }
-    }
-
-    function userPanelInfoUpdate() {
-      let info = {...userInfo}
-      info['address'] = addressParser(info['state'], info['city'])
-      delete info.name
-      delete info.password_confirm
-      delete info.password
-      delete info.password_current
-      delete info.phone
-      delete info.recommend
-      console.log("Update User Panel Info", info)
-      if (!panelInfoChecker(info)) {
-        alert('필수 값들이 입력되었는지 확인해주세요')
-        return
-      }
-
-      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
-        http.put('/user?type=panel', info).then(res => {
-          if (res.data.success) {
-            alert('업데이트 성공')
-          } else {
-            alert('업데이트 실패')
-          }
-        }).catch(console.log)
-            .finally(() => location.replace('/mypage'))
-      }
+          })
+          .catch(console.log)
+          .finally(() => location.replace('/mypage'))
     }
 
 
@@ -1436,78 +1488,44 @@
         sbox.append(`<option>신청 불가</option>`)
       }
 
-      userInfo['id'] = `[[${user.id}]]`
-      userInfo['point'] = `[[${user.point}]]`
-      userInfo['email'] = `[[${user.email}]]`
-      userInfo['name'] = `[[${user.name}]]`
-      userInfo['phone'] = `[[${user.phone}]]`
-      userInfo['role'] = `[[${user.role}]]`
-      userInfo['isEmailReceive'] = `[[${user.isEmailReceive}]]`
-      userInfo['isSmsReceive'] = `[[${user.isSmsReceive}]]`
-      userInfo['recommend'] = `[[${user.recommend}]]`
-      userInfo['gender'] = `[[${user.gender}]]`
-      userInfo['education'] = `[[${user.education}]]`
-      userInfo['marry'] = `[[${user.marry}]]`
-      userInfo['birth'] = `[[${user.birth}]]`
-      userInfo['birthType'] = `[[${user.birthType}]]`
-      userInfo['job'] = `[[${user.job}]]`
-      userInfo['industry'] = `[[${user.industry}]]`
-      userInfo['registeredAt'] = `[[${user.registeredAt}]]`
-      userInfo['favorite'] = `[[${user.favorite}]]`
-      let address = `[[${user.address}]]`
-      userInfo['state'] = address.split(' ')[0]
-      userInfo['city'] = address.split(' ')[1]
-      console.log(userInfo)
       setDateValue()
-      let birth = userInfo['birth'].substring(0, 10).split("-")
-      $('#year').val((birth[0] * 1)).prop('selected', true).on('change', inputChangeHandler)
-      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', inputChangeHandler).on('change', setDay).trigger('change')
-      $('#day').val((birth[2] * 1)).prop('selected', true).on('change', inputChangeHandler)
+      let birth = `[[${user.birth}]]`
+      birth = String(birth).substring(0, 10).split("-")
+      $('#year').val((birth[0] * 1)).prop('selected', true)
+      $('#month').val((birth[1] * 1)).prop('selected', true).on('change', setDay).trigger('change')
+      $('#day').val((birth[2] * 1)).prop('selected', true)
     }
 
-    const checkRequiredInput = () => {
+    const pointExchangeRequest = () => {
       const account = $('input[name=account]')
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
 
-      if (!account.val()) {
-        account.focus();
-        alert('계좌번호를 입력해 주세요');
-      } else if (!checkAccountNumber(account)) {
+      if (!checkAccountNumber(account)) {
         account.focus().val('')
         alert('올바른 계좌번호를 입력해주세요')
       } else if (!bank.val()) {
         bank.focus()
       } else {
-        http
-            .post('/api/pointrequest', {
-              point: reqPoint.val(),
-              account: account.val(),
-              bank: bank.val()
-            })
-            .then(res => {
-              if (res.data.response) {
-                alert('요청이 성공적으로 완료되었습니다.');
-                location.reload();
-              } else {
-                alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
-              }
-            })
-            .catch(err => console.log(err));
+        if (confirm(`올바른 계좌번호를 입력하였는지 확인해주세요.\n은행명 : ${bank.val()}\n계좌번호 : ${account.val()}`)) {
+          http
+              .post('/api/pointrequest', {
+                point: reqPoint.val(),
+                account: account.val(),
+                bank: bank.val()
+              })
+              .then(res => {
+                if (res.data.response) {
+                  alert('요청이 성공적으로 완료되었습니다.');
+                  location.reload();
+                } else {
+                  alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
+                }
+              })
+              .catch(err => console.log(err));
+        }
       }
     };
-
-    const inputChangeHandler = e => {
-      let name = e.target.name
-      let value = String(e.target.value).trim()
-      if (name === 'favorite') {
-        let tmpArr = []
-        $('input[name=favorite]:checked').each((idx, elem) => tmpArr.push($(elem).val()))
-        userInfo["favorite"] = [...tmpArr]
-      } else {
-        userInfo[name] = value
-      }
-    }
 
     const getPointHistoryList = () => {
       http
@@ -1568,8 +1586,6 @@
         parent.append(template)
       }
     }
-    let userInfo = {favorite: []}
-    let canDelete = false;
 
     $(function () {
       let link = document.location.href
@@ -1577,40 +1593,43 @@
         location.replace('/index')
 
       init();
-
       getAllPointRequest();
       getPointHistoryList()
       getUserParticipateSurvey()
 
-      $('button[name=pointrequest_btn]').on('click', checkRequiredInput);
+      $('button[name=pointrequest_btn]').on('click', pointExchangeRequest);
       $('button[name=user_delete]').on('click', userDelete)
-      $('.right_content').find('input').on('keyup change', inputChangeHandler)
-          .find('select').on('change', inputChangeHandler)
-      // $('button[name=user_info_update_btn]').on('click', pwdChecker)
-      $('.input_content').find('input[type=password]')
-          .on('keyup blur change', inputChangeHandler)
-          .on('keyup blur change', function (e) {
-            let input = $(this)
-            let msg = input.next('.err_msg')
-            if (!passwordInputValidator(input.val())) {
-              msg.css('diplay', 'block').text('입력한 비밀번호를 확인해주세요')
-            }
-          })
-      $('.user_info_input').on('keyup blur change', inputChangeHandler)
-      $('#exit_checked').on('change', () => {
-        canDelete = !canDelete;
-      })
       $('input[type=tel]')
           .on('focus', phoneDelHypen)
           .on('blur', phoneAddHypen)
+
+      // 입력 폼 검증 이벤트
+      $(document)
+          .on('keyup change', 'input[name=before]', function () {
+            let passwordValue = String($(this).val())
+            let msg = $(this).closest('form').find('.err_msg')
+            passwordValidateMessage(passwordValue, msg)
+          })
+          .on('keyup change', 'input[name=password]', function () {
+            let passwordValue = String($(this).val())
+            let msg = $(this).closest('form').find('.err_msg')
+            passwordValidateMessage(passwordValue, msg)
+          })
+          .on('keyup change', 'input[name=confirm]', function () {
+            let confirmValue = String($(this).val())
+            let msg = $(this).closest('form').find('.err_msg')
+            confirmValidateMessage(confirmValue, msg)
+          })
+
+      // 변경 버튼 이벤트
       $('.box01').find('button').on('click', userBasicInfoUpdate)
       $('.box02').find('button').on('click', userPanelInfoUpdate)
       $('.box03').find('button').on('click', userPasswordUpdate)
-      // TODO : 엑셀 저장 버튼 만들기
-      $('button[name=save_excel]').on('click', {url: `/api/points/excel${'/' + userInfo.id}`}, saveByExcel)
 
-      $('input[name=account]').on('keyup change')
-      $('button[name=savePointHistoryBtn]').on('click', {},saveByExcel)
+      // 포인트 내역 엑셀 저장
+      $('button[name=savePointHistoryBtn]').on('click', {url: `/api/pointhistory/excel`}, saveByExcel)
+      // 서베이 내역 엑셀 저장
+      $('button[name=saveSurveyHistoryBtn]').on('click', {url: `/api/participates/excel`}, saveByExcel)
     });
   </script>
 </th:block>

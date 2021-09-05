@@ -233,6 +233,7 @@ public class ApiController {
                                       .progress(PointRequestProgressType.REQUESTED)
                                       .bank(pointRequestDto.getBank())
                                       .uid(user.getId())
+                                      .name(user.getName())
                                       .build();
 
       pointRequestService.saveOrUpdate(preq);

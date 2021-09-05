@@ -78,12 +78,11 @@
   <script>
 
     const makePointRequestTemplate = req => {
-      console.log(req);
       let template = $(`<div class="post-row"></div>`);
       template.append(`<span>${req.id}</span>`);
-      template.append(`<span>${req.email}</span>`);
+      template.append(`<span>${emailToString(req.email)}</span>`);
       template.append(`<span>${req.name}</span>`);
-      template.append(`<span>${req.point}</span>`);
+      template.append(`<span>${req.requestPoint}</span>`);
       template.append(`<span>${req.bank}은행</span>`);
       template.append(`<span>${req.account}</span>`);
       template.append(`<span>${req.progress}</span>`);
@@ -96,12 +95,14 @@
 
     const deleteRequest = e => {
       if (confirm('정말로 요청을 삭제하시겠습니까?')) {
-        http.delete(`/points/${e.data.id}`)
+        http
+            .delete(`/api/points/${e.data.id}`)
             .then(res => {
               if (res.data.success) {
                 alert('요청 삭제 완료');
               }
-            }).finally(location.replace('/admin/pointlist'));
+            })
+            .finally(() => location.replace('/admin/pointlist'));
       }
     };
 
@@ -109,7 +110,7 @@
       http.put(`/api/points/${e.data.id}`, {progress: e.data.progress})
           .then(res => {
             if (res.data.success) {
-              getAllPointRequest();
+              init()
             }
           }).catch(console.log);
     };

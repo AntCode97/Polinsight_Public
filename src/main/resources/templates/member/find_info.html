@@ -149,7 +149,7 @@
                 <input type="text" class="user_info_input" name="findpwd_name" required />
               </div>
               <div class="user_input_box">
-                <span class="info_article">휴대전화</span>
+                <label class="info_article">휴대전화</label>
                 <input type="tel" class="user_info_input" name="findpwd_phone" required placeholder="' - ' 없이 입력해주세요." />
               </div>
               <div class="user_btn_wrap" style="justify-content: flex-start;">
@@ -166,7 +166,8 @@
     </div>
     <th:block th:include="layout/footer" />
   </div>
-  <script type="text/javascript">
+  <script th:src="@{/js/Validator.js}"></script>
+  <script>
     $(document).on('focus', '.user_info_input', function () {
       $(this).css('border-bottom', '1px solid #4C99CF');
       $(this).prev('.info_article').css('color', '#4C99CF')
@@ -177,49 +178,72 @@
       $(this).prev('.info_article').css('color', '#69666D')
       $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
     });
-    $(document).on('click', '.header_box > input', function () {
-      if ($(this).is(':checked')) {
-        $('.tab_box').css('display', 'none');
-        const id = $(this).attr('id');
-        const num = id.substring(3, 5);
-        const selector = ".box" + num;
-        $(selector).css('display', 'flex');
-      }
-    });
-
-    const emailChecker = e => {
-      const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      const email = e.target.value;
-
-      if (email.match(regex) != null || !email) {
-        $('.err_msg').css("display", "none");
-      } else {
-        $('.err_msg').css("display", "block");
-      }
-    }
-
-    const nameChecker = () => {
-      const name = $('input[name=name]').val()
-      if (name.match()) {
-        name.next('span').css("display", "none");
-      } else {
-        name.next('span').css("display", "block");
-      }
-    }
+    $(document)
+        .on('click', '.header_box > input', function () {
+          if ($(this).is(':checked')) {
+            $('.tab_box').css('display', 'none');
+            const id = $(this).attr('id');
+            const num = id.substring(3, 5);
+            const selector = ".box" + num;
+            $(selector).css('display', 'flex');
+          }
+        })
+        .on('keyup change', 'input[type=email]', function () {
+          let emailValue = $(this).val()
+          let msg = $(this).closest('form').find('.err_msg')
+          emailValidateMessage(emailValue, msg)
+        })
+        .on('keyup change', 'input[type=tel]', function () {
+          let phoneValue = $(this).val()
+          let msg = $(this).closest('form').find('.err_msg')
+          phoneValidateMessage(phoneValue, msg)
+        })
+        .on('keyup change', 'input[name=findpwd_name], input[name=finduser_name]', function () {
+          let nameValue = $(this).val()
+          let msg = $(this).closest('form').find('.err_msg')
+          nameValidateMessage(nameValue, msg);
+        })
 
     const clickFindBtn = e => {
       e.preventDefault()
-      e.returnValue = false;
-      let phone = $('input[name=phone]').val()
+      e.stopPropagation()
+
+      let phone = $('input[name=phone]')
       let type = e.target.name
-      let finduser_name = $('input[name=finduser_name]').val()
-      let findpwd_name = $('input[name=findpwd_name]').val()
-      let findpwd_phone = $('input[name=findpwd_phone]').val()
-      let email = $('input[name=email]').val()
-      if (type === 'user' && emailInputValidator(email)) {
-        alert('입력하신 이메일을 확인해주세요')
-        $('input[name=email]').val('').focus()
+      let finduser_name = $('input[name=finduser_name]')
+      let findpwd_name = $('input[name=findpwd_name]')
+      let findpwd_phone = $('input[name=findpwd_phone]')
+      let email = $('input[name=email]')
+      if (type === 'email') {
+        if (!isValidEmail(email.val())) {
+          alert('입력하신 이메일을 확인해주세요')
+          email.focus()
+          return;
+        }
+        if (!isValidName(finduser_name.val())) {
+          alert('입력하신 이름을 확인해주세요')
+          finduser_name.focus()
+          return
+        }
       }
+      if (type === 'password') {
+        if (!isValidName(findpwd_name.val())) {
+          alert('입력하신 이름을 확인해주세요')
+          findpwd_name.focus()
+          return;
+        }
+        if (!isValidEmail(email.val())) {
+          alert('입력하신 이메일을 확인해주세요')
+          email.focus()
+          return;
+        }
+        if (!isValidPhone(findpwd_phone.val())) {
+          alert('입력하신 이메일을 확인해주세요')
+          findpwd_phone.focus()
+          return;
+        }
+      }
+
       http
           .post('/find?type=' + type, type === 'email' ? {
             phone: phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3"),
@@ -250,7 +274,6 @@
     }
 
     $(function () {
-      $('input[name=email]').on('keyup', _.throttle(emailChecker, 500))
       $('button').on('click', clickFindBtn)
       $('input[name=find_tab]').on('click', () => {
         $('.tab_box').find('input').val('')
