@@ -1223,7 +1223,7 @@
                       <option value="우리">우리</option>
                       <option value="케이">케이</option>
                     </select>
-                    <input name="account" type="text" class="user_info_input" placeholder="계좌번호를 입력해주세요." required />
+                    <input name="account" type="number" class="user_info_input" placeholder="계좌번호를 입력해주세요." required />
                     <span class="info_msg">(숫자만 입력해주세요.)</span>
                   </div>
                   <div class="user_btn_wrap" style="justify-content: flex-start;">
@@ -1322,19 +1322,6 @@
         tmp.append(`<td>${request.bank}</td>`);
         tmp.append(`<td>${request.account}</td>`);
         tmp.append(`<td>${request.progress}</td>`);
-        table.append(tmp);
-      }
-    };
-    const makeParticipateList = surveys => {
-      const table = $('.participate_survey_table>tbody');
-      table.empty();
-      for (survey of surveys) {
-        const tmp = $(`<tr class="table-row"></tr>`);
-        tmp.append(`<td>${survey.userId}</td>`);
-        tmp.append(`<td>${survey.title}</td>`);
-        tmp.append(`<td>${survey.participatedAt}</td>`);
-        tmp.append(`<td>${survey.point}</td>`);
-        tmp.append(`<td>${survey.finished}</td>`);
         table.append(tmp);
       }
     };
@@ -1509,35 +1496,34 @@
       $('#day').val((birth[2] * 1)).prop('selected', true)
     }
 
-    const pointExchange = () => {
+    const pointExchangeRequest = () => {
       const account = $('input[name=account]')
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
 
-      if (!account.val()) {
-        account.focus();
-        alert('계좌번호를 입력해 주세요');
-        // } else if (!checkAccountNumber(account)) {
-        //   account.focus().val('')
-        //   alert('올바른 계좌번호를 입력해주세요')
+      if (!checkAccountNumber(account)) {
+        account.focus().val('')
+        alert('올바른 계좌번호를 입력해주세요')
       } else if (!bank.val()) {
         bank.focus()
       } else {
-        http
-            .post('/api/pointrequest', {
-              point: reqPoint.val(),
-              account: account.val(),
-              bank: bank.val()
-            })
-            .then(res => {
-              if (res.data.response) {
-                alert('요청이 성공적으로 완료되었습니다.');
-                location.reload();
-              } else {
-                alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
-              }
-            })
-            .catch(err => console.log(err));
+        if (confirm(`올바른 계좌번호를 입력하였는지 확인해주세요.\n은행명 : ${bank.val()}\n계좌번호 : ${account.val()}`)) {
+          http
+              .post('/api/pointrequest', {
+                point: reqPoint.val(),
+                account: account.val(),
+                bank: bank.val()
+              })
+              .then(res => {
+                if (res.data.response) {
+                  alert('요청이 성공적으로 완료되었습니다.');
+                  location.reload();
+                } else {
+                  alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
+                }
+              })
+              .catch(err => console.log(err));
+        }
       }
     };
 
@@ -1611,7 +1597,7 @@
       getPointHistoryList()
       getUserParticipateSurvey()
 
-      $('button[name=pointrequest_btn]').on('click', pointExchange);
+      $('button[name=pointrequest_btn]').on('click', pointExchangeRequest);
       $('button[name=user_delete]').on('click', userDelete)
       $('input[type=tel]')
           .on('focus', phoneDelHypen)
