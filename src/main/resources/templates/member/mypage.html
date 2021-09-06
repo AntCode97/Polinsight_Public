@@ -754,7 +754,7 @@
             </div>
 
             <!-- 패널정보 변경 -->
-            <div class="tab_box box02">
+            <div sec:authorize="hasAnyAuthority('PANEL', 'BEST')" class="tab_box box02">
               <form action="" method="">
                 <div class="item_header">
                   <span><i class="fas fa-user-astronaut" style="padding-right: 3px; color: #4C99CF;"></i>패널정보변경</span>
@@ -1638,6 +1638,5 @@
       // 서베이 내역 엑셀 저장
       $('button[name=saveSurveyHistoryBtn]').on('click', {url: `/api/participates/excel`}, saveByExcel)
     })
-    }
   </script>
 </th:block>

@@ -380,7 +380,7 @@ public class UserController {
 
   @PermitAll
   @Transactional
-  @PostMapping("/testsignup")
+  @PostMapping("/user_join")
   public ApiUtils.ApiResult<Boolean> testSignup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
     log.warn(signupDTO.toString());
     try {

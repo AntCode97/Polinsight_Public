@@ -177,7 +177,7 @@ const userDtoParser = beforeInfo => {
 
 const getBasicDataFromInputToJson = () => {
   let email = $('input[name=email]')
-  let domain = $('input[name=domain]')
+  let domain = $('select[name=domain]')
   let name = $('input[name=name]')
   let phone = $('input[name=phone]')
   let recommend = $('input[name=recommend]')
@@ -188,7 +188,7 @@ const getBasicDataFromInputToJson = () => {
     email: !domain.val() ? email.val() : `${email.val()}@${domain.val()}`,
     name: name.val(),
     phone: phone.val(),
-    recommend: !recommend.val() ? "" : recommend.val(),
+    recommend: recommend.val().length > 0 ? recommend.val() : "",
     password: password.val(),
     confirm: confirm.val()
   }

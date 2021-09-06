@@ -7,7 +7,7 @@ const isValidEmail = (emailValue) => {
 }
 
 const isValidPhone = (phoneValue) => {
-  return (/^[0-9]{3}[0-9]{4}[0-9]{4}$/).test(phoneValue)
+  return (/^[0-9]{3}[0-9]{4}[0-9]{4}$/).test(phoneValue) || (/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/).test(phoneValue)
 }
 
 const isValidName = (nameValue) => {
@@ -45,7 +45,7 @@ const confirmValidateMessage = (confirmValue, passwordValue, msg) => {
     if (!isValidPassword(confirmValue)) {
       msg.text('올바른 패스워드를 입력해주세요.').show();
     } else if (confirmValue !== passwordValue && isValidPassword(confirmValue) && isValidPassword(passwordValue)) {
-      msg.text('비밀번호가 일치하지 않습니다.').show();
+      msg.text('패스워드가 일치하지 않습니다.').show();
     } else if (confirmValue === passwordValue && isValidPassword(confirmValue) && isValidPassword(passwordValue)) {
       msg.text('').hide();
       return true;
@@ -84,7 +84,7 @@ const nameValidateMessage = (nameValue, msg) => {
 
 // email, phone, name, password
 const isValidBasicInfo = (emailValue, phoneValue, nameValue, passwordValue) => {
-  return isValidName(emailValue) && isValidPhone(phoneValue) && isValidName(nameValue) && isValidPassword(passwordValue)
+  return isValidEmail(emailValue) && isValidPhone(phoneValue) && isValidName(nameValue) && isValidPassword(passwordValue)
 }
 
 const isValidNameAndPhone = (nameValue, phoneValue) => {
