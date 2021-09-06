@@ -285,8 +285,7 @@
     async function getSurveyData(e) {
       let type = $('input[name=sort_group]:checked').val();
       let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      let regex = !e ? '' : String($('input[name=admin_find'
-    ]).
+      let regex = !e ? '' : String($('input[name=admin_find]').
       val()
     ).
       trim();
