@@ -126,11 +126,6 @@ const checkAccountNumber = account_number => {
   return !!account_number.match(/([0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-])/)
 }
 
-const userNameChecker = user_name => {
-  user_name = String(user_name).trim()
-  return !!user_name.match(/^[가-힣]{2,10}$/)
-}
-
 const panelInfoChecker = info => {
   let arr = ['birth', 'gender', 'birthType', 'education', 'marry', 'job', 'industry', 'favorite', 'address']
   for (let idx in arr) {

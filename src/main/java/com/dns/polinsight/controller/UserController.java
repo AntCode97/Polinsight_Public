@@ -137,6 +137,7 @@ public class UserController {
         case "basic":
           user.setName(userDto.getName());
           user.setPhone(Phone.of(userDto.getPhone()));
+          log.warn("바꾸려는 데이터 :: " + user.toString());
           break;
         case "password":
           if (!passwordEncoder.matches(userDto.getNewPassword(), user.getPassword()))
