@@ -524,13 +524,13 @@
                             </div>
                             <div class="right_content">
                               <select id="year" name="year">
-                                <option>선택</option>
+                                <option value="선택">선택</option>
                               </select><label for="year"> 년</label>
                               <select id="month" name="month">
-                                <option>선택</option>
+                                <option value="선택">선택</option>
                               </select><label for="month"> 월</label>
                               <select id="day" name="day">
-                                <option>선택</option>
+                                <option value="선택">선택</option>
                               </select><label for="day"> 일</label>
                               <label>
                                 <input checked name="birthType" type="radio" value="양력">
@@ -609,7 +609,7 @@
                             </div>
                             <div class="right_content">
                               <select id="job" name="job">
-                                <option>선택</option>
+                                <option value="선택">선택</option>
                                 <option value="학생">학생</option>
                                 <option value="경영직">경영직</option>
                                 <option value="공무">공무</option>
@@ -632,7 +632,7 @@
                             </div>
                             <div class="right_content">
                               <select id="industry" name="industry">
-                                <option>선택</option>
+                                <option value="선택">선택</option>
                                 <option value="제조업">제조업</option>
                                 <option value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
                                 <option value="부동산업">부동산업</option>
@@ -1088,11 +1088,6 @@
         }).catch(console.log)
       }
     }
-
-    // const addInputTrigger = () => {
-    //   $('input').on('keyup change')
-    //   $('select').on('change')
-    // }
 
     let updatedUser = {}
 

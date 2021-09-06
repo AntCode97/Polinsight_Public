@@ -117,9 +117,10 @@ async function saveByExcel(e) {
 
 }
 
+// TODO 은행별로 나누어 검증 필요
 const checkAccountNumber = account_number => {
   account_number = String(account_number).trim()
-  return !!account_number.match(/([0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-])/)
+  return !!account_number.match(/([0-9,\-]{3,6}[0-9,\-]{2,6}[0-9,\-])/)
 }
 
 const userNameChecker = user_name => {
@@ -132,7 +133,6 @@ const panelInfoChecker = info => {
   for (let idx in arr) {
     let key = arr[idx];
     if (!info[key] || info[key].includes('선택') || info[key].includes('undefined')) {
-      console.log(key)
       return false;
     }
     if (key === 'favorite') {
