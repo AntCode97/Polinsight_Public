@@ -1030,12 +1030,12 @@
         let recommend = $('input[name=recommend]')
         let name = $('input[name=name]')
         if (!isValidPasswordForJoin(password.val(), confirm.val())) {
-          alert('비밀번호를 확인해주세요')
+          alert('필수정보를 입력해주세요')
           return;
         }
         // check basic info
         if (!isValidBasicInfo(`${email.val()}@${domain.val()}`, phone.val().replaceAll("-", ""), name.val(), password.val())) {
-          alert('필수 입력값들을 먼저 입력해주세요')
+          alert('필수정보를 입력해주세요')
           return
         }
         expand()

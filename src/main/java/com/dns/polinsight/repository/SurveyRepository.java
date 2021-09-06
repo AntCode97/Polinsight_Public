@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
@@ -22,7 +21,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   List<Survey> findSurveysByTitleLike(String title, Pageable pageable);
 
-  Optional<Survey> findSurveyBySurveyId(long surveyId);
+  Survey findSurveyBySurveyId(Long surveyId);
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId=c.survey.surveyId where s.id = :id")
   SurveyMapping findSurveyMappingById(long id);

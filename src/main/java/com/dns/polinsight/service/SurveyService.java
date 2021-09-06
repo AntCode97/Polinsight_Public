@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public interface SurveyService {
 
+  Optional<Survey> findById(Long id);
+
   Survey save(Survey survey);
 
   List<Survey> findAll();
@@ -44,6 +46,5 @@ public interface SurveyService {
   void deleteSurveyById(long surveyId);
 
   int adminSurveyUpdate(long id, long point, String create, String end, String progressType);
-
 
 }

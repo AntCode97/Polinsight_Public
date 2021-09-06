@@ -246,12 +246,12 @@
 
       http
           .post('/find?type=' + type, type === 'email' ? {
-            phone: phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3"),
-            name: finduser_name
+            phone: phone.val().replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3"),
+            name: finduser_name.val()
           } : {
-            name: findpwd_name,
-            email: email,
-            phone: findpwd_phone.replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
+            name: findpwd_name.val(),
+            email: email.val(),
+            phone: findpwd_phone.val().replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
           })
           .then(res => {
             if (res.data.success) {

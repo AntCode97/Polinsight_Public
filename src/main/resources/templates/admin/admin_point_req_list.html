@@ -88,7 +88,11 @@
       template.append(`<span>${req.progress}</span>`);
       const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
       const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
-      const tmp_cell = $(`<span></span>`).append(modify_btn).append(`<span>  </span>`).append(delete_btn);
+      const tmp_cell = $(`<span></span>`)
+      if (req.progress === 'REQUESTED')
+        tmp_cell.append(modify_btn).append(`<span>  </span>`)
+      else
+        tmp_cell.append(delete_btn);
       template.append(tmp_cell);
       return template;
     };
@@ -107,12 +111,15 @@
     };
 
     const progressUpdate = e => {
-      http.put(`/api/points/${e.data.id}`, {progress: e.data.progress})
-          .then(res => {
-            if (res.data.success) {
-              init()
-            }
-          }).catch(console.log);
+      if (confirm('요청의 상태를 변경하시겠습니까?')) {
+        http
+            .put(`/api/points/${e.data.id}`, {progress: e.data.progress})
+            .then(res => {
+              if (res.data.success) {
+                init()
+              }
+            }).catch(console.log);
+      }
     };
 
     async function getPointRequestData(e) {

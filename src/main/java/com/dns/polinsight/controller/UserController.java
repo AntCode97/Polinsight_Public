@@ -216,7 +216,7 @@ public class UserController {
       log.error("UID Data Not Found");
       return new ModelAndView("redirect:/denied");
     }
-    return new ModelAndView("change_password");
+    return new ModelAndView("member/change_password");
   }
 
   @PostMapping("/api/password/change")

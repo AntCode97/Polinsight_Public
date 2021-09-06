@@ -14,6 +14,10 @@ const isValidName = (nameValue) => {
   return (/^[가-힣]{2,10}$/).test(nameValue)
 }
 
+const isValidDate = (dateValue) => {
+  return (/[0-9]{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])/).test(dateValue)
+}
+
 const emailValidateMessage = (emailValue, msg) => {
   if (emailValue.length > 0) {
     if (!isValidEmail(emailValue)) {
@@ -93,7 +97,7 @@ const isValidNameAndPhone = (nameValue, phoneValue) => {
 
 // post_password, new_password, new_password_confirm 패스워드 변경시에만 사용
 const isValidPasswordForJoin = (password, confirm) => {
-  return isValidPassword(password) && isValidPassword(confirm)
+  return isValidPassword(password) && isValidPassword(confirm) && (password === confirm)
 }
 const isValidPasswordForChange = (before, password, confirm) => {
   return isValidPassword(before) && isValidPassword(password) && isValidPassword(confirm)
@@ -114,4 +118,15 @@ const isValidPanelInfo = info => {
     }
   }
   return true;
+}
+
+const isValidSurveyUpdateInfo = survey_info => {
+  if ((/[^0-9]/g).test(survey_info['point']) || !isValidDate(survey_info['createdAt']) || !isValidDate(survey_info['endAt'])) {
+    return false
+  }
+  if (!(/[^0-9]/g).test(survey_info['point']) && Number(survey_info['point']) < 0) {
+    alert('포인트는 0 이하일 수 없습니다')
+    return false
+  }
+  return true
 }

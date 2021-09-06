@@ -1508,29 +1508,22 @@
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
 
-      if (!checkAccountNumber(account)) {
-        account.focus().val('')
-        alert('올바른 계좌번호를 입력해주세요')
-      } else if (!bank.val()) {
-        bank.focus()
-      } else {
-        if (confirm(`올바른 계좌번호를 입력하였는지 확인해주세요.\n은행명 : ${bank.val()}\n계좌번호 : ${account.val()}`)) {
-          http
-              .post('/api/pointrequest', {
-                point: reqPoint.val(),
-                account: account.val(),
-                bank: bank.val()
-              })
-              .then(res => {
-                if (res.data.response) {
-                  alert('요청이 성공적으로 완료되었습니다.');
-                  location.reload();
-                } else {
-                  alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
-                }
-              })
-              .catch(err => console.log(err));
-        }
+      if (confirm(`올바른 계좌번호를 입력하였는지 확인해주세요.\n은행명 : ${bank.val()}\n계좌번호 : ${account.val()}`)) {
+        http
+            .post('/api/pointrequest', {
+              point: reqPoint.val(),
+              account: account.val(),
+              bank: bank.val()
+            })
+            .then(res => {
+              if (res.data.response) {
+                alert('요청이 성공적으로 완료되었습니다.');
+                location.reload();
+              } else {
+                alert('요청 중 문제가 발생하였습니다.\n관리자에게 문의해주세요');
+              }
+            })
+            .catch(err => console.log(err));
       }
     }
 
