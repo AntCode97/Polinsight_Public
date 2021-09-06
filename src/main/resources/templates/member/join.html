@@ -125,7 +125,7 @@
     }
 
     .correct_msg {
-      color   : greenyellow;
+      color   : lightgreen;
       display : inline-block;
     }
 
@@ -379,7 +379,7 @@
                         <option value="gmail.com">gmail.com</option>
                         <option value="kakao.com">kakao.com</option>
                       </select>
-                      <span id="email_msg"></span>
+                      <span class="err_msg"></span>
                       <!--                <span class="info_msg"></span>-->
                     </div>
                   </li>
@@ -408,13 +408,12 @@
                     </div>
                   </li>
                   <li>
-                    <!--TODO : 특수문자 검증 필요-->
                     <div class="left_content">
                       <label for="user_name">이름</label>
                     </div>
                     <div class="right_content">
                       <input class="login_input" id="user_name" name="name" required type="text" />
-                      <!--                <span>이름을 입력해주세요.</span>-->
+                      <span class="err_msg"></span>
                       <span class="info_msg"></span>
                     </div>
                   </li>
@@ -882,6 +881,7 @@
     </div>
     <th:block th:include="layout/footer" />
   </div>
+  <script th:src="@{/js/Validator.js}"></script>
   <script>
     const userInfo = {
       favorite: []
@@ -901,6 +901,7 @@
     }
 
     const signUpDataProcess = (info) => {
+
       userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
       userInfo['phone'] = stringToPhone(userInfo['phone'])
       if (!!userInfo['recommend'])
@@ -910,7 +911,7 @@
         $('input[name=confirm]').val('')
         $('input[name=password]').val('').focus()
         alert('비밀번호를 다시 확인해주세요')
-        return;
+        return false;
       } else if (!passwordInputValidator(userInfo['password'])) {
         $('input[name=confirm]').val('')
         $('input[name=password]').val('').focus()
@@ -922,42 +923,52 @@
         $('input[name=recommend]').val('').focus()
         // TODO 추천인 연락처 서버에 존재하는지 확인
         alert('연락처와 추천인 연락처는 같을 수 없습니다.')
-        return
+        return false
       }
       if (userInfo['ispanel'] === undefined || userInfo['ispanel'] === null) {
         $('input[name=ispanel]').val('').focus()
         alert('패널 가입 여부를 확인해주세요')
-        return;
+        return false;
       }
 
       // 패널 가입할 때
       if (userInfo['ispanel'] === 'true') {
         userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
         userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
-      }
-    }
-
-    const checkRequiredData = () => {
-      let result = true
-      $("form").find('input').each(function () {
-        let inputElem = $(this)
-        let label = inputElem.parent('.right_content').prev('.left_content').children('label')
-        let inputValue = inputElem.val().trim()
-        if ($(this).prop('required') && !inputValue) {
-          inputElem.focus()
-          inputElem.val('')
-          alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
-          result = false
+        let industry = document.querySelector("#industry");
+        if (industry.value == "선택") {
+          alert("직종을 선택해 주세요");
           return false;
         }
-      })
-      return result;
+      }
+      return true;
     }
+
+    // const checkRequiredData = () => {
+    //   let result = true
+    //   $("form").find('input').each(function () {
+    //     let inputElem = $(this)
+    //     let label = inputElem.parent('.right_content').prev('.left_content').children('label')
+    //     let inputValue = inputElem.val().trim()
+    //     if ($(this).prop('required') && !inputValue) {
+    //       inputElem.focus()
+    //       inputElem.val('')
+    //       alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
+    //       result = false
+    //       return false;
+    //     }
+    //   })
+    //   return result;
+    // }
 
     const join = e => {
       e.preventDefault();
-      e.returnValue = false;
-      signUpDataProcess()
+      e.stopPropagation();
+      if (!signUpDataProcess()) {
+        location.href = "#top";
+        return;
+      }
+
       http
           .post('/testsignup', userInfo)
           .then(res => {
@@ -982,20 +993,23 @@
     const throttleEmailchecker = _.throttle((email, callback) => {
       http.get("/api/user/" + email)
           .then(res => callback(res.data.response))
-          .catch(err => console.log("error", err))
+          .catch(err => {
+            console.log("error", err)
+            callback(false)
+          })
     }, 200)
 
     const checkEmail = e => {
       let account = $('input[name=email]').val()
       let domain = $('input[name=domain]').val()
-      let email = `${account}@${domain}`.trim()
+      let emailValue = `${account}@${domain}`.trim()
       let msg = $("#email_msg").css('display', 'block')
 
       if (!account) {
         msg.text("").removeClass("correct_msg").addClass("err_msg")
       } else {
-        if (emailInputValidator(email)) {
-          throttleEmailchecker(email, function (status) {
+        if (isValidEmail(emailValue)) {
+          throttleEmailchecker(emailValue, function (status) {
             if (status) {
               msg.text("사용 가능한 이메일입니다.").removeClass("err_msg").addClass("correct_msg")
             } else {
@@ -1028,23 +1042,6 @@
       userInfo['ispanel'] = false;
     }
 
-    // TODO
-    const passwordChecker = e => {
-      let password = $('input[name=password]');
-      let confirm = $('input[name=confirm]');
-
-      if (!!password.val() || !!confirm.val()) {
-        if (passwordInputValidator(password.val()) && passwordInputValidator(confirm.val()))
-          if (password.val() !== confirm.val()) {
-            confirm.next('.err_msg').text('비밀번호가 일치하지 않습니다.')
-          } else {
-            !!password.val() && passwordInputValidator(password.val()) ? password.next('.err_msg').text('올바른 비밀번호를 입력해주세요') : password.next('.err_msg').text('')
-            !!confirm.val() && passwordInputValidator(confirm.val()) ? confirm.next('.err_msg').text('올바른 비밀번호를 입력해주세요') : confirm.next('.err_msg').text('')
-          }
-      }
-    }
-
-
     const closeModal = () => {
       $('.popup_overlay').fadeOut(100)
     }
@@ -1066,7 +1063,25 @@
       $('button.popup_btn').on('click', closeModal)
       // 모달 열기 이벤트
 
-      $('input[name=ispanel][value="true"]').on('click', expand)
+      $('input[name=ispanel][value="true"]').on('click', () => {
+        let email = $('input[name=email]')
+        let domain = $('input[name=domain]')
+        let password = $('input[name=password]')
+        let confirm = $('input[name=confirm]')
+        let phone = $('input[name=phone]')
+        let recommend = $('input[name=recommend]')
+        let name = $('input[name=name]')
+        if (!isValidPasswordForJoin(password.val(), confirm.val())) {
+          alert('비밀번호를 확인해주세요')
+          return;
+        }
+        // check basic info
+        if (!isValidBasicInfo(`${email.val()}@${domain.val()}`, phone.val(), name.val(), password.val())) {
+          alert('필수 입력값들을 먼저 입력해주세요')
+          return
+        }
+        expand()
+      })
 
       $('input[name=ispanel][value="false"]').on('click', fold)
       //접기 버튼
@@ -1082,38 +1097,38 @@
       $('input[name=email]').on('keyup change', checkEmail)
       $('select[name=domain]').on('change', checkEmail)
       // 패스워드 입력 검증 및 안내 메시지
-      $('input[name=password]').on('keyup change', function () {
-        let input = $(this)
-        let val = input.val()
-        let msg = input.next('.err_msg')
-        if (val.length < 1) {
-          msg.text('').css('display', 'none')
-          return
-        }
-        if (!passwordInputValidator(val)) {
-          msg.text('올바른 값을 입력해주세요').css('display', 'block')
-        } else {
-          msg.text('').css('display', 'none')
-        }
-      })
-      $('input[name=confirm]').on('keyup change', function () {
-        let input = $(this)
-        let val = input.val()
-        let msg = input.next('.err_msg')
-        let password = $('input[name=password]')
-        if (val.length < 1) {
-          msg.text('').css('display', 'none')
-          return
-        }
-        if (!passwordInputValidator(val)) {
-          msg.text('올바른 값을 입력해주세요').css('display', 'block')
-        } else {
-          if (password.val() !== val) {
-            msg.text('비밀번호가 일치하지 않습니다.').css('display', 'block')
-          } else
-            msg.text('').css('display', 'none')
-        }
-      })
+      // $('input[name=password]').on('keyup change', function () {
+      //   let input = $(this)
+      //   let val = input.val()
+      //   let msg = input.next('.err_msg')
+      //   if (val.length < 1) {
+      //     msg.text('').css('display', 'none')
+      //     return
+      //   }
+      //   if (!passwordInputValidator(val)) {
+      //     msg.text('올바른 값을 입력해주세요').css('display', 'block')
+      //   } else {
+      //     msg.text('').css('display', 'none')
+      //   }
+      // })
+      // $('input[name=confirm]').on('keyup change', function () {
+      //   let input = $(this)
+      //   let val = input.val()
+      //   let msg = input.next('.err_msg')
+      //   let password = $('input[name=password]')
+      //   if (val.length < 1) {
+      //     msg.text('').css('display', 'none')
+      //     return
+      //   }
+      //   if (!passwordInputValidator(val)) {
+      //     msg.text('올바른 값을 입력해주세요').css('display', 'block')
+      //   } else {
+      //     if (password.val() !== val) {
+      //       msg.text('비밀번호가 일치하지 않습니다.').css('display', 'block')
+      //     } else
+      //       msg.text('').css('display', 'none')
+      //   }
+      // })
     }
 
     const throttleRecommendChecker = _.throttle((recommend, callback) => {
@@ -1146,5 +1161,24 @@
         }
       })
     })
+
+    // 입력데이터 검증 및 메시지 처리
+    $(document)
+        .on('change keyup', 'input[name=password]', function () {
+          let passwordValue = $(this).val()
+          let msg = $(this).closest('div').find('.err_msg')
+          passwordValidateMessage(passwordValue, msg);
+        })
+        .on('change keyup', 'input[name=confirm]', function () {
+          let passwordValue = $(this).val()
+          let msg = $(this).closest('div').find('.err_msg')
+          confirmValidateMessage(passwordValue, msg);
+        })
+        .on('change keyup', 'input[name=name]', function () {
+          let nameValue = $(this).val()
+          let msg = $(this).closest('div').find('.err_msg')
+          nameValidateMessage(nameValue, msg)
+        })
+
   </script>
 </th:block>

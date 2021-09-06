@@ -128,8 +128,8 @@
       font-size     : 14px;
       margin        : 5px 0;
       padding       : 15px 35px;
+      text-align    : center;
       width         : 100%;
-      text-align: center;
     }
 
     .user_nav_btn_wrap > input[type='radio'] + label:hover {
@@ -418,14 +418,14 @@
     }
 
     .btn-mem-update {
-      cursor: pointer;
-      border: none;
-      outline: none;
-      border-radius: 5px;
-      padding: 10px 25px;
-      background: #EBA444;
-      color: white;
-      margin-top: 25px;
+      background    : #EBA444;
+      border        : none;
+      border-radius : 5px;
+      color         : white;
+      cursor        : pointer;
+      margin-top    : 25px;
+      outline       : none;
+      padding       : 10px 25px;
     }
 
   </style>
@@ -900,14 +900,14 @@
 
       <div class="scroll-table">
         <div class="post-row post-th">
-          <spane>번호</spane>
-          <spane>아이디(이메일)</spane>
-          <spane>이름</spane>
-          <spane>휴대전화</spane>
-          <spane>포인트</spane>
-          <spane>유형</spane>
-          <spane>가입일</spane>
-          <spane>관리</spane>
+          <span>번호</span>
+          <span>아이디(이메일)</span>
+          <span>이름</span>
+          <span>휴대전화</span>
+          <span>포인트</span>
+          <span>유형</span>
+          <span>가입일</span>
+          <span>관리</span>
         </div>
       </div>
       <div class="page-button" id="pagination"></div>
@@ -985,7 +985,6 @@
 
     const openModalWithMemberInfo = e => {
       const user = e.data.userinfo;
-      console.log("Download User Data ::: ", user)
       updatedUser = {...user}
       // 회원 정보 세팅
       $('p#user_email').text(user.email)

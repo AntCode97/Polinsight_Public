@@ -66,6 +66,10 @@ function stringToEmail() {
   return arguments[0] + '@' + arguments[1]
 }
 
+const emailToString = (info) => {
+  return info['account'] + '@' + info['domain']
+}
+
 function stringToPhone() {
   if (arguments.length > 2) {
     return `${arguments[0]}-${arguments[1]}-${arguments[2]}`
@@ -169,4 +173,55 @@ const userDtoParser = beforeInfo => {
   if (!!beforeInfo['recommend'])
     returnInfo['recommend'] = returnInfo['recommend'].replace(/([0-9]{3})([0-9]{4})([0-9]{4})/, "$1-$2-$3")
   return returnInfo
+}
+
+const getBasicDataFromInputToJson = () => {
+  let email = $('input[name=email]')
+  let domain = $('input[name=domain]')
+  let name = $('input[name=name]')
+  let phone = $('input[name=phone]')
+  let recommend = $('input[name=recommend]')
+  let password = $('input[name=password]')
+  let confirm = $('input[name=confirm]')
+
+  return {
+    email: !domain.val() ? email.val() : `${email.val()}@${domain.val()}`,
+    name: name.val(),
+    phone: phone.val(),
+    recommend: !recommend.val() ? "" : recommend.val(),
+    password: password.val(),
+    confirm: confirm.val()
+  }
+}
+
+const getPanelDataFromInputToJson = () => {
+  let gender = $('input[name=gender]:checked')
+  let year = $('select[name=year]')
+  let month = $('select[name=month]')
+  let day = $('select[name=day]')
+  let birthType = $('input[name=birthType]:checked')
+  let state = $('#state')
+  let city = $('select[name=city]')
+  let education = $('select[name=education]')
+  let marry = $('input[name=marry]:checked')
+  let job = $('select[name=job]')
+  let industry = $('select[name=industry]')
+  let favorite = $('input:checkbox[name=favorite]:checked')
+
+  let favList = []
+  favorite.each((index, value) => {
+    favList.push(value.value)
+  })
+
+  return {
+    gender: gender.val(),
+    birth: dateParser(year.val(), month.val(), day.val()),
+    birthType: birthType.val(),
+    address: addressParser(state.val(), city.val()),
+    education: education.val(),
+    marry: marry.val(),
+    job: job.val(),
+    industry: industry.val(),
+    favorite: favList
+  }
 }

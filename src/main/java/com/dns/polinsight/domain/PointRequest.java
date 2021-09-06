@@ -41,6 +41,8 @@ public class PointRequest {
 
   private String account;
 
+  private String name;
+
   @Setter
   @Builder.Default
   @Enumerated(EnumType.STRING)
