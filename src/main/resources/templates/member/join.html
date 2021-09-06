@@ -379,8 +379,7 @@
                         <option value="gmail.com">gmail.com</option>
                         <option value="kakao.com">kakao.com</option>
                       </select>
-                      <span class="err_msg"></span>
-                      <!--                <span class="info_msg"></span>-->
+                      <span class="err_msg msg"></span>
                     </div>
                   </li>
                   <li>
@@ -391,7 +390,7 @@
                     </div>
                     <div class="right_content">
                       <input class="pwdinput" id="password" name="password" required type="password" minlength="10" maxlength="16" />
-                      <span class="err_msg">올바른 비밀번호를 입력하세요.</span>
+                      <span class="err_msg msg"></span>
                       <span class="info_msg">영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자</span>
                     </div>
                   </li>
@@ -403,8 +402,7 @@
                     </div>
                     <div class="right_content">
                       <input class="pwdinput" name="confirm" id="pwdconfirm" required type="password" minlength="10" maxlength="16" />
-                      <span class="err_msg">비밀번호가 일치하지 않습니다.</span>
-                      <span class="info_msg" id="pwmsg"></span>
+                      <span class="err_msg msg">비밀번호가 일치하지 않습니다.</span>
                     </div>
                   </li>
                   <li>
@@ -434,9 +432,8 @@
                     </div>
                     <div class="right_content">
                       <input class="login_input" id="recommend" name="recommend" type="tel" maxlength="11">
-                      <!--                <button id="phone_rec_user_chk">확인</button>-->
                       <span class="info_msg">(- 없이 입력해주세요.)</span>
-                      <span class="err_msg"></span>
+                      <span class="err_msg msg"></span>
                     </div>
                   </li>
                 </ul>
@@ -883,115 +880,69 @@
   </div>
   <script th:src="@{/js/Validator.js}"></script>
   <script>
-    const userInfo = {
-      favorite: []
-    }
-
-    const inputHandler = e => {
-      let name = e.target.name
-      let value = e.target.value
-      if (name === 'favorite') {
-        if (userInfo[name].includes(value))
-          userInfo[name].pop(value)
-        else
-          userInfo[name].push(value)
-      } else {
-        userInfo[name] = value
-      }
-    }
-
-    const signUpDataProcess = (info) => {
-
-      userInfo['email'] = stringToEmail(userInfo['email'], userInfo['domain'])
-      userInfo['phone'] = stringToPhone(userInfo['phone'])
-      if (!!userInfo['recommend'])
-        userInfo['recommend'] = stringToPhone(userInfo['recommend'])
-      // 비밀번호 확인
-      if (userInfo['password'] !== userInfo['confirm']) {
-        $('input[name=confirm]').val('')
-        $('input[name=password]').val('').focus()
-        alert('비밀번호를 다시 확인해주세요')
-        return false;
-      } else if (!passwordInputValidator(userInfo['password'])) {
-        $('input[name=confirm]').val('')
-        $('input[name=password]').val('').focus()
-        alert('비밀번호를 형식에 맞게 지정해주요')
-        return false;
-      }
-      // 연락처 입력 확인
-      if (userInfo['phone'] === userInfo['recommend']) {
-        $('input[name=recommend]').val('').focus()
-        // TODO 추천인 연락처 서버에 존재하는지 확인
-        alert('연락처와 추천인 연락처는 같을 수 없습니다.')
-        return false
-      }
-      if (userInfo['ispanel'] === undefined || userInfo['ispanel'] === null) {
-        $('input[name=ispanel]').val('').focus()
-        alert('패널 가입 여부를 확인해주세요')
-        return false;
-      }
-
-      // 패널 가입할 때
-      if (userInfo['ispanel'] === 'true') {
-        userInfo['address'] = addressParser(userInfo['state'], userInfo['city'])
-        userInfo['birth'] = dateParser(userInfo['year'], userInfo['month'], userInfo['day'])
-        let industry = document.querySelector("#industry");
-        if (industry.value == "선택") {
-          alert("직종을 선택해 주세요");
-          return false;
-        }
-      }
-      return true;
-    }
-
-    // const checkRequiredData = () => {
-    //   let result = true
-    //   $("form").find('input').each(function () {
-    //     let inputElem = $(this)
-    //     let label = inputElem.parent('.right_content').prev('.left_content').children('label')
-    //     let inputValue = inputElem.val().trim()
-    //     if ($(this).prop('required') && !inputValue) {
-    //       inputElem.focus()
-    //       inputElem.val('')
-    //       alert(label.text().trim() + " 항목은 필수 입력 사항입니다.")
-    //       result = false
-    //       return false;
-    //     }
-    //   })
-    //   return result;
-    // }
 
     const join = e => {
       e.preventDefault();
       e.stopPropagation();
-      if (!signUpDataProcess()) {
-        location.href = "#top";
-        return;
+      let signupInfo = getBasicDataFromInputToJson()
+      let isPanel = $('input:radio[name=ispanel]:checked').val()
+
+      let recommendValue = $('input[name=recommend]').val()
+      if (recommendValue.length > 0) {
+        if (!isValidPhone(recommendValue)) {
+          alert('입력한 값들을 다시 한번 확인해주세요')
+          return;
+        }
       }
 
-      http
-          .post('/testsignup', userInfo)
-          .then(res => {
-            if (res.data.success) {
-              if (e.data.type === 'panel') {
-                // 패널 회원 가입
-                location.replace("/success_panel")
+      if (!(isValidBasicInfo(signupInfo['email'], signupInfo['phone'], signupInfo['name'], signupInfo['password']))) {
+        // 입력값 검증 실패
+        alert('입력한 값들을 다시 한번 확인해주세요.')
+        $('input[name=email]').focus()
+        return
+      }
+
+      if (!isValidPasswordForJoin(signupInfo['password'], signupInfo['confirm'])) {
+        alert('패스워드를 다시 확인해주세요.')
+        $('input[name=password]').val('').focus()
+        $('input[name=confirm]').val('')
+        return
+      }
+
+      if (isPanel === 'true') {
+        signupInfo = {...signupInfo, ...getPanelDataFromInputToJson()}
+        if (!isValidPanelInfo(signupInfo)) {
+          alert('입력하신 패널 정보를 다시 한번 확인해주세요.')
+          $('input[name=gender]').focus()
+          return;
+        }
+      }
+
+      if (confirm('입력하신 정보로 회원가입 하시겠습니까?')) {
+        http
+            .post('/user_join', signupInfo)
+            .then(res => {
+              if (res.data.success) {
+                if (e.data.type === 'panel') {
+                  // 패널 회원 가입
+                  location.replace("/success_panel")
+                } else {
+                  // 일반 회원 가입
+                  location.replace("/success_basic")
+                }
               } else {
-                // 일반 회원 가입
-                location.replace("/success_basic")
+                alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
               }
-            } else {
+            })
+            .catch(err => {
+              console.log("Error response", err)
               alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
-            }
-          })
-          .catch(err => {
-            console.log("Error response", err)
-            alert('처리 중 오류가 발생하였습니다.\n관리자에게 문의해주세요.')
-          })
+            })
+      }
     }
 
     const throttleEmailchecker = _.throttle((email, callback) => {
-      http.get("/api/user/" + email)
+      http.get("/api/user/email/" + email)
           .then(res => callback(res.data.response))
           .catch(err => {
             console.log("error", err)
@@ -999,13 +950,25 @@
           })
     }, 200)
 
-    const checkEmail = e => {
-      let account = $('input[name=email]').val()
-      let domain = $('input[name=domain]').val()
-      let emailValue = `${account}@${domain}`.trim()
-      let msg = $("#email_msg").css('display', 'block')
+    const throttleRecommendChecker = _.throttle((recommend, callback) => {
+      http.get('/api/user/recommend/' + recommend)
+          .then(res => {
+            callback(res.data.response)
+          })
+          .catch(err => {
+            console.log("error", err)
+            callback(false)
+          })
+    }, 200)
 
-      if (!account) {
+    const checkEmail = e => {
+      let account = $('input[name=email]')
+      let domain = $('select[name=domain]').val()
+      let emailValue = `${account.val()}@${domain}`.trim()
+      let msg = account.closest('.right_content').find('.msg')
+      msg.show()
+
+      if (account.val().length === 0) {
         msg.text("").removeClass("correct_msg").addClass("err_msg")
       } else {
         if (isValidEmail(emailValue)) {
@@ -1031,7 +994,7 @@
       // 날짜 선택 폼 설정
       setDateValue()
       $("#month").on('change', setDay)
-      userInfo['ispanel'] = true;
+      $('input:radio[name=ispanel][value=true]').prop('checked', true)
     }
     const fold = () => {
       openModal()
@@ -1039,7 +1002,7 @@
       $('.popup_overlay').fadeIn(100)
       $('#basic_info').animate({left: 0}).css({'height': '100%', 'width': '1000px', 'display': 'block'})
       $('input[name=ispanel][value="false"]').prop('checked', true)
-      userInfo['ispanel'] = false;
+      $('input:radio[name=ispanel][value=false]').prop('checked', true)
     }
 
     const closeModal = () => {
@@ -1050,14 +1013,9 @@
     }
 
     const init = () => {
-      $('input').on('keyup change checked', inputHandler)
-      $('select').on('keyup change', inputHandler).trigger('change')
       $('button#panel_submit').on('click', {type: 'panel'}, join)
       $('button#basic_submit').on('click', {type: 'basic'}, join)
 
-      $('input[type=radio]:checked').each(function () {
-        userInfo[$(this).attr('name')] = $(this).val()
-      })
       // 모달 닫기 이벤트
       $('#popup_close_btn').on('click', closeModal)
       $('button.popup_btn').on('click', closeModal)
@@ -1065,7 +1023,7 @@
 
       $('input[name=ispanel][value="true"]').on('click', () => {
         let email = $('input[name=email]')
-        let domain = $('input[name=domain]')
+        let domain = $('select[name=domain]')
         let password = $('input[name=password]')
         let confirm = $('input[name=confirm]')
         let phone = $('input[name=phone]')
@@ -1076,7 +1034,7 @@
           return;
         }
         // check basic info
-        if (!isValidBasicInfo(`${email.val()}@${domain.val()}`, phone.val(), name.val(), password.val())) {
+        if (!isValidBasicInfo(`${email.val()}@${domain.val()}`, phone.val().replaceAll("-", ""), name.val(), password.val())) {
           alert('필수 입력값들을 먼저 입력해주세요')
           return
         }
@@ -1131,35 +1089,9 @@
       // })
     }
 
-    const throttleRecommendChecker = _.throttle((recommend, callback) => {
-      http.get('/api/user/recommend/' + recommend)
-          .then(callback)
-          .catch(console.log)
-    }, 200)
 
     $(function () {
       init();
-
-      $('input[name=recommend]').on('change keyup', function (e) {
-        let recommend = $(this).val()
-        let msg = $(this).parents('.right_content').children('.err_msg')
-        // 비어있으면 리턴
-        if (!recommend) {
-          msg.text('').hide()
-          return
-        }
-        if (phoneNumberChecker(recommend)) {
-          if (recommend === $('input[name=phone]').val()) {
-            msg.show().text('추천인 번호는 사용자 번호와 같을 수 없습니다.')
-          } else {
-            throttleRecommendChecker(recommend, (ret) => {
-              !ret.data.response ? msg.text('사용할 수 있는 추천인 번호입니다.').show() : msg.text('사용할 수 없는 추천인 번호입니다.').hide()
-            })
-          }
-        } else {
-          msg.show().text('휴대전화 형식이 올바르지 않습니다.')
-        }
-      })
     })
 
     // 입력데이터 검증 및 메시지 처리
@@ -1170,14 +1102,41 @@
           passwordValidateMessage(passwordValue, msg);
         })
         .on('change keyup', 'input[name=confirm]', function () {
-          let passwordValue = $(this).val()
+          let confirmValue = $(this).val()
+          let passwordValue = $('input[name=password]').val()
           let msg = $(this).closest('div').find('.err_msg')
-          confirmValidateMessage(passwordValue, msg);
+          confirmValidateMessage(confirmValue, passwordValue, msg);
         })
         .on('change keyup', 'input[name=name]', function () {
           let nameValue = $(this).val()
           let msg = $(this).closest('div').find('.err_msg')
           nameValidateMessage(nameValue, msg)
+        })
+        .on('change keyup', 'input[name=recommend]', function () {
+          let recommend = $(this)
+          let recommendValue = recommend.val()
+          let msg = $(this).closest('.right_content').find('.msg')
+          if (recommendValue.length > 0) {
+            if (isValidPhone(recommendValue)) {
+              if (recommendValue === $('input[name=phone]').val()) {
+                msg.show().text('추천인 번호는 사용자 번호와 같을 수 없습니다.')
+              } else {
+                let recomm = recommendValue.substr(0, 3) + '-' + recommendValue.substr(3, 4) + '-' + recommendValue.substr(7, 4)
+                throttleRecommendChecker(recomm, function (status) {
+                  if (status) {
+                    msg.text('사용할 수 있는 추천인 번호입니다.').show()
+                  } else {
+                    msg.text('사용할 수 없는 추천인 번호입니다.').show()
+                  }
+
+                })
+              }
+            } else {
+              msg.show().text('휴대전화 형식이 올바르지 않습니다.')
+            }
+          } else {
+            msg.text('').hide()
+          }
         })
 
   </script>
