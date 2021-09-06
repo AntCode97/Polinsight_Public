@@ -121,9 +121,10 @@ async function saveByExcel(e) {
 
 }
 
+// TODO 은행별로 나누어 검증 필요
 const checkAccountNumber = account_number => {
   account_number = String(account_number).trim()
-  return !!account_number.match(/([0-9,\-]{3,6}\-[0-9,\-]{2,6}\-[0-9,\-])/)
+  return !!account_number.match(/([0-9,\-]{3,6}[0-9,\-]{2,6}[0-9,\-])/)
 }
 
 const panelInfoChecker = info => {
@@ -131,7 +132,6 @@ const panelInfoChecker = info => {
   for (let idx in arr) {
     let key = arr[idx];
     if (!info[key] || info[key].includes('선택') || info[key].includes('undefined')) {
-      console.log(key)
       return false;
     }
     if (key === 'favorite') {
@@ -172,7 +172,7 @@ const userDtoParser = beforeInfo => {
 
 const getBasicDataFromInputToJson = () => {
   let email = $('input[name=email]')
-  let domain = $('input[name=domain]')
+  let domain = $('select[name=domain]')
   let name = $('input[name=name]')
   let phone = $('input[name=phone]')
   let recommend = $('input[name=recommend]')
@@ -183,7 +183,7 @@ const getBasicDataFromInputToJson = () => {
     email: !domain.val() ? email.val() : `${email.val()}@${domain.val()}`,
     name: name.val(),
     phone: phone.val(),
-    recommend: !recommend.val() ? "" : recommend.val(),
+    recommend: recommend.val().length > 0 ? recommend.val() : "",
     password: password.val(),
     confirm: confirm.val()
   }

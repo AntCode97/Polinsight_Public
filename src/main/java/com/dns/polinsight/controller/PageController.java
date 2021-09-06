@@ -32,25 +32,37 @@ public class PageController {
   }
 
   @GetMapping("/login")
-  public ModelAndView login() {
-    ModelAndView mv = new ModelAndView();
-    mv.setViewName("member/login");
-    return mv;
+  public ModelAndView login(@CurrentUser User user) {
+    if (user == null) {
+      return new ModelAndView("member/login");
+    } else {
+      return new ModelAndView("redirect:/");
+    }
   }
 
   @GetMapping("/join")
-  public ModelAndView signUp() {
-    return new ModelAndView("member/join");
+  public ModelAndView signUp(@CurrentUser User user) {
+    if (user == null) {
+      return new ModelAndView("member/join");
+    } else {
+      return new ModelAndView("redirect:/");
+    }
+
   }
 
 
   @GetMapping("/signup")
-  public ModelAndView contract() {
-    return new ModelAndView("member/contract");
+  public ModelAndView contract(@CurrentUser User user) {
+    if (user == null) {
+      return new ModelAndView("member/contract");
+    } else {
+      return new ModelAndView("redirect:/");
+    }
+
   }
 
   @GetMapping("/panel")
-  public ModelAndView panelSignUp() {
+  public ModelAndView panelSignUp(@CurrentUser User user) {
     ModelAndView mv = new ModelAndView();
     mv.setViewName("_panel");
     return mv;
@@ -143,6 +155,11 @@ public class PageController {
 
   @GetMapping("/accumulate_error")
   public ModelAndView pointAccumulateError() {
+    return new ModelAndView("redirect:/point_accumulate_error");
+  }
+
+  @GetMapping("/point_accumulate_error")
+  public ModelAndView pointAccumulateErrorPage() {
     return new ModelAndView("error/point_accumulate_error");
   }
 

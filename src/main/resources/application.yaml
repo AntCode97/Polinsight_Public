@@ -164,7 +164,7 @@ custom :
       - /qna
       - /faq
       - /api/callback**
-      - /testsignup
+      - /user_join
       - /accumulate_error
   api :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
@@ -220,8 +220,8 @@ spring :
     properties :
       hibernate :
         ddl-auto :   validate
-        show-sql :   true
         format_sql : true
+    show-sql :     true
     generate-ddl : true
 
   banner :

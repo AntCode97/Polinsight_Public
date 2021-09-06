@@ -17,10 +17,10 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
 
   Optional<PointRequest> findPointRequestByUidAndRequestPoint(long uid, long requestPoint);
 
-  @Query("select pr from PointRequest pr")
+  @Query("select pr from PointRequest pr where pr.progress = 'REQUESTED'")
   Page<PointRequestMapping> findAllPointRequest(Pageable pageable);
 
-  @Query("select pr from PointRequest pr where pr.email = '%:regex%' or pr.account like '%:regex%' or pr.bank = '%:regex%' or pr.progress = '%:regex%'")
+  @Query("select pr from PointRequest pr where pr.progress = 'REQUESTED' and (pr.email = '%:regex%' or pr.account like '%:regex%' or pr.bank = '%:regex%' or pr.progress = '%:regex%')")
   Page<PointRequestMapping> findAllByRegex(Pageable pageable, String regex);
 
   long countPointRequestsByUid(Long userId);

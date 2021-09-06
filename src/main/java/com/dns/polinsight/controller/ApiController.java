@@ -4,6 +4,7 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
 import com.dns.polinsight.domain.dto.PointRequestDto;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
 import com.dns.polinsight.mapper.PointRequestMapping;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -154,6 +154,7 @@ public class ApiController {
   @DeleteMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminDeleteSurveyById(@RequestBody Survey survey) throws Exception {
     try {
+      log.info("Deleted Survey ID : {}, Title : {}", survey.getId(), survey.getTitle());
       surveyService.deleteSurveyById(survey.getId());
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -164,10 +165,15 @@ public class ApiController {
   /*
    * 저장된 서베이 목록 수정을 위한 api
    * */
+  @Transactional
   @PutMapping("/survey")
-  public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(Survey survey) throws Exception {
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
+    log.warn("업데이트하는 서베이 정보:: {}", dto.toString());
     try {
+      Survey survey = surveyService.findById(dto.getId()).orElseThrow();
+      survey.updateInfo(dto);
       surveyService.update(survey);
+      log.info("Survey Updated ID: {}, Title : {}", survey.getId(), survey.getTitle());
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -340,17 +346,6 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
-  }
-
-  @GetMapping("/test")
-  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long id) {
-    try {
-      return success(surveyService.findSurveyById(id).orElseThrow());
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      throw new EntityNotFoundException(e.getMessage());
-    }
-
   }
 
 }

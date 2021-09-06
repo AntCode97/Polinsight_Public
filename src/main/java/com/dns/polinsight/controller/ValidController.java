@@ -23,27 +23,26 @@ public class ValidController {
 
   private final UserService userService;
 
-  @GetMapping("/user/{email}")
+  @GetMapping("/user/email/{email}")
   public ApiUtils.ApiResult<Boolean> isExistEmail(@PathVariable("email") Email email) throws NotFoundException {
     try {
       return success(!userService.isExistEmail(email));
     } catch (RuntimeException e) {
       e.printStackTrace();
-      throw new NotFoundException("Email Number Not Found");
+      throw new NotFoundException("Email Number Not Found " + e.getMessage());
     }
   }
 
   @GetMapping("/user/recommend/{phone}")
   public ApiUtils.ApiResult<Boolean> isExistPhoneForRecommend(@PathVariable("phone") String recommendPhone) throws NotFoundException {
     try {
-      log.warn("Recommend Phone Number : " + recommendPhone);
-      if (recommendPhone.isEmpty() || recommendPhone.length() < 11) {
+      if (recommendPhone.length() < 11) {
         return success(Boolean.FALSE);
       } else {
-        return success(!userService.isExistPhone(Phone.of(recommendPhone)));
+        return success(userService.isExistPhone(Phone.of(recommendPhone)));
       }
     } catch (Exception e) {
-      throw new NotFoundException("Phone Number Not Found");
+      throw new NotFoundException("Phone Number Not Found " + e.getMessage());
     }
   }
 

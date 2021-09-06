@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
   @Override
   public User saveOrUpdate(User user) {
     user = repository.saveAndFlush(user);
-    log.warn(this.getClass().getSimpleName() + " ::: " + user);
     return user;
   }
 
@@ -123,6 +122,5 @@ public class UserServiceImpl implements UserService {
   public Page<UserDto> testFindAllUser(Pageable pageable) {
     return userJdbcTemplate.findAllUser(pageable);
   }
-
 
 }

@@ -137,7 +137,6 @@ public class UserController {
         case "basic":
           user.setName(userDto.getName());
           user.setPhone(Phone.of(userDto.getPhone()));
-          log.warn("바꾸려는 데이터 :: " + user.toString());
           break;
         case "password":
           if (!passwordEncoder.matches(userDto.getNewPassword(), user.getPassword()))
@@ -217,7 +216,7 @@ public class UserController {
       log.error("UID Data Not Found");
       return new ModelAndView("redirect:/denied");
     }
-    return new ModelAndView("change_password");
+    return new ModelAndView("member/change_password");
   }
 
   @PostMapping("/api/password/change")
@@ -381,7 +380,7 @@ public class UserController {
 
   @PermitAll
   @Transactional
-  @PostMapping("/testsignup")
+  @PostMapping("/user_join")
   public ApiUtils.ApiResult<Boolean> testSignup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
     log.warn(signupDTO.toString());
     try {

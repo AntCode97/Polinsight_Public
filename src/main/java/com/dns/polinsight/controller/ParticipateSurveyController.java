@@ -123,13 +123,14 @@ public class ParticipateSurveyController {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
-    
+
     try {
       SurveyMapping survey = surveyService.findSurveyById(id);
 
       log.warn("survey ID : {}, surveyId : {}, Title : {} --- participate URL : {}", survey.getId(), survey.getSurveyId(), survey.getTitle(), survey.getParticipateUrl());
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
-      List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString(), LocalDateTime.now().toString());
+      LocalDateTime now = LocalDateTime.now();
+      List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString(), now.toString());
       String hash = new HashUtil().makeHash(someVariables, salt);
       String sb = survey.getParticipateUrl() + "?hash=" + hash + "&email=" + user.getEmail();
       log.info("hash : {}, email : {}", hash, user.getEmail().toString());
@@ -142,7 +143,7 @@ public class ParticipateSurveyController {
                                                                                     .build())
                                                                       .hash(hash)
                                                                       .user(user)
-                                                                      .participatedAt(LocalDateTime.now())
+                                                                      .participatedAt(now)
                                                                       .surveyPoint(survey.getPoint())
                                                                       .finished(false)
                                                                       .build());

@@ -754,7 +754,7 @@
             </div>
 
             <!-- 패널정보 변경 -->
-            <div class="tab_box box02">
+            <div sec:authorize="hasAnyAuthority('PANEL', 'BEST')" class="tab_box box02">
               <form action="" method="">
                 <div class="item_header">
                   <span><i class="fas fa-user-astronaut" style="padding-right: 3px; color: #4C99CF;"></i>패널정보변경</span>
@@ -790,19 +790,19 @@
                               <div class="right_content">
                                 <label for="year">
                                   <select id="year" name="year">
-                                    <option>선택</option>
+                                    <option value="선택">선택</option>
                                   </select>
                                   년
                                 </label>
                                 <label for="month">
                                   <select id="month" name="month">
-                                    <option>선택</option>
+                                    <option value="선택">선택</option>
                                   </select>
                                   월
                                 </label>
                                 <label for="day">
                                   <select id="day" name="day">
-                                    <option>선택</option>
+                                    <option value="선택">선택</option>
                                   </select>
                                   일
                                 </label>
@@ -847,7 +847,7 @@
                               </div>
                               <div class="right_content">
                                 <select id="education" name="education" required>
-                                  <option>선택</option>
+                                  <option value="선택">선택</option>
                                   <option th:selected="${#strings.equals(user.education,'고졸 이하(재학 포함)')}" value="고졸 이하(재학 포함)">고졸 이하(재학 포함)</option>
                                   <option th:selected="${#strings.equals(user.education,'대학 재학')}" value="대학 재학">대학 재학</option>
                                   <option th:selected="${#strings.equals(user.education,'대학교 졸업(수료 포함)')}" value="대학교 졸업(수료 포함)">대학교 졸업(수료 포함)</option>
@@ -880,7 +880,7 @@
                               </div>
                               <div class="right_content">
                                 <select id="job" name="job" required>
-                                  <option>선택</option>
+                                  <option value="선택">선택</option>
                                   <option th:selected="${#strings.equals(user.job , '학생')}" value="학생">학생</option>
                                   <option th:selected="${#strings.equals(user.job , '경영직')}" value="경영직">경영직</option>
                                   <option th:selected="${#strings.equals(user.job , '공무')}" value="공무">공무</option>
@@ -903,7 +903,7 @@
                               </div>
                               <div class="right_content">
                                 <select id="industry" name="industry">
-                                  <option>선택</option>
+                                  <option value="선택">선택</option>
                                   <option th:selected="${#strings.equals(user.industry , '제조업')}" value="제조업">제조업</option>
                                   <option th:selected="${#strings.equals(user.industry , '건설업(인테리어 포함)')}" value="건설업(인테리어 포함)">건설업(인테리어 포함)</option>
                                   <option th:selected="${#strings.equals(user.industry , '부동산업')}" value="부동산업">부동산업</option>
@@ -1340,8 +1340,7 @@
     function userBasicInfoUpdate() {
       let name = $('input[name=name]')
       let phone = $('input[name=phone]')
-      console.log('name: ' + name.val())
-      console.log(isValidName(name.val()))
+
       if (!isValidName(name.val())) {
         alert('올바른 이름을 입력해주세요')
         name.focus()
@@ -1454,8 +1453,16 @@
         return
       }
 
-      if (!confirm('회원 정보를 업데이트 하시겠습니까?')) {
-        return;
+      if (confirm('회원 정보를 업데이트 하시겠습니까?')) {
+        http.put('/user?type=panel', info).then(res => {
+              if (res.data.success) {
+                alert('패널 정보 업데이트 성공')
+              } else {
+                alert('패널 정보 업데이트 실패')
+              }
+            })
+            .catch(console.log)
+            .finally(() => location.replace('/mypage'))
       }
 
       http
@@ -1501,12 +1508,6 @@
       const reqPoint = $('select[name=reqpoint]')
       const bank = $('select[name=bank]')
 
-      // if (!checkAccountNumber(account)) {
-      //   account.focus().val('')
-      //   alert('올바른 계좌번호를 입력해주세요')
-      // } else if (!bank.val()) {
-      //   bank.focus()
-      // } else {
       if (confirm(`올바른 계좌번호를 입력하였는지 확인해주세요.\n은행명 : ${bank.val()}\n계좌번호 : ${account.val()}`)) {
         http
             .post('/api/pointrequest', {
@@ -1524,8 +1525,7 @@
             })
             .catch(err => console.log(err));
       }
-      // }
-    };
+    }
 
     const getPointHistoryList = () => {
       http
@@ -1630,6 +1630,6 @@
       $('button[name=savePointHistoryBtn]').on('click', {url: `/api/pointhistory/excel`}, saveByExcel)
       // 서베이 내역 엑셀 저장
       $('button[name=saveSurveyHistoryBtn]').on('click', {url: `/api/participates/excel`}, saveByExcel)
-    });
+    })
   </script>
 </th:block>
