@@ -15,7 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -168,7 +173,11 @@ public class SurveyServiceImpl implements SurveyService {
   private Survey getSurveyDetails(Survey survey, HttpEntity<Object> header) {
     ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
     Map<String, Object> map = res.getBody();
-    survey.getStatus().setVariables(((Map<String, String>) map.get("custom_variables")).keySet());
+    Map<String, String> vars = (Map<String, String>) map.get("custom_variables");
+
+    if (!(vars.keySet().contains("hash") && vars.keySet().contains("email"))) {
+      survey = getSurveyCustomVariablesOrUpdate(survey);
+    }
     survey.setQuestionCount(Long.valueOf(map.get("question_count") + "")); //--> 질문 갯수
     return survey;
   }
@@ -212,19 +221,30 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
   }
 
-  /**
-   * @param survey
-   *     : CustomVariables가 등록되지 않은 서베이 엔티티
-   */
-  private void getSurveyCustomVariablesOrUpdate(Survey survey) {
+  private Survey getSurveyCustomVariablesOrUpdate(Survey survey) {
     if (!survey.getStatus().getVariables().isEmpty()) {
-      return;
+      return survey;
     }
-    httpEntity.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<String> entity = new HttpEntity<>(httpEntity.getHeaders());
-    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "", HttpMethod.PATCH, entity, Map.class);
+    String url = baseURL + "surveys/" + survey.getSurveyId();
+    Map<String, String> custom_variables = new HashMap<>();
+    custom_variables.put("email", "id");
+    custom_variables.put("hash", "hash");
+    Map<String, Object> map = new HashMap<>();
+    map.put("custom_variables", custom_variables);
+    // 응답으로 서베이 디테일이 날라옴
 
-    ResponseEntity<Map> response = new RestTemplate().exchange(baseURL + "surveys/" + survey.getSurveyId(), HttpMethod.GET, httpEntity, Map.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    HttpEntity<Map> entity = new HttpEntity<>(map, headers);
+    ClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+    RestTemplate restTemplate = new RestTemplate(factory);
+    ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.PATCH, entity, Map.class);
+    Map<String, Object> responseData = response.getBody();
+    Map<String, String> var = (Map) responseData.get("custom_variables");
+    survey.getStatus().setVariables(var.keySet());
+    log.info("Survey {} variables updated, Title: {}", survey.getId(), survey.getTitle());
+    return survey;
   }
+
 
 }

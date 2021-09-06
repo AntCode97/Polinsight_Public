@@ -20,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -340,17 +339,6 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
-  }
-
-  @GetMapping("/test")
-  public ApiUtils.ApiResult<Survey> test(@RequestParam("id") long id) {
-    try {
-      return success(surveyService.findSurveyById(id).orElseThrow());
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      throw new EntityNotFoundException(e.getMessage());
-    }
-
   }
 
 }

@@ -45,5 +45,4 @@ public interface SurveyService {
 
   int adminSurveyUpdate(long id, long point, String create, String end, String progressType);
 
-
 }
