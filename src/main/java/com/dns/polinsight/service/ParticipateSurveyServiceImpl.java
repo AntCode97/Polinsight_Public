@@ -26,6 +26,7 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
     return participateSurveyRepository.findAllByUserId(userId, pageable);
   }
 
+  @Override
   public List<ParticipateSurvey> findAllByUserId(long userId) {
     return participateSurveyRepository.findAllByUserId(userId);
   }

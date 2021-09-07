@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveOrUpdate(User user) {
-    user = repository.saveAndFlush(user);
+    user = repository.save(user);
     return user;
   }
 
