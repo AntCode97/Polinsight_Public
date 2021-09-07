@@ -40,6 +40,7 @@ public class SurveyServiceImpl implements SurveyService {
 
   private final CollectorRepository collectorRepository;
 
+  private final ParticipateSurveyService participateSurveyService;
 
   @Value("${custom.api.accessToken}")
   private String accessToken;
@@ -55,6 +56,13 @@ public class SurveyServiceImpl implements SurveyService {
     header.setBearerAuth(accessToken);
     httpEntity = new HttpEntity<>(header);
   }
+
+  //  TODO
+  //  @Override
+  //  public List<Object> findAllInIndex(Pageable pageable, User user) {
+  //surveyRepository.findAllSurveys(pageable);
+  //user.getParticipateSurvey()
+  //  }
 
   @Override
   public Optional<Survey> findById(Long id) {

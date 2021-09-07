@@ -68,4 +68,9 @@ public class DefaultExceptionController {
     return mv;
   }
 
+  @ExceptionHandler(AlreadyParticipateSurveyException.class)
+  public ApiUtils.ApiResult<?> handleAlreadyParticipateSurveyException() {
+    return error("이미 참여한 설문입니다.", 6789);
+  }
+
 }

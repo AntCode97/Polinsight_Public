@@ -168,7 +168,6 @@ public class ApiController {
   @Transactional
   @PutMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
-    log.warn("업데이트하는 서베이 정보:: {}", dto.toString());
     try {
       Survey survey = surveyService.findById(dto.getId()).orElseThrow();
       survey.updateInfo(dto);

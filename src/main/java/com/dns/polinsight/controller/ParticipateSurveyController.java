@@ -5,6 +5,7 @@ import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.exception.AlreadyParticipateSurveyException;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
@@ -28,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
 
@@ -45,12 +47,19 @@ public class ParticipateSurveyController {
 
   private final ParticipateSurveyService participateSurveyService;
 
+  @GetMapping("/participates")
+  public ApiUtils.ApiResult<List<ParticipateSurvey>> getParticipateSurveyByUserid(@CurrentUser User user) throws WrongAccessException {
+    if (user == null) {
+      throw new WrongAccessException();
+    }
+    return success(participateSurveyService.findAllByUserId(user.getId()));
+  }
+
   @Transactional
   @GetMapping("/callback")
   public ModelAndView callback(
       @RequestParam("hash") String hash,
       @RequestParam("email") String name) {
-    log.warn("callback ::: hash : " + hash + ", email: " + name + ", ");
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
       throw new InvalidParameterException();
     }
@@ -76,10 +85,11 @@ public class ParticipateSurveyController {
   @Transactional
   public void processingPointSurveyHistory(User user, ParticipateSurvey participateSurvey) throws Exception, WrongAccessException {
     if (participateSurvey.getFinished()) {
-      throw new WrongAccessException();
+      throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
     }
-    participateSurvey.setFinished(true);
     try {
+      participateSurvey.setFinished(true);
+      participateSurvey.addUser(user);
       participateSurveyService.saveAndUpdate(participateSurvey);
     } catch (Exception e) {
       throw new Exception("SurveyHistory write Exception");
@@ -87,13 +97,15 @@ public class ParticipateSurveyController {
     try {
       Survey survey = participateSurvey.getSurvey();
       survey.updateCount();
+      log.info("설문 참여 횟수 업데이트");
     } catch (Exception e) {
       throw new Exception("설문 카운트 갱신 오류");
     }
     try {
-      user.getParticipateSurvey().add(participateSurvey);
-      user.setPoint(user.getPoint() + participateSurvey.getSurveyPoint());
+      user.addParticipateSurvey(participateSurvey);
+      user.updatePoint(participateSurvey.getSurveyPoint());
       user = userService.saveOrUpdate(user);
+      log.info("사용자 설문 참여 정보 업데이트");
     } catch (Exception e) {
       throw new Exception("User Info update Exception");
     }
@@ -107,6 +119,7 @@ public class ParticipateSurveyController {
                                                    .requestedAt(LocalDateTime.now())
                                                    .userId(user.getId())
                                                    .build());
+      log.info("{} 설문 참여 {} 포인트 업데이트", user.getEmail().toString(), participateSurvey.getSurveyPoint());
     } catch (Exception e) {
       throw new Exception("PointHistory write Exception");
     }
@@ -119,15 +132,22 @@ public class ParticipateSurveyController {
   @GetMapping("/participate/{surveyId}")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
                                                             @PathVariable("surveyId") Long id,
-                                                            @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException {
+                                                            @Value("{custom.hash.pointsalt}") String salt) throws NoSuchAlgorithmException, AlreadyParticipateSurveyException {
     if (user == null) {
       throw new BadCredentialsException("UnAuthorized");
     }
 
     try {
+      List<ParticipateSurvey> list = participateSurveyService.findAllByUserId(user.getId()).stream()
+                                                             .filter(ParticipateSurvey::getFinished)
+                                                             .filter(ps -> ps.getSurvey().getId().equals(id))
+                                                             .collect(Collectors.toList());
+      if (list.size() > 0) {
+        throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
+      }
+
       SurveyMapping survey = surveyService.findSurveyById(id);
 
-      log.warn("survey ID : {}, surveyId : {}, Title : {} --- participate URL : {}", survey.getId(), survey.getSurveyId(), survey.getTitle(), survey.getParticipateUrl());
       log.info("{} participate survey that is : {}", user.getEmail(), survey.getTitle());
       LocalDateTime now = LocalDateTime.now();
       List<String> someVariables = Arrays.asList(user.getEmail().toString(), survey.getSurveyId().toString(), now.toString());

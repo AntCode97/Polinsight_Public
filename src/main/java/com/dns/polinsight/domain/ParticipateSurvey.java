@@ -41,4 +41,8 @@ public class ParticipateSurvey implements Serializable {
   @Setter
   private Boolean finished;
 
+  public void addUser(User user) {
+    this.user = user;
+  }
+
 }

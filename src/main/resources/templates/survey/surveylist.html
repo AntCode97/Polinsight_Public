@@ -177,8 +177,9 @@
               if (res.data.success) {
                 location.replace(res.data.response);
               } else {
-                alert('에러 발생');
+                alert(res.data.error.message);
                 console.log(res);
+                location.replace("/")
               }
             }).catch(console.log);
       });

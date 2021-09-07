@@ -51,5 +51,4 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type ")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
-
 }

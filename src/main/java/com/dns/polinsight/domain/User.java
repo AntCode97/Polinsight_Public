@@ -32,15 +32,13 @@ import java.util.List;
     @UniqueConstraint(columnNames = {"email"})
 })
 @ToString
-@EqualsAndHashCode()
 @DynamicUpdate
 public class User implements UserDetails {
 
   @ToString.Exclude
-  @Builder.Default
   @JsonIgnore
   @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
-  private List<ParticipateSurvey> participateSurvey = new ArrayList<>();
+  private List<ParticipateSurvey> participateSurvey;
 
 
   @Builder.Default
@@ -195,6 +193,18 @@ public class User implements UserDetails {
   @PrePersist
   public void setDefaultValue() {
     this.registeredAt = LocalDate.now();
+  }
+
+  public void addParticipateSurvey(ParticipateSurvey participateSurvey) {
+    if (this.getParticipateSurvey() == null) {
+      this.participateSurvey = new ArrayList(Collections.singleton(participateSurvey));
+    } else {
+      this.participateSurvey.add(participateSurvey);
+    }
+  }
+
+  public void updatePoint(Long point) {
+    this.point += point;
   }
 
 }
