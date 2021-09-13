@@ -496,7 +496,7 @@
         table.children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
-          searchMessage(obj.keyword, obj.total)
+          searchMessage(obj.keyword, obj.total, '설문이')
           obj.content.forEach(survey => {
             table.append(makeSurveyTemplate(survey));
           });

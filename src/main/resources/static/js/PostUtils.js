@@ -51,14 +51,14 @@ const makeSurveyTemplate = (survey) => {
 }
 
 
-const searchMessage = (keyword, total) => {
+const searchMessage = (keyword, total, name) => {
   let searchBox = $('.util-search').empty()
   if (!keyword) {
     searchBox
-        .append($(`<span><strong id="total_count">${total}</strong>개 검색</span>`))
+        .append($(`<span><strong id="total_count">${total}</strong>개의 ${name} 있습니다</span>`))
   } else {
     searchBox
         .append($(`<span id="keyword"><span><strong>${keyword}</strong> 검색 결과 </span></span>`))
-        .append($(`<span><strong id="total_count">${total}</strong>개 검색</span>`))
+        .append($(`<span><strong id="total_count">${total}</strong>개 ${name} 있습니다</span>`))
   }
 }
