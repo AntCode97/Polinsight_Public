@@ -79,6 +79,9 @@
       cursor      : pointer;
       font-size   : 14px;
       font-weight : bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     #more_survey_btn:hover {
@@ -90,7 +93,7 @@
     <div class="main_survey_list_title">
       <div>
         <div class="survey_title_wrap">
-          <div style="display: flex; justify-content: flex-start">
+          <div style="display: flex; justify-content: space-between; width: 100%;">
             <p>진행중인 <span class="pol_color">온라인조사</span></p>
             <p id="more_survey_btn"><i class="fas fa-plus fa-lg"></i></p>
           </div>

@@ -105,7 +105,7 @@
 
 .post-row > h1 {
   display : block;
-  width   : 100%;
+  width   : 100% !important;
 }
 
 .btn_multi_wrap {
