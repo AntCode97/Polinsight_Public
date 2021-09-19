@@ -45,9 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        .antMatchers(permission.getTemplate().toArray(new String[0])).permitAll()
-        .antMatchers(permission.getResources().toArray(new String[permission.getResources().size()])).permitAll()
-        .antMatchers(permission.getAdmin().toArray(new String[permission.getAdmin().size()])).hasAuthority(UserRoleType.ADMIN.name())
+        .antMatchers(permission.getTemplate()).permitAll()
+        .antMatchers(permission.getResources()).permitAll()
+        .antMatchers(permission.getAdmin()).hasAuthority(UserRoleType.ADMIN.name())
         .anyRequest().authenticated().and()
         .formLogin()
         .loginPage("/login")
@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-//  @Bean
+  //  @Bean
   public CustomAuthenticationFilter customAuthenticationProcessingFilter() {
     CustomAuthenticationFilter filter = new CustomAuthenticationFilter("/dologin");
     filter.setAuthenticationManager(authenticationManager());
@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return filter;
   }
 
-//  @Bean
+  //  @Bean
   public AuthenticationManager authenticationManager() {
     return new CustomAuthManager(userService, passwordEncoder());
   }

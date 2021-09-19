@@ -15,10 +15,10 @@ import java.util.List;
 @ConfigurationProperties(prefix = "custom.permission")
 public class PathPermission {
 
-  private List<String> resources;
+  private String[] resources;
 
-  private List<String> admin;
+  private String[] admin;
 
-  private List<String> template;
+  private String[] template;
 
 }

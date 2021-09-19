@@ -521,81 +521,79 @@
               }
             });
           });
-
-      $(document).on('click', '.btn-update', function () {
-        $('.modal_wrap').css('display', 'flex');
-      });
-      $(document).on('click', '.btn_close', function () {
-        $('.modal_wrap').css('display', 'none');
-      });
-      $(document).on('click', '.post-row > *', function () {
-        $('.modal_wrap').css('display', 'flex');
-      });
-
-      /* 동적 웹디자인 및 유효성 체크 */
-      $(document).on('focus', '.user_info_input', function () {
-        $(this).css('border-bottom', '1px solid #4C99CF');
-        $(this).prevAll('.info_article').css('color', '#4C99CF');
-        $(this).parent().prevAll('.info_article').css('color', '#4C99CF');
-        $(this).parents('.user_info_box').css('border', '1px solid #4C99CF');
-      });
-      $(document).on('blur', '.user_info_input', function () {
-        $(this).css('border-bottom', '1px solid #c5c7d0');
-        $(this).prevAll('.info_article').css('color', '#69666D');
-        $(this).parent().prevAll('.info_article').css('color', '#69666D');
-        $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
-      });
-      $(document)
-          .on('hover', '.post-row:not(:first-child)', function () {
-            $(this).css('cursor', 'pointer')
-          })
-          .on('keyup', 'input[name=point]', function (e) {
-            e.stopPropagation()
-            e.preventDefault()
-            let msg = $('.err_msg')
-            if ($(this).val().length > 0) {
-              if (!checkNumber(e)) {
-                msg.show().text('포인트는 숫자만 입력 가능합니다.')
-              } else {
-                msg.hide().text('')
-              }
+    })
+    
+    /* 동적 웹디자인 및 유효성 체크 */
+    $(document)
+        .on('focus', '.user_info_input', function () {
+          $(this).css('border-bottom', '1px solid #4C99CF');
+          $(this).prevAll('.info_article').css('color', '#4C99CF');
+          $(this).parent().prevAll('.info_article').css('color', '#4C99CF');
+          $(this).parents('.user_info_box').css('border', '1px solid #4C99CF');
+        })
+        .on('blur', '.user_info_input', function () {
+          $(this).css('border-bottom', '1px solid #c5c7d0');
+          $(this).prevAll('.info_article').css('color', '#69666D');
+          $(this).parent().prevAll('.info_article').css('color', '#69666D');
+          $(this).parents('.user_info_box').css('border', '1px solid #c5c7d0');
+        })
+        .on('hover', '.post-row:not(:first-child)', function () {
+          $(this).css('cursor', 'pointer')
+        })
+        .on('keyup', 'input[name=point]', function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          let msg = $('.err_msg')
+          if ($(this).val().length > 0) {
+            if (!checkNumber(e)) {
+              msg.show().text('포인트는 숫자만 입력 가능합니다.')
             } else {
               msg.hide().text('')
             }
-          })
-          .on('change', 'input[name=end]', function () {
-            e.stopPropagation()
-            e.preventDefault()
-            let msg = $('.err_msg')
-            if ($(this).val().length > 0) {
-              if (!isValidDate($(this).val())) {
-                msg.show().text('올바른 날짜를 입력해주세요')
-                $(this).focus()
-              } else {
-                msg.hide().text('')
-              }
+          } else {
+            msg.hide().text('')
+          }
+        })
+        .on('change', 'input[name=end]', function () {
+          e.stopPropagation()
+          e.preventDefault()
+          let msg = $('.err_msg')
+          if ($(this).val().length > 0) {
+            if (!isValidDate($(this).val())) {
+              msg.show().text('올바른 날짜를 입력해주세요')
+              $(this).focus()
             } else {
               msg.hide().text('')
             }
-          })
-          .on('change', 'input[name=create]', function () {
-            e.stopPropagation()
-            e.preventDefault()
-            let msg = $('.err_msg')
-            let end = $('input[name=end]')
-            let create = $(this)
-            if (create.val().length > 0) {
-              if (isValidDate(create.val())) {
-                end.attr('min', dateParser(create.val().split("-")[0], create.val().split("-")[1], Number(create.val().split("-")[2]) + 1))
-                msg.hide().text('')
-              } else {
-                msg.show().text('올바른 날짜를 입력해주세요')
-              }
-            } else {
+          } else {
+            msg.hide().text('')
+          }
+        })
+        .on('change', 'input[name=create]', function () {
+          e.stopPropagation()
+          e.preventDefault()
+          let msg = $('.err_msg')
+          let end = $('input[name=end]')
+          let create = $(this)
+          if (create.val().length > 0) {
+            if (isValidDate(create.val())) {
+              end.attr('min', dateParser(create.val().split("-")[0], create.val().split("-")[1], Number(create.val().split("-")[2]) + 1))
               msg.hide().text('')
+            } else {
+              msg.show().text('올바른 날짜를 입력해주세요')
             }
-          })
-
-    });
+          } else {
+            msg.hide().text('')
+          }
+        })
+        .on('click', '.btn-update', function () {
+          $('.modal_wrap').css('display', 'flex');
+        })
+        .on('click', '.btn_close', function () {
+          $('.modal_wrap').css('display', 'none');
+        })
+        .on('click', '.post-row > *', function () {
+          $('.modal_wrap').css('display', 'flex');
+        });
   </script>
 </th:block>

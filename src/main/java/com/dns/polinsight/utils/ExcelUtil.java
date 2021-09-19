@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class ExcelUtil<T> {
 
   private int rowNum = 0;
 
-  public void createExcelToResponse(List<T> data, String filename, HttpServletResponse response) throws IllegalAccessException, IOException {
+  public void createExcelToResponse(List<T> data, String filename, HttpServletResponse response, Map<String, String> header) throws IllegalAccessException, IOException {
     SXSSFWorkbook workbook = new SXSSFWorkbook();
     SXSSFSheet sheet = workbook.createSheet("sheet1");
     rowNum = 0;
@@ -27,7 +28,7 @@ public class ExcelUtil<T> {
     if (data.size() < 1) {
       throw new InvalidValueException("데이터가 존재하지 않습니다.");
     }
-    createExcel(sheet, data);
+    createExcel(sheet, data, header);
     log.info("created row: " + sheet.getLastRowNum());
 
     response.setCharacterEncoding("UTF-8");
@@ -40,7 +41,7 @@ public class ExcelUtil<T> {
   }
 
 
-  private void createExcel(SXSSFSheet sheet, List<T> list) throws IllegalAccessException {
+  private void createExcel(SXSSFSheet sheet, List<T> list, Map<String, String> header) throws IllegalAccessException {
     if (list.size() == 0)
       return;
 
@@ -49,7 +50,7 @@ public class ExcelUtil<T> {
     for (Field field : list.get(0).getClass().getDeclaredFields()) {
       field.trySetAccessible();
       Cell cell = row.createCell(cellNum++);
-      cell.setCellValue(field.getName());
+      cell.setCellValue(header.get(field.getName()));
     }
     for (T data : list) {
       row = sheet.createRow(rowNum++);
@@ -57,7 +58,9 @@ public class ExcelUtil<T> {
 
       for (Field field : data.getClass().getDeclaredFields()) {
         field.trySetAccessible();
-        row.createCell(cellNum++).setCellValue(field.get(data).toString());
+        String str = field.get(data) == null ? "-" : field.get(data).toString();
+        row.createCell(cellNum++)
+           .setCellValue(String.valueOf(str.toCharArray(), 0, Math.min(str.length(), 32767)));
       }
     }
   }

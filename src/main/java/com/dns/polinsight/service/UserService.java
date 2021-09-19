@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.mapper.ExcelUserMapping;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
@@ -52,6 +53,6 @@ public interface UserService extends UserDetailsService {
   Optional<User> findUserEmailByNameAndPhone(String name, Phone phone);
 
 
-  List<UserDto> findAllUserToUserDto();
+  List<ExcelUserMapping> findAllUserToUserDto();
 
 }

@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.mapper.ExcelUserMapping;
 import com.dns.polinsight.repository.UserJdbcTemplate;
 import com.dns.polinsight.repository.UserRepository;
 import com.dns.polinsight.types.Email;
@@ -119,8 +120,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserDto> findAllUserToUserDto() {
-    return repository.findAllUserToUserDto();
+  public List<ExcelUserMapping> findAllUserToUserDto() {
+    return repository.findAllUserByUserDto();
   }
 
 }

@@ -233,7 +233,7 @@
     }
 
     .nav-link:hover {
-      color       : #3885CA !important;
+      color : #3885CA !important;
     }
 
     .nav-link > i {
@@ -244,12 +244,13 @@
       color          : white;
       display        : block;
       font-size      : 18px;
-      height: 100%;
+      height         : 100%;
       letter-spacing : 0;
       padding        : 0 5px;
     }
+
     .mem-link:hover {
-      color       : #3885CA !important;
+      color : #3885CA !important;
     }
 
 
@@ -315,13 +316,10 @@
       <li class="nav-item"><a th:href="@{/login}" class="nav-link"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
       <li class="nav-item"><a th:href="@{/signup}" class="nav-link"><i class="fas fa-user"></i> JOIN</a></li>
     </th:block>
-    <!--    <th:block th:unless="${session.user} == null">-->
     <th:block sec:authorize="isAuthenticated()">
-      <!--      <th:block th:unless="${#strings.equals(session.user.role, 'ADMIN')}">-->
       <th:block sec:authorize="hasAnyAuthority('USER','PANEL','BEST')">
         <li class="nav-item"><a th:href="@{/mypage}" class="nav-link"><i class="fas fa-user-circle"></i> MY PAGE</a></li>
       </th:block>
-      <!--      <th:block th:if="${#strings.equals(session.user.role, 'ADMIN')}">-->
       <li sec:authorize="hasAuthority('ADMIN')" class="nav-item"><a th:href="@{/admin}" class="nav-link"><i class="fas fa-users-cog"></i> ADMIN</a></li>
       <li class="nav-item"><a th:href="@{/dologout}" class="nav-link"><i class="fas fa-sign-out-alt"></i> LOGOUT</a></li>
     </th:block>

@@ -102,8 +102,7 @@ async function saveByExcel(e) {
   }
   let url = e.data.url
   let params = !e.data.param ? {} : e.data.param
-  alert(`Count reqeust url : ${url}/count`)
-  console.log(`Count reqeust url : ${url}/count`)
+  
   const response = await http.get(url + '/count', {params: params})
   if (response.data.success) {
     if (response.data.response > 0) {
@@ -118,12 +117,6 @@ async function saveByExcel(e) {
   }
 
 
-}
-
-// TODO 은행별로 나누어 검증 필요
-const checkAccountNumber = account_number => {
-  account_number = String(account_number).trim()
-  return !!account_number.match(/([0-9,\-]{3,6}[0-9,\-]{2,6}[0-9,\-])/)
 }
 
 const panelInfoChecker = info => {
@@ -156,7 +149,6 @@ const adminPanelInfoChecker = info => {
   return true;
 }
 
-// TODO : 우선은 어드민 페이지만 나중에 바꾼다
 const userDtoParser = beforeInfo => {
   let returnInfo = {...beforeInfo}
   if (!!beforeInfo['state'] && !!beforeInfo['city'])
