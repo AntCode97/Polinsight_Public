@@ -3,7 +3,7 @@ const isValidPassword = (passwordValue) => {
 }
 
 const isValidEmail = (emailValue) => {
-  return (/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i).test(emailValue)
+  return (/^[a-zA-Z0-9\.\_\-]{6,20}@([a-zA-Z0-9])+\.[a-zA-Z0-9]{2,8}$/i).test(emailValue)
 }
 
 const isValidPhone = (phoneValue) => {

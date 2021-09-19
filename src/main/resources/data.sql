@@ -1315,3 +1315,12 @@ VALUES
   ( 'testpanel5@gmail.com', '테스트 패널5', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
   ( 'testpanel6@gmail.com', '테스트 패널6', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE ),
   ( 'testpanel7@gmail.com', '테스트 패널7', '$2a$10$3O1QshkweRjINJb6BRKeA.deVsAfD9sefQQw2v4upoYzC44gSi8HS', '010-1231-2340', 98000, '', 'PANEL', '2021-08-06', '양력', '대학', 'FEMALE', '교육', '2021-08-17 21:04:51.696353', '학생', TRUE, '', TRUE, TRUE );
+
+-- INSERT INTO.point_request ( id, uid, email, request_point, requested_at, bank, account, NAME, progress )
+-- VALUES
+--   (
+--   1, 2, 'testpanel@gmail.com', 10000, '2021-09-19 20:02:29', '신한', '1312313', '테스트패널', 'REQUESTED'),
+--   (
+--   2, 2, 'testpanel@gmail.com', 70000, '2021-09-19 20:02:36', '신한', '123123123', '테스트패널', 'REQUESTED'),
+--   (
+--   3, 2, 'testpanel@gmail.com', 10000, '2021-09-19 20:02:45', '신한', '1232123123', '테스트패널', 'REQUESTED');

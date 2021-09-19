@@ -91,10 +91,8 @@ function dateParser() {
 }
 
 function checkNumber(event) {
-  if (event.key >= 0 && event.key <= 9) {
-    return true;
-  }
-  return false;
+  return event.key >= 0 && event.key <= 9;
+
 }
 
 async function saveByExcel(e) {
@@ -104,7 +102,8 @@ async function saveByExcel(e) {
   }
   let url = e.data.url
   let params = !e.data.param ? {} : e.data.param
-
+  alert(`Count reqeust url : ${url}/count`)
+  console.log(`Count reqeust url : ${url}/count`)
   const response = await http.get(url + '/count', {params: params})
   if (response.data.success) {
     if (response.data.response > 0) {
@@ -172,7 +171,7 @@ const userDtoParser = beforeInfo => {
 
 const getBasicDataFromInputToJson = () => {
   let email = $('input[name=email]')
-  let domain = $('select[name=domain]')
+  let domain = $('input[name=domain]')
   let name = $('input[name=name]')
   let phone = $('input[name=phone]')
   let recommend = $('input[name=recommend]')

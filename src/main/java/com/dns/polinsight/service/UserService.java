@@ -51,6 +51,7 @@ public interface UserService extends UserDetailsService {
 
   Optional<User> findUserEmailByNameAndPhone(String name, Phone phone);
 
-  Page<UserDto> testFindAllUser(Pageable pageable);
+
+  List<UserDto> findAllUserToUserDto();
 
 }

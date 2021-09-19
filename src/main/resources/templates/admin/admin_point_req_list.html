@@ -35,9 +35,9 @@
     }
 
     .btn_excel {
+      align-items     : center;
       display         : flex;
       justify-content : flex-end;
-      align-items     : center;
       margin-bottom   : 5px;
     }
   </style>
@@ -93,13 +93,16 @@
       template.append(`<span>${req.bank}은행</span>`);
       template.append(`<span>${req.account}</span>`);
       template.append(`<span>${req.progress}</span>`);
-      const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
-      const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
+      // const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
+      // const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
       const tmp_cell = $(`<span></span>`)
-      if (req.progress === 'REQUESTED')
-        tmp_cell.append(modify_btn).append(`<span>  </span>`)
-      else
-        tmp_cell.append(delete_btn);
+      for (let i = 0; i < 3; i++) {
+        tmp_cell.append(`<label><input type="checkbox"/>${i}</label>`)
+      }
+      // if (req.progress === 'REQUESTED')
+      //   tmp_cell.append(modify_btn).append(`<span>  </span>`)
+      // else
+      //   tmp_cell.append(delete_btn);
       template.append(tmp_cell);
       return template;
     };

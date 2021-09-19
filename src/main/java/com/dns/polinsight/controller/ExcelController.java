@@ -5,11 +5,14 @@ import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.exception.UnAuthorizedException;
+import com.dns.polinsight.mapper.UserMapping;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
 import com.dns.polinsight.service.PointRequestService;
+import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,8 @@ public class ExcelController {
 
   private final PointHistoryService pointHistoryService;
 
+  private final UserService userService;
+
   @GetMapping("/points/excel/{userId}")
   public void getExcelFromAllPointRequests(HttpServletResponse response,
                                            @CurrentUser User user,
@@ -57,6 +62,7 @@ public class ExcelController {
 
   @GetMapping("/points/excel/count")
   public ApiUtils.ApiResult<Long> countExistsPointRequests(@CurrentUser User user) {
+    log.warn("카운트 쿼리 ");
     if (user == null) {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
@@ -126,6 +132,25 @@ public class ExcelController {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
     return success(participateSurveyService.countExistParticipateSurvey());
+  }
+
+  @GetMapping("/user/excel/count")
+  public ApiUtils.ApiResult<Long> countExistUser(@CurrentUser User user) {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
+    return success(userService.countAllUser());
+  }
+
+  @GetMapping("/user/excel")
+  public void getUserDataByExcel(@CurrentUser User user,
+                                 HttpServletResponse response) throws IOException, IllegalAccessException {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
+    }
+    ExcelUtil<UserDto> excelUtil = new ExcelUtil<>();
+    //    유저 목록 전체를 엑셀로 다운로드
+    excelUtil.createExcelToResponse(userService.findAllUserToUserDto(), String.format("%s-%s", "point_history", LocalDate.now()), response);
   }
 
 }

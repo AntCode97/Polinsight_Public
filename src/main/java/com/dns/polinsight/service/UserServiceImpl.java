@@ -119,8 +119,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<UserDto> testFindAllUser(Pageable pageable) {
-    return userJdbcTemplate.findAllUser(pageable);
+  public List<UserDto> findAllUserToUserDto() {
+    return repository.findAllUserToUserDto();
   }
 
 }
