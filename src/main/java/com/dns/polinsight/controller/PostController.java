@@ -102,6 +102,7 @@ public class PostController {
     log.info("Result: " + result + ", data: " + postDTO.toString());
 
     postDTO.setFiles(Arrays.asList(file));
+    //에러가 있으면 다시 돌려보냄
     if (result.hasErrors()) {
       return "admin/admin_post_register";
     }
@@ -375,7 +376,7 @@ public class PostController {
     postDTO.setTitle(post.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     postDTO.setRegisteredAt(registeredAt);
-
+    postDTO.setThumbnail(post.getThumbnail());
     model.addAttribute("postDTO", postDTO);
     return "admin/admin_post_update";
   }
@@ -406,7 +407,10 @@ public class PostController {
       }
     }
 
-
+    Post editPost = postService.findOne(postId);
+    if(editPost.getThumbnail() != null) {
+      attachService.deleteThumbnail(editPost.getThumbnail());
+    }
     postService.addPost(postDTO);
     attachService.addAttach(postDTO);
 
@@ -418,6 +422,9 @@ public class PostController {
   public String delete(@PathVariable("postId") Long postId, Model model) {
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
+    if(post.getThumbnail() != null){
+      attachService.deleteThumbnail(post.getThumbnail());
+    }
     postService.delete(post);
     return "redirect:/posts";
   }
@@ -428,6 +435,9 @@ public class PostController {
 
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
+    if(post.getThumbnail() != null){
+      attachService.deleteThumbnail(post.getThumbnail());
+    }
     postService.delete(post);
     //Page<Post> posts = postService.getPostList(pageable);
     //model.addAttribute("posts", posts);

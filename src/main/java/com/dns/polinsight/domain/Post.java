@@ -31,6 +31,8 @@ public class Post implements Serializable {
   @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
 
+  private String thumbnail;
+
   @Id
   @Column(name = "pno")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +75,8 @@ public class Post implements Serializable {
         .registeredAt(postDTO.getRegisteredAt())
         .postType(postDTO.getPostType())
         .attaches(postDTO.getAttaches())
-        .viewcnt(postDTO.getViewcnt());
+        .viewcnt(postDTO.getViewcnt())
+            .thumbnail(postDTO.getThumbnail());
   }
 
 
