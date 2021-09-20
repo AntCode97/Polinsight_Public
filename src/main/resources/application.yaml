@@ -100,9 +100,6 @@ spring :
     servlet :
       content-type : "*/*"
 
-
-
-
 file :
   upload :
     baseLocation : "./upload-dir/"

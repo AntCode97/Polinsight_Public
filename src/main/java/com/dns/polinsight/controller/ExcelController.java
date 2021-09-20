@@ -41,13 +41,16 @@ public class ExcelController {
 
   private final UserService userService;
 
-  @GetMapping("/points/excel/{userId}")
+  @GetMapping(value = "/points/excel/{userId}")
   public void getExcelFromAllPointRequests(HttpServletResponse response,
                                            @CurrentUser User user,
                                            @PathVariable(value = "userId", required = false) Long userId) throws Exception {
     if (user == null) {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
+    // TODO: 2021/09/20 : 로그 찍어보고 제대로 나오는지 확인하기
+    // pathVariable 문제인거 같다
+    log.warn("포인트 요청 목록 엑셀 다운로드");
     try {
       Map<String, String> headerMap = new HashMap<>();
       headerMap.put("email", "이메일");
@@ -70,13 +73,20 @@ public class ExcelController {
     }
   }
 
-  @GetMapping("/points/excel/count")
-  public ApiUtils.ApiResult<Long> countExistsPointRequests(@CurrentUser User user) {
+  @GetMapping(value = "/points/excel/count")
+  public ApiUtils.ApiResult<Long> countExistsPointRequests(@CurrentUser User user) throws Exception {
     log.warn("카운트 쿼리 ");
     if (user == null) {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
-    return success(pointRequestService.countExistsPointRequests());
+    try {
+      Long count = pointRequestService.countExistsPointRequests();
+      log.warn("카운트 결과 {}", count);
+      return success(count);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
+    }
   }
 
   @GetMapping("/points/excel/{userId}/count")
@@ -85,7 +95,9 @@ public class ExcelController {
     if (user == null) {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
-    return success(pointRequestService.countExistsPointRequestsByUserId(userId));
+    Long count = pointRequestService.countExistsPointRequestsByUserId(userId);
+    log.warn("카운트 결과 : {}", count);
+    return success(count);
   }
 
   @GetMapping("/pointhistory/excel")

@@ -1100,7 +1100,7 @@
       $("#month").on('change selected', setDay)
 
       /*비동기 회원 찾기 및 화면 업데이트*/
-      $('input[name=admin_member_search]').on('keyup', {page: 0}, _.throttle(init, 300))
+      $('input[name=admin_member_search]').on('change keyup', {page: 0}, _.throttle(init, 300))
       $('button[name=admin_member_search_btn]').on('click', {page: 0}, init).css('font-weight', 'bolder')
       $('button#admin_user_info_update_btn').on('click', userInfoUpdateButtonHandler)
 
@@ -1123,18 +1123,18 @@
     });
 
     $(document).on('click', '.user_nav_btn_wrap > input', function () {
-      if ($(this).is(':checked')) {
-        $('.tab_box').css('display', 'none');
-        const id = $(this).attr('id');
-        const num = id.substring(3, 5);
-        const selector = ".box" + num;
-        $(selector).css('display', 'block');
-      }
-    })
-    .on('click', '.btn_close', function () {
-      $('.modal_wrap').css('display', 'none');
-    })
-    .on('click', 'button[name=save_excel]', {url:'/api/user/excel'}, saveByExcel)
+          if ($(this).is(':checked')) {
+            $('.tab_box').css('display', 'none');
+            const id = $(this).attr('id');
+            const num = id.substring(3, 5);
+            const selector = ".box" + num;
+            $(selector).css('display', 'block');
+          }
+        })
+        .on('click', '.btn_close', function () {
+          $('.modal_wrap').css('display', 'none');
+        })
+        .on('click', 'button[name=save_excel]', {url: '/api/user/excel'}, saveByExcel)
 
 
   </script>
