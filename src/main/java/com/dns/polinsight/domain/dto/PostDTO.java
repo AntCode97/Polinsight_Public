@@ -44,6 +44,9 @@ public class PostDTO {
 
   private List<MultipartFile> files;
 
+  private MultipartFile thumbnailImg;
+
+  private String thumbnail;
   @Builder.Default
   private Long viewcnt = 0L;
 
@@ -56,6 +59,8 @@ public class PostDTO {
     this.registeredAt = post.getRegisteredAt();
     this.attaches = post.getAttaches();
     this.viewcnt = post.getViewcnt();
+
+    this.thumbnail = post.getThumbnail();
   }
 
   public void transViewcontent() {

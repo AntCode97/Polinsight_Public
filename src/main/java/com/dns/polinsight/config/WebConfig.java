@@ -3,6 +3,7 @@ package com.dns.polinsight.config;
 import com.dns.polinsight.config.resolver.CurrentUserResolver;
 import com.dns.polinsight.types.convereter.EmailConverter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -16,15 +17,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/"};
-
+  @Value("${file.upload.baseLocation}")
+  private String baseLocation;
+//"file:///Users/yunjun/IntelliJProjects/polinsight/"
+static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/","file:///Users/yunjun/IntelliJProjects/polinsight/"};
   private final CurrentUserResolver currentUserResolver;
+
+
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**")
-            .addResourceLocations(resourceLocations)
-    ;
+            .addResourceLocations(resourceLocations);
+//    registry.addResourceHandler("/upload-dir/**")
+//            .addResourceLocations("/Users/yunjun/IntelliJProjects/polinsight/", "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/","classpath:/../../../upload-dir/");
+//    registry.addResourceHandler("/**")
+//            .addResourceLocations("file:///Users/yunjun/IntelliJProjects/polinsight/");
+
   }
 
   @Override

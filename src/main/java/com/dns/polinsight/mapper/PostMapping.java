@@ -49,4 +49,7 @@ public interface PostMapping {
   @JsonIgnore
   Long getViewcnt();
 
+  String getThumbnail();
+
+
 }
