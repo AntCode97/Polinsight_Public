@@ -26,7 +26,8 @@ public interface AttachService {
 
   List<Attach> findByname(String filename);
 
-
   void addAttach(PostDTO postDTO);
+
+  void deleteThumbnail(String thumbnailPath) ;
 
 }

@@ -52,6 +52,12 @@
                                                             <input type="text" class="board_input board_writer" name="writer" id="board_writer" th:value="${user.name}" readonly />
                                             </span>
                       </div>
+                        <div class="board_div" id="thumbnail">
+                            <label for="board_title"><span>*</span>썸네일 이미지</label>
+                            <span class="board_span">
+                                                            <input type="file" class="board_input board_writer" th:filed="*{thumbnailImg}" />
+                                            </span>
+                        </div>
                     </div>
                     <!-- 게시글 내용 등록(스마트에디터) -->
                     <div class="input_wrap textarea_div">
