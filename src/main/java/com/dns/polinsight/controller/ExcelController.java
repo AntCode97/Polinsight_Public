@@ -41,10 +41,10 @@ public class ExcelController {
 
   private final UserService userService;
 
-  @GetMapping(value = "/points/excel/{userId}")
+  @GetMapping(value = "/points/excel")
   public void getExcelFromAllPointRequests(HttpServletResponse response,
                                            @CurrentUser User user,
-                                           @PathVariable(value = "userId", required = false) Long userId) throws Exception {
+                                           @RequestParam(value = "userId", required = false) Long userId) throws Exception {
     if (user == null) {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
