@@ -1,7 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.mapper.PointRequestMapping;
+import com.dns.polinsight.projection.PointRequestMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

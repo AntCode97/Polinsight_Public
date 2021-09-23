@@ -1,4 +1,4 @@
-package com.dns.polinsight.mapper;
+package com.dns.polinsight.projection;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.User;

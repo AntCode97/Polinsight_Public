@@ -750,7 +750,7 @@
 
             <!-- 패널정보 변경 -->
             <div class="tab_box box02">
-              <th:block sec:authorize="!hasAuthority('USER')">
+              <th:block sec:authorize="hasAnyAuthority('PANEL','BEST','MANAGER')">
                 <form action="" method="">
                   <div class="item_header">
                     <span><i class="fas fa-user-astronaut" style="padding-right: 3px; color: #4C99CF;"></i>패널정보변경</span>
@@ -1631,12 +1631,12 @@
       $('.box01').find('button').on('click', userBasicInfoUpdate)
       // $('.box02').find('button').on('click', userPanelInfoUpdate)
       $('.box03').find('button').on('click', userPasswordUpdate)
-      
+
 
       // 포인트 내역 엑셀 저장
-      $('button[name=savePointHistoryBtn]').on('click', {url: `/api/pointhistory/excel`}, saveByExcel)
+      $('button[name=savePointHistoryBtn]').on('click', {url: `/api/pointhistory/excel`, userId: -1}, saveByExcel)
       // 서베이 내역 엑셀 저장
-      $('button[name=saveSurveyHistoryBtn]').on('click', {url: `/api/participates/excel`}, saveByExcel)
+      $('button[name=saveSurveyHistoryBtn]').on('click', {url: `/api/participates/excel`, userId: -1}, saveByExcel)
     })
   </script>
 </th:block>

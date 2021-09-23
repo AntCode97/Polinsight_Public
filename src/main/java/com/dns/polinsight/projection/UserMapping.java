@@ -1,4 +1,4 @@
-package com.dns.polinsight.mapper;
+package com.dns.polinsight.projection;
 
 import com.dns.polinsight.types.Address;
 import com.dns.polinsight.types.Email;

@@ -33,6 +33,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.springframework.session:spring-session-data-redis:2.5.2'
 
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
     /* Mail*/
     implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.4'
     /* Cache */

@@ -5,7 +5,7 @@ import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.SurveyStatus;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
-import com.dns.polinsight.mapper.SurveyMapping;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;

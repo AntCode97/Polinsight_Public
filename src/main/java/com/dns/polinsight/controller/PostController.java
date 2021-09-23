@@ -58,7 +58,7 @@ public class PostController {
   public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
 
 
-    Page<com.dns.polinsight.mapper.PostMapping> posts;
+    Page<com.dns.polinsight.projection.PostMapping> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
       if (keyword.equals("")) {
@@ -187,7 +187,7 @@ public class PostController {
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                      Model model) {
     //Page<Post> posts = postService.getPostList(pageable);
-    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
+    Page<com.dns.polinsight.projection.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
 
     //posts.get().map(Post::toString);
 
@@ -205,7 +205,7 @@ public class PostController {
   public String search(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
                        Model model) {
     //    System.out.println(postSearch.getSearchType() + postSearch.getSearchValue());
-    Page<com.dns.polinsight.mapper.PostMapping> posts;
+    Page<com.dns.polinsight.projection.PostMapping> posts;
     if (postSearch.getSearchType() == SearchType.TITLE) {
       posts = postService.findPostsByTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     } else {
@@ -477,7 +477,7 @@ public class PostController {
     //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
 
 
-    Page<com.dns.polinsight.mapper.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.valueOf(type), pageable);
+    Page<com.dns.polinsight.projection.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.valueOf(type), pageable);
 
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);

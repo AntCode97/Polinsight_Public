@@ -2,7 +2,8 @@ INSERT INTO user ( id, email, name, password, phone, point, recommend, role, bir
 VALUES
   ( 1, 'testadmin@gmail.com', '관리자', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '010-1233-2290', 987654321, '', 'ADMIN', '2020-01-01', '양력', '대학 재학', 'MALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
   ( 2, 'testpanel@gmail.com', '테스트패널', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '010-9999-9999', 98000, NULL, 'PANEL', '2021-08-06', '양력', '대학 재학', 'FEMALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
-  ( 3, 'testuser@gmail.com', '테스트 유저', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '010-1231-2340', 0, NULL, 'PANEL', '2021-08-06', '양력', '대학 재학', 'MALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
+  ( 3, 'testuser@gmail.com', '테스트 유저', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '010-1231-2340', 0, NULL, 'USER', '2021-08-06', '양력', '대학 재학', 'MALE', '교육 서비스업',
+    '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
   ( 4, 'dsquibe3@discovery.com', 'smengue3', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '227-8331-4990', 0, NULL, 'USER', '2021-01-22', '양력', '대학 재학', 'MALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
   ( 5, 'wcosser4@springer.com', 'fwickmann4', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '849-3948-4900', 0, NULL, 'USER', '2020-09-26', '양력', '대학 재학', 'MALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),
   ( 6, 'clober5@wix.com', 'eveljes5', '$2a$10$3sS.cIMjcNHDD1Eiji5NUe4feG2ZwAmaTjNz33zaxRF6mk5cSQ3m.', '899-7392-7530', 0, NULL, 'USER', '2021-05-25', '양력', '대학 재학', 'FEMALE', '교육 서비스업', '2021-08-17', '학생', '미혼', '광주 북구', TRUE, TRUE ),

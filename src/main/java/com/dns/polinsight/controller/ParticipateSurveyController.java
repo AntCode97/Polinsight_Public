@@ -9,7 +9,7 @@ import com.dns.polinsight.exception.AlreadyParticipateSurveyException;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.UserNotFoundException;
 import com.dns.polinsight.exception.WrongAccessException;
-import com.dns.polinsight.mapper.SurveyMapping;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
 import com.dns.polinsight.service.SurveyService;
@@ -117,7 +117,8 @@ public class ParticipateSurveyController {
                                                    .sign(true)
                                                    .content("설문 참여 보상")
                                                    .requestedAt(LocalDateTime.now())
-                                                   .userId(user.getId())
+//                                                   .userId(user.getId())
+                                                   .user(user)
                                                    .build());
       log.info("{} 설문 참여 {} 포인트 업데이트", user.getEmail().toString(), participateSurvey.getSurveyPoint());
     } catch (Exception e) {

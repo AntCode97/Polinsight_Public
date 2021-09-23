@@ -603,7 +603,10 @@
 
     }
 
-    const changeRoleToPanel = () => {
+    const changeRoleToPanel = e => {
+      e.preventDefault()
+
+      alert('패널로 변경 요청')
       let panelInfo = getPanelDataFromInputToJson()
 
       // 데이터 검증
@@ -618,24 +621,30 @@
       }
 
       http
-          .put('/api/changetopanel', panelInfo)
+          .patch('/api/changetopanel', panelInfo)
           .then(res => {
             if (res.data.success) {
-              location.replace("/success_panel")
+              location.replace("/mypage")
             }
           })
           .catch(err => {
             alert('처리 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
-          })
-          .finally(() => {
-            location.replace('/')
+            location.replace('/mypage')
           })
     }
 
+    const init = () => {
+      setDateValue()
+    }
+
     $(function () {
+      init();
       $('button[name=to_panel_btn]').on('click', changeRoleToPanel)
 
     })
+
+    $(document)
+        .on('change', 'select[name=month]', setDay)
 
   </script>
 </th:block>

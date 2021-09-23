@@ -392,7 +392,7 @@ public class UserController {
     }
   }
 
-  @PutMapping("/api/changetopanel")
+  @PatchMapping("/api/changetopanel")
   @Transactional
   public ApiUtils.ApiResult<Boolean> userChangeRoleToPanel(@RequestBody UserDto dto,
                                                            @CurrentUser User user) throws DataUpdateException {
@@ -402,9 +402,14 @@ public class UserController {
     if (!user.getRole().equals(UserRoleType.USER)) {
       throw new UnAuthorizedException("일반 유저만 사용 가능합니다.");
     }
+    log.warn("{} has requested to change role", user.getEmail().toString());
+    log.warn(dto.toString());
+
     try {
       user.getPanel().update(Panel.of(dto));
+      user.updateRole(UserRoleType.PANEL);
       userService.saveOrUpdate(user);
+      log.warn("updated data : {}", userService.findUserByEmail(user.getEmail()));
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new DataUpdateException("패널 변경중 에러 발생 :: " + e.getMessage());

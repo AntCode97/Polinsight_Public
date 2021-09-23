@@ -166,9 +166,13 @@ public class PageController {
   }
 
   @GetMapping("/upgradepanel")
-  public ModelAndView chageNormalUserToPanel(@CurrentUser User user) {
-    if (user == null || !user.getRole().equals(UserRoleType.USER)) {
-      throw new UnAuthorizedException("");
+  public ModelAndView changeNormalUserToPanel(@CurrentUser User user) throws Exception {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인 한 유저만 사용가능합니다.");
+    }
+    if (!user.getRole().equals(UserRoleType.USER)) {
+      log.error("일반 유저만 사용 가능");
+      throw new Exception("일반 유저만 사용 가능합니다");
     }
 
     return new ModelAndView("member/change_to_panel");

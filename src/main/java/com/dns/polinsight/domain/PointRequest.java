@@ -62,5 +62,4 @@ public class PointRequest {
     }
     return this;
   }
-
 }

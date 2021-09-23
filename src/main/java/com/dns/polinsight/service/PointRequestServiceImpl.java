@@ -1,7 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.mapper.PointRequestMapping;
+import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.repository.PointRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

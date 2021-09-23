@@ -1,7 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.mapper.SurveyMapping;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
