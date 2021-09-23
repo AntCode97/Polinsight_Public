@@ -312,7 +312,7 @@
     <li class="nav-item"><a th:href="@{/research/online}" class="nav-link">Research</a></li>
     <li class="nav-item"><a th:href="@{/posts}" class="nav-link">Customer</a></li>
   </ul>
-  <hr class="navbar-hr">
+  <hr class="navar-hr">
   <ul class="navbar-nav">
     <th:block sec:authorize="isAnonymous()">
       <li class="nav-item"><a th:href="@{/login}" class="nav-link"><i class="fas fa-sign-in-alt"></i> LOGIN</a></li>
@@ -356,7 +356,7 @@
         </ul>
         <ul class="navi_box">
           <li>
-            <a th:href="@{/posts}">Business</a>
+            <a th:href="@{/business/category}">Business</a>
             <div class="dropdown" style="left: 160.5px;">
               <div class="dropdown_box">
 
@@ -369,7 +369,7 @@
         <ul class="navi_box">
           <li>
 
-            <a th:href="@{/}">Research</a>
+            <a th:href="@{/research/online}">Research</a>
             <div class="dropdown" style="left: 314.5px;">
               <div class="dropdown_box">
                 <a class="dropdown_element" th:href="@{/research/online}">온라인조사</a>
