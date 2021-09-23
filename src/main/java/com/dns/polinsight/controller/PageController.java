@@ -3,6 +3,8 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.exception.UnAuthorizedException;
+import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -161,6 +163,15 @@ public class PageController {
   @GetMapping("/point_accumulate_error")
   public ModelAndView pointAccumulateErrorPage() {
     return new ModelAndView("error/point_accumulate_error");
+  }
+
+  @GetMapping("/upgradepanel")
+  public ModelAndView chageNormalUserToPanel(@CurrentUser User user) {
+    if (user == null || !user.getRole().equals(UserRoleType.USER)) {
+      throw new UnAuthorizedException("");
+    }
+
+    return new ModelAndView("member/change_to_panel");
   }
 
 }

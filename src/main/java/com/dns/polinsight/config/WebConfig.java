@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,8 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**")
-            .addResourceLocations(resourceLocations)
-    ;
+            .addResourceLocations(resourceLocations);
   }
 
   @Override
@@ -33,6 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
             .allowedOrigins("*")
             .maxAge(60 * 60);
   }
+
 
   @Override
   public void addFormatters(FormatterRegistry registry) {
