@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS survey
   minimum_time   INT          NOT NULL DEFAULT 30,
   count          BIGINT       NOT NULL DEFAULT 0,
   question_count BIGINT       NULL     DEFAULT 0,
+  thumbnail varchar(3000) NULL ,
   UNIQUE (survey_id)
 );
 

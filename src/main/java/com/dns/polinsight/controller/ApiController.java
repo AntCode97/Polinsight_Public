@@ -19,8 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -165,6 +167,7 @@ public class ApiController {
   /*
    * 저장된 서베이 목록 수정을 위한 api
    * */
+  @PreAuthorize("hasAuthority('ADMIN')")
   @Transactional
   @PutMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
@@ -222,6 +225,7 @@ public class ApiController {
 
   }
 
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
@@ -248,7 +252,7 @@ public class ApiController {
                                                    .content("포인트 정산 요청")
                                                    .total(user.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-//                                                   .userId(user.getId())
+                                                   //                                                   .userId(user.getId())
                                                    .user(user)
                                                    .requestedAt(pointRequestDto.getRequestedAt())
                                                    .build());
@@ -315,6 +319,7 @@ public class ApiController {
     }
   }
 
+  @PermitAll
   @PostMapping("/find/email")
   public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
     try {

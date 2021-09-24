@@ -65,6 +65,10 @@ public class Post implements Serializable {
   @Column(name = "view_count")
   private Long viewcnt;
 
+
+  @OneToMany(mappedBy = "post", targetEntity = Comment.class, cascade = CascadeType.ALL)
+  private List<Comment> comments;
+
   public static PostBuilder builder(PostDTO postDTO) {
     return PostBuilder()
         .id(postDTO.getId())
@@ -76,7 +80,7 @@ public class Post implements Serializable {
         .postType(postDTO.getPostType())
         .attaches(postDTO.getAttaches())
         .viewcnt(postDTO.getViewcnt())
-            .thumbnail(postDTO.getThumbnail());
+        .thumbnail(postDTO.getThumbnail());
   }
 
 

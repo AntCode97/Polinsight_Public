@@ -1,0 +1,68 @@
+<th:block th:include="layout/header" />
+<th:block>
+  <style>
+    .header_wrap {
+      background-color : rgb(24, 40, 56) !important;
+    }
+  </style>
+  <th:block>
+    <div class="flex-wrapper">
+      <div class="flex-content">
+        <div name="post-header">
+
+        </div>
+        <div name="post-body">
+
+        </div>
+        <div name="comment">
+
+        </div>
+      </div>
+      <th:block th:include="layout/footer" />
+    </div>
+  </th:block>
+  <script>
+
+    const makeTemplate = post => {
+      let postHead = $('div[name=post-header]')
+      postHead.append(`<div>
+<span>${post.user.email}</span>
+<span>${post.title}</span>
+<span>${post.registeredAt}</span>
+</div>`)
+
+
+      let postBody = $('div[name=post-body]')
+      postBody.append(`<div>
+        <img src="${post.thumbnail}" >
+      </div>`)
+
+      let commentBody = $('div[name=comment]')
+      post.comments.forEach(comment => {
+        commentBody.append(`<div>
+<span name="author">${comment.author}</span>
+<span name="content" >${commenct.content}</span>
+<span name="registryDate">${comment.registeredAt}</span>
+<span>
+<button>답글</button>
+<button>삭제</button>
+</span>
+</div>`)
+      })
+      let template = $('<div name="content-body"></div>')
+      template.append(postHead).append(postBody).append(commentBody)
+      return template
+    }
+
+
+    const init = () => {
+
+    }
+
+    let insight_data = [[${data}]]
+    $(function () {
+      init();
+      makeTemplate(insight_data)
+    })
+  </script>
+</th:block>

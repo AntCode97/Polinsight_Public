@@ -1,7 +1,6 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.SurveyDto;
-import com.dns.polinsight.types.ProgressType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -52,6 +51,7 @@ public class Survey implements Serializable {
   @Setter
   private Long questionCount;
 
+  private String thumbnail;
 
   @JsonManagedReference
   @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

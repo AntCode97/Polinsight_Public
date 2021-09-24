@@ -76,7 +76,14 @@
       text-align  : center;
     }
 
-    .sub_item {display: block; text-align: center; font-size: 1.5rem; color: #444; margin-top: 40px; margin-bottom: 30px;}
+    .sub_item {
+      display       : block;
+      text-align    : center;
+      font-size     : 1.5rem;
+      color         : #444444;
+      margin-top    : 40px;
+      margin-bottom : 30px;
+    }
 
     .tbl-search {
       align-items     : center;
@@ -253,24 +260,24 @@
           <span>포인트</span>
           <span>등록일</span>
         </div>
-        <div class="post-row">
-          <span>9</span>
-          <span class="status-bar status-finish">마감</span>
-          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>
-          <span>~2019.05.08</span>
-          <span>10/25</span>
-          <span><Strong>1,000P</Strong></span>
-          <span>2021-06-16</span>
-        </div>
-        <div class="post-row">
-          <span>8</span>
-          <span class="status-bar">진행중</span>
-          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>
-          <span>~2019.05.08</span>
-          <span>10/25</span>
-          <span><Strong>1,000P</Strong></span>
-          <span>2021-06-16</span>
-        </div>
+        <!--        <div class="post-row">-->
+        <!--          <span>9</span>-->
+        <!--          <span class="status-bar status-finish">마감</span>-->
+        <!--          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>-->
+        <!--          <span>~2019.05.08</span>-->
+        <!--          <span>10/25</span>-->
+        <!--          <span><Strong>1,000P</Strong></span>-->
+        <!--          <span>2021-06-16</span>-->
+        <!--        </div>-->
+        <!--        <div class="post-row">-->
+        <!--          <span>8</span>-->
+        <!--          <span class="status-bar">진행중</span>-->
+        <!--          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>-->
+        <!--          <span>~2019.05.08</span>-->
+        <!--          <span>10/25</span>-->
+        <!--          <span><Strong>1,000P</Strong></span>-->
+        <!--          <span>2021-06-16</span>-->
+        <!--        </div>-->
       </div>
     </div>
   </div>
@@ -285,10 +292,7 @@
     async function getSurveyData(e) {
       let type = $('input[name=sort_group]:checked').val();
       let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      let regex = !e ? '' : String($('input[name=admin_find]').
-      val()
-    ).
-      trim();
+      let regex = !e ? '' : String($('input[name=admin_find]').val()).trim();
       const response = await http.get('/api/surveys/notAdmin?type=' + type, {params: {page: page, size: 10, regex: regex}});
       if (response.data.success) {
         const data = response.data.response;
@@ -302,32 +306,32 @@
       spinner.show();
       getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total);
-        $('.scroll-table').children('.post-row:not(:first-child)').remove();
+        let table = $('.scroll-table')
+        table.children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
           obj.content.forEach(post => {
-            $('.scroll-table').append(makeSurveyTemplate2(post));
+            table.append(makeSurveyTemplate2(post));
           });
         } else
-          $('.scroll-table').append(`<div class='post-row'><h1>게시물이 없습니다.</h1></div>`);
+          table.append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`);
       });
       spinner.hide();
     };
 
     const makeSurveyTemplate2 = (survey) => {
-      if (survey.progress != 'BEFORE') {
-        let template = $(`<div class='post-row'></div>`);
+      if (survey.progress !== 'BEFORE') {
+        let template = $(`<div class="post-row"></div>`);
 
 
         template.append(`<div>${survey.id}</div>`);// 번호
-        if (survey.progress === 'ONGOING') template.append(`<div class='status-bar'>진행중</div>`); //설문 종류
-        else if (survey.progress === 'END') template.append(`<div class='status-bar status-finish'>마감</div>`);
-        template.append(`<div style='white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${survey.title}</div>`);// 설문 이름
+        if (survey.progress === 'ONGOING') template.append(`<div class="status-bar">진행중</div>`); //설문 종류
+        else if (survey.progress === 'END') template.append(`<div class="status-bar status-finish">마감</div>`);
+        template.append(`<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`);// 설문 이름
         template.append(`<div>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); //종료 일자
-        template.append(`<div>${survey.count}</div>`);// 참여자 수
+        template.append(`<div>${!survey.count ? '지정 안됨' : survey.count}</div>`);// 참여자 수
         template.append(`<div>${!survey.point ? '지정 안됨' : survey.point}</div>`);// 지급 포인트
         template.append(`<div>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); // 설문 기간
-
 
         return template;
       }
