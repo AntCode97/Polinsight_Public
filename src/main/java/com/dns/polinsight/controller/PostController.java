@@ -408,9 +408,16 @@ public class PostController {
     }
 
     Post editPost = postService.findOne(postId);
-    if(editPost.getThumbnail() != null) {
-      attachService.deleteThumbnail(editPost.getThumbnail());
-    }
+
+      if(postDTO.getThumbnailImg() !=null && !postDTO.getThumbnailImg().isEmpty()){
+        if(editPost.getThumbnail() != null){
+          attachService.deleteThumbnail(editPost.getThumbnail());
+        }
+      } else{
+        postDTO.setThumbnail(editPost.getThumbnail());
+      }
+
+
     postService.addPost(postDTO);
     attachService.addAttach(postDTO);
 

@@ -45,7 +45,8 @@
                   <div class="board_div" id="thumbnail_div">
                     <label for="board_title"><span>*</span>썸네일 이미지</label>
                     <span class="board_span">
-                      <img th:if="*{thumbnail}" th:src="*{thumbnail}" >
+
+                      <img th:if="*{thumbnail}" th:src="'/files/'+*{thumbnail}" >
                                           <input type="file" class="board_input" th:field="*{thumbnailImg}" accept="image/*"/>
                                         </span>
                   </div>

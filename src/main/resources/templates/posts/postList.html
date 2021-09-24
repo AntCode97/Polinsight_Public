@@ -192,7 +192,7 @@
                 <strong></strong></a>
               <!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
               <!--          -->
-              <img th:if="${post.thumbnail}" th:src="${post.thumbnail}" >
+              <img th:if="${post.thumbnail}" th:src="'/files/'+${post.thumbnail}" >
               <span th:text="${post.user.name}"></span>
               <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
               <span th:text="${post.viewcnt}">52</span>

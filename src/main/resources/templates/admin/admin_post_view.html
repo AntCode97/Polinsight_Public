@@ -261,8 +261,12 @@
                 <div th:each="file : ${post.attaches}" class="input_wrap">
                   <div class="board_div2">
                     <label class="file_item2" th:text="'첨부파일#'"></label>
-                    <a class="file_download" th:href="@{'/posts/'+${file.filePath}}" th:text="${file.originalName}"></a>
+<!--                    <a class="file_download" th:href="@{'/posts/'+${file.filePath}}" th:text="${file.originalName}"></a>-->
+                    <a class="file_download" th:href="@{'/files/'+${file.fileName}}" th:text="${file.originalName}"></a>
                   </div>
+                </div>
+                <div th:each="file : ${post.attaches}" class="input_wrap">
+                  <img th:src="'/files/'+${file.fileName}">
                 </div>
                 <div class="input_wrap textarea_div">
                   <div class="board_div2" th:text="${post.viewcontent}" style="white-space: pre;">
