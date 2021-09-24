@@ -66,7 +66,7 @@
 
     $(function () {
       init();
-      $('input[name=admin_find]').on('keyup', {page: 0, regex: $('input[name=admin_find]').val()}, _throttle(init, 300));
+      $('input[name=admin_find]').on('keyup', {page: 0, regex: $('input[name=admin_find]').val()}, _.throttle(init, 300));
     });
   </script>
 </th:block>

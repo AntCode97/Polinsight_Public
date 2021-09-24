@@ -207,4 +207,8 @@ public class User implements UserDetails {
     this.point += point;
   }
 
+  public void updateRole(UserRoleType role) {
+    this.role = role;
+  }
+
 }

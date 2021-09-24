@@ -1,6 +1,7 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointHistory;
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.repository.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +56,11 @@ public class PointHistoryServiceImpl implements PointHistoryService {
   @Override
   public long countPointHistories() {
     return pointHistoryRepository.count();
+  }
+
+  @Override
+  public List<PointHistory> findAllByUser(User user) {
+    return pointHistoryRepository.findAllByUser(user);
   }
 
 }

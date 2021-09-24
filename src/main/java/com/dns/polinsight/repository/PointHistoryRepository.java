@@ -1,6 +1,7 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.PointHistory;
+import com.dns.polinsight.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,5 +19,6 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Long
 
   List<PointHistory> findAllByUserId(long userId);
 
+  List<PointHistory> findAllByUser(User user);
 
 }

@@ -76,11 +76,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.sessionManagement()
         .sessionAuthenticationErrorUrl("/")
         .invalidSessionUrl("/")
-        //        .sessionConcurrency(concurrencyControlConfigurer -> {
-        //          concurrencyControlConfigurer.expiredUrl("/login");
-        //          concurrencyControlConfigurer.maximumSessions(1);  // 최대 한개의 로그인만 허용
-        //          concurrencyControlConfigurer.maxSessionsPreventsLogin(false);
-        //        })
         .maximumSessions(1)
         .maxSessionsPreventsLogin(false)
         .expiredUrl("/");

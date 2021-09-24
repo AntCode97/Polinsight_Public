@@ -2,7 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
-import com.dns.polinsight.mapper.ExcelUserMapping;
+import com.dns.polinsight.projection.ExcelUserMapping;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;

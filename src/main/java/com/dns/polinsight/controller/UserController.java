@@ -3,10 +3,7 @@ package com.dns.polinsight.controller;
 import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.*;
-import com.dns.polinsight.exception.DataUpdateException;
-import com.dns.polinsight.exception.InvalidValueException;
-import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.exception.WrongAccessException;
+import com.dns.polinsight.exception.*;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
@@ -392,6 +389,30 @@ public class UserController {
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
+    }
+  }
+
+  @PatchMapping("/api/changetopanel")
+  @Transactional
+  public ApiUtils.ApiResult<Boolean> userChangeRoleToPanel(@RequestBody UserDto dto,
+                                                           @CurrentUser User user) throws DataUpdateException {
+    if (user == null) {
+      throw new UnAuthorizedException("로그인한 유저만 사용 가능합니다.");
+    }
+    if (!user.getRole().equals(UserRoleType.USER)) {
+      throw new UnAuthorizedException("일반 유저만 사용 가능합니다.");
+    }
+    log.warn("{} has requested to change role", user.getEmail().toString());
+    log.warn(dto.toString());
+
+    try {
+      user.getPanel().update(Panel.of(dto));
+      user.updateRole(UserRoleType.PANEL);
+      userService.saveOrUpdate(user);
+      log.warn("updated data : {}", userService.findUserByEmail(user.getEmail()));
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new DataUpdateException("패널 변경중 에러 발생 :: " + e.getMessage());
     }
   }
 

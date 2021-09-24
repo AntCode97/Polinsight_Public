@@ -7,8 +7,8 @@ import com.dns.polinsight.domain.dto.PointRequestDto;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.*;
-import com.dns.polinsight.mapper.PointRequestMapping;
-import com.dns.polinsight.mapper.SurveyMapping;
+import com.dns.polinsight.projection.PointRequestMapping;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
@@ -248,7 +248,8 @@ public class ApiController {
                                                    .content("포인트 정산 요청")
                                                    .total(user.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-                                                   .userId(user.getId())
+//                                                   .userId(user.getId())
+                                                   .user(user)
                                                    .requestedAt(pointRequestDto.getRequestedAt())
                                                    .build());
       return success(Boolean.TRUE);
@@ -334,9 +335,9 @@ public class ApiController {
   }
 
   @GetMapping("posts")
-  public ApiUtils.ApiResult<Page<com.dns.polinsight.mapper.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
-                                                                                         @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                                         @PageableDefault Pageable pageable) throws Exception {
+  public ApiUtils.ApiResult<Page<com.dns.polinsight.projection.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
+                                                                                             @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                                             @PageableDefault Pageable pageable) throws Exception {
     try {
       if (regex.isBlank())
         return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));

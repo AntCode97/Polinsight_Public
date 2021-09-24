@@ -96,13 +96,9 @@
       // const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
       // const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
       const tmp_cell = $(`<span></span>`)
-      for (let i = 0; i < 3; i++) {
-        tmp_cell.append(`<label><input type="checkbox"/>${i}</label>`)
-      }
-      // if (req.progress === 'REQUESTED')
-      //   tmp_cell.append(modify_btn).append(`<span>  </span>`)
-      // else
-      //   tmp_cell.append(delete_btn);
+      tmp_cell.append(`<label><input type="checkbox"/>보류</label>`)
+      tmp_cell.append(`<label><input type="checkbox"/>완료</label>`)
+      tmp_cell.append(`<label><input type="checkbox"/>오류</label>`)
       template.append(tmp_cell);
       return template;
     };
@@ -169,5 +165,6 @@
 
       $('button[name=save_excel]').on('click', {url: '/api/points/excel'}, saveByExcel);
     });
+
   </script>
 </th:block>

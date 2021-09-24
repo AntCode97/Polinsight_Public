@@ -149,11 +149,11 @@
       });
       $(document).on('click', '.btn-remove', function () {
         var num = $(this).attr('data-num');
-        $('.file_item').eq(num - 1).css('border', 'none').empty();
+        $('.file_item').eq(num - 1).css('border', 'none').remove();
       });
       $(document).on('click', '.btn-file-remove', function () {
         var num = $(this).attr('data-num');
-        $('.file_item').eq(num - 1).css('border', 'none').empty();
+        $('.file_item').eq(num - 1).css('border', 'none').remove();
         const fileName = $(this).attr('value');
         console.log(fileName);
         $.ajax({
