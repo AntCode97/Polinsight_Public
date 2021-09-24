@@ -85,8 +85,7 @@
                                                             </span>
                     <span>
                   											<button type="button" class="btn btn-green insert_btn"
-                                                onclick="document.getElementById('frm_board').submit();"
-                                        >등록</button>
+                                       id="submit-btn" >등록</button>
                   										</span>
 
                   </div>
@@ -127,8 +126,29 @@
         alert("파일명에 대괄호는 포함할 수 없습니다.")
         $(".board_file").val("");
       }
-      151
+
     });
+
+    function makeSubmit(){
+      let submitBtn = document.querySelector("#submit-btn");
+      submitBtn.addEventListener('click', function (){
+        let title = document.querySelector("#board_title");
+        let textArea = document.querySelector("#board_content");
+        console.log("Hi" + textArea.value)
+        if(textArea.value ==null || textArea.value == ""){
+          alert("내용을 입력해주세요")
+        } else if(title.value ==null || title.value == ""){
+          alert("제목을 입력해주세요")
+        }
+        else{
+          document.getElementById('frm_board').submit();
+        }
+
+      })
+    }
+
+
+    window.onload(makeSubmit());
 
   </script>
 </th:block>
