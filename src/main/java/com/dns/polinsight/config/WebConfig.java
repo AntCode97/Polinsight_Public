@@ -18,8 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-  //"file:///Users/yunjun/IntelliJProjects/polinsight/"
-  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/", "file:///Users/yunjun/IntelliJProjects/polinsight/"};
+  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/"};
 
   private final CurrentUserResolver currentUserResolver;
 
@@ -29,9 +28,9 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**")
-            .addResourceLocations(resourceLocations);
-    //    registry.addResourceHandler("/upload-dir/**")
-    //            .addResourceLocations("/Users/yunjun/IntelliJProjects/polinsight/", "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/","classpath:/../../../upload-dir/");
+            .addResourceLocations("classpath:/templates/", "classpath:/static/");
+    registry.addResourceHandler("/files/**")
+                .addResourceLocations("file:///" + baseLocation);
     //    registry.addResourceHandler("/**")
     //            .addResourceLocations("file:///Users/yunjun/IntelliJProjects/polinsight/");
   }

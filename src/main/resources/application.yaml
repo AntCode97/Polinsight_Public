@@ -100,9 +100,9 @@ spring :
     servlet :
       content-type : "*/*"
 
-file :
-  upload :
-    baseLocation : "upload-dir/"
+#file :
+#  upload :
+#    baseLocation : "upload-dir/"
 
 
 custom :
@@ -246,6 +246,12 @@ server :
 custom :
   callback :
     base : "http://localhost:8080"
+
+
+file :
+  upload :
+    baseLocation : "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/"
+
 ---
 spring :
   datasource :
@@ -292,3 +298,9 @@ logging :
 custom :
   callback :
     base : "http://dnslab.iptime.org"
+
+
+
+file :
+  upload :
+    baseLocation : "/var/lib/jenkins/area_deploy/polinsight/upload-dir/"
