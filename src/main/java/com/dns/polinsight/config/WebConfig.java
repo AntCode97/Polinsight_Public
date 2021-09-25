@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,8 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-  //"file:///Users/yunjun/IntelliJProjects/polinsight/"
-  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/", "file:///Users/yunjun/IntelliJProjects/polinsight/"};
+  static String[] resourceLocations = {"classpath:/templates/", "classpath:/static/"};
 
   private final CurrentUserResolver currentUserResolver;
 
@@ -30,10 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**")
             .addResourceLocations(resourceLocations);
-    //    registry.addResourceHandler("/upload-dir/**")
-    //            .addResourceLocations("/Users/yunjun/IntelliJProjects/polinsight/", "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/","classpath:/../../../upload-dir/");
-    //    registry.addResourceHandler("/**")
-    //            .addResourceLocations("file:///Users/yunjun/IntelliJProjects/polinsight/");
+
+    // 이미지 업로드 경로
+    registry.addResourceHandler("/files/**")
+            .addResourceLocations("file:///" + baseLocation);
   }
 
   @Override

@@ -4,6 +4,7 @@ import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,6 +40,8 @@ public class SurveyDto {
 
   @Enumerated(EnumType.STRING)
   private ProgressType progress;
+
+  private MultipartFile thumbnail;
 
   public SurveyDto(Survey survey) {
     this.id = survey.getId();

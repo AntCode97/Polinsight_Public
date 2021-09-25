@@ -62,7 +62,7 @@ public class AttachServiceImpl implements AttachService {
   @Override
   public void deleteThumbnail(String thumbnailPath) {
     //경로 문제 때문에 . 추가
-    storageService.delete('.'+thumbnailPath);
+    storageService.delete('.' + thumbnailPath);
     log.info("Thumbnail Delete Success!");
   }
 
@@ -116,50 +116,6 @@ public class AttachServiceImpl implements AttachService {
 
   @Override
   public void addAttach(PostDTO postDTO) {
-    //System.out.println(postDTO.getFile().getOriginalFilename());
-    List<MultipartFile> files = postDTO.getFiles();
-
-
-
-    if (files != null) {
-      if (!files.isEmpty()) {
-        List<Attach> attaches = new ArrayList<>();
-        for (MultipartFile file : files) {
-          if (!file.isEmpty()) {
-            System.out.println(file.getOriginalFilename());
-            UUID uuid = UUID.randomUUID();
-
-            Attach attach = Attach.builder()
-                                  .fileName(uuid + file.getOriginalFilename())
-                                  .fileSize(file.getSize())
-                                  .originalName(file.getOriginalFilename())
-                                  .filePath(baseLocation + uuid + file.getOriginalFilename())
-                                  .post(Post.builder(postDTO).build())
-                                  .build();
-            attaches.add(attach);
-            storageService.store(uuid.toString(), file);
-
-          }
-        }
-        MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-        if(thumbnailImg != null && !thumbnailImg.isEmpty()){
-          log.info("썸네일 추가 완료");
-          UUID uuid = UUID.randomUUID();
-
-          postDTO.setThumbnail("/"+baseLocation+uuid + thumbnailImg.getOriginalFilename());
-
-          storageService.store(uuid.toString(), thumbnailImg);
-        } else {
-          log.error("Thumbnail 이미지 파일이 없습니다.");
-        }
-
-        repository.saveAll(attaches);
-        postDTO.setAttaches(attaches);
-        postService.addPost(postDTO);
-      }
-    } else {
-      log.info("File List is null");
     }
-  }
 
 }

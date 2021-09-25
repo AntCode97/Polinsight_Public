@@ -21,9 +21,8 @@
                                           <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{postType}" autofocus required>
                                             <optgroup label="분류 선택">
                                             <option value="NOTICE">공지사항</option>
-                                            <option value="ARCHIVES">자료실</option>
-                                              <option value="EVENT">이벤트</option>
-                                                 </optgroup>
+                                              <option value="QNA">Q&A</option>
+                                             </optgroup>
                                           </select>
                                           <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후 변경이 불가능합니다.)</span>
                                           <div class="err_msg_wrap err_title"><span class="err_msg">게시판 타입을 선택해주세요.:(</span></div>
@@ -45,7 +44,7 @@
                   <div class="board_div" id="thumbnail_div">
                     <label for="board_title"><span>*</span>썸네일 이미지</label>
                     <span class="board_span">
-                                          <input type="file" class="board_input" th:field="*{thumbnailImg}" accept="image/*"/>
+                                          <input type="file" class="board_input" th:field="*{thumbnailImg}" accept="image/*" />
                                         </span>
                   </div>
                 </div>
