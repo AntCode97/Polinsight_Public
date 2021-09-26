@@ -100,9 +100,6 @@ spring :
     servlet :
       content-type : "*/*"
 
-
-
-
 custom :
   permission :
     resources :
@@ -297,4 +294,4 @@ custom :
 
 file :
   upload :
-    baseLocation : "upload-dir/"
+    baseLocation : "/var/lib/jenkins/area_deploy/polinsight/upload-dir/"

@@ -52,7 +52,8 @@
           new
       </span>
         </a>
-        <img th:if="${list.thumbnail}" th:src="${list.thumbnail}" >
+        <img th:if="${list.thumbnail}" th:src="'/files/'+${list.thumbnail}" >
+<!--        <img th:if="${list.thumbnail}" th:src="${list.thumbnail}" >-->
 
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
