@@ -14,6 +14,10 @@
         <div name="post-body">
 
         </div>
+        <div name="comment-input">
+          <input name="input-comment-value" type="text">
+          <span><button name="add-comment-btn" onclick="addComment()" disabled>답글 달기</button></span>
+        </div>
         <div name="comment">
 
         </div>
@@ -23,46 +27,100 @@
   </th:block>
   <script>
 
-    const makeTemplate = post => {
+    // async function uploadInsightThumbnail(thubmnail, postId) {
+    //   let frmData = new FormData()
+    //   frmData.append('thumbnail', thubmnail)
+    //   let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
+    //     headers: {'Content-Type': 'multipart/form-data'}
+    //   })
+    //
+    //   return response.data.success
+    // }
+
+    // const addComment = e => {
+    //   e.stopPropagation()
+    //   e.preventDefault()
+    //   let commentValue = $('input[name-input-comment-value]').val()
+    //
+    //   http.post('', {
+    //         comment: commentValue
+    //       })
+    //       .then(res => {
+    //
+    //       })
+    //       .catch(err => {
+    //         console.log(err)
+    //         alert('댓글 작성 도중 오류가 발생하였습니다.\n잠시후 다시 시도해주세요')
+    //       })
+    //       .finally(() => {
+    //         location.reload()
+    //       })
+    // }
+
+    async function getOneInsightData(postId) {
+      let response = await http.get(`/api/post/${postId}`)
+      if (response.data.success) {
+        return response.data.response
+      } else
+        alert('데이터를 가져오는 중 오류가 발생하였습니다.')
+    }
+
+    const makeInsightTemplate = post => {
+      console.log(post)
       let postHead = $('div[name=post-header]')
-      postHead.append(`<div>
-<span>${post.user.email}</span>
-<span>${post.title}</span>
-<span>${post.registeredAt}</span>
-</div>`)
+      let headTemplate = $(`<div></div>`)
+      headTemplate.append(`<span>${post.userName}</span>`)
+      headTemplate.append(`<span>${post.title}</span>`)
+      headTemplate.append(`<span>${post.registeredAt}</span>`)
+      postHead.append(headTemplate)
 
 
       let postBody = $('div[name=post-body]')
-      postBody.append(`<div>
-        <img src="${post.thumbnail}" >
-      </div>`)
+      postBody.append(`<div>${post.viewcontent}</div>`)
+      post.attaches.forEach(attach => {
+        if (isImageFile(attach.fileName)) {
+          // 첨부파일이 이미지일 때
+          postBody.append(`<img src="http://localhost:8080/files/${attach.filePath}"/>`)
+        }
+      })
+      if (post.attaches.length > 0) {
+        postBody.append(`<img src="${post.thumbnail}" >`)
+      }
+
 
       let commentBody = $('div[name=comment]')
       post.comments.forEach(comment => {
-        commentBody.append(`<div>
-<span name="author">${comment.author}</span>
-<span name="content" >${commenct.content}</span>
-<span name="registryDate">${comment.registeredAt}</span>
-<span>
-<button>답글</button>
-<button>삭제</button>
-</span>
-</div>`)
+        let bodyTemplate = $('<div class="comment-row"></div>')
+        bodyTemplate.append(`<span name="author">${comment.author}</span>`)
+        bodyTemplate.append(`<span name="content" >${commenct.content}</span>`)
+        bodyTemplate.append(`<span name="registryDate">${comment.registeredAt}</span>`)
+        bodyTemplate.append(`<span><button>답글</button><button>삭제</button></span>`)
+        commentBody.append(bodyTemplate)
       })
-      let template = $('<div name="content-body"></div>')
-      template.append(postHead).append(postBody).append(commentBody)
-      return template
     }
 
+    const init = e => {
+      let postId = `[[${postId}]]`
 
-    const init = () => {
-
+      getOneInsightData(postId)
+          .then(insight => {
+            makeInsightTemplate(insight);
+          })
     }
 
-    let insight_data = [[${data}]]
     $(function () {
       init();
-      makeTemplate(insight_data)
     })
+
+    $(document)
+        .on('change keyup', 'input[name=input-comment-value]', function () {
+          let inp = $(this)
+          let inputValue = inp.val()
+          if (!inputValue) {
+            $("button[name=add-comment-btn]").prop('disabled', true);
+          } else {
+            $("button[name=add-comment-btn]").prop('disabled', false);
+          }
+        })
   </script>
 </th:block>

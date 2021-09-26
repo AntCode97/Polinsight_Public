@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<Post, Long> {
   //    Post save(Post post);
   //
@@ -69,4 +71,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("select p from Post p where p.postType = :type and ( p.searchcontent like %:regex% or p.title like %:regex% or p.id = :regex or p.viewcnt = :regex )")
   Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
+  List<Post> findAllByPostType(PostType type);
 }

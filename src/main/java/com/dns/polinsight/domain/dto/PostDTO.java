@@ -1,10 +1,13 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Attach;
+import com.dns.polinsight.domain.Comment;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.PostType;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +18,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +39,8 @@ public class PostDTO {
   @NotNull
   private User user;
 
+  private String userName;
+
   @CreatedDate
   private LocalDateTime registeredAt;
 
@@ -46,7 +50,10 @@ public class PostDTO {
 
   private MultipartFile thumbnailImg;
 
+  private List<Comment> comments;
+
   private String thumbnail;
+
   @Builder.Default
   private Long viewcnt = 0L;
 
@@ -65,6 +72,11 @@ public class PostDTO {
 
   public void transViewcontent() {
     this.viewcontent = this.content.replaceAll("\r\n", "<br>").replaceAll(" ", "&nbsp;");
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }

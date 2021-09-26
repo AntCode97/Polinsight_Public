@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +35,11 @@ public class Comment {
    * 수정, 삭제 여부등을 저장할 필드
    * */
   private String status;
+
+  private Integer depth;
+
+  @OneToMany(targetEntity = Comment.class)
+  private List<Comment> parent;
 
   @PrePersist
   public void registTime() {

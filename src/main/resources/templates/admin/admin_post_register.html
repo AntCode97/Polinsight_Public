@@ -22,6 +22,8 @@
                                             <optgroup label="분류 선택">
                                             <option value="NOTICE">공지사항</option>
                                               <option value="QNA">Q&A</option>
+                                              <option value="INSIGHT">INSIGHT</option>
+
                                              </optgroup>
                                           </select>
                                           <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후 변경이 불가능합니다.)</span>
@@ -121,7 +123,7 @@
     });
     $(document).on('change', '.board_file', function () {
       const file = $(this).val().toString();
-      console.log(file);
+
       if (file.includes("[") || file.includes("]")) {
         alert("파일명에 대괄호는 포함할 수 없습니다.")
         $(".board_file").val("");

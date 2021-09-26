@@ -15,7 +15,7 @@ import java.util.List;
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s" +
-      ".endAt, s.questionCount as questionCount, c.participateUrl as participateUrl";
+      ".endAt, s.thumbnail as thumbnail, s.questionCount as questionCount, c.participateUrl as participateUrl";
 
   Page<Survey> findAllByTitleLikeOrderById(Pageable pageable, String title);
 

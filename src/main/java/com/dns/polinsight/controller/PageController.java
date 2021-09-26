@@ -4,6 +4,7 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.exception.UnAuthorizedException;
+import com.dns.polinsight.service.PostService;
 import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +23,8 @@ import javax.annotation.security.PermitAll;
 @Controller
 @RequiredArgsConstructor
 public class PageController {
+
+  private final PostService postService;
 
   @PermitAll
   @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST, RequestMethod.GET})
@@ -55,7 +59,6 @@ public class PageController {
 
   }
 
-
   @PermitAll
   @GetMapping("/signup")
   public ModelAndView contract(@CurrentUser User user) {
@@ -86,6 +89,10 @@ public class PageController {
     return new ModelAndView("member/success_panel");
   }
 
+  //  @GetMapping("/events")
+  //  public ModelAndView events() {
+  //    return new ModelAndView("posts/events");
+  //  }
 
   @PermitAll
   @GetMapping("/find")
@@ -93,20 +100,15 @@ public class PageController {
     return new ModelAndView("member/find_info");
   }
 
-  //  @GetMapping("/events")
-  //  public ModelAndView events() {
-  //    return new ModelAndView("posts/events");
+  //  @GetMapping("/faq")
+  //  public ModelAndView faq() {
+  //    return new ModelAndView("posts/faq");
   //  }
 
   @GetMapping("/qna")
   public ModelAndView qna() {
     return new ModelAndView("posts/qna");
   }
-
-  //  @GetMapping("/faq")
-  //  public ModelAndView faq() {
-  //    return new ModelAndView("posts/faq");
-  //  }
 
   @PermitAll
   @GetMapping("/research/online")
@@ -174,6 +176,39 @@ public class PageController {
     }
 
     return new ModelAndView("member/change_to_panel");
+  }
+
+  /**
+   * pols -> insight페이지 (상세 보기)
+   */
+  @PermitAll
+  @GetMapping("/insight/{postId}")
+  public ModelAndView goInsightPage(@PathVariable("postId") String postId) {
+    ModelAndView mv = new ModelAndView("posts/insight");
+    log.warn("page controller postId ::: {}", postId);
+    mv.addObject("postId", postId);
+    //    Post post = postService.findOne(postId);
+    //    mv.addObject("insight", PostDTO.builder()
+    //                                   .id(post.getId())
+    //                                   .postType(post.getPostType())
+    //                                   .title(post.getTitle())
+    //                                   .thumbnail(post.getThumbnail())
+    //                                   .attaches(post.getAttaches())
+    //                                   .userName(post.getUser().getName())
+    //                                   .registeredAt(post.getRegisteredAt())
+    //                                   .comments(post.getComments())
+    //                                   .build());
+    //    mv.getModel().put("insight", PostDTO.builder()
+    //                                   .id(post.getId())
+    //                                   .postType(post.getPostType())
+    //                                   .title(post.getTitle())
+    //                                   .thumbnail(post.getThumbnail())
+    //                                   .attaches(post.getAttaches())
+    //                                   .userName(post.getUser().getName())
+    //                                   .registeredAt(post.getRegisteredAt())
+    //                                   .comments(post.getComments())
+    //                                   .build());
+    return mv;
   }
 
 }

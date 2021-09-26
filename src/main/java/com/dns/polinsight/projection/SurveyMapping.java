@@ -24,6 +24,8 @@ public interface SurveyMapping {
 
   LocalDate getCreatedAt();
 
+  String getThumbnail();
+
   default String getCreate() {
     if (getCreatedAt() != null) {
       return getCreatedAt().toString();

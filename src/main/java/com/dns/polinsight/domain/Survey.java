@@ -51,6 +51,7 @@ public class Survey implements Serializable {
   @Setter
   private Long questionCount;
 
+  @Setter
   private String thumbnail;
 
   @JsonManagedReference

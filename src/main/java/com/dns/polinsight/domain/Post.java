@@ -31,6 +31,7 @@ public class Post implements Serializable {
   @JsonIgnore
   private final List<Attach> attaches = new ArrayList<>();
 
+  @Setter
   private String thumbnail;
 
   @Id

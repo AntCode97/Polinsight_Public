@@ -30,4 +30,6 @@ public interface AttachService {
 
   void deleteThumbnail(String thumbnailPath) ;
 
+  String addAttach(MultipartFile file);
+
 }

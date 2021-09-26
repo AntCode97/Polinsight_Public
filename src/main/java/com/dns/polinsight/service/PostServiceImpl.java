@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -127,4 +128,13 @@ public class PostServiceImpl implements PostService {
     return repository.findAllByTypesAndRegex(type, regex, pageable);
   }
 
+  @Override
+  public List<Post> findPostsByPostType(PostType postType){
+    return repository.findAllByPostType(postType);
+  }
+
+  @Override
+  public Post updatePost(Post post){
+    return  repository.saveAndFlush(post);
+  }
 }

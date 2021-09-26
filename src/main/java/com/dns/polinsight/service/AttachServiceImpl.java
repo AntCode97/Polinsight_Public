@@ -1,7 +1,6 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
-import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.AttachNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
@@ -116,6 +115,26 @@ public class AttachServiceImpl implements AttachService {
 
   @Override
   public void addAttach(PostDTO postDTO) {
+
+  }
+
+  //  @Override
+  //  public void addAttach(PostDTO postDTO) {
+  //    }
+
+  @Override
+  public String addAttach(MultipartFile file) {
+    String fileName = null;
+    if (!file.isEmpty()) {
+      UUID uuid = UUID.randomUUID();
+      fileName = uuid + file.getOriginalFilename();
+      storageService.store(uuid.toString(), file);
+
+    } else {
+      log.info("File List is null");
     }
+
+    return fileName;
+  }
 
 }
