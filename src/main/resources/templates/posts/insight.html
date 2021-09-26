@@ -16,7 +16,7 @@
         </div>
         <div name="comment-input">
           <input name="input-comment-value" type="text">
-          <span><button name="add-comment-btn" onclick="addComment()" disabled>답글 달기</button></span>
+          <span><button name="add-comment-btn" disabled>답글 달기</button></span>
         </div>
         <div name="comment">
 
@@ -25,37 +25,8 @@
       <th:block th:include="layout/footer" />
     </div>
   </th:block>
+  <script th:src="@{/js/Validator.js}"></script>
   <script>
-
-    // async function uploadInsightThumbnail(thubmnail, postId) {
-    //   let frmData = new FormData()
-    //   frmData.append('thumbnail', thubmnail)
-    //   let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
-    //     headers: {'Content-Type': 'multipart/form-data'}
-    //   })
-    //
-    //   return response.data.success
-    // }
-
-    // const addComment = e => {
-    //   e.stopPropagation()
-    //   e.preventDefault()
-    //   let commentValue = $('input[name-input-comment-value]').val()
-    //
-    //   http.post('', {
-    //         comment: commentValue
-    //       })
-    //       .then(res => {
-    //
-    //       })
-    //       .catch(err => {
-    //         console.log(err)
-    //         alert('댓글 작성 도중 오류가 발생하였습니다.\n잠시후 다시 시도해주세요')
-    //       })
-    //       .finally(() => {
-    //         location.reload()
-    //       })
-    // }
 
     async function getOneInsightData(postId) {
       let response = await http.get(`/api/post/${postId}`)
@@ -66,7 +37,6 @@
     }
 
     const makeInsightTemplate = post => {
-      console.log(post)
       let postHead = $('div[name=post-header]')
       let headTemplate = $(`<div></div>`)
       headTemplate.append(`<span>${post.userName}</span>`)
@@ -79,8 +49,7 @@
       postBody.append(`<div>${post.viewcontent}</div>`)
       post.attaches.forEach(attach => {
         if (isImageFile(attach.fileName)) {
-          // 첨부파일이 이미지일 때
-          postBody.append(`<img src="http://localhost:8080/files/${attach.filePath}"/>`)
+          postBody.append(`<img src="${'http://localhost:8080/files/' + attach.fileName}"/>`)
         }
       })
       if (post.attaches.length > 0) {
@@ -91,20 +60,63 @@
       let commentBody = $('div[name=comment]')
       post.comments.forEach(comment => {
         let bodyTemplate = $('<div class="comment-row"></div>')
-        bodyTemplate.append(`<span name="author">${comment.author}</span>`)
+        bodyTemplate.append(`<span name="author">${comment.author.name} 님</span>`)
         bodyTemplate.append(`<span name="content" >${commenct.content}</span>`)
         bodyTemplate.append(`<span name="registryDate">${comment.registeredAt}</span>`)
-        bodyTemplate.append(`<span><button>답글</button><button>삭제</button></span>`)
+        let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
+        let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
+        bodyTemplate.append(`<span></span>`)
         commentBody.append(bodyTemplate)
       })
     }
 
+    const commentDeleteEvent = e => {
+      let commentId = e.param.id
+      http.delete(`/api/comment/${commentId}`)
+          .catch(err => {
+            console.error(err)
+            alert('댓글 삭제 실패\n관리자에게 문의해주세요')
+          })
+          .finally(() => location.reload())
+    }
+
+    const commentAddEvent = e => {
+      console.log('comment add event ')
+      let postId = insight.id
+      let comment = {
+        content: $('input[name=input-comment-value]').val()
+      };
+      console.log(comment)
+      alert('정말 추가하시겠습니까?')
+      http
+          .post(`/api/comment/${postId}`, comment)
+          .catch(err => {
+            console.error(err)
+            alert('댓글 생성 중 오류가 발생하였습니다.')
+          })
+          .finally(() => location.reload())
+    }
+
+    // const commentUpdateEvent = () => {
+    //   let postId = insight.id
+    //   let comment = {};
+    //
+    //   http
+    //       .patch(`/api/comment`, comment)
+    //       .catch(err => {
+    //         console.error(err)
+    //         alert('댓글 업데이트 중 오류가 발생하였습니다.')
+    //       })
+    //       .finally(() => location.reload())
+    // }
+
+    let insight = {}
     const init = e => {
       let postId = `[[${postId}]]`
-
       getOneInsightData(postId)
-          .then(insight => {
-            makeInsightTemplate(insight);
+          .then(ins => {
+            insight = {...ins}
+            makeInsightTemplate(ins);
           })
     }
 
@@ -122,5 +134,6 @@
             $("button[name=add-comment-btn]").prop('disabled', false);
           }
         })
+        .on('click', 'button[name=add-comment-btn]', commentAddEvent)
   </script>
 </th:block>

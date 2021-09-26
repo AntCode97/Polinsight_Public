@@ -144,6 +144,7 @@ public class AttachServiceImpl implements AttachService {
 
           storageService.store(uuid.toString(), thumbnailImg);
         } else {
+          // TODO: 2021/09/26  
           log.error("Thumbnail 이미지 파일이 없습니다.");
         }
 

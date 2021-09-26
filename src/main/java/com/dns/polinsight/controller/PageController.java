@@ -185,29 +185,7 @@ public class PageController {
   @GetMapping("/insight/{postId}")
   public ModelAndView goInsightPage(@PathVariable("postId") String postId) {
     ModelAndView mv = new ModelAndView("posts/insight");
-    log.warn("page controller postId ::: {}", postId);
     mv.addObject("postId", postId);
-    //    Post post = postService.findOne(postId);
-    //    mv.addObject("insight", PostDTO.builder()
-    //                                   .id(post.getId())
-    //                                   .postType(post.getPostType())
-    //                                   .title(post.getTitle())
-    //                                   .thumbnail(post.getThumbnail())
-    //                                   .attaches(post.getAttaches())
-    //                                   .userName(post.getUser().getName())
-    //                                   .registeredAt(post.getRegisteredAt())
-    //                                   .comments(post.getComments())
-    //                                   .build());
-    //    mv.getModel().put("insight", PostDTO.builder()
-    //                                   .id(post.getId())
-    //                                   .postType(post.getPostType())
-    //                                   .title(post.getTitle())
-    //                                   .thumbnail(post.getThumbnail())
-    //                                   .attaches(post.getAttaches())
-    //                                   .userName(post.getUser().getName())
-    //                                   .registeredAt(post.getRegisteredAt())
-    //                                   .comments(post.getComments())
-    //                                   .build());
     return mv;
   }
 

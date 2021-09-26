@@ -3,6 +3,7 @@ package com.dns.polinsight.domain;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.types.PostType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Post implements Serializable {
   @OneToMany(mappedBy = "post")
 
   @Builder.Default
-  @JsonIgnore
+  @JsonManagedReference
   private final List<Attach> attaches = new ArrayList<>();
 
   @Setter
@@ -67,6 +68,7 @@ public class Post implements Serializable {
   private Long viewcnt;
 
 
+  @JsonManagedReference
   @OneToMany(mappedBy = "post", targetEntity = Comment.class, cascade = CascadeType.ALL)
   private List<Comment> comments;
 

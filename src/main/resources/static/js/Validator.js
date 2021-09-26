@@ -132,5 +132,5 @@ const isValidSurveyUpdateInfo = survey_info => {
 }
 
 const isImageFile = imageFileName => {
-  return !(/\.(gif|jpe?g|tiff|png|webp|bmp)$/).test(imageFileName);
+  return (/\.(gif|jpe?g|tiff|png|webp|bmp)$/).test(imageFileName);
 }

@@ -126,7 +126,6 @@
   </div>
   <script>
     const makeSurveyCard = survey => {
-      console.log(survey)
       let template = $(`<div></div>`).addClass('main_survey_item');
       if (!!survey.thumbnail)
         template.append(`<img width="300px" height="191px" src="http://localhost:8080/files/${survey.thumbnail}" />`)
@@ -195,7 +194,6 @@
                   location.replace(res.data.response);
                 } else {
                   alert(res.data.error.message);
-                  console.log(res);
                   location.replace("/")
                 }
               }).catch(console.log);
