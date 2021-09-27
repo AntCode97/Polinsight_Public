@@ -30,13 +30,6 @@ public class CommentController {
 
   private final PostService postService;
 
-  //  @GetMapping("/comment/{commentId}")
-  //  public ApiUtils.ApiResult<CommentDto> findOneCommentByCommentId(@PathVariable("commentId") Long commentId) {
-  //    var aa = commentService.findOneCommentBySeq(commentId).map(CommentDto::new).get();
-  //    log.warn(aa.toString());
-  //    return success(null);
-  //  }
-
   @GetMapping("/comment/{postId}")
   public ApiUtils.ApiResult<List<CommentDto>> findOneCommentByPostId(@PathVariable("postId") Long postId) {
     List<Comment> temp = commentService.findAllCommentByPostId(Post.builder().id(postId).build());
@@ -63,7 +56,7 @@ public class CommentController {
       Post post = postService.findOne(postId);
       dto.setPost(post);
       Comment comment = commentService.saveAndUpdate(Comment.of(dto));
-      comment.setWriter(user);
+      comment.setWriter(user.getName());
       post.getComments().add(comment);
       postService.updatePost(post);
       return success(Boolean.TRUE);

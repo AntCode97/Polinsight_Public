@@ -2,7 +2,6 @@ package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,9 +19,7 @@ public class Comment {
   private Long seq;
 
   @Setter
-  @JsonIgnore
-  @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-  private User writer;
+  private String writer;
 
   @Column(nullable = false)
   private String content;
@@ -35,13 +32,6 @@ public class Comment {
   private LocalDateTime registeredAt;
 
   private LocalDateTime lastModifiedAt;
-
-  /**
-   * 부모 댓글의 번호
-   */
-  private Long parent;
-
-  private Long depth;
 
   /*
    * 수정, 삭제 여부등을 저장할 필드

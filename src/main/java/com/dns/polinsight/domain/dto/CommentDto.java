@@ -28,13 +28,11 @@ public class CommentDto {
 
   private Boolean isDeleted;
 
-  private Long parentSeq;
-
   public CommentDto(Comment comment) {
     this.seq = comment.getSeq();
     this.content = comment.getContent();
     this.post = comment.getPost();
-    this.writer = comment.getWriter().getName();
+    this.writer = comment.getWriter();
     this.lastModifiedAt = comment.getLastModifiedAt();
   }
 
