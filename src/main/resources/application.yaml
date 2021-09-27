@@ -244,7 +244,7 @@ custom :
     base : "http://localhost:8080"
 file :
   upload :
-    baseLocation : "/Users/alban/polinsight_directory/"
+    baseLocation : "C:\\Users\\aa\\Documents\\upload_test"
 ---
 spring :
   datasource :

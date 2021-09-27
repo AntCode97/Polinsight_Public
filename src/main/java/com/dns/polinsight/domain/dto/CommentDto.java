@@ -1,8 +1,7 @@
 package com.dns.polinsight.domain.dto;
 
+import com.dns.polinsight.domain.Comment;
 import com.dns.polinsight.domain.Post;
-import com.dns.polinsight.domain.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,22 +16,27 @@ public class CommentDto {
 
   private Long seq;
 
-  @Setter
-  private Integer number;
-
   private String content;
 
-  @JsonBackReference
   @Setter
   private Post post;
 
   private LocalDateTime lastModifiedAt;
 
-  @JsonBackReference
   @Setter
-  private User author;
+  private String writer;
 
   private Boolean isDeleted;
+
+  private Long parentSeq;
+
+  public CommentDto(Comment comment) {
+    this.seq = comment.getSeq();
+    this.content = comment.getContent();
+    this.post = comment.getPost();
+    this.writer = comment.getWriter().getName();
+    this.lastModifiedAt = comment.getLastModifiedAt();
+  }
 
   @Override
   public String toString() {

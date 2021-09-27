@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Post addPost(PostDTO postDTO) {
-    return repository.save(Post.builder(postDTO).build());
+    return repository.save(Post.of(postDTO));
   }
 
   @Override

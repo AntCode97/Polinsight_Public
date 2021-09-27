@@ -4,6 +4,23 @@
     .header_wrap {
       background-color : rgb(24, 40, 56) !important;
     }
+
+    .comment-row {
+      border : 1px black solid;
+    }
+
+    .comment-row > span:not(:first-child) {
+      margin-left : 8px;
+    }
+
+    .comment-row > a {
+      margin-left : 8px;
+    }
+
+    .comment_btn {
+      color           : #2B90D9;
+      text-decoration : underline;
+    }
   </style>
   <th:block>
     <div class="flex-wrapper">
@@ -26,7 +43,20 @@
     </div>
   </th:block>
   <script th:src="@{/js/Validator.js}"></script>
+  <script th:src="@{/js/CommonUtils.js}"></script>
   <script>
+    async function getCommentByPostId(postId) {
+      let res = await http.get(`/api/comment/${postId}`)
+      let data = res.data.response
+      return {total: data.length, data: data}
+    }
+
+    const makeCommentTemplate = comment => {
+      let template = $('div')
+      template.append(`<div><span>${comment.wirter}</span><span>${dayAndTime(comment.lastModifiedAt)}</span></div>`)
+      template.append(`<div>${comment.content}</div>`)
+      return template
+    }
 
     async function getOneInsightData(postId) {
       let response = await http.get(`/api/post/${postId}`)
@@ -37,6 +67,7 @@
     }
 
     const makeInsightTemplate = post => {
+      console.log(post)
       let postHead = $('div[name=post-header]')
       let headTemplate = $(`<div></div>`)
       headTemplate.append(`<span>${post.userName}</span>`)
@@ -52,20 +83,23 @@
           postBody.append(`<img src="${'http://localhost:8080/files/' + attach.fileName}"/>`)
         }
       })
-      if (post.attaches.length > 0) {
-        postBody.append(`<img src="${post.thumbnail}" >`)
-      }
+      // if (post.attaches.length > 0) {
+      //   postBody.append(`<img src="${post.thumbnail}" >`)
+      // }
 
 
       let commentBody = $('div[name=comment]')
       post.comments.forEach(comment => {
         let bodyTemplate = $('<div class="comment-row"></div>')
-        bodyTemplate.append(`<span name="author">${comment.author.name} 님</span>`)
-        bodyTemplate.append(`<span name="content" >${commenct.content}</span>`)
-        bodyTemplate.append(`<span name="registryDate">${comment.registeredAt}</span>`)
-        let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
-        let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
-        bodyTemplate.append(`<span></span>`)
+        bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
+        bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
+        // let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
+        // let updateBtn = $(`<button>수정</button>`).on('click', {}, commentAddEvent)
+        // let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
+        bodyTemplate.append(`<span>  <a class="comment_btn" href="">수정</a>  <a class="comment_btn" href="">답글</a></span>`)
+        bodyTemplate.append($(`<span><button type="" name="content" >수정</button></span>`).on('click', {before: before}, commentDeleteEvent))
+        bodyTemplate.append($(`<span><button type="" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
+        bodyTemplate.append(`<div><span name="content" >${comment.content}</span></div>`)
         commentBody.append(bodyTemplate)
       })
     }
@@ -81,13 +115,10 @@
     }
 
     const commentAddEvent = e => {
-      console.log('comment add event ')
       let postId = insight.id
       let comment = {
         content: $('input[name=input-comment-value]').val()
       };
-      console.log(comment)
-      alert('정말 추가하시겠습니까?')
       http
           .post(`/api/comment/${postId}`, comment)
           .catch(err => {
@@ -97,7 +128,10 @@
           .finally(() => location.reload())
     }
 
-    // const commentUpdateEvent = () => {
+    /** TODO : 버튼 위치에서부터 찾아가서 바꿔야할듯
+     * 돔을 변경 : 원래 div에서 textarea로 변경하고 데이터 변경해서 업데이트 하도록
+     * /
+     // const commentUpdateEvent = () => {
     //   let postId = insight.id
     //   let comment = {};
     //
@@ -110,8 +144,8 @@
     //       .finally(() => location.reload())
     // }
 
-    let insight = {}
-    const init = e => {
+     let insight = {}
+     const init = e => {
       let postId = `[[${postId}]]`
       getOneInsightData(postId)
           .then(ins => {
@@ -120,12 +154,12 @@
           })
     }
 
-    $(function () {
+     $(function () {
       init();
     })
 
-    $(document)
-        .on('change keyup', 'input[name=input-comment-value]', function () {
+     $(document)
+     .on('change keyup', 'input[name=input-comment-value]', function () {
           let inp = $(this)
           let inputValue = inp.val()
           if (!inputValue) {
@@ -134,6 +168,6 @@
             $("button[name=add-comment-btn]").prop('disabled', false);
           }
         })
-        .on('click', 'button[name=add-comment-btn]', commentAddEvent)
+     .on('click', 'button[name=add-comment-btn]', commentAddEvent)
   </script>
 </th:block>

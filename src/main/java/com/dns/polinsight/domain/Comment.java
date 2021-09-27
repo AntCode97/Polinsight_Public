@@ -2,11 +2,8 @@ package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,18 +13,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment implements Comparable<Comment> {
+public class Comment {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long seq;
 
-  private Integer number;
+  @Setter
+  @JsonIgnore
+  @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+  private User writer;
 
-  @JsonBackReference
-  @OneToOne(targetEntity = User.class)
-  private User author;
-
+  @Column(nullable = false)
   private String content;
 
   @JsonBackReference
@@ -39,6 +36,13 @@ public class Comment implements Comparable<Comment> {
 
   private LocalDateTime lastModifiedAt;
 
+  /**
+   * 부모 댓글의 번호
+   */
+  private Long parent;
+
+  private Long depth;
+
   /*
    * 수정, 삭제 여부등을 저장할 필드
    * */
@@ -47,12 +51,10 @@ public class Comment implements Comparable<Comment> {
   public static Comment of(CommentDto dto) {
     return Comment.builder()
                   .seq(dto.getSeq())
-                  .author(dto.getAuthor())
                   .content(dto.getContent())
                   .post(dto.getPost())
                   .isDeleted(dto.getIsDeleted())
                   .lastModifiedAt(dto.getLastModifiedAt())
-                  .number(dto.getNumber())
                   .build();
   }
 
@@ -64,11 +66,7 @@ public class Comment implements Comparable<Comment> {
   @PrePersist
   public void registryTime() {
     this.registeredAt = LocalDateTime.now();
-  }
-
-  @Override
-  public int compareTo(@NotNull Comment o) {
-    return Long.compare(this.number, o.number);
+    this.lastModifiedAt = this.registeredAt;
   }
 
 }

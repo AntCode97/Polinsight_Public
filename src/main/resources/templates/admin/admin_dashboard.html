@@ -5,6 +5,7 @@
     <div>
       <button class="btn_udel btn-primary" id="syncSurveyList">서베이몽키와 동기화</button>
       <button class="btn_udel btn-primary" id="getExcelBtn">목록 엑셀로 다운받기</button>
+      <button class="btn_udel btn-primary" id="create_board_btn">게시글 작성</button>
     </div>
   </div>
   <script th:src="@{/js/PostUtils.js}"></script>
@@ -19,6 +20,9 @@
     $(function () {
       $("#getExcelBtn").on('click', {url: '/api/pointhistory/excel'}, saveByExcel)
       $("#syncSurveyList").on('click', syncSurveyList)
+      $('#create_board_btn').on('click', () => {
+        location.replace('/admin/posts/new')
+      })
     })
   </script>
 </th:block>

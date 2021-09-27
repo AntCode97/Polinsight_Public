@@ -398,17 +398,7 @@ public class ApiController {
   @GetMapping("/post/{postId}")
   public ApiUtils.ApiResult<PostDTO> getPostByPostId(@PathVariable("postId") Long postId) {
     Post post = postService.findOne(postId);
-    return success(PostDTO.builder()
-                          .id(post.getId())
-                          .postType(post.getPostType())
-                          .title(post.getTitle())
-                          .thumbnail(post.getThumbnail())
-                          .attaches(post.getAttaches())
-                          .userName(post.getUser().getName())
-                          .registeredAt(post.getRegisteredAt())
-                          .viewcontent(post.getViewcontent())
-                          .comments(post.getComments())
-                          .build());
+    return success(PostDTO.of(post));
   }
 
 }

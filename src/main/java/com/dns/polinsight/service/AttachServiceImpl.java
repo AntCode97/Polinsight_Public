@@ -128,7 +128,7 @@ public class AttachServiceImpl implements AttachService {
                                   .fileSize(file.getSize())
                                   .originalName(file.getOriginalFilename())
                                   .filePath(baseLocation + uuid + file.getOriginalFilename())
-                                  .post(Post.builder(postDTO).build())
+                                  .post(Post.of(postDTO))
                                   .build();
             attaches.add(attach);
             storageService.store(uuid.toString(), file);

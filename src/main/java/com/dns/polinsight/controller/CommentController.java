@@ -10,13 +10,13 @@ import com.dns.polinsight.service.PostService;
 import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
 
@@ -30,14 +30,26 @@ public class CommentController {
 
   private final PostService postService;
 
-  @GetMapping("/comment/{commentId}")
-  public ApiUtils.ApiResult<Optional<Comment>> findOneCommentByCommentId(@PathVariable("commentId") Long commentId) {
-    return success(commentService.findOneCommentBySeq(commentId));
+  //  @GetMapping("/comment/{commentId}")
+  //  public ApiUtils.ApiResult<CommentDto> findOneCommentByCommentId(@PathVariable("commentId") Long commentId) {
+  //    var aa = commentService.findOneCommentBySeq(commentId).map(CommentDto::new).get();
+  //    log.warn(aa.toString());
+  //    return success(null);
+  //  }
+
+  @GetMapping("/comment/{postId}")
+  public ApiUtils.ApiResult<List<CommentDto>> findOneCommentByPostId(@PathVariable("postId") Long postId) {
+    List<Comment> temp = commentService.findAllCommentByPostId(Post.builder().id(postId).build());
+    log.warn(temp.toString());
+    //    temp.sort(Comparator.comparing(Comment::getDepth));
+    //    List<Comment> list = temp.stream().filter(comment -> comment.getDepth() == 0).collect(Collectors.toList());
+
+    return success(temp.stream().map(CommentDto::new).collect(Collectors.toList()));
   }
 
   @GetMapping("/comments")
-  public ApiUtils.ApiResult<Page<Comment>> findAll(@PageableDefault Pageable pageable) {
-    return success(commentService.findAllComment(pageable));
+  public ApiUtils.ApiResult<List<CommentDto>> findAll(@PageableDefault Pageable pageable) {
+    return success(commentService.findAllComment().stream().map(CommentDto::new).collect(Collectors.toList()));
   }
 
   @Transactional
@@ -49,10 +61,9 @@ public class CommentController {
     log.warn(dto.toString());
     try {
       Post post = postService.findOne(postId);
-      dto.setAuthor(user);
       dto.setPost(post);
-      dto.setNumber(post.getComments().size() + 1);
       Comment comment = commentService.saveAndUpdate(Comment.of(dto));
+      comment.setWriter(user);
       post.getComments().add(comment);
       postService.updatePost(post);
       return success(Boolean.TRUE);
@@ -63,7 +74,7 @@ public class CommentController {
 
   @Transactional
   @PatchMapping("/comment")
-  public ApiUtils.ApiResult<Boolean> udateComment(@RequestBody CommentDto dto) throws Exception {
+  public ApiUtils.ApiResult<Boolean> updateComment(@RequestBody CommentDto dto) throws Exception {
     try {
       Comment savedComment = commentService.findOneCommentBySeq(dto.getSeq()).orElseThrow();
       savedComment.update(dto);

@@ -1,7 +1,6 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Attach;
-import com.dns.polinsight.domain.Comment;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.PostType;
@@ -15,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -50,7 +50,7 @@ public class PostDTO {
 
   private MultipartFile thumbnailImg;
 
-  private List<Comment> comments;
+  private List<CommentDto> comments;
 
   private String thumbnail;
 
@@ -66,8 +66,22 @@ public class PostDTO {
     this.registeredAt = post.getRegisteredAt();
     this.attaches = post.getAttaches();
     this.viewcnt = post.getViewcnt();
-
+    this.comments = post.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
     this.thumbnail = post.getThumbnail();
+  }
+
+  public static PostDTO of(Post post) {
+    return PostDTO.builder()
+                  .id(post.getId())
+                  .postType(post.getPostType())
+                  .title(post.getTitle())
+                  .thumbnail(post.getThumbnail())
+                  .attaches(post.getAttaches())
+                  .userName(post.getUser().getName())
+                  .registeredAt(post.getRegisteredAt())
+                  .viewcontent(post.getViewcontent())
+                  .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .build();
   }
 
   public void transViewcontent() {
