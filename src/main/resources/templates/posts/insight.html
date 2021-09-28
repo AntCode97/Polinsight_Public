@@ -31,13 +31,12 @@
         <div name="post-body">
 
         </div>
-        <div name="comment-input">
-          <input name="input-comment-value" type="text">
-          <span><button name="add-comment-btn" disabled>답글 달기</button></span>
-        </div>
-        <div name="comment">
+        <!--        <div name="comment-input">-->
+        <!--          <input name="input-comment-value" type="text">-->
+        <!--          <span><button name="add-comment-btn" disabled>답글 달기</button></span>-->
+        <!--        </div>-->
 
-        </div>
+        <th:block th:include="fragments/comment"></th:block>
       </div>
       <th:block th:include="layout/footer" />
     </div>
@@ -45,18 +44,6 @@
   <script th:src="@{/js/Validator.js}"></script>
   <script th:src="@{/js/CommonUtils.js}"></script>
   <script>
-    async function getCommentByPostId(postId) {
-      let res = await http.get(`/api/comment/${postId}`)
-      let data = res.data.response
-      return {total: data.length, data: data}
-    }
-
-    const makeCommentTemplate = comment => {
-      let template = $('div')
-      template.append(`<div><span>${comment.wirter}</span><span>${dayAndTime(comment.lastModifiedAt)}</span></div>`)
-      template.append(`<div>${comment.content}</div>`)
-      return template
-    }
 
     async function getOneInsightData(postId) {
       let response = await http.get(`/api/post/${postId}`)
@@ -67,7 +54,6 @@
     }
 
     const makeInsightTemplate = post => {
-      console.log(post)
       let postHead = $('div[name=post-header]')
       let headTemplate = $(`<div></div>`)
       headTemplate.append(`<span>${post.userName}</span>`)
@@ -88,64 +74,24 @@
       // }
 
 
-      let commentBody = $('div[name=comment]')
-      post.comments.forEach(comment => {
-        let bodyTemplate = $('<div class="comment-row"></div>')
-        bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
-        bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
-        // let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
-        // let updateBtn = $(`<button>수정</button>`).on('click', {}, commentAddEvent)
-        // let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
-        bodyTemplate.append(`<span>  <a class="comment_btn" href="">수정</a>  <a class="comment_btn" href="">답글</a></span>`)
-        bodyTemplate.append($(`<span><button type="" name="content" >수정</button></span>`).on('click', {before: before}, commentDeleteEvent))
-        bodyTemplate.append($(`<span><button type="" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
-        bodyTemplate.append(`<div><span name="content" >${comment.content}</span></div>`)
-        commentBody.append(bodyTemplate)
-      })
+      // let commentBody = $('div[name=comment]')
+      // post.comments.forEach(comment => {
+      //   let bodyTemplate = $('<div class="comment-row"></div>')
+      //   bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
+      //   bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
+      //   // let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
+      //   // let updateBtn = $(`<button>수정</button>`).on('click', {}, commentAddEvent)
+      //   // let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
+      //   bodyTemplate.append(`<span>  <a class="comment_btn" href="">수정</a>  <a class="comment_btn" href="">답글</a></span>`)
+      //   bodyTemplate.append($(`<span><button type="" name="content" >수정</button></span>`).on('click', {before: before}, commentDeleteEvent))
+      //   bodyTemplate.append($(`<span><button type="" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
+      //   bodyTemplate.append(`<div><span name="content" >${comment.content}</span></div>`)
+      //   commentBody.append(bodyTemplate)
+      // })
     }
 
-    const commentDeleteEvent = e => {
-      let commentId = e.param.id
-      http.delete(`/api/comment/${commentId}`)
-          .catch(err => {
-            console.error(err)
-            alert('댓글 삭제 실패\n관리자에게 문의해주세요')
-          })
-          .finally(() => location.reload())
-    }
-
-    const commentAddEvent = e => {
-      let postId = insight.id
-      let comment = {
-        content: $('input[name=input-comment-value]').val()
-      };
-      http
-          .post(`/api/comment/${postId}`, comment)
-          .catch(err => {
-            console.error(err)
-            alert('댓글 생성 중 오류가 발생하였습니다.')
-          })
-          .finally(() => location.reload())
-    }
-
-    /** TODO : 버튼 위치에서부터 찾아가서 바꿔야할듯
-     * 돔을 변경 : 원래 div에서 textarea로 변경하고 데이터 변경해서 업데이트 하도록
-     * /
-     // const commentUpdateEvent = () => {
-    //   let postId = insight.id
-    //   let comment = {};
-    //
-    //   http
-    //       .patch(`/api/comment`, comment)
-    //       .catch(err => {
-    //         console.error(err)
-    //         alert('댓글 업데이트 중 오류가 발생하였습니다.')
-    //       })
-    //       .finally(() => location.reload())
-    // }
-
-     let insight = {}
-     const init = e => {
+    let insight = {}
+    const initInsight = e => {
       let postId = `[[${postId}]]`
       getOneInsightData(postId)
           .then(ins => {
@@ -154,20 +100,9 @@
           })
     }
 
-     $(function () {
-      init();
+    $(function () {
+      initInsight();
     })
 
-     $(document)
-     .on('change keyup', 'input[name=input-comment-value]', function () {
-          let inp = $(this)
-          let inputValue = inp.val()
-          if (!inputValue) {
-            $("button[name=add-comment-btn]").prop('disabled', true);
-          } else {
-            $("button[name=add-comment-btn]").prop('disabled', false);
-          }
-        })
-     .on('click', 'button[name=add-comment-btn]', commentAddEvent)
   </script>
 </th:block>

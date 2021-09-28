@@ -31,7 +31,7 @@ public class CommentDto {
   public CommentDto(Comment comment) {
     this.seq = comment.getSeq();
     this.content = comment.getContent();
-    this.post = comment.getPost();
+//    this.post = comment.getPost();
     this.writer = comment.getWriter();
     this.lastModifiedAt = comment.getLastModifiedAt();
   }

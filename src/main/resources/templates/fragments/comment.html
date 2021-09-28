@@ -1,49 +1,13 @@
-<th:block th:include="layout/header" />
 <th:block>
-  <style>
-    .header_wrap {
-      background-color : rgb(24, 40, 56) !important;
-    }
-
-    .comment-row {
-      border : 1px black solid;
-    }
-
-    .comment-row > span:not(:first-child) {
-      margin-left : 8px;
-    }
-
-    .comment-row > a {
-      margin-left : 8px;
-    }
-
-    .comment_btn {
-      color           : #2B90D9;
-      text-decoration : underline;
-    }
-  </style>
   <th:block>
-    <div class="flex-wrapper">
-      <div class="flex-content">
-        <div name="post-header">
+    <div name="comment">
 
-        </div>
-        <div name="post-body">
-
-        </div>
-        <div name="comment">
-
-        </div>
-        <div name="comment-input">
-          <input name="input-comment-value" type="text">
-          <span><button name="add-comment-btn" disabled>답글 달기</button></span>
-        </div>
-      </div>
-      <th:block th:include="layout/footer" />
+    </div>
+    <div name="comment-input">
+      <input name="input-comment-value" type="text">
+      <span><button name="add-comment-btn" disabled>답글 달기</button></span>
     </div>
   </th:block>
-  <script th:src="@{/js/Validator.js}"></script>
-  <script th:src="@{/js/CommonUtils.js}"></script>
   <script>
     async function getCommentByPostId(postId) {
       let res = await http.get(`/api/comment/${postId}`)
@@ -51,52 +15,15 @@
       return {total: data.length, data: data}
     }
 
-    const makeCommentTemplate = comment => {
-      let template = $('div')
-      template.append(`<div><span>${comment.wirter}</span><span>${dayAndTime(comment.lastModifiedAt)}</span></div>`)
-      template.append(`<div>${comment.content}</div>`)
-      return template
-    }
-
-    async function getOneInsightData(postId) {
-      let response = await http.get(`/api/post/${postId}`)
-      if (response.data.success) {
-        return response.data.response
-      } else
-        alert('데이터를 가져오는 중 오류가 발생하였습니다.')
-    }
-
-    const makeInsightTemplate = post => {
-      let postHead = $('div[name=post-header]')
-      let headTemplate = $(`<div></div>`)
-      headTemplate.append(`<span>${post.userName}</span>`)
-      headTemplate.append(`<span>${post.title}</span>`)
-      headTemplate.append(`<span>${post.registeredAt}</span>`)
-      postHead.append(headTemplate)
-
-
-      let postBody = $('div[name=post-body]')
-      postBody.append(`<div>${post.viewcontent}</div>`)
-      post.attaches.forEach(attach => {
-        if (isImageFile(attach.fileName)) {
-          postBody.append(`<img src="${'http://localhost:8080/files/' + attach.fileName}"/>`)
-        }
-      })
-      // if (post.attaches.length > 0) {
-      //   postBody.append(`<img src="${post.thumbnail}" >`)
-      // }
-
+    const makeCommentTemplate = (comments, postId) => {
 
       let commentBody = $('div[name=comment]')
-      post.comments.forEach(comment => {
+      comments.forEach(comment => {
+        console.log(comment)
         let bodyTemplate = $('<div class="comment-row"></div>')
         bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
         bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
-        // let replyBtn = $(`<button>답글</button>`).on('click', {}, commentAddEvent)
-        // let updateBtn = $(`<button>수정</button>`).on('click', {}, commentAddEvent)
-        // let delBtn = $('<button>삭제</button>').on('click', {id: comment.seq}, commentDeleteEvent)
-        // bodyTemplate.append(`<span>  <a class="comment_btn" href="">수정</a>  <a class="comment_btn" href="">답글</a></span>`)
-        bodyTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment}, commentUpdateHandler))
+        bodyTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
         bodyTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
         bodyTemplate.append(`<div class="comment-content"><span  >${comment.content}</span></div>`)
         commentBody.append(bodyTemplate)
@@ -104,7 +31,7 @@
     }
 
     const commentDeleteEvent = e => {
-      let commentId = e.param.id
+      let commentId = e.data.id
       http.delete(`/api/comment/${commentId}`)
           .catch(err => {
             console.error(err)
@@ -128,16 +55,18 @@
     }
 
     const commentUpdateHandler = e => {
-      let postId = insight.id
-      let before = e.params.before;
-      let content_div = $(e.target).closest('.post-row').find('div.comment-content')
-      content_div.remove('span')
+      let postId = e.data.id
+      let before = e.data.before;
+      // $(e.target).closest('.comment-row').css('background-color', 'red')
+      // alert('red')
+      let content_div = $(e.target).closest('.comment-row').find('div.comment-content')
+      content_div.empty()
       content_div.append($(`<input />`).val(before.content))
       content_div.append($(`<button>변경</button>`).on('click', {comment: before}, commentUpdate))
     }
 
     const commentUpdate = e => {
-      let comment = e.params.comment
+      let comment = e.data.comment
       comment.content = $(e.target).prev('input').val()
       http
           .patch(`/api/comment`, comment)
@@ -148,18 +77,16 @@
           .finally(() => location.reload())
     }
 
-    let insight = {}
-    const init = e => {
+    const initComment = e => {
       let postId = `[[${postId}]]`
-      getOneInsightData(postId)
-          .then(ins => {
-            insight = {...ins}
-            makeInsightTemplate(ins);
+      getCommentByPostId(postId)
+          .then(obj => {
+            makeCommentTemplate(obj.data, postId);
           })
     }
 
     $(function () {
-      init();
+      initComment();
     })
 
     $(document)

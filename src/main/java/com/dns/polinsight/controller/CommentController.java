@@ -33,7 +33,6 @@ public class CommentController {
   @GetMapping("/comment/{postId}")
   public ApiUtils.ApiResult<List<CommentDto>> findOneCommentByPostId(@PathVariable("postId") Long postId) {
     List<Comment> temp = commentService.findAllCommentByPostId(Post.builder().id(postId).build());
-    log.warn(temp.toString());
     //    temp.sort(Comparator.comparing(Comment::getDepth));
     //    List<Comment> list = temp.stream().filter(comment -> comment.getDepth() == 0).collect(Collectors.toList());
 
@@ -50,8 +49,6 @@ public class CommentController {
   public ApiUtils.ApiResult<Boolean> addComment(@RequestBody CommentDto dto,
                                                 @PathVariable("postId") Long postId,
                                                 @CurrentUser User user) throws Exception {
-    log.warn("댓글 추가 ---- {}", postId);
-    log.warn(dto.toString());
     try {
       Post post = postService.findOne(postId);
       dto.setPost(post);
