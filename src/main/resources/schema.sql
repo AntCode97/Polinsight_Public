@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS attach
 (
-  id            BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id           BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
   file_path     VARCHAR(255) NULL,
   file_size     BIGINT       NULL,
   file_name     VARCHAR(255) NULL,
@@ -104,6 +104,19 @@ CREATE TABLE IF NOT EXISTS attach
   pno           BIGINT       NULL,
   FOREIGN KEY (pno) REFERENCES post (pno)
 );
+
+CREATE TABLE IF NOT EXISTS comment
+(
+   seq              BIGINT       NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   writer           VARCHAR(255) NULL,
+   content          VARCHAR(3000) Not NULL,
+   is_deleted       BIT          NULL DEFAULT FALSE,
+   pno              BIGINT       NULL,
+   registered_at    DATETIME(6)   NULL     DEFAULT NOW(),
+   last_modified_at  DATETIME(6)   NULL     DEFAULT NOW(),
+   FOREIGN KEY (pno) REFERENCES post (pno)
+   );
+
 
 CREATE TABLE IF NOT EXISTS survey
 (

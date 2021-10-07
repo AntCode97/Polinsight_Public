@@ -306,6 +306,19 @@
   </div>
   <script type="text/javascript">
     $(function () {
+      makeDeleteBtn();
+      document.querySelector(".popup_delete_btn").addEventListener('click', deletePost);
+      $("#popup_close_btn>i").on('click', (e) => {
+        $('.popup_overlay').fadeOut(100)
+      })
+      $(".popup_btn").on('click', (e) => {
+        $(".popup_overlay").fadeOut(100)
+      })
+      $('.popup_overlay').on('click', function () {
+        $(this).css('display', 'none')
+      })
+
+
       let file_item2 = document.getElementsByClassName('file_item2');
       let fileCount = file_item2.length;
       for (let i = 1; i <= fileCount; i++) {
@@ -328,6 +341,23 @@
       } else{
         location.href = "/admin/posts"
       }
+    }
+    function deletePost ()  {
+      let postId2 = postId;
+
+      $.ajax({
+        url: '/admin/posts/' + postId2 + '/delete',
+        type: 'GET'
+      }).done(
+              // setTimeout("location.reload()", 1000)
+              function () {
+                location.replace('/admin/posts')
+                // parentDiv.innerHTML =    '<span class="delete_post">삭제된 게시글</span>'
+                // console.log(parentDiv)
+                //  $('#boardTable').replaceWith(fragment);
+              }
+      )
+      $(".popup_overlay").fadeOut(100)
     }
   </script>
 </th:block>
