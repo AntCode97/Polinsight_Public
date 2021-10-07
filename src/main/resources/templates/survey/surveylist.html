@@ -76,12 +76,12 @@
     }
 
     #more_survey_btn {
-      cursor      : pointer;
-      font-size   : 14px;
-      font-weight : bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      cursor          : pointer;
+      font-size       : 14px;
+      font-weight     : bold;
+      display         : flex;
+      justify-content : center;
+      align-items     : center;
     }
 
     #more_survey_btn:hover {
@@ -127,13 +127,19 @@
   <script>
     const makeSurveyCard = survey => {
       let template = $(`<div></div>`).addClass('main_survey_item');
+      if (!!survey.thumbnail)
+        template.append(`<img width="300px" height="191px" src="http://localhost:8080/files/${survey.thumbnail}" />`)
       if (survey.progress === 'ONGOING') {
         template.addClass('bg_color_item_white');
         template.append(`<p class="survey_run">진행중</p>`);
         template.on('mouseover', function () {
-          $(this).css('cursor', 'pointer').css('box-shadow', '5px 5px 10px rgba(0,0,0, .3)').css('transition', 'box-shadow 0.5s ease-in-out');
+          $(this).css({
+            'cursor': 'pointer',
+            'box-shadow': '5px 5px 10px rgba(0,0,0, .3)',
+            'transition': 'box-shadow 0.5s ease-in-out'
+          })
         }).on('mouseleave', function () {
-          $(this).css('cursor', 'default').css('box-shadow', 'none');
+          $(this).css({'cursor': 'default', 'box-shadow': 'none'});
         }).on('click', {survey: survey}, surveyCardClickEventHandler);
       } else {
         template.addClass('bg_color_item_gray');
@@ -163,6 +169,12 @@
       return true;
     };
 
+    async function checkAlreadyParticipate(surveyId) {
+      let response = await http.get(`/api/participates/${surveyId}`)
+      // T or F
+      return response.data.response
+    }
+
     const surveyCardClickEventHandler = (e) => {
       e.preventDefault();
       e.returnValue = false;
@@ -173,18 +185,21 @@
 
       $('p.notice').empty().append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`);
 
-      $('button[name=participate_btn]').on('click', () => {
-        http
-            .get(`/api/participate${'/' + survey.id}`)
-            .then(res => {
-              if (res.data.success) {
-                location.replace(res.data.response);
-              } else {
-                alert(res.data.error.message);
-                console.log(res);
-                location.replace("/")
-              }
-            }).catch(console.log);
+      $('button[name=participate_btn]').on('click', e => {
+        if (checkAlreadyParticipate(survey.surveyId)) {
+          http
+              .get(`/api/participate${'/' + survey.id}`)
+              .then(res => {
+                if (res.data.success) {
+                  location.replace(res.data.response);
+                } else {
+                  alert(res.data.error.message);
+                  location.replace("/")
+                }
+              }).catch(console.log);
+        }else{
+          alert('이미 참여한 설문입니다.')
+        }
       });
 
       $('.modal_close_btn').on('click', () => {

@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Post addPost(PostDTO postDTO) {
-    return repository.save(Post.builder(postDTO).build());
+    return repository.save(Post.of(postDTO));
   }
 
   @Override
@@ -127,4 +127,13 @@ public class PostServiceImpl implements PostService {
     return repository.findAllByTypesAndRegex(type, regex, pageable);
   }
 
+  @Override
+  public List<Post> findPostsByPostType(PostType postType){
+    return repository.findAllByPostType(postType);
+  }
+
+  @Override
+  public Post updatePost(Post post){
+    return  repository.saveAndFlush(post);
+  }
 }

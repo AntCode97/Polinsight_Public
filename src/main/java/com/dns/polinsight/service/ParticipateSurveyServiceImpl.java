@@ -63,4 +63,8 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
     participateSurveyRepository.updateFinishedById(pSurveyId);
   }
 
+  @Override
+  public Boolean isExistParticipates(Long surveyId){
+    return participateSurveyRepository.existsParticipateSurveyBySurveyId(surveyId);
+  }
 }

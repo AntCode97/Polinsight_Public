@@ -299,6 +299,10 @@
             <div class="item_header">
               <span><i class="fas fa-poll-h" style="padding-right: 3px; color: #4C99CF;"></i>설문정보</span>
             </div>
+            <div>
+              <span>썸네일 업로드</span>
+              <span><input name="thumbnail" type="file"></span>
+            </div>
             <div class="item_content">
               <div class="user_basic_wrap">
                 <div id="survey_id" class="user_info_box user_readonly_box">
@@ -440,6 +444,17 @@
       }
     }
 
+    async function uploadSurveyThumbnail(thubmnail, surveyId) {
+      console.log("섬네일 저장")
+      let frmData = new FormData()
+      frmData.append('thumbnail', thubmnail)
+      let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
+        headers: {'Content-Type': 'multipart/form-data'}
+      })
+
+      return response.data.success
+    }
+
     const surveyUpdate = e => {
       e.stopPropagation()
       e.preventDefault()
@@ -451,6 +466,8 @@
         createdAt: $('input[name=create]').val(),
         endAt: $('input[name=end]').val(),
       }
+
+      uploadSurveyThumbnail($('input[name=thumbnail]').prop('files')[0], info.id)
       // 데이터 검증
       if (!isValidSurveyUpdateInfo(info)) {
         alert('올바른 값을 입력해주세요')
@@ -465,7 +482,7 @@
                 alert('업데이트 성공')
             })
             .catch(err => {
-              alert('설문 삭제 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
+              alert('설문 업데이트 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
             })
             .finally(() => init())
       }
@@ -522,7 +539,7 @@
             });
           });
     })
-    
+
     /* 동적 웹디자인 및 유효성 체크 */
     $(document)
         .on('focus', '.user_info_input', function () {
@@ -554,7 +571,7 @@
             msg.hide().text('')
           }
         })
-        .on('change', 'input[name=end]', function () {
+        .on('change', 'input[name=end]', function (e) {
           e.stopPropagation()
           e.preventDefault()
           let msg = $('.err_msg')
@@ -569,7 +586,7 @@
             msg.hide().text('')
           }
         })
-        .on('change', 'input[name=create]', function () {
+        .on('change', 'input[name=create]', function (e) {
           e.stopPropagation()
           e.preventDefault()
           let msg = $('.err_msg')

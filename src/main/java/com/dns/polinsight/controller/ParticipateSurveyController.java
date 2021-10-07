@@ -19,6 +19,7 @@ import com.dns.polinsight.utils.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,7 @@ public class ParticipateSurveyController {
 
   private final ParticipateSurveyService participateSurveyService;
 
+  @PreAuthorize("isAuthenticated()")
   @GetMapping("/participates")
   public ApiUtils.ApiResult<List<ParticipateSurvey>> getParticipateSurveyByUserid(@CurrentUser User user) throws WrongAccessException {
     if (user == null) {
@@ -55,6 +57,7 @@ public class ParticipateSurveyController {
     return success(participateSurveyService.findAllByUserId(user.getId()));
   }
 
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @GetMapping("/callback")
   public ModelAndView callback(
@@ -117,7 +120,7 @@ public class ParticipateSurveyController {
                                                    .sign(true)
                                                    .content("설문 참여 보상")
                                                    .requestedAt(LocalDateTime.now())
-//                                                   .userId(user.getId())
+                                                   //                                                   .userId(user.getId())
                                                    .user(user)
                                                    .build());
       log.info("{} 설문 참여 {} 포인트 업데이트", user.getEmail().toString(), participateSurvey.getSurveyPoint());
@@ -130,6 +133,7 @@ public class ParticipateSurveyController {
   /*
    * 로그인한 사용자가 서베이 클릭시
    * */
+  @PreAuthorize("isAuthenticated()")
   @GetMapping("/participate/{surveyId}")
   public ApiUtils.ApiResult<String> surveyClickEventHandler(@CurrentUser User user,
                                                             @PathVariable("surveyId") Long id,

@@ -41,4 +41,8 @@ public interface PostService {
 
   Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
+  List<Post> findPostsByPostType(PostType postType);
+
+  Post updatePost(Post post);
+
 }

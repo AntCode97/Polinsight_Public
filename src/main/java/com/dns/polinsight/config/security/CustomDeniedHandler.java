@@ -44,8 +44,9 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
     } else {
       log.info(accessDeniedException.getClass().getCanonicalName());
     }
+//    request.getRequestDispatcher("/denied").forward(request, response);
 
-    request.getRequestDispatcher("/denied").forward(request, response);
+    response.sendRedirect("/denied");
   }
 
 }

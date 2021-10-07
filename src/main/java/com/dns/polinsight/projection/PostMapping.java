@@ -52,4 +52,5 @@ public interface PostMapping {
   String getThumbnail();
 
 
+
 }

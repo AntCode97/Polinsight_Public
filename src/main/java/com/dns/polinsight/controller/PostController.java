@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -409,13 +410,13 @@ public class PostController {
 
     Post editPost = postService.findOne(postId);
 
-      if(postDTO.getThumbnailImg() !=null && !postDTO.getThumbnailImg().isEmpty()){
-        if(editPost.getThumbnail() != null){
-          attachService.deleteThumbnail(editPost.getThumbnail());
-        }
-      } else{
-        postDTO.setThumbnail(editPost.getThumbnail());
+    if (postDTO.getThumbnailImg() != null && !postDTO.getThumbnailImg().isEmpty()) {
+      if (editPost.getThumbnail() != null) {
+        attachService.deleteThumbnail(editPost.getThumbnail());
       }
+    } else {
+      postDTO.setThumbnail(editPost.getThumbnail());
+    }
 
 
     postService.addPost(postDTO);
@@ -429,7 +430,7 @@ public class PostController {
   public String delete(@PathVariable("postId") Long postId, Model model) {
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
-    if(post.getThumbnail() != null){
+    if (post.getThumbnail() != null) {
       attachService.deleteThumbnail(post.getThumbnail());
     }
     postService.delete(post);
@@ -442,7 +443,7 @@ public class PostController {
 
     Post post = postService.findOne(postId);
     attachService.deleteAttaches(postId);
-    if(post.getThumbnail() != null){
+    if (post.getThumbnail() != null) {
       attachService.deleteThumbnail(post.getThumbnail());
     }
     postService.delete(post);
@@ -538,5 +539,13 @@ public class PostController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
+
+  @GetMapping("posts/pols/{pno}")
+  public ModelAndView getOnePolsinsight(ModelAndView mv, @PathVariable("pno") Long pno) {
+    Post polsInsight = postService.findOne(pno);
+    mv.addObject("data", polsInsight);
+    mv.setViewName("posts/insight");
+    return mv;
+  }
 
 }

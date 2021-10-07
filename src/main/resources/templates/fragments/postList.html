@@ -70,7 +70,7 @@
           </span>
         </span>
       </div>
-      <div class="post-bottom">
+      <div class="post-bottom" sec:authorize="hasAuthority('ADMIN')">
         <button class="btn-input btn-green" onclick="location.href='/admin/posts/new'">새 글쓰기</button>
       </div>
 

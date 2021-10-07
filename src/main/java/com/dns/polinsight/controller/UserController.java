@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,7 +58,6 @@ public class UserController {
 
   private final ChangePasswordService changePasswordService;
 
-  //  private final LoginService loginService;
 
   @Transactional
   @PostMapping("/signup")
@@ -120,6 +120,7 @@ public class UserController {
     }
   }
 
+
   @Transactional
   @PutMapping("/user")
   public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto,
@@ -129,7 +130,6 @@ public class UserController {
       throw new InvalidValueException();
 
     try {
-      log.warn(userDto.toString());
       switch (type) {
         case "basic":
           user.setName(userDto.getName());
@@ -169,10 +169,11 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('USER','PANEL', 'BEST')")
   @GetMapping("/mypage")
   public ModelAndView myPage(@CurrentUser User user) throws WrongAccessException, Exception {
     if (user == null)
-      throw new WrongAccessException("잘못된 접근입니다.");
+      throw new UnAuthorizedException("로그인한 유저만 사용 가능합니다.");
 
     try {
       ModelAndView mv = new ModelAndView();
@@ -187,6 +188,7 @@ public class UserController {
   }
 
   @PostMapping("/update")
+  @PreAuthorize("hasAnyAuthority('USER','PANEL', 'BEST')")
   public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestBody User user, HttpSession session) {
     Map<String, Object> map = new HashMap<>();
     try {
@@ -239,7 +241,7 @@ public class UserController {
       log.warn("changePassword() in UserController email : {}, name : {}, hash: {}", email, name, hash);
       if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(Email.of(email)).getHash())) {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
-        log.error("넘어온 해시와 저장된 해시가 다릅니다");
+        log.error("해시값이 일치하지 않습니다");
         throw new IllegalAccessException();
       }
       User user = userService.findUserByEmail(Email.of(email));
@@ -274,6 +276,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('USER','PANEL', 'BEST')")
   @GetMapping("/api/user/participate/{userid}")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("participatedAt"));
@@ -299,10 +302,11 @@ public class UserController {
   }
 
   @GetMapping("/api/user/total")
-  public ApiUtils.ApiResult<Long> coutAllUser() {
+  public ApiUtils.ApiResult<Long> countAllUser() {
     return success(userService.countAllUserExcludeAdmin());
   }
 
+  @PermitAll
   @PostMapping("/findpwd")
   public ModelAndView findPwd(@Value("${custom.callback.base}") String callbackBase,
                               @RequestParam(name = "email") Email email,
@@ -392,6 +396,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAuthority('USER')")
   @PatchMapping("/api/changetopanel")
   @Transactional
   public ApiUtils.ApiResult<Boolean> userChangeRoleToPanel(@RequestBody UserDto dto,

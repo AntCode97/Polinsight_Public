@@ -26,4 +26,6 @@ public interface ParticipateSurveyService {
 
   void updateParticipateSurveyById(long pSurveyId);
 
+  Boolean isExistParticipates(Long surveyId);
+
 }

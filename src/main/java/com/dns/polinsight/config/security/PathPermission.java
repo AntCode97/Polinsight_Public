@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Slf4j
 @Component
 @Getter
@@ -19,6 +17,12 @@ public class PathPermission {
 
   private String[] admin;
 
-  private String[] template;
+  private String[] manager;
+
+  private String[] panel;
+
+  private String[] user;
+
+  private String[] anonymous;
 
 }

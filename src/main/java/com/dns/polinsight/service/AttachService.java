@@ -28,8 +28,8 @@ public interface AttachService {
 
   void addAttach(PostDTO postDTO);
 
-  String addAttach(MultipartFile file);
-
   void deleteThumbnail(String thumbnailPath) ;
+
+  String addAttach(MultipartFile file);
 
 }

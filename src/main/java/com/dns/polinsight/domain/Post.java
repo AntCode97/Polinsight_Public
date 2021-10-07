@@ -2,7 +2,7 @@ package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.types.PostType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +18,8 @@ import java.util.List;
 @Entity
 @ToString
 @Getter
-@Builder(builderMethodName = "PostBuilder")
+//@Builder(builderMethodName = "PostBuilder")
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post implements Serializable {
@@ -28,9 +29,10 @@ public class Post implements Serializable {
   @OneToMany(mappedBy = "post")
 
   @Builder.Default
-  @JsonIgnore
+  @JsonManagedReference
   private final List<Attach> attaches = new ArrayList<>();
 
+  @Setter
   private String thumbnail;
 
   @Id
@@ -65,18 +67,24 @@ public class Post implements Serializable {
   @Column(name = "view_count")
   private Long viewcnt;
 
-  public static PostBuilder builder(PostDTO postDTO) {
-    return PostBuilder()
-        .id(postDTO.getId())
-        .title(postDTO.getTitle())
-        .searchcontent(postDTO.getContent())
-        .viewcontent(postDTO.getViewcontent())
-        .user(postDTO.getUser())
-        .registeredAt(postDTO.getRegisteredAt())
-        .postType(postDTO.getPostType())
-        .attaches(postDTO.getAttaches())
-        .viewcnt(postDTO.getViewcnt())
-            .thumbnail(postDTO.getThumbnail());
+
+  @JsonManagedReference
+  @OneToMany(mappedBy = "post", targetEntity = Comment.class, cascade = CascadeType.ALL)
+  private List<Comment> comments;
+
+  public static Post of(PostDTO postDTO) {
+    return Post.builder()
+               .id(postDTO.getId())
+               .title(postDTO.getTitle())
+               .searchcontent(postDTO.getContent())
+               .viewcontent(postDTO.getViewcontent())
+               .user(postDTO.getUser())
+               .registeredAt(postDTO.getRegisteredAt())
+               .postType(postDTO.getPostType())
+               .attaches(postDTO.getAttaches())
+               .viewcnt(postDTO.getViewcnt())
+               .thumbnail(postDTO.getThumbnail())
+               .build();
   }
 
 

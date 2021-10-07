@@ -42,6 +42,14 @@
             <span>첨부파일</span>
           </div>
         </div>
+        <!--        인증된 유저 글쓰기 가능-->
+        <div sec:authorize="hasAnyAuthority('USER','PANEL', 'BEST')">
+          <button name="add_question_btn">질문 등록</button>
+        </div>
+        <!--        미 인증 유저 로그인 유도-->
+        <div sec:authorize="isAnonymous()">
+          <button name="anonymous_add_question_btn">질문 등록</button>
+        </div>
         <div class="page-button" id="pagination"></div>
       </div>
     </div>
@@ -88,7 +96,17 @@
       $('input[name=board_search]').on('keyup', {page: 0}, _.throttle(init, 300))
       $('input[name=board_search_btn]').on('click', {page: 0}, _.throttle(init, 300))
     })
-    
+
+    $(document)
+        .on('click', 'button[name=add_question_btn]', function () {
+          // go create question post
+          // TODO
+        })
+        .on('click', 'button[name=anonymous_add_question_btn]', function () {
+          // go login
+          location.assign('/login')
+        })
+
   </script>
 </th:block>
 <th:block th:include="layout/footer" />

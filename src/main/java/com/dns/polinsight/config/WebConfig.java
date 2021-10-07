@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -28,11 +27,11 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/**")
-            .addResourceLocations("classpath:/templates/", "classpath:/static/");
+            .addResourceLocations(resourceLocations);
+
+    // 이미지 업로드 경로
     registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:///" + baseLocation);
-    //    registry.addResourceHandler("/**")
-    //            .addResourceLocations("file:///Users/yunjun/IntelliJProjects/polinsight/");
+            .addResourceLocations("file:///" + baseLocation);
   }
 
   @Override

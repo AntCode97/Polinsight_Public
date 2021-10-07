@@ -211,3 +211,8 @@ const getPanelDataFromInputToJson = () => {
     favorite: favList
   }
 }
+
+const dayAndTime = (dateValue) => {
+  let arr = String(dateValue).trim().split('T')
+  return `${arr[0]} ${arr[1].split('.')[0]}`
+}

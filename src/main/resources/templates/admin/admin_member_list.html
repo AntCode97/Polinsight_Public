@@ -1122,7 +1122,8 @@
       $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
     });
 
-    $(document).on('click', '.user_nav_btn_wrap > input', function () {
+    $(document)
+        .on('click', '.user_nav_btn_wrap > input', function () {
           if ($(this).is(':checked')) {
             $('.tab_box').css('display', 'none');
             const id = $(this).attr('id');

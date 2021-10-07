@@ -1,0 +1,104 @@
+<th:block>
+  <th:block>
+    <div name="comment">
+
+    </div>
+    <div name="comment-input">
+      <input name="input-comment-value" type="text">
+      <span><button name="add-comment-btn" disabled>답글 달기</button></span>
+    </div>
+  </th:block>
+  <script>
+    async function getCommentByPostId(postId) {
+      let res = await http.get(`/api/comment/${postId}`)
+      let data = res.data.response
+      return {total: data.length, data: data}
+    }
+
+    const makeCommentTemplate = (comments, postId) => {
+
+      let commentBody = $('div[name=comment]')
+      comments.forEach(comment => {
+        console.log(comment)
+        let bodyTemplate = $('<div class="comment-row"></div>')
+        bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
+        bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
+        bodyTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
+        bodyTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
+        bodyTemplate.append(`<div class="comment-content"><span  >${comment.content}</span></div>`)
+        commentBody.append(bodyTemplate)
+      })
+    }
+
+    const commentDeleteEvent = e => {
+      let commentId = e.data.id
+      http.delete(`/api/comment/${commentId}`)
+          .catch(err => {
+            console.error(err)
+            alert('댓글 삭제 실패\n관리자에게 문의해주세요')
+          })
+          .finally(() => location.reload())
+    }
+
+    const commentAddEvent = e => {
+      let postId = insight.id
+      let comment = {
+        content: $('input[name=input-comment-value]').val()
+      };
+      http
+          .post(`/api/comment/${postId}`, comment)
+          .catch(err => {
+            console.error(err)
+            alert('댓글 생성 중 오류가 발생하였습니다.')
+          })
+          .finally(() => location.reload())
+    }
+
+    const commentUpdateHandler = e => {
+      let postId = e.data.id
+      let before = e.data.before;
+      // $(e.target).closest('.comment-row').css('background-color', 'red')
+      // alert('red')
+      let content_div = $(e.target).closest('.comment-row').find('div.comment-content')
+      content_div.empty()
+      content_div.append($(`<input />`).val(before.content))
+      content_div.append($(`<button>변경</button>`).on('click', {comment: before}, commentUpdate))
+    }
+
+    const commentUpdate = e => {
+      let comment = e.data.comment
+      comment.content = $(e.target).prev('input').val()
+      http
+          .patch(`/api/comment`, comment)
+          .catch(err => {
+            console.error(err)
+            alert('댓글 업데이트 중 오류가 발생하였습니다.')
+          })
+          .finally(() => location.reload())
+    }
+
+    const initComment = e => {
+      let postId = `[[${postId}]]`
+      getCommentByPostId(postId)
+          .then(obj => {
+            makeCommentTemplate(obj.data, postId);
+          })
+    }
+
+    $(function () {
+      initComment();
+    })
+
+    $(document)
+        .on('change keyup', 'input[name=input-comment-value]', function () {
+          let inp = $(this)
+          let inputValue = inp.val()
+          if (!inputValue) {
+            $("button[name=add-comment-btn]").prop('disabled', true);
+          } else {
+            $("button[name=add-comment-btn]").prop('disabled', false);
+          }
+        })
+        .on('click', 'button[name=add-comment-btn]', commentAddEvent)
+  </script>
+</th:block>

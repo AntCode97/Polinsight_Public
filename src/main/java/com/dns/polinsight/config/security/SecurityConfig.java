@@ -1,11 +1,11 @@
 package com.dns.polinsight.config.security;
 
 import com.dns.polinsight.service.UserService;
-import com.dns.polinsight.types.UserRoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsUtils;
 
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -45,10 +46,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        .antMatchers(permission.getTemplate()).permitAll()
+        //        .antMatchers(permission.getAnonymous()).permitAll()
         .antMatchers(permission.getResources()).permitAll()
-        .antMatchers(permission.getAdmin()).hasAuthority(UserRoleType.ADMIN.name())
-        .anyRequest().authenticated().and()
+        //        .antMatchers(permission.getUser()).hasAuthority(UserRoleType.USER.name())
+        //        .antMatchers(permission.getPanel()).hasAuthority(UserRoleType.PANEL.name())
+        //        .antMatchers(permission.getManager()).hasAuthority(UserRoleType.MANAGER.name())
+        //        .antMatchers(permission.getAdmin()).hasAuthority(UserRoleType.ADMIN.name())
+        //        .anyRequest().authenticated()
+        .and()
         .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/dologin")

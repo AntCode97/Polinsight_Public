@@ -2,10 +2,7 @@ package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
-import com.dns.polinsight.domain.dto.ParticipateSurveyDto;
-import com.dns.polinsight.domain.dto.PointRequestDto;
-import com.dns.polinsight.domain.dto.SurveyDto;
-import com.dns.polinsight.domain.dto.UserDto;
+import com.dns.polinsight.domain.dto.*;
 import com.dns.polinsight.exception.*;
 import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.projection.SurveyMapping;
@@ -19,8 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.PermitAll;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -51,6 +51,8 @@ public class ApiController {
   private final PostService postService;
 
   private final PointHistoryService pointHistoryService;
+
+  private final AttachService attachService;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -163,16 +165,34 @@ public class ApiController {
   }
 
   /*
-   * 저장된 서베이 목록 수정을 위한 api
+   * 저장된 서베이 목록 수정을 api
    * */
+  @PreAuthorize("hasAuthority('ADMIN')")
   @Transactional
   @PutMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
     try {
       Survey survey = surveyService.findById(dto.getId()).orElseThrow();
+
       survey.updateInfo(dto);
       surveyService.update(survey);
       log.info("Survey Updated ID: {}, Title : {}", survey.getId(), survey.getTitle());
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional
+  @PostMapping("/survey/thumbnail/{surveyId}")
+  public ApiUtils.ApiResult<Boolean> adminUpdateSurveyThumbnail(MultipartFile thumbnail,
+                                                                @PathVariable("surveyId") Long surveyId) throws Exception {
+    try {
+      Survey survey = surveyService.findById(surveyId).orElseThrow();
+      String thumbnailName = attachService.addAttach(thumbnail);
+      survey.setThumbnail(thumbnailName);
+      surveyService.update(survey);
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
@@ -222,6 +242,7 @@ public class ApiController {
 
   }
 
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @PostMapping("/pointrequest")
   public ApiUtils.ApiResult<Boolean> requestPointCalculateByUser(@Valid @RequestBody PointRequestDto pointRequestDto,
@@ -248,7 +269,7 @@ public class ApiController {
                                                    .content("포인트 정산 요청")
                                                    .total(user.getPoint() - pointRequestDto.getPoint())
                                                    .sign(false)
-//                                                   .userId(user.getId())
+                                                   //                                                   .userId(user.getId())
                                                    .user(user)
                                                    .requestedAt(pointRequestDto.getRequestedAt())
                                                    .build());
@@ -315,6 +336,7 @@ public class ApiController {
     }
   }
 
+  @PermitAll
   @PostMapping("/find/email")
   public ApiUtils.ApiResult<Email> findEmail(@RequestBody UserDto userDto) throws Exception {
     try {
@@ -346,6 +368,37 @@ public class ApiController {
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @GetMapping("/participates/{surveyId}")
+  public ApiUtils.ApiResult<Boolean> isExistParticipates(@CurrentUser User user,
+                                                         @PathVariable("surveyId") Long surveyId) {
+    return success(participateSurveyService.isExistParticipates(surveyId));
+  }
+
+  /*
+   * 업르도 된 이미지 파일 저장 처리 후 결과반환
+   * */
+  @Transactional
+  @PostMapping("/insight/thumbnail/{postId}")
+  public ApiUtils.ApiResult<Boolean> uploadPolsinsightImageThumbnail(MultipartFile thumbnail,
+                                                                     @PathVariable("postId") Long postId) throws Exception {
+    try {
+      Post post = postService.findOne(postId);
+      String file_uuid = attachService.addAttach(thumbnail);
+      post.setThumbnail(file_uuid);
+      postService.updatePost(post);
+      return success(Boolean.TRUE);
+    } catch (Exception e) {
+      throw new Exception(e.getMessage());
+    }
+  }
+
+  @GetMapping("/post/{postId}")
+  public ApiUtils.ApiResult<PostDTO> getPostByPostId(@PathVariable("postId") Long postId) {
+    Post post = postService.findOne(postId);
+    return success(PostDTO.of(post));
   }
 
 }
