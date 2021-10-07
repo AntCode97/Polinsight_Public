@@ -4,9 +4,11 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.AttachNotFoundException;
+import com.dns.polinsight.exception.ImageResizeException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
 import com.dns.polinsight.storage.FileSystemStorageService;
+import com.dns.polinsight.utils.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.IOUtils;
@@ -32,6 +34,8 @@ public class AttachServiceImpl implements AttachService {
   private final AttachRepository repository;
 
   private final PostRepository postRepository;
+
+  private final ImageUtil imageUtil;
 
   private final FileSystemStorageService storageService;
 
@@ -114,7 +118,7 @@ public class AttachServiceImpl implements AttachService {
   }
 
   @Override
-  public void addAttach(PostDTO postDTO) {
+  public void addAttach(PostDTO postDTO) throws ImageResizeException {
     List<MultipartFile> files = postDTO.getFiles();
 
     if (files != null) {
@@ -143,6 +147,7 @@ public class AttachServiceImpl implements AttachService {
           postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
 
           storageService.store(uuid.toString(), thumbnailImg);
+          imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString());
         } else {
           // TODO: 2021/09/26  
           log.error("Thumbnail 이미지 파일이 없습니다.");
