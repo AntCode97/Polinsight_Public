@@ -82,7 +82,17 @@
 
 </th:block>
 <script>
+  const makeDeleteBtn = () => {
 
+    $(".delete_btn").on('click', (e) => {
+      deleteBtn = e.currentTarget;
+      postId = $(deleteBtn).attr('value');
+      console.log("postID:" + postId)
+      $(".popup_overlay").fadeIn(100)
+
+    })
+
+  }
 
 
 
