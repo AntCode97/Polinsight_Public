@@ -144,10 +144,10 @@ public class AttachServiceImpl implements AttachService {
           log.info("썸네일 추가 완료");
           UUID uuid = UUID.randomUUID();
 
-          postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
 
           storageService.store(uuid.toString(), thumbnailImg);
-          imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString());
+          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString());
+          postDTO.setThumbnail(thumbnailPath);
         } else {
           // TODO: 2021/09/26  
           log.error("Thumbnail 이미지 파일이 없습니다.");
