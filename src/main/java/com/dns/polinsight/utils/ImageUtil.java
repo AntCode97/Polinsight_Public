@@ -37,7 +37,9 @@ public class ImageUtil {
       g.dispose();
       ImageIO.write(newImage, "png", new File(thumbnailPath));
 
+      return thumbnailPath;
     } catch (Exception e) {
+      log.error(e.getMessage());
       throw new ImageResizeException(e.getMessage());
     }
   }
