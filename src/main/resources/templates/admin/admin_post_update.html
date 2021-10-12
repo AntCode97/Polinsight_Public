@@ -14,6 +14,8 @@
           <div class="metop_board_wrap">
             <div class="metop_board_card" style="border-top: 3px solid #EBA444;">
               <form id="frm_board" th:action="@{/admin/posts/{id}/edit (id=${postDTO.id})}" th:object="${postDTO}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+
                 <div class="input_wrap register_top_wrap">
                   <div class="board_div">
                     <label for="board_title"><span>*</span>게시판</label>
@@ -47,7 +49,7 @@
                     <span class="board_span">
 
                       <img th:if="*{thumbnail}" th:src="'/files/'+*{thumbnail}" >
-                                          <input type="file" class="board_input" th:field="*{thumbnailImg}" accept="image/*"/>
+                                          <input type="file" id="thumbnail" class="board_input" th:field="*{thumbnailImg}" accept="image/*"/>
                                         </span>
                   </div>
                 </div>
@@ -167,6 +169,14 @@
         alert('파일명에 대괄호는 포함할 수 없습니다.');
         $('.board_file').val('');
       }
+    });
+    $(document).on('change', '#thumbnail', function () {
+      const file = $(this).val().toString();
+      if (file.includes("[") || file.includes("]")) {
+        alert("파일명에 대괄호는 포함할 수 없습니다.")
+        $('#thumbnail').val("");
+      }
+
     });
 
 

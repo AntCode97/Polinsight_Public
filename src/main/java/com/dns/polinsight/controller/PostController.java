@@ -1,6 +1,7 @@
 package com.dns.polinsight.controller;
 
 import com.dns.polinsight.config.resolver.CurrentUser;
+import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
@@ -22,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,10 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -83,21 +82,16 @@ public class PostController {
     return "admin/admin_post_list";
   }
 
-
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/new")
   public String adminCreateForm(Model model, @CurrentUser User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
-    //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-    //      //      model.addAttribute("user", user);
-    //      return "posts/createPostForm";
-    //    }
-    //    return "index";
-    //로그인이 안되서 일단 이렇게 진행
+
     return "admin/admin_post_register";
   }
 
-
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("admin/posts/new")
   public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
     log.info("Result: " + result + ", data: " + postDTO.toString());
@@ -108,21 +102,49 @@ public class PostController {
       return "admin/admin_post_register";
     }
     postDTO.transViewcontent();
-    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-      //    if (user != null) {
-      User admin = userService.findUserByEmail(user.getEmail());
-      postDTO.setUser(admin);
-      postDTO.setRegisteredAt(LocalDateTime.now());
-      Post post = postService.addPost(postDTO);
-      postDTO.setId(post.getId());
-      attachService.addAttach(postDTO);
+    User admin = userService.findUserByEmail(user.getEmail());
+    postDTO.setUser(admin);
+    postDTO.setRegisteredAt(LocalDateTime.now());
+    Post post = postService.addPost(postDTO);
+    postDTO.setId(post.getId());
+    //썸네일 추가
+    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
+      log.info("썸네일 추가 완료");
+      UUID uuid = UUID.randomUUID();
+      postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
+      storageService.store(uuid.toString(), thumbnailImg);
+    } else {
+      log.error("Thumbnail 이미지 파일이 없습니다.");
     }
 
+    //attachService.addAttach(postDTO);
+    //파일 첨부
+    List<MultipartFile> files = postDTO.getFiles();
+    if (files != null) {
+      if (!files.isEmpty()) {
+        List<Attach> attaches = new ArrayList<>();
+        for (MultipartFile mf : files) {
+          if (!mf.isEmpty()) {
+            UUID uuid = UUID.randomUUID();
+            attaches.add(attachService.addAttach(uuid, mf, postDTO));
+            storageService.store(uuid.toString(), mf);
+
+          }
+        }
+        postDTO.setAttaches(attaches);
+
+      }
+    } else {
+      log.info("File List is null");
+    }
+    postService.addPost(postDTO);
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
 
     return "redirect:/admin/posts";
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/search")
   public String adminsearch(@PageableDefault Pageable pageable, @RequestParam Map<String, Object> paramMap,
                             Model model, HttpSession session) {
@@ -146,42 +168,6 @@ public class PostController {
     return "admin/admin_post_list";
   }
 
-  @GetMapping("posts/new")
-  public String createForm(Model model, @CurrentUser User user) throws IOException {
-    model.addAttribute("postDTO", new PostDTO());
-    model.addAttribute("user", user);
-    //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-    //      //      model.addAttribute("user", user);
-    //      return "posts/createPostForm";
-    //    }
-    //    return "index";
-    //로그인이 안되서 일단 이렇게 진행
-    return "posts/createPostForm";
-  }
-
-
-  @PostMapping("posts/new")
-  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
-    postDTO.setFiles(Arrays.asList(file));
-    log.info("Result: " + result + ", data: " + postDTO);
-    if (result.hasErrors()) {
-      return "/posts/createPostForm";
-    }
-    postDTO.transViewcontent();
-    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-      //    if (user != null) {
-      User admin = userService.findUserByEmail(user.getEmail());
-      postDTO.setUser(admin);
-      postDTO.setRegisteredAt(LocalDateTime.now());
-      Post post = postService.addPost(postDTO);
-      postDTO.setId(post.getId());
-      attachService.addAttach(postDTO);
-    }
-
-    redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
-
-    return "redirect:/posts";
-  }
 
 
   @GetMapping("posts")
@@ -223,20 +209,10 @@ public class PostController {
     return "posts/postList";
   }
 
-
   @GetMapping("posts/{postId}")
-  public String content(@PathVariable("postId") Long postId, Model model, @CurrentUser User user, HttpSession session) {
-    //파일 리스트 보여줄 때
-    //    model.addAttribute("files", storageService.loadAll().map(
-    //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
-    //                    "serveFile", path.getFileName().toString()).build().toUri().toString())
-    //            .collect(Collectors.toList()));
+  public String content(@PathVariable("postId") Long postId, Model model, HttpSession session) {
 
-    model.addAttribute("user", user);
     model.addAttribute("files", attachService.findFiles(postId));
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
 
     try {
       long update_time = 0;
@@ -272,18 +248,16 @@ public class PostController {
     return "posts/post";
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/{postId}")
-  public String adminContent(@PathVariable("postId") Long postId, Model model, @CurrentUser User user, HttpSession session) {
+  public String adminContent(@PathVariable("postId") Long postId, Model model, HttpSession session) {
     //파일 리스트 보여줄 때
     //    model.addAttribute("files", storageService.loadAll().map(
     //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
     //                    "serveFile", path.getFileName().toString()).build().toUri().toString())
     //            .collect(Collectors.toList()));
     model.addAttribute("files", attachService.findFiles(postId));
-    //    if (user != null) {
-    //      model.addAttribute("user", user);
-    //    }
-    model.addAttribute("user", user);
+
 
 
     try {
@@ -307,65 +281,9 @@ public class PostController {
     return "admin/admin_post_view";
   }
 
-  @GetMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, Model model, @CurrentUser User user) {
-
-    if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
-        || user.getRole() == UserRoleType.ADMIN)) {
-      Post post = postService.findOne(postId);
-      PostDTO postDTO = new PostDTO();
-      postDTO.setId(post.getId());
-      postDTO.setContent(post.getSearchcontent());
-      postDTO.setViewcontent(post.getViewcontent());
-      postDTO.setAttaches(post.getAttaches());
-      postDTO.setUser(post.getUser());
-      postDTO.setTitle(post.getTitle());
-      LocalDateTime registeredAt = LocalDateTime.now();
-      postDTO.setRegisteredAt(registeredAt);
-
-      model.addAttribute("files", attachService.findFiles(postId));
-
-      model.addAttribute("postDTO", postDTO);
-      return "/posts/updatePostForm";
-    } else {
-      return "redirect:/posts";
-    }
-
-
-  }
-
-  @PostMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
-    if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
-        || user.getRole() == UserRoleType.ADMIN)) {
-      User admin = userService.findUserByEmail(user.getEmail());
-      postDTO.setUser(admin);
-      postDTO.setId(postId);
-      postDTO.setRegisteredAt(LocalDateTime.now());
-      postDTO.transViewcontent();
-      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
-      List<MultipartFile> mFiles = postDTO.getFiles();
-      if (mFiles != null) {
-        for (MultipartFile m : file) {
-          mFiles.add(m);
-
-        }
-        postDTO.setFiles(mFiles);
-      } else {
-        if (file != null) {
-          mFiles = Arrays.asList(file);
-          postDTO.setFiles(mFiles);
-        }
-      }
-
-      postService.addPost(postDTO);
-      attachService.addAttach(postDTO);
-    }
-    return "redirect:/posts/{postId}";
-  }
-
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model, @CurrentUser User user) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, Model model) {
 
     Post post = postService.findOne(postId);
     PostDTO postDTO = new PostDTO();
@@ -382,8 +300,8 @@ public class PostController {
     return "admin/admin_post_update";
   }
 
-
-  @PostMapping("admin/posts/{postId}/edit")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PutMapping("admin/posts/{postId}/edit")
   public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
     //    System.out.println("게시글 수정!" + postId);
     User admin = userService.findUserByEmail(user.getEmail());
@@ -410,41 +328,62 @@ public class PostController {
 
     Post editPost = postService.findOne(postId);
 
-    if (postDTO.getThumbnailImg() != null && !postDTO.getThumbnailImg().isEmpty()) {
+    //썸네일 추가
+    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+    //새로운 썸네일 이미지가 있는데
+    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
+      //기존의 게시글도 썸네일이 있을 때
       if (editPost.getThumbnail() != null) {
-        attachService.deleteThumbnail(editPost.getThumbnail());
+        storageService.deleteThumbnail(editPost.getThumbnail());
+      }
+        log.info("썸네일 추가 완료");
+        UUID uuid = UUID.randomUUID();
+        postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
+        storageService.store(uuid.toString(), thumbnailImg);
+      } else {
+      //원래 썸네일 유지
+        postDTO.setThumbnail(editPost.getThumbnail());
+    }
+
+    //attachService.addAttach(postDTO);
+    //파일 첨부
+    List<MultipartFile> files = postDTO.getFiles();
+    if (files != null) {
+      if (!files.isEmpty()) {
+        List<Attach> attaches = new ArrayList<>();
+        for (MultipartFile mf : files) {
+          if (!mf.isEmpty()) {
+            UUID uuid = UUID.randomUUID();
+            attaches.add(attachService.addAttach(uuid, mf, postDTO));
+            storageService.store(uuid.toString(), mf);
+
+          }
+        }
+        postDTO.setAttaches(attaches);
+
       }
     } else {
-      postDTO.setThumbnail(editPost.getThumbnail());
+      log.info("File List is null");
     }
+    postService.addPost(postDTO);
 
 
     postService.addPost(postDTO);
-    attachService.addAttach(postDTO);
 
     return "redirect:/admin/posts/{postId}";
   }
 
 
-  @GetMapping("/posts/{postId}/delete")
-  public String delete(@PathVariable("postId") Long postId, Model model) {
-    Post post = postService.findOne(postId);
-    attachService.deleteAttaches(postId);
-    if (post.getThumbnail() != null) {
-      attachService.deleteThumbnail(post.getThumbnail());
-    }
-    postService.delete(post);
-    return "redirect:/posts";
-  }
-
-  //Post로 바꿔도 될듯함
-  @GetMapping("/admin/posts/{postId}/delete")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @ResponseBody
+  @DeleteMapping("/admin/posts/{postId}/delete")
   public String adminDelete(@PathVariable("postId") Long postId, Model model, @PageableDefault Pageable pageable) {
 
     Post post = postService.findOne(postId);
-    attachService.deleteAttaches(postId);
+
+    deleteAttaches(postId);
     if (post.getThumbnail() != null) {
-      attachService.deleteThumbnail(post.getThumbnail());
+      storageService.deleteThumbnail(post.getThumbnail());
     }
     postService.delete(post);
     //Page<Post> posts = postService.getPostList(pageable);
@@ -535,7 +474,8 @@ public class PostController {
   @GetMapping("api/{file}/delete")
   public ResponseEntity asyncDeleteFile(@PathVariable("file") String filename, Model model) {
     log.info("File Delete Success!!");
-    attachService.delete(attachService.findByname(filename).get(0));
+    deleteAttach(attachService.findByname(filename).get(0));
+
     return new ResponseEntity(HttpStatus.OK);
   }
 
@@ -547,5 +487,113 @@ public class PostController {
     mv.setViewName("posts/insight");
     return mv;
   }
+
+  public void deleteAttach(Attach attach){
+    storageService.delete(attach.getFilePath());
+    attachService.delete(attach);
+
+  }
+
+  public void deleteAttaches(Long postId) {
+    attachService.findByPostId(postId).forEach(attach -> {
+      storageService.delete(attach.getFilePath());
+      attachService.delete(attach);
+    });
+
+  }
+
+
+  //현재 일반 유저는 글을 쓸 수 없기 떄문에 주석처리
+//  @GetMapping("posts/new")
+//  @PreAuthorize("isAuthenticated()")
+//  public String createForm(Model model, @CurrentUser User user) throws IOException {
+//    model.addAttribute("postDTO", new PostDTO());
+//    model.addAttribute("user", user);
+//    return "posts/createPostForm";
+//  }
+//
+//  @PostMapping("posts/new")
+//  @PreAuthorize("isAuthenticated()")
+//  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
+//    postDTO.setFiles(Arrays.asList(file));
+//    log.info("Result: " + result + ", data: " + postDTO);
+//    if (result.hasErrors()) {
+//      return "/posts/createPostForm";
+//    }
+//    postDTO.transViewcontent();
+//    User admin = userService.findUserByEmail(user.getEmail());
+//    postDTO.setUser(admin);
+//    postDTO.setRegisteredAt(LocalDateTime.now());
+//    Post post = postService.addPost(postDTO);
+//    postDTO.setId(post.getId());
+//    attachService.addAttach(postDTO);
+//    redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
+//    return "redirect:/posts";
+//  }
+
+//  @PreAuthorize("isAuthenticated()")
+//  @GetMapping("posts/{postId}/edit")
+//  public String updatePost(@PathVariable("postId") Long postId, Model model) {
+//
+//
+//    Post post = postService.findOne(postId);
+//    PostDTO postDTO = new PostDTO();
+//    postDTO.setId(post.getId());
+//    postDTO.setContent(post.getSearchcontent());
+//    postDTO.setViewcontent(post.getViewcontent());
+//    postDTO.setAttaches(post.getAttaches());
+//    postDTO.setUser(post.getUser());
+//    postDTO.setTitle(post.getTitle());
+//    LocalDateTime registeredAt = LocalDateTime.now();
+//    postDTO.setRegisteredAt(registeredAt);
+//
+//    model.addAttribute("files", attachService.findFiles(postId));
+//
+//    model.addAttribute("postDTO", postDTO);
+//    return "/posts/updatePostForm";
+//
+//  }
+//
+//  @PreAuthorize("isAuthenticated()")
+//  @PostMapping("posts/{postId}/edit")
+//  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
+//
+//    User admin = userService.findUserByEmail(user.getEmail());
+//    postDTO.setUser(admin);
+//    postDTO.setId(postId);
+//    postDTO.setRegisteredAt(LocalDateTime.now());
+//    postDTO.transViewcontent();
+//    postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
+//    List<MultipartFile> mFiles = postDTO.getFiles();
+//    if (mFiles != null) {
+//      for (MultipartFile m : file) {
+//        mFiles.add(m);
+//
+//      }
+//      postDTO.setFiles(mFiles);
+//    } else {
+//      if (file != null) {
+//        mFiles = Arrays.asList(file);
+//        postDTO.setFiles(mFiles);
+//      }
+//    }
+//
+//    postService.addPost(postDTO);
+//    attachService.addAttach(postDTO);
+//
+//    return "redirect:/posts/{postId}";
+//  }
+
+//@PreAuthorize("isAuthenticated()")
+//@GetMapping("/posts/{postId}/delete")
+//public String delete(@PathVariable("postId") Long postId, Model model) {
+//  Post post = postService.findOne(postId);
+//  attachService.deleteAttaches(postId);
+//  if (post.getThumbnail() != null) {
+//    attachService.deleteThumbnail(post.getThumbnail());
+//  }
+//  postService.delete(post);
+//  return "redirect:/posts";
+//}
 
 }

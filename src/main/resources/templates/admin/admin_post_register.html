@@ -46,7 +46,7 @@
                   <div class="board_div" id="thumbnail_div">
                     <label for="board_title"><span>*</span>썸네일 이미지</label>
                     <span class="board_span">
-                                          <input type="file" class="board_input" th:field="*{thumbnailImg}" accept="image/*" />
+                                          <input type="file" id="thumbnail" class="board_input" th:field="*{thumbnailImg}" accept="image/*" />
                                         </span>
                   </div>
                 </div>
@@ -122,10 +122,16 @@
     });
     $(document).on('change', '.board_file', function () {
       const file = $(this).val().toString();
-
       if (file.includes("[") || file.includes("]")) {
         alert("파일명에 대괄호는 포함할 수 없습니다.")
         $(".board_file").val("");
+      }
+    });
+    $(document).on('change', '#thumbnail', function () {
+      const file = $(this).val().toString();
+      if (file.includes("[") || file.includes("]")) {
+        alert("파일명에 대괄호는 포함할 수 없습니다.")
+        $('#thumbnail').val("");
       }
 
     });

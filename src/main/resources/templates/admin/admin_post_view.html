@@ -278,11 +278,11 @@
                   <div class="board_div2 btn_wrap">
                     <div class="btn_wrap1">
                       <span >
-                        <a href="#" class="board_btn list_btn" onclick="goList()"> <i class="far fa-file-alt"></i>목록</a>
+                        <a href="#" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                       </span>
                     </div>
                     <th:block>
-                      <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">
+                      <div class="btn_wrap2">
                         <span>
                           <a th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
                         </span>
@@ -305,6 +305,17 @@
 
   </div>
   <script type="text/javascript">
+
+    function goList() {
+      const listBtnUrl = getCookie("listBtnUrl");
+      console.log(listBtnUrl)
+      if(listBtnUrl != null){
+        location.href= listBtnUrl;
+      } else{
+        location.href = "/admin/posts"
+      }
+    }
+
     $(function () {
       makeDeleteBtn();
       document.querySelector(".popup_delete_btn").addEventListener('click', deletePost);
@@ -324,6 +335,9 @@
       for (let i = 1; i <= fileCount; i++) {
         file_item2[i - 1].innerText = '첨부파일#' + i;
       }
+
+      document.querySelector(".list_btn").addEventListener('click', goList);
+
     });
     const goAdminPostList =  () => {
       history.back();
@@ -333,21 +347,12 @@
       return value? value[2] : null;
     };
 
-    const goList = () => {
-      const listBtnUrl = getCookie("listBtnUrl");
-      console.log(listBtnUrl)
-      if(listBtnUrl != null){
-        location.href= listBtnUrl;
-      } else{
-        location.href = "/admin/posts"
-      }
-    }
     function deletePost ()  {
       let postId2 = postId;
 
       $.ajax({
         url: '/admin/posts/' + postId2 + '/delete',
-        type: 'GET'
+        type: "DELETE"
       }).done(
               // setTimeout("location.reload()", 1000)
               function () {

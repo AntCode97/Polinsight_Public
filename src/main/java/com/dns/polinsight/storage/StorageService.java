@@ -18,8 +18,11 @@ public interface StorageService {
 
   void delete(String filename);
 
+  void deleteThumbnail(String thumbnailPath);
+
   Resource loadAsResource(String filename);
 
   void deleteAll();
 
+  String store(String toString, MultipartFile thumbnailImg);
 }
