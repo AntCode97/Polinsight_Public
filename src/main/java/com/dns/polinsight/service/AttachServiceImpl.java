@@ -119,12 +119,16 @@ public class AttachServiceImpl implements AttachService {
     return repository.findByFileName(fileName);
   }
 
+  // 파일 여러개 받는거
   @Transactional
   @Override
   public void addAttach(PostDTO postDTO) throws ImageResizeException {
     List<MultipartFile> files = postDTO.getFiles();
 
     if (files != null) {
+      /**
+       * 썸네일 외 파일 저장 로직
+       */
       if (!files.isEmpty()) {
         List<Attach> attaches = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -143,14 +147,15 @@ public class AttachServiceImpl implements AttachService {
           }
         }
         MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+        /**
+         * Thumbnail 저장 로직
+         */
         if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
           log.info("썸네일 추가 완료");
           UUID uuid = UUID.randomUUID();
-          String ext = ".png";
-
 
           //          storageService.store(uuid.toString(), thumbnailImg);
-          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString(), ext);
+          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString(), ".png");
           postDTO.setThumbnail(thumbnailPath);
         } else {
           log.error("Thumbnail 이미지 파일이 없습니다.");
@@ -165,6 +170,7 @@ public class AttachServiceImpl implements AttachService {
     }
   }
 
+  // 파일만 저장
   @Override
   public String addAttach(MultipartFile file) {
     String fileName = null;

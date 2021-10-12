@@ -180,6 +180,16 @@
       background : #192739 !important;
     }
 
+    .card-box > img {
+      width  : 290px;
+      height : 164px;
+      object-fit: contain;
+    }
+
+    .card-box:hover {
+      cursor : pointer;
+    }
+
 
     @media (min-width : 320px) and (max-width : 480px) {
       .carasel_wrap {
@@ -319,7 +329,7 @@
     const makeSurveyTemplate2 = (survey) => {
       if (survey.progress !== 'BEFORE') {
         let template = $(`<div class="card-box"></div>`);
-        template.append(`<div class="card-box">
+        template.append(`<div class="card-box"">
             <img src="/img/logo/logo.png" class="card-img" alt="">
                 <div class="card-title">${survey.title}</div></div>`);// 카드
         return template

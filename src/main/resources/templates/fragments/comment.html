@@ -19,13 +19,21 @@
 
       let commentBody = $('div[name=comment]')
       comments.forEach(comment => {
-        console.log(comment)
-        let bodyTemplate = $('<div class="comment-row"></div>')
-        bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
-        bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
-        bodyTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
-        bodyTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
-        bodyTemplate.append(`<div class="comment-content"><span  >${comment.content}</span></div>`)
+        let bodyTemplate = $(`<div class="comment-row">
+<div>
+<span name="author">${comment.writer} 님</span>
+<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>
+</div>
+<div class="comment-content">
+<span>${comment.content}</span>
+</div>
+</div>`)
+        // bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
+        // bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
+        let btnTemplate = $(`<div></div>`)
+        btnTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
+        btnTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
+        bodyTemplate.append(btnTemplate)
         commentBody.append(bodyTemplate)
       })
     }
@@ -41,7 +49,9 @@
     }
 
     const commentAddEvent = e => {
-      let postId = insight.id
+      // let postId = insight.id
+      let postId = `[[${post.id}]]`
+      console.log(postId)
       let comment = {
         content: $('input[name=input-comment-value]').val()
       };

@@ -23,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -86,16 +87,11 @@ public class PostController {
   }
 
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/new")
   public String adminCreateForm(Model model, @CurrentUser User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
-    //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-    //      //      model.addAttribute("user", user);
-    //      return "posts/createPostForm";
-    //    }
-    //    return "index";
-    //로그인이 안되서 일단 이렇게 진행
     return "admin/admin_post_register";
   }
 

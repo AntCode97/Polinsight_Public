@@ -236,7 +236,9 @@
     <div class="flex-content">
       <div class="board_contents_wrap">
         <!-- Header Title -->
-        <div class="main_item"><p style="text-align: center;">공지사항</p></div>
+        <div th:if="${post.postType.name().equals('NOTICE')}" class="main_item"><p style="text-align: center;">공지사항</p></div>
+        <div th:if="${post.postType.name().equals('QNA')}" class="main_item"><p style="text-align: center;">Q & A</p></div>
+        <div th:if="${post.postType.name().equals('INSIGHT')}" class="main_item"><p style="text-align: center;">Pol's Insight</p></div>
 
         <!-- 게시글 내용 -->
         <section>
@@ -274,7 +276,7 @@
               <div class="board_div">
                 <label th:text="'첨부파일#' + ${fileStat.index + 1}"></label>
                 <a class="file_download" th:href="@{'/files/'+${file.fileName}}" th:text="${file.originalName}"></a>
-<!--                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>-->
+                <!--                <a class="file_download" th:text="${file.originalName}" th:href="@{'/posts/'+${file.filePath}}"></a>-->
               </div>
             </div>
             <div th:each="file : ${post.attaches}" class="input_wrap">
@@ -294,14 +296,6 @@
                   <a onclick="goList()" class="btn btn-primary"> <i class="far fa-file-alt"></i>목록</a>
               </span>
                 </div>
-                <!--            <div class="btn_wrap2" th:if="${user.role.toString()} =='ADMIN'">-->
-                <!--              <span>-->
-                <!--                  <a th:href="@{'/boards/modify/' + ${post.id}}" class="btn btn-support"><i class="fas fa-edit"></i>수정</a>-->
-                <!--              </span>-->
-                <!--              <span>-->
-                <!--                  <a href="#" class="btn btn-warn"><i class="far fa-trash-alt"></i>삭제</a>-->
-                <!--              </span>-->
-                <!--            </div>-->
               </div>
             </div>
 
@@ -329,21 +323,20 @@
         </div>
 
       </div>
+      <div th:if="${post.postType.name().equals('QNA')}" th:include="fragments/comment"></div>
     </div>
     <th:block th:include="layout/footer" />
   </div>
 
 
   <script type="text/javascript">
-    window.onload = function () {
-      let file_item2 = document.getElementsByClagssName("file_item2");
-      let fileCount = file_item2.length;
-
-      console.log(fileCount, file_item2);
-      for (let i = 1; i <= fileCount; i++) {
-        file_item2[i - 1].innerText = "첨부파일#" + i;
-      }
-    }
+    // const postInit = function () {
+    //   let file_item2 = document.getElementsByClagssName("file_item2");
+    //   let fileCount = file_item2.length;
+    //   for (let i = 1; i <= fileCount; i++) {
+    //     file_item2[i - 1].innerText = "첨부파일#" + i;
+    //   }
+    // }
 
     var bno = [[${post.id}]];
     $(function () {
@@ -403,16 +396,16 @@
     });
 
 
-    const getCookie = function(name) {
+    const getCookie = function (name) {
       const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      return value? value[2] : null;
+      return value ? value[2] : null;
     };
 
     const goList = () => {
       const listBtnUrl = getCookie("listBtnUrl");
-      if(listBtnUrl != null){
-        location.href= listBtnUrl;
-      } else{
+      if (listBtnUrl != null) {
+        location.href = listBtnUrl;
+      } else {
         location.href = "/posts"
       }
     }

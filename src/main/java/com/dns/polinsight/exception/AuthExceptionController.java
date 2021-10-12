@@ -21,6 +21,7 @@ public class AuthExceptionController {
 
   @ExceptionHandler(UsernameNotFoundException.class)
   public ApiUtils.ApiResult<?> handleUserNameNotFoundException(UsernameNotFoundException e) {
+    e.printStackTrace();
     return error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
   }
 
