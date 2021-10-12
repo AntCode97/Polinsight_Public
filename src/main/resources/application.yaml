@@ -215,10 +215,6 @@ spring :
     activate :
       on-profile : dev
 
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
 
   jpa :
     properties :
@@ -253,8 +249,7 @@ custom :
     base : "http://localhost:8080"
 file :
   upload :
-    baseLocation : "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/"
-#    baseLocation : "C:\\upload_test"
+    baseLocation : "C:\\upload_test"
 ---
 spring :
   datasource :
