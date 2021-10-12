@@ -19,11 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +42,8 @@ public class AttachServiceImpl implements AttachService {
   private final FileSystemStorageService storageService;
 
   private final PostService postService;
+
+  private final Pattern extPattern = Pattern.compile("\\.(?<ext>png|jpg|jpeg|bmp|gif)$");
 
   @Value("${file.upload.baseLocation}")
   private String baseLocation;
@@ -71,8 +75,6 @@ public class AttachServiceImpl implements AttachService {
 
   @Override
   public List<File> findFiles(Long postId) {
-    //    Post post = postRepository.findById(postId).get();
-    //    System.out.println(post.getId() + post.getTitle());
     return repository.findByPostId(postId).stream().map(attach -> new File(attach.getFilePath())).collect(Collectors.toList());
   }
 
@@ -117,11 +119,16 @@ public class AttachServiceImpl implements AttachService {
     return repository.findByFileName(fileName);
   }
 
+  // 파일 여러개 받는거
+  @Transactional
   @Override
   public void addAttach(PostDTO postDTO) throws ImageResizeException {
     List<MultipartFile> files = postDTO.getFiles();
 
     if (files != null) {
+      /**
+       * 썸네일 외 파일 저장 로직
+       */
       if (!files.isEmpty()) {
         List<Attach> attaches = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -140,16 +147,17 @@ public class AttachServiceImpl implements AttachService {
           }
         }
         MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+        /**
+         * Thumbnail 저장 로직
+         */
         if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
           log.info("썸네일 추가 완료");
           UUID uuid = UUID.randomUUID();
 
-
-          storageService.store(uuid.toString(), thumbnailImg);
-          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString());
+          //          storageService.store(uuid.toString(), thumbnailImg);
+          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString(), ".png");
           postDTO.setThumbnail(thumbnailPath);
         } else {
-          // TODO: 2021/09/26  
           log.error("Thumbnail 이미지 파일이 없습니다.");
         }
 
@@ -162,6 +170,7 @@ public class AttachServiceImpl implements AttachService {
     }
   }
 
+  // 파일만 저장
   @Override
   public String addAttach(MultipartFile file) {
     String fileName = null;

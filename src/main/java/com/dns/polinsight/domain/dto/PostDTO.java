@@ -3,6 +3,7 @@ package com.dns.polinsight.domain.dto;
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.projection.PostMapping;
 import com.dns.polinsight.types.PostType;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,6 +33,7 @@ public class PostDTO {
   @NotNull
   private PostType postType;
 
+  @NotNull
   private String content;
 
   private String viewcontent;
@@ -81,6 +83,21 @@ public class PostDTO {
                   .registeredAt(post.getRegisteredAt())
                   .viewcontent(post.getViewcontent())
                   .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .build();
+  }
+
+  public static PostDTO of(PostMapping mapping) {
+    return PostDTO.builder()
+                  .id(mapping.getId())
+                  .title(mapping.getTitle())
+                  .thumbnail(mapping.getThumbnail())
+                  .postType(mapping.getPostType())
+                  .user(mapping.getUser())
+                  .registeredAt(mapping.getRegisteredAt())
+                  .attaches(mapping.getAttaches())
+                  .viewcnt(mapping.getViewCount())
+                  .viewcontent(mapping.getViewcontent())
+                  .comments(mapping.getComment().stream().map(CommentDto::new).collect(Collectors.toList()))
                   .build();
   }
 

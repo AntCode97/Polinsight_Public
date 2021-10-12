@@ -24,9 +24,10 @@ public class ImageUtil {
   @Value("${file.upload.baseLocation}")
   private String baseLocation;
 
-  public String imageResize(MultipartFile originImage, String uuidName) throws ImageResizeException {
+  public String imageResize(MultipartFile originImage, String uuidName, String ext) throws ImageResizeException {
     try {
-      String thumbnailPath = baseLocation + fileSeparator + "thumbnail" + fileSeparator + uuidName;
+      String thumbnailPath = "thumbnail/" + uuidName + ext;
+      String thumbnailAbsPath = baseLocation + fileSeparator + thumbnailPath;
       Image image = ImageIO.read(originImage.getInputStream());
       Image resizedImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
@@ -35,7 +36,7 @@ public class ImageUtil {
       Graphics g = newImage.getGraphics();
       g.drawImage(resizedImage, 0, 0, null);
       g.dispose();
-      ImageIO.write(newImage, "png", new File(thumbnailPath));
+      ImageIO.write(newImage, "png", new File(thumbnailAbsPath));
 
       return thumbnailPath;
     } catch (Exception e) {

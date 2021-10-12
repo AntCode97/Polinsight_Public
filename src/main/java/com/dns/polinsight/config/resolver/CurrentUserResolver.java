@@ -28,7 +28,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
 
   @Override
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-    String principal = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    String principal = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
     if (principal.equals("anonymousUser")) {
       return null;
     }

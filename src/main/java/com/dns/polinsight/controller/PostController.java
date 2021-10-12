@@ -23,6 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -85,16 +87,11 @@ public class PostController {
   }
 
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/new")
   public String adminCreateForm(Model model, @CurrentUser User user) throws IOException {
     model.addAttribute("postDTO", new PostDTO());
     model.addAttribute("user", user);
-    //    if (user != null && user.getRole() == UserRoleType.ADMIN) {
-    //      //      model.addAttribute("user", user);
-    //      return "posts/createPostForm";
-    //    }
-    //    return "index";
-    //로그인이 안되서 일단 이렇게 진행
     return "admin/admin_post_register";
   }
 
@@ -162,11 +159,12 @@ public class PostController {
 
 
   @PostMapping("posts/new")
-  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
+  public String create(@Valid PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     postDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + postDTO);
     if (result.hasErrors()) {
-      return "/posts/createPostForm";
+      //      return "/posts/createPostForm";
+      return "redirect:/posts/new";
     }
     postDTO.transViewcontent();
     if (user != null && user.getRole() == UserRoleType.ADMIN) {
@@ -438,7 +436,6 @@ public class PostController {
     return "redirect:/posts";
   }
 
-  //Post로 바꿔도 될듯함
   @GetMapping("/admin/posts/{postId}/delete")
   public String adminDelete(@PathVariable("postId") Long postId, Model model, @PageableDefault Pageable pageable) {
 
@@ -448,10 +445,7 @@ public class PostController {
       attachService.deleteThumbnail(post.getThumbnail());
     }
     postService.delete(post);
-    //Page<Post> posts = postService.getPostList(pageable);
-    //model.addAttribute("posts", posts);
     return "redirect:/admin/posts";
-    //return "fragments/postList";
   }
 
   @GetMapping("/api/post/search")
@@ -464,15 +458,10 @@ public class PostController {
     List<Post> posts;
     if (type.equals(SearchType.TITLE.name())) {
       posts = postService.searchTitle(keyword, PostType.valueOf(cls), pageable).get().collect(Collectors.toList());
-      //posts = postService.searchTitle(keyword, PostType.valueOf(cls), pageable);
-
-      map.put("data", posts);
     } else {
       posts = postService.searchContent(keyword, PostType.valueOf(cls), pageable).get().collect(Collectors.toList());
-      //posts = postService.searchContent(keyword, PostType.valueOf(cls), pageable);
-
-      map.put("data", posts);
     }
+    map.put("data", posts);
 
     return ResponseEntity.ok(map);
   }
@@ -499,12 +488,6 @@ public class PostController {
   public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
     model.addAttribute("keyword", keyword);
-    //    String keyword = paramMap.get("keyword").toString();
-    //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-    //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-    //    model.addAttribute("keyword", keyword);
-    //    model.addAttribute("posts", posts);
-    //    session.setAttribute("postCount", posts.getTotalElements());
     model.addAttribute("postCount", session.getAttribute("postCount"));
 
     return "fragments/postList :: #postCount";

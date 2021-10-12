@@ -33,9 +33,6 @@ public class Comment {
 
   private LocalDateTime lastModifiedAt;
 
-  /*
-   * 수정, 삭제 여부등을 저장할 필드
-   * */
   private Boolean isDeleted;
 
   public static Comment of(CommentDto dto) {
