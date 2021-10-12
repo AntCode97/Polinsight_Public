@@ -152,7 +152,7 @@
                   <select th:field="*{postType}" class="select-box" name="classify" id="classify">
                     <optgroup label="분류 선택">
                       <option selected value="NOTICE">공지</option>
-                      <option value="EVENT">이벤트</option>
+                      <option value="QNA">Q&A</option>
                     </optgroup>
                   </select>
                   <select th:field="*{searchType}" name="search_item" class="select-box" id="type">
@@ -190,9 +190,7 @@
           new
       </span>
                 <strong></strong></a>
-              <!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
-              <!--          -->
-              <img th:if="${post.thumbnail}" th:src="'/files/'+${post.thumbnail}" >
+              <img th:if="${post.thumbnail}" th:src="'/files/'+${post.thumbnail}">
               <span th:text="${post.user.name}"></span>
               <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
               <span th:text="${post.viewcnt}">52</span>
@@ -201,7 +199,9 @@
               <span>
                         <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
                         <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-                    </span>
+                        <i th:if="${post.thumbnail == null }" class="fas fa-file-image file_icon_no"></i>
+          <i th:unless="${post.thumbnail == null }" class="fas fa-file-image file_icon_yes"></i>
+              </span>
             </div>
           </div>
 
@@ -258,9 +258,9 @@
     if (keyword === "")
       closeBtn.className = "disabled";
   }
-  const setCookie = function(name, value, exp) {
+  const setCookie = function (name, value, exp) {
     const date = new Date();
-    date.setTime(date.getTime() + exp*24*60*60*1000);
+    date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
     document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
   };
   const makeBackUrl = () => {

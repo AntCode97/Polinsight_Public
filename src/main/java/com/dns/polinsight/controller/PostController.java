@@ -5,6 +5,7 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.ImageResizeException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -93,7 +95,7 @@ public class PostController {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("admin/posts/new")
-  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
+  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     log.info("Result: " + result + ", data: " + postDTO.toString());
 
     postDTO.setFiles(Arrays.asList(file));
@@ -167,8 +169,6 @@ public class PostController {
 
     return "admin/admin_post_list";
   }
-
-
 
   @GetMapping("posts")
   public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
@@ -386,10 +386,7 @@ public class PostController {
       storageService.deleteThumbnail(post.getThumbnail());
     }
     postService.delete(post);
-    //Page<Post> posts = postService.getPostList(pageable);
-    //model.addAttribute("posts", posts);
     return "redirect:/admin/posts";
-    //return "fragments/postList";
   }
 
   @GetMapping("/api/post/search")
@@ -402,15 +399,10 @@ public class PostController {
     List<Post> posts;
     if (type.equals(SearchType.TITLE.name())) {
       posts = postService.searchTitle(keyword, PostType.valueOf(cls), pageable).get().collect(Collectors.toList());
-      //posts = postService.searchTitle(keyword, PostType.valueOf(cls), pageable);
-
-      map.put("data", posts);
     } else {
       posts = postService.searchContent(keyword, PostType.valueOf(cls), pageable).get().collect(Collectors.toList());
-      //posts = postService.searchContent(keyword, PostType.valueOf(cls), pageable);
-
-      map.put("data", posts);
     }
+    map.put("data", posts);
 
     return ResponseEntity.ok(map);
   }
@@ -437,12 +429,6 @@ public class PostController {
   public String asyncPostCount(Model model, HttpSession session, @RequestParam("keyword") String keyword) {
 
     model.addAttribute("keyword", keyword);
-    //    String keyword = paramMap.get("keyword").toString();
-    //    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
-    //    Page<Post> posts = postService.searchKeyword(keyword, pageable);
-    //    model.addAttribute("keyword", keyword);
-    //    model.addAttribute("posts", posts);
-    //    session.setAttribute("postCount", posts.getTotalElements());
     model.addAttribute("postCount", session.getAttribute("postCount"));
 
     return "fragments/postList :: #postCount";

@@ -3,7 +3,6 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
 import com.dns.polinsight.projection.ExcelUserMapping;
-import com.dns.polinsight.repository.UserJdbcTemplate;
 import com.dns.polinsight.repository.UserRepository;
 import com.dns.polinsight.types.Email;
 import com.dns.polinsight.types.Phone;
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository repository;
 
-  private final UserJdbcTemplate userJdbcTemplate;
 
   @Override
   public List<User> findAll() {

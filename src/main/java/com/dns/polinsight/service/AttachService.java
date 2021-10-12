@@ -2,6 +2,7 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.ImageResizeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

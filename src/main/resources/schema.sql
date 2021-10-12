@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS post
   view_count     BIGINT        NOT NULL DEFAULT 0,
   user_id        BIGINT        NOT NULL,
   type           VARCHAR(30)   NULL,
-  thumbnail      VARCHAR(3000) NULL,
+  thumbnail      VARCHAR(3000) NOT NULL DEFAULT '',
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 

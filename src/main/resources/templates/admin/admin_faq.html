@@ -35,11 +35,7 @@
   <script>
     async function getPostData(e) {
       let page = !e ? 0 : e.data.page;
-      let regex = !e ? '' : String($('input[name=admin_find'
-    ]).
-      val()
-    ).
-      trim();
+      let regex = !e ? '' : String($('input[name=admin_find]').val()).trim();
       const responseData = await http.get('/api/posts?type=FAQ', {
         params: {page: page, size: 10, regex: regex}
       });
