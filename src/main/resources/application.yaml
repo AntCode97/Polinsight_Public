@@ -241,4 +241,4 @@ custom :
 
 file :
   upload :
-    baseLocation : "/var/lib/jenkins/area_deploy/polinsight/upload-dir/"
+    baseLocation : "/app/data"
