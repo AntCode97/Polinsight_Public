@@ -20,8 +20,8 @@ server :
 spring :
   servlet :
     multipart :
-      max-file-size :    102400KB
-      max-request-size : 102400KB
+      max-file-size :    307200KB
+      max-request-size : 307200KB
   mvc :
     static-path-pattern : /static/**
     hiddenmethod:
@@ -202,3 +202,6 @@ custom :
 file :
   upload :
     baseLocation : "/app/data/"
+    image: "/app/data/image"
+    thumbnail: "/app/data/thumbnail"
+    file: "/app/data/file"

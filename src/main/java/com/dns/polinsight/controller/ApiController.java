@@ -196,7 +196,6 @@ public class ApiController {
       Survey survey = surveyService.findById(surveyId).orElseThrow();
       UUID uuid = UUID.randomUUID();
       String thumbnailName = storageService.store(uuid.toString(), thumbnail);
-
       survey.setThumbnail(thumbnailName);
       surveyService.update(survey);
       return success(Boolean.TRUE);

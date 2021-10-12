@@ -3,12 +3,11 @@ package com.dns.polinsight.storage;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface StorageService {
-
-  void init();
 
   void store(MultipartFile file);
 
@@ -16,13 +15,14 @@ public interface StorageService {
 
   Path load(String filename);
 
-  void delete(String filename);
+  void delete(String filename) throws FileNotFoundException;
 
-  void deleteThumbnail(String thumbnailPath);
+  void deleteThumbnail(String thumbnailPath) throws FileNotFoundException;
 
   Resource loadAsResource(String filename);
 
   void deleteAll();
 
   String store(String toString, MultipartFile thumbnailImg);
+
 }
