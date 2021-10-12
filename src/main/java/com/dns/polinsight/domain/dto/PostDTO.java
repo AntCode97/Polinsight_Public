@@ -32,6 +32,7 @@ public class PostDTO {
   @NotNull
   private PostType postType;
 
+  @NotNull
   private String content;
 
   private String viewcontent;

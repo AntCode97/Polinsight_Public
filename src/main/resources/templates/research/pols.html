@@ -311,7 +311,7 @@
       let template = $('<div class="card-box"></div>').on('click', function (e) {
         location.assign(`/insight/${insight.id}`.trim())
       })
-      template.append(`<img src="http://localhost:8080/files/${insight.thumbnail}" alt="">`)
+      template.append(`<img src="http://localhost:8080/upload/${insight.thumbnail}" alt="">`)
       template.append(`<div class="card-title">${insight.title}</div>`)
       return template
     }

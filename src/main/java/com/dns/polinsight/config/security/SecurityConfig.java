@@ -4,7 +4,6 @@ import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,13 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        //        .antMatchers(permission.getAnonymous()).permitAll()
         .antMatchers(permission.getResources()).permitAll()
-        //        .antMatchers(permission.getUser()).hasAuthority(UserRoleType.USER.name())
-        //        .antMatchers(permission.getPanel()).hasAuthority(UserRoleType.PANEL.name())
-        //        .antMatchers(permission.getManager()).hasAuthority(UserRoleType.MANAGER.name())
-        //        .antMatchers(permission.getAdmin()).hasAuthority(UserRoleType.ADMIN.name())
-        //        .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
@@ -76,7 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .invalidateHttpSession(true)
         .and()
         .httpBasic().disable();
-    //        .addFilterBefore(customAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
     http.sessionManagement()
         .sessionAuthenticationErrorUrl("/")
@@ -91,18 +83,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  //  @Bean
-  public CustomAuthenticationFilter customAuthenticationProcessingFilter() {
-    CustomAuthenticationFilter filter = new CustomAuthenticationFilter("/dologin");
-    filter.setAuthenticationManager(authenticationManager());
-    filter.setAuthenticationFailureHandler(failureHandler);
-    filter.setAuthenticationSuccessHandler(successHandler);
-    return filter;
-  }
-
-  //  @Bean
-  public AuthenticationManager authenticationManager() {
-    return new CustomAuthManager(userService, passwordEncoder());
-  }
 
 }
