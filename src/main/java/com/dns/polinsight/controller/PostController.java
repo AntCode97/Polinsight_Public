@@ -4,6 +4,7 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.ImageResizeException;
 import com.dns.polinsight.repository.PostSearch;
 import com.dns.polinsight.service.AttachService;
 import com.dns.polinsight.service.PostService;
@@ -99,7 +100,7 @@ public class PostController {
 
 
   @PostMapping("admin/posts/new")
-  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
+  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     log.info("Result: " + result + ", data: " + postDTO.toString());
 
     postDTO.setFiles(Arrays.asList(file));
@@ -161,7 +162,7 @@ public class PostController {
 
 
   @PostMapping("posts/new")
-  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
+  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     postDTO.setFiles(Arrays.asList(file));
     log.info("Result: " + result + ", data: " + postDTO);
     if (result.hasErrors()) {
@@ -335,7 +336,7 @@ public class PostController {
   }
 
   @PostMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
+  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     if (user != null && (user.getRole() == UserRoleType.USER || user.getRole() == UserRoleType.PANEL || user.getRole() == UserRoleType.BEST
         || user.getRole() == UserRoleType.ADMIN)) {
       User admin = userService.findUserByEmail(user.getEmail());
@@ -384,7 +385,7 @@ public class PostController {
 
 
   @PostMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
+  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
     //    System.out.println("게시글 수정!" + postId);
     User admin = userService.findUserByEmail(user.getEmail());
     postDTO.setUser(admin);
