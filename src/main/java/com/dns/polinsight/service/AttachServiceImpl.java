@@ -37,12 +37,6 @@ public class AttachServiceImpl implements AttachService {
 
   private final PostRepository postRepository;
 
-  private final ImageUtil imageUtil;
-
-  private final FileSystemStorageService storageService;
-
-  private final PostService postService;
-
   private final Pattern extPattern = Pattern.compile("\\.(?<ext>png|jpg|jpeg|bmp|gif)$");
 
   @Value("${file.upload.baseLocation}")
@@ -54,24 +48,23 @@ public class AttachServiceImpl implements AttachService {
   }
 
   @Override
+  public List<Attach> findByPostId(Long postId) {
+    return repository.findByPostId(postId);
+  }
+
+  @Override
   public void deleteAttaches(Long postId) {
     repository.findByPostId(postId).forEach(attach -> {
-      storageService.delete(attach.getFilePath());
       repository.delete(attach);
     });
   }
 
+
   @Override
   public void delete(Attach attach) {
-    storageService.delete(attach.getFilePath());
     repository.delete(attach);
   }
 
-  @Override
-  public void deleteThumbnail(String thumbnailPath) {
-    //경로 문제 때문에 . 추가
-    storageService.delete(baseLocation + thumbnailPath);
-  }
 
   @Override
   public List<File> findFiles(Long postId) {
@@ -119,71 +112,18 @@ public class AttachServiceImpl implements AttachService {
     return repository.findByFileName(fileName);
   }
 
-  // 파일 여러개 받는거
-  @Transactional
+  //Attach객체를 하나로 만드는 것으로 변경
   @Override
-  public void addAttach(PostDTO postDTO) throws ImageResizeException {
-    List<MultipartFile> files = postDTO.getFiles();
-
-    if (files != null) {
-      /**
-       * 썸네일 외 파일 저장 로직
-       */
-      if (!files.isEmpty()) {
-        List<Attach> attaches = new ArrayList<>();
-        for (MultipartFile file : files) {
-          if (!file.isEmpty()) {
-            UUID uuid = UUID.randomUUID();
-            Attach attach = Attach.builder()
-                                  .fileName(uuid + file.getOriginalFilename())
-                                  .fileSize(file.getSize())
-                                  .originalName(file.getOriginalFilename())
-                                  .filePath(baseLocation + uuid + file.getOriginalFilename())
-                                  .post(Post.of(postDTO))
-                                  .build();
-            attaches.add(attach);
-            storageService.store(uuid.toString(), file);
-
-          }
-        }
-        MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-        /**
-         * Thumbnail 저장 로직
-         */
-        if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
-          log.info("썸네일 추가 완료");
-          UUID uuid = UUID.randomUUID();
-
-          //          storageService.store(uuid.toString(), thumbnailImg);
-          String thumbnailPath = imageUtil.imageResize(postDTO.getThumbnailImg(), uuid.toString(), ".png");
-          postDTO.setThumbnail(thumbnailPath);
-        } else {
-          log.error("Thumbnail 이미지 파일이 없습니다.");
-        }
-
-        repository.saveAll(attaches);
-        postDTO.setAttaches(attaches);
-        postService.addPost(postDTO);
-      }
-    } else {
-      log.info("File List is null");
-    }
-  }
-
-  // 파일만 저장
-  @Override
-  public String addAttach(MultipartFile file) {
-    String fileName = null;
-    if (!file.isEmpty()) {
-      UUID uuid = UUID.randomUUID();
-      fileName = uuid + file.getOriginalFilename();
-      storageService.store(uuid.toString(), file);
-
-    } else {
-      log.info("File List is null");
-    }
-
-    return fileName;
+  public Attach addAttach(UUID uuid, MultipartFile file, PostDTO postDTO) {
+    Attach attach = Attach.builder()
+            .fileName(uuid + file.getOriginalFilename())
+            .fileSize(file.getSize())
+            .originalName(file.getOriginalFilename())
+            .filePath(baseLocation + uuid + file.getOriginalFilename())
+            .post(Post.of(postDTO))
+            .build();
+    repository.save(attach);
+    return attach;
   }
 
 }

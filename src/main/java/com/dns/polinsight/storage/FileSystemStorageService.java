@@ -30,12 +30,14 @@ public class FileSystemStorageService implements StorageService {
     this.init();
   }
 
-
-  public void store(String uuid, MultipartFile file) {
+  @Override
+  public String store(String uuid, MultipartFile file) {
+    String fileName = null;
     try {
       if (file.isEmpty()) {
         throw new StorageException("Failed to store empty file.");
       }
+      fileName = uuid + file.getOriginalFilename();
       Path destinationFile = this.rootLocation.resolve(
                                      Paths.get(uuid + file.getOriginalFilename()))
                                               .normalize().toAbsolutePath();
@@ -53,6 +55,7 @@ public class FileSystemStorageService implements StorageService {
     } catch (IOException e) {
       throw new StorageException("Failed to store file.", e);
     }
+    return fileName;
   }
 
   @Override
@@ -93,6 +96,12 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public Path load(String filename) {
     return rootLocation.resolve(filename);
+  }
+
+  @Override
+  public void deleteThumbnail(String thumbnailPath) {
+    Path path = Paths.get(String.valueOf(rootLocation), thumbnailPath);
+    this.delete(path.toString());
   }
 
   @Override

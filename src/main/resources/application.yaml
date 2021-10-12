@@ -24,6 +24,9 @@ spring :
       max-request-size : 102400KB
   mvc :
     static-path-pattern : /static/**
+    hiddenmethod:
+      filter:
+        enabled: true
   web :
     resources :
       static-locations : classpath:/static
@@ -113,6 +116,8 @@ spring :
   config :
     activate :
       on-profile : dev
+
+
   jpa :
     properties :
       hibernate :

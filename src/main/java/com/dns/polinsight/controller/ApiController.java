@@ -7,6 +7,7 @@ import com.dns.polinsight.exception.*;
 import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.*;
+import com.dns.polinsight.storage.StorageService;
 import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.dns.polinsight.utils.ApiUtils.success;
@@ -53,6 +55,8 @@ public class ApiController {
   private final PointHistoryService pointHistoryService;
 
   private final AttachService attachService;
+
+  private final StorageService storageService;
 
   @PutMapping("{postId}/count")
   public ApiUtils.ApiResult<Boolean> handlePostCount(@PathVariable long postId) throws Exception {
@@ -190,7 +194,9 @@ public class ApiController {
                                                                 @PathVariable("surveyId") Long surveyId) throws Exception {
     try {
       Survey survey = surveyService.findById(surveyId).orElseThrow();
-      String thumbnailName = attachService.addAttach(thumbnail);
+      UUID uuid = UUID.randomUUID();
+      String thumbnailName = storageService.store(uuid.toString(), thumbnail);
+
       survey.setThumbnail(thumbnailName);
       surveyService.update(survey);
       return success(Boolean.TRUE);
@@ -386,7 +392,8 @@ public class ApiController {
                                                                      @PathVariable("postId") Long postId) throws Exception {
     try {
       Post post = postService.findOne(postId);
-      String file_uuid = attachService.addAttach(thumbnail);
+      UUID uuid = UUID.randomUUID();
+      String file_uuid = storageService.store(uuid.toString(), thumbnail);
       post.setThumbnail(file_uuid);
       postService.updatePost(post);
       return success(Boolean.TRUE);
