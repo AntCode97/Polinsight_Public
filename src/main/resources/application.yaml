@@ -24,9 +24,9 @@ spring :
       max-request-size : 100MB
   mvc :
     static-path-pattern : /static/**
-    hiddenmethod:
-      filter:
-        enabled: true
+    hiddenmethod :
+      filter :
+        enabled : true
   web :
     resources :
       static-locations : classpath:/static
@@ -70,10 +70,10 @@ custom :
     url :         "https://api.surveymonkey.net/v3/" # 서베이 몽키 API 주소
     accessToken : "uX2r-rEuS8sFuxabPuSDfDkD2KWu459vOQg588cu6qatlX1QS5uURCVTvip1rKzk7ApktG.RWz.vRu69oVmx9WNd.hq0RZ2knTfXf-Fopw7K8f.-EGOgAD-IOXOnFQwH"
   callback :
-    base : "http://localhost:8080/"
+    base : "http://localhost:8080"
   hash :
-    passwordsalt : polinsightPasswordSalt
-    pointsalt :    polinsightPointSalt
+    passwordsalt : ${random.value}
+    pointsalt :    ${random.value}
 
 
 management :
@@ -145,13 +145,16 @@ server :
     session :
       timeout : 5m
 
-
 custom :
   callback :
     base : "http://localhost:8080"
 file :
   upload :
     baseLocation : "C:\\upload_test\\"
+    image :        "C:\\upload_test\\image\\"
+    thumbnail :    "C:\\upload_test\\thumbnail\\"
+    file :         "C:\\upload_test\\file\\"
+    address :      "http://localhost:8080/uploads"
 ---
 spring :
   datasource :
@@ -197,11 +200,12 @@ logging :
 
 custom :
   callback :
-    base : "http://dnslab.iptime.org/"
+    base : "http://dnslab.iptime.org"
 
 file :
   upload :
     baseLocation : "/app/data/"
-    image: "/app/data/image"
-    thumbnail: "/app/data/thumbnail"
-    file: "/app/data/file"
+    image :        "/app/data/image"
+    thumbnail :    "/app/data/thumbnail"
+    file :         "/app/data/file"
+    address :      "http://dnslab.iptime.org/uploads"

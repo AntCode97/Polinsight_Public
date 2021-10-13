@@ -99,7 +99,7 @@ public class PostDTO {
                   .attaches(mapping.getAttaches())
                   .viewcnt(mapping.getViewCount())
                   .viewcontent(mapping.getViewcontent())
-                  .comments(mapping.getComment().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .comments(mapping.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
                   .build();
   }
 

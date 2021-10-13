@@ -52,6 +52,6 @@ public interface PostMapping {
 
   String getThumbnail();
 
-  List<Comment> getComment();
+  List<Comment> getComments();
 
 }

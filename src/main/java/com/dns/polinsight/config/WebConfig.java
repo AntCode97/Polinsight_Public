@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
             .addResourceLocations(resourceLocations);
 
     // 이미지 업로드 경로
-    registry.addResourceHandler("/upload/**")
+    registry.addResourceHandler("/uploads/**")
             .addResourceLocations("file:///" + baseLocation);
   }
 

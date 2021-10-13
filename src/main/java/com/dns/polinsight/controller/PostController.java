@@ -381,14 +381,6 @@ public class PostController {
         "attachment; filename=\"" + file.getFilename() + "\"").body(file);
   }
 
-
-  @Transactional
-  @GetMapping("/posts/{postId}/{file}/delete")
-  public String deleteFile(@PathVariable("postId") Long postId, @PathVariable("file") String filename) {
-    attachService.delete(attachService.findByname(filename).get(0));
-    return "redirect:/posts/" + postId + "/edit";
-  }
-
   @Transactional
   @GetMapping("api/{file}/delete")
   public ResponseEntity<Boolean> asyncDeleteFile(@PathVariable("file") String filename) throws FileNotFoundException {
@@ -400,8 +392,7 @@ public class PostController {
 
   @GetMapping("posts/pols/{pno}")
   public ModelAndView getOnePolsinsight(ModelAndView mv, @PathVariable("pno") Long pno) {
-    Post polsInsight = postService.findOne(pno);
-    mv.addObject("data", polsInsight);
+    mv.addObject("data", PostDTO.of(postService.findOne(pno)));
     mv.setViewName("posts/insight");
     return mv;
   }

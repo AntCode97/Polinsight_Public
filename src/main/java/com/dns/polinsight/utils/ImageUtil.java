@@ -40,7 +40,7 @@ public class ImageUtil {
     try {
       //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName + "." + ext);
       //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName);
-      String thumbnailPath = "thumbnail" + fileSeparator + imageName;
+      String thumbnailPath = "/thumbnail/" + imageName;
       String thumbnailAbsPath = baseLocation + fileSeparator + thumbnailPath;
 
       Image image = ImageIO.read(originImage.getInputStream());
