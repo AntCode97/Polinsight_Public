@@ -392,8 +392,8 @@ public class ApiController {
     try {
       Post post = postService.findOne(postId);
       UUID uuid = UUID.randomUUID();
-      String file_uuid = storageService.store(uuid.toString(), thumbnail);
-      post.setThumbnail(file_uuid);
+      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), thumbnail);
+      post.setThumbnail(thumbnailPath);
       postService.updatePost(post);
       return success(Boolean.TRUE);
     } catch (Exception e) {

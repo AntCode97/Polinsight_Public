@@ -4,11 +4,8 @@ import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.AttachNotFoundException;
-import com.dns.polinsight.exception.ImageResizeException;
 import com.dns.polinsight.repository.AttachRepository;
 import com.dns.polinsight.repository.PostRepository;
-import com.dns.polinsight.storage.FileSystemStorageService;
-import com.dns.polinsight.utils.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.IOUtils;
@@ -19,13 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.transaction.Transactional;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +33,6 @@ public class AttachServiceImpl implements AttachService {
 
   private final PostRepository postRepository;
 
-  private final Pattern extPattern = Pattern.compile("\\.(?<ext>png|jpg|jpeg|bmp|gif)$");
 
   @Value("${file.upload.baseLocation}")
   private String baseLocation;
@@ -73,27 +68,18 @@ public class AttachServiceImpl implements AttachService {
 
   @Override
   public List<MultipartFile> findMultipartFiles(Long postId) throws IOException {
-    List<Attach> attaches = repository.findByPostId(postId);
-    List<MultipartFile> mFiles = new ArrayList<MultipartFile>();
-    for (Attach attach : attaches) {
-      File file = new File(attach.getFilePath());
-      FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()), false, attach.getOriginalName(), (int) file.length(), file.getParentFile());
-
-      try {
-        InputStream input = new FileInputStream(file);
-        OutputStream os = fileItem.getOutputStream();
-        IOUtils.copy(input, os);
-        // Or faster..
-        // IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
-      } catch (IOException ex) {
-        // do something.
-      }
-
-      MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-
-      mFiles.add(multipartFile);
-    }
-    return mFiles;
+    return repository.findByPostId(postId).stream()
+                     .map(attach -> {
+                       try {
+                         File file = new File(attach.getFilePath());
+                         FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()), false, attach.getOriginalName(), (int) file.length(), file.getParentFile());
+                         IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
+                         return new CommonsMultipartFile(fileItem);
+                       } catch (IOException e) {
+                         log.error(e.getMessage());
+                       }
+                       return null;
+                     }).collect(Collectors.toList());
   }
 
 
@@ -112,18 +98,15 @@ public class AttachServiceImpl implements AttachService {
     return repository.findByFileName(fileName);
   }
 
-  //Attach객체를 하나로 만드는 것으로 변경
   @Override
   public Attach addAttach(UUID uuid, MultipartFile file, PostDTO postDTO) {
-    Attach attach = Attach.builder()
-            .fileName(uuid + file.getOriginalFilename())
-            .fileSize(file.getSize())
-            .originalName(file.getOriginalFilename())
-            .filePath(baseLocation + uuid + file.getOriginalFilename())
-            .post(Post.of(postDTO))
-            .build();
-    repository.save(attach);
-    return attach;
+    return repository.save(Attach.builder()
+                                 .fileName(uuid + file.getOriginalFilename())
+                                 .fileSize(file.getSize())
+                                 .originalName(file.getOriginalFilename())
+                                 .filePath(baseLocation + uuid + file.getOriginalFilename())
+                                 .post(Post.of(postDTO))
+                                 .build());
   }
 
 }

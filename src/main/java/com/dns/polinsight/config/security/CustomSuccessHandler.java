@@ -1,8 +1,7 @@
 package com.dns.polinsight.config.security;
 
+import com.dns.polinsight.domain.User;
 import com.dns.polinsight.domain.dto.UserDto;
-import com.dns.polinsight.repository.UserRepository;
-import com.dns.polinsight.types.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,17 +19,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
-
-  private final UserRepository repository;
-
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
     String[] emails = authentication.getName().split("@");
-    request.getSession().setMaxInactiveInterval(30 * 60); // 세션 만료시간 30분
-    UserDto userDto = new UserDto(repository.findUserByEmail(Email.builder().account(emails[0]).domain(emails[1]).build()).get());
-    request.getSession().setAttribute("user", userDto);
-    log.warn("user data : {}", authentication.getPrincipal().toString());
-    log.info(userDto.getEmail() + "-- login success");
+    request.getSession().setMaxInactiveInterval(30 * 60);
+    request.getSession().setAttribute("user", new UserDto((User) authentication.getPrincipal()));
+    log.info("{} login", ((User) authentication.getPrincipal()).getEmail());
     response.sendRedirect("/");
     response.setStatus(HttpStatus.OK.value());
   }

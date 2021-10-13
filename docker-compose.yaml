@@ -1,45 +1,46 @@
-version: "3"
+version : "3"
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
+services :
+  app :
+    build :
+      context :    .
+      dockerfile : ./Dockerfile
+    ports :
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://pol-mariadb:3306/polinsight?useUnicode=true
-      SPRING_DATASOURCE_USERNAME: polinsight
-      SPRING_DATASOURCE_PASSWORD: polinsight
-    volumes:
-      - /home/polinsight/polinsight_data:/app/data
-    depends_on:
+    environment :
+      SPRING_DATASOURCE_URL :      jdbc:mariadb://pol-mariadb:3306/polinsight?useUnicode=true
+      SPRING_DATASOURCE_USERNAME : polinsight
+      SPRING_DATASOURCE_PASSWORD : polinsight
+    volumes :
+      - /app/data:/app/data
+      - /app/logs:/app/logs
+    depends_on :
       - "pol-mariadb"
 
-  pol-mariadb:
-    image: mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "polinsight"
-      MYSQL_USER: "polinsight"
-      MYSQL_PASSWORD: "polinsight"
-    command:
+  pol-mariadb :
+    image :   mariadb
+    environment :
+      MYSQL_ROOT_PASSWORD : "root"
+      MYSQL_DATABASE :      "polinsight"
+      MYSQL_USER :          "polinsight"
+      MYSQL_PASSWORD :      "polinsight"
+    command :
       [
-        "--character-set-server=utf8mb4",
-        "--collation-server=utf8mb4_unicode_ci",
+          "--character-set-server=utf8mb4",
+          "--collation-server=utf8mb4_unicode_ci",
       ]
-    ports:
+    ports :
       - 3306:3306
-    volumes:
-      - /home/polinsight/polinsight_data/db:/var/lib/mysql
-    restart: always
+    volumes :
+      - /app/data/db:/var/lib/mysql
+    restart : always
 
-  pol-redis:
-    image: redis
-    command: redis-server --port 6379
-    ports:
+  pol-redis :
+    image :   redis
+    command : redis-server --port 6379
+    ports :
       - 6379:6379
-    restart: always
+    restart : always
 
-networks:
-  polinsight_network:
+networks :
+  polinsight_network :

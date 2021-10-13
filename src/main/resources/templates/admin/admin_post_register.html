@@ -20,11 +20,10 @@
                     <span class="board_span">
                                           <select class="board_input focus_input board_select" name="btype" id="board_type" th:field="*{postType}" autofocus required>
                                             <optgroup label="분류 선택">
-                                            <option value="NOTICE">공지사항</option>
-                                              <option value="QNA">Q&A</option>
-                                              <option value="INSIGHT">INSIGHT</option>
-
-                                             </optgroup>
+                                              <option sec:authorize="hasAuthority('ADMIN')" value="NOTICE">공지사항</option>
+                                              <option sec:authorize="hasAnyAuthority('USER', 'PANEL', 'BEST')" value="QNA">Q&A</option>
+                                              <option sec:authorize="hasAuthority('ADMIN')" value="INSIGHT">INSIGHT</option>
+                                            </optgroup>
                                           </select>
                                           <span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후 변경이 불가능합니다.)</span>
                                           <div class="err_msg_wrap err_title"><span class="err_msg">게시판 타입을 선택해주세요.:(</span></div>
@@ -86,7 +85,7 @@
                                                             </span>
                     <span>
                   											<button type="button" class="btn btn-green insert_btn"
-                                       id="submit-btn" >등록</button>
+                                                id="submit-btn">등록</button>
                   										</span>
 
                   </div>
@@ -136,18 +135,17 @@
 
     });
 
-    function makeSubmit(){
+    function makeSubmit() {
       let submitBtn = document.querySelector("#submit-btn");
-      submitBtn.addEventListener('click', function (){
+      submitBtn.addEventListener('click', function () {
         let title = document.querySelector("#board_title");
         let textArea = document.querySelector("#board_content");
-        console.log("Hi" + textArea.value)
-        if(textArea.value ==null || textArea.value == ""){
+        
+        if (textArea.value == null || textArea.value == "") {
           alert("내용을 입력해주세요")
-        } else if(title.value ==null || title.value == ""){
+        } else if (title.value == null || title.value == "") {
           alert("제목을 입력해주세요")
-        }
-        else{
+        } else {
           document.getElementById('frm_board').submit();
         }
 

@@ -75,6 +75,8 @@ public class PostDTO {
   public static PostDTO of(Post post) {
     return PostDTO.builder()
                   .id(post.getId())
+                  .content(post.getSearchcontent())
+                  .user(post.getUser())
                   .postType(post.getPostType())
                   .title(post.getTitle())
                   .thumbnail(post.getThumbnail())

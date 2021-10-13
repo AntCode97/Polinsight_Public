@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -55,8 +56,6 @@ public class PostController {
 
   @GetMapping("admin/posts")
   public String adminPostList(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable, Model model, @RequestParam Map<String, Object> paramMap, HttpSession session) {
-
-
     Page<com.dns.polinsight.projection.PostMapping> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
@@ -77,24 +76,12 @@ public class PostController {
       model.addAttribute("posts", posts);
     }
 
-
     return "admin/admin_post_list";
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
-  @GetMapping("admin/posts/new")
-  public String adminCreateForm(Model model, @CurrentUser User user) throws IOException {
-    model.addAttribute("postDTO", new PostDTO());
-    model.addAttribute("user", user);
-
-    return "admin/admin_post_register";
-  }
-
-  @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("admin/posts/new")
-  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException {
-    log.info("Result: " + result + ", data: " + postDTO.toString());
-
+  public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException, IOException {
     postDTO.setFiles(Arrays.asList(file));
     //에러가 있으면 다시 돌려보냄
     if (result.hasErrors()) {
@@ -107,14 +94,15 @@ public class PostController {
     Post post = postService.addPost(postDTO);
     postDTO.setId(post.getId());
     //썸네일 추가
-    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
-      log.info("썸네일 추가 완료");
+    MultipartFile originalThumbnail = postDTO.getThumbnailImg();
+    if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
       UUID uuid = UUID.randomUUID();
-      postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
-      storageService.store(uuid.toString(), thumbnailImg);
+      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), originalThumbnail);
+      postDTO.setThumbnail(thumbnailPath);
+      storageService.store(uuid.toString(), originalThumbnail);
+      log.info("Success add thumbnail");
     } else {
-      log.error("Thumbnail 이미지 파일이 없습니다.");
+      log.error("There is no Thumbnail");
     }
 
     //attachService.addAttach(postDTO);
@@ -122,17 +110,7 @@ public class PostController {
     List<MultipartFile> files = postDTO.getFiles();
     if (files != null) {
       if (!files.isEmpty()) {
-        List<Attach> attaches = new ArrayList<>();
-        for (MultipartFile mf : files) {
-          if (!mf.isEmpty()) {
-            UUID uuid = UUID.randomUUID();
-            attaches.add(attachService.addAttach(uuid, mf, postDTO));
-            storageService.store(uuid.toString(), mf);
-
-          }
-        }
-        postDTO.setAttaches(attaches);
-
+        saveAttaches(postDTO, files);
       }
     } else {
       log.info("File List is null");
@@ -143,24 +121,34 @@ public class PostController {
     return "redirect:/admin/posts";
   }
 
+  private void saveAttaches(PostDTO postDTO, List<MultipartFile> files) throws IOException {
+    List<Attach> attaches = new ArrayList<>();
+    for (MultipartFile mf : files) {
+      if (!mf.isEmpty()) {
+        UUID uuid = UUID.randomUUID();
+        attaches.add(attachService.addAttach(uuid, mf, postDTO));
+        storageService.store(uuid.toString(), mf);
+
+      }
+    }
+    postDTO.setAttaches(attaches);
+  }
+
   @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/search")
-  public String adminsearch(@PageableDefault Pageable pageable, @RequestParam Map<String, Object> paramMap,
+  public String adminSearch(@PageableDefault Pageable pageable,
+                            @RequestParam Map<String, Object> paramMap,
                             Model model, HttpSession session) {
-
     Page<Post> posts;
     if (paramMap.get("keyword") != null) {
       String keyword = paramMap.get("keyword").toString();
-
       model.addAttribute("keyword", keyword);
       posts = postService.searchKeyword(keyword, pageable);
     } else {
       posts = postService.getPostList(pageable);
     }
-    long postCount = posts.getTotalElements();
-
-    model.addAttribute("postCount", postCount);
-    session.setAttribute("postCount", postCount);
+    model.addAttribute("postCount", posts.getTotalElements());
+    session.setAttribute("postCount", posts.getTotalElements());
     model.addAttribute("posts", posts);
 
 
@@ -168,21 +156,21 @@ public class PostController {
   }
 
   @GetMapping("posts")
-  public String list(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
+  public String list(@ModelAttribute("postSearch") PostSearch postSearch,
+                     @PageableDefault Pageable pageable,
                      Model model) {
-    Page<com.dns.polinsight.projection.PostMapping> posts = postService.findPostsByType(PostType.NOTICE, pageable);
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
-    model.addAttribute("posts", posts);
-
+    model.addAttribute("posts", postService.findPostsByType(PostType.NOTICE, pageable));
 
     return "posts/postList";
   }
 
 
   @GetMapping("posts/search")
-  public String search(@ModelAttribute("postSearch") PostSearch postSearch, @PageableDefault Pageable pageable,
+  public String search(@ModelAttribute("postSearch") PostSearch postSearch,
+                       @PageableDefault Pageable pageable,
                        Model model) {
     Page<com.dns.polinsight.projection.PostMapping> posts;
     if (postSearch.getSearchType() == SearchType.TITLE) {
@@ -192,11 +180,9 @@ public class PostController {
     }
     model.addAttribute("posts", posts);
 
-
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     }
-
 
     return "posts/postList";
   }
@@ -213,17 +199,19 @@ public class PostController {
       }
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
-        log.info("Post View COUNT UP");
         postService.upViewCnt(postId);
+        log.info("Post No.{} view count up", postId);
         session.setAttribute("update_time" + postId, current_time);
       }
 
     } catch (Exception e) {
+      // NOTE 2021-10-13 : try-catch 사용 이유??? / 어떤 에러가 발생하는지??
       e.printStackTrace();
     }
     Post findPost = postService.findOne(postId);
-
     model.addAttribute("post", new PostDTO(findPost));
+
+    // NOTE 2021-10-13 : 아래 코드는 무슨 작동을 위해??
     List<Post> allPosts = postService.findAll();
     for (int i = 0; i < allPosts.size(); i++) {
       if (allPosts.get(i).getId() == postId) {
@@ -243,14 +231,7 @@ public class PostController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/{postId}")
   public String adminContent(@PathVariable("postId") Long postId, Model model, HttpSession session) {
-    //파일 리스트 보여줄 때
-    //    model.addAttribute("files", storageService.loadAll().map(
-    //            path -> MvcUriComponentsBuilder.fromMethodName(PostController.class,
-    //                    "serveFile", path.getFileName().toString()).build().toUri().toString())
-    //            .collect(Collectors.toList()));
     model.addAttribute("files", attachService.findFiles(postId));
-
-
     try {
       long update_time = 0;
       if (session.getAttribute("update_time" + postId) != null) {
@@ -259,44 +240,36 @@ public class PostController {
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
         postService.upViewCnt(postId);
-        log.info("Post View COUNT UP");
+        log.info("Post No.{} view count up", postId);
         session.setAttribute("update_time" + postId, current_time);
       }
 
+      Post findPost = postService.findOne(postId);
+      model.addAttribute("post", new PostDTO(findPost));
     } catch (Exception e) {
+      // NOTE 2021-10-13 : try-catch 사용 이유??? / 어떤 에러가 발생하는지??
       e.printStackTrace();
     }
-
-    Post findPost = postService.findOne(postId);
-    model.addAttribute("post", new PostDTO(findPost));
     return "admin/admin_post_view";
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("admin/posts/{postId}/edit")
   public String adminUpdatePost(@PathVariable("postId") Long postId, Model model) {
-    // TODO: 2021-10-13 관리자 게시글 업데이트 로직
     Post post = postService.findOne(postId);
-    PostDTO postDTO = new PostDTO();
-    postDTO.setId(post.getId());
-    postDTO.setContent(post.getSearchcontent());
-    postDTO.setViewcontent(post.getViewcontent());
-    postDTO.setAttaches(post.getAttaches());
-    postDTO.setUser(post.getUser());
-    postDTO.setTitle(post.getTitle());
-    LocalDateTime registeredAt = LocalDateTime.now();
-    postDTO.setRegisteredAt(registeredAt);
-    postDTO.setThumbnail(post.getThumbnail());
+    PostDTO postDTO = PostDTO.of(post);
+    postDTO.setRegisteredAt(LocalDateTime.now());
     model.addAttribute("postDTO", postDTO);
     return "admin/admin_post_update";
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @PutMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) throws FileNotFoundException {
-    // TODO: 2021-10-13 : 파일 다운로드 로직
-    User admin = userService.findUserByEmail(user.getEmail());
-    postDTO.setUser(admin);
+  public String adminUpdatePost(@PathVariable("postId") Long postId,
+                                @ModelAttribute("postDTO") PostDTO postDTO,
+                                @CurrentUser User user,
+                                MultipartFile[] files) throws IOException, ImageResizeException {
+    postDTO.setUser(userService.findUserByEmail(user.getEmail()));
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
@@ -305,17 +278,13 @@ public class PostController {
       postDTO.setPostType(PostType.NOTICE);
     List<MultipartFile> mFiles = postDTO.getFiles();
     if (mFiles != null) {
-      for (MultipartFile m : file) {
-        mFiles.add(m);
-
-      }
-      postDTO.setFiles(mFiles);
+      mFiles.addAll(Arrays.asList(files));
     } else {
-      if (file != null) {
-        mFiles = Arrays.asList(file);
-        postDTO.setFiles(mFiles);
+      if (files != null) {
+        mFiles = Arrays.asList(files);
       }
     }
+    postDTO.setFiles(mFiles);
 
     Post editPost = postService.findOne(postId);
 
@@ -325,38 +294,22 @@ public class PostController {
     if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
       //기존의 게시글도 썸네일이 있을 때
       if (editPost.getThumbnail() != null) {
-        storageService.deleteThumbnail(editPost.getThumbnail());
+        storageService.delete(editPost.getThumbnail());
       }
-      log.info("썸네일 추가 완료");
       UUID uuid = UUID.randomUUID();
-      postDTO.setThumbnail(uuid + thumbnailImg.getOriginalFilename());
+      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
       storageService.store(uuid.toString(), thumbnailImg);
+      log.info("Success add thumbnail");
     } else {
       //원래 썸네일 유지
       postDTO.setThumbnail(editPost.getThumbnail());
     }
 
-    //attachService.addAttach(postDTO);
     //파일 첨부
-    List<MultipartFile> files = postDTO.getFiles();
-    if (files != null) {
-      if (!files.isEmpty()) {
-        List<Attach> attaches = new ArrayList<>();
-        for (MultipartFile mf : files) {
-          if (!mf.isEmpty()) {
-            UUID uuid = UUID.randomUUID();
-            attaches.add(attachService.addAttach(uuid, mf, postDTO));
-            storageService.store(uuid.toString(), mf);
-
-          }
-        }
-        postDTO.setAttaches(attaches);
-
-      }
-    } else {
-      log.info("File List is null");
+    List<MultipartFile> fileList = postDTO.getFiles();
+    if (fileList != null) {
+      saveAttaches(postDTO, fileList);
     }
-    postService.addPost(postDTO);
     postService.addPost(postDTO);
     return "redirect:/admin/posts/{postId}";
   }
@@ -365,13 +318,13 @@ public class PostController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @ResponseBody
   @DeleteMapping("/admin/posts/{postId}/delete")
-  public String adminDelete(@PathVariable("postId") Long postId, Model model, @PageableDefault Pageable pageable) throws FileNotFoundException {
+  public String adminDelete(@PathVariable("postId") Long postId) throws FileNotFoundException {
 
     Post post = postService.findOne(postId);
 
     deleteAttaches(postId);
     if (post.getThumbnail() != null) {
-      storageService.deleteThumbnail(post.getThumbnail());
+      storageService.delete(post.getThumbnail());
     }
     postService.delete(post);
     return "redirect:/admin/posts";
@@ -401,7 +354,6 @@ public class PostController {
 
     String keyword = paramMap.get("keyword").toString();
     String type = paramMap.get("type").toString();
-    //List<Post> posts = postService.searchContent(keyword, pageable).get().collect(Collectors.toList());;
     Page<com.dns.polinsight.projection.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.valueOf(type), pageable);
     model.addAttribute("keyword", keyword);
     model.addAttribute("posts", posts);
@@ -430,17 +382,18 @@ public class PostController {
   }
 
 
+  @Transactional
   @GetMapping("/posts/{postId}/{file}/delete")
-  public String deleteFile(@PathVariable("postId") Long postId, @PathVariable("file") String filename, Model model) {
+  public String deleteFile(@PathVariable("postId") Long postId, @PathVariable("file") String filename) {
     attachService.delete(attachService.findByname(filename).get(0));
     return "redirect:/posts/" + postId + "/edit";
   }
 
+  @Transactional
   @GetMapping("api/{file}/delete")
-  public ResponseEntity<Boolean> asyncDeleteFile(@PathVariable("file") String filename, Model model) throws FileNotFoundException {
-    log.info("File Delete Success!!");
+  public ResponseEntity<Boolean> asyncDeleteFile(@PathVariable("file") String filename) throws FileNotFoundException {
     deleteAttach(attachService.findByname(filename).get(0));
-
+    log.info("{} Delete Success!!", filename);
     return ResponseEntity.ok(true);
   }
 

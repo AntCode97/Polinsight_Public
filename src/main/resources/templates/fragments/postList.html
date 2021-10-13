@@ -52,8 +52,8 @@
           new
       </span>
         </a>
-        <img th:if="${list.thumbnail}" th:src="'/files/'+${list.thumbnail}">
-        <!--        <img th:if="${list.thumbnail}" th:src="${list.thumbnail}" >-->
+        <!--        <img th:if="${list.thumbnail}" th:src="${@environment.getProperty('custom.callback.base')+list.thumbnail}">-->
+        <img th:if="${list.thumbnail}" src="${list.thumbnail}">
 
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
@@ -61,8 +61,8 @@
         <span>
           <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
           <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-          <i th:if="${list.thumbnail == null }" class="fas fa-file-image file_icon_no"></i>
-          <i th:unless="${list.thumbnail == null }" class="fas fa-file-image file_icon_yes"></i>
+          <i th:if="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>
+          <i th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>
         </span>
         <span>
           <span class="btn_multi_wrap">

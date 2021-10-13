@@ -19,15 +19,30 @@ public class ImageUtil {
 
   static String fileSeparator = File.separator;
 
-  int width = 800, height = 600;
+  int width = 480, height = 320;
 
   @Value("${file.upload.baseLocation}")
   private String baseLocation;
 
-  public String imageResize(MultipartFile originImage, String uuidName, String ext) throws ImageResizeException {
+  /**
+   * @param originImage
+   *     : image file
+   * @param imageName
+   *     : uuid + image origin name
+   * @param ext
+   *     : image extension  ex) jpg, png, jpeg, bmp ...
+   *
+   * @return : image name that down scaled
+   *
+   * @throws ImageResizeException
+   */
+  public String imageResize(MultipartFile originImage, String imageName, String ext) throws ImageResizeException {
     try {
-      String thumbnailPath = "thumbnail/" + uuidName + ext;
+      //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName + "." + ext);
+      //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName);
+      String thumbnailPath = "thumbnail" + fileSeparator + imageName;
       String thumbnailAbsPath = baseLocation + fileSeparator + thumbnailPath;
+
       Image image = ImageIO.read(originImage.getInputStream());
       Image resizedImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
@@ -36,7 +51,8 @@ public class ImageUtil {
       Graphics g = newImage.getGraphics();
       g.drawImage(resizedImage, 0, 0, null);
       g.dispose();
-      ImageIO.write(newImage, "png", new File(thumbnailAbsPath));
+
+      ImageIO.write(newImage, ext, new File(String.valueOf(thumbnailAbsPath)));
 
       return thumbnailPath;
     } catch (Exception e) {
