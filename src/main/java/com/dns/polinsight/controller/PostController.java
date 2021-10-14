@@ -82,11 +82,10 @@ public class PostController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("admin/posts/new")
   public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException, IOException {
-    postDTO.setFiles(Arrays.asList(file));
-    //에러가 있으면 다시 돌려보냄
     if (result.hasErrors()) {
       return "admin/admin_post_register";
     }
+    postDTO.setFiles(Arrays.asList(file));
     postDTO.transViewcontent();
     User admin = userService.findUserByEmail(user.getEmail());
     postDTO.setUser(admin);
@@ -104,8 +103,6 @@ public class PostController {
     } else {
       log.error("There is no Thumbnail");
     }
-
-    //attachService.addAttach(postDTO);
     //파일 첨부
     List<MultipartFile> files = postDTO.getFiles();
     if (files != null) {
@@ -419,32 +416,32 @@ public class PostController {
 
 
   //현재 일반 유저는 글을 쓸 수 없기 떄문에 주석처리
-  //  @GetMapping("posts/new")
-  //  @PreAuthorize("isAuthenticated()")
-  //  public String createForm(Model model, @CurrentUser User user) throws IOException {
-  //    model.addAttribute("postDTO", new PostDTO());
-  //    model.addAttribute("user", user);
-  //    return "posts/createPostForm";
-  //  }
+  @GetMapping("posts/new")
+  @PreAuthorize("isAuthenticated()")
+  public String createForm(Model model, @CurrentUser User user) throws IOException {
+    model.addAttribute("postDTO", new PostDTO());
+    model.addAttribute("user", user);
+    return "posts/createPostForm";
+  }
   //
-  //  @PostMapping("posts/new")
-  //  @PreAuthorize("isAuthenticated()")
-  //  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
-  //    postDTO.setFiles(Arrays.asList(file));
-  //    log.info("Result: " + result + ", data: " + postDTO);
-  //    if (result.hasErrors()) {
-  //      return "/posts/createPostForm";
+  //    @PostMapping("posts/new")
+  //    @PreAuthorize("isAuthenticated()")
+  //    public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
+  //      postDTO.setFiles(Arrays.asList(file));
+  //      log.info("Result: " + result + ", data: " + postDTO);
+  //      if (result.hasErrors()) {
+  //        return "/posts/createPostForm";
+  //      }
+  //      postDTO.transViewcontent();
+  //      User admin = userService.findUserByEmail(user.getEmail());
+  //      postDTO.setUser(admin);
+  //      postDTO.setRegisteredAt(LocalDateTime.now());
+  //      Post post = postService.addPost(postDTO);
+  //      postDTO.setId(post.getId());
+  //      attachService.addAttach(postDTO);
+  //      redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
+  //      return "redirect:/posts";
   //    }
-  //    postDTO.transViewcontent();
-  //    User admin = userService.findUserByEmail(user.getEmail());
-  //    postDTO.setUser(admin);
-  //    postDTO.setRegisteredAt(LocalDateTime.now());
-  //    Post post = postService.addPost(postDTO);
-  //    postDTO.setId(post.getId());
-  //    attachService.addAttach(postDTO);
-  //    redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
-  //    return "redirect:/posts";
-  //  }
 
   //  @PreAuthorize("isAuthenticated()")
   //  @GetMapping("posts/{postId}/edit")

@@ -214,7 +214,6 @@
   </style>
 </th:block>
 <th:block>
-
   <div class="admin_main_contents">
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
@@ -252,7 +251,6 @@
                   <div class="board_div2">
                     <label>작성일</label>
                     <span class="regdate" th:if="${post.registeredAt == post.registeredAt}" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
-                    <!--                                        <span class="updatedate" th:unless="${one.regdate == one.updatedate}" th:text="${#temporals.format(one.updatedate, 'yyyy-MM-dd HH:mm')} + '(수정)'"></span>-->
 
                     <label class="label_padding">조회</label>
                     <span th:text="${post.viewcnt}">12</span>
@@ -261,7 +259,6 @@
                 <div th:each="file : ${post.attaches}" class="input_wrap">
                   <div class="board_div2">
                     <label class="file_item2" th:text="'첨부파일#'"></label>
-<!--                    <a class="file_download" th:href="@{'/posts/'+${file.filePath}}" th:text="${file.originalName}"></a>-->
                     <a class="file_download" th:href="@{'/files/'+${file.fileName}}" th:text="${file.originalName}"></a>
                   </div>
                 </div>
@@ -277,7 +274,7 @@
                 <div class="last_wrap">
                   <div class="board_div2 btn_wrap">
                     <div class="btn_wrap1">
-                      <span >
+                      <span>
                         <a href="#" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
                       </span>
                     </div>
@@ -288,7 +285,6 @@
                         </span>
                         <span class="board_btn delete_btn" th:value="${post.id}">
                           <i class="far fa-trash-alt"></i>삭제
-                                                          <!--                          <a th:href="@{/admin/posts/{id}/delete (id=${post.id})}" class="board_btn delete_btn"><i class="far fa-trash-alt"></i>삭제</a>-->
                         </span>
                       </div>
                     </th:block>
@@ -309,9 +305,9 @@
     function goList() {
       const listBtnUrl = getCookie("listBtnUrl");
       console.log(listBtnUrl)
-      if(listBtnUrl != null){
-        location.href= listBtnUrl;
-      } else{
+      if (listBtnUrl != null) {
+        location.href = listBtnUrl;
+      } else {
         location.href = "/admin/posts"
       }
     }
@@ -339,28 +335,24 @@
       document.querySelector(".list_btn").addEventListener('click', goList);
 
     });
-    const goAdminPostList =  () => {
+    const goAdminPostList = () => {
       history.back();
     }
-    const getCookie = function(name) {
+    const getCookie = function (name) {
       const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      return value? value[2] : null;
+      return value ? value[2] : null;
     };
 
-    function deletePost ()  {
+    function deletePost() {
       let postId2 = postId;
 
       $.ajax({
         url: '/admin/posts/' + postId2 + '/delete',
         type: "DELETE"
       }).done(
-              // setTimeout("location.reload()", 1000)
-              function () {
-                location.replace('/admin/posts')
-                // parentDiv.innerHTML =    '<span class="delete_post">삭제된 게시글</span>'
-                // console.log(parentDiv)
-                //  $('#boardTable').replaceWith(fragment);
-              }
+          function () {
+            location.replace('/admin/posts')
+          }
       )
       $(".popup_overlay").fadeOut(100)
     }
