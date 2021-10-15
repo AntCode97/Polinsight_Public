@@ -39,7 +39,7 @@ public class ImageUtil {
   public String imageResize(MultipartFile originImage, String imageName, String ext) throws ImageResizeException {
     try {
       String thumbnailPath = "/thumbnails/" + imageName;
-      Path thumbnailAbsPath = Paths.get(thumbnailLocation + thumbnailPath).normalize();
+      Path thumbnailAbsPath = Paths.get(thumbnailLocation + imageName).normalize();
 
       Image image = ImageIO.read(originImage.getInputStream());
       Image resizedImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
