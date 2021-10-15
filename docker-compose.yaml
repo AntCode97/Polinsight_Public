@@ -32,7 +32,7 @@ services :
     ports :
       - 3306:3306
     volumes :
-      - /app/data/db:/var/lib/mysql
+      - /app/data/database:/var/lib/mysql
     restart : always
 
   pol-redis :
