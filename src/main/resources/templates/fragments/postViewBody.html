@@ -1,0 +1,83 @@
+<th:block>
+  <section>
+    <div id="metop_container">
+      <div class="metop_inner">
+        <!-- 상세 게시글 창 -->
+        <div class="metop_board_wrap" th:object="${post}">
+          <div class="metop_board_card" style="border-top: 3px solid #4C99CF;">
+            <form name="" action="" method="POST">
+              <div class="input_wrap title_div">
+                <div class="board_div2">
+                  <div class="tile_info_wrap">
+                    <div>
+                      <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
+                    </div>
+                  </div>
+                  <div class="title_text">
+                    <span th:text="${post.title}">폴인사이트입니다.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input_wrap">
+                <div class="board_div2" id="writer_div">
+                  <label>작성자</label>
+                  <span th:text="${post.userId}">관리자</span>
+                </div>
+              </div>
+              <div class="input_wrap">
+                <div class="board_div2">
+                  <label>작성일</label>
+                  <span class="regdate" th:if="${post.registeredAt == post.registeredAt}" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+
+                  <label class="label_padding">조회</label>
+                  <span th:text="${post.viewcnt}">12</span>
+                </div>
+              </div>
+              <div th:each="file : ${post.attaches}" class="input_wrap">
+                <div class="board_div2">
+                  <label class="file_item2" th:text="'첨부파일#'"></label>
+                  <a class="file_download" th:href="${@environment.getProperty('file.upload.address')}+${file.fileName}" th:text="${file.originalName}"></a>
+                </div>
+              </div>
+              <div th:each="file : ${post.attaches}" class="input_wrap">
+                <img th:src="${@environment.getProperty('file.upload.address')}+${file.fileName}">
+              </div>
+              <div class="input_wrap textarea_div">
+                <div class="board_div2" th:text="${post.viewcontent}" style="white-space: pre;">
+                </div>
+              </div>
+
+              <!-- 취소 & 등록 버튼 -->
+              <div class="last_wrap">
+                <div class="board_div2 btn_wrap">
+                  <div class="btn_wrap1">
+                      <span>
+                        <a onclick="goList()" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
+                      </span>
+                  </div>
+                  <th:block>
+                    <div class="btn_wrap2">
+                        <span>
+                          <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
+                          <a th:if="${post.isWriter}" sec:authorize="hasAnyAuthority('USER','PANEL','BEST')" th:href="@{/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i
+                              class="fas fa-edit"></i>수정
+                          </a>
+                        </span>
+                      <span th:if="${post.isWriter}" class="board_btn delete_btn" onclick="onDeletePost()">
+                      <i class="far fa-trash-alt"></i>삭제
+                      </span>
+                    </div>
+                  </th:block>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <span id="current_username" style="display: none;" sec:authentication="principal.username"></span>
+      <span id="current_userrole" style="display: none;" sec:authentication="principal.authorities"></span>
+    </div>
+    <th:block th:replace="fragments/post_delete_popup" />
+  </section>
+</th:block>

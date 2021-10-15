@@ -122,8 +122,6 @@ spring :
     properties :
       hibernate :
         ddl-auto : validate
-    #        format_sql : true
-    #    show-sql :     true
     generate-ddl : true
 
   banner :
@@ -151,10 +149,10 @@ custom :
 file :
   upload :
     baseLocation : "C:\\upload_test\\"
-    image :        "C:\\upload_test\\image\\"
-    thumbnail :    "C:\\upload_test\\thumbnail\\"
-    file :         "C:\\upload_test\\file\\"
-    address :      "http://localhost:8080/uploads"
+    image :        "C:\\upload_test\\images\\"
+    thumbnail :    "C:\\upload_test\\thumbnails\\"
+    file :         "C:\\upload_test\\files\\"
+    address :      "http://localhost:8080/uploads/"
 ---
 spring :
   datasource :

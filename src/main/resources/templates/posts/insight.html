@@ -2,24 +2,24 @@
 <th:block>
   <style>
     .header_wrap {
-      background-color: rgb(24, 40, 56) !important;
+      background-color : rgb(24, 40, 56) !important;
     }
 
     .comment-row {
-      border: 1px black solid;
+      border : 1px black solid;
     }
 
     .comment-row > span:not(:first-child) {
-      margin-left: 8px;
+      margin-left : 8px;
     }
 
     .comment-row > a {
-      margin-left: 8px;
+      margin-left : 8px;
     }
 
     .comment_btn {
-      color: #2b90d9;
-      text-decoration: underline;
+      color           : #2B90D9;
+      text-decoration : underline;
     }
 
     .post-header {
@@ -29,11 +29,11 @@
     }
 
     .post-wrapper {
-      max-width: 1200px;
+      max-width : 1200px;
     }
 
     .post-content-header {
-      display: flex;
+      display : flex;
     }
 
     .post-writer {
@@ -73,7 +73,7 @@
       headTemplate.append(`<span class="post-writer">${post.userName}</span>`);
       headTemplate.append(`<span class="post-title">${post.title}</span>`);
       headTemplate.append(
-        `<span class="post-date">${dayAndTime(post.registeredAt)}</span>`
+          `<span class="post-date">${dayAndTime(post.registeredAt)}</span>`
       );
       postHead.append(headTemplate);
 
@@ -82,7 +82,7 @@
       post.attaches.forEach((attach) => {
         if (isImageFile(attach.fileName)) {
           postBody.append(
-            `<img src="${"http://localhost:8080/uploads/" + attach.fileName}"/>`
+              `<img src="${"[[${@environment.getProperty('file.upload.image')}]]" + attach.fileName}" alt="`${attach.originalName}`"/>`
           );
         }
       });

@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
-@PreAuthorize("hasAuthority('ADMIN, MANAGER')")
+@PreAuthorize("hasAnyAuthority('ADMIN, MANAGER')")
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminPageController {

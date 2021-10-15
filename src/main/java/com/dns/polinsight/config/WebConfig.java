@@ -29,9 +29,9 @@ public class WebConfig implements WebMvcConfigurer {
     registry.addResourceHandler("/**")
             .addResourceLocations(resourceLocations);
 
-//    // 이미지 업로드 경로
-//    registry.addResourceHandler("/uploads/**")
-//            .addResourceLocations("file:///" + baseLocation);
+    // 이미지 업로드 경로
+    registry.addResourceHandler("/uploads/**")
+            .addResourceLocations("file:///" + baseLocation);
   }
 
   @Override

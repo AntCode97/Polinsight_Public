@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsUtils;
 
@@ -22,17 +23,12 @@ import org.springframework.web.cors.CorsUtils;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final UserService userService;
-
   private final LogoutSuccessHandler logoutSuccessHandler;
 
   private final AuthenticationFailureHandler failureHandler;
 
   /* 인증 실패 처리 */
   private final AuthenticationEntryPoint entryPoint;
-
-  /* 인가 실패 처리 */
-  private final AccessDeniedHandler deniedHandler;
 
   private final PathPermission permission;
 
@@ -58,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .exceptionHandling()
         .authenticationEntryPoint(entryPoint)
-//        .accessDeniedHandler(deniedHandler)
         .accessDeniedPage("/denied")
         .and()
         .logout()

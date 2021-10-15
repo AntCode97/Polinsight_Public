@@ -53,7 +53,6 @@
       </span>
         </a>
         <img th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${list.thumbnail}">
-        <!--        <img th:if="${list.thumbnail}" src="${list.thumbnail}">-->
 
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
@@ -146,11 +145,7 @@
       });
 
     };
-    // const init = () => {
-    //   document.querySelector('#searchinput').addEventListener('keyup', asyncFindBoard);
-    // }
-    // window.load = init()
-    // $(document).ready(init);
+
     const deleteNotice = (e) => {
       e.preventDefault();
     };

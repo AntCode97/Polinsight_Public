@@ -43,6 +43,8 @@ public class PostDTO {
 
   private String userName;
 
+  private String userId;
+
   @CreatedDate
   private LocalDateTime registeredAt;
 
@@ -55,6 +57,9 @@ public class PostDTO {
   private List<CommentDto> comments;
 
   private String thumbnail;
+
+  @Builder.Default
+  private Boolean isWriter = false;
 
   @Builder.Default
   private Long viewcnt = 0L;
@@ -82,6 +87,7 @@ public class PostDTO {
                   .thumbnail(post.getThumbnail())
                   .attaches(post.getAttaches())
                   .userName(post.getUser().getName())
+                  .userId(String.valueOf(post.getUser().getEmail()))
                   .registeredAt(post.getRegisteredAt())
                   .viewcontent(post.getViewcontent())
                   .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
@@ -95,6 +101,8 @@ public class PostDTO {
                   .thumbnail(mapping.getThumbnail())
                   .postType(mapping.getPostType())
                   .user(mapping.getUser())
+                  .userId(String.valueOf(mapping.getUser().getEmail()))
+                  .userName(mapping.getUser().getName())
                   .registeredAt(mapping.getRegisteredAt())
                   .attaches(mapping.getAttaches())
                   .viewcnt(mapping.getViewCount())

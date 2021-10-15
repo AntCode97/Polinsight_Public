@@ -61,7 +61,11 @@
     <div class="board_div" id="thumbnail_div">
       <label for="board_title"><span>*</span>썸네일 이미지</label>
       <span class="board_span">
-        <img th:if="*{thumbnail}" th:src="'/files/'+*{thumbnail}" />
+        <img
+          style="width: 80px; height: 54px"
+          th:if="*{thumbnail}"
+          th:src="${@environment.getProperty('file.upload.address')}+ *{thumbnail}"
+        />
         <input
           type="file"
           id="thumbnail"

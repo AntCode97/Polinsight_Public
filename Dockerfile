@@ -7,11 +7,11 @@ ARG JAR_FILE=./build/libs/app.jar
 # working directory
 WORKDIR /app
 
-RUN mkdir -p "/app/data/image"  \
+RUN mkdir -p "/app/data/images"  \
     "/app/data/files" \
-    "/app/data/thumbnail" \
+    "/app/data/thumbnails" \
     "/app/logs" \
-    "/app/data/db"
+    "/app/data/database"
 
 COPY ${JAR_FILE} app.jar
 

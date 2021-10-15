@@ -5,7 +5,7 @@ import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.exception.AttachNotFoundException;
 import com.dns.polinsight.repository.AttachRepository;
-import com.dns.polinsight.repository.PostRepository;
+import com.dns.polinsight.utils.TypeCheckUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.IOUtils;
@@ -31,11 +31,17 @@ public class AttachServiceImpl implements AttachService {
 
   private final AttachRepository repository;
 
-  private final PostRepository postRepository;
+  private final TypeCheckUtil typeCheckUtil;
 
 
   @Value("${file.upload.baseLocation}")
   private String baseLocation;
+
+  @Value("${file.upload.image}")
+  private String imageLocation;
+
+  @Value("${file.upload.file}")
+  private String fileLocation;
 
   @Override
   public List<Attach> findAll() {
@@ -100,11 +106,12 @@ public class AttachServiceImpl implements AttachService {
 
   @Override
   public Attach addAttach(UUID uuid, MultipartFile file, PostDTO postDTO) {
+    String fileName = uuid + file.getOriginalFilename();
     return repository.save(Attach.builder()
-                                 .fileName(uuid + file.getOriginalFilename())
+                                 .fileName((typeCheckUtil.isImageFile(file.getOriginalFilename()) ? "images/" : "files/") + fileName)
                                  .fileSize(file.getSize())
                                  .originalName(file.getOriginalFilename())
-                                 .filePath(baseLocation + uuid + file.getOriginalFilename())
+                                 .filePath((typeCheckUtil.isImageFile(file.getOriginalFilename()) ? imageLocation : fileLocation) + fileName)
                                  .post(Post.of(postDTO))
                                  .build());
   }

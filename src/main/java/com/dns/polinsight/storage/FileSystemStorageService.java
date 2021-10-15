@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -18,13 +15,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.InputMismatchException;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -36,10 +31,10 @@ public class FileSystemStorageService implements StorageService {
 
   private final ImageUtil imageUtil;
 
-  @Value("${file.upload.images}")
+  @Value("${file.upload.image}")
   private String imageLocation;
 
-  @Value("${file.upload.files}")
+  @Value("${file.upload.file}")
   private String fileLocation;
 
   @Autowired
@@ -75,40 +70,40 @@ public class FileSystemStorageService implements StorageService {
         typeCheckUtil.getImageFileExt(thumbnail.getOriginalFilename()));
   }
 
-  @Override
-  public Stream<Path> loadAll() {
-    try {
-      return Files.walk(this.rootLocation, 1)
-                  .filter(path -> !path.equals(this.rootLocation))
-                  .map(this.rootLocation::relativize);
-    } catch (IOException e) {
-      throw new StorageException("Failed to read stored files", e);
-    }
+//  @Override
+//  public Stream<Path> loadAll() {
+//    try {
+//      return Files.walk(this.rootLocation, 1)
+//                  .filter(path -> !path.equals(this.rootLocation))
+//                  .map(this.rootLocation::relativize);
+//    } catch (IOException e) {
+//      throw new StorageException("Failed to read stored files", e);
+//    }
+//
+//  }
 
-  }
-
-  @Override
-  public Path load(String filename) {
-    return rootLocation.resolve(filename);
-  }
+//  @Override
+//  public Path load(String filename) {
+//    return rootLocation.resolve(filename);
+//  }
 
 
-  @Override
-  public Resource loadAsResource(String filename) {
-    try {
-      Path file = load(filename);
-      Resource resource = new UrlResource(file.toUri());
-      if (resource.exists() || resource.isReadable()) {
-        return resource;
-      } else {
-        throw new StorageFileNotFoundException(
-            "Could not read file: " + filename);
-
-      }
-    } catch (MalformedURLException e) {
-      throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-    }
-  }
+  //  @Override
+  //  public Resource loadAsResource(String filename) {
+  //    try {
+  //      Path file = load(filename);
+  //      Resource resource = new UrlResource(file.toUri());
+  //      if (resource.exists() || resource.isReadable()) {
+  //        return resource;
+  //      } else {
+  //        throw new StorageFileNotFoundException(
+  //            "Could not read file: " + filename);
+  //
+  //      }
+  //    } catch (MalformedURLException e) {
+  //      throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+  //    }
+  //  }
 
   @Override
   public void delete(String filepath) throws FileNotFoundException {
@@ -121,10 +116,10 @@ public class FileSystemStorageService implements StorageService {
     }
   }
 
-  @Override
-  public void deleteAll() {
-    FileSystemUtils.deleteRecursively(rootLocation.toFile());
-  }
+//  @Override
+  //  public void deleteAll() {
+  //    FileSystemUtils.deleteRecursively(rootLocation.toFile());
+  //  }
 
   @PostConstruct
   public void init() {
@@ -139,9 +134,9 @@ public class FileSystemStorageService implements StorageService {
 
   private Path getPathByType(MultipartFile file, String uuid) {
     if (typeCheckUtil.isImageFile(file.getOriginalFilename()))
-      return rootLocation.resolve(Paths.get(imageLocation + "/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
+      return rootLocation.resolve(Paths.get(imageLocation + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
     else
-      return rootLocation.resolve(Paths.get(fileLocation + "/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
+      return rootLocation.resolve(Paths.get(fileLocation + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
   }
 
 }

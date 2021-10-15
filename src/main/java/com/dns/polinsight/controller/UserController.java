@@ -19,6 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -386,7 +389,7 @@ public class UserController {
   @PermitAll
   @Transactional
   @PostMapping("/user_join")
-  public ApiUtils.ApiResult<Boolean> testSignup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
+  public ApiUtils.ApiResult<Boolean> signup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
     log.warn(signupDTO.toString());
     try {
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
@@ -418,7 +421,13 @@ public class UserController {
       user.getPanel().update(Panel.of(dto));
       user.updateRole(UserRoleType.PANEL);
       userService.saveOrUpdate(user);
-      log.warn("updated data : {}", userService.findUserByEmail(user.getEmail()));
+      // Spring security에 인증되어있는 객체를 업데이트
+      Authentication before = SecurityContextHolder.getContext().getAuthentication();
+      log.warn(before.toString());
+      // TODO: 2021-10-15
+      SecurityContextHolder.clearContext();
+//      SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, before.getCredentials(),
+//          Collections.singletonList(new SimpleGrantedAuthority(UserRoleType.PANEL.getName()))));
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new DataUpdateException("패널 변경중 에러 발생 :: " + e.getMessage());

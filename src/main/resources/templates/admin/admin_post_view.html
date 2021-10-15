@@ -3,13 +3,13 @@
 <th:block>
   <style type="text/css">
     .admin_main_contents {
-      background-color : #FAFAFA;
-      height           : 100%;
+      background-color: #fafafa;
+      height: 100%;
     }
 
     .admin_main_contents {
-      padding : 20px 40px 40px;
-      width   : 100%;
+      padding: 20px 40px 40px;
+      width: 100%;
     }
 
     /* 여기까지 전체적인 레이아웃 */
@@ -17,200 +17,200 @@
     /* 카드 제목 */
 
     .last_wrap {
-      margin-bottom : 10px;
+      margin-bottom: 10px;
     }
 
     .board_div2 {
-      border-radius : 2px;
-      font-size     : 13px;
+      border-radius: 2px;
+      font-size: 13px;
 
-      height        : 100%;
-      padding       : 10px 10px;
-      width         : 100%;
+      height: 100%;
+      padding: 10px 10px;
+      width: 100%;
     }
 
     /* 제목 */
     .tile_info_wrap {
-      align-content   : center;
-      display         : flex;
-      justify-content : space-between;
+      align-content: center;
+      display: flex;
+      justify-content: space-between;
     }
 
     .post_no {
-      color       : #515151;
-      font-size   : 13px;
-      font-weight : bold;
+      color: #515151;
+      font-size: 13px;
+      font-weight: bold;
     }
 
     .title_text > span {
-      color     : #515151;
-      font-size : 20px;
+      color: #515151;
+      font-size: 20px;
     }
 
     .regdate {
-      color     : #515151;
-      font-size : 14px;
+      color: #515151;
+      font-size: 14px;
     }
 
     .updatedate {
-      color           : #515151;
-      font-size       : 14px;
-      text-decoration : underline;
+      color: #515151;
+      font-size: 14px;
+      text-decoration: underline;
     }
 
     /* 작성자 */
     #writer_div {
-      height      : 48px;
-      line-height : 26px;
+      height: 48px;
+      line-height: 26px;
     }
 
     .post_count_wrap > div {
-      border        : 1px solid #DDDDDD;
-      border-radius : 5px;
-      box-sizing    : border-box;
-      color         : #515151;
-      cursor        : pointer;
-      font-family   : sans-serif;
-      font-size     : 13px;
-      height        : 48px;
-      margin-left   : 5px;
-      min-width     : 48px;
-      overflow      : hidden;
-      position      : relative;
-      text-align    : center;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      color: #515151;
+      cursor: pointer;
+      font-family: sans-serif;
+      font-size: 13px;
+      height: 48px;
+      margin-left: 5px;
+      min-width: 48px;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
     }
 
     .viewcnt:hover {
-      border : 2px solid #3885CA;
+      border: 2px solid #3885ca;
     }
 
     .replycnt:hover {
-      border : 2px solid #FF6347;
+      border: 2px solid #ff6347;
     }
 
     .goodcnt:hover {
-      border : 2px solid tomato;
+      border: 2px solid tomato;
     }
 
     .downcnt:hover {
-      border : 2px solid mediumseagreen;
+      border: 2px solid mediumseagreen;
     }
 
     .post_count_wrap strong {
-      display     : block;
-      font-size   : 1rem;
-      font-weight : 400;
-      line-height : 26px;
+      display: block;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 26px;
     }
 
     /* 첨부파일 */
     .form-group .board_div2 {
-      align-items     : center;
-      border          : 1.5px dashed #DADADA;
-      color           : #515151;
-      display         : flex;
-      height          : 130px;
-      justify-content : center;
-      text-align      : center;
+      align-items: center;
+      border: 1.5px dashed #dadada;
+      color: #515151;
+      display: flex;
+      height: 130px;
+      justify-content: center;
+      text-align: center;
     }
 
     /* 등록/취소 버튼 */
 
     .board_btn {
-      background      : white;
-      border-radius   : 2px;
-      color           : white;
-      font-size       : 14px;
-      padding         : 12px 22px;
-      text-decoration : none;
-      transition      : box-shadow .2s cubic-bezier(.4, 0, 1, 1),
-      background-color .2s cubic-bezier(.4, 0, .2, 1);
+      background: white;
+      border-radius: 2px;
+      color: white;
+      font-size: 14px;
+      padding: 12px 22px;
+      text-decoration: none;
+      transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
+        background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .board_btn:hover {
-      box-shadow : 0 2px 2px 0 rgba(0, 0, 0, .14),
-      0 3px 1px -2px rgba(0, 0, 0, .2),
-      0 1px 5px 0 rgba(0, 0, 0, .12);
-      box-shadow : 0 14px 26px -12px hsla(0, 0%, 60%, .42),
-      0 4px 23px 0 rgba(0, 0, 0, .12),
-      0 8px 10px -5px hsla(0, 0%, 60%, .2);
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 14px 26px -12px hsla(0, 0%, 60%, 0.42),
+        0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px hsla(0, 0%, 60%, 0.2);
     }
 
     /* 버튼 색상들 */
     .list_btn {
-      background-color : #3885CA;
+      background-color: #3885ca;
     }
 
     .update_btn {
-      background-color : #EBA444;
+      background-color: #eba444;
     }
 
     .delete_btn {
-      background-color : tomato;
-      cursor           : pointer;
+      background-color: tomato;
+      cursor: pointer;
     }
 
     .btn_wrap1 {
-      margin-left : -10px;
+      margin-left: -10px;
     }
 
     .btn_wrap2 {
-      margin-right : -10px;
+      margin-right: -10px;
     }
 
-    .list_btn > i, .delete_btn > i, .update_btn > i {
-      font-size     : 17px;
-      font-weight   : normal;
-      padding-right : 5px;
+    .list_btn > i,
+    .delete_btn > i,
+    .update_btn > i {
+      font-size: 17px;
+      font-weight: normal;
+      padding-right: 5px;
     }
 
     .uploadedList > li {
-      border-radius : 2px;
-      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-      margin-right  : 5px;
+      border-radius: 2px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin-right: 5px;
     }
 
     /* 첨부파일 */
 
     .form-group .board_div2 {
-      align-items     : center;
-      border          : 1.5px dashed #DADADA;
-      color           : #515151;
-      display         : flex;
-      font-size       : 15px;
-      height          : 150px;
-      justify-content : center;
-      text-align      : center;
+      align-items: center;
+      border: 1.5px dashed #dadada;
+      color: #515151;
+      display: flex;
+      font-size: 15px;
+      height: 150px;
+      justify-content: center;
+      text-align: center;
     }
 
     .title_div {
-      background-color : #F9F9F9;
-      border-top       : 2px solid #7C7C7C;
+      background-color: #f9f9f9;
+      border-top: 2px solid #7c7c7c;
     }
 
     .board_div2 > label {
-      border-right  : 1px solid #EFEFEF;
-      font-weight   : bold;
-      margin-right  : 7px;
-      padding-right : 7px;
+      border-right: 1px solid #efefef;
+      font-weight: bold;
+      margin-right: 7px;
+      padding-right: 7px;
     }
 
     .label_padding {
-      padding-left : 20px;
+      padding-left: 20px;
     }
 
     .file_download {
-      color : #007791;
+      color: #007791;
     }
 
     .file_download:hover {
-      text-decoration : underline;
+      text-decoration: underline;
     }
 
     .input_wrap {
-      border-bottom : 1px solid #DADADA;
+      border-bottom: 1px solid #dadada;
     }
-
   </style>
 </th:block>
 <th:block>
@@ -218,143 +218,58 @@
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
         <p class="main_item">공지사항</p>
+        <span data-th-text="${post.isWriter}"></span>
       </div>
     </div>
 
-    <section>
-      <div id="metop_container">
-        <div class="metop_inner">
-          <!-- 상세 게시글 창 -->
-          <div class="metop_board_wrap" th:object="${post}">
-            <div class="metop_board_card" style="border-top: 3px solid #4C99CF;">
-              <form name="" action="" method="POST">
-                <div class="input_wrap title_div">
-                  <div class="board_div2">
-                    <div class="tile_info_wrap">
-                      <div>
-                        <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
-                      </div>
-                    </div>
-                    <div class="title_text">
-                      <span th:text="${post.title}">폴인사이트입니다.</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="input_wrap">
-                  <div class="board_div2" id="writer_div">
-                    <label>작성자</label>
-                    <span th:text="*{user.name}">관리자</span>
-                  </div>
-                </div>
-                <div class="input_wrap">
-                  <div class="board_div2">
-                    <label>작성일</label>
-                    <span class="regdate" th:if="${post.registeredAt == post.registeredAt}" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
-
-                    <label class="label_padding">조회</label>
-                    <span th:text="${post.viewcnt}">12</span>
-                  </div>
-                </div>
-                <div th:each="file : ${post.attaches}" class="input_wrap">
-                  <div class="board_div2">
-                    <label class="file_item2" th:text="'첨부파일#'"></label>
-                    <a class="file_download" th:href="@{'/files/'+${file.fileName}}" th:text="${file.originalName}"></a>
-                  </div>
-                </div>
-                <div th:each="file : ${post.attaches}" class="input_wrap">
-                  <img th:src="'/files/'+${file.fileName}">
-                </div>
-                <div class="input_wrap textarea_div">
-                  <div class="board_div2" th:text="${post.viewcontent}" style="white-space: pre;">
-                  </div>
-                </div>
-
-                <!-- 취소 & 등록 버튼 -->
-                <div class="last_wrap">
-                  <div class="board_div2 btn_wrap">
-                    <div class="btn_wrap1">
-                      <span>
-                        <a href="#" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
-                      </span>
-                    </div>
-                    <th:block>
-                      <div class="btn_wrap2">
-                        <span>
-                          <a th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
-                        </span>
-                        <span class="board_btn delete_btn" th:value="${post.id}">
-                          <i class="far fa-trash-alt"></i>삭제
-                        </span>
-                      </div>
-                    </th:block>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <th:block th:include="fragments/postViewBody" />
   </div>
-  <div th:replace="fragments/post_delete_popup">
-
-  </div>
-  <script type="text/javascript">
-
-    function goList() {
-      const listBtnUrl = getCookie("listBtnUrl");
-      console.log(listBtnUrl)
-      if (listBtnUrl != null) {
-        location.href = listBtnUrl;
-      } else {
-        location.href = "/admin/posts"
-      }
-    }
-
+  <script>
     $(function () {
-      makeDeleteBtn();
-      document.querySelector(".popup_delete_btn").addEventListener('click', deletePost);
-      $("#popup_close_btn>i").on('click', (e) => {
-        $('.popup_overlay').fadeOut(100)
-      })
-      $(".popup_btn").on('click', (e) => {
-        $(".popup_overlay").fadeOut(100)
-      })
-      $('.popup_overlay').on('click', function () {
-        $(this).css('display', 'none')
-      })
-
-
-      let file_item2 = document.getElementsByClassName('file_item2');
-      let fileCount = file_item2.length;
-      for (let i = 1; i <= fileCount; i++) {
-        file_item2[i - 1].innerText = '첨부파일#' + i;
+      let file_item2 = $(".file_item2");
+      for (let i = 1; i <= file_item2.length; i++) {
+        file_item2[i - 1].innerText = "첨부파일#" + i;
       }
 
-      document.querySelector(".list_btn").addEventListener('click', goList);
-
+      $(".list_btn").on("click", goList);
     });
-    const goAdminPostList = () => {
-      history.back();
-    }
+
     const getCookie = function (name) {
-      const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      let value = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
       return value ? value[2] : null;
     };
 
-    function deletePost() {
-      let postId2 = postId;
+    function goList() {
+      const listBtnUrl = getCookie("listBtnUrl");
 
-      $.ajax({
-        url: '/admin/posts/' + postId2 + '/delete',
-        type: "DELETE"
-      }).done(
-          function () {
-            location.replace('/admin/posts')
-          }
-      )
-      $(".popup_overlay").fadeOut(100)
+      if (listBtnUrl != null) {
+        location.href = listBtnUrl;
+      } else {
+        location.href = "/admin/posts";
+      }
     }
+
+    const onDeletePost = () => {
+      let postId = "[[${post.id}]]";
+      let curUserName = $("#current_username").text();
+      let curUserRole = $("#current_userrole").text();
+      let postWriter = "[[${post.userId}]]";
+
+      if (curUserRole.includes("ADMIN") || postWriter === curUserName) {
+        let overlay = $(".popup_overlay");
+        overlay.fadeIn(100);
+        overlay.find(".popup_delete_btn").on("click", () => {
+          // 게시물 삭제
+          http
+            .delete(`/admin/posts/${postId}/delete`)
+            .then(() => location.replace("/admin/posts"))
+            .catch()
+            .finally(() => {
+              overlay.fadeOut(100);
+              overlay.children().off("click");
+            });
+        });
+      }
+    };
   </script>
 </th:block>
