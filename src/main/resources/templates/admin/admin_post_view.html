@@ -1,7 +1,7 @@
 <th:block th:include="admin/admin_sidebar" />
 <th:block th:include="module/common" />
 <th:block>
-  <style type="text/css">
+  <style>
     .admin_main_contents {
       background-color: #fafafa;
       height: 100%;
@@ -209,7 +209,12 @@
     }
 
     .input_wrap {
+      max-width: 800px;
       border-bottom: 1px solid #dadada;
+    }
+
+    .input_wrap > img {
+      max-width: 800px;
     }
   </style>
 </th:block>

@@ -319,7 +319,7 @@
               <div id="survey_point" class="user_basic_wrap">
                 <div class="user_info_box user_point_box">
                   <span class="info_article">포인트</span>
-                  <input type="text" class="user_info_input" name="point" value="300" />
+                  <input type="text" class="user_info_input" name="point" />
                 </div>
                 <div id="survey_progress" class="user_info_box user_status_box">
                   <span class="info_article">진행상태</span>
@@ -420,6 +420,9 @@
   <script th:src="@{/js/Validator.js}"></script>
   <script>
     const setDataInModal = e => {
+      e.stopPropagation()
+      e.preventDefault()
+      $('.modal_wrap').css('display', 'flex')
       let survey = e.data.survey;
       $('#survey_id').find('p').text(survey.id);
       $('input[name=id]').val(survey.id)
@@ -427,10 +430,12 @@
       $('input[name=title]').val(survey.title)
       $('#survey_point').find('input').val(!survey.point ? -1 : survey.point);
       $('#survey_progress').find('select').val(survey.progress);
-      $('#survey_duration').find('input[name=create]').val(survey.createdAt);
-      $('#survey_duration').find('input[name=end]').val(survey.endAt);
-      $('#modal_btn').find('button[name=update]').on('click', {survey: survey}, surveyUpdate);
-      $('#modal_btn').find('button[name=delete]').on('click', {survey: survey}, surveyDelete);
+      $('#survey_duration')
+          .find('input[name=create]').val(survey.createdAt)
+          .find('input[name=end]').val(survey.endAt);
+      $('#modal_btn')
+          .find('button[name=update]').on('click', {survey: survey}, surveyUpdate)
+          .find('button[name=delete]').on('click', {survey: survey}, surveyDelete);
     };
 
     async function getSurveyData(e) {
@@ -445,7 +450,6 @@
     }
 
     async function uploadSurveyThumbnail(thubmnail, surveyId) {
-      console.log("섬네일 저장")
       let frmData = new FormData()
       frmData.append('thumbnail', thubmnail)
       let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
@@ -467,7 +471,11 @@
         endAt: $('input[name=end]').val(),
       }
 
-      uploadSurveyThumbnail($('input[name=thumbnail]').prop('files')[0], info.id)
+      let thumbnailFile = $('input[name=thumbnail]').prop('files')[0]
+
+      if (!!thumbnailFile) {
+        uploadSurveyThumbnail(thumbnailFile, info.id)
+      }
       // 데이터 검증
       if (!isValidSurveyUpdateInfo(info)) {
         alert('올바른 값을 입력해주세요')
@@ -480,11 +488,15 @@
             .then(res => {
               if (res.data.success)
                 alert('업데이트 성공')
+              init()
             })
             .catch(err => {
               alert('설문 업데이트 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
             })
-            .finally(() => init())
+            .finally(() => {
+              $('.modal_wrap').fadeOut(100)
+
+            })
       }
     }
     const surveyDelete = e => {
@@ -502,11 +514,18 @@
             .catch(err => {
               alert('설문 삭제 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
             })
-            .finally(() => init())
+            .finally(() => {
+              $('.modal_wrap').fadeOut(100)
+              init()
+            })
       }
     }
 
     const init = e => {
+      if (!!e) {
+        e.stopPropagation()
+        e.preventDefault()
+      }
       getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total);
         const table = $('.scroll-table');
@@ -603,14 +622,63 @@
             msg.hide().text('')
           }
         })
-        .on('click', '.btn-update', function () {
+        .on('click', '.btn-update', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
           $('.modal_wrap').css('display', 'flex');
         })
-        .on('click', '.btn_close', function () {
+        .on('click', '.btn_close', function (e) {
+          e.preventDefault()
+          e.stopPropagation()
           $('.modal_wrap').css('display', 'none');
         })
-        .on('click', '.post-row > *', function () {
-          $('.modal_wrap').css('display', 'flex');
-        });
+    // .on('click', '.post-row > *', function (e) {
+    //   e.preventDefault()
+    //   e.stopPropagation()
+    //   // $('.modal_wrap').css('display', 'flex');
+    //   $('.modal_wrap').fadeIn(100)
+    // });
+
+    const makeSurveyTemplate = (survey) => {
+      console.log(survey)
+      let template = $(`<div></div>`)
+          .on("click", {survey: survey}, setDataInModal)
+          .addClass("post-row");
+      template.append(`<div>${survey.id}</div>`); // 번호
+      template.append(
+          `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
+      ); // 설문 이름
+      template.append(`<div>${!survey.point ? "지정 안됨" : survey.point}</div>`); // 지급 포인트
+      template.append(
+          `<div>${
+              survey.createAt
+                  ? "N/A"
+                  : survey.createAt === "1900-01-01"
+                      ? "N/A"
+                      : "~ " + survey.createAt
+          }</div>`
+      ); // 설문 기간
+      template.append(
+          `<div>${
+              survey.end
+                  ? "N/A"
+                  : survey.end === "1900-01-01"
+                      ? "N/A"
+                      : "~ " + survey.end
+          }</div>`
+      );
+      template.append(
+          `<div>${
+              survey.progress === "BEFORE"
+                  ? "등록"
+                  : survey.progress === "ONGOING"
+                      ? "진행"
+                      : "종료"
+          }</div>`
+      ); // 진행 상태
+      template.append(`<div>${!survey.count ? 0 : survey.count}</div>`); // 참여자 수
+      template.append(`<div>${survey.surveyId}</div>`); // 서베이 아이디
+      return template;
+    };
   </script>
 </th:block>

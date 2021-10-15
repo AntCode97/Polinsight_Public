@@ -123,6 +123,8 @@ public class ApiController {
           return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
         }
       }
+      // TODO: 2021-10-16
+      //      return success(new PageImpl<>(surveyList.get().map(SurveyDto::of).collect(Collectors.toList()), pageable, surveyList.getTotalElements()));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception();
@@ -176,9 +178,11 @@ public class ApiController {
   @PutMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
     try {
+      log.warn("before update :: {}", dto);
       Survey survey = surveyService.findById(dto.getId()).orElseThrow();
 
       survey.updateInfo(dto);
+      log.warn("after update :: {}", survey);
       surveyService.update(survey);
       log.info("Survey Updated ID: {}, Title : {}", survey.getId(), survey.getTitle());
       return success(Boolean.TRUE);
@@ -195,8 +199,9 @@ public class ApiController {
     try {
       Survey survey = surveyService.findById(surveyId).orElseThrow();
       UUID uuid = UUID.randomUUID();
-      String thumbnailName = storageService.store(uuid.toString(), thumbnail);
-      survey.setThumbnail(thumbnailName);
+      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), thumbnail);
+      storageService.store(uuid.toString(), thumbnail);
+      survey.setThumbnail(thumbnailPath);
       surveyService.update(survey);
       return success(Boolean.TRUE);
     } catch (Exception e) {

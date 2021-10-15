@@ -1,109 +1,105 @@
 <th:block>
   <style>
     .modal_container {
-      align-items      : center;
-      background-color : rgba(0, 0, 0, .0);
-      display          : none;
-      height           : 100%;
-      justify-content  : center;
-      left             : 0;
-      margin           : 0 auto;
-      overflow-y       : hidden;
-      position         : fixed;
-      top              : 0;
-      width            : 100%;
-      z-index          : 999;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0);
+      display: none;
+      height: 100%;
+      justify-content: center;
+      left: 0;
+      margin: 0 auto;
+      overflow-y: hidden;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
     }
 
     .modal_wrap {
-      background-color : white;
-      box-shadow       : 5px 5px 5px rgba(0, 0, 0, 0.3);
-      height           : 250px;
-      padding          : 20px;
-      width            : 400px;
-
+      background-color: white;
+      box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+      height: 250px;
+      padding: 20px;
+      width: 400px;
     }
 
     .modal_content {
-      align-items     : center;
-      display         : flex;
-      flex-direction  : column;
-      justify-content : center;
-      text-align      : center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
     }
 
-
     .modal_header {
-      display        : flex;
-      flex-direction : row-reverse;
-      height         : 10%;
-      width          : 100%;
+      display: flex;
+      flex-direction: row-reverse;
+      height: 10%;
+      width: 100%;
     }
 
     .modal_body {
-      flex-grow : 1;
-      height    : 75%;
-      width     : 290px;
+      flex-grow: 1;
+      height: 75%;
+      width: 290px;
     }
 
     .modal_title {
-      font-size   : 20px;
-      font-weight : bold;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     .modal_footer {
-      display         : flex;
-      height          : 15%;
-      justify-content : space-around;
-      width           : 100%;
+      display: flex;
+      height: 15%;
+      justify-content: space-around;
+      width: 100%;
     }
 
     .modal_buttons {
-      height : 40px;
-      width  : 40px;
+      height: 40px;
+      width: 40px;
     }
 
     .modal_buttons:hover {
-      color  : red;
-      cursor : pointer;
+      color: red;
+      cursor: pointer;
     }
 
-
     .modal_footer > .modal_buttons:hover {
-      background-color : #1F326A;
-      border           : 1px solid #091940;
-      color            : #FFFFFF;
+      background-color: #1f326a;
+      border: 1px solid #091940;
+      color: #ffffff;
     }
 
     #more_survey_btn {
-      cursor          : pointer;
-      font-size       : 14px;
-      font-weight     : bold;
-      display         : flex;
-      justify-content : center;
-      align-items     : center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     #more_survey_btn:hover {
-      color : #4C99CF;
+      color: #4c99cf;
     }
-
   </style>
   <div class="main_survey_list_wrap">
     <div class="main_survey_list_title">
       <div>
         <div class="survey_title_wrap">
-          <div style="display: flex; justify-content: space-between; width: 100%;">
+          <div
+            style="display: flex; justify-content: space-between; width: 100%"
+          >
             <p>진행중인 <span class="pol_color">온라인조사</span></p>
             <p id="more_survey_btn"><i class="fas fa-plus fa-lg"></i></p>
           </div>
           <span>폴인사이트에서 현재 진행중인 온라인조사를 소개해드립니다.</span>
         </div>
-
       </div>
     </div>
-    <div class="main_survey_box">
-    </div>
+    <div class="main_survey_box"></div>
   </div>
   <!--   로딩 스피너 -->
   <div id="loading">
@@ -113,56 +109,81 @@
     <div class="modal_wrap">
       <div class="modal_content">
         <div class="modal_header">
-          <p class="modal_buttons modal_close_btn"><i class="fas fa-times"></i></p>
+          <p class="modal_buttons modal_close_btn">
+            <i class="fas fa-times"></i>
+          </p>
         </div>
         <div class="modal_body">
           <p class="notice"></p>
         </div>
         <div class="modal_footer">
-          <button class="btn btn-primary" name="participate_btn">참여하기</button>
+          <button class="btn btn-primary" name="participate_btn">
+            참여하기
+          </button>
         </div>
       </div>
     </div>
   </div>
   <script>
-    const makeSurveyCard = survey => {
-      let template = $(`<div></div>`).addClass('main_survey_item');
-      if (!!survey.thumbnail)
-        template.append(`<img width="300px" height="191px" src="http://localhost:8080/files/${survey.thumbnail}" />`)
-      if (survey.progress === 'ONGOING') {
-        template.addClass('bg_color_item_white');
+    const makeSurveyCard = (survey) => {
+      let address = "[[${@environment.getProperty('file.upload.address')}]]";
+      let template = $(`<div></div>`).addClass("main_survey_item");
+      if (!!survey.thumbnail) {
+        template.append(
+          `<img width="300px" height="191px" src="${
+            address + survey.thumbnail
+          }" />`
+        );
+      }
+      if (survey.progress === "ONGOING") {
+        template.addClass("bg_color_item_white");
         template.append(`<p class="survey_run">진행중</p>`);
-        template.on('mouseover', function () {
-          $(this).css({
-            'cursor': 'pointer',
-            'box-shadow': '5px 5px 10px rgba(0,0,0, .3)',
-            'transition': 'box-shadow 0.5s ease-in-out'
+        template
+          .on("mouseover", function () {
+            $(this).css({
+              cursor: "pointer",
+              "box-shadow": "5px 5px 10px rgba(0,0,0, .3)",
+              transition: "box-shadow 0.5s ease-in-out",
+            });
           })
-        }).on('mouseleave', function () {
-          $(this).css({'cursor': 'default', 'box-shadow': 'none'});
-        }).on('click', {survey: survey}, surveyCardClickEventHandler);
+          .on("mouseleave", function () {
+            $(this).css({ cursor: "default", "box-shadow": "none" });
+          })
+          .on("click", { survey: survey }, surveyCardClickEventHandler);
       } else {
-        template.addClass('bg_color_item_gray');
+        template.addClass("bg_color_item_gray");
         template.append(`<p class="survey_stop">조사완료</p>`);
-        template.on('click', function (e) {
+        template.on("click", function (e) {
           e.preventDefault();
           e.returnValue = false;
-          alert('종료된 설문입니다.');
+          alert("종료된 설문입니다.");
         });
       }
       template.append(`<p class="survey_title">${survey.title}</p>`);
-      template.append(`<p class="survey_point"> ${!survey.point ? '지정 안됨' : survey.point + ' P'}</p>`);
-      template.append(`<p class="survey_date"> ${!survey.endAt ? '지정 안됨' : '~ ' + survey.endAt.split('T')[0]}</p>`);
+      template.append(
+        `<p class="survey_point"> ${
+          !survey.point ? "지정 안됨" : survey.point + " P"
+        }</p>`
+      );
+      template.append(
+        `<p class="survey_date"> ${
+          !survey.end
+            ? "지정 안됨"
+            : survey.end === "1900-01-01"
+            ? "지정 안됨"
+            : "~ " + survey.end
+        }</p>`
+      );
 
       return template;
     };
 
-    const loginChk = id => {
+    const loginChk = (id) => {
       let sessionUser = `[[${session.user}]]`;
       if (!sessionUser) {
-        alert('로그인을 먼저 해주세요');
+        alert("로그인을 먼저 해주세요");
         return false;
-      } else if (sessionUser.role === 'ADMIN') {
+      } else if (sessionUser.role === "ADMIN") {
         location.href = `/admin/surveyinfo/${id}`;
         return false;
       }
@@ -170,9 +191,8 @@
     };
 
     async function checkAlreadyParticipate(surveyId) {
-      let response = await http.get(`/api/participates/${surveyId}`)
-      // T or F
-      return response.data.response
+      let response = await http.get(`/api/participates/${surveyId}`);
+      return response.data.response;
     }
 
     const surveyCardClickEventHandler = (e) => {
@@ -181,50 +201,62 @@
       const survey = e.data.survey;
       if (!loginChk(survey.seq)) return;
 
-      $('.modal_container').css('display', 'flex');
+      $(".modal_container").css("display", "flex");
 
-      $('p.notice').empty().append(`<span class="modal_title">${survey.title}</span>`).append(`<span> 설문을 진행하시겠습니까?</span>`);
+      $("p.notice")
+        .empty()
+        .append(`<span class="modal_title">${survey.title}</span>`)
+        .append(`<span> 설문을 진행하시겠습니까?</span>`);
 
-      $('button[name=participate_btn]').on('click', e => {
+      $("button[name=participate_btn]").on("click", (e) => {
         if (checkAlreadyParticipate(survey.surveyId)) {
           http
-              .get(`/api/participate${'/' + survey.id}`)
-              .then(res => {
-                if (res.data.success) {
-                  location.replace(res.data.response);
-                } else {
-                  alert(res.data.error.message);
-                  location.replace("/")
-                }
-              }).catch(console.log);
-        }else{
-          alert('이미 참여한 설문입니다.')
+            .get(`/api/participate${"/" + survey.id}`)
+            .then((res) => {
+              if (res.data.success) {
+                location.replace(res.data.response);
+              } else {
+                alert(res.data.error.message);
+                location.replace("/");
+              }
+            })
+            .catch(console.log);
+        } else {
+          alert("이미 참여한 설문입니다.");
         }
       });
 
-      $('.modal_close_btn').on('click', () => {
-        $('.participate_btn').off('click');
-        $('.modal_container').fadeOut();
+      $(".modal_close_btn").on("click", () => {
+        $(".participate_btn").off("click");
+        $(".modal_container").fadeOut();
       });
     };
 
     async function getSurveyDataInIndex(e) {
       let page = !e ? 0 : e.data.page;
       const response = await http.get(`/api/surveys?type=INDEX`, {
-        params: {page: page, size: 10}
+        params: { page: page, size: 10 },
       });
       const data = response.data.response;
-      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number};
+      return {
+        content: data.content,
+        total: data.totalElements,
+        totalPage: data.totalPages,
+        current: data.number,
+      };
     }
 
     const init = (e) => {
-
-      getSurveyDataInIndex(e).then(obj => {
+      getSurveyDataInIndex(e).then((obj) => {
         if (obj.total > 0) {
-          const survey_box = $('.main_survey_box').empty().append('<div class="main_survey_item_wrap"></div>');
-          obj.content.forEach(survey => {
-            let item_wrap = survey_box.find('.main_survey_item_wrap:last-child');
-            if (item_wrap.find('.main_survey_item').length < 3) {
+          const survey_box = $(".main_survey_box")
+            .empty()
+            .append('<div class="main_survey_item_wrap"></div>');
+          obj.content.forEach((survey) => {
+            let item_wrap = survey_box.find(
+              ".main_survey_item_wrap:last-child"
+            );
+            if (item_wrap.find(".main_survey_item").length < 3) {
               item_wrap.append(makeSurveyCard(survey));
             } else {
               item_wrap = $('<div class="main_survey_item_wrap"></div>');
@@ -237,8 +269,8 @@
 
     $(function () {
       init();
-      $('#more_survey_btn').on('click', () => {
-        location.assign('/research/pols')
+      $("#more_survey_btn").on("click", () => {
+        location.assign("/research/pols");
       });
     });
   </script>

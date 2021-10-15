@@ -46,19 +46,19 @@ public class FileSystemStorageService implements StorageService {
 
   // TODO: 2021-10-15 비동기 처리 필요
   @Override
-  public String store(String uuid, MultipartFile file) throws IOException {
-    String fileName = null;
+  public void store(String uuid, MultipartFile file) throws IOException {
+    //    String fileName = null;
     if (file.isEmpty()) {
       throw new StorageException("Failed to store empty file.");
     }
-    fileName = uuid + file.getOriginalFilename();
+    //    fileName = uuid + file.getOriginalFilename();
     Path destinationFile = getPathByType(file, uuid);
 
     try (InputStream inputStream = file.getInputStream()) {
       Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    return fileName;
+    //    return fileName;
   }
 
   @Override
@@ -70,22 +70,22 @@ public class FileSystemStorageService implements StorageService {
         typeCheckUtil.getImageFileExt(thumbnail.getOriginalFilename()));
   }
 
-//  @Override
-//  public Stream<Path> loadAll() {
-//    try {
-//      return Files.walk(this.rootLocation, 1)
-//                  .filter(path -> !path.equals(this.rootLocation))
-//                  .map(this.rootLocation::relativize);
-//    } catch (IOException e) {
-//      throw new StorageException("Failed to read stored files", e);
-//    }
-//
-//  }
+  //  @Override
+  //  public Stream<Path> loadAll() {
+  //    try {
+  //      return Files.walk(this.rootLocation, 1)
+  //                  .filter(path -> !path.equals(this.rootLocation))
+  //                  .map(this.rootLocation::relativize);
+  //    } catch (IOException e) {
+  //      throw new StorageException("Failed to read stored files", e);
+  //    }
+  //
+  //  }
 
-//  @Override
-//  public Path load(String filename) {
-//    return rootLocation.resolve(filename);
-//  }
+  //  @Override
+  //  public Path load(String filename) {
+  //    return rootLocation.resolve(filename);
+  //  }
 
 
   //  @Override
@@ -116,7 +116,7 @@ public class FileSystemStorageService implements StorageService {
     }
   }
 
-//  @Override
+  //  @Override
   //  public void deleteAll() {
   //    FileSystemUtils.deleteRecursively(rootLocation.toFile());
   //  }

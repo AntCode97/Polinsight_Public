@@ -292,10 +292,9 @@
       } else alert("데이터를 가져오는 중 오류가 발생하였습니다.");
     }
 
-    const initTest = (e) => {
+    const init = (e) => {
       getInsightData().then((obj) => {
         let table = $(".scroll-card");
-        // TODO 카드 리스트 만들기
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
           obj.content.forEach((insight) => {
@@ -305,38 +304,6 @@
           table.append("<h1>데이터가 존재하지 않습니다</h1>");
         }
       });
-    };
-
-    async function getSurveyData(e) {
-      let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      let regex = String($("input[name=admin_find]").val()).trim();
-      const response = await http.get("/api/surveys/notAdmin", {
-        params: { page: page, size: 10, regex: regex },
-      });
-      if (response.data.success) {
-        const data = response.data.response;
-        return {
-          content: data.content,
-          total: data.totalElements,
-          totalPage: data.totalPages,
-          current: data.number,
-        };
-      }
-    }
-
-    const init = (e) => {
-      const spinner = $("#loading");
-      spinner.show();
-      getSurveyData(e).then((obj) => {
-        if (obj.total > 0) {
-          makePagination(obj.current, obj.totalPage);
-          obj.content.forEach((post) => {
-            $(".scroll-card").append(makeSurveyTemplate2(post));
-          });
-        } else
-          $(".scroll-card").append(`<div><h1>게시물이 없습니다.</h1></div>`);
-      });
-      spinner.hide();
     };
 
     const makeInsightTemplate = (insight) => {
@@ -355,19 +322,8 @@
       return template;
     };
 
-    const makeSurveyTemplate2 = (survey) => {
-      if (survey.progress !== "BEFORE") {
-        let template = $(`<div class="card-box"></div>`);
-        template.append(`<div class="card-box"">
-            <img src="/img/logo/logo.png" class="card-img" alt="">
-                <div class="card-title">${survey.title}</div></div>`); // 카드
-        return template;
-      }
-    };
-
     $(function () {
-      // init()
-      initTest();
+      init();
     });
   </script>
 </th:block>

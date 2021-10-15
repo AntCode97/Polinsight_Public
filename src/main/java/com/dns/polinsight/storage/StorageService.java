@@ -11,7 +11,7 @@ public interface StorageService {
 
   void delete(String filename) throws FileNotFoundException;
 
-  String store(String toString, MultipartFile thumbnailImg) throws IOException;
+  void store(String toString, MultipartFile thumbnailImg) throws IOException;
 
   String saveThumbnail(String uuid, MultipartFile thumbnail) throws ImageResizeException, TypeMismatchException;
 

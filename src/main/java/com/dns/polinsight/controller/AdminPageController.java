@@ -50,4 +50,9 @@ public class AdminPageController {
     return new ModelAndView("admin/admin_qna");
   }
 
+  @GetMapping("/pols")
+  public ModelAndView polsInsight() {
+    return new ModelAndView("admin/admin_pols");
+  }
+
 }
