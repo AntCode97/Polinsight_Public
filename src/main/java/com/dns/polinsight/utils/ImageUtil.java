@@ -11,18 +11,18 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ImageUtil {
 
-  static String fileSeparator = File.separator;
-
   int width = 480, height = 320;
 
-  @Value("${file.upload.baseLocation}")
-  private String baseLocation;
+  @Value("${file.upload.thumbnail}")
+  private String thumbnailLocation;
 
   /**
    * @param originImage
@@ -38,10 +38,8 @@ public class ImageUtil {
    */
   public String imageResize(MultipartFile originImage, String imageName, String ext) throws ImageResizeException {
     try {
-      //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName + "." + ext);
-      //      Path thumbnailPath = Paths.get("thumbnail/").resolve(imageName);
       String thumbnailPath = "/thumbnail/" + imageName;
-      String thumbnailAbsPath = baseLocation + fileSeparator + thumbnailPath;
+      Path thumbnailAbsPath = Paths.get(thumbnailLocation + thumbnailPath).normalize();
 
       Image image = ImageIO.read(originImage.getInputStream());
       Image resizedImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);

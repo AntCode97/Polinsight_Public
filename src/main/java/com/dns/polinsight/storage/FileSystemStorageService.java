@@ -6,6 +6,7 @@ import com.dns.polinsight.utils.TypeCheckUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,12 @@ public class FileSystemStorageService implements StorageService {
 
   private final ImageUtil imageUtil;
 
+  @Value("${file.upload.images}")
+  private String imageLocation;
+
+  @Value("${file.upload.files}")
+  private String fileLocation;
+
   @Autowired
   public FileSystemStorageService(StorageProperties properties, TypeCheckUtil typeCheckUtil, ImageUtil imageUtil) {
     this.rootLocation = Paths.get(properties.getLocation());
@@ -42,6 +49,7 @@ public class FileSystemStorageService implements StorageService {
     this.imageUtil = imageUtil;
   }
 
+  // TODO: 2021-10-15 비동기 처리 필요
   @Override
   public String store(String uuid, MultipartFile file) throws IOException {
     String fileName = null;
@@ -50,13 +58,6 @@ public class FileSystemStorageService implements StorageService {
     }
     fileName = uuid + file.getOriginalFilename();
     Path destinationFile = getPathByType(file, uuid);
-
-    // TODO: 2021-10-13 : 경로 체크 구문이 필요할 듯
-
-    // NOTE 2021-10-13 : 빌드시에 디렉토리를 생성하게 해놓아서 문제는 없어보인다. --> 아닌 것 같다
-    //    if (!destinationFile.getParent().equals(rootLocation.toAbsolutePath())) {
-    //      throw new StorageException("Cannot store file outside current directory.");
-    //    }
 
     try (InputStream inputStream = file.getInputStream()) {
       Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
@@ -138,9 +139,9 @@ public class FileSystemStorageService implements StorageService {
 
   private Path getPathByType(MultipartFile file, String uuid) {
     if (typeCheckUtil.isImageFile(file.getOriginalFilename()))
-      return rootLocation.resolve(Paths.get("image/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
+      return rootLocation.resolve(Paths.get(imageLocation + "/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
     else
-      return rootLocation.resolve(Paths.get("files/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
+      return rootLocation.resolve(Paths.get(fileLocation + "/" + uuid + file.getOriginalFilename())).normalize().toAbsolutePath();
   }
 
 }

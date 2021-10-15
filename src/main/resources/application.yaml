@@ -205,7 +205,7 @@ custom :
 file :
   upload :
     baseLocation : "/app/data/"
-    image :        "/app/data/image"
-    thumbnail :    "/app/data/thumbnail"
-    file :         "/app/data/file"
+    image :        "/app/data/images"
+    thumbnail :    "/app/data/thumbnails"
+    file :         "/app/data/files"
     address :      "http://dnslab.iptime.org/uploads"
