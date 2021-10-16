@@ -12,10 +12,7 @@ import com.dns.polinsight.types.*;
 import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -101,30 +98,31 @@ public class ApiController {
    * 저장된 모든 설문 반환
    * */
   @GetMapping("/surveys")
-  public ApiUtils.ApiResult<Page<SurveyMapping>> adminGetAllSurveys(@PageableDefault Pageable pageable,
+  public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
                                                                     @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                     @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), ((Sort.by("id").ascending().and(Sort.by("endAt").descending()))));
+    Page<SurveyMapping> surveyList;
     try {
       if (type.isBlank() || type.equals("ALL")) {
         if (regex.isBlank()) {
-          return success(surveyService.findAll(pageable));
+          surveyList = surveyService.findAll(pageable);
         } else {
-          return success(surveyService.findAllAndRegex(pageable, regex));
+          surveyList = surveyService.findAllAndRegex(pageable, regex);
         }
       } else if (type.equals("INDEX")) {
         Page<SurveyMapping> page = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
-        return success(page);
+        surveyList = page;
       } else {
         type = type.toUpperCase();
         if (regex.isBlank()) {
-          return success(surveyService.findAllByTypes(pageable, ProgressType.valueOf(type)));
+          surveyList = surveyService.findAllByTypes(pageable, ProgressType.valueOf(type));
         } else {
-          return success(surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex));
+          surveyList = surveyService.findAllByTypesAndRegex(pageable, ProgressType.valueOf(type), regex);
         }
       }
-      // TODO: 2021-10-16
-      //      return success(new PageImpl<>(surveyList.get().map(SurveyDto::of).collect(Collectors.toList()), pageable, surveyList.getTotalElements()));
+
+      return success(new PageImpl<>(surveyList.getContent().stream().map(SurveyDto::of).collect(Collectors.toList()), pageable, surveyList.getTotalElements()));
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception();

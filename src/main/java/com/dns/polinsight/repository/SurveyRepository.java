@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-  String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt, s" +
-      ".endAt, s.thumbnail as thumbnail, s.questionCount as questionCount, c.participateUrl as participateUrl";
+  final String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt as " +
+      "createdAt, s.endAt as endAt, s.thumbnail as thumbnail, s.questionCount as questionCount, c.participateUrl as participateUrl";
 
   Page<Survey> findAllByTitleLikeOrderById(Pageable pageable, String title);
 
@@ -51,4 +51,5 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type ")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
+
 }

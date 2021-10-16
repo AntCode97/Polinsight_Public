@@ -167,11 +167,11 @@
       );
       template.append(
         `<p class="survey_date"> ${
-          !survey.end
+          !survey.endAt
             ? "지정 안됨"
-            : survey.end === "1900-01-01"
+            : survey.endAt === "1900-01-01"
             ? "지정 안됨"
-            : "~ " + survey.end
+            : "~ " + survey.endAt
         }</p>`
       );
 

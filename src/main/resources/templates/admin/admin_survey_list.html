@@ -651,20 +651,16 @@
       template.append(`<div>${!survey.point ? "지정 안됨" : survey.point}</div>`); // 지급 포인트
       template.append(
           `<div>${
-              survey.createAt
+              !survey.createAt
                   ? "N/A"
-                  : survey.createAt === "1900-01-01"
-                      ? "N/A"
-                      : "~ " + survey.createAt
+                  : "~ " + survey.createAt
           }</div>`
       ); // 설문 기간
       template.append(
           `<div>${
-              survey.end
+              !survey.endAt
                   ? "N/A"
-                  : survey.end === "1900-01-01"
-                      ? "N/A"
-                      : "~ " + survey.end
+                  : "~ " + survey.endAt
           }</div>`
       );
       template.append(
