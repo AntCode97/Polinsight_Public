@@ -9,8 +9,11 @@
     .post-row > *:nth-child(1) {
       width : 50px;
     }
-
     .post-row > *:nth-child(2) {
+      width : 40px;
+    }
+
+    .post-row > *:nth-child(3) {
       width : 500px;
     }
 
@@ -400,6 +403,7 @@
         <thead>
         <tr class="post-th post-row">
           <th>번호</th>
+          <th>썸네일</th>
           <th>설문 이름</th>
           <th>포인트</th>
           <th>설문 시작일</th>
@@ -632,35 +636,30 @@
           e.stopPropagation()
           $('.modal_wrap').css('display', 'none');
         })
-    // .on('click', '.post-row > *', function (e) {
-    //   e.preventDefault()
-    //   e.stopPropagation()
-    //   // $('.modal_wrap').css('display', 'flex');
-    //   $('.modal_wrap').fadeIn(100)
-    // });
 
     const makeSurveyTemplate = (survey) => {
-      console.log(survey)
+      let loc = "[[${@environment.getProperty('file.upload.address')}]]"
       let template = $(`<div></div>`)
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");
       template.append(`<div>${survey.id}</div>`); // 번호
+      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`) // TODO : 임시로 카카오톡 달아놓음
       template.append(
           `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
       ); // 설문 이름
       template.append(`<div>${!survey.point ? "지정 안됨" : survey.point}</div>`); // 지급 포인트
       template.append(
           `<div>${
-              !survey.createAt
+              !survey.createdAt
                   ? "N/A"
-                  : "~ " + survey.createAt
+                  : survey.createdAt
           }</div>`
       ); // 설문 기간
       template.append(
           `<div>${
               !survey.endAt
                   ? "N/A"
-                  : "~ " + survey.endAt
+                  : survey.endAt
           }</div>`
       );
       template.append(
