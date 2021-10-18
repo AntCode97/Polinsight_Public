@@ -603,6 +603,11 @@
             </div>
           </div>
 
+          <div
+              style="color: white; background-color: red; width: 50px; height: 30px;"
+              sec:authentication="principal.username"
+          ></div>
+
           <!-- 포인트 이력 -->
           <div class="item_box history_box">
             <div class="item_header">
@@ -859,11 +864,11 @@
                                 </div>
                                 <div class="right_content">
                                   <label>
-                                    <input name="marry" type="radio" value="false" th:checked="${#strings.equals(user.marry,'미혼')}">
+                                    <input name="marry" type="radio" value="미혼" th:checked="${#strings.equals(user.marry,'미혼')}">
                                     미혼
                                   </label>
                                   <label>
-                                    <input name="marry" type="radio" value="true" th:checked="${#strings.equals(user.marry,'기혼')}">
+                                    <input name="marry" type="radio" value="기혼" th:checked="${#strings.equals(user.marry,'기혼')}">
                                     기혼
                                   </label>
                                   <span class="err_msg"></span>
@@ -1150,7 +1155,7 @@
                   </div>
                 </form>
               </th:block>
-              <th:block sec:authorize="hasAnyAuthority('USER')">
+              <th:block sec:authorize="hasAuthority('USER')">
                 <div class="input_content">
                   <h2>회원님은 패널유저가 아니십니다. 패널로 변경 하시겠습니까?</h2>
                   <button name="go_change_panel">패널로 변경하기</button>
@@ -1417,8 +1422,7 @@
           .finally(() => location.replace('/mypage'))
     }
 
-    // 추가 정보 업데이트
-    // gender, birth(yaer, month, day), birthType, address(state, city), education, marry, job, industry, favorite
+
     function userPanelInfoUpdate() {
       let gender = $('input[name=gender]:checked')
       let year = $('select[name=year]')

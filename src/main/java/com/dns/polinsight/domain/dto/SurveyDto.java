@@ -1,9 +1,15 @@
 package com.dns.polinsight.domain.dto;
 
 import com.dns.polinsight.domain.Survey;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
@@ -14,7 +20,6 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class SurveyDto {
 
   private Long id;
@@ -57,5 +62,24 @@ public class SurveyDto {
     this.title = survey.getTitle();
   }
 
+  public static SurveyDto of(SurveyMapping mapping) {
+    return SurveyDto.builder()
+                    .id(mapping.getId())
+                    .point(mapping.getPoint())
+                    .surveyId(mapping.getSurveyId())
+                    .count(mapping.getQuestionCount())
+                    .progress(mapping.getProgress())
+                    .minimumTime(mapping.getMinimumTime())
+                    .createdAt(mapping.getCreatedAt())
+                    .endAt(mapping.getEndAt())
+                    .participateUrl(mapping.getParticipateUrl())
+                    .title(mapping.getTitle())
+                    .build();
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+  }
 
 }

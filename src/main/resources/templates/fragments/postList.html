@@ -52,8 +52,7 @@
           new
       </span>
         </a>
-        <img th:if="${list.thumbnail}" th:src="'/files/'+${list.thumbnail}">
-        <!--        <img th:if="${list.thumbnail}" th:src="${list.thumbnail}" >-->
+        <img th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${list.thumbnail}">
 
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
@@ -61,8 +60,8 @@
         <span>
           <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
           <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-          <i th:if="${list.thumbnail == null }" class="fas fa-file-image file_icon_no"></i>
-          <i th:unless="${list.thumbnail == null }" class="fas fa-file-image file_icon_yes"></i>
+          <i th:if="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>
+          <i th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>
         </span>
         <span>
           <span class="btn_multi_wrap">
@@ -146,11 +145,7 @@
       });
 
     };
-    // const init = () => {
-    //   document.querySelector('#searchinput').addEventListener('keyup', asyncFindBoard);
-    // }
-    // window.load = init()
-    // $(document).ready(init);
+
     const deleteNotice = (e) => {
       e.preventDefault();
     };

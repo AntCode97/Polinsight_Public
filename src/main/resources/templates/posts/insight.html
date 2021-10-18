@@ -21,20 +21,36 @@
       color           : #2B90D9;
       text-decoration : underline;
     }
+
+    .post-header {
+    }
+
+    .post-body {
+    }
+
+    .post-wrapper {
+      max-width : 1200px;
+    }
+
+    .post-content-header {
+      display : flex;
+    }
+
+    .post-writer {
+    }
+
+    .post-title {
+    }
+
+    .post-date {
+    }
   </style>
   <th:block>
     <div class="flex-wrapper">
       <div class="flex-content">
-        <div name="post-header">
-
-        </div>
-        <div name="post-body">
-
-        </div>
-        <!--        <div name="comment-input">-->
-        <!--          <input name="input-comment-value" type="text">-->
-        <!--          <span><button name="add-comment-btn" disabled>답글 달기</button></span>-->
-        <!--        </div>-->
+        <div class="post-wrapper"></div>
+        <div name="post-header" class="post-header"></div>
+        <div name="post-body" class="post-body"></div>
 
         <th:block th:include="fragments/comment"></th:block>
       </div>
@@ -44,46 +60,43 @@
   <script th:src="@{/js/Validator.js}"></script>
   <script th:src="@{/js/CommonUtils.js}"></script>
   <script>
-
     async function getOneInsightData(postId) {
-      let response = await http.get(`/api/post/${postId}`)
+      let response = await http.get(`/api/post/${postId}`);
       if (response.data.success) {
-        return response.data.response
-      } else
-        alert('데이터를 가져오는 중 오류가 발생하였습니다.')
+        return response.data.response;
+      } else alert("데이터를 가져오는 중 오류가 발생하였습니다.");
     }
 
-    const makeInsightTemplate = post => {
-      let postHead = $('div[name=post-header]')
-      let headTemplate = $(`<div></div>`)
-      headTemplate.append(`<span>${post.userName}</span>`)
-      headTemplate.append(`<span>${post.title}</span>`)
-      headTemplate.append(`<span>${post.registeredAt}</span>`)
-      postHead.append(headTemplate)
+    const makeInsightTemplate = (post) => {
+      let postHead = $("div[name=post-header]");
+      let headTemplate = $(`<div class="post-content-header"></div>`);
+      headTemplate.append(`<span class="post-writer">${post.userName}</span>`);
+      headTemplate.append(`<span class="post-title">${post.title}</span>`);
+      headTemplate.append(
+          `<span class="post-date">${dayAndTime(post.registeredAt)}</span>`
+      );
+      postHead.append(headTemplate);
 
-
-      let postBody = $('div[name=post-body]')
-      postBody.append(`<div>${post.viewcontent}</div>`)
-      post.attaches.forEach(attach => {
+      let postBody = $("div[name=post-body]");
+      postBody.append(`<div>${post.viewcontent}</div>`);
+      post.attaches.forEach((attach) => {
         if (isImageFile(attach.fileName)) {
-          postBody.append(`<img src="${'http://localhost:8080/files/' + attach.fileName}"/>`)
+          postBody.append(
+              `<img src="${"[[${@environment.getProperty('file.upload.image')}]]" + attach.fileName}" alt="`${attach.originalName}`"/>`
+          );
         }
-      })
-    }
+      });
+    };
 
-    let insight = {}
-    const initInsight = e => {
-      let postId = `[[${postId}]]`
-      getOneInsightData(postId)
-          .then(ins => {
-            insight = {...ins}
-            makeInsightTemplate(ins);
-          })
-    }
+    const initInsight = (e) => {
+      let postId = `[[${postId}]]`;
+      getOneInsightData(postId).then((ins) => {
+        makeInsightTemplate(ins);
+      });
+    };
 
     $(function () {
       initInsight();
-    })
-
+    });
   </script>
 </th:block>

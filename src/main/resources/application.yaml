@@ -20,13 +20,13 @@ server :
 spring :
   servlet :
     multipart :
-      max-file-size :    102400KB
-      max-request-size : 102400KB
+      max-file-size :    100MB
+      max-request-size : 100MB
   mvc :
     static-path-pattern : /static/**
-    hiddenmethod:
-      filter:
-        enabled: true
+    hiddenmethod :
+      filter :
+        enabled : true
   web :
     resources :
       static-locations : classpath:/static
@@ -72,8 +72,8 @@ custom :
   callback :
     base : "http://localhost:8080"
   hash :
-    passwordsalt : polinsightPasswordSalt
-    pointsalt :    polinsightPointSalt
+    passwordsalt : ${random.value}
+    pointsalt :    ${random.value}
 
 
 management :
@@ -122,8 +122,6 @@ spring :
     properties :
       hibernate :
         ddl-auto : validate
-    #        format_sql : true
-    #    show-sql :     true
     generate-ddl : true
 
   banner :
@@ -145,13 +143,16 @@ server :
     session :
       timeout : 5m
 
-
 custom :
   callback :
     base : "http://localhost:8080"
 file :
   upload :
     baseLocation : "C:\\upload_test\\"
+    image :        "C:\\upload_test\\images\\"
+    thumbnail :    "C:\\upload_test\\thumbnails\\"
+    file :         "C:\\upload_test\\files\\"
+    address :      "http://localhost:8080/uploads/"
 ---
 spring :
   datasource :
@@ -202,3 +203,7 @@ custom :
 file :
   upload :
     baseLocation : "/app/data/"
+    image :        "/app/data/images/"
+    thumbnail :    "/app/data/thumbnails/"
+    file :         "/app/data/files/"
+    address :      "http://dnslab.iptime.org/uploads/"
