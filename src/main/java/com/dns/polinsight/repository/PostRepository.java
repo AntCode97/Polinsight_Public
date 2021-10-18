@@ -52,7 +52,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   Page<PostMapping> findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(String title, String searchcontent, PostType postType, Pageable pageable);
 
 
-  @Query("select p from Post p where p.postType = :type and ( p.searchcontent like %:regex% or p.title like %:regex% or p.id = :regex or p.viewcnt = :regex )")
+  @Query("select p from Post p where p.postType = :type and ( p.searchcontent like %:regex% or p.title like %:regex% or p.user.name like %:regex% )")
   Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
   List<Post> findAllByPostType(PostType type);

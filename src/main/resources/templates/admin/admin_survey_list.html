@@ -549,6 +549,7 @@
         const table = $('.scroll-table > tbody');
         table.children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
+          console.log(obj.current + " " +obj.totalPage );
           makePagination(obj.current, obj.totalPage);
           searchMessage(obj.keyword, obj.total, '설문이')
           obj.content.forEach(survey => {
