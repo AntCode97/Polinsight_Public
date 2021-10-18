@@ -310,16 +310,16 @@
       </div>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a th:href="@{/company/introduce}" class="nav-link">Company</a>
+          <a th:href="@{/company/introduce}" class="nav-link" name="company">Company</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/business/category}" class="nav-link">Business</a>
+          <a th:href="@{/business/category}" class="nav-link" name="business">Business</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/research/online}" class="nav-link">Research</a>
+          <a th:href="@{/research/online}" class="nav-link" name="research">Research</a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/posts}" class="nav-link">Customer</a>
+          <a th:href="@{/posts}" class="nav-link" name="posts">Customer</a>
         </li>
       </ul>
       <hr class="navar-hr" />
@@ -375,7 +375,7 @@
           <div class="header_container_navi">
             <ul class="navi_box">
               <li>
-                <a th:href="@{/company/introduce}">Company</a>
+                <a th:href="@{/company/introduce}" name="company">Company</a>
                 <div class="dropdown" style="left: 0px">
                   <div class="dropdown_box">
                     <a class="dropdown_element" th:href="@{/company/introduce}"
@@ -390,7 +390,7 @@
             </ul>
             <ul class="navi_box">
               <li>
-                <a th:href="@{/business/category}">Business</a>
+                <a th:href="@{/business/category}" name="business">Business</a>
                 <div class="dropdown" style="left: 160.5px">
                   <div class="dropdown_box">
                     <a class="dropdown_element" th:href="@{/business/category}"
@@ -405,7 +405,7 @@
             </ul>
             <ul class="navi_box">
               <li>
-                <a th:href="@{/research/online}">Research</a>
+                <a th:href="@{/research/online}" name="research">Research</a>
                 <div class="dropdown" style="left: 314.5px">
                   <div class="dropdown_box">
                     <a class="dropdown_element" th:href="@{/research/online}"
@@ -420,7 +420,7 @@
             </ul>
             <ul class="navi_box">
               <li>
-                <a th:href="@{/posts}">Customer</a>
+                <a th:href="@{/posts}" name="posts">Customer</a>
                 <div class="dropdown" style="right: 0px">
                   <div class="dropdown_box">
                     <a class="dropdown_element" th:href="@{/posts}">공지사항</a>
@@ -461,6 +461,14 @@
     </div>
   </body>
   <script th:inline="javascript">
+    let url = window.location.href;
+    let start_idx_num = url.indexOf('/', 9);
+    let end_idx_num = url.indexOf('/', start_idx_num+1)
+    let url_keyword = url.substring(start_idx_num+1, end_idx_num)
+
+    $('ul.navi_box > li > a[name='+url_keyword +']').css('color', '#4C99CF');
+
+
     $(function () {
       // Scroll TOP버튼 생성 및 TOP으로 이동
       // + header 디자인 그림자 추가
