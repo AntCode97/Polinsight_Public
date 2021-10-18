@@ -151,18 +151,18 @@
             <div class="form-search">
               <form th:action="@{/posts/search}" th:object="${postSearch}" method="get">
                 <div class="search-box">
-                  <select th:field="*{postType}" class="select-box" name="classify" id="classify">
-                    <optgroup label="분류 선택">
-                      <option selected value="NOTICE">공지</option>
-                      <option value="QNA">Q&A</option>
-                    </optgroup>
-                  </select>
-                  <select th:field="*{searchType}" name="search_item" class="select-box" id="type">
-                    <optgroup label="통합검색">
-                      <option selected th:value="TITLE" th:text="제목"></option>
-                      <option th:value="CONTENT" th:text="내용"></option>
-                    </optgroup>
-                  </select>
+<!--                  <select th:field="*{postType}" class="select-box" name="classify" id="classify">-->
+<!--                    <optgroup label="분류 선택">-->
+<!--                      <option selected value="NOTICE">공지</option>-->
+<!--                      <option value="QNA">Q&A</option>-->
+<!--                    </optgroup>-->
+<!--                  </select>-->
+<!--                  <select th:field="*{searchType}" name="search_item" class="select-box" id="type">-->
+<!--                    <optgroup label="통합검색">-->
+<!--                      <option selected th:value="TITLE" th:text="제목"></option>-->
+<!--                      <option th:value="CONTENT" th:text="내용"></option>-->
+<!--                    </optgroup>-->
+<!--                  </select>-->
                   <div class="box-search">
                     <input id="searchinput" th:field="*{searchValue}" type="text" onkeyup="makeCloseBtn()">
                     <input class="disabled" type="button" />

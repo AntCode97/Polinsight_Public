@@ -51,7 +51,7 @@
       } else alert("데이터를 가져오는 중 오류가 발생하였습니다.");
     }
 
-    const init = (e) => {
+    let init = (e) => {
       getInsightData().then((obj) => {
         let table = $(".scroll-card");
         if (obj.total > 0) {

@@ -73,12 +73,12 @@
     }
 
     #more_survey_btn {
+      align-items: center;
       cursor: pointer;
+      display: flex;
       font-size: 14px;
       font-weight: bold;
-      display: flex;
       justify-content: center;
-      align-items: center;
     }
 
     #more_survey_btn:hover {
@@ -162,7 +162,7 @@
       template.append(`<p class="survey_title">${survey.title}</p>`);
       template.append(
         `<p class="survey_point"> ${
-          !survey.point ? "지정 안됨" : survey.point + " P"
+          !survey.point ? "지정 안됨" : survey.point.toLocaleString() + " P"
         }</p>`
       );
       template.append(
@@ -200,7 +200,7 @@
       e.returnValue = false;
       const survey = e.data.survey;
       if (!loginChk(survey.seq)) return;
-
+      if (isAdmin()) return;
       $(".modal_container").css("display", "flex");
 
       $("p.notice")
@@ -246,7 +246,7 @@
       };
     }
 
-    const init = (e) => {
+    let init = (e) => {
       getSurveyDataInIndex(e).then((obj) => {
         if (obj.total > 0) {
           const survey_box = $(".main_survey_box")
@@ -266,7 +266,13 @@
         }
       });
     };
-
+    const isAdmin = () => {
+      if ($(".mem-link:first").text() === "ADMIN") {
+        location.assign("/admin/surveylist");
+        return true;
+      }
+      return false;
+    };
     $(function () {
       init();
       $("#more_survey_btn").on("click", () => {

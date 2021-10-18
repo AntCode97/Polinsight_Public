@@ -5,24 +5,33 @@
     .header_wrap {
       background-color: rgb(24, 40, 56) !important;
     }
+
+    .content-wrap {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      height: 100%;
+      justify-content: start;
+      margin: auto;
+      max-width: 85%;
+    }
   </style>
   <div class="flex-wrapper">
     <div class="flex-content">
-      <div class="PC">
-        <div class="web">
-          <p class="main_item">게시글 등록</p>
-          <div class="post">
-            <form
-              id="frm_board"
-              class="information"
-              enctype="multipart/form-data"
-              method="post"
-              th:action="@{/posts/new}"
-              th:object="${postDTO}"
-            >
-              <th:block th:include="fragments/postCreateBody" />
-            </form>
-          </div>
+      <div class="content-wrap">
+        <p class="main_item">게시글 등록</p>
+        <div class="post">
+          <form
+            id="frm_board"
+            class="information"
+            enctype="multipart/form-data"
+            method="post"
+            th:action="@{/posts/new}"
+            th:object="${postDTO}"
+          >
+            <th:block th:include="fragments/postCreateBody" />
+          </form>
         </div>
       </div>
     </div>
