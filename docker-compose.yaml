@@ -1,49 +1,46 @@
-version : "3.3"
+version : "3"
 
 services :
-  pol-redis :
-    image :   redis
+  app :
+    build :
+      context :    .
+      dockerfile : ./Dockerfile
     ports :
-      - 6379:6379
-    restart : always
-    networks :
-      - polinsight_network
+      - "8080:8080"
+    environment :
+      SPRING_DATASOURCE_URL :      jdbc:mariadb://pol-mariadb:3306/polinsight?useUnicode=true
+      SPRING_DATASOURCE_USERNAME : polinsight
+      SPRING_DATASOURCE_PASSWORD : polinsight
+    volumes :
+      - /app/data:/app/data
+      - /app/logs:/app/logs
+    depends_on :
+      - "pol-mariadb"
 
   pol-mariadb :
     image :   mariadb
+    environment :
+      MYSQL_ROOT_PASSWORD : "root"
+      MYSQL_DATABASE :      "polinsight"
+      MYSQL_USER :          "polinsight"
+      MYSQL_PASSWORD :      "polinsight"
+    command :
+      [
+          "--character-set-server=utf8mb4",
+          "--collation-server=utf8mb4_unicode_ci",
+      ]
     ports :
       - 3306:3306
-    environment :
-      - MYSQL_USER=polinsight
-      - MYSQL_PASSWORD=polinsight
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=polinsight
+    volumes :
+      - /app/data/database:/var/lib/mysql
     restart : always
-    networks :
-      - polinsight_network
 
-  pol-mongodb :
-    image :   mongo
+  pol-redis :
+    image :   redis
+    command : redis-server --port 6379
     ports :
-      - 27017:27017
+      - 6379:6379
     restart : always
-    networks :
-      - my_net
-  pol-app :
-    image : polinsight/app
-    ports :
-      - 8080:8080
-    networks :
-      - polinsight_network
-    environment :
-      - maria_host="pol-mariadb"
-      - mongo_host="pol-mongodb"
-      - redis_host="pol-redis"
-      - profile=prod
-    depends_on :
-      - pol-redis
-      - pol-mariadb
-      - pol-mongodb
 
 networks :
   polinsight_network :

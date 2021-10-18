@@ -21,11 +21,7 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
 
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-    log.info("access denied handler: -------------------");
-    /*
-     * 인가 거부 처리
-     * Access Denied
-     * */
+
     response.setStatus(HttpStatus.FORBIDDEN.value());
 
     if (accessDeniedException != null) {
@@ -44,8 +40,6 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
     } else {
       log.info(accessDeniedException.getClass().getCanonicalName());
     }
-//    request.getRequestDispatcher("/denied").forward(request, response);
-
     response.sendRedirect("/denied");
   }
 

@@ -19,8 +19,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -59,17 +61,17 @@ public class UserController {
   private final ChangePasswordService changePasswordService;
 
 
+  @PreAuthorize("isAnonymous()")
   @Transactional
   @PostMapping("/signup")
   public ApiUtils.ApiResult<Boolean> userSignUp(@RequestBody SignupDTO signupDTO,
-                                                ModelAndView mv) throws Exception {
+                                                ModelAndView mv) {
     try {
-      log.warn("Sing up Info - " + signupDTO.toString());
-      String inputPassword = signupDTO.getPassword();
+      log.info("{} sing up" + signupDTO.getEmail());
+      //      String inputPassword = signupDTO.getPassword();
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
       User user = userService.saveOrUpdate(new User(signupDTO));
-      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
-      log.warn("Saved Info - " + user);
+      //      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
       if (signupDTO.isIspanel()) {
         mv.setViewName("redirect:/panel");
       } else {
@@ -78,12 +80,12 @@ public class UserController {
         mv.setViewName("redirect:/success_basic");
       }
       return success(Boolean.TRUE);
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Exception(e.getMessage());
+    } catch (InvalidValueException e) {
+      throw new InvalidValueException(e.getMessage());
     }
   }
 
+  @PreAuthorize("hasAuthority('USER')")
   @PostMapping("/panel_signup")
   @Transactional
   public ApiUtils.ApiResult<Boolean> panelSignup(@RequestBody Panel panel, @CurrentUser User user) throws WrongAccessException, DataUpdateException {
@@ -95,15 +97,14 @@ public class UserController {
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
     } catch (Exception e) {
-      e.printStackTrace();
       throw new DataUpdateException("패널 정보를 업데이트하지 못하였습니다.");
     }
   }
 
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @PostMapping("/user/delete")
   public void deleteUser(@CurrentUser User user,
-                         ModelAndView mv,
                          HttpServletRequest request,
                          HttpServletResponse response) throws Exception {
     try {
@@ -112,15 +113,14 @@ public class UserController {
       userService.deleteUserById(user.getId());
       new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
       SecurityContextHolder.clearContext();
-      log.info("ID : {} - {} has deleted", userId, email);
-      //      return success(Boolean.TRUE);
+      log.info("ID : {} has deleted", email);
     } catch (Exception e) {
-      e.printStackTrace();
       throw new Exception(e.getMessage());
     }
   }
 
 
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @PutMapping("/user")
   public ApiUtils.ApiResult<UserDto> updateUser(@RequestBody UserDto userDto,
@@ -153,6 +153,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @Transactional
   @PutMapping("/admin/user")
   public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto dto) throws Exception {
@@ -208,9 +209,9 @@ public class UserController {
   }
 
 
+  @PreAuthorize("isAnonymous()")
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpSession session) {
-    log.warn("UserController :: changePWd() --- " + session.getAttribute("uid"));
     if (session.getAttribute("uid") == null) {
       log.error("UID Data Not Found");
       return new ModelAndView("redirect:/denied");
@@ -232,6 +233,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("isAnonymous()")
   @GetMapping("/change/{hash}/{name}/{email}")
   public ModelAndView changePassword(HttpSession session,
                                      @PathVariable(name = "hash") String hash,
@@ -255,6 +257,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('USER','PANEL','BEST')")
   @PostMapping("/api/point/{point}")
   public ApiUtils.ApiResult<List<PointRequest>> requestPointCalcFromUser(@CurrentUser User user,
                                                                          @PathVariable(name = "point") Long point) throws Exception {
@@ -267,6 +270,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('USER','PANEL','BEST')")
   @GetMapping("/api/point/{userid}")
   public ApiUtils.ApiResult<List<PointRequest>> getPointRequestList(@PathVariable(name = "userid") long userid) throws Exception {
     try {
@@ -290,6 +294,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAnyAuthority('USER','PANEL','BEST')")
   @PostMapping("/api/survey/participate")
   public ApiUtils.ApiResult<Boolean> participateSurvey(@CurrentUser User user, Survey survey) throws Exception {
     try {
@@ -301,6 +306,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping("/api/user/total")
   public ApiUtils.ApiResult<Long> countAllUser() {
     return success(userService.countAllUserExcludeAdmin());
@@ -334,6 +340,7 @@ public class UserController {
     return new ModelAndView("redirect:/index");
   }
 
+  @PreAuthorize("isAnonymous()")
   @PostMapping("/find")
   @Transactional
   public ApiUtils.ApiResult<Object> findEmailOrPassword(@RequestBody UserDto userDto,
@@ -382,7 +389,7 @@ public class UserController {
   @PermitAll
   @Transactional
   @PostMapping("/user_join")
-  public ApiUtils.ApiResult<Boolean> testSignup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
+  public ApiUtils.ApiResult<Boolean> signup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
     log.warn(signupDTO.toString());
     try {
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
@@ -414,7 +421,13 @@ public class UserController {
       user.getPanel().update(Panel.of(dto));
       user.updateRole(UserRoleType.PANEL);
       userService.saveOrUpdate(user);
-      log.warn("updated data : {}", userService.findUserByEmail(user.getEmail()));
+      // Spring security에 인증되어있는 객체를 업데이트
+      Authentication before = SecurityContextHolder.getContext().getAuthentication();
+      log.warn(before.toString());
+      // TODO: 2021-10-15
+      SecurityContextHolder.clearContext();
+//      SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, before.getCredentials(),
+//          Collections.singletonList(new SimpleGrantedAuthority(UserRoleType.PANEL.getName()))));
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new DataUpdateException("패널 변경중 에러 발생 :: " + e.getMessage());

@@ -19,13 +19,21 @@
 
       let commentBody = $('div[name=comment]')
       comments.forEach(comment => {
-        console.log(comment)
-        let bodyTemplate = $('<div class="comment-row"></div>')
-        bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
-        bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
-        bodyTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
-        bodyTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
-        bodyTemplate.append(`<div class="comment-content"><span  >${comment.content}</span></div>`)
+        let bodyTemplate = $(`<div class="comment-row">
+<div>
+<span name="author">${comment.writer} 님</span>
+<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>
+</div>
+<div class="comment-content">
+<span>${comment.content}</span>
+</div>
+</div>`)
+        // bodyTemplate.append(`<span name="author">${comment.writer} 님</span>`)
+        // bodyTemplate.append(`<span name="registryDate">${dayAndTime(comment.lastModifiedAt)}</span>`)
+        let btnTemplate = $(`<div></div>`)
+        btnTemplate.append($(`<span><button type="button" name="content" >수정</button></span>`).on('click', {before: comment, id: postId}, commentUpdateHandler))
+        btnTemplate.append($(`<span><button type="button" name="content" >삭제</button></span>`).on('click', {id: comment.seq}, commentDeleteEvent))
+        bodyTemplate.append(btnTemplate)
         commentBody.append(bodyTemplate)
       })
     }
@@ -41,12 +49,11 @@
     }
 
     const commentAddEvent = e => {
-      let postId = insight.id
       let comment = {
         content: $('input[name=input-comment-value]').val()
       };
       http
-          .post(`/api/comment/${postId}`, comment)
+          .post(`/api/comment/${getInsightId()}`, comment)
           .catch(err => {
             console.error(err)
             alert('댓글 생성 중 오류가 발생하였습니다.')
@@ -55,10 +62,7 @@
     }
 
     const commentUpdateHandler = e => {
-      let postId = e.data.id
       let before = e.data.before;
-      // $(e.target).closest('.comment-row').css('background-color', 'red')
-      // alert('red')
       let content_div = $(e.target).closest('.comment-row').find('div.comment-content')
       content_div.empty()
       content_div.append($(`<input />`).val(before.content))
@@ -78,11 +82,15 @@
     }
 
     const initComment = e => {
-      let postId = `[[${postId}]]`
-      getCommentByPostId(postId)
+      getCommentByPostId(getInsightId())
           .then(obj => {
-            makeCommentTemplate(obj.data, postId);
+            makeCommentTemplate(obj.data, getInsightId());
           })
+    }
+
+    const getInsightId = () => {
+      let arr = location.href.split("/")
+      return Number(arr[arr.length - 1])
     }
 
     $(function () {

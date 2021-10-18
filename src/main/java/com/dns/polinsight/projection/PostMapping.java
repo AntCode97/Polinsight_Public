@@ -1,6 +1,7 @@
 package com.dns.polinsight.projection;
 
 import com.dns.polinsight.domain.Attach;
+import com.dns.polinsight.domain.Comment;
 import com.dns.polinsight.domain.User;
 import com.dns.polinsight.types.PostType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,6 +52,6 @@ public interface PostMapping {
 
   String getThumbnail();
 
-
+  List<Comment> getComments();
 
 }

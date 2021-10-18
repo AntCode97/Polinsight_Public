@@ -136,6 +136,8 @@
       }
     }
   </style>
+</th:block>
+<th:block>
   <div class="flex-wrapper">
     <div class="flex-content">
       <div class="board_contents_wrap">
@@ -152,7 +154,7 @@
                   <select th:field="*{postType}" class="select-box" name="classify" id="classify">
                     <optgroup label="분류 선택">
                       <option selected value="NOTICE">공지</option>
-                      <option value="EVENT">이벤트</option>
+                      <option value="QNA">Q&A</option>
                     </optgroup>
                   </select>
                   <select th:field="*{searchType}" name="search_item" class="select-box" id="type">
@@ -163,7 +165,7 @@
                   </select>
                   <div class="box-search">
                     <input id="searchinput" th:field="*{searchValue}" type="text" onkeyup="makeCloseBtn()">
-                    <input class="disabled" type="button"></input>
+                    <input class="disabled" type="button" />
                     <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
                   </div>
                 </div>
@@ -190,18 +192,17 @@
           new
       </span>
                 <strong></strong></a>
-              <!--          <a th:text="${post.title}" th:href="@{/posts/{id} (id=${post.id})}" class="post-title" th:unless='${#dates.year(#dates.createNow())==#temporals.year(post.registeredAt) && #dates.month(#dates.createNow())==#temporals.month(post.registeredAt) &&#dates.day(#dates.createNow())==#temporals.day(post.registeredAt)  }'><strong></strong></a>-->
-              <!--          -->
-              <img th:if="${post.thumbnail}" th:src="'/files/'+${post.thumbnail}" >
+              <img th:unless="${post.thumbnail == null || #strings.equals(post.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${post.thumbnail}">
               <span th:text="${post.user.name}"></span>
               <span th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd')}"></span>
               <span th:text="${post.viewcnt}">52</span>
-              <!--          <span><i class="fas fa-paperclip file_icon_no"></i></span>-->
               <!--          파일 유무에 따른 디자인 변경(색상)-->
               <span>
-                        <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
-                        <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-                    </span>
+                <i th:if="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
+                <i th:unless="${post.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
+                <i th:if="${post.thumbnail == null || #strings.equals(post.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>
+                <i th:unless="${post.thumbnail == null || #strings.equals(post.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>
+              </span>
             </div>
           </div>
 
@@ -239,32 +240,37 @@
     </div>
     <th:block th:include="layout/footer" />
   </div>
-</th:block>
-<script>
-  let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
-  let keyword = document.querySelector("#searchinput").value;
-  if (keyword === "")
-    closeBtn.className = "disabled";
-  else closeBtn.classList.remove("disabled");
-  closeBtn.addEventListener("click", function () {
-    let searchInput = document.querySelector("#searchinput")
-    searchInput.value = "";
-    location.href = "/posts"
-  })
-  const makeCloseBtn = () => {
-    let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
-    closeBtn.classList.remove("disabled");
-    let keyword = document.querySelector("#searchinput").value;
+  <script>
+    let closeBtn = $(".post-search .box-search input[type=button]")
+    let keyword = $("#searchinput").val();
     if (keyword === "")
-      closeBtn.className = "disabled";
-  }
-  const setCookie = function(name, value, exp) {
-    const date = new Date();
-    date.setTime(date.getTime() + exp*24*60*60*1000);
-    document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-  };
-  const makeBackUrl = () => {
-    setCookie("listBtnUrl", location.href, 1)
-  }
+      closeBtn.addClass("disabled")
+    else
+      closeBtn.removeClass("disabled");
+    closeBtn.on("click", function () {
+      let searchInput = $("#searchinput")
+      searchInput.val('')
+      location.assign("/posts")
+    })
 
-</script>
+    const makeCloseBtn = () => {
+      let closeBtn = $(".post-search .box-search input[type=button]")
+      closeBtn.removeClass("disabled");
+      let keyword = $("#searchinput").val();
+      if (keyword === "")
+        closeBtn.addClass("disabled");
+    }
+
+    const setCookie = function (name, value, exp) {
+      const date = new Date();
+      date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+      document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    }
+
+    const makeBackUrl = () => {
+      setCookie("listBtnUrl", location.href, 1)
+    }
+
+  </script>
+</th:block>
+

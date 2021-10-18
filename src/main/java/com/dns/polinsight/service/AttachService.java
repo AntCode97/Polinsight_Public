@@ -2,15 +2,19 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.dto.PostDTO;
+import com.dns.polinsight.exception.ImageResizeException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public interface AttachService {
 
   List<Attach> findAll();
+
+  List<Attach> findByPostId(Long postId);
 
   void deleteAttaches(Long boardId);
 
@@ -26,10 +30,6 @@ public interface AttachService {
 
   List<Attach> findByname(String filename);
 
-  void addAttach(PostDTO postDTO);
-
-  void deleteThumbnail(String thumbnailPath) ;
-
-  String addAttach(MultipartFile file);
+  public Attach addAttach(UUID uuid, MultipartFile file, PostDTO postDTO);
 
 }
