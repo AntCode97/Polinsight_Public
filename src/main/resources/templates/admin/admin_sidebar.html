@@ -431,7 +431,6 @@
 
       /* 여기까지 전체적인 레이아웃 */
       /* 게시글판 디자인 */
-      /* 여기까지 전체적인 레이아웃 */
       .main_item {
         border-bottom: 1px dashed #dadada;
         color: #000000;
@@ -759,8 +758,12 @@
             <div class="admin_user_photo">
               <img
                 alt="user_img"
-                style="width: 100%"
-                th:src="@{/img/etc/circle_loppy.png}"
+                style="
+                  width: 100%;
+                  background-color: white;
+                  object-fit: contain;
+                "
+                th:src="@{/img/logo/logo.png}"
               />
             </div>
             <div class="user-info">
@@ -849,7 +852,7 @@
                 <i class="fas fa-poll-h"></i>
                 <p>
                   설문 관리
-                  <i class="fas fa-caret-down arrow"></i>
+                  <!--                  <i class="fas fa-caret-down arrow"></i>-->
                 </p>
               </a>
             </li>
@@ -858,7 +861,7 @@
                 <i class="fas fa-coins"></i>
                 <p>
                   포인트 요청 목록
-                  <i class="fas fa-caret-down arrow"></i>
+                  <!--                  <i class="fas fa-caret-down arrow"></i>-->
                 </p>
               </a>
             </li>
@@ -886,18 +889,22 @@
 
           <div class="right_menu">
             <ul>
+              <!--              <li>-->
+              <!--                <a class="header_menu_item">-->
+              <!--                  <i class="fas fa-user"></i>-->
+              <!--                </a>-->
+              <!--                <div class="dropdown_user">-->
+              <!--                  <a th:href="@{/admin/user/manage}">정보수정</a>-->
+              <!--                  <a th:href="@{/dologout}">로그아웃</a>-->
+              <!--                </div>-->
+              <!--              </li>-->
               <li>
-                <a class="header_menu_item">
-                  <i class="fas fa-user"></i>
-                </a>
-                <div class="dropdown_user">
-                  <a th:href="@{/admin/user/manage}">정보수정</a>
-                  <a th:href="@{/dologout}">로그아웃</a>
-                </div>
+                <a th:href="@{/dologout}">로그아웃</a>
               </li>
               <li>
                 <a class="header_menu_item" th:href="@{/}">
                   <i class="fas fa-door-open"></i>
+                  EXIT
                 </a>
               </li>
             </ul>
