@@ -2,11 +2,11 @@
 <th:block>
   <style>
     .header_wrap {
-      background-color : rgb(24, 40, 56) !important;
+      background-color: rgb(24, 40, 56) !important;
     }
 
     .container {
-      margin-top : 120px;
+      margin-top: 120px;
     }
   </style>
   <div class="container">
@@ -16,7 +16,9 @@
       </div>
       <div class="main_contents_wrap">
         <div class="post-search">
-          <div class="util-search">총 <strong id="total_count"></strong>개의 게시물이 있습니다.</div>
+          <div class="util-search">
+            총 <strong id="total_count"></strong>개의 게시물이 있습니다.
+          </div>
         </div>
         <div class="scroll-table">
           <div class="post-row post-th">
@@ -38,34 +40,39 @@
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     async function getPostData(e) {
-      let page = !e ? 0 : e.data.page
-      const responseData = await http.get('/api/posts?type=EVENT', {
-        params: {page: page, size: 10}
-      })
-      const data = responseData.data.response
-      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number}
+      let page = !e ? 0 : e.data.page;
+      const responseData = await http.get("/api/posts?type=EVENT", {
+        params: { page: page, size: 10 },
+      });
+      const data = responseData.data.response;
+      return {
+        content: data.content,
+        total: data.totalElements,
+        totalPage: data.totalPages,
+        current: data.number,
+      };
     }
 
-    const init = e => {
-      const spinner = $('#loading')
-      spinner.show()
-      getPostData(!e ? 0 : e.data.page).then(obj => {
-        $('#total_count').text(obj.total)
-        $('.scroll-table').children('.post-row:not(:first-child)').remove()
+    let init = (e) => {
+      const spinner = $("#loading");
+      spinner.show();
+      getPostData(!e ? 0 : e.data.page).then((obj) => {
+        $("#total_count").text(obj.total);
+        $(".scroll-table").children(".post-row:not(:first-child)").remove();
         if (obj.total > 0) {
-          makePagination(obj.current, obj.totalPage)
-          obj.content.forEach(post => {
-            $('.scroll-table').append(makePostTemplate(post))
-          })
+          makePagination(obj.current, obj.totalPage);
+          obj.content.forEach((post) => {
+            $(".scroll-table").append(makePostTemplate(post));
+          });
         } else
-          $('.scroll-table').append(`<div><h1>게시물이 없습니다.</h1></div>`)
-      })
-      spinner.hide()
-    }
+          $(".scroll-table").append(`<div><h1>게시물이 없습니다.</h1></div>`);
+      });
+      spinner.hide();
+    };
 
     $(function () {
       init();
-    })
+    });
   </script>
 </th:block>
 <th:block th:include="layout/footer" />

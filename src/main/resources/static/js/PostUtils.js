@@ -45,7 +45,7 @@ const makePostTemplate = (post) => {
   template.append(`<div>${post.viewCount}</div>`);
   template.append(`<div>-</div>`);
   template.on("click", { post: post }, (e) => {
-    location.href = `/posts/${post.id}`;
+    location.assign(`/posts/${post.id}`);
   });
   return template;
 };

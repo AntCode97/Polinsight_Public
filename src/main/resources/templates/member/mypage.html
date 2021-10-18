@@ -146,14 +146,8 @@
       padding-left   : 25px;
     }
 
-    .user_img_wrap {
-      /* width: 82px;
-      height: 82px;
-      border: 1px solid #ddd; padding: 5px; */
-    }
-
     .user_img {
-      background-image    : url('/img/icons/kakao-talk.svg');
+      background-image    : url('img/logo/logo.png');
       background-position : center center;
       background-repeat   : no-repeat;
       background-size     : cover;
@@ -607,7 +601,7 @@
             <div class="item_header">
               <span><i class="fas fa-star" style="padding-right: 3px; color: #4C99CF;"></i>포인트이력</span>
               <span>
-                <button name="savePointHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
+                <button class="btn_udel btn-primary" name="savePointHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
               </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
@@ -652,7 +646,7 @@
             <div class="item_header">
               <span><i class="fas fa-poll-h" style="padding-right: 3px; color: #4C99CF;"></i>서베이이력</span>
               <span>
-                <button name="saveSurveyHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
+                <button class="btn_udel btn-primary" name="saveSurveyHistoryBtn"><i class="far fa-file-excel"></i>다운로드</button>
               </span>
               <span><i class="fas fa-plus"></i></span>
             </div>
@@ -1479,7 +1473,7 @@
     }
 
 
-    const init = () => {
+    let init = () => {
       let user_total_point = $('.point_info>span:first-child').text().replaceAll(/[^\d]/g, '') * 1
       let user_point = $('.point_info>span:last-child')
       let prefix = Math.floor(user_total_point / 10000)
@@ -1573,7 +1567,7 @@
             }
 
           })
-          .catch(console.log)
+          .catch(console.error)
     }
 
     const addDummy = (parent, size, colsize) => {

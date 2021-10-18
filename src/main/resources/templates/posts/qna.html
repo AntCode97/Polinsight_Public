@@ -14,6 +14,62 @@
       margin    : auto;
       max-width : 1200px;
     }
+
+    .search-box {
+      align-items     : center;
+      display         : flex;
+      gap             : 5px;
+      justify-content : center;
+    }
+
+    .search-box > * {
+      color     : #444444;
+      cursor    : pointer;
+      font-size : 1rem;
+    }
+
+    .select-box {
+      appearance   : none;
+      background   : #FFFFFF url("/img/etc/arrow-search.png") no-repeat right center;
+      border       : 1px solid #CCD0D7;
+      flex         : 1;
+      font-size    : 1.2rem;
+      height       : 55px;
+      padding-left : 20px;
+    }
+
+    .post-row > *:nth-child(1) {
+      width : 60px
+    }
+
+    .post-row > *:nth-child(2) {
+      width : 230px;
+      flex-grow: 1;
+    }
+
+    .post-row > *:nth-child(3) {
+      width : 80px
+    }
+
+    .post-row > *:nth-child(4) {
+      width : 110px
+    }
+
+    .post-row > *:nth-child(5) {
+      width : 80px
+    }
+
+    .post-row > *:nth-child(6) {
+      width : 100px
+    }
+
+    .post-row:not(:first-child) > *:nth-child(2) {
+      text-overflow : ellipsis;
+    }
+
+    .post-row:not(:first-child):hover {
+      cursor : pointer;
+    }
   </style>
   <div class="container">
     <div class="board_contents_wrap">
@@ -21,15 +77,19 @@
         <p>Q&A</p>
       </div>
       <div class="main_contents_wrap">
+        <!-- Search Box -->
         <div class="post-search">
-          <div class="util-search">총 <strong id="total_count"></strong>명의 게시물이 있습니다.</div>
+          <div class="util-search">총 <strong>1</strong>개의 게시물이 있습니다.</div>
           <div class="form-search">
-            <div class="tbl-search">
-              <div class="box-search">
-                <input type="text" name="board_search" />
-                <input type="submit" name="board_search_btn" />
+            <form method="get">
+              <div class="search-box">
+                <div class="box-search">
+                  <input id="searchinput" type="text" onkeyup="makeCloseBtn()">
+                  <input class="disabled" type="button" />
+                  <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         <div class="scroll-table">
@@ -44,11 +104,11 @@
         </div>
         <!--        인증된 유저 글쓰기 가능-->
         <div sec:authorize="hasAnyAuthority('USER','PANEL', 'BEST')">
-          <button name="add_question_btn">질문 등록</button>
+          <button class="btn_udel btn-primary" name="add_question_btn">질문 등록</button>
         </div>
         <!--        미 인증 유저 로그인 유도-->
         <div sec:authorize="isAnonymous()">
-          <button name="anonymous_add_question_btn">질문 등록</button>
+          <button class="btn_udel btn-primary" name="anonymous_add_question_btn">질문 등록</button>
         </div>
         <div class="page-button" id="pagination"></div>
       </div>
@@ -60,54 +120,69 @@
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     async function getPostData(e) {
-      let page = !e ? 0 : e.data.page
-      let regex = String($('input[name=board_search]').val()).trim()
-      const responseData = await http.get('/api/posts?type=QNA', {
-        params: {page: page, size: 10}
-      })
-      const data = responseData.data.response
+      let page = !e ? 0 : e.data.page;
+      let regex = String($("input[name=board_search]").val()).trim();
+      const responseData = await http.get("/api/posts?type=QNA", {
+        params: {page: page, size: 10},
+      });
+      const data = responseData.data.response;
 
-      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
+      return {
+        content: data.content,
+        total: data.totalElements,
+        totalPage: data.totalPages,
+        current: data.number,
+        keyword: regex,
+      };
     }
 
-    const init = e => {
-      const spinner = $('#loading')
-      spinner.show()
-      getPostData(!e ? 0 : e.data.page).then(obj => {
-        $('#total_count').text(obj.total)
-        let table = $('.scroll-table')
-        table.children('.post-row:not(:first-child)').remove()
+    let init = (e) => {
+      const spinner = $("#loading");
+      spinner.show();
+      getPostData(!e ? 0 : e.data.page).then((obj) => {
+        $("#total_count").text(obj.total);
+        let table = $(".scroll-table");
+        table.children(".post-row:not(:first-child)").remove();
         if (obj.total > 0) {
-          makePagination(obj.current, obj.totalPage)
-          searchMessage(obj.keyword, obj.total, '게시물이')
-          obj.content.forEach(post => {
-            table.append(makePostTemplate(post))
-          })
+          makePagination(obj.current, obj.totalPage);
+          searchMessage(obj.keyword, obj.total, "게시물이");
+          obj.content.forEach((post) => {
+            table.append(makePostTemplate(post));
+          });
         } else {
-          table.append($(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`))
+          table.append(
+              $(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
+          );
         }
-      })
-      spinner.hide()
-    }
+      });
+      spinner.hide();
+    };
 
     $(function () {
       init();
 
-      $('input[name=board_search]').on('keyup', {page: 0}, _.throttle(init, 300))
-      $('input[name=board_search_btn]').on('click', {page: 0}, _.throttle(init, 300))
-    })
+      $("input[name=board_search]").on(
+          "keyup",
+          {page: 0},
+          _.throttle(init, 300)
+      );
+      $("input[name=board_search_btn]").on(
+          "click",
+          {page: 0},
+          _.throttle(init, 300)
+      );
+    });
 
     $(document)
-        .on('click', 'button[name=add_question_btn]', function () {
+        .on("click", "button[name=add_question_btn]", function () {
           // go create question post
           // TODO
-          location.assign('/posts/new')
+          location.assign("/posts/new");
         })
-        .on('click', 'button[name=anonymous_add_question_btn]', function () {
+        .on("click", "button[name=anonymous_add_question_btn]", function () {
           // go login
-          location.assign('/login')
-        })
-
+          location.assign("/login");
+        });
   </script>
 </th:block>
 <th:block th:include="layout/footer" />
