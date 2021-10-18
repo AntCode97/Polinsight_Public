@@ -60,10 +60,12 @@
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     async function getPostData(e) {
-      let page = !e ? 0 : e.data.page
+      let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
+      // let page = !e ? 0 : e.data.page
       let regex = String($('input[name=board_search]').val()).trim()
+
       const responseData = await http.get('/api/posts?type=QNA', {
-        params: {page: page, size: 10}
+        params: {page: page, size: 10, regex:regex}
       })
       const data = responseData.data.response
 
@@ -73,11 +75,12 @@
     const init = e => {
       const spinner = $('#loading')
       spinner.show()
-      getPostData(!e ? 0 : e.data.page).then(obj => {
+      getPostData(e).then(obj => {
         $('#total_count').text(obj.total)
         let table = $('.scroll-table')
         table.children('.post-row:not(:first-child)').remove()
         if (obj.total > 0) {
+          console.log(obj.current + " " +obj.totalPage );
           makePagination(obj.current, obj.totalPage)
           searchMessage(obj.keyword, obj.total, '게시물이')
           obj.content.forEach(post => {
