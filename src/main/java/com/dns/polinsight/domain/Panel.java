@@ -35,12 +35,14 @@ public class Panel implements Serializable {
 
   private String education;
 
-  private String marry;
+  @Builder.Default
+  private String marry = "미혼";
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate birth;
 
-  private String birthType;
+  @Builder.Default
+  private String birthType = "양력";
 
   private String job;
 
@@ -51,6 +53,8 @@ public class Panel implements Serializable {
 
   public static Panel of(UserDto dto) {
     return Panel.builder()
+                .gender(dto.getGender())
+                .education(dto.getEducation())
                 .address(Address.of(dto.getAddress()))
                 .job(dto.getJob())
                 .industry(dto.getIndustry())

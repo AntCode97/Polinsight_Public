@@ -4,7 +4,6 @@ import com.dns.polinsight.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsUtils;
 
@@ -23,17 +23,12 @@ import org.springframework.web.cors.CorsUtils;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  private final UserService userService;
-
   private final LogoutSuccessHandler logoutSuccessHandler;
 
   private final AuthenticationFailureHandler failureHandler;
 
   /* 인증 실패 처리 */
   private final AuthenticationEntryPoint entryPoint;
-
-  /* 인가 실패 처리 */
-  private final AccessDeniedHandler deniedHandler;
 
   private final PathPermission permission;
 
@@ -46,13 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        //        .antMatchers(permission.getAnonymous()).permitAll()
         .antMatchers(permission.getResources()).permitAll()
-        //        .antMatchers(permission.getUser()).hasAuthority(UserRoleType.USER.name())
-        //        .antMatchers(permission.getPanel()).hasAuthority(UserRoleType.PANEL.name())
-        //        .antMatchers(permission.getManager()).hasAuthority(UserRoleType.MANAGER.name())
-        //        .antMatchers(permission.getAdmin()).hasAuthority(UserRoleType.ADMIN.name())
-        //        .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/login")
@@ -65,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .exceptionHandling()
         .authenticationEntryPoint(entryPoint)
-        .accessDeniedHandler(deniedHandler).accessDeniedPage("/denied")
+        .accessDeniedPage("/denied")
         .and()
         .logout()
         .logoutUrl("/dologout")
@@ -76,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .invalidateHttpSession(true)
         .and()
         .httpBasic().disable();
-    //        .addFilterBefore(customAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
     http.sessionManagement()
         .sessionAuthenticationErrorUrl("/")
@@ -91,18 +79,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  //  @Bean
-  public CustomAuthenticationFilter customAuthenticationProcessingFilter() {
-    CustomAuthenticationFilter filter = new CustomAuthenticationFilter("/dologin");
-    filter.setAuthenticationManager(authenticationManager());
-    filter.setAuthenticationFailureHandler(failureHandler);
-    filter.setAuthenticationSuccessHandler(successHandler);
-    return filter;
-  }
-
-  //  @Bean
-  public AuthenticationManager authenticationManager() {
-    return new CustomAuthManager(userService, passwordEncoder());
-  }
 
 }

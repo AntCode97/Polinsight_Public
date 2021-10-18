@@ -1,944 +1,962 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<th:block th:include="module/common" />
-<head>
-  <title>폴인사이트</title>
-  <meta charset="UTF-8">
-  <style>
-    body {
-      background-color : #FAFAFA;
-    }
-
-    .admin_main_contents {
-      display     : block;
-      height      : calc(100% - 51px);
-      margin-left : 260px;
-      margin-top  : 51px;
-      padding     : 20px 40px 40px;
-      width       : calc(100% - 260px);
-    }
-
-    .admin_sidebar, .admin_sidebar_wrap, .admin_main {
-      transition-duration        : .2s, .2s, .35s;
-      transition-property        : top, bottom, width;
-      transition-timing-function : linear, linear, ease;
-    }
-
-    .admin_sidebar {
-      background-color : #191919;
-      bottom           : 0;
-      box-shadow       : 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
-      height           : 100%;
-      left             : 0;
-      max-height       : 100%;
-      position         : fixed;
-      top              : 0;
-      width            : 260px;
-      z-index          : 999;
-    }
-
-    .admin_logo {
-      display  : block;
-      margin   : 0;
-      padding  : 15px 0;
-      position : relative;
-      z-index  : 4;
-    }
-
-    .admin_logo:after {
-      background-color : hsla(0, 0%, 71%, .3);
-      bottom           : 0;
-      content          : "";
-      height           : 1px;
-      position         : absolute;
-      right            : 15px;
-      width            : calc(100% - 30px);
-    }
-
-    .logo-mini {
-      color        : white;
-      float        : left;
-      margin-left  : 23px;
-      margin-right : 15px;
-      opacity      : 1;
-      text-align   : center;
-      transition   : all .3s linear;
-      width        : 30px;
-    }
-
-    .simple-text {
-      display        : inline-block;
-      font-size      : 18px;
-      font-weight    : 400;
-      line-height    : 30px;
-      overflow       : hidden;
-      padding        : 5px 0;
-      text-transform : uppercase;
-      white-space    : nowrap;
-    }
-
-    .logo-normal {
-      color     : white;
-      display   : block;
-      opacity   : 1;
-      transform : translateZ(0);
-    }
-
-    .admin_sidebar_wrap {
-      height         : calc(100vh - 75px);
-      padding-bottom : 30px;
-      position       : relative;
-      width          : 260px;
-      z-index        : 4;
-    }
-
-
-    .ps {
-      overflow-anchor : none;
-      touch-action    : auto;
-    }
-
-    .admin_user {
-      margin         : 20px auto 0;
-      padding-bottom : 20px;
-      position       : relative;
-    }
-
-    .admin_user_photo {
-      border-radius : 50%;
-      box-shadow    : 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
-      float         : left;
-      height        : 34px;
-      margin-left   : 23px;
-      margin-right  : 11px;
-      overflow      : hidden;
-      width         : 34px;
-      z-index       : 5;
-    }
-
-    .user-info > a {
-      color       : white;
-      display     : block;
-      font-size   : 14px;
-      line-height : 18px;
-      padding     : 8px 15px;
-      white-space : nowrap;
-    }
-
-    .username {
-      display     : block;
-      font-size   : 14px;
-      line-height : 18px;
-    }
-
-    .admin_user:after {
-      background-color : hsla(0, 0%, 71%, .3);
-      bottom           : 0;
-      content          : "";
-      height           : 1px;
-      position         : absolute;
-      right            : 15px;
-      width            : calc(100% - 30px);
-    }
-
-    .admin_nav {
-      display       : block;
-      flex-wrap     : wrap;
-      list-style    : none;
-      margin-bottom : 0;
-      margin-top    : 15px;
-      padding-left  : 0;
-    }
-
-    .nav_link {
-      align-items     : center;
-      border-radius   : 3px;
-      color           : white;
-      display         : flex;
-      font-size       : 13px;
-      justify-content : flex-start;
-      margin          : 10px 15px 0;
-      padding         : .5rem 10px;
-      text-transform  : capitalize;
-      transition      : all .15s ease-in;
-    }
-
-    .nav_link > i {
-      font-size      : 20px;
-      line-height    : 30px;
-      margin-right   : 15px;
-      text-align     : center;
-      vertical-align : middle;
-      width          : 30px;
-    }
-
-    .nav_link > p {
-      display     : block;
-      font-size   : 14px;
-      height      : auto;
-      line-height : 30px;
-      margin      : 0;
-      position    : relative;
-      white-space : nowrap;
-      width       : 100%;
-    }
-
-    .nav-item:hover > a {
-      background-color : hsla(0, 0%, 78%, .2);
-      box-shadow       : none;
-    }
-
-    .nav_link > p > i {
-      line-height    : 30px;
-      position       : absolute;
-      right          : 6px;
-      vertical-align : middle;
-    }
-
-    .nav_dropdown {
-      padding-left : 40px;
-    }
-
-    .collapse-show {
-      height   : 0;
-      overflow : hidden;
-    }
-
-    .admin_main {
-      float    : right;
-      height   : 51px;
-      position : fixed;
-      right    : 0;
-      top      : 0;
-      width    : calc(100% - 260px);
-      z-index  : 999;
-    }
-
-    .admin_main_header {
-      align-items      : center;
-      background-color : white;
-      border-bottom    : 1px solid #DDDDDD;
-      display          : flex;
-      height           : 51px;
-      justify-content  : space-between;
-      padding          : 0 20px;
-      width            : calc(100vw - 260px);
-    }
-
-    .contents_title {
-      font-size : 1.0rem;
-    }
-
-    .right_menu > ul {
-      align-items     : center;
-      display         : flex;
-      justify-content : center;
-    }
-
-    .right_menu > ul > li {
-      position : relative;
-    }
-
-    a.header_menu_item {
-      align-items     : center;
-      border          : 1.5px solid transparent;
-      border-radius   : 50%;
-      cursor          : pointer;
-      display         : flex;
-      height          : 35px;
-      justify-content : center;
-      margin-right    : 20px;
-      width           : 35px;
-    }
-
-    .right_menu > ul > li:hover > a {
-      border     : 1.5px solid #DDDDDD;
-      box-shadow : 0 2px 2px 0 hsl(0deg 0% 60% / 14%), 0 3px 1px -2px hsl(0deg 0% 60% / 20%), 0 1px 5px 0 hsl(0deg 0% 60% / 12%);
-    }
-
-    .right_menu > ul > li:hover > .dropdown_user {
-      display : block;
-    }
-
-    .header_menu_item > i {
-      font-size : 15px;
-    }
-
-    .dropdown_user {
-      background-color : white;
-      border           : 1.5px solid #DDDDDD;
-      box-shadow       : 0 2px 5px 0 rgb(0 0 0 / 26%);
-      display          : none;
-      padding          : 5px 0;
-      position         : absolute;
-      right            : 0;
-      width            : 160px;
-      z-index          : 9999;
-    }
-
-
-    .dropdown_user > a {
-      border-radius : 2px;
-      display       : block;
-      margin        : 0 5px;
-      padding       : 10px 24px;
-      z-index       : 9999;
-    }
-
-    .dropdown_user > a:hover {
-      background-color : #3885CA;
-      box-shadow       : 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(5 0 153 / 40%);
-      color            : white;
-    }
-
-    .contents_title > a > i {
-      font-size    : .9rem;
-      margin-right : 5px;
-    }
-
-    .contents_title > a {
-      position : relative;
-    }
-
-    .next-link {
-      padding-left : 20px;
-    }
-
-    .next-link::before {
-      background-image    : url('/img/etc/dot_depth.gif');
-      background-position : center center;
-      background-repeat   : no-repeat;
-      content             : '';
-      height              : 100%;
-      left                : 3px;
-      position            : absolute;
-      top                 : 2px;
-      width               : 10px;
-    }
-
-    .pagination {
-      align-content : center;
-      display       : block;
-      justify-items : center;
-      margin        : 20px 0;
-      text-align    : center;
-    }
-
-    .pagination > .pagination_button {
-      border      : 1px solid #E2E2E2;
-      cursor      : pointer;
-      display     : inline-block;
-      font-size   : 0.9rem;
-      line-height : 34px;
-      margin      : 0 2px;
-      text-align  : center;
-      width       : 30px;
-    }
-
-    .pagination_button:hover {
-      cursor          : pointer;
-      text-decoration : underline;
-    }
-
-    .pagination_button_current {
-      background-color : rgba(255, 255, 255, .5);
-      color            : rgba(32, 205, 195, 1);
-      font-weight      : bolder;
-    }
-
-    .search-box-container {
-      justify-items  : center;
-      margin         : 0 auto;
-      position       : relative;
-      vertical-align : middle;
-      white-space    : nowrap;
-      width          : 300px;
-    }
-
-    .search-box-container .admin_find {
-      background    : white;
-      border        : 0.5px solid black;
-      border-radius : 5px;
-      color         : #63717F;
-      float         : left;
-      height        : 50px;
-      padding-left  : 45px;
-      width         : 300px;
-    }
-
-    .search-box-container .search-icon {
-      color       : #4F5B66;
-      margin-left : 17px;
-      margin-top  : 17px;
-      position    : absolute;
-      top         : 50%;
-      z-index     : 1;
-    }
-
-    .empty-data {
-      align-items     : center;
-      display         : flex;
-      height          : 500px;
-      justify-content : center;
-    }
-
-    .post-th {
-      align-items      : center;
-      background-color : #F2F2F2 !important;
-      border-bottom    : 1px solid #CFCFD1;
-      border-top       : 2px solid #7C7C7C;
-      display          : flex;
-      justify-content  : space-between;
-    }
-
-    .post-th > * {
-      color       : #666666;
-      display     : inline-block;
-      font-size   : 1rem;
-      line-height : 30px;
-      padding     : 9px 10px;
-      text-align  : center;
-    }
-
-    .post-row {
-      align-items      : center;
-      background-color : #FFFFFF;
-      border-bottom    : 1px solid #CFCFD1;
-      display          : flex;
-      justify-content  : space-between;
-    }
-
-    .post-row > * {
-      color       : #666666;
-      display     : inline-block;
-      font-size   : 1rem;
-      line-height : 30px;
-      padding     : 9px 0px;
-      text-align  : center;
-    }
-
-    .btn_udel {
-      border        : none;
-      border-radius : 5px;
-      cursor        : pointer;
-      padding       : 5px 10px;
-    }
-
-
-    /* 여기까지 전체적인 레이아웃 */
-    /* 게시글판 디자인 */
-    /* 여기까지 전체적인 레이아웃 */
-    .main_item {
-      border-bottom : 1px dashed #DADADA;
-      color         : #000000;
-      font-size     : 2rem;
-      font-weight   : bold;
-      padding       : 10px 0 20px;
-    }
-
-    #metop_container {
-      align-items     : center;
-      justify-content : center;
-    }
-
-    .metop_board_card {
-      background    : white;
-      border-radius : 2px;
-      border-top    : 3px solid mediumseagreen;
-      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14),
-      0 3px 1px -2px rgba(0, 0, 0, .2),
-      0 1px 5px 0 rgba(0, 0, 0, .12);
-      margin        : 30px 0;
-      padding       : 40px 30px 20px 30px;
-      position      : relative;
-      width         : 85%;
-    }
-
-    /* 카드 제목 */
-    .register_top_wrap {
-      border-top : 2px solid #7C7C7C;
-    }
-
-    .register_bottom_wrap {
-      border-top : 1px solid #DADADA;
-    }
-
-    .uploadedList {
-      display : flex;
-      padding : 15px 0px 0px 0px;
-    }
-
-    .uploadedList > li {
-      border-radius : 2px;
-      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-      margin-right  : 5px;
-    }
-
-    .board_div {
-      align-items     : center;
-      border-bottom   : 1px solid #DADADA;
-      display         : flex;
-      height          : 100%;
-      justify-content : flex-start;
-      width           : 100%;
-    }
-
-    /* 작성자 */
-
-    .board_div b {
-      font-size : 16px;
-    }
-
-    .board_div > span {
-      font-size : 14px;
-    }
-
-    .board_span {
-      background-color : #FFFFFF;
-      display          : block;
-      flex             : 7;
-      overflow         : hidden;
-      padding          : 9px 20px;
-    }
-
-    .board_writer {
-      display     : inline-block;
-      font-size   : 16px;
-      line-height : 30px;
-    }
-
-    .board_type > option {
-      cursor : pointer;
-    }
-
-    .board_input {
-      border    : 1px solid #DADADA;
-      font-size : 15px;
-      height    : 30px;
-      outline   : none;
-      width     : 100%;
-    }
-
-    .board_content {
-      border    : 1px solid #DADADA;
-      font-size : 14px;
-      height    : 300px;
-      outline   : none;
-      resize    : none;
-      width     : 100%;
-    }
-
-    .textarea_div {
-      align-items : flex-start;
-      padding     : 20px 0;
-    }
-
-    .form-group > label {
-      margin-top : 10px;
-    }
-
-    .form-group .board_div {
-      align-items     : center;
-      border          : 1.5px dashed #DADADA;
-      color           : #515151;
-      display         : flex;
-      font-size       : 15px;
-      height          : 150px;
-      justify-content : center;
-      text-align      : center;
-    }
-
-    /* 등록/취소 버튼 */
-    .btn_wrap {
-      border          : 0;
-      border-radius   : 0;
-      display         : flex;
-      justify-content : space-between;
-      margin-top      : 25px;
-      padding         : 10px 15px 10px 15px;
-    }
-
-    .insert_btn {
-      margin-right : -15px;
-      width        : 80px;
-    }
-
-    .cancel_btn {
-      margin-left : -15px;
-      width       : 80px;
-    }
-
-    .board_content_wrap {
-      height : 100%;
-      width  : 100%;
-    }
-
-    div#smart_editor2 {
-      width : 1040px !important;
-    }
-
-    .err_msg_wrap {
-      display    : none;
-      text-align : left;
-    }
-
-    .err_msg {
-      color     : #D95339;
-      display   : block;
-      font-size : 14px;
-    }
-
-    .board_div > label {
-      background-color : #EEEEEE;
-      display          : block;
-      font-size        : 16px;
-      line-height      : 30px;
-      padding          : 9px 15px 9px 25px;
-      padding-left     : 30px;
-      position         : relative;
-      width            : 150px;
-    }
-
-    .board_div > label > span {
-      color     : #D95339;
-      font-size : 20px;
-      left      : 10px;
-      position  : absolute;
-      top       : 9px;
-    }
-
-    #board_writer {
-      width : 150px;
-    }
-
-    .size_limit_msg {
-      color : #999999;
-    }
-
-    .file_wrap {
-      border : 1px solid #DADADA;
-    }
-
-    .file_item > label {
-      display    : block;
-      text-align : center;
-      width      : 100px;
-    }
-
-    .file_item > div {
-      align-items      : center;
-      background-color : #FFFFFF;
-      display          : flex;
-      flex             : 7;
-      padding          : 9px 10px;
-    }
-
-    .file_item {
-      align-items      : center;
-      background-color : #EEEEEE;
-      display          : flex;
-      justify-content  : flex-start;
-    }
-
-    .btn-add, .btn-remove {
-      cursor       : pointer;
-      margin-right : 5px;
-      outline      : none;
-      padding      : 5px 7px;
-      width        : 60px;
-    }
-
-    .btn-remove {
-      background-color : #FFFFFF;
-      border           : 1px solid tomato;
-      color            : tomato;
-    }
-
-    .other_file_item {
-      border-top : 1px solid #DADADA;
-    }
-
-    .board_select {
-      cursor : pointer;
-      width  : 150px;
-    }
-
-    .board_file {
-      cursor : pointer;
-    }
-
-    /*게시글 조회 파트*/
-    .left_content {
-      flex : 1.5;
-    }
-
-    .right_content {
-      flex : 8.5;
-    }
-
-    .left_content > label {
-      background  : url('img/etc/icon_required_input.png') right center no-repeat;
-      cursor      : pointer;
-      font-weight : bold;
-      line-height : 18px;
-      overflow    : hidden;
-      padding     : 0 15px;
-    }
-
-    .right_content > input {
-      border      : 1px solid #DDDDDD;
-      color       : #333333;
-      font-size   : 14px;
-      height      : 32px;
-      line-height : 32px;
-      margin      : 0 3px;
-      outline     : none;
-      width       : 300px;
-    }
-
-    .right_content > select {
-      border          : 1px solid #DDDDDD;
-      color           : #333333;
-      display         : inline-block;
-      font-size       : 14px;
-      height          : 32px;
-      line-height     : 32px;
-      margin          : 0 3px;
-      outline         : none;
-      text-align      : center;
-      text-align-last : center;
-      width           : 200px;
-    }
-
-    .info_msg, .err_msg {
-      font-size   : 12px;
-      font-weight : normal;
-      padding     : 0 5px;
-    }
-
-    .info_msg {
-      color : #A9A9A9;
-    }
-
-    .page-button {
-      margin     : 20px 0;
-      text-align : center;
-    }
-
-    .page-button > a {
-      border      : 1px solid #E2E2E2;
-      cursor      : pointer;
-      display     : inline-block;
-      font-size   : 0.9rem;
-      line-height : 34px;
-      text-align  : center;
-      width       : 30px;
-    }
-  </style>
-</head>
-<body>
-<div class="admin_wrap">
-  <!-- 관리자페이지 사이드바 -->
-  <div class="admin_sidebar ps">
-    <!-- 사이드바 로고 -->
-    <div class="admin_logo">
-      <a class="simple-text logo-mini" th:href="@{/}">PI</a>
-      <a class="simple-text logo-normal" th:href="@{/}">POLINSIGHT</a>
-    </div>
-
-    <div class="admin_sidebar_wrap ps">
-      <!-- 관리자 계정 정보 -->
-      <div class="admin_user">
-        <div class="admin_user_photo">
-          <img alt="user_img" style="width: 100%;" th:src="@{/img/etc/circle_loppy.png}" />
-        </div>
-        <div class="user-info">
-          <a class="username">
-            <span th:text="${session.user.name}"> </span>
-          </a>
-        </div>
-      </div>
-      <!-- 네비게이션 -->
-      <ul class="admin_nav">
-        <li class="nav-item nav_action">
-          <a class="nav_link" th:href="@{/admin}">
-            <i class="fas fa-home"></i>
-            <p>대시보드</p>
-          </a>
-        </li>
-        <li class="nav-item nav_action">
-          <a class="nav_link" href="#">
-            <i class="fas fa-user-friends"></i>
-            <p>
-              회원관리
-              <i class="fas fa-caret-down arrow"></i>
-            </p>
-          </a>
-        </li>
-        <div class="collapse-show">
-          <ul class="admin_nav">
-            <li class="nav-item">
-              <a class="nav_link" th:href="@{/admin/memberlist}">
-                <p class="nav_dropdown">회원 목록</p>
-              </a>
-            </li>
-            <!--            <li class="nav-item">-->
-            <!--              <a th:href="@{/admin/membersearch}" class="nav_link">-->
-            <!--                <p class="nav_dropdown">회원 검색</p>-->
-            <!--              </a>-->
-            <!--            </li>-->
-            <li class="nav-item">
-              <a class="nav_link" href="#">
-                <p class="nav_dropdown">이메일보내기</p>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <li class="nav-item nav_action">
-          <a class="nav_link" href="#">
-            <i class="fas fa-clipboard-list"></i>
-            <p>
-              게시글 관리
-              <i class="fas fa-caret-down arrow"></i>
-            </p>
-          </a>
-        </li>
-        <div class="collapse-show">
-          <ul class="admin_nav">
-            <li class="nav-item">
-              <a class="nav_link" th:href="@{/admin/posts}">
-                <p class="nav_dropdown">공지사항</p>
-              </a>
-            </li>
-            <!--            <li class="nav-item">-->
-            <!--              <a class="nav_link" th:href="@{/admin/posts/download }">-->
-            <!--                <p class="nav_dropdown">자료실</p>-->
-            <!--              </a>-->
-            <!--            </li>-->
-            <!--            <li class="nav-item">-->
-            <!--              <a class="nav_link" th:href="@{/admin/events}">-->
-            <!--                <p class="nav_dropdown">Events</p>-->
-            <!--              </a>-->
-            <!--            </li>-->
-            <li class="nav-item">
-              <a class="nav_link" th:href="@{/admin/qna}">
-                <p class="nav_dropdown">Q & A</p>
-              </a>
-            </li>
-            <!--            <li class="nav-item">-->
-            <!--              <a class="nav_link" th:href="@{/admin/faq}">-->
-            <!--                <p class="nav_dropdown">FAQ</p>-->
-            <!--              </a>-->
-            <!--            </li>-->
-          </ul>
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
+  <th:block th:include="module/common" />
+  <head>
+    <title>폴인사이트</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        background-color: #fafafa;
+      }
+
+      .admin_main_contents {
+        display: block;
+        height: calc(100% - 51px);
+        margin-left: 260px;
+        margin-top: 51px;
+        padding: 20px 40px 40px;
+        width: calc(100% - 260px);
+      }
+
+      .admin_sidebar,
+      .admin_sidebar_wrap,
+      .admin_main {
+        transition-duration: 0.2s, 0.2s, 0.35s;
+        transition-property: top, bottom, width;
+        transition-timing-function: linear, linear, ease;
+      }
+
+      .admin_sidebar {
+        background-color: #191919;
+        bottom: 0;
+        box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%),
+          0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+        height: 100%;
+        left: 0;
+        max-height: 100%;
+        position: fixed;
+        top: 0;
+        width: 260px;
+        z-index: 999;
+      }
+
+      .admin_logo {
+        display: block;
+        margin: 0;
+        padding: 15px 0;
+        position: relative;
+        z-index: 4;
+      }
+
+      .admin_logo:after {
+        background-color: hsla(0, 0%, 71%, 0.3);
+        bottom: 0;
+        content: "";
+        height: 1px;
+        position: absolute;
+        right: 15px;
+        width: calc(100% - 30px);
+      }
+
+      .logo-mini {
+        color: white;
+        float: left;
+        margin-left: 23px;
+        margin-right: 15px;
+        opacity: 1;
+        text-align: center;
+        transition: all 0.3s linear;
+        width: 30px;
+      }
+
+      .simple-text {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 30px;
+        overflow: hidden;
+        padding: 5px 0;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .logo-normal {
+        color: white;
+        display: block;
+        opacity: 1;
+        transform: translateZ(0);
+      }
+
+      .admin_sidebar_wrap {
+        height: calc(100vh - 75px);
+        padding-bottom: 30px;
+        position: relative;
+        width: 260px;
+        z-index: 4;
+      }
+
+      .ps {
+        overflow-anchor: none;
+        touch-action: auto;
+      }
+
+      .admin_user {
+        margin: 20px auto 0;
+        padding-bottom: 20px;
+        position: relative;
+      }
+
+      .admin_user_photo {
+        border-radius: 50%;
+        box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%),
+          0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+        float: left;
+        height: 34px;
+        margin-left: 23px;
+        margin-right: 11px;
+        overflow: hidden;
+        width: 34px;
+        z-index: 5;
+      }
+
+      .user-info > a {
+        color: white;
+        display: block;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 8px 15px;
+        white-space: nowrap;
+      }
+
+      .username {
+        display: block;
+        font-size: 14px;
+        line-height: 18px;
+      }
+
+      .admin_user:after {
+        background-color: hsla(0, 0%, 71%, 0.3);
+        bottom: 0;
+        content: "";
+        height: 1px;
+        position: absolute;
+        right: 15px;
+        width: calc(100% - 30px);
+      }
+
+      .admin_nav {
+        display: block;
+        flex-wrap: wrap;
+        list-style: none;
+        margin-bottom: 0;
+        margin-top: 15px;
+        padding-left: 0;
+      }
+
+      .nav_link {
+        align-items: center;
+        border-radius: 3px;
+        color: white;
+        display: flex;
+        font-size: 13px;
+        justify-content: flex-start;
+        margin: 10px 15px 0;
+        padding: 0.5rem 10px;
+        text-transform: capitalize;
+        transition: all 0.15s ease-in;
+      }
+
+      .nav_link > i {
+        font-size: 20px;
+        line-height: 30px;
+        margin-right: 15px;
+        text-align: center;
+        vertical-align: middle;
+        width: 30px;
+      }
+
+      .nav_link > p {
+        display: block;
+        font-size: 14px;
+        height: auto;
+        line-height: 30px;
+        margin: 0;
+        position: relative;
+        white-space: nowrap;
+        width: 100%;
+      }
+
+      .nav-item:hover > a {
+        background-color: hsla(0, 0%, 78%, 0.2);
+        box-shadow: none;
+      }
+
+      .nav_link > p > i {
+        line-height: 30px;
+        position: absolute;
+        right: 6px;
+        vertical-align: middle;
+      }
+
+      .nav_dropdown {
+        padding-left: 40px;
+      }
+
+      .collapse-show {
+        height: 0;
+        overflow: hidden;
+      }
+
+      .admin_main {
+        float: right;
+        height: 51px;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: calc(100% - 260px);
+        z-index: 999;
+      }
+
+      .admin_main_header {
+        align-items: center;
+        background-color: white;
+        border-bottom: 1px solid #dddddd;
+        display: flex;
+        height: 51px;
+        justify-content: space-between;
+        padding: 0 20px;
+        width: calc(100vw - 260px);
+      }
+
+      .contents_title {
+        font-size: 1rem;
+      }
+
+      .right_menu > ul {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+      }
+
+      .right_menu > ul > li {
+        position: relative;
+      }
+
+      a.header_menu_item {
+        align-items: center;
+        border: 1.5px solid transparent;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        height: 35px;
+        justify-content: center;
+        margin-right: 20px;
+        width: 35px;
+      }
+
+      .right_menu > ul > li:hover > a {
+        border: 1.5px solid #dddddd;
+        box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%),
+          0 3px 1px -2px hsl(0deg 0% 60% / 20%),
+          0 1px 5px 0 hsl(0deg 0% 60% / 12%);
+      }
+
+      .right_menu > ul > li:hover > .dropdown_user {
+        display: block;
+      }
+
+      .header_menu_item > i {
+        font-size: 15px;
+      }
+
+      .dropdown_user {
+        background-color: white;
+        border: 1.5px solid #dddddd;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
+        display: none;
+        padding: 5px 0;
+        position: absolute;
+        right: 0;
+        width: 160px;
+        z-index: 9999;
+      }
+
+      .dropdown_user > a {
+        border-radius: 2px;
+        display: block;
+        margin: 0 5px;
+        padding: 10px 24px;
+        z-index: 9999;
+      }
+
+      .dropdown_user > a:hover {
+        background-color: #3885ca;
+        box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%),
+          0 7px 10px -5px rgb(5 0 153 / 40%);
+        color: white;
+      }
+
+      .contents_title > a > i {
+        font-size: 0.9rem;
+        margin-right: 5px;
+      }
+
+      .contents_title > a {
+        position: relative;
+      }
+
+      .next-link {
+        padding-left: 20px;
+      }
+
+      .next-link::before {
+        background-image: url("/img/etc/dot_depth.gif");
+        background-position: center center;
+        background-repeat: no-repeat;
+        content: "";
+        height: 100%;
+        left: 3px;
+        position: absolute;
+        top: 2px;
+        width: 10px;
+      }
+
+      .pagination {
+        align-content: center;
+        display: block;
+        justify-items: center;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .pagination > .pagination_button {
+        border: 1px solid #e2e2e2;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 0.9rem;
+        line-height: 34px;
+        margin: 0 2px;
+        text-align: center;
+        width: 30px;
+      }
+
+      .pagination_button:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      .pagination_button_current {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: rgba(32, 205, 195, 1);
+        font-weight: bolder;
+      }
+
+      .search-box-container {
+        justify-items: center;
+        margin: 0 auto;
+        position: relative;
+        vertical-align: middle;
+        white-space: nowrap;
+        width: 300px;
+      }
+
+      .search-box-container .admin_find {
+        background: white;
+        border: 0.5px solid black;
+        border-radius: 5px;
+        color: #63717f;
+        float: left;
+        height: 50px;
+        padding-left: 45px;
+        width: 300px;
+      }
+
+      .search-box-container .search-icon {
+        color: #4f5b66;
+        margin-left: 17px;
+        margin-top: 17px;
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+      }
+
+      .empty-data {
+        align-items: center;
+        display: flex;
+        height: 500px;
+        justify-content: center;
+      }
+
+      .post-th {
+        align-items: center;
+        background-color: #f2f2f2 !important;
+        border-bottom: 1px solid #cfcfd1;
+        border-top: 2px solid #7c7c7c;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .post-th > * {
+        color: #666666;
+        display: inline-block;
+        font-size: 1rem;
+        line-height: 30px;
+        padding: 9px 10px;
+        text-align: center;
+      }
+
+      .post-row {
+        align-items: center;
+        background-color: #ffffff;
+        border-bottom: 1px solid #cfcfd1;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .post-row > * {
+        color: #666666;
+        display: inline-block;
+        font-size: 1rem;
+        line-height: 30px;
+        padding: 9px 0px;
+        text-align: center;
+      }
+
+      .btn_udel {
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+      }
+
+      /* 여기까지 전체적인 레이아웃 */
+      /* 게시글판 디자인 */
+      .main_item {
+        border-bottom: 1px dashed #dadada;
+        color: #000000;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 10px 0 20px;
+      }
+
+      #metop_container {
+        align-items: center;
+        justify-content: center;
+      }
+
+      .metop_board_card {
+        background: white;
+        border-radius: 2px;
+        border-top: 3px solid mediumseagreen;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        margin: 30px 0;
+        padding: 40px 30px 20px 30px;
+        position: relative;
+        width: 85%;
+      }
+
+      /* 카드 제목 */
+      .register_top_wrap {
+        border-top: 2px solid #7c7c7c;
+      }
+
+      .register_bottom_wrap {
+        border-top: 1px solid #dadada;
+      }
+
+      .uploadedList {
+        display: flex;
+        padding: 15px 0px 0px 0px;
+      }
+
+      .uploadedList > li {
+        border-radius: 2px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+          0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        margin-right: 5px;
+      }
+
+      .board_div {
+        align-items: center;
+        border-bottom: 1px solid #dadada;
+        display: flex;
+        height: 100%;
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      /* 작성자 */
+
+      .board_div b {
+        font-size: 16px;
+      }
+
+      .board_div > span {
+        font-size: 14px;
+      }
+
+      .board_span {
+        background-color: #ffffff;
+        display: block;
+        flex: 7;
+        overflow: hidden;
+        padding: 9px 20px;
+      }
+
+      .board_writer {
+        display: inline-block;
+        font-size: 16px;
+        line-height: 30px;
+      }
+
+      .board_type > option {
+        cursor: pointer;
+      }
+
+      .board_input {
+        border: 1px solid #dadada;
+        font-size: 15px;
+        height: 30px;
+        outline: none;
+        width: 100%;
+      }
+
+      .board_content {
+        border: 1px solid #dadada;
+        font-size: 14px;
+        height: 300px;
+        outline: none;
+        resize: none;
+        width: 100%;
+      }
+
+      .textarea_div {
+        align-items: flex-start;
+        padding: 20px 0;
+      }
+
+      .form-group > label {
+        margin-top: 10px;
+      }
+
+      .form-group .board_div {
+        align-items: center;
+        border: 1.5px dashed #dadada;
+        color: #515151;
+        display: flex;
+        font-size: 15px;
+        height: 150px;
+        justify-content: center;
+        text-align: center;
+      }
+
+      /* 등록/취소 버튼 */
+      .btn_wrap {
+        border: 0;
+        border-radius: 0;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+        padding: 10px 15px 10px 15px;
+      }
+
+      .insert_btn {
+        margin-right: -15px;
+        width: 80px;
+      }
+
+      .cancel_btn {
+        margin-left: -15px;
+        width: 80px;
+      }
+
+      .board_content_wrap {
+        height: 100%;
+        width: 100%;
+      }
+
+      div#smart_editor2 {
+        width: 1040px !important;
+      }
+
+      .err_msg_wrap {
+        display: none;
+        text-align: left;
+      }
+
+      .err_msg {
+        color: #d95339;
+        display: block;
+        font-size: 14px;
+      }
+
+      .board_div > label {
+        background-color: #eeeeee;
+        display: block;
+        font-size: 16px;
+        line-height: 30px;
+        padding: 9px 15px 9px 25px;
+        padding-left: 30px;
+        position: relative;
+        width: 150px;
+      }
+
+      .board_div > label > span {
+        color: #d95339;
+        font-size: 20px;
+        left: 10px;
+        position: absolute;
+        top: 9px;
+      }
+
+      #board_writer {
+        width: 150px;
+      }
+
+      .size_limit_msg {
+        color: #999999;
+      }
+
+      .file_wrap {
+        border: 1px solid #dadada;
+      }
+
+      .file_item > label {
+        display: block;
+        text-align: center;
+        width: 100px;
+      }
+
+      .file_item > div {
+        align-items: center;
+        background-color: #ffffff;
+        display: flex;
+        flex: 7;
+        padding: 9px 10px;
+      }
+
+      .file_item {
+        align-items: center;
+        background-color: #eeeeee;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .btn-add,
+      .btn-remove {
+        cursor: pointer;
+        margin-right: 5px;
+        outline: none;
+        padding: 5px 7px;
+        width: 60px;
+      }
+
+      .btn-remove {
+        background-color: #ffffff;
+        border: 1px solid tomato;
+        color: tomato;
+      }
+
+      .other_file_item {
+        border-top: 1px solid #dadada;
+      }
+
+      .board_select {
+        cursor: pointer;
+        width: 150px;
+      }
+
+      .board_file {
+        cursor: pointer;
+      }
+
+      /*게시글 조회 파트*/
+      .left_content {
+        flex: 1.5;
+      }
+
+      .right_content {
+        flex: 8.5;
+      }
+
+      .left_content > label {
+        background: url("img/etc/icon_required_input.png") right center
+          no-repeat;
+        cursor: pointer;
+        font-weight: bold;
+        line-height: 18px;
+        overflow: hidden;
+        padding: 0 15px;
+      }
+
+      .right_content > input {
+        border: 1px solid #dddddd;
+        color: #333333;
+        font-size: 14px;
+        height: 32px;
+        line-height: 32px;
+        margin: 0 3px;
+        outline: none;
+        width: 300px;
+      }
+
+      .right_content > select {
+        border: 1px solid #dddddd;
+        color: #333333;
+        display: inline-block;
+        font-size: 14px;
+        height: 32px;
+        line-height: 32px;
+        margin: 0 3px;
+        outline: none;
+        text-align: center;
+        text-align-last: center;
+        width: 200px;
+      }
+
+      .info_msg,
+      .err_msg {
+        font-size: 12px;
+        font-weight: normal;
+        padding: 0 5px;
+      }
+
+      .info_msg {
+        color: #a9a9a9;
+      }
+
+      .page-button {
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .page-button > a {
+        border: 1px solid #e2e2e2;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 0.9rem;
+        line-height: 34px;
+        text-align: center;
+        width: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin_wrap">
+      <!-- 관리자페이지 사이드바 -->
+      <div class="admin_sidebar ps">
+        <!-- 사이드바 로고 -->
+        <div class="admin_logo">
+          <a class="simple-text logo-mini" th:href="@{/}">PI</a>
+          <a class="simple-text logo-normal" th:href="@{/}">POLINSIGHT</a>
         </div>
 
-        <li class="nav-item nav_action">
-          <a class="nav_link" th:href="@{/admin/surveylist}">
-            <i class="fas fa-poll-h"></i>
-            <p>
-              설문 관리
-              <i class="fas fa-caret-down arrow"></i>
-            </p>
-          </a>
-        </li>
-        <li class="nav-item nav_action">
-          <a class="nav_link" th:href="@{/admin/pointlist}">
-            <i class="fas fa-coins"></i>
-            <p>
-              포인트 요청 목록
-              <i class="fas fa-caret-down arrow"></i>
-            </p>
-          </a>
-        </li>
-        <!--        <li class="nav-item nav_action">-->
-        <!--          <a th:href="@{/}" class="nav_link">-->
-        <!--            <i class="fas fa-door-open"></i>-->
-        <!--            <p>EXIT</p>-->
-        <!--          </a>-->
-        <!--        </li>-->
-      </ul>
-    </div>
-  </div>
-  <!--사이드바 종료-->
-  <!--헤더-->
-  <div class="admin_main ps">
-    <div class="admin_main_header">
-      <div class="contents_title">
-        <a th:href="@{/admin}">
-          <i class="fas fa-user-lock"></i>
-          Admin
-        </a>
-        <!--                <a th:href="@{/admin/post/manage}" class="next-link">게시글관리</a>-->
-        <!--                <a th:href="@{/admin/noti/manage}" class="next-link">공지사항</a>-->
-      </div>
-
-      <div class="right_menu">
-        <ul>
-          <li>
-            <a class="header_menu_item">
-              <i class="fas fa-user"></i>
-            </a>
-            <div class="dropdown_user">
-              <a th:href="@{/admin/user/manage}">정보수정</a>
-              <a th:href="@{/dologout}">로그아웃</a>
+        <div class="admin_sidebar_wrap ps">
+          <!-- 관리자 계정 정보 -->
+          <div class="admin_user">
+            <div class="admin_user_photo">
+              <img
+                alt="user_img"
+                style="
+                  width: 100%;
+                  background-color: white;
+                  object-fit: contain;
+                "
+                th:src="@{/img/logo/logo.png}"
+              />
             </div>
-          </li>
-          <li>
-            <a class="header_menu_item" th:href="@{/}">
-              <i class="fas fa-door-open"></i>
+            <div class="user-info">
+              <a class="username">
+                <span th:text="${session.user.name}"> </span>
+              </a>
+            </div>
+          </div>
+          <!-- 네비게이션 -->
+          <ul class="admin_nav">
+            <li class="nav-item nav_action">
+              <a class="nav_link" th:href="@{/admin}">
+                <i class="fas fa-home"></i>
+                <p>대시보드</p>
+              </a>
+            </li>
+            <li class="nav-item nav_action">
+              <a class="nav_link" href="#">
+                <i class="fas fa-user-friends"></i>
+                <p>
+                  회원관리
+                  <i class="fas fa-caret-down arrow"></i>
+                </p>
+              </a>
+            </li>
+            <div class="collapse-show">
+              <ul class="admin_nav">
+                <li class="nav-item">
+                  <a class="nav_link" th:href="@{/admin/memberlist}">
+                    <p class="nav_dropdown">회원 목록</p>
+                  </a>
+                </li>
+                <!--            <li class="nav-item">-->
+                <!--              <a th:href="@{/admin/membersearch}" class="nav_link">-->
+                <!--                <p class="nav_dropdown">회원 검색</p>-->
+                <!--              </a>-->
+                <!--            </li>-->
+                <li class="nav-item">
+                  <a class="nav_link" href="#">
+                    <p class="nav_dropdown">이메일보내기</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <li class="nav-item nav_action">
+              <a class="nav_link" href="#">
+                <i class="fas fa-clipboard-list"></i>
+                <p>
+                  게시글 관리
+                  <i class="fas fa-caret-down arrow"></i>
+                </p>
+              </a>
+            </li>
+            <div class="collapse-show">
+              <ul class="admin_nav">
+                <li class="nav-item">
+                  <a class="nav_link" th:href="@{/admin/posts}">
+                    <p class="nav_dropdown">공지사항</p>
+                  </a>
+                </li>
+                <!--            <li class="nav-item">-->
+                <!--              <a class="nav_link" th:href="@{/admin/posts/download }">-->
+                <!--                <p class="nav_dropdown">자료실</p>-->
+                <!--              </a>-->
+                <!--            </li>-->
+                <!--            <li class="nav-item">-->
+                <!--              <a class="nav_link" th:href="@{/admin/events}">-->
+                <!--                <p class="nav_dropdown">Events</p>-->
+                <!--              </a>-->
+                <!--            </li>-->
+                <li class="nav-item">
+                  <a class="nav_link" th:href="@{/admin/qna}">
+                    <p class="nav_dropdown">Q & A</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav_link" th:href="@{/admin/pols}">
+                    <p class="nav_dropdown">Pol's Insight</p>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <li class="nav-item nav_action">
+              <a class="nav_link" th:href="@{/admin/surveylist}">
+                <i class="fas fa-poll-h"></i>
+                <p>
+                  설문 관리
+                  <!--                  <i class="fas fa-caret-down arrow"></i>-->
+                </p>
+              </a>
+            </li>
+            <li class="nav-item nav_action">
+              <a class="nav_link" th:href="@{/admin/pointlist}">
+                <i class="fas fa-coins"></i>
+                <p>
+                  포인트 요청 목록
+                  <!--                  <i class="fas fa-caret-down arrow"></i>-->
+                </p>
+              </a>
+            </li>
+            <!--        <li class="nav-item nav_action">-->
+            <!--          <a th:href="@{/}" class="nav_link">-->
+            <!--            <i class="fas fa-door-open"></i>-->
+            <!--            <p>EXIT</p>-->
+            <!--          </a>-->
+            <!--        </li>-->
+          </ul>
+        </div>
+      </div>
+      <!--사이드바 종료-->
+      <!--헤더-->
+      <div class="admin_main ps">
+        <div class="admin_main_header">
+          <div class="contents_title">
+            <a th:href="@{/admin}">
+              <i class="fas fa-user-lock"></i>
+              Admin
             </a>
-          </li>
-        </ul>
+            <!--                <a th:href="@{/admin/post/manage}" class="next-link">게시글관리</a>-->
+            <!--                <a th:href="@{/admin/noti/manage}" class="next-link">공지사항</a>-->
+          </div>
+
+          <div class="right_menu">
+            <ul>
+              <!--              <li>-->
+              <!--                <a class="header_menu_item">-->
+              <!--                  <i class="fas fa-user"></i>-->
+              <!--                </a>-->
+              <!--                <div class="dropdown_user">-->
+              <!--                  <a th:href="@{/admin/user/manage}">정보수정</a>-->
+              <!--                  <a th:href="@{/dologout}">로그아웃</a>-->
+              <!--                </div>-->
+              <!--              </li>-->
+              <li>
+                <a th:href="@{/dologout}">로그아웃</a>
+              </li>
+              <li>
+                <a class="header_menu_item" th:href="@{/}">
+                  <i class="fas fa-door-open"></i>
+                  EXIT
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<!--헤더 종료-->
-</body>
-<script th:inline="javascript">
-  $(function () {
-    let link = document.location.href;
+    <!--헤더 종료-->
+  </body>
+  <script th:inline="javascript">
+    $(function () {
+      let link = document.location.href;
 
-    let array = link.split('/');
-    let index = array.indexOf('admin');
-    array.splice(0, index + 1);
-    let html = '';
-    for (i = 0; i < array.length; i++) {
-      if (i === 0) {
-        if (array[i] === 'posts') {
-          html += '<a class="next-link">게시글관리</a>';
-        } else if (array[i] === 'memberlist') {
-          html += '<a class="next-link">회원관리</a>';
-        } else if (array[i] === 'surveylist') {
-          html += `<a class="next-link">설문 관리</a>`;
-        } else if (array[i] === 'pointlist') {
-          html += `<a class="next-link">사용자 요청 관리</a>`;
-        }
-      } else if (i === 1) {
-        if (array[0] === 'posts') {
-          if (array[i] === 'notice') {
-            html += '<a href="#" class="next-link">공지사항</a>';
-          } else if (array[i] === 'download') {
-            html += '<a href="#" class="next-link">자료실</a>';
-          } else if (array[i] === 'QnA') {
-            html += '<a href="#" class="next-link">QnA</a>';
+      let array = link.split("/");
+      let index = array.indexOf("admin");
+      array.splice(0, index + 1);
+      let html = "";
+      for (i = 0; i < array.length; i++) {
+        if (i === 0) {
+          if (array[i] === "posts") {
+            html += '<a class="next-link">게시글관리</a>';
+          } else if (array[i] === "memberlist") {
+            html += '<a class="next-link">회원관리</a>';
+          } else if (array[i] === "surveylist") {
+            html += `<a class="next-link">설문 관리</a>`;
+          } else if (array[i] === "pointlist") {
+            html += `<a class="next-link">사용자 요청 관리</a>`;
+          }
+        } else if (i === 1) {
+          if (array[0] === "posts") {
+            if (array[i] === "notice") {
+              html += '<a href="#" class="next-link">공지사항</a>';
+            } else if (array[i] === "download") {
+              html += '<a href="#" class="next-link">자료실</a>';
+            } else if (array[i] === "QnA") {
+              html += '<a href="#" class="next-link">QnA</a>';
+            }
           }
         }
       }
-    }
-    $('.contents_title').append(html);
+      $(".contents_title").append(html);
 
-    $('.nav_action').click(function () {
-      let value = $(this).find('.arrow').attr('class');
-      if (value === 'fas fa-caret-down arrow') {
-        $(this).next('div').css('height', '100%');
-        $(this).find('.arrow').attr('class', 'fas fa-caret-up arrow');
-      } else if (value === 'fas fa-caret-up arrow') {
-        $(this).next('div').css('height', '0');
-        $(this).find('.arrow').attr('class', 'fas fa-caret-down arrow');
-      }
+      $(".nav_action").click(function () {
+        let value = $(this).find(".arrow").attr("class");
+        if (value === "fas fa-caret-down arrow") {
+          $(this).next("div").css("height", "100%");
+          $(this).find(".arrow").attr("class", "fas fa-caret-up arrow");
+        } else if (value === "fas fa-caret-up arrow") {
+          $(this).next("div").css("height", "0");
+          $(this).find(".arrow").attr("class", "fas fa-caret-down arrow");
+        }
+      });
     });
-  });
-</script>
+  </script>
 </html>

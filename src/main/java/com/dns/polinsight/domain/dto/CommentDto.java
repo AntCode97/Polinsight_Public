@@ -18,6 +18,8 @@ public class CommentDto {
 
   private String content;
 
+  private Long postId;
+
   @Setter
   private Post post;
 
@@ -31,7 +33,8 @@ public class CommentDto {
   public CommentDto(Comment comment) {
     this.seq = comment.getSeq();
     this.content = comment.getContent();
-//    this.post = comment.getPost();
+    //    this.post = comment.getPost();
+    this.postId = comment.getPost().getId();
     this.writer = comment.getWriter();
     this.lastModifiedAt = comment.getLastModifiedAt();
   }

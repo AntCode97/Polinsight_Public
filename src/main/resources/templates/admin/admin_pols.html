@@ -1,0 +1,88 @@
+<th:block th:include="admin/admin_sidebar" />
+<th:block>
+  <style>
+    .insight_card_wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      /*align-items: center;*/
+      flex-grow: 1;
+    }
+
+    .card-box {
+      width: 600px;
+    }
+
+    .card-box > img {
+      object-fit: contain;
+      object-position: 50% 50%;
+    }
+  </style>
+</th:block>
+<th:block>
+  <div class="admin_main_contents">
+    <div class="board_contents_wrap">
+      <div class="main_item">
+        <p>Pol's Insight</p>
+      </div>
+      <div class="main_contents_wrap">
+        <div class="insight_card_wrapper">
+          <div class="scroll-card"></div>
+        </div>
+        <div class="page-button" id="pagination"></div>
+      </div>
+    </div>
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  <script th:src="@{/js/PostUtils.js}"></script>
+  <script>
+    async function getInsightData() {
+      let response = await http.get("/api/posts?type=INSIGHT");
+      let data = response.data.response;
+      if (response.data.success) {
+        return {
+          content: data.content,
+          total: data.totalElements,
+          totalPage: data.totalPages,
+          current: data.number,
+        };
+      } else alert("데이터를 가져오는 중 오류가 발생하였습니다.");
+    }
+
+    let init = (e) => {
+      getInsightData().then((obj) => {
+        let table = $(".scroll-card");
+        if (obj.total > 0) {
+          makePagination(obj.current, obj.totalPage);
+          obj.content.forEach((insight) => {
+            table.append(makeInsightTemplate(insight));
+          });
+        } else {
+          table.append("<h1>데이터가 존재하지 않습니다</h1>");
+        }
+      });
+    };
+
+    const makeInsightTemplate = (insight) => {
+      let template = $('<div class="card-box"></div>').on(
+        "click",
+        function (e) {
+          location.assign(`/insight/${insight.id}`.trim());
+        }
+      );
+      template.append(
+        `<img src="` +
+          "[[${@environment.getProperty('file.upload.address')}]]" +
+          `${insight.thumbnail}" alt="">`
+      );
+      template.append(`<div class="card-title">${insight.title}</div>`);
+      return template;
+    };
+
+    $(function () {
+      init();
+    });
+  </script>
+</th:block>

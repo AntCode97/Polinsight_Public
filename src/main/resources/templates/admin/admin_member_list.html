@@ -884,7 +884,7 @@
     </div>
 
     <div>
-      <button name="save_excel">유저 목록 다운로드</button>
+      <button name="save_excel" class="btn btn-primary">유저 목록 다운로드</button>
     </div>
 
     <div class="main_contents_wrap">
@@ -951,7 +951,7 @@
       }
     }
 
-    const init = e => {
+    let init = e => {
       getMemberData(e).then(obj => {
         $('#total_count').text(obj.total)
         let table = $('.scroll-table')

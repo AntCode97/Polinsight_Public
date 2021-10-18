@@ -3,6 +3,7 @@ package com.dns.polinsight.domain.dto;
 import com.dns.polinsight.domain.Attach;
 import com.dns.polinsight.domain.Post;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.projection.PostMapping;
 import com.dns.polinsight.types.PostType;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,6 +33,7 @@ public class PostDTO {
   @NotNull
   private PostType postType;
 
+  @NotNull
   private String content;
 
   private String viewcontent;
@@ -40,6 +42,8 @@ public class PostDTO {
   private User user;
 
   private String userName;
+
+  private String userId;
 
   @CreatedDate
   private LocalDateTime registeredAt;
@@ -53,6 +57,9 @@ public class PostDTO {
   private List<CommentDto> comments;
 
   private String thumbnail;
+
+  @Builder.Default
+  private Boolean isWriter = false;
 
   @Builder.Default
   private Long viewcnt = 0L;
@@ -73,14 +80,34 @@ public class PostDTO {
   public static PostDTO of(Post post) {
     return PostDTO.builder()
                   .id(post.getId())
+                  .content(post.getSearchcontent())
+                  .user(post.getUser())
                   .postType(post.getPostType())
                   .title(post.getTitle())
                   .thumbnail(post.getThumbnail())
                   .attaches(post.getAttaches())
                   .userName(post.getUser().getName())
+                  .userId(String.valueOf(post.getUser().getEmail()))
                   .registeredAt(post.getRegisteredAt())
                   .viewcontent(post.getViewcontent())
                   .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .build();
+  }
+
+  public static PostDTO of(PostMapping mapping) {
+    return PostDTO.builder()
+                  .id(mapping.getId())
+                  .title(mapping.getTitle())
+                  .thumbnail(mapping.getThumbnail())
+                  .postType(mapping.getPostType())
+                  .user(mapping.getUser())
+                  .userId(String.valueOf(mapping.getUser().getEmail()))
+                  .userName(mapping.getUser().getName())
+                  .registeredAt(mapping.getRegisteredAt())
+                  .attaches(mapping.getAttaches())
+                  .viewcnt(mapping.getViewCount())
+                  .viewcontent(mapping.getViewcontent())
+                  .comments(mapping.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
                   .build();
   }
 
