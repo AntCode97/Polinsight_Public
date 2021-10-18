@@ -311,11 +311,11 @@
                       </div>
                       <div class="right_content">
                         <label>
-                          <input checked name="marry" type="radio" value="false">
+                          <input checked name="marry" type="radio" value="미혼">
                           미혼
                         </label>
                         <label>
-                          <input name="marry" type="radio" value="true">
+                          <input name="marry" type="radio" value="기혼">
                           기혼
                         </label>
                         <span class="err_msg"></span>
@@ -606,9 +606,7 @@
     const changeRoleToPanel = e => {
       e.preventDefault()
 
-      alert('패널로 변경 요청')
       let panelInfo = getPanelDataFromInputToJson()
-
       // 데이터 검증
       if (!panelInfoChecker(panelInfo)) {
         alert('필수 사항이 작성되었는지 확인해주세요')
@@ -624,16 +622,19 @@
           .patch('/api/changetopanel', panelInfo)
           .then(res => {
             if (res.data.success) {
-              location.replace("/mypage")
+              alert('유저 변경에 성공하였습니다.\n다시 로그인해주세요.')
             }
           })
           .catch(err => {
             alert('처리 중 오류가 발생하였습니다.\n계속해서 오류가 발생한다면 관리자에게 문의해주세요.')
-            location.replace('/mypage')
+          })
+          .finally(() => {
+            // TODO
+            location.replace("/")
           })
     }
 
-    const init = () => {
+    let init = () => {
       setDateValue()
     }
 

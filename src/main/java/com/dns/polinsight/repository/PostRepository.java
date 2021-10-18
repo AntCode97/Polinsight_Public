@@ -13,14 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-  //    Post save(Post post);
-  //
-  //    Optional<Post> findById(Long id);
-  //    Optional<Post> findByContent(String searchContent);
-  //
-  //    Boolean delete(Post post);
-  //
-  //    List<Post> findAll();
 
   @Query(
       value = "SELECT b FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType",
@@ -34,6 +26,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   )
   Page<Post> findBySearchcontent(String searchcontent, PostType postType, Pageable pageable);
 
+  Page<Post> findPostsBySearchcontentAndPostType(String searchcontent, PostType postType, Pageable pageable);
+
   @Query(
       value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
       countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
@@ -42,23 +36,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
   @Transactional
   @Modifying()
-  @Query(
-      value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId"
-  )
+  @Query(value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId")
   void upViewCnt(Long postId);
 
   Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
-  //  @Query(
-  //          value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType",
-  //          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:searchcontent% AND b.postType = :postType"
-  //  )
   Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
 
-  //  @Query(
-  //          value = "SELECT b FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType",
-  //          countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.title LIKE %:title% AND b.postType = :postType"
-  //  )
   Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title, PostType postType, Pageable pageable);
 
   @Query(
@@ -72,4 +56,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
   List<Post> findAllByPostType(PostType type);
+
 }

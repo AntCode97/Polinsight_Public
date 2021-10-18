@@ -3,194 +3,193 @@
   <style>
     /* CASAREL 아래 nav-bar */
     .headline_wrap {
-      align-items     : center;
-      color           : red;
-      display         : none;
-      flex-direction  : column;
-      font-size       : 55px;
-      gap             : 10px;
-      height          : 100%;
-      justify-content : center;
+      align-items: center;
+      color: red;
+      display: none;
+      flex-direction: column;
+      font-size: 55px;
+      gap: 10px;
+      height: 100%;
+      justify-content: center;
     }
 
     .small-headline {
-      font-size : 14px;
+      font-size: 14px;
     }
 
     .carasel_wrap {
-      height : 35vh;
+      height: 35vh;
     }
 
     .carasel_wrap::before {
-      height : 35vh;
+      height: 35vh;
     }
 
     .big_navigation {
-      align-items     : center;
-      display         : flex;
-      justify-content : flex-start;
-      margin          : -1px auto 0;
-      width           : 1200px;
+      align-items: center;
+      display: flex;
+      justify-content: flex-start;
+      margin: -1px auto 0;
+      width: 1200px;
     }
 
     .big_navigation_wrap {
-      border-bottom : 1px solid #DDDDDD;
+      border-bottom: 1px solid #dddddd;
     }
 
     .big_navigation > li > a {
-      background     : #CECECE;
-      color          : white;
-      display        : block;
-      font-size      : 15px;
-      height         : 50px;
-      letter-spacing : -0.5px;
-      line-height    : 48px;
-      margin         : 0 -1px -1px 0;
-      overflow       : hidden;
-      padding        : 0 40px;
-      text-align     : center;
+      background: #cecece;
+      color: white;
+      display: block;
+      font-size: 15px;
+      height: 50px;
+      letter-spacing: -0.5px;
+      line-height: 48px;
+      margin: 0 -1px -1px 0;
+      overflow: hidden;
+      padding: 0 40px;
+      text-align: center;
     }
 
     .check_navigation {
-      background : #192739 !important;
+      background: #192739 !important;
     }
 
     /* post DESIGN */
     .post_main_contents {
-      display   : block;
-      margin    : 40px auto;
-      max-width : 1200px;
-      width     : 100%;
+      display: block;
+      margin: 40px auto;
+      max-width: 1200px;
+      width: 100%;
     }
 
     .post_main_contents_item {
-      border-bottom : 1px dashed #DADADA;
-      padding       : 10px 0;
+      border-bottom: 1px dashed #dadada;
+      padding: 10px 0;
     }
 
     .main_item {
-      color       : #000000;
-      font-size   : 2.5rem;
-      font-weight : bold;
-      padding     : 0 20px 10px;
-      text-align  : center;
+      color: #000000;
+      font-size: 2.5rem;
+      font-weight: bold;
+      padding: 0 20px 10px;
+      text-align: center;
     }
 
     .sub_item {
-      display       : block;
-      text-align    : center;
-      font-size     : 1.5rem;
-      color         : #444444;
-      margin-top    : 40px;
-      margin-bottom : 30px;
+      display: block;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #444444;
+      margin-top: 40px;
+      margin-bottom: 30px;
     }
 
     .tbl-search {
-      align-items     : center;
-      display         : flex;
-      gap             : 10px;
-      justify-content : center;
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
     }
 
     .box-select {
-      appearance   : none;
-      background   : #FFFFFF url('/img/etc/arrow-search.png') no-repeat right center;
-      border       : 1px solid #CCD0D7;
-      cursor       : pointer;
-      flex         : 1.5;
-      font-size    : 1.2rem;
-      height       : 55px;
-      line-height  : 55px;
-      padding-left : 20px;
-      text-align   : left;
+      appearance: none;
+      background: #ffffff url("/img/etc/arrow-search.png") no-repeat right
+        center;
+      border: 1px solid #ccd0d7;
+      cursor: pointer;
+      flex: 1.5;
+      font-size: 1.2rem;
+      height: 55px;
+      line-height: 55px;
+      padding-left: 20px;
+      text-align: left;
     }
 
     .post-search .form-search {
-      padding : 20px 200px;
+      padding: 20px 200px;
     }
 
     .survey-sort-wrap {
-      align-items     : center;
-      display         : flex;
-      gap             : 10px;
-      justify-content : flex-start;
-      margin-bottom   : 10px;
-      margin-left     : 10px;
-      width           : 100%;
+      align-items: center;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+      margin-bottom: 10px;
+      margin-left: 10px;
+      width: 100%;
     }
 
     .survey-sort-wrap > label {
-      border        : 1px solid #444444;
-      border-radius : 5px;
-      color         : #444444;
-      cursor        : pointer;
-      display       : block;
-      padding       : 5px 0;
-      text-align    : center;
-      width         : 70px;
+      border: 1px solid #444444;
+      border-radius: 5px;
+      color: #444444;
+      cursor: pointer;
+      display: block;
+      padding: 5px 0;
+      text-align: center;
+      width: 70px;
     }
 
     .survey-sort-wrap > input {
-      display : none;
+      display: none;
     }
 
     .sort-active {
-      background : #192739 !important;
-      border     : 1px solid #192739 !important;
-      color      : #FFFFFF !important;
+      background: #192739 !important;
+      border: 1px solid #192739 !important;
+      color: #ffffff !important;
     }
 
     .post-row > *:nth-child(1) {
-      width : 70px;
+      width: 70px;
     }
 
     .post-row > *:nth-child(2) {
-      width : 90px;
+      width: 90px;
     }
 
     .post-row > *:nth-child(3) {
-      width : 500px;
+      width: 500px;
     }
 
     .post-row > *:nth-child(4) {
-      width : 120px;
+      width: 120px;
     }
 
     .post-row > *:nth-child(5) {
-      width : 180px;
+      width: 180px;
     }
 
     .post-row > *:nth-child(6) {
-      width : 100px;
+      width: 100px;
     }
 
     .post-row > *:nth-child(7) {
-      width : 120px;
+      width: 120px;
     }
 
     .status-bar {
-      background    : #4C99CF;
-      border-radius : 5px;
-      color         : #FFFFFF;
-      padding       : 0;
+      background: #4c99cf;
+      border-radius: 5px;
+      color: #ffffff;
+      padding: 0;
     }
 
     .status-finish {
-      background : #192739 !important;
+      background: #192739 !important;
     }
 
-
-    @media (min-width : 320px) and (max-width : 480px) {
+    @media (min-width: 320px) and (max-width: 480px) {
       .carasel_wrap {
-        height : 25vh;
+        height: 25vh;
       }
 
       .headline_wrap {
-        display : none;
+        display: none;
       }
     }
   </style>
-
 
   <div class="carasel_wrap">
     <div class="headline_wrap">
@@ -202,8 +201,20 @@
 
   <div class="big_navigation_wrap">
     <ul class="big_navigation">
-      <li><a th:href="@{/research/online}" th:classappend="${checked} == 'online' ? 'check_navigation'">온라인조사</a></li>
-      <li><a th:href="@{/research/pols}" th:classappend="${checked} == 'pols' ? 'check_navigation'">폴'S인사이트</a></li>
+      <li>
+        <a
+          th:href="@{/research/online}"
+          th:classappend="${checked} == 'online' ? 'check_navigation'"
+          >온라인조사</a
+        >
+      </li>
+      <li>
+        <a
+          th:href="@{/research/pols}"
+          th:classappend="${checked} == 'pols' ? 'check_navigation'"
+          >폴'S인사이트</a
+        >
+      </li>
     </ul>
   </div>
 
@@ -211,7 +222,10 @@
     <div class="post_main_contents_category">
       <div class="post_main_contents_item">
         <p class="main_item">온라인 조사</p>
-        <span class="sub_item">온라인으로 진행하고 있는 설문조사입니다. 진행중인 설문조사에 참여해보세요.</span>
+        <span class="sub_item"
+          >온라인으로 진행하고 있는 설문조사입니다. 진행중인 설문조사에
+          참여해보세요.</span
+        >
       </div>
     </div>
 
@@ -230,24 +244,34 @@
               <option value="">포인트순</option>
             </select>
             <div class="box-search">
-              <input name="admin_find" type="text" id="searchinput" th:value="${keyword}" />
+              <input
+                name="admin_find"
+                type="text"
+                id="searchinput"
+                th:value="${keyword}"
+              />
               <input type="submit" />
             </div>
           </div>
         </div>
       </div>
       <div class="survey-sort-wrap">
-        <label for="sort_all" class="check_sort sort-active">
-          전체
-        </label>
-        <input value="ALL" type="radio" name="sort_group" id="sort_all" checked />
-        <label for="sort_ongoing">
-          진행
-        </label>
-        <input value="ONGOING" type="radio" name="sort_group" id="sort_ongoing" />
-        <label for="sort_end">
-          종료
-        </label>
+        <label for="sort_all" class="check_sort sort-active"> 전체 </label>
+        <input
+          value="ALL"
+          type="radio"
+          name="sort_group"
+          id="sort_all"
+          checked
+        />
+        <label for="sort_ongoing"> 진행 </label>
+        <input
+          value="ONGOING"
+          type="radio"
+          name="sort_group"
+          id="sort_ongoing"
+        />
+        <label for="sort_end"> 종료 </label>
         <input value="END" type="radio" name="sort_group" id="sort_end" />
       </div>
       <div class="scroll-table">
@@ -260,97 +284,109 @@
           <span>포인트</span>
           <span>등록일</span>
         </div>
-        <!--        <div class="post-row">-->
-        <!--          <span>9</span>-->
-        <!--          <span class="status-bar status-finish">마감</span>-->
-        <!--          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>-->
-        <!--          <span>~2019.05.08</span>-->
-        <!--          <span>10/25</span>-->
-        <!--          <span><Strong>1,000P</Strong></span>-->
-        <!--          <span>2021-06-16</span>-->
-        <!--        </div>-->
-        <!--        <div class="post-row">-->
-        <!--          <span>8</span>-->
-        <!--          <span class="status-bar">진행중</span>-->
-        <!--          <a href="#" class="post-title">온라인으로 진행하고 있는 설문조사입니다.</a>-->
-        <!--          <span>~2019.05.08</span>-->
-        <!--          <span>10/25</span>-->
-        <!--          <span><Strong>1,000P</Strong></span>-->
-        <!--          <span>2021-06-16</span>-->
-        <!--        </div>-->
       </div>
     </div>
   </div>
 
-  <div class="page-button" id="pagination">
-  </div>
+  <div class="page-button" id="pagination"></div>
   <th:block th:include="layout/footer" />
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
-
-
     async function getSurveyData(e) {
-      let type = $('input[name=sort_group]:checked').val();
+      let type = $("input[name=sort_group]:checked").val();
       let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-      let regex = !e ? '' : String($('input[name=admin_find]').val()).trim();
-      const response = await http.get('/api/surveys/notAdmin?type=' + type, {params: {page: page, size: 10, regex: regex}});
+      let regex = !e ? "" : String($("input[name=admin_find]").val()).trim();
+      const response = await http.get("/api/surveys/notAdmin?type=" + type, {
+        params: { page: page, size: 10, regex: regex },
+      });
       if (response.data.success) {
         const data = response.data.response;
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number};
+        return {
+          content: data.content,
+          total: data.totalElements,
+          totalPage: data.totalPages,
+          current: data.number,
+        };
       }
     }
 
-
-    const init = e => {
-      const spinner = $('#loading');
+    let init = (e) => {
+      const spinner = $("#loading");
       spinner.show();
-      getSurveyData(e).then(obj => {
-        $('#total_count').text(obj.total);
-        let table = $('.scroll-table')
-        table.children('.post-row:not(:first-child)').remove();
+      getSurveyData(e).then((obj) => {
+        $("#total_count").text(obj.total);
+        let table = $(".scroll-table");
+        table.children(".post-row:not(:first-child)").remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
-          obj.content.forEach(post => {
+          obj.content.forEach((post) => {
             table.append(makeSurveyTemplate2(post));
           });
         } else
-          table.append(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`);
+          table.append(
+            `<div class="post-row"><h1>게시물이 없습니다.</h1></div>`
+          );
       });
       spinner.hide();
     };
 
     const makeSurveyTemplate2 = (survey) => {
-      if (survey.progress !== 'BEFORE') {
+      if (survey.progress !== "BEFORE") {
         let template = $(`<div class="post-row"></div>`);
 
-
-        template.append(`<div>${survey.id}</div>`);// 번호
-        if (survey.progress === 'ONGOING') template.append(`<div class="status-bar">진행중</div>`); //설문 종류
-        else if (survey.progress === 'END') template.append(`<div class="status-bar status-finish">마감</div>`);
-        template.append(`<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`);// 설문 이름
-        template.append(`<div>${String(survey.endAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); //종료 일자
-        template.append(`<div>${!survey.count ? '지정 안됨' : survey.count}</div>`);// 참여자 수
-        template.append(`<div>${!survey.point ? '지정 안됨' : survey.point}</div>`);// 지급 포인트
-        template.append(`<div>${String(survey.createdAt).split('T')[0] !== 'null' ? String(survey.endAt).split('T')[0] : 'N/A'}</div>`); // 설문 기간
+        template.append(`<div>${survey.id}</div>`); // 번호
+        if (survey.progress === "ONGOING")
+          template.append(`<div class="status-bar">진행중</div>`);
+        //설문 종류
+        else if (survey.progress === "END")
+          template.append(`<div class="status-bar status-finish">마감</div>`);
+        template.append(
+          `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
+        ); // 설문 이름
+        template.append(
+          `<div>${
+            String(survey.endAt).split("T")[0] !== "null"
+              ? String(survey.endAt).split("T")[0]
+              : "N/A"
+          }</div>`
+        ); //종료 일자
+        template.append(
+          `<div>${!survey.count ? "지정 안됨" : survey.count}</div>`
+        ); // 참여자 수
+        template.append(
+          `<div>${!survey.point ? "지정 안됨" : survey.point}</div>`
+        ); // 지급 포인트
+        template.append(
+          `<div>${
+            String(survey.createdAt).split("T")[0] !== "null"
+              ? String(survey.endAt).split("T")[0]
+              : "N/A"
+          }</div>`
+        ); // 설문 기간
 
         return template;
       }
     };
 
-
     $(function () {
       init();
-      $('input[name=admin_find]').on('keyup', {page: 0, regex: $('input[name=admin_find]').val()}, _.throttle(init, 300));
-      $('input[name=sort_group]').on('click', {page: 0}, init).on('change', function (e) {
-        let id = e.target.id;
-        $('input[name=sort_group]').each(function () {
-          if (id === $(this).attr('id')) {
-            $(this).prev().addClass('sort-active');
-          } else {
-            $(this).prev().removeClass('sort-active');
-          }
+      $("input[name=admin_find]").on(
+        "keyup",
+        { page: 0, regex: $("input[name=admin_find]").val() },
+        _.throttle(init, 300)
+      );
+      $("input[name=sort_group]")
+        .on("click", { page: 0 }, init)
+        .on("change", function (e) {
+          let id = e.target.id;
+          $("input[name=sort_group]").each(function () {
+            if (id === $(this).attr("id")) {
+              $(this).prev().addClass("sort-active");
+            } else {
+              $(this).prev().removeClass("sort-active");
+            }
+          });
         });
-      });
     });
   </script>
 </th:block>

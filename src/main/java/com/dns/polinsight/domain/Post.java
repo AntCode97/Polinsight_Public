@@ -86,6 +86,4 @@ public class Post implements Serializable {
                .thumbnail(postDTO.getThumbnail())
                .build();
   }
-
-
 }

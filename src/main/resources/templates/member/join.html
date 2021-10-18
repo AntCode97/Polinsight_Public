@@ -75,6 +75,9 @@
 
     .right_content {
       flex : 8.5;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
     }
 
     .left_content > label {
@@ -94,6 +97,7 @@
       margin      : 0 3px;
       outline     : none;
       width       : 300px;
+      padding: 0 5px;
     }
 
     .right_content > select {
@@ -105,8 +109,6 @@
       line-height     : 32px;
       margin          : 0 3px;
       outline         : none;
-      text-align      : center;
-      text-align-last : center;
       width           : 200px;
     }
 
@@ -349,6 +351,16 @@
       border         : none;
       padding-bottom : 0;
     }
+
+    input[name='domain'], select[name='domain'] {
+      width: 170px;
+    }
+    .admin_msg {
+      font-size: 12px;
+      color: tomato;
+      padding-left: 5px;
+      font-weight: normal;
+    }
   </style>
   <!--  기본 -->
   <div class="flex-wrapper">
@@ -441,7 +453,7 @@
               </div>
               <div class="register_box">
                 <div class="register_contents_wrap">
-                  <p>수신동의</p>
+                  <p>수신동의 <span class="admin_msg">(수신 동의하지 않을 경우 포인트 적립 등 혜택을 받지 못할 수 있습니다.)</span></p>
                   <div class="register_contents">
                     <ul>
                       <li>
@@ -628,11 +640,11 @@
                     </div>
                     <div class="right_content">
                       <label>
-                        <input checked name="marry" type="radio" value="false">
+                        <input checked name="marry" type="radio" value="미혼">
                         미혼
                       </label>
                       <label>
-                        <input name="marry" type="radio" value="true">
+                        <input name="marry" type="radio" value="기혼">
                         기혼
                       </label>
                       <span class="err_msg"></span>
@@ -1011,7 +1023,7 @@
       $('.popup_overlay').fadeIn(100)
     }
 
-    const init = () => {
+    let init = () => {
       $('button#panel_submit').on('click', {type: 'panel'}, join)
       $('button#basic_submit').on('click', {type: 'basic'}, join)
 
@@ -1155,6 +1167,7 @@
           let domain_input = $('input[name=domain]')
           if (selectedValue === 'self') {
             domain_input.val('').prop('disabled', false)
+            domain_input.focus()
           } else {
             domain_input.val(selectedValue).prop('disabled', true)
           }

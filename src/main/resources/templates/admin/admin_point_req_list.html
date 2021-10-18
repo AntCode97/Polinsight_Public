@@ -2,43 +2,46 @@
 <th:block>
   <style>
     table {
-      margin : 0;
-      width  : 100%;
+      margin: 0;
+      width: 100%;
     }
 
-    .post-row > *:nth-child(1) {
-      width : 70px;
+    .post-row > span:nth-child(1) {
+      width: 70px;
     }
 
-    .post-row > *:nth-child(2) {
-      width : 250px;
+    .post-row > span:nth-child(2) {
+      width: 200px;
     }
 
-    .post-row > *:nth-child(3) {
-      width : 100px;
+    .post-row > span:nth-child(3) {
+      width: 100px;
     }
 
-    .post-row > *:nth-child(4) {
-      width : 95px;
+    .post-row > span:nth-child(4) {
+      width: 95px;
     }
 
-    .post-row > *:nth-child(5) {
-      width : 200px;
+    .post-row > span:nth-child(5) {
+      width: 100px;
     }
 
-    .post-row > *:nth-child(6) {
-      width : 100px;
+    .post-row > span:nth-child(6) {
+      width: 100px;
     }
 
-    .post-row > *:nth-child(7) {
-      width : 150px;
+    .post-row > span:nth-child(7) {
+      width: 150px;
+    }
+    .post-row > span:nth-child(7) {
+      width: 150px;
     }
 
     .btn_excel {
-      align-items     : center;
-      display         : flex;
-      justify-content : flex-end;
-      margin-bottom   : 5px;
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 5px;
     }
   </style>
   <div class="admin_main_contents">
@@ -50,7 +53,9 @@
 
     <div class="main_contents_wrap">
       <div class="post-search">
-        <div class="util-search">총 <strong id="total_count"></strong>개의 요청이 있습니다.</div>
+        <div class="util-search">
+          총 <strong id="total_count"></strong>개의 요청이 있습니다.
+        </div>
 
         <!--관리자 페이지 설문 찾기 기능-->
         <div class="form-search">
@@ -63,7 +68,9 @@
         </div>
       </div>
       <div class="btn_excel">
-        <button class="btn_udel btn-green" name="save_excel">엑셀로 저장</button>
+        <button class="btn_udel btn-green" name="save_excel">
+          엑셀로 저장
+        </button>
       </div>
 
       <div class="scroll-table">
@@ -83,8 +90,7 @@
   </div>
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
-
-    const makePointRequestTemplate = req => {
+    const makePointRequestTemplate = (req) => {
       let template = $(`<div class="post-row"></div>`);
       template.append(`<span>${req.id}</span>`);
       template.append(`<span>${emailToString(req.email)}</span>`);
@@ -95,76 +101,93 @@
       template.append(`<span>${req.progress}</span>`);
       // const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
       // const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
-      const tmp_cell = $(`<span></span>`)
-      tmp_cell.append(`<label><input type="checkbox"/>보류</label>`)
-      tmp_cell.append(`<label><input type="checkbox"/>완료</label>`)
-      tmp_cell.append(`<label><input type="checkbox"/>오류</label>`)
+      const tmp_cell = $(`<span></span>`);
+      tmp_cell.append(`<label><input type="checkbox"/>보류</label>`);
+      tmp_cell.append(`<label><input type="checkbox"/>완료</label>`);
+      tmp_cell.append(`<label><input type="checkbox"/>오류</label>`);
       template.append(tmp_cell);
       return template;
     };
 
-    const deleteRequest = e => {
-      if (confirm('정말로 요청을 삭제하시겠습니까?')) {
-        http
-            .delete(`/api/points/${e.data.id}`)
-            .then(res => {
-              if (res.data.success) {
-                alert('요청 삭제 완료');
-              }
-            })
-            .finally(() => location.replace('/admin/pointlist'));
-      }
-    };
+    // const deleteRequest = (e) => {
+    //   if (confirm("정말로 요청을 삭제하시겠습니까?")) {
+    //     http
+    //       .delete(`/api/points/${e.data.id}`)
+    //       .then((res) => {
+    //         if (res.data.success) {
+    //           alert("요청 삭제 완료");
+    //         }
+    //       })
+    //       .finally(() => location.replace("/admin/pointlist"));
+    //   }
+    // };
 
-    const progressUpdate = e => {
-      if (confirm('요청의 상태를 변경하시겠습니까?')) {
+    const progressUpdate = (e) => {
+      if (confirm("요청의 상태를 변경하시겠습니까?")) {
         http
-            .put(`/api/points/${e.data.id}`, {progress: e.data.progress})
-            .then(res => {
-              if (res.data.success) {
-                init()
-              }
-            }).catch(console.log);
+          .put(`/api/points/${e.data.id}`, { progress: e.data.progress })
+          .then((res) => {
+            if (res.data.success) {
+              init();
+            }
+          })
+          .catch(console.error);
       }
     };
 
     async function getPointRequestData(e) {
       let page = !e ? 0 : e.data.page;
-      let regex = !e ? '' : String($('input[name=admin_find]').val()).trim();
-      const response = await http.get('/api/points', {params: {page: page, size: 10, regex: regex}});
+      let regex = !e ? "" : String($("input[name=admin_find]").val()).trim();
+      const response = await http.get("/api/points", {
+        params: { page: page, size: 10, regex: regex },
+      });
       if (response.data.success) {
         const data = response.data.response;
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex};
+        return {
+          content: data.content,
+          total: data.totalElements,
+          totalPage: data.totalPages,
+          current: data.number,
+          keyword: regex,
+        };
       } else {
-        console.log('data fetch error');
+        console.error("data fetch error");
       }
     }
 
-    const init = e => {
-      getPointRequestData(e).then(obj => {
-        $('#total_count').text(obj.total);
-        let table = $('.scroll-table')
-        table.children('.post-row:not(:first-child)').remove();
+    let init = (e) => {
+      getPointRequestData(e).then((obj) => {
+        $("#total_count").text(obj.total);
+        let table = $(".scroll-table");
+        table.children(".post-row:not(:first-child)").remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
-          searchMessage(obj.keyword, obj.total, '요청이')
-          obj.content.forEach(point_request => {
+          searchMessage(obj.keyword, obj.total, "요청이");
+          obj.content.forEach((point_request) => {
             table.append(makePointRequestTemplate(point_request));
           });
         } else {
-          table.append(`<div class="post-row"><h1>요청 목록이 존재하지 않습니다.</h1></div>`);
+          table.append(
+            `<div class="post-row"><h1>요청 목록이 존재하지 않습니다.</h1></div>`
+          );
         }
       });
     };
 
-
     $(function () {
       init();
       /*검색*/
-      $('input[name=admin_find]').on('keyup', {page: 0, regex: $('input[name=admin_find]').val()}, _.throttle(init, 300));
+      $("input[name=admin_find]").on(
+        "keyup",
+        { page: 0, regex: $("input[name=admin_find]").val() },
+        _.throttle(init, 300)
+      );
 
-      $('button[name=save_excel]').on('click', {url: '/api/points/excel'}, saveByExcel);
+      $("button[name=save_excel]").on(
+        "click",
+        { url: "/api/points/excel" },
+        saveByExcel
+      );
     });
-
   </script>
 </th:block>

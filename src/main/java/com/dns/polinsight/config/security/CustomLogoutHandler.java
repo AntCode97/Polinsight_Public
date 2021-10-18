@@ -1,5 +1,6 @@
 package com.dns.polinsight.config.security;
 
+import com.dns.polinsight.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -23,8 +24,8 @@ public class CustomLogoutHandler implements LogoutSuccessHandler {
     response.setStatus(HttpStatus.OK.value());
     SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
     securityContextLogoutHandler.logout(request, response, authentication);
+    log.info(((User) authentication.getPrincipal()).getEmail().toString() + " logged out");
     SecurityContextHolder.createEmptyContext();
-    log.info(authentication.getPrincipal().toString() + " --- logged out");
     response.sendRedirect("/");
   }
 

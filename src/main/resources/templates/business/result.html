@@ -1,10 +1,184 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<th:block th:include="layout/header" />
+<th:block>
+  <style>
+    /* CASAREL 아래 nav-bar */
+    .headline_wrap {
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: red;
+      font-size: 55px;
+    }
+    .small-headline {
+      font-size: 14px;
+    }
+    .carasel_wrap {
+      height: 35vh;
+    }
+    .carasel_wrap::before {
+      height: 35vh;
+    }
+    .big_navigation {
+      width: 1200px;
+      margin: -1px auto 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .big_navigation_wrap {
+      border-bottom: 1px solid #ddd;
+    }
+    .big_navigation > li > a {
+      display: block;
+      color: white;
+      font-size: 15px;
+      letter-spacing: -0.5px;
+      text-align: center;
+      overflow: hidden;
+      height: 50px;
+      line-height: 48px;
+      padding: 0 40px;
+      background: #cecece;
+      margin: 0 -1px -1px 0;
+    }
+    .check_navigation {
+      background: #192739 !important;
+    }
 
-</body>
-</html>
+    /* post DESIGN */
+    .pols_main_contents {
+      display: block;
+      max-width: 1000px;
+      width: 100%;
+      margin: 40px auto;
+    }
+    .pols_main_contents_item {
+      padding: 0 0 40px;
+      border-bottom: 1px solid #dadada;
+    }
+    .main_item {
+      color: #000000;
+      font-size: 2.5rem;
+      font-weight: bold;
+      padding: 0 20px 10px;
+      text-align: center;
+    }
+    .sub_item {
+      display: block;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #444;
+      margin-top: 40px;
+    }
+    .category_introduce_box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #dadada;
+    }
+    .main_intro {
+      font-size: 24px;
+      color: #444;
+    }
+    .category_introduce_box p {
+      font-size: 16px;
+      color: #444;
+      text-align: center;
+    }
+    .category_introduce_box p:nth-child(1) {
+      margin-bottom: 5px;
+    }
+
+    .category_box_wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .category_box {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 100%;
+      gap: 40px;
+    }
+    .left_category_box {
+      flex: 2.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #444;
+      height: 140px;
+    }
+    .left_category_box > img {
+      width: 100px;
+    }
+    .right_category_box {
+      flex: 7.5;
+    }
+    .right_category_box > * {
+      font-size: 16px;
+    }
+    .right_category_box > h3 {
+      color: #4c99cf;
+    }
+    .sub_title {
+      padding: 15px 0 20px;
+    }
+
+    @media (min-width: 320px) and (max-width: 480px) {
+      .carasel_wrap {
+        height: 25vh;
+      }
+      .headline_wrap {
+        display: none;
+      }
+    }
+  </style>
+</th:block>
+<th:block>
+  <div class="carasel_wrap">
+    <div class="headline_wrap">
+      <span>고객화 함께 가치를</span>
+      <span>더해가는 기업</span>
+      <span class="small-headline"></span>
+    </div>
+  </div>
+  <div class="big_navigation_wrap">
+    <ul class="big_navigation">
+      <li>
+        <a
+          th:href="@{/business/category}"
+          th:classappend="${checked} == 'category' ? 'check_navigation'"
+          >분야별 영역</a
+        >
+      </li>
+      <li>
+        <a
+          th:href="@{/business/result}"
+          th:classappend="${checked} == 'result' ? 'check_navigation'"
+          >주요실적</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="pols_main_contents_category">
+    <div class="pols_main_contents_item">
+      <p class="main_item">주요실적</p>
+      <span class="sub_item">고객과 함께 가치를 더해가는 기업</span>
+    </div>
+  </div>
+
+  <div class="main_contents_wrap"></div>
+
+  <div class="main_contents_wrap category_box_wrap">
+    <!--    내용 -->
+  </div>
+  <th:block th:include="layout/footer" />
+</th:block>

@@ -11,22 +11,36 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ImageUtil {
 
-  static String fileSeparator = File.separator;
+  int width = 480, height = 320;
 
-  int width = 800, height = 600;
+  @Value("${file.upload.thumbnail}")
+  private String thumbnailLocation;
 
-  @Value("${file.upload.baseLocation}")
-  private String baseLocation;
-
-  public String imageResize(MultipartFile originImage, String uuidName) throws ImageResizeException {
+  /**
+   * @param originImage
+   *     : image file
+   * @param imageName
+   *     : uuid + image origin name
+   * @param ext
+   *     : image extension  ex) jpg, png, jpeg, bmp ...
+   *
+   * @return : image name that down scaled
+   *
+   * @throws ImageResizeException
+   */
+  public String imageResize(MultipartFile originImage, String imageName, String ext) throws ImageResizeException {
     try {
-      String thumbnailPath = baseLocation + fileSeparator + "thumbnail" + fileSeparator + uuidName;
+      String thumbnailPath = "thumbnails/" + imageName;
+      Path thumbnailAbsPath = Paths.get(thumbnailLocation + imageName).normalize();
+
       Image image = ImageIO.read(originImage.getInputStream());
       Image resizedImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
@@ -35,7 +49,8 @@ public class ImageUtil {
       Graphics g = newImage.getGraphics();
       g.drawImage(resizedImage, 0, 0, null);
       g.dispose();
-      ImageIO.write(newImage, "png", new File(thumbnailPath));
+
+      ImageIO.write(newImage, ext, new File(String.valueOf(thumbnailAbsPath)));
 
       return thumbnailPath;
     } catch (Exception e) {

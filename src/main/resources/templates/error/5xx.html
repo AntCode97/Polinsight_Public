@@ -1,37 +1,33 @@
 <th:block th:include="layout/header" />
 <style>
   .header_wrap {
-    background-color : rgb(24, 40, 56) !important;
+    background-color: rgb(24, 40, 56) !important;
   }
 
   .content-wrap {
-    align-items     : center;
-    display         : flex;
-    flex-direction  : column;
-    height          : 100%;
-    justify-content : center;
-    margin          : auto;
-    max-width       : 1200px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    margin: auto;
+    max-width: 1200px;
   }
 </style>
 <div class="flex-wrapper">
   <div class="flex-content">
     <div class="content-wrap">
       <h1>Internal Server Error</h1>
+      <div>처리 중 문제가 발생하였습니다. 잠시 후 다시 시도해주세요.</div>
       <div>
-        처리 중 문제가 발생하였습니다. 잠시 후 다시 시도해주세요.
-      </div>
-      <div>
-        <button class="btn-primary btn-big">메인화면으로</button>
+        <button class="btn-primary btn-big" onclick="location.replace('/')">
+          메인화면으로
+        </button>
+        <button class="btn-primary btn-big" onclick="history.back()">
+          돌아가기
+        </button>
       </div>
     </div>
   </div>
   <th:block th:include="layout/footer" />
 </div>
-<script>
-  $(function () {
-    $('button').on('click', () => {
-      location.replace('/')
-    })
-  })
-</script>
