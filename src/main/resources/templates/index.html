@@ -71,7 +71,7 @@
       flex-direction   : column;
       height           : 100%;
       justify-content  : flex-start;
-      margin           : 30px auto 50px;
+      margin           : 30px auto 20px;
       min-width        : 1200px;
       padding          : 20px 30px;
       width            : 100%;
@@ -241,6 +241,65 @@
       min-width : 1200px;
     }
 
+    /* 수동 이미지 슬라이드 */
+    .main_image_slide {
+      width: 940px;
+      margin: 0 auto;
+    }
+    .main_image_slide h3 {
+      font-size: 25px;
+      font-weight: bold;
+    }
+    .title_image_slide {margin-bottom: 25px;}
+    .image_slide_wrap {position: relative;}
+    .image_slide_block_wrap {overflow: hidden;}
+    .image_slide_block {
+      width: 4140px;
+      display: flex;
+      gap: 20px;
+      justify-content: flex-start;
+      align-items: center;
+      transition: all ease .5s;
+    }
+    .image_box {
+      width: 300px;
+      height: 250px;
+      overflow: hidden;
+      border-radius: 5px;
+      background-image: url('/img/logo/logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      border: 1px solid black;
+    }
+    .slide_arrow_btn {
+      position: absolute;
+      top: 100px;
+      background: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 35px;
+      z-index: 100;
+      box-shadow: 0 0 1px 1px rgb(20 23 28 / 10%), 0 3px 1px 0 rgb(20 23 28 / 10%);
+      border: 0;
+    }
+    .slide_left_btn {
+      left: -25px;
+    }
+    .slide_right_btn {
+      right: -25px;
+    }
+    .slide_arrow_btn:hover {
+      box-shadow: 0 2px 8px 2px rgb(20 23 28 / 15%);
+      color: #4C99CF;
+    }
+
+
 
     @media (min-width : 320px) and (max-width : 480px) {
       .carasel_wrap {
@@ -370,10 +429,59 @@
       <div>
         <th:block th:include="survey/surveylist" />
       </div>
+
+      <!-- 수동 이미지 슬라이드 -->
+      <div class="main_image_slide">
+        <div class="title_image_slide">
+          <h3>제목 없음</h3>
+        </div>
+        <div class="image_slide_wrap">
+          <div class="slide_arrow_btn slide_left_btn" style="visibility: hidden;"><i class="fas fa-angle-left"></i></div>
+          <div class="slide_arrow_btn slide_right_btn"><i class="fas fa-angle-right"></i></div>
+          <div class="image_slide_block_wrap">
+            <div class="image_slide_block">
+              <div class="image_box">그림 1</div>
+              <div class="image_box">그림 2</div>
+              <div class="image_box">그림 3</div>
+              <div class="image_box">그림 4</div>
+              <div class="image_box">그림 5</div>
+              <div class="image_box">그림 6</div>
+              <div class="image_box">그림 7</div>
+              <div class="image_box">그림 8</div>
+              <div class="image_box">그림 9</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <th:block th:include="layout/footer" />
+    <th:block th:include="layout/footer"/>
   </div>
   <script th:inline="javascript">
+    // 수동 이미지 슬라이드 애니메이션 동작
+    $(document).on('click', '.slide_left_btn', function(){
+      const ml_value = $('.image_slide_block').css('margin-left');
+      const val = Number(ml_value.replace(/[^0-9]/g,''));
+      if(val != 0) {
+        $('.slide_right_btn').css('visibility', 'visible');
+        $('.image_slide_block').css('margin-left', '-' + (val - 960) + 'px');
+      }
+      if(val == 960) {
+        $(this).css('visibility', 'hidden');
+      }
+    });
 
+    $(document).on('click', '.slide_right_btn', function(){
+      const ml_value = $('.image_slide_block').css('margin-left');
+      const val = Number(ml_value.replace(/[^0-9]/g,''));
+      console.log(val);
+      if(val < (940 * 2)) {
+        $('.slide_left_btn').css('visibility', 'visible');
+        $('.image_slide_block').css('margin-left', '-' + (val + 960) + 'px');
+      }
+      if(val == 960) {
+        $(this).css('visibility', 'hidden');
+      }
+    });
   </script>
 </th:block>
