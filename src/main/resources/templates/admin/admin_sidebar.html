@@ -763,7 +763,7 @@
                   background-color: white;
                   object-fit: contain;
                 "
-                th:src="@{/img/logo/logo.png}"
+                th:src="@{/img/user/user_admin.png}"
               />
             </div>
             <div class="user-info">
@@ -883,28 +883,22 @@
               <i class="fas fa-user-lock"></i>
               Admin
             </a>
-            <!--                <a th:href="@{/admin/post/manage}" class="next-link">게시글관리</a>-->
-            <!--                <a th:href="@{/admin/noti/manage}" class="next-link">공지사항</a>-->
           </div>
 
           <div class="right_menu">
             <ul>
-              <!--              <li>-->
-              <!--                <a class="header_menu_item">-->
-              <!--                  <i class="fas fa-user"></i>-->
-              <!--                </a>-->
-              <!--                <div class="dropdown_user">-->
-              <!--                  <a th:href="@{/admin/user/manage}">정보수정</a>-->
-              <!--                  <a th:href="@{/dologout}">로그아웃</a>-->
-              <!--                </div>-->
-              <!--              </li>-->
               <li>
-                <a th:href="@{/dologout}">로그아웃</a>
+                <a class="header_menu_item">
+                  <i class="fas fa-user"></i>
+                </a>
+                <div class="dropdown_user">
+                  <a th:href="@{/admin/user/manage}">정보수정</a>
+                  <a th:href="@{/dologout}">로그아웃</a>
+                </div>
               </li>
               <li>
                 <a class="header_menu_item" th:href="@{/}">
                   <i class="fas fa-door-open"></i>
-                  EXIT
                 </a>
               </li>
             </ul>

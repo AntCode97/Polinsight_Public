@@ -427,6 +427,26 @@
       outline       : none;
       padding       : 10px 25px;
     }
+    .btn-excel-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .btn-excel {
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 5px 10px;
+      color: white;
+      background-color: mediumseagreen;
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: normal;
+    }
+    .btn-excel:hover {
+      background: #3CA071;
+      border-color: transparent;
+    }
 
   </style>
   <!-- Modal Page: 회원정보 수정 -->
@@ -883,10 +903,6 @@
       </div>
     </div>
 
-    <div>
-      <button name="save_excel" class="btn btn-primary">유저 목록 다운로드</button>
-    </div>
-
     <div class="main_contents_wrap">
       <div class="post-search">
         <div class="util-search">총 <strong id="total_count"></strong>명의 회원이 있습니다.</div>
@@ -900,6 +916,10 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="btn-excel-wrap">
+        <button name="save_excel" class="btn btn-excel">유저 목록 다운로드</button>
       </div>
 
       <div class="scroll-table">
