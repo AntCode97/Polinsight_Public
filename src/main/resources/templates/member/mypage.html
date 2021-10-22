@@ -147,14 +147,15 @@
     }
 
     .user_img {
-      background-image    : url('img/logo/logo.png');
+      border: 1px solid #444;
       background-position : center center;
       background-repeat   : no-repeat;
-      background-size     : cover;
+      background-size     : 70%;
       border-radius       : 50px;
       height              : 70px;
       overflow            : hidden;
       width               : 70px;
+      box-shadow: 0 0 1px 1px rgb(20 23 28 / 10%), 0 3px 1px 0 rgb(20 23 28 / 10%);
     }
 
     .user_name {
@@ -305,6 +306,10 @@
       justify-content : flex-start;
       margin-bottom   : 10px;
       position        : relative;
+      gap: 10px;
+    }
+    .user_input_box select {
+      width: 85px;
     }
 
     .user_input_box > .info_article {
@@ -563,6 +568,10 @@
       height  : 32px;
       outline : none;
     }
+
+    input.direct_write_bank {
+      width: 80px!important;
+    }
   </style>
   <div class="flex-wrapper">
     <div class="flex-content mypage-wrapper">
@@ -575,9 +584,15 @@
               <div class="user_info">
                 <div class="left_item">
                   <div class="user_img_wrap">
-                    <div class="user_img">
-                      <!--                    <img th:src="${user.picture}" alt="">-->
-                    </div>
+
+                    <!-- 회원등급에 따른 이미지 -->
+                    <th:block sec:authorize="isAuthenticated()">
+                      <th:block sec:authorize="hasAnyAuthority('USER')"><div class="user_img" style="background-image: url('/img/user/user_user.png')"></div><th:block>
+                      <th:block sec:authorize="hasAnyAuthority('PANEL')"><div class="user_img" style="background-image: url('/img/user/user_panel.png')"></div><th:block>
+                      <th:block sec:authorize="hasAnyAuthority('ADMIN',)"><div class="user_img" style="background-image: url('/img/user/user_admin.png')"></div><th:block>
+                    </th:block>
+
+
                   </div>
                 </div>
                 <div class="right_item">
@@ -1198,14 +1213,14 @@
                     <input type="text" class="user_info_input" name="able_point_info" value="10000" readonly />
                     <span class="info_msg">(10,000포인트 단위로 신청 가능)</span>
                   </div>
-                  <div class="user_input_box point_input_box">
+                  <div class="user_input_box">
                     <span class="info_article">신청 포인트</span>
                     <!--              <input type="text" class="user_info_input" onkeypress="return checkNumber(event)" required></input>-->
                     <select name="reqpoint" required></select>
                   </div>
                   <div class="user_input_box bank_input_box">
                     <span class="info_article">신청 계좌</span>
-                    <select name="bank">
+                    <select name="bank" class="select_bank">
                       <option value="신한">신한</option>
                       <option value="카카오">카카오</option>
                       <option value="농협">농협</option>
@@ -1217,7 +1232,9 @@
                       <option value="하나">하나</option>
                       <option value="우리">우리</option>
                       <option value="케이">케이</option>
+                      <option value="direct">직접입력</option>
                     </select>
+                    <input name="" type="text" class="user_info_input direct_write_bank" placeholder="은행명" style="display: none;">
                     <input name="account" type="number" class="user_info_input" placeholder="계좌번호를 입력해주세요." required />
                     <span class="info_msg">(숫자만 입력해주세요.)</span>
                   </div>
@@ -1292,6 +1309,15 @@
         const num = id.substring(3, 5);
         const selector = ".box" + num;
         $(selector).css('display', 'block');
+      }
+    });
+
+    $(document).on('change', '.select_bank', function(){
+      let sel_val = $(this).val();
+      if(sel_val == 'direct') {
+        $('.direct_write_bank').css('display', 'block');
+      } else {
+        $('.direct_write_bank').css('display', 'none');
       }
     });
 
