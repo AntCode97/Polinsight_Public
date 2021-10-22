@@ -1011,7 +1011,7 @@
       $('.popup_overlay').fadeIn(100)
     }
 
-    const init = () => {
+    let init = () => {
       $('button#panel_submit').on('click', {type: 'panel'}, join)
       $('button#basic_submit').on('click', {type: 'basic'}, join)
 
