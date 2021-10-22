@@ -369,6 +369,7 @@ public class ApiController {
                                                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                                              @PageableDefault Pageable pageable) throws Exception {
 
+    System.out.println("API POST 입력"+type + " " + regex+ " ");
     try {
       if (regex.isBlank())
         return success(postService.apiFindPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));

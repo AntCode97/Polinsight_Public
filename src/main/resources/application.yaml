@@ -244,6 +244,10 @@ custom :
     base : "http://localhost:8080"
 file :
   upload :
+#    baseLocation: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/"
+#    image: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/images/"
+#    thumbnail: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/thumbnails/"
+#    file: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/files/"
     baseLocation : "C:\\upload_test\\"
     image :        "C:\\upload_test\\images\\"
     thumbnail :    "C:\\upload_test\\thumbnails\\"
