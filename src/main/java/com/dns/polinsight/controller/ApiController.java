@@ -368,9 +368,10 @@ public class ApiController {
   public ApiUtils.ApiResult<Page<com.dns.polinsight.projection.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
                                                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                                              @PageableDefault Pageable pageable) throws Exception {
+
     try {
       if (regex.isBlank())
-        return success(postService.findPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
+        return success(postService.apiFindPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
       else
         return success(postService.findAllByTypesAndRegex(PostType.valueOf(type.toUpperCase(Locale.ROOT)), regex, pageable));
     } catch (Exception e) {

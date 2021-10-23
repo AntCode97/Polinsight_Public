@@ -90,8 +90,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 1px solid #444;
             height: 140px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
         }
         .left_category_box > img {width: 100px;}
         .right_category_box {flex: 7.5;}
@@ -142,9 +144,7 @@
 
         <div class="main_contents_wrap category_box_wrap">
             <div class="category_box">
-                <div class="left_category_box">
-                    <img src="/img/logo/logo.png">
-                </div>
+                <div class="left_category_box" style="background-image: url('/img/icons/poll_icon.png');"></div>
                 <div class="right_category_box">
                     <h3>POLL</h3>
                     <p class="sub_title">여론조사</p>
@@ -153,9 +153,7 @@
                 </div>
             </div>
             <div class="category_box">
-                <div class="left_category_box">
-                    <img src="/img/logo/logo.png">
-                </div>
+                <div class="left_category_box" style="background-image: url('/img/icons/data_icon.png');"></div>
                 <div class="right_category_box">
                     <h3>PUBLIC DATA</h3>
                     <p class="sub_title">공공데이터 분석</p>
@@ -165,9 +163,7 @@
             </div>
 
             <div class="category_box">
-                <div class="left_category_box">
-                    <img src="/img/logo/logo.png">
-                </div>
+                <div class="left_category_box" style="background-image: url('/img/icons/politics_icon.png');"></div>
                 <div class="right_category_box">
                     <h3>POLITICS</h3>
                     <p class="sub_title">정책연구</p>
