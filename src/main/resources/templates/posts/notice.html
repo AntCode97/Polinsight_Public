@@ -143,45 +143,43 @@
       <div class="board_contents_wrap">
         <!-- Header Title -->
         <div class="main_item"><p style="text-align: center;">공지사항</p></div>
-          <div class="main_contents_wrap">
-              <!-- Search Box -->
-              <div class="post-search">
-                  <div class="util-search">총 <strong>1</strong>개의 게시물이 있습니다.</div>
-                  <div class="form-search">
-                      <form method="get">
-                          <div class="search-box">
-                              <div class="box-search">
-                                  <input id="searchinput" name="board_search" type="text" onkeyup="makeCloseBtn()">
-                                  <input class="disabled" type="button" />
-                                  <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
-                              </div>
-                          </div>
-                      </form>
+        <div class="main_contents_wrap">
+          <!-- Search Box -->
+          <div class="post-search">
+            <div class="util-search">총 <strong>1</strong>개의 게시물이 있습니다.</div>
+            <div class="form-search">
+              <form method="get">
+                <div class="search-box">
+                  <div class="box-search">
+                    <input id="searchinput" name="board_search" type="text" onkeyup="makeCloseBtn()">
+                    <input class="disabled" type="button" />
+                    <input type="submit" name="submit_OK" value="검색하기" class="btn-search" id="submit_OK">
                   </div>
-              </div>
-              <div class="scroll-table">
-                  <div class="post-row post-th">
-                      <span>번호</span>
-                      <a href="#">제목</a>
-                      <span>작성자</span>
-                      <span>작성일</span>
-                      <span>조회수</span>
-                      <span>첨부파일</span>
-                  </div>
-              </div>
-
-              <div class="page-button" id="pagination"></div>
+                </div>
+              </form>
+            </div>
           </div>
-      </div>
-        <div id="loading">
-            <div class="spinner"></div>
-        </div>
-    </div>
+          <div class="scroll-table">
+            <div class="post-row post-th">
+              <span>번호</span>
+              <a href="#">제목</a>
+              <span>작성자</span>
+              <span>작성일</span>
+              <span>조회수</span>
+              <span>첨부파일</span>
+            </div>
+          </div>
 
+          <div class="page-button" id="pagination"></div>
+        </div>
+      </div>
+      <div id="loading">
+        <div class="spinner"></div>
+      </div>
     </div>
     <th:block th:include="layout/footer" />
   </div>
-    <script th:src="@{/js/PostUtils.js}"></script>
+  <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     let closeBtn = $(".post-search .box-search input[type=button]")
     let keyword = $("#searchinput").val();
@@ -206,57 +204,56 @@
 
     async function getPostData(e) {
 
-        let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
+      let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
 
-        let regex = String($('input[name=board_search]').val()).trim()
+      let regex = String($('input[name=board_search]').val()).trim()
 
-        const responseData = await http.get('/api/posts?type=NOTICE', {
-            params: {page: page, size: 10, regex:regex}
-        })
-        const data = responseData.data.response
+      const responseData = await http.get('/api/posts?type=NOTICE', {
+        params: {page: page, size: 10, regex: regex}
+      })
+      const data = responseData.data.response
 
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
+      return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
     }
 
     const init = e => {
-        const spinner = $('#loading')
-        spinner.show()
-        getPostData(e).then(obj => {
-            $('#total_count').text(obj.total)
-            let table = $('.scroll-table')
-            table.children('.post-row:not(:first-child)').remove()
-            if (obj.total > 0) {
-                console.log(obj.current + " " +obj.totalPage );
-                makePagination(obj.current, obj.totalPage)
-                searchMessage(obj.keyword, obj.total, '게시물이')
-                obj.content.forEach(post => {
-                    table.append(makePostTemplate(post))
-                })
+      const spinner = $('#loading')
+      spinner.show()
+      getPostData(e).then(obj => {
+        $('#total_count').text(obj.total)
+        let table = $('.scroll-table')
+        table.children('.post-row:not(:first-child)').remove()
+        if (obj.total > 0) {
+          console.log(obj.current + " " + obj.totalPage);
+          makePagination(obj.current, obj.totalPage)
+          searchMessage(obj.keyword, obj.total, '게시물이')
+          obj.content.forEach(post => {
+            table.append(makePostTemplate(post))
+          })
 
-            } else {
-                table.append(
-                    $(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
-                );
-            }
-        });
-        spinner.hide();
+        } else {
+          table.append(
+              $(`<div class="post-row"><h1>게시물이 없습니다.</h1></div>`)
+          );
+        }
+      });
+      spinner.hide();
     };
 
     $(function () {
-        init();
+      init();
 
-        $("input[name=board_search]").on(
-            "keyup",
-            {page: 0},
-            _.throttle(init, 300)
-        );
-        $("input[name=board_search_btn]").on(
-            "click",
-            {page: 0},
-            _.throttle(init, 300)
-        );
+      $("input[name=board_search]").on(
+          "keyup",
+          {page: 0},
+          _.throttle(init, 300)
+      );
+      $("input[name=board_search_btn]").on(
+          "click",
+          {page: 0},
+          _.throttle(init, 300)
+      );
     });
-
 
 
   </script>

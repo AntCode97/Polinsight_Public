@@ -453,15 +453,13 @@
     let url = window.location.href;
     let start_idx_num = url.indexOf('/', 9);
     let end_idx_num = url.indexOf('/', start_idx_num+1)
-    console.log(start_idx_num)
     let url_keyword = ''
-    if(end_idx_num == -1) {
+    if(end_idx_num === -1) {
       url_keyword = url.substring(start_idx_num+1)
     } else {
       url_keyword = url.substring(start_idx_num+1, end_idx_num)
     }
-    console.log(url_keyword);
-    if(url_keyword != '' || url_keyword.length != 0) {
+    if(url_keyword !== '' || url_keyword.length !== 0) {
       $('ul.navi_box > li > a[name='+url_keyword +']').css('color', '#4C99CF');
     }
 

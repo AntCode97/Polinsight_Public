@@ -1,11 +1,28 @@
 <th:block>
+  <style>
+    .comment-list {
+      max-width : 1200px;
+      margin    : auto;
+    }
+
+    .comment-input {
+      max-width      : 1200px;
+      margin         : auto;
+      display        : flex;
+      flex-direction : row;
+      align-items    : flex-end;
+    }
+
+  </style>
   <th:block>
-    <div name="comment">
+    <div name="comment" class="comment-list">
 
     </div>
-    <div name="comment-input">
-      <input name="input-comment-value" type="text">
-      <span><button name="add-comment-btn" disabled>답글 달기</button></span>
+    <div name="comment-input" class="comment-input">
+      <input name="input-comment-value" type="text" placeholder="댓글을 남겨주세요" />
+      <span>
+        <button name="add-comment-btn" disabled>답글 달기</button>
+      </span>
     </div>
   </th:block>
   <script>

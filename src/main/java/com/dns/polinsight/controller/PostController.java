@@ -158,7 +158,7 @@ public class PostController {
   }
 
   @GetMapping("posts")
-  public String list(@ModelAttribute("postSearch") PostSearch postSearch,
+  public String noticeList(@ModelAttribute("postSearch") PostSearch postSearch,
                      @PageableDefault Pageable pageable,
                      Model model) {
     if (postSearch.getPostType() != null) {
@@ -168,7 +168,7 @@ public class PostController {
       List<PostDTO> postDTOList = mappingList.getContent().stream().map(PostDTO::of).collect(Collectors.toList());
       model.addAttribute("posts", new PageImpl<>(postDTOList, pageable, mappingList.getTotalElements()));
     }
-    return "posts/postList";
+    return "posts/notice";
   }
 
 
@@ -188,7 +188,7 @@ public class PostController {
       model.addAttribute("postSearch", postSearch);
     }
 
-    return "posts/postList";
+    return "posts/notice";
   }
 
   @GetMapping("posts/{postId}")
