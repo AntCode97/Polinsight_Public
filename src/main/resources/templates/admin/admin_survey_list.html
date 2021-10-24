@@ -552,7 +552,7 @@
       }
       getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total);
-        const table = $('.scroll-table > tbody');
+        let table = $('.scroll-table > tbody');
         table.children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);

@@ -209,7 +209,6 @@
     }
 
     .input_wrap {
-      max-width: 800px;
       border-bottom: 1px solid #dadada;
     }
 
@@ -223,7 +222,7 @@
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
         <p class="main_item">공지사항</p>
-        <span data-th-text="${post.isWriter}"></span>
+<!--        <span data-th-text="${post.isWriter}"></span>-->
       </div>
     </div>
 
@@ -246,7 +245,6 @@
 
     function goList() {
       const listBtnUrl = getCookie("listBtnUrl");
-
       if (listBtnUrl != null) {
         location.href = listBtnUrl;
       } else {
@@ -276,5 +274,7 @@
         });
       }
     };
+
+
   </script>
 </th:block>

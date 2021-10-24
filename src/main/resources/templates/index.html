@@ -2,226 +2,225 @@
 <th:block>
   <style>
     .carasel_wrap {
-      margin-top : -120px;
+      margin-top: -120px;
     }
 
     .panel_wrap {
-      align-items     : center;
-      border          : 1.5px solid #AAAAAA;
-      display         : flex;
-      justify-content : center;
-      margin          : 30px auto 0;
-      padding         : 30px 0;
-      width           : 900px;
+      align-items: center;
+      border: 1.5px solid #aaaaaa;
+      display: flex;
+      justify-content: center;
+      margin: 30px auto 0;
+      padding: 30px 0;
+      width: 900px;
     }
 
     .panel_item_horizontal {
-      display : flex;
+      display: flex;
     }
 
     .panel_item_vertical {
-      display        : flex;
-      flex-direction : column;
+      display: flex;
+      flex-direction: column;
     }
 
     .pol_color {
-      color : #4C99CF;
+      color: #4c99cf;
     }
 
     .panel_item > p {
-      font-size : 14px;
+      font-size: 14px;
     }
 
     .panel_big_item {
-      font-size      : 25px !important;
-      font-weight    : bold;
-      padding-bottom : 10px;
+      font-size: 25px !important;
+      font-weight: bold;
+      padding-bottom: 10px;
     }
 
     .panel_btn {
-      font-size  : 14px;
-      padding    : 7px 0;
-      text-align : center;
-      width      : 110px;
+      font-size: 14px;
+      padding: 7px 0;
+      text-align: center;
+      width: 110px;
     }
 
     .panel_btn_login {
-      background-color : #182838;
-      color            : white;
-      margin-right     : 5px;
+      background-color: #182838;
+      color: white;
+      margin-right: 5px;
     }
 
     .panel_btn_join {
-      background-color : #4C99CF;
-      color            : white;
+      background-color: #4c99cf;
+      color: white;
     }
 
     .panel_line {
-      background-color : #182838;
-      height           : 65px;
-      margin           : 0 30px;
-      width            : 2px;
+      background-color: #182838;
+      height: 65px;
+      margin: 0 30px;
+      width: 2px;
     }
 
     /* 진행중인 온라인 조사 */
     .main_survey_list_wrap {
-      align-items      : center;
-      background-color : #E1EEF6;
-      display          : flex;
-      flex-direction   : column;
-      height           : 100%;
-      justify-content  : flex-start;
-      margin           : 30px auto 20px;
-      min-width        : 1200px;
-      padding          : 20px 30px;
-      width            : 100%;
+      align-items: center;
+      background-color: #e1eef6;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: flex-start;
+      margin: 30px auto 20px;
+      min-width: 1200px;
+      padding: 20px 30px;
+      width: 100%;
     }
 
     .main_survey_list_title {
-      align-items     : flex-end;
-      display         : flex;
-      justify-content : space-between;
-      margin-bottom   : 25px;
-      width           : 940px;
+      align-items: flex-end;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      width: 940px;
     }
 
     .main_survey_list_title > div {
-      align-items     : center;
-      justify-content : flex-start;
+      align-items: center;
+      justify-content: flex-start;
       /*justify-content : space-between;*/
-      width           : 100%;
+      width: 100%;
     }
 
     .survey_plus {
-      color     : #444444;
-      cursor    : pointer;
-      font-size : 14px;
+      color: #444444;
+      cursor: pointer;
+      font-size: 14px;
     }
 
     .survey_plus > i {
-      margin-right : 3px;
+      margin-right: 3px;
     }
 
     .main_survey_list_title p {
-
-      font-size    : 25px;
-      font-weight  : bold;
-      margin-right : 10px;
+      font-size: 25px;
+      font-weight: bold;
+      margin-right: 10px;
     }
 
-    .survey_run, .survey_stop {
-      font-size     : 17px;
-      font-weight   : bold;
-      margin-bottom : 10px;
+    .survey_run,
+    .survey_stop {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
 
     .survey_title {
-      color         : #444444;
-      font-size     : 17px;
-      font-weight   : bold;
-      margin-bottom : 45px;
+      color: #444444;
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 45px;
     }
 
     .survey_point {
-      border-bottom  : 1px solid #C1C1C1;
-      font-weight    : bold;
-      padding-bottom : 5px;
+      border-bottom: 1px solid #c1c1c1;
+      font-weight: bold;
+      padding-bottom: 5px;
     }
 
     .survey_date {
-      font-weight : bold;
-      padding     : 10px 0 20px;
-      text-align  : right;
+      font-weight: bold;
+      padding: 10px 0 20px;
+      text-align: right;
     }
 
     .main_survey_item_wrap {
-      align-items     : center;
-      display         : flex;
-      gap             : 20px;
-      justify-content : flex-start;
-      margin-bottom   : 20px;
-      max-width       : 940px;
+      align-items: center;
+      display: flex;
+      gap: 20px;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+      max-width: 940px;
     }
 
     .main_survey_item {
-      border-radius : 5px;
-      overflow      : hidden;
-      padding       : 10px;
-      width         : 300px;
+      border-radius: 5px;
+      overflow: hidden;
+      padding: 10px;
+      width: 300px;
     }
 
     .survey_run {
-      color : #4C99CF;
+      color: #4c99cf;
     }
 
     .survey_stop {
-      color : #000000;
+      color: #000000;
     }
 
     .bg_color_item_white {
-      background-color : white;
+      background-color: white;
     }
 
     .bg_color_item_gray {
-      background-color : #DEDEDE;
+      background-color: #dedede;
     }
 
-    .survey_run, .survey_stop {
-      font-size     : 17px;
-      font-weight   : bold;
-      margin-bottom : 10px;
+    .survey_run,
+    .survey_stop {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
 
     .survey_title {
-      font-size     : 17px;
-      font-weight   : bold;
-      height        : 2rem;
-      margin-bottom : 45px;
+      font-size: 17px;
+      font-weight: bold;
+      height: 2rem;
+      margin-bottom: 45px;
     }
 
     .survey_point {
-      border-bottom  : 1px solid #DADADA;
-      font-weight    : bold;
-      padding-bottom : 5px;
+      border-bottom: 1px solid #dadada;
+      font-weight: bold;
+      padding-bottom: 5px;
     }
 
     .survey_date {
-      font-weight : bold;
-      padding     : 10px 0 20px;
-      text-align  : right;
+      font-weight: bold;
+      padding: 10px 0 20px;
+      text-align: right;
     }
 
     .survey_run {
-      color : #4C99CF;
+      color: #4c99cf;
     }
 
     .survey_stop {
-      color : #000000;
+      color: #000000;
     }
 
     .bg_color_item_white {
-      background-color : white;
+      background-color: white;
     }
 
     .bg_color_item_gray {
-      background-color : #DEDEDE;
+      background-color: #dedede;
     }
 
     .headline_wrap {
-      align-items     : center;
-      color           : red;
-      display         : none;
-      flex-direction  : column;
-      font-size       : 55px;
-      gap             : 10px;
-      height          : 100%;
-      justify-content : center;
-
-
+      align-items: center;
+      color: red;
+      display: none;
+      flex-direction: column;
+      font-size: 55px;
+      gap: 10px;
+      height: 100%;
+      justify-content: center;
     }
 
     .small-headline {
-      font-size : 14px;
+      font-size: 14px;
     }
     .main_survey_list_title > div {
       display: flex;
@@ -231,14 +230,14 @@
 
     .survey_title_wrap {
       width: 100%;
-      align-items     : flex-start;
-      display         : flex;
+      align-items: flex-start;
+      display: flex;
       flex-direction: column;
       gap: 3px;
     }
 
     .panel_plus_wrap {
-      min-width : 1200px;
+      min-width: 1200px;
     }
 
     /* 수동 이미지 슬라이드 */
@@ -250,23 +249,29 @@
       font-size: 25px;
       font-weight: bold;
     }
-    .title_image_slide {margin-bottom: 25px;}
-    .image_slide_wrap {position: relative;}
-    .image_slide_block_wrap {overflow: hidden;}
+    .title_image_slide {
+      margin-bottom: 25px;
+    }
+    .image_slide_wrap {
+      position: relative;
+    }
+    .image_slide_block_wrap {
+      overflow: hidden;
+    }
     .image_slide_block {
       width: 4140px;
       display: flex;
       gap: 20px;
       justify-content: flex-start;
       align-items: center;
-      transition: all ease .5s;
+      transition: all ease 0.5s;
     }
     .image_box {
       width: 300px;
       height: 250px;
       overflow: hidden;
       border-radius: 5px;
-      background-image: url('/img/logo/logo.png');
+      background-image: url("/img/logo/logo.png");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center center;
@@ -285,7 +290,8 @@
       cursor: pointer;
       font-size: 35px;
       z-index: 100;
-      box-shadow: 0 0 1px 1px rgb(20 23 28 / 10%), 0 3px 1px 0 rgb(20 23 28 / 10%);
+      box-shadow: 0 0 1px 1px rgb(20 23 28 / 10%),
+        0 3px 1px 0 rgb(20 23 28 / 10%);
       border: 0;
     }
     .slide_left_btn {
@@ -296,109 +302,107 @@
     }
     .slide_arrow_btn:hover {
       box-shadow: 0 2px 8px 2px rgb(20 23 28 / 15%);
-      color: #4C99CF;
+      color: #4c99cf;
     }
 
-
-
-    @media (min-width : 320px) and (max-width : 480px) {
+    @media (min-width: 320px) and (max-width: 480px) {
       .carasel_wrap {
-        height    : 25vh;
-        min-width : 0px;
-        width     : 100%;
+        height: 25vh;
+        min-width: 0px;
+        width: 100%;
       }
 
       .headline_wrap {
-        display : none;
+        display: none;
       }
 
       .panel_plus_wrap {
-        min-width : 0px;
+        min-width: 0px;
       }
 
       .panel_wrap {
-        flex-direction : column;
-        margin         : 20px 10px;
-        padding        : 20px 0;
-        width          : calc(100% - 20px);
+        flex-direction: column;
+        margin: 20px 10px;
+        padding: 20px 0;
+        width: calc(100% - 20px);
       }
 
       .panel_big_item {
-        font-size : 20px !important;
+        font-size: 20px !important;
       }
 
       .panel_item > p {
-        font-size : 12px;
+        font-size: 12px;
       }
 
       .panel_btn {
-        font-size : 12px;
+        font-size: 12px;
       }
 
       .panel_wrap > .panel_item_vertical:nth-child(1) {
-        display : none;
+        display: none;
       }
 
       .panel_wrap > .panel_line {
-        display : none;
+        display: none;
       }
 
       .panel_item_vertical {
-        align-items : center;
+        align-items: center;
       }
 
       .panel_item_horizontal {
-        margin-top : 20px;
+        margin-top: 20px;
       }
 
       .main_survey_list_title {
-        width : 100%;
+        width: 100%;
       }
 
       .main_survey_list_title p {
-        font-size : 17px;
+        font-size: 17px;
       }
 
       .survey_title_wrap > span {
-        display : none;
+        display: none;
       }
       .main_survey_item_wrap {
-        flex-direction : column;
+        flex-direction: column;
       }
 
       .main_survey_item {
-        width : 100%;
+        width: 100%;
       }
 
       .main_survey_list_wrap {
-        margin    : 20px auto 20px;
-        min-width : 0px;
-        padding   : 20px 10px;
+        margin: 20px auto 20px;
+        min-width: 0px;
+        padding: 20px 10px;
       }
 
-      .survey_run, .survey_stop {
-        font-size : 14px;
+      .survey_run,
+      .survey_stop {
+        font-size: 14px;
       }
 
-      .survey_point, .survey_date {
-        font-size : 12px;
+      .survey_point,
+      .survey_date {
+        font-size: 12px;
       }
 
       .survey_title {
-        font-size     : 14px;
-        height        : 100%;
-        margin-bottom : 15px;
+        font-size: 14px;
+        height: 100%;
+        margin-bottom: 15px;
       }
 
       .survey_date {
-        padding : 5px 0px;
+        padding: 5px 0px;
       }
 
       .survey_plus {
-        font-size : 12px;
+        font-size: 12px;
       }
-
-
     }
   </style>
 
@@ -409,18 +413,27 @@
         <div class="panel_plus_wrap">
           <div class="panel_wrap">
             <div class="panel_item panel_item_vertical">
-              <p class="panel_big_item"><span class="pol_color">폴인패널</span> 가입하기</p>
+              <p class="panel_big_item">
+                <span class="pol_color">폴인패널</span> 가입하기
+              </p>
               <p>폴인사이트의 패널이 되어주세요.</p>
             </div>
             <div class="panel_line"></div>
             <div class="panel_item panel_item_vertical">
-              <p class="panel_big_item"><span class="pol_color">폴인패널</span>이 된다면?</p>
+              <p class="panel_big_item">
+                <span class="pol_color">폴인패널</span>이 된다면?
+              </p>
               <p>폴인사이트가 진행하는 온라인조사 직접참여</p>
             </div>
             <div class="panel_line"></div>
-            <div class="panel_item panel_item_horizontal" sec:authorize="isAnonymous()">
+            <div
+              class="panel_item panel_item_horizontal"
+              sec:authorize="isAnonymous()"
+            >
               <a th:href="@{/login}" class="panel_btn panel_btn_login">LOGIN</a>
-              <a th:href="@{/signup}" class="panel_btn panel_btn_join">JOIN US</a>
+              <a th:href="@{/signup}" class="panel_btn panel_btn_join"
+                >JOIN US</a
+              >
             </div>
           </div>
         </div>
@@ -436,8 +449,15 @@
           <h3>제목 없음</h3>
         </div>
         <div class="image_slide_wrap">
-          <div class="slide_arrow_btn slide_left_btn" style="visibility: hidden;"><i class="fas fa-angle-left"></i></div>
-          <div class="slide_arrow_btn slide_right_btn"><i class="fas fa-angle-right"></i></div>
+          <div
+            class="slide_arrow_btn slide_left_btn"
+            style="visibility: hidden"
+          >
+            <i class="fas fa-angle-left"></i>
+          </div>
+          <div class="slide_arrow_btn slide_right_btn">
+            <i class="fas fa-angle-right"></i>
+          </div>
           <div class="image_slide_block_wrap">
             <div class="image_slide_block">
               <div class="image_box">그림 1</div>
@@ -453,34 +473,32 @@
           </div>
         </div>
       </div>
-
     </div>
-    <th:block th:include="layout/footer"/>
+    <th:block th:include="layout/footer" />
   </div>
   <script th:inline="javascript">
     // 수동 이미지 슬라이드 애니메이션 동작
-    $(document).on('click', '.slide_left_btn', function(){
-      const ml_value = $('.image_slide_block').css('margin-left');
-      const val = Number(ml_value.replace(/[^0-9]/g,''));
-      if(val != 0) {
-        $('.slide_right_btn').css('visibility', 'visible');
-        $('.image_slide_block').css('margin-left', '-' + (val - 960) + 'px');
+    $(document).on("click", ".slide_left_btn", function () {
+      const ml_value = $(".image_slide_block").css("margin-left");
+      const val = Number(ml_value.replace(/[^0-9]/g, ""));
+      if (val !== 0) {
+        $(".slide_right_btn").css("visibility", "visible");
+        $(".image_slide_block").css("margin-left", "-" + (val - 960) + "px");
       }
-      if(val == 960) {
-        $(this).css('visibility', 'hidden');
+      if (val === 960) {
+        $(this).css("visibility", "hidden");
       }
     });
 
-    $(document).on('click', '.slide_right_btn', function(){
-      const ml_value = $('.image_slide_block').css('margin-left');
-      const val = Number(ml_value.replace(/[^0-9]/g,''));
-      console.log(val);
-      if(val < (940 * 2)) {
-        $('.slide_left_btn').css('visibility', 'visible');
-        $('.image_slide_block').css('margin-left', '-' + (val + 960) + 'px');
+    $(document).on("click", ".slide_right_btn", function () {
+      const ml_value = $(".image_slide_block").css("margin-left");
+      const val = Number(ml_value.replace(/[^0-9]/g, ""));
+      if (val < 940 * 2) {
+        $(".slide_left_btn").css("visibility", "visible");
+        $(".image_slide_block").css("margin-left", "-" + (val + 960) + "px");
       }
-      if(val == 960) {
-        $(this).css('visibility', 'hidden');
+      if (val === 960) {
+        $(this).css("visibility", "hidden");
       }
     });
   </script>

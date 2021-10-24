@@ -2,20 +2,20 @@
 <th:block>
   <style>
     .insight_card_wrapper {
-      display         : flex;
-      flex-wrap       : wrap;
-      justify-content : space-evenly;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
       /*align-items: center;*/
-      flex-grow       : 1;
+      flex-grow: 1;
     }
 
     .card-box {
-      width : 600px;
+      width: 600px;
     }
 
     .card-box > img {
-      object-fit      : contain;
-      object-position : 50% 50%;
+      object-fit: contain;
+      object-position: 50% 50%;
     }
   </style>
 </th:block>
@@ -67,41 +67,60 @@
 
     const makeInsightTemplate = (insight) => {
       let template = $('<div class="card-box"></div>').on(
-          "click",
-          function (e) {
-            location.assign(`/insight/${insight.id}`.trim());
-          }
+        "click",
+        function (e) {
+          location.assign(`/insight/${insight.id}`.trim());
+        }
       );
-      template.append(
+      if (!!insight.thumbnail)
+        template.append(
           `<img src="` +
-          "[[${@environment.getProperty('file.upload.address')}]]" +
-          `${insight.thumbnail}" alt="">`
-      );
+            "[[${@environment.getProperty('file.upload.address')}]]" +
+            `${insight.thumbnail}" alt="">`
+        );
+      else {
+        template.append(`<img src="/img/logo/logo.png" alt="">`);
+      }
       template.append(`<div class="card-title">${insight.title}</div>`);
-      $(`<button>수정</button>`).off().on('click', {}, admin_polsItem_update)
-      $(`<button>삭제</button>`).off().on('click', {}, admin_polsItem_remove)
-      template.append(`
-      <div>
-      </div>
-      `)
+      let update_btn = $(`<button class="btn_udel btn-support">수정</button>`)
+        .off()
+        .on("click", { id: insight.id }, admin_polsItem_update);
+      let delete_btn = $(
+        `<button class="btn_udel btn-warn delete_btn">삭제</button>`
+      )
+        .off()
+        .on("click", { id: insight.id }, admin_polsItem_remove);
+      let btn_wrap = $("<div></div>");
+      btn_wrap.append(update_btn);
+      btn_wrap.append(delete_btn);
+      template.append(btn_wrap);
       return template;
     };
 
     const admin_polsItem_update = (e) => {
       e.stopPropagation();
       e.returnValue = false;
+      let insight_id = e.data.id;
       // TODO 2021-10-24, 일, 15:54 : 폴스인사이트 게시글 업데이트 로직 추가
       // 팝업을 추가해서 넣자
-    }
+      location.href(`/admin/posts/${insight_id}/edit`);
+    };
     const admin_polsItem_remove = (e) => {
       e.stopPropagation();
       e.returnValue = false;
-      if(confirm('게시글을 삭제하시겠습니까?')){
+      if (confirm("게시글을 삭제하시겠습니까?")) {
         // TODO 2021-10-24, 일, 15:51 : 폴스인사이트 게시글 삭제 로직 추가
-
-        console.log('게시글 삭제 됨')
+        let insight_id = e.data.id;
+        http
+          .delete(`/admin/posts/${insight_id}/delete`)
+          .then(() => location.replace("/admin/posts"))
+          .catch()
+          .finally(() => {
+            overlay.fadeOut(100);
+            overlay.children().off("click");
+          });
       }
-    }
+    };
 
     $(function () {
       init();

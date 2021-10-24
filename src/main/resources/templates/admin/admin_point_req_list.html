@@ -33,6 +33,7 @@
     .post-row > span:nth-child(7) {
       width: 150px;
     }
+
     .post-row > span:nth-child(7) {
       width: 150px;
     }
@@ -40,8 +41,39 @@
     .btn_excel {
       align-items: center;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       margin-bottom: 5px;
+    }
+
+    .survey_sort_wrap {
+      align-items: center;
+      display: flex;
+      gap: 15px;
+      justify-content: flex-start;
+      padding-bottom: 5px;
+      padding-left: 10px;
+    }
+
+    .survey_sort_wrap > input {
+      display: none;
+    }
+
+    .survey_sort_wrap > label {
+      color: inherit;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+
+    .check_sort {
+      color: tomato !important;
+      text-decoration: underline;
+    }
+
+    .btn_box {
+      display: flex;
+      gap: 10px;
     }
   </style>
   <div class="admin_main_contents">
@@ -68,9 +100,46 @@
         </div>
       </div>
       <div class="btn_excel">
-        <button class="btn_udel btn-green" name="save_excel">
-          엑셀로 저장
-        </button>
+        <div class="survey_sort_wrap">
+          <label for="sort_all" class="check_sort"> 전체 </label>
+          <input
+            value="ALL"
+            type="radio"
+            name="sort_group"
+            id="sort_all"
+            checked
+          />
+          <label for="sort_wait"> 보류 </label>
+          <input value="WAIT" type="radio" name="sort_group" id="sort_wait" />
+          <label for="sort_error"> 오류 </label>
+          <input value="ERROR" type="radio" name="sort_group" id="sort_error" />
+          <label for="sort_requested"> 진행 </label>
+          <input
+            value="REQUESTED"
+            type="radio"
+            name="sort_group"
+            id="sort_requested"
+          />
+          <label for="sort_finished"> 완료 </label>
+          <input
+            value="FINISHED"
+            type="radio"
+            name="sort_group"
+            id="sort_finished"
+          />
+        </div>
+        <div class="btn_box">
+          <button
+            class="btn_udel"
+            name="pay_completed"
+            style="background: #4c99cf; color: white"
+          >
+            요청 상태 변경
+          </button>
+          <button class="btn_udel btn-green" name="save_excel">
+            엑셀로 저장
+          </button>
+        </div>
       </div>
 
       <div class="scroll-table">
@@ -81,7 +150,7 @@
           <span>요청 포인트</span>
           <span>은행</span>
           <span>계좌번호</span>
-          <span>진행 상황</span>
+          <!--          <span>진행 상황</span>-->
           <span>관리</span>
         </div>
       </div>
@@ -98,29 +167,33 @@
       template.append(`<span>${req.requestPoint}</span>`);
       template.append(`<span>${req.bank}은행</span>`);
       template.append(`<span>${req.account}</span>`);
-      template.append(`<span>${req.progress}</span>`);
+      // template.append(`<span>${req.progress}</span>`); // 진행 상황
       // const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
       // const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
-      const tmp_cell = $(`<span></span>`);
-      tmp_cell.append(`<label><input type="checkbox"/>보류</label>`);
-      tmp_cell.append(`<label><input type="checkbox"/>완료</label>`);
-      tmp_cell.append(`<label><input type="checkbox"/>오류</label>`);
-      template.append(tmp_cell);
+      if (req.progress === "FINISHED") {
+        template.append(`<span>지급 완료</span>`);
+      } else {
+        const tmp_cell = $(`<span></span>`);
+        tmp_cell.append(
+          `<label><input type="checkbox" name="WAIT"/>보류</label>`
+        );
+        tmp_cell.append(
+          `<label><input type="checkbox" name="FINISHED"/>완료</label>`
+        );
+        tmp_cell.append(
+          `<label><input type="checkbox" name="ERROR"/>오류</label>`
+        );
+        tmp_cell.find("input[type=checkbox]").each(function () {
+          $(this).prop("name") === req.progress
+            ? $(this).prop("checked", true)
+            : $(this).prop("name") === "FINISHED"
+            ? $(this).prop("checked", false)
+            : $(this).prop("checked", false).prop("disabled", true);
+        });
+        template.append(tmp_cell);
+      }
       return template;
     };
-
-    // const deleteRequest = (e) => {
-    //   if (confirm("정말로 요청을 삭제하시겠습니까?")) {
-    //     http
-    //       .delete(`/api/points/${e.data.id}`)
-    //       .then((res) => {
-    //         if (res.data.success) {
-    //           alert("요청 삭제 완료");
-    //         }
-    //       })
-    //       .finally(() => location.replace("/admin/pointlist"));
-    //   }
-    // };
 
     const progressUpdate = (e) => {
       if (confirm("요청의 상태를 변경하시겠습니까?")) {
@@ -136,9 +209,10 @@
     };
 
     async function getPointRequestData(e) {
+      let type = $("input[name=sort_group]:checked").val();
       let page = !e ? 0 : e.data.page;
       let regex = !e ? "" : String($("input[name=admin_find]").val()).trim();
-      const response = await http.get("/api/points", {
+      const response = await http.get(`/api/points?type=${type}`, {
         params: { page: page, size: 10, regex: regex },
       });
       if (response.data.success) {
@@ -188,6 +262,39 @@
         { url: "/api/points/excel" },
         saveByExcel
       );
+
+      $("button[name=pay_completed]").on("click", function (e) {
+        e.stopPropagation();
+        e.returnValue = false;
+        if (confirm("요청의 상태를 일괄 변경 하시겠습니까?")) {
+          $(".post-row:not(:first-child)").each(function () {
+            let row = $(this);
+            let id = row.children(":first").text();
+            let chkboxes = row
+              .children(":last")
+              .find("input[type=checkbox]:checked");
+            if (chkboxes.length > 0) {
+              http.put(`/api/points/${id}`, {
+                progress: chkboxes.prop("name"),
+              });
+            }
+          });
+        }
+        location.replace("/admin/pointlist");
+      });
+
+      $("input[name=sort_group]")
+        .on("click", { page: 0 }, init)
+        .on("change", function (e) {
+          let id = e.target.id;
+          $("input[name=sort_group]").each(function () {
+            if (id === $(this).attr("id")) {
+              $(this).prev().addClass("check_sort");
+            } else {
+              $(this).prev().removeClass("check_sort");
+            }
+          });
+        });
     });
   </script>
 </th:block>

@@ -20,61 +20,61 @@
           <th>설문 참여 날짜</th>
         </tr>
       </table>
-      <div class="survey_item">
-
-      </div>
+      <div class="survey_item"></div>
     </div>
   </div>
   <script>
-
     const makeSurveyViewTemplate = (idx, survey) => {
-      let template = '<tr>'
+      let template = "<tr>";
       // 서베이 참여일 추가 필요
-      template += `<td><p>${idx}</p></td>`
-      template += `<td><p>${survey.title}</p></td>`
-      template += `<td><p>${survey.point}</p></td>`
-      template += `</tr>`
+      template += `<td><p>${idx}</p></td>`;
+      template += `<td><p>${survey.title}</p></td>`;
+      template += `<td><p>${survey.point}</p></td>`;
+      template += `</tr>`;
       return template;
-    }
+    };
 
     const makeSurveyListView = (surveys) => {
-      const surveyWrap = $('.survey_wrap')
+      const surveyWrap = $(".survey_wrap");
       let cnt = 1;
       for (survey of surveys) {
-        surveyWrap.append(makeSurveyViewTemplate(cnt, survey))
+        surveyWrap.append(makeSurveyViewTemplate(cnt, survey));
         cnt++;
       }
-    }
+    };
 
     const getParticipateSurveyList = () => {
-      http.get('/api/survey/participate')
-          .then(res => {
-            makeSurveyListView(res.data.response)
-          })
-          .catch(err => {
-            // surveys is not iterable
-            console.log(err)
-            alert('참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요.')
-          })
-    }
+      http
+        .get("/api/survey/participate")
+        .then((res) => {
+          makeSurveyListView(res.data.response);
+        })
+        .catch((err) => {
+          // surveys is not iterable
+          console.error(err);
+          alert(
+            "참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요."
+          );
+        });
+    };
 
     const testFunc = () => {
-      http.get('/api/survey/participate')
-          .then(res => {
-            makeSurveyListView(res.data)
-          })
-          .catch(
-              err => {
-                console.log(err);
-                alert('참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요.')
-              }
-          )
-    }
+      http
+        .get("/api/survey/participate")
+        .then((res) => {
+          makeSurveyListView(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+          alert(
+            "참여한 설문 목록을 가져오던 중 에러가 발생하였습니다.\n문제가 계속 발생하면 관리자에게 문의해주세요."
+          );
+        });
+    };
 
     $(function () {
       getParticipateSurveyList();
-      $('form[name=parti_survey_search_form]').on('submit', testFunc)
-    })
-
+      $("form[name=parti_survey_search_form]").on("submit", testFunc);
+    });
   </script>
 </th:block>

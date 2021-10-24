@@ -99,8 +99,8 @@ public class ApiController {
    * */
   @GetMapping("/surveys")
   public ApiUtils.ApiResult<Page<SurveyDto>> adminGetAllSurveys(@PageableDefault Pageable pageable,
-                                                                    @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                    @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+                                                                @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), ((Sort.by("id").ascending().and(Sort.by("endAt").descending()))));
     Page<SurveyMapping> surveyList;
     try {
@@ -296,19 +296,31 @@ public class ApiController {
 
   @GetMapping("/points")
   public ApiUtils.ApiResult<Page<PointRequestMapping>> getAllPointRequests(@PageableDefault Pageable pageable,
-                                                                           @RequestParam(value = "regex", required = false, defaultValue = "") String regex) throws Exception {
+                                                                           @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                           @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
+    // TODO 2021-10-24, 일, 23:18 : 검색이 안됨 --> DB 쿼리 바꿔야 할듯
     try {
-      if (regex.isBlank())
-        return success(pointRequestService.findAllPointRequests(pageable));
-      else
-        return success(pointRequestService.findAllPointRequestsByRegex(pageable, regex));
+      if (regex.isBlank()) {
+        if (type.toUpperCase(Locale.ROOT).equals("ALL")) {
+          return success(pointRequestService.findAllPointRequests(pageable));
+        } else {
+          return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase(Locale.ROOT))));
+        }
+      } else {
+        if (type.toUpperCase(Locale.ROOT).equals("ALL")) {
+          return success(pointRequestService.findAllPointRequestsByRegex(pageable, regex));
+        } else {
+          return success(pointRequestService.findAllPointRequestsByRegexAndType(pageable, regex, PointRequestProgressType.valueOf(type.toUpperCase(Locale.ROOT))));
+        }
+      }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
   }
 
   @PutMapping("/points/{id}")
-  public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId, @RequestBody PointRequestDto dto) throws Exception {
+  public ApiUtils.ApiResult<Boolean> updateUserRequestByAdmin(@PathVariable("id") long pointReqId,
+                                                              @RequestBody PointRequestDto dto) throws Exception {
     try {
       PointRequest pointRequest = pointRequestService.findPointRequestById(pointReqId).orElseThrow();
       pointRequest.progressUpdate(dto);

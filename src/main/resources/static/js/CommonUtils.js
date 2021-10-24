@@ -184,7 +184,6 @@ const adminPanelInfoChecker = (info) => {
       info[key].includes("선택") ||
       info[key].includes("undefined")
     ) {
-      console.log(key);
       return false;
     }
     if (key === "favorite") {

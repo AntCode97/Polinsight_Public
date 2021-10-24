@@ -352,13 +352,13 @@
         <!--    -->
         <div class="post-move" th:object="${post}">
           <div class="postList">
-            <div class="nearPost" th:unless="${nextPost} ==null">
+            <div class="nearPost" th:unless="${nextPost} ==null"                   th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|">
               <div>
                 <div class="nearPostLetter"><b>다음글</b></div>
                 <div
                   class="nearPostName"
                   th:text="${nextPost.title}"
-                  th:onclick="|location.href='@{/posts/{id} (id=${nextPost.id})}'|"
+
                 >
                   -다음글 제목-
                 </div>
@@ -370,13 +370,13 @@
                 -다음글 날짜
               </div>
             </div>
-            <div class="nearPost" th:unless="${prevPost} ==null">
+            <div class="nearPost" th:unless="${prevPost} ==null" th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|">
               <div>
                 <div class="nearPostLetter"><b>이전글</b></div>
                 <div
                   class="nearPostName"
                   th:text="${prevPost.title}"
-                  th:onclick="|location.href='@{/posts/{id} (id=${prevPost.id})}'|"
+
                 >
                   -이전글 제목-
                 </div>

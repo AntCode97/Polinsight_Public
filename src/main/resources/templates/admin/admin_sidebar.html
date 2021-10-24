@@ -244,25 +244,21 @@
 
       a.header_menu_item {
         align-items: center;
-        border: 1.5px solid transparent;
-        border-radius: 50%;
+        border-radius: 5px;
         cursor: pointer;
         display: flex;
-        height: 35px;
+        height: 30px;
         justify-content: center;
         margin-right: 20px;
-        width: 35px;
+        width: 70px;
+        background: tomato;
+        color: white;
       }
 
       .right_menu > ul > li:hover > a {
-        border: 1.5px solid #dddddd;
         box-shadow: 0 2px 2px 0 hsl(0deg 0% 60% / 14%),
           0 3px 1px -2px hsl(0deg 0% 60% / 20%),
           0 1px 5px 0 hsl(0deg 0% 60% / 12%);
-      }
-
-      .right_menu > ul > li:hover > .dropdown_user {
-        display: block;
       }
 
       .header_menu_item > i {
@@ -796,16 +792,6 @@
                     <p class="nav_dropdown">회원 목록</p>
                   </a>
                 </li>
-                <!--            <li class="nav-item">-->
-                <!--              <a th:href="@{/admin/membersearch}" class="nav_link">-->
-                <!--                <p class="nav_dropdown">회원 검색</p>-->
-                <!--              </a>-->
-                <!--            </li>-->
-                <li class="nav-item">
-                  <a class="nav_link" href="#">
-                    <p class="nav_dropdown">이메일보내기</p>
-                  </a>
-                </li>
               </ul>
             </div>
             <li class="nav-item nav_action">
@@ -824,16 +810,6 @@
                     <p class="nav_dropdown">공지사항</p>
                   </a>
                 </li>
-                <!--            <li class="nav-item">-->
-                <!--              <a class="nav_link" th:href="@{/admin/posts/download }">-->
-                <!--                <p class="nav_dropdown">자료실</p>-->
-                <!--              </a>-->
-                <!--            </li>-->
-                <!--            <li class="nav-item">-->
-                <!--              <a class="nav_link" th:href="@{/admin/events}">-->
-                <!--                <p class="nav_dropdown">Events</p>-->
-                <!--              </a>-->
-                <!--            </li>-->
                 <li class="nav-item">
                   <a class="nav_link" th:href="@{/admin/qna}">
                     <p class="nav_dropdown">Q & A</p>
@@ -871,6 +847,15 @@
             <!--            <p>EXIT</p>-->
             <!--          </a>-->
             <!--        </li>-->
+            <li class="nav-item nav_action">
+              <a class="nav_link" th:href="@{/}">
+                <i class="fas fa-door-open"></i>
+                <p>
+                  나가기
+                  <!--                  <i class="fas fa-caret-down arrow"></i>-->
+                </p>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -888,17 +873,8 @@
           <div class="right_menu">
             <ul>
               <li>
-                <a class="header_menu_item">
-                  <i class="fas fa-user"></i>
-                </a>
-                <div class="dropdown_user">
-                  <a th:href="@{/admin/user/manage}">정보수정</a>
-                  <a th:href="@{/dologout}">로그아웃</a>
-                </div>
-              </li>
-              <li>
-                <a class="header_menu_item" th:href="@{/}">
-                  <i class="fas fa-door-open"></i>
+                <a class="header_menu_item" th:href="@{/dologout}">
+                  로그아웃
                 </a>
               </li>
             </ul>

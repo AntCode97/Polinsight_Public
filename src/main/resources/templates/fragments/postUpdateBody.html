@@ -284,8 +284,8 @@
   </style>
 </th:block>
 <th:block>
-  <input type="hidden" name="_method" value="PUT" />
 
+  <input type="hidden" name="_method" value="PUT"/>
   <div class="input_wrap register_top_wrap">
     <div class="board_div">
       <label for="board_title"><span>*</span>게시판</label>
@@ -343,23 +343,7 @@
         />
       </span>
     </div>
-    <div class="board_div" id="thumbnail_div">
-      <label for="board_title"><span>*</span>썸네일 이미지</label>
-      <span class="board_span">
-        <img
-          style="width: 80px; height: 54px"
-          th:if="*{thumbnail}"
-          th:src="${@environment.getProperty('file.upload.address')}+ *{thumbnail}"
-        />
-        <input
-          type="file"
-          id="thumbnail"
-          class="board_input"
-          th:field="*{thumbnailImg}"
-          accept="image/*"
-        />
-      </span>
-    </div>
+
   </div>
   <!-- 게시글 내용 등록(스마트에디터) -->
   <div class="input_wrap textarea_div">
@@ -434,7 +418,7 @@
         <button
           type="button"
           class="btn btn-support insert_btn"
-          onclick="document.getElementById('frm_board').submit();"
+          th:postNo="*{id}"
         >
           수정
         </button>
@@ -444,6 +428,7 @@
 </th:block>
 <th:block>
   <script>
+    let deleteFileList = [];
     $(function () {
       let fileCount = $(".file_item").length;
       let file_item = document.getElementsByClassName("file_item_label");
@@ -455,6 +440,18 @@
           file_remove[i - 1].setAttribute("data-num", i);
         }
       }
+      let updateBtn = document.querySelector(".btn.btn-support.insert_btn");
+      updateBtn.addEventListener("click", async function () {
+        let data = new FormData(document.querySelector('#frm_board'));
+        let id = updateBtn.getAttribute("postNo");
+        data.append('deleteFileList', deleteFileList)
+        await http.post(`/admin/posts/${id}/edit`, data,
+                { headers: { 'Content-Type': 'multipart/form-data'}}).then((response) => {
+                  window.location.href=`/admin/posts/${id}`;
+        });
+
+      })
+
     });
 
     $(document)
@@ -467,16 +464,14 @@
       })
       .on("click", ".btn-file-remove", function () {
         let num = $(this).attr("data-num");
+        const fileName = $(this).attr("value");
+        deleteFileList.push(fileName);
         $(".file_item")
           .eq(num - 1)
           .css("border", "none")
           .remove();
-        const fileName = $(this).attr("value");
 
-        http
-          .get(`/api/${fileName}/delete`)
-          .then(alert("Sucess"))
-          .catch(alert("error"));
+
       })
       .on("change", ".board_file", function () {
         const file = $(this).val().toString();

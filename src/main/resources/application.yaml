@@ -148,10 +148,10 @@ custom :
     base : "http://localhost:8080"
 file :
   upload :
-    baseLocation : "/Users/alban/Documents/upload_test/"
-    image :        "/Users/alban/Documents/upload_test/images/"
-    thumbnail :    "/Users/alban/Documents/upload_test/thumbnails/"
-    file :         "/Users/alban/Documents/upload_test/files/"
+    baseLocation : "C:\\upload_test\\"
+    image :        "C:\\upload_test\\images\\"
+    thumbnail :    "C:\\upload_test\\thumbnails\\"
+    file :         "C:\\upload_test\\files\\"
     address :      "http://localhost:8080/uploads/"
 ---
 spring :
