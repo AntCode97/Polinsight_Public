@@ -57,6 +57,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Page<PostMapping> apiFindPostsByType(PostType type, Pageable pageable) {
+    pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
     return repository.findAllByPostType(type, pageable);
   }
 
@@ -129,6 +130,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable) {
+    pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
     return repository.findAllByTypesAndRegex(type, regex, pageable);
   }
 

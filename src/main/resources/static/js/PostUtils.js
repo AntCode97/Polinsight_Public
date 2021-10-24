@@ -45,6 +45,7 @@ const makePostTemplate = (post) => {
   template.append(`<div>${post.viewCount}</div>`);
   template.append(`<div>-</div>`);
   template.on("click", { post: post }, (e) => {
+    makeBackUrl();
     location.assign(`/posts/${post.id}`);
   });
   return template;
@@ -72,3 +73,16 @@ const searchMessage = (keyword, total, name) => {
       );
   }
 };
+
+
+const setCookie = function (name, value, exp) {
+  const date = new Date();
+  date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+  document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+}
+
+const makeBackUrl = () => {
+  console.log("HHHIS")
+  setCookie("listBtnUrl", location.href, 1)
+}
+
