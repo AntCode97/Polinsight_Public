@@ -552,10 +552,9 @@
       }
       getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total);
-        const table = $('.scroll-table > tbody');
+        let table = $('.scroll-table > tbody');
         table.children('.post-row:not(:first-child)').remove();
         if (obj.total > 0) {
-          console.log(obj.current + " " +obj.totalPage );
           makePagination(obj.current, obj.totalPage);
           searchMessage(obj.keyword, obj.total, '설문이')
           obj.content.forEach(survey => {
@@ -669,7 +668,7 @@
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");
       template.append(`<div>${survey.id}</div>`); // 번호
-      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`) // TODO : 임시로 카카오톡 달아놓음
+      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
       template.append(
           `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
       ); // 설문 이름

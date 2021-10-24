@@ -3,6 +3,7 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.repository.PointRequestRepository;
+import com.dns.polinsight.types.PointRequestProgressType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -48,6 +49,16 @@ public class PointRequestServiceImpl implements PointRequestService {
   @Override
   public Page<PointRequestMapping> findAllPointRequestsByRegex(Pageable pageable, String regex) {
     return pointRequestRepository.findAllByRegex(pageable, regex);
+  }
+
+  @Override
+  public Page<PointRequestMapping> findAllPointRequestsAndType(Pageable pageable, PointRequestProgressType type) {
+    return pointRequestRepository.findAllPointRequestAndType(pageable, type);
+  }
+
+  @Override
+  public Page<PointRequestMapping> findAllPointRequestsByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type) {
+    return pointRequestRepository.findAllByRegexAndType(pageable, regex, type);
   }
 
   @Override

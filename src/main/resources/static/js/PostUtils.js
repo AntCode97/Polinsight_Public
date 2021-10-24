@@ -58,12 +58,14 @@ const makeNoticeTemplate = (post, current) => {
   template.append(`<div>${post.registedAt}</div>`);
   template.append(`<div>${post.viewCount}</div>`);
 
-  if(post.attaches.length ===0)   template.append(`  <div>
+  if (post.attaches.length === 0)
+    template.append(`  <div>
                 <i class="fas fa-paperclip file_icon_no"></i>
-              </div>`)
-  else   template.append(`  <div>
+              </div>`);
+  else
+    template.append(`  <div>
                 <i class="fas fa-paperclip file_icon_yes"></i>
-              </div>`)
+              </div>`);
 
   template.on("click", { post: post }, (e) => {
     asynMakeBackUrl(current);
@@ -103,16 +105,12 @@ const getCookie = function (name) {
 const setCookie = function (name, value, exp) {
   const date = new Date();
   date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
-  document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-}
-
+  document.cookie =
+    name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
+};
 
 const asynMakeBackUrl = (current) => {
-
-  let regex = String($('input[name=board_search]').val()).trim();
-  console.log(location.href + "?page="+current +"&keyword="+regex);
-  let next ="/posts?page="+current +"&keyword="+regex;
-  setCookie("listBtnUrl",next, 1)
-}
-
-
+  let regex = String($("input[name=board_search]").val()).trim();
+  let next = "/posts?page=" + current + "&keyword=" + regex;
+  setCookie("listBtnUrl", next, 1);
+};

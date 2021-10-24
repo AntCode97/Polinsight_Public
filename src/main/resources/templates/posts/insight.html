@@ -22,18 +22,45 @@
       text-decoration : underline;
     }
 
+    .image-wrapper {
+      max-width  : 1200px;
+      max-height : 600px;
+    }
+
+    .image-wrapper img {
+      object-fit : scale-down;
+      max-width  : inherit;
+      max-height : inherit;
+    }
+
     .post-header {
+      margin      : auto;
+      white-space : pre;
+      border      : 2px black solid;
+      max-width   : 800px;
     }
 
     .post-body {
+      margin      : auto;
+      white-space : pre;
+      border      : 2px black solid;
+      max-width   : 800px;
+      min-height  : 600px;
     }
 
     .post-wrapper {
       max-width : 1200px;
+      margin    : auto;
     }
 
     .post-content-header {
       display : flex;
+    }
+
+    .comment-wrapper {
+      max-width : 1200px;
+      margin    : auto;
+
     }
 
     .post-writer {
@@ -48,11 +75,11 @@
   <th:block>
     <div class="flex-wrapper">
       <div class="flex-content">
-        <div class="post-wrapper"></div>
-        <div name="post-header" class="post-header"></div>
-        <div name="post-body" class="post-body"></div>
-
-        <th:block th:include="fragments/comment"></th:block>
+        <div class="post-wrapper">
+          <div name="post-header" class="post-header"></div>
+          <div name="post-body" class="post-body"></div>
+          <th:block th:include="fragments/comment"></th:block>
+        </div>
       </div>
       <th:block th:include="layout/footer" />
     </div>
@@ -78,15 +105,19 @@
       postHead.append(headTemplate);
 
       let postBody = $("div[name=post-body]");
-      postBody.append(`<div>${post.viewcontent}</div>`);
-      post.attaches.forEach((attach) => {
+      postBody.append(`<div ">${post.viewcontent}</div>`);
+      post.attaches.forEach(attach => {
+        let imageWrapper = $('<div></div>')
+        imageWrapper.addClass('image-wrapper')
+        let img = $('<img/>')
         if (isImageFile(attach.fileName)) {
-          postBody.append(
-              `<img src="${"[[${@environment.getProperty('file.upload.image')}]]" + attach.fileName}" alt="`${attach.originalName}`"/>`
-          );
+          img.prop('src', "[[${@environment.getProperty('file.upload.address')}]]" + attach.fileName)
+          img.prop('alt', `${attach.originalName}`)
+          imageWrapper.append(img);
         }
+        postBody.append(imageWrapper)
       });
-    };
+    }
 
     const initInsight = (e) => {
       let postId = `[[${postId}]]`;

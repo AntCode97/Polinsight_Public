@@ -26,30 +26,7 @@ public interface SurveyMapping {
 
   String getThumbnail();
 
-  //  default String getCreate() {
-  //    if (getCreatedAt() != null) {
-  //      return getCreatedAt().toString();
-  //    } else {
-  //      return LocalDate.parse("1900-01-01").toString();
-  //    }
-  //  }
-
   LocalDate getEndAt();
-
-  //  default String getEnd() {
-  //    if (getEndAt() != null) {
-  //      return getEndAt().toString();
-  //    } else {
-  //      return LocalDate.parse("1900-01-01").toString();
-  //    }
-  //  }
-
-
-  //  @JsonIgnore
-  //  Collector getCollector();
-
-  //  @JsonIgnore
-  //  Survey getSurvey();
 
 
 }

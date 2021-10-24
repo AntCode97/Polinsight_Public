@@ -57,9 +57,8 @@ public class PointRequest {
   }
 
   public PointRequest progressUpdate(PointRequestDto dto) {
-    if (dto.getProgress() == PointRequestProgressType.REQUESTED) {
-      this.progress = PointRequestProgressType.FINISHED;
-    }
+    this.progress = dto.getProgress();
     return this;
   }
+
 }

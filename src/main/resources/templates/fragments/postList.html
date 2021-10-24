@@ -52,7 +52,7 @@
           new
       </span>
         </a>
-<!--        <img th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${list.thumbnail}">-->
+        <!--        <img th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${list.thumbnail}">-->
 
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
@@ -60,8 +60,8 @@
         <span>
           <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
           <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-<!--          <i th:if="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>-->
-<!--          <i th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>-->
+          <!--          <i th:if="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>-->
+          <!--          <i th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>-->
         </span>
         <span>
           <span class="btn_multi_wrap">
@@ -137,14 +137,12 @@
           type: 'POST',
           data: keyword
         }).done(function (frag) {
-          //console.log(frag)
           $('#postCount').replaceWith(frag);
 
         });
       });
 
     };
-
 
 
     let closeBtn = document.querySelector(".post-search .box-search input[type=button]")
@@ -162,27 +160,23 @@
       setCookie("listBtnUrl", location.href, 1)
     }
 
-    function makeDeleteBtn (e) {
-
-      let postId= e.value;
-
-      console.log("postID:" + postId)
-      $(".popup_overlay").fadeIn(100)
+    function makeDeleteBtn(e) {
+      let postId = e.value;
       let overlay = $(".popup_overlay");
       overlay.fadeIn(100);
       overlay.find(".popup_delete_btn").on("click", () => {
         // 게시물 삭제
         http
-                .delete(`/admin/posts/${postId}/delete`)
-                .then(() => location.replace("/admin/posts"))
-                .catch()
-                .finally(() => {
-                  overlay.fadeOut(100);
-                  overlay.children().off("click");
-                });
+            .delete(`/admin/posts/${postId}/delete`)
+            .then(() => location.replace("/admin/posts"))
+            .catch()
+            .finally(() => {
+              overlay.fadeOut(100);
+              overlay.children().off("click");
+            });
       });
 
-      }
+    }
 
 
   </script>

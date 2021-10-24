@@ -435,7 +435,6 @@
       })
       .on("change", ".board_file", function () {
         const file = $(this).val().toString();
-        console.log(file);
         if (file.includes("[") || file.includes("]")) {
           alert("파일명에 대괄호는 포함할 수 없습니다.");
           $(".board_file").val("");
@@ -459,7 +458,6 @@
           alert("내용을 입력해주세요");
           return;
         }
-        console.log("submit click");
         document.getElementById("frm_board").submit();
       })
       .on("click", ".btn-add", function () {

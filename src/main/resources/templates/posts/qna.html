@@ -43,8 +43,8 @@
     }
 
     .post-row > *:nth-child(2) {
-      width : 230px;
-      flex-grow: 1;
+      width     : 230px;
+      flex-grow : 1;
     }
 
     .post-row > *:nth-child(3) {
@@ -74,7 +74,7 @@
   <div class="container">
     <div class="board_contents_wrap">
       <div class="main_item">
-        <p>Q&A</p>
+        <p style="text-align: center;">Q&A</p>
       </div>
       <div class="main_contents_wrap">
         <!-- Search Box -->
@@ -120,16 +120,12 @@
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
     async function getPostData(e) {
-
       let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
-
       let regex = String($('input[name=board_search]').val()).trim()
-
       const responseData = await http.get('/api/posts?type=QNA', {
-        params: {page: page, size: 10, regex:regex}
+        params: {page: page, size: 10, regex: regex}
       })
       const data = responseData.data.response
-
       return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
     }
 
@@ -141,7 +137,6 @@
         let table = $('.scroll-table')
         table.children('.post-row:not(:first-child)').remove()
         if (obj.total > 0) {
-          console.log(obj.current + " " +obj.totalPage );
           makePagination(obj.current, obj.totalPage)
           searchMessage(obj.keyword, obj.total, '게시물이')
           obj.content.forEach(post => {
@@ -174,12 +169,9 @@
 
     $(document)
         .on("click", "button[name=add_question_btn]", function () {
-          // go create question post
-          // TODO
           location.assign("/posts/new");
         })
         .on("click", "button[name=anonymous_add_question_btn]", function () {
-          // go login
           location.assign("/login");
         });
   </script>
