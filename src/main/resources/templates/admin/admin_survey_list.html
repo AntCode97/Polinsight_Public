@@ -668,7 +668,7 @@
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");
       template.append(`<div>${survey.id}</div>`); // 번호
-      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`) // TODO : 임시로 카카오톡 달아놓음
+      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
       template.append(
           `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
       ); // 설문 이름

@@ -2,20 +2,20 @@
 <th:block>
   <style>
     .insight_card_wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
+      display         : flex;
+      flex-wrap       : wrap;
+      justify-content : space-evenly;
       /*align-items: center;*/
-      flex-grow: 1;
+      flex-grow       : 1;
     }
 
     .card-box {
-      width: 600px;
+      width : 600px;
     }
 
     .card-box > img {
-      object-fit: contain;
-      object-position: 50% 50%;
+      object-fit      : contain;
+      object-position : 50% 50%;
     }
   </style>
 </th:block>
@@ -67,19 +67,41 @@
 
     const makeInsightTemplate = (insight) => {
       let template = $('<div class="card-box"></div>').on(
-        "click",
-        function (e) {
-          location.assign(`/insight/${insight.id}`.trim());
-        }
+          "click",
+          function (e) {
+            location.assign(`/insight/${insight.id}`.trim());
+          }
       );
       template.append(
-        `<img src="` +
+          `<img src="` +
           "[[${@environment.getProperty('file.upload.address')}]]" +
           `${insight.thumbnail}" alt="">`
       );
       template.append(`<div class="card-title">${insight.title}</div>`);
+      $(`<button>수정</button>`).off().on('click', {}, admin_polsItem_update)
+      $(`<button>삭제</button>`).off().on('click', {}, admin_polsItem_remove)
+      template.append(`
+      <div>
+      </div>
+      `)
       return template;
     };
+
+    const admin_polsItem_update = (e) => {
+      e.stopPropagation();
+      e.returnValue = false;
+      // TODO 2021-10-24, 일, 15:54 : 폴스인사이트 게시글 업데이트 로직 추가
+      // 팝업을 추가해서 넣자
+    }
+    const admin_polsItem_remove = (e) => {
+      e.stopPropagation();
+      e.returnValue = false;
+      if(confirm('게시글을 삭제하시겠습니까?')){
+        // TODO 2021-10-24, 일, 15:51 : 폴스인사이트 게시글 삭제 로직 추가
+
+        console.log('게시글 삭제 됨')
+      }
+    }
 
     $(function () {
       init();

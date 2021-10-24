@@ -22,6 +22,17 @@
       text-decoration : underline;
     }
 
+    .image-wrapper {
+      max-width  : 1200px;
+      max-height : 600px;
+    }
+
+    .image-wrapper img {
+      object-fit : scale-down;
+      max-width  : inherit;
+      max-height : inherit;
+    }
+
     .post-header {
       margin      : auto;
       white-space : pre;
@@ -95,13 +106,16 @@
 
       let postBody = $("div[name=post-body]");
       postBody.append(`<div ">${post.viewcontent}</div>`);
-      post.attaches.forEach((attach) => {
+      post.attaches.forEach(attach => {
+        let imageWrapper = $('<div></div>')
+        imageWrapper.addClass('image-wrapper')
         let img = $('<img/>')
         if (isImageFile(attach.fileName)) {
-          img.prop('src', "[[${@environment.getProperty('file.upload.image')}]]" + attach.fileName)
+          img.prop('src', "[[${@environment.getProperty('file.upload.address')}]]" + attach.fileName)
           img.prop('alt', `${attach.originalName}`)
-          postBody.append(img);
+          imageWrapper.append(img);
         }
+        postBody.append(imageWrapper)
       });
     }
 

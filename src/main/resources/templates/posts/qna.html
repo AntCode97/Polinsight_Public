@@ -43,8 +43,8 @@
     }
 
     .post-row > *:nth-child(2) {
-      width : 230px;
-      flex-grow: 1;
+      width     : 230px;
+      flex-grow : 1;
     }
 
     .post-row > *:nth-child(3) {
@@ -126,7 +126,7 @@
       let regex = String($('input[name=board_search]').val()).trim()
 
       const responseData = await http.get('/api/posts?type=QNA', {
-        params: {page: page, size: 10, regex:regex}
+        params: {page: page, size: 10, regex: regex}
       })
       const data = responseData.data.response
 
@@ -141,7 +141,7 @@
         let table = $('.scroll-table')
         table.children('.post-row:not(:first-child)').remove()
         if (obj.total > 0) {
-          console.log(obj.current + " " +obj.totalPage );
+          console.log(obj.current + " " + obj.totalPage);
           makePagination(obj.current, obj.totalPage)
           searchMessage(obj.keyword, obj.total, '게시물이')
           obj.content.forEach(post => {
@@ -174,12 +174,9 @@
 
     $(document)
         .on("click", "button[name=add_question_btn]", function () {
-          // go create question post
-          // TODO
           location.assign("/posts/new");
         })
         .on("click", "button[name=anonymous_add_question_btn]", function () {
-          // go login
           location.assign("/login");
         });
   </script>

@@ -424,10 +424,7 @@ public class UserController {
       // Spring security에 인증되어있는 객체를 업데이트
       Authentication before = SecurityContextHolder.getContext().getAuthentication();
       log.warn(before.toString());
-      // TODO: 2021-10-15
       SecurityContextHolder.clearContext();
-//      SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, before.getCredentials(),
-//          Collections.singletonList(new SimpleGrantedAuthority(UserRoleType.PANEL.getName()))));
       return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new DataUpdateException("패널 변경중 에러 발생 :: " + e.getMessage());
