@@ -65,19 +65,39 @@
   </style>
 </th:block>
 <th:block>
-  <div class="popup_overlay">
+  <div class="popup_overlay" onclick="popupDisplay()">
     <div class="popup_box">
       <div id="popup_close_btn" style="position: relative; float: right; margin: 7px 10px; font-size: 20px; cursor:pointer;">
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times" onclick="fadeOut()"></i>
       </div>
       <div class="popup_content">
         <h3>게시글을 삭제하시겠습니까?<br>삭제하면 복구할 수 없습니다.</h3>
       </div>
       <div class="popup_btn_wrap">
         <button name="post_delete_confirm" type="button" class="popup_btn popup_delete_btn">삭제</button>
-        <button type="button" class="popup_btn">취소</button>
+        <button type="button" class="popup_btn" onclick="fadeOut()">취소</button>
       </div>
     </div>
   </div>
+  <script>
+    // 팝업 관련 설정
+    let postId;
+    let deleteBtn;
 
+    function fadeOut() {
+      $(".popup_overlay").fadeOut(100)
+    }
+
+    function popupDisplay(){
+      $(this).css('display', 'none')
+    }
+
+    const deleteNotice = (e) => {
+      e.preventDefault();
+    };
+
+
+
+
+  </script>
 </th:block>
