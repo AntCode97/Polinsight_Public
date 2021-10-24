@@ -13,7 +13,10 @@ public interface AttachRepository extends JpaRepository<Attach, Long> {
       countQuery = "SELECT COUNT(a.id) FROM Attach a WHERE a.post.id = :postId"
   )
   List<Attach> findByPostId(Long postId);
-
+  @Query(
+          value = "SELECT a FROM Attach a WHERE a.fileName like %:fileName",
+          countQuery = "SELECT COUNT(a.id) FROM Attach a WHERE a.fileName like %:fileName"
+  )
   List<Attach> findByFileName(String fileName);
 
 }
