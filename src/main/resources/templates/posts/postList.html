@@ -208,6 +208,20 @@
 
         let page = !e ? 0 : !e.data.page ? 0 : e.data.page;
 
+        let params = parseQueryString();
+        if(params != null){
+            if(params.get('keyword') != null) {
+                let boardSearch = document.querySelector("input[name=board_search]");
+                boardSearch.value = params.get('keyword');
+            }
+
+            if ( params.get('page') != null) {
+                page = parseInt(params.get('page'));
+
+            }
+        }
+
+
         let regex = String($('input[name=board_search]').val()).trim()
 
         const responseData = await http.get('/api/posts?type=NOTICE', {
@@ -215,10 +229,27 @@
         })
         const data = responseData.data.response
 
-        return {content: data.content, total: data.totalElements, totalPage: data.totalPages, current: data.number, keyword: regex}
+        return {content: data.content, total: data.totalElements, totalPage: data.totalPages,
+            current: data.number, keyword: regex}
     }
 
+    function parseQueryString() {
+
+        let listBtnUrl = getCookie("listBtnUrl");
+        if(listBtnUrl !=null){
+            let params = new URLSearchParams(listBtnUrl.split('?')[1]);
+            //쿠키 삭제
+            setCookie("listBtnUrl", "", -1);
+            return params;
+        }
+        return null;
+
+    }
+
+
+
     const init = e => {
+
         const spinner = $('#loading')
         spinner.show()
         getPostData(e).then(obj => {
@@ -226,11 +257,14 @@
             let table = $('.scroll-table')
             table.children('.post-row:not(:first-child)').remove()
             if (obj.total > 0) {
+
+
+
                 console.log(obj.current + " " +obj.totalPage );
                 makePagination(obj.current, obj.totalPage)
                 searchMessage(obj.keyword, obj.total, '게시물이')
                 obj.content.forEach(post => {
-                    table.append(makePostTemplate(post))
+                    table.append(makeNoticeTemplate(post, obj.current))
                 })
 
             } else {
@@ -243,6 +277,7 @@
     };
 
     $(function () {
+
         init();
 
         $("input[name=board_search]").on(

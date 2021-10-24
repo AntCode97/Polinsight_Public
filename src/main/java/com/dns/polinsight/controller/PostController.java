@@ -83,6 +83,35 @@ public class PostController {
   }
 
   @Transactional
+  @PostMapping("posts/new")
+  @PreAuthorize("hasAnyAuthority('USER','PANEL','BEST')")
+  public String normalUserCreatePost(PostDTO postDTO,
+                                     BindingResult result,
+                                     RedirectAttributes redirectAttributes,
+                                     @CurrentUser User user) {
+    log.info("Result: " + result + ", data: " + postDTO);
+    if (result.hasErrors()) {
+      return "/posts/createPostForm";
+    }
+    postDTO.transViewcontent();
+    postDTO.setUser(user);
+    postDTO.setRegisteredAt(LocalDateTime.now());
+    Post post = postService.addPost(postDTO);
+    postDTO.setId(post.getId());
+    // 첨부파일 저장
+    if (postDTO.getFiles() != null) {
+      postDTO.getFiles().parallelStream()
+              .forEach(mf -> {
+                attachService.addAttach(UUID.randomUUID(), mf, postDTO);
+              });
+    }
+    log.info("{} has registered post", postDTO.getId());
+    redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
+    return "redirect:/posts";
+  }
+
+
+  @Transactional
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("admin/posts/new")
   public String adminCreate(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) throws ImageResizeException, IOException {
@@ -97,17 +126,17 @@ public class PostController {
     Post post = postService.addPost(postDTO);
     postDTO.setId(post.getId());
     //썸네일 추가
-    MultipartFile originalThumbnail = postDTO.getThumbnailImg();
-    if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
-      UUID uuid = UUID.randomUUID();
-      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), originalThumbnail);
-      postDTO.setThumbnail(thumbnailPath);
-      // 원본 이미지 저장
-      storageService.store(uuid.toString(), originalThumbnail);
-      log.info("Success add thumbnail");
-    } else {
-      log.error("There is no Thumbnail");
-    }
+//    MultipartFile originalThumbnail = postDTO.getThumbnailImg();
+//    if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
+//      UUID uuid = UUID.randomUUID();
+//      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), originalThumbnail);
+//      postDTO.setThumbnail(thumbnailPath);
+//      // 원본 이미지 저장
+//      storageService.store(uuid.toString(), originalThumbnail);
+//      log.info("Success add thumbnail");
+//    } else {
+//      log.error("There is no Thumbnail");
+//    }
     //파일 첨부
     List<MultipartFile> files = postDTO.getFiles();
     if (files != null) {
@@ -270,50 +299,52 @@ public class PostController {
   public String adminUpdatePost(@PathVariable("postId") Long postId,
                                 @ModelAttribute("postDTO") PostDTO postDTO,
                                 @CurrentUser User user,
-                                MultipartFile[] files) throws IOException, ImageResizeException {
+                                MultipartFile[] file, String[] deleteFileList) throws IOException, ImageResizeException {
     postDTO.transViewcontent();
     postDTO.setUser(userService.findUserByEmail(user.getEmail()));
     postDTO.setId(postId);
     postDTO.setRegisteredAt(LocalDateTime.now());
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
 
+    for(String deleteFile : deleteFileList){
+      System.out.println(deleteFile);
+      deleteAttach(attachService.findByname(deleteFile).get(0));
+    }
 
     if (postDTO.getPostType() == null)
       postDTO.setPostType(PostType.NOTICE);
+    //파일 첨부
     List<MultipartFile> mFiles = postDTO.getFiles();
-    if (mFiles != null) {
-      mFiles.addAll(Arrays.asList(files));
-    } else {
-      if (files != null) {
-        mFiles = Arrays.asList(files);
-      }
+    if (file != null) {
+      mFiles = Arrays.asList(file);
+      saveAttaches(postDTO, mFiles);
     }
+
+
+
     postDTO.setFiles(mFiles);
+
 
     Post editPost = postService.findOne(postId);
 
-    //썸네일 추가
-    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-    //새로운 썸네일 이미지가 있는데
-    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
-      //기존의 게시글도 썸네일이 있을 때
-      if (editPost.getThumbnail() != null) {
-        storageService.delete(editPost.getThumbnail());
-      }
-      UUID uuid = UUID.randomUUID();
-      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
-      storageService.store(uuid.toString(), thumbnailImg);
-      log.info("Success add thumbnail");
-    } else {
-      //원래 썸네일 유지
-      postDTO.setThumbnail(editPost.getThumbnail());
-    }
+//    //썸네일 추가
+//    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+//    //새로운 썸네일 이미지가 있는데
+//    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
+//      //기존의 게시글도 썸네일이 있을 때
+//      if (editPost.getThumbnail() != null) {
+//        storageService.delete(editPost.getThumbnail());
+//      }
+//      UUID uuid = UUID.randomUUID();
+//      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
+//      storageService.store(uuid.toString(), thumbnailImg);
+//      log.info("Success add thumbnail");
+//    } else {
+//      //원래 썸네일 유지
+//      postDTO.setThumbnail(editPost.getThumbnail());
+//    }
 
-    //파일 첨부
-    List<MultipartFile> fileList = postDTO.getFiles();
-    if (fileList != null) {
-      saveAttaches(postDTO, fileList);
-    }
+
     postService.addPost(postDTO);
     return "redirect:/admin/posts/{postId}";
   }
@@ -395,7 +426,6 @@ public class PostController {
   @GetMapping("api/{file}/delete")
   public ResponseEntity<Boolean> asyncDeleteFile(@PathVariable("file") String filename) throws FileNotFoundException {
     deleteAttach(attachService.findByname(filename).get(0));
-    log.info("{} Delete Success!!", filename);
     return ResponseEntity.ok(true);
   }
 

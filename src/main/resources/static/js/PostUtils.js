@@ -45,7 +45,28 @@ const makePostTemplate = (post) => {
   template.append(`<div>${post.viewCount}</div>`);
   template.append(`<div>-</div>`);
   template.on("click", { post: post }, (e) => {
-    makeBackUrl();
+    location.assign(`/posts/${post.id}`);
+  });
+  return template;
+};
+
+const makeNoticeTemplate = (post, current) => {
+  let template = $(`<div></div>`).addClass("post-row");
+  template.append(`<div>${post.id}</div>`);
+  template.append(`<div>${post.title}</div>`);
+  template.append(`<div>${post.name}</div>`);
+  template.append(`<div>${post.registedAt}</div>`);
+  template.append(`<div>${post.viewCount}</div>`);
+
+  if(post.attaches.length ===0)   template.append(`  <div>
+                <i class="fas fa-paperclip file_icon_no"></i>
+              </div>`)
+  else   template.append(`  <div>
+                <i class="fas fa-paperclip file_icon_yes"></i>
+              </div>`)
+
+  template.on("click", { post: post }, (e) => {
+    asynMakeBackUrl(current);
     location.assign(`/posts/${post.id}`);
   });
   return template;
@@ -74,6 +95,10 @@ const searchMessage = (keyword, total, name) => {
   }
 };
 
+const getCookie = function (name) {
+  let value = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+  return value ? value[2] : null;
+};
 
 const setCookie = function (name, value, exp) {
   const date = new Date();
@@ -81,8 +106,13 @@ const setCookie = function (name, value, exp) {
   document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
 }
 
-const makeBackUrl = () => {
-  console.log("HHHIS")
-  setCookie("listBtnUrl", location.href, 1)
+
+const asynMakeBackUrl = (current) => {
+
+  let regex = String($('input[name=board_search]').val()).trim();
+  console.log(location.href + "?page="+current +"&keyword="+regex);
+  let next ="/posts?page="+current +"&keyword="+regex;
+  setCookie("listBtnUrl",next, 1)
 }
+
 
