@@ -3,10 +3,10 @@
   <style>
     .insight_card_wrapper {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      /*align-items: center;*/
       flex-grow: 1;
+      flex-wrap: wrap;
+      /*align-items: center;*/
+      justify-content: space-evenly;
     }
 
     .card-box {
@@ -101,15 +101,13 @@
       e.stopPropagation();
       e.returnValue = false;
       let insight_id = e.data.id;
-      // TODO 2021-10-24, 일, 15:54 : 폴스인사이트 게시글 업데이트 로직 추가
       // 팝업을 추가해서 넣자
-      location.href(`/admin/posts/${insight_id}/edit`);
+      location.assign(`/admin/posts/${insight_id}/edit`);
     };
     const admin_polsItem_remove = (e) => {
       e.stopPropagation();
       e.returnValue = false;
       if (confirm("게시글을 삭제하시겠습니까?")) {
-        // TODO 2021-10-24, 일, 15:51 : 폴스인사이트 게시글 삭제 로직 추가
         let insight_id = e.data.id;
         http
           .delete(`/admin/posts/${insight_id}/delete`)

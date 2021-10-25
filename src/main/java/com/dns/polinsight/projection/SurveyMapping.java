@@ -28,5 +28,6 @@ public interface SurveyMapping {
 
   LocalDate getEndAt();
 
+  String getOriginalName();
 
 }

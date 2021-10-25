@@ -28,6 +28,10 @@ public interface PointRequestService {
 
   Page<PointRequestMapping> findAllPointRequestsByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
 
+  Page<PointRequestMapping> findAllOngoingRequest(Pageable pageable);
+
+  Page<PointRequestMapping> findAllOngoingRequestByRegex(Pageable pageable, String regex);
+
   void deletePointRequestById(long id);
 
 

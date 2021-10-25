@@ -99,7 +99,7 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public void delete(String filepath) throws FileNotFoundException {
     try {
-      File file = new File(Paths.get(String.valueOf(rootLocation), filepath).toString());
+      File file = new File(Paths.get(filepath).toString());
       file.delete();
       log.info(file.getName() + " has deleted");
     } catch (SecurityException se) {

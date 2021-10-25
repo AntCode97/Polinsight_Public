@@ -176,11 +176,8 @@ public class ApiController {
   @PutMapping("/survey")
   public ApiUtils.ApiResult<Boolean> adminUpdateSurveyById(@RequestBody SurveyDto dto) throws Exception {
     try {
-      log.warn("before update :: {}", dto);
       Survey survey = surveyService.findById(dto.getId()).orElseThrow();
-
       survey.updateInfo(dto);
-      log.warn("after update :: {}", survey);
       surveyService.update(survey);
       log.info("Survey Updated ID: {}, Title : {}", survey.getId(), survey.getTitle());
       return success(Boolean.TRUE);
@@ -200,6 +197,7 @@ public class ApiController {
       String thumbnailPath = storageService.saveThumbnail(uuid.toString(), thumbnail);
       storageService.store(uuid.toString(), thumbnail);
       survey.setThumbnail(thumbnailPath);
+      survey.setOriginalName(thumbnail.getOriginalFilename());
       surveyService.update(survey);
       return success(Boolean.TRUE);
     } catch (Exception e) {
@@ -301,16 +299,21 @@ public class ApiController {
     // TODO 2021-10-24, 일, 23:18 : 검색이 안됨 --> DB 쿼리 바꿔야 할듯
     try {
       if (regex.isBlank()) {
-        if (type.toUpperCase(Locale.ROOT).equals("ALL")) {
+        if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequests(pageable));
+        } else if (type.equalsIgnoreCase("REQUESTED")) {
+          // ERROR, Requested, Ongoing, Wait 모두 출력
+          return success(pointRequestService.findAllOngoingRequest(pageable));
         } else {
-          return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase(Locale.ROOT))));
+          return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase())));
         }
       } else {
-        if (type.toUpperCase(Locale.ROOT).equals("ALL")) {
+        if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequestsByRegex(pageable, regex));
+        } else if (type.equalsIgnoreCase("REQUESTED")) {
+          return success(pointRequestService.findAllOngoingRequestByRegex(pageable, regex));
         } else {
-          return success(pointRequestService.findAllPointRequestsByRegexAndType(pageable, regex, PointRequestProgressType.valueOf(type.toUpperCase(Locale.ROOT))));
+          return success(pointRequestService.findAllPointRequestsByRegexAndType(pageable, regex, PointRequestProgressType.valueOf(type.toUpperCase())));
         }
       }
     } catch (Exception e) {

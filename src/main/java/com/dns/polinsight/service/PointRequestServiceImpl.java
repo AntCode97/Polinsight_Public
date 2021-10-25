@@ -62,6 +62,16 @@ public class PointRequestServiceImpl implements PointRequestService {
   }
 
   @Override
+  public Page<PointRequestMapping> findAllOngoingRequest(Pageable pageable) {
+    return pointRequestRepository.findAllOngoingRequest(pageable);
+  }
+
+  @Override
+  public Page<PointRequestMapping> findAllOngoingRequestByRegex(Pageable pageable, String regex) {
+    return pointRequestRepository.findAllOngoingRequestByRegex(pageable, regex);
+  }
+
+  @Override
   public void deletePointRequestById(long id) {
     pointRequestRepository.deleteById(id);
   }

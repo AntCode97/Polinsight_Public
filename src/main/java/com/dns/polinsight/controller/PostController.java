@@ -101,9 +101,9 @@ public class PostController {
     // 첨부파일 저장
     if (postDTO.getFiles() != null) {
       postDTO.getFiles().parallelStream()
-              .forEach(mf -> {
-                attachService.addAttach(UUID.randomUUID(), mf, postDTO);
-              });
+             .forEach(mf -> {
+               attachService.addAttach(UUID.randomUUID(), mf, postDTO);
+             });
     }
     log.info("{} has registered post", postDTO.getId());
     redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
@@ -125,18 +125,20 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     Post post = postService.addPost(postDTO);
     postDTO.setId(post.getId());
+    log.warn("{}", postDTO.toString());
     //썸네일 추가
-//    MultipartFile originalThumbnail = postDTO.getThumbnailImg();
-//    if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
-//      UUID uuid = UUID.randomUUID();
-//      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), originalThumbnail);
-//      postDTO.setThumbnail(thumbnailPath);
-//      // 원본 이미지 저장
-//      storageService.store(uuid.toString(), originalThumbnail);
-//      log.info("Success add thumbnail");
-//    } else {
-//      log.error("There is no Thumbnail");
-//    }
+    MultipartFile originalThumbnail = postDTO.getThumbnailImg();
+    if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
+      UUID uuid = UUID.randomUUID();
+      String thumbnailPath = storageService.saveThumbnail(uuid.toString(), originalThumbnail);
+      postDTO.setThumbnail(thumbnailPath);
+      // 원본 이미지 저장
+      storageService.store(uuid.toString(), originalThumbnail);
+      log.info("Success add thumbnail");
+    } else {
+      log.error("There is no Thumbnail");
+    }
+
     //파일 첨부
     List<MultipartFile> files = postDTO.getFiles();
     if (files != null) {
@@ -188,8 +190,8 @@ public class PostController {
 
   @GetMapping("posts")
   public String noticeList(@ModelAttribute("postSearch") PostSearch postSearch,
-                     @PageableDefault Pageable pageable,
-                     Model model) {
+                           @PageableDefault Pageable pageable,
+                           Model model) {
     if (postSearch.getPostType() != null) {
       model.addAttribute("postSearch", postSearch);
     } else {
@@ -295,7 +297,7 @@ public class PostController {
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
-  @PostMapping("admin/posts/{postId}/edit")
+  @PutMapping("admin/posts/{postId}/edit")
   public String adminUpdatePost(@PathVariable("postId") Long postId,
                                 @ModelAttribute("postDTO") PostDTO postDTO,
                                 @CurrentUser User user,
@@ -306,7 +308,7 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
 
-    for(String deleteFile : deleteFileList){
+    for (String deleteFile : deleteFileList) {
       System.out.println(deleteFile);
       deleteAttach(attachService.findByname(deleteFile).get(0));
     }
@@ -321,28 +323,27 @@ public class PostController {
     }
 
 
-
     postDTO.setFiles(mFiles);
 
 
     Post editPost = postService.findOne(postId);
 
-//    //썸네일 추가
-//    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-//    //새로운 썸네일 이미지가 있는데
-//    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
-//      //기존의 게시글도 썸네일이 있을 때
-//      if (editPost.getThumbnail() != null) {
-//        storageService.delete(editPost.getThumbnail());
-//      }
-//      UUID uuid = UUID.randomUUID();
-//      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
-//      storageService.store(uuid.toString(), thumbnailImg);
-//      log.info("Success add thumbnail");
-//    } else {
-//      //원래 썸네일 유지
-//      postDTO.setThumbnail(editPost.getThumbnail());
-//    }
+    //    //썸네일 추가
+    //    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
+    //    //새로운 썸네일 이미지가 있는데
+    //    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
+    //      //기존의 게시글도 썸네일이 있을 때
+    //      if (editPost.getThumbnail() != null) {
+    //        storageService.delete(editPost.getThumbnail());
+    //      }
+    //      UUID uuid = UUID.randomUUID();
+    //      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
+    //      storageService.store(uuid.toString(), thumbnailImg);
+    //      log.info("Success add thumbnail");
+    //    } else {
+    //      //원래 썸네일 유지
+    //      postDTO.setThumbnail(editPost.getThumbnail());
+    //    }
 
 
     postService.addPost(postDTO);
@@ -386,8 +387,6 @@ public class PostController {
 
   @PostMapping("/api/admin/posts/search")
   public String asyncAdminPostSearch(@RequestParam Map<String, Object> paramMap, @PageableDefault Pageable pageable, Model model, HttpSession session) {
-
-
     String keyword = paramMap.get("keyword").toString();
     String type = paramMap.get("type").toString();
     Page<com.dns.polinsight.projection.PostMapping> posts = postService.findBySearchKeyword(keyword, PostType.valueOf(type), pageable);
@@ -407,20 +406,21 @@ public class PostController {
     return "fragments/postList :: #postCount";
   }
 
-    //파일 클릭했을 때, 다운로드할 수 있게 함
-    @GetMapping("/posts/upload-dir/{fileType}/{filename}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+  // TODO 2021-10-25, 월, 10:18 : upload-dir이 아님
+  //파일 클릭했을 때, 다운로드할 수 있게 함
+  @GetMapping("/posts/upload-dir/{fileType}/{filename}")
+  @ResponseBody
+  public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-      Resource file = storageService.loadAsResource(filename);
-      Attach attach = attachService.findByname(filename).get(0);
+    Resource file = storageService.loadAsResource(filename);
+    Attach attach = attachService.findByname(filename).get(0);
 
-     String encodedUploadFileName = UriUtils.encode(attach.getOriginalName(), StandardCharsets.UTF_8);
+    String encodedUploadFileName = UriUtils.encode(attach.getOriginalName(), StandardCharsets.UTF_8);
 
-      String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
-      return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-              contentDisposition).body(file);
-    }
+    String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
+    return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+        contentDisposition).body(file);
+  }
 
   @Transactional
   @GetMapping("api/{file}/delete")
@@ -499,37 +499,35 @@ public class PostController {
     postDTO.setTitle(post.getTitle());
     LocalDateTime registeredAt = LocalDateTime.now();
     postDTO.setRegisteredAt(registeredAt);
-
     model.addAttribute("files", attachService.findFiles(postId));
-
     model.addAttribute("postDTO", postDTO);
     return "/posts/updatePostForm";
 
   }
+
+  //    @PreAuthorize("isAuthenticated()")
+  //    @PostMapping("posts/{postId}/edit")
+  //    public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
   //
-  //  @PreAuthorize("isAuthenticated()")
-  //  @PostMapping("posts/{postId}/edit")
-  //  public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
+  //      User admin = userService.findUserByEmail(user.getEmail());
+  //      postDTO.setUser(admin);
+  //      postDTO.setId(postId);
+  //      postDTO.setRegisteredAt(LocalDateTime.now());
+  //      postDTO.transViewcontent();
+  //      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
+  //      List<MultipartFile> mFiles = postDTO.getFiles();
+  //      if (mFiles != null) {
+  //        for (MultipartFile m : file) {
+  //          mFiles.add(m);
   //
-  //    User admin = userService.findUserByEmail(user.getEmail());
-  //    postDTO.setUser(admin);
-  //    postDTO.setId(postId);
-  //    postDTO.setRegisteredAt(LocalDateTime.now());
-  //    postDTO.transViewcontent();
-  //    postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
-  //    List<MultipartFile> mFiles = postDTO.getFiles();
-  //    if (mFiles != null) {
-  //      for (MultipartFile m : file) {
-  //        mFiles.add(m);
-  //
-  //      }
-  //      postDTO.setFiles(mFiles);
-  //    } else {
-  //      if (file != null) {
-  //        mFiles = Arrays.asList(file);
+  //        }
   //        postDTO.setFiles(mFiles);
+  //      } else {
+  //        if (file != null) {
+  //          mFiles = Arrays.asList(file);
+  //          postDTO.setFiles(mFiles);
+  //        }
   //      }
-  //    }
   //
   //    postService.addPost(postDTO);
   //    attachService.addAttach(postDTO);

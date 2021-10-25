@@ -41,7 +41,9 @@
             </div>
           </div>
           <div>
-            <button class="btn btn-primary">게시물 작성</button>
+            <button name="btn_add_post" class="btn btn-primary">
+              게시물 작성
+            </button>
           </div>
           <div class="page-button" id="pagination"></div>
         </div>
@@ -96,6 +98,10 @@
         { page: 0, regex: $("input[name=admin_find]").val() },
         _.throttle(init, 300)
       );
+
+      $("button[name=btn_add_post]").on("click", function () {
+        location.assign("/admin/posts/new");
+      });
     });
   </script>
 </th:block>
