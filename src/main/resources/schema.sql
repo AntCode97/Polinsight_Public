@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS survey
   count          BIGINT       NOT NULL DEFAULT 0,
   question_count BIGINT       NULL     DEFAULT 0,
   thumbnail varchar(3000) NULL ,
+  original_name varchar(1000) NULL,
   UNIQUE (survey_id)
 );
 
