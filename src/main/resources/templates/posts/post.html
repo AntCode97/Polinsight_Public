@@ -471,5 +471,29 @@
         location.href = "/posts"
       }
     }
+
+    const onDeletePost = () => {
+      let postId = "[[${post.id}]]";
+      let curUserName = $("#current_username").text();
+      let curUserRole = $("#current_userrole").text();
+      let postWriter = "[[${post.userId}]]";
+
+      if (curUserRole.includes("ADMIN") || postWriter === curUserName) {
+        let overlay = $(".popup_overlay");
+        overlay.fadeIn(100);
+        overlay.find(".popup_delete_btn").on("click", () => {
+          http
+                  .delete(`/admin/posts/${postId}/delete`)
+                  .then(() => location.replace("/posts"))
+                  .catch()
+                  .finally(() => {
+                    overlay.fadeOut(100);
+                    overlay.children().off("click");
+                  });
+        });
+      }
+    };
+
+
   </script>
 </th:block>

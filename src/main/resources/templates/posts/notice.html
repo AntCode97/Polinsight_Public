@@ -126,7 +126,9 @@
     .post-row > *:nth-child(6) {
       width : 95px;
     }
-
+    .post-row:not(:first-child):hover {
+      cursor : pointer;
+    }
     @media (min-width : 320px) and (max-width : 480px) {
       .select-box {
         flex         : 1.5;
@@ -162,7 +164,7 @@
           <div class="scroll-table">
             <div class="post-row post-th">
               <span>번호</span>
-              <a href="#">제목</a>
+              <span>제목</span>
               <span>작성자</span>
               <span>작성일</span>
               <span>조회수</span>
@@ -228,7 +230,6 @@
       let listBtnUrl = getCookie("listBtnUrl");
       if (listBtnUrl != null) {
         let params = new URLSearchParams(listBtnUrl.split('?')[1]);
-        //쿠키 삭제
         setCookie("listBtnUrl", "", -1);
         return params;
       }

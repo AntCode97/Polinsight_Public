@@ -309,7 +309,6 @@ public class PostController {
     postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
 
     for (String deleteFile : deleteFileList) {
-      System.out.println(deleteFile);
       deleteAttach(attachService.findByname(deleteFile).get(0));
     }
 
