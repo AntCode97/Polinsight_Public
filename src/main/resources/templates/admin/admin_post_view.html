@@ -221,7 +221,6 @@
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
         <p class="main_item">공지사항</p>
-<!--        <span data-th-text="${post.isWriter}"></span>-->
       </div>
     </div>
 
@@ -251,7 +250,6 @@
     function goList() {
       const listBtnUrl = getCookie("listBtnUrl");
       if (listBtnUrl != null) {
-        //쿠키 삭제
         setCookie("listBtnUrl", "", -1);
         location.href = listBtnUrl;
       } else {
@@ -269,7 +267,6 @@
         let overlay = $(".popup_overlay");
         overlay.fadeIn(100);
         overlay.find(".popup_delete_btn").on("click", () => {
-          // 게시물 삭제
           http
             .delete(`/admin/posts/${postId}/delete`)
             .then(() => location.replace("/admin/posts"))
