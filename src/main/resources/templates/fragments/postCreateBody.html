@@ -1,285 +1,285 @@
 <th:block>
   <style>
     .main_item {
-      border-bottom: 1px dashed #dadada;
-      color: #000000;
-      font-size: 2rem;
-      font-weight: bold;
-      padding: 10px 0 20px;
+      border-bottom : 1px dashed #DADADA;
+      color         : #000000;
+      font-size     : 2rem;
+      font-weight   : bold;
+      padding       : 10px 0 20px;
     }
 
     #metop_container {
-      align-items: center;
-      justify-content: center;
+      align-items     : center;
+      justify-content : center;
     }
 
     .metop_board_card {
-      background: white;
-      border-radius: 2px;
-      border-top: 3px solid mediumseagreen;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-      margin: 30px 0;
-      padding: 40px 30px 20px 30px;
-      position: relative;
+      background    : white;
+      border-radius : 2px;
+      border-top    : 3px solid mediumseagreen;
+      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin        : 30px 0;
+      padding       : 40px 30px 20px 30px;
+      position      : relative;
     }
 
     /* 카드 제목 */
     .register_top_wrap {
-      border-top: 2px solid #7c7c7c;
+      border-top : 2px solid #7C7C7C;
     }
 
     .register_bottom_wrap {
-      border-top: 1px solid #dadada;
+      border-top : 1px solid #DADADA;
     }
 
     .uploadedList {
-      display: flex;
-      padding: 15px 0px 0px 0px;
+      display : flex;
+      padding : 15px 0px 0px 0px;
     }
 
     .uploadedList > li {
-      border-radius: 2px;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-      margin-right: 5px;
+      border-radius : 2px;
+      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin-right  : 5px;
     }
 
     .board_div {
-      align-items: center;
-      border-bottom: 1px solid #dadada;
-      display: flex;
-      height: 100%;
-      justify-content: flex-start;
-      width: 100%;
+      align-items     : center;
+      border-bottom   : 1px solid #DADADA;
+      display         : flex;
+      height          : 100%;
+      justify-content : flex-start;
+      width           : 100%;
     }
 
     /* 작성자 */
 
     .board_div b {
-      font-size: 16px;
+      font-size : 16px;
     }
 
     .board_div > span {
-      font-size: 14px;
+      font-size : 14px;
     }
 
     .board_span {
-      background-color: #ffffff;
-      display: block;
-      flex: 7;
-      overflow: hidden;
-      padding: 9px 20px;
+      background-color : #FFFFFF;
+      display          : block;
+      flex             : 7;
+      overflow         : hidden;
+      padding          : 9px 20px;
     }
 
     .board_writer {
-      display: inline-block;
-      font-size: 16px;
-      line-height: 30px;
+      display     : inline-block;
+      font-size   : 16px;
+      line-height : 30px;
     }
 
     .board_type > option {
-      cursor: pointer;
+      cursor : pointer;
     }
 
     .board_input {
-      border: 1px solid #dadada;
-      font-size: 15px;
-      height: 30px;
-      outline: none;
-      width: 100%;
+      border    : 1px solid #DADADA;
+      font-size : 15px;
+      height    : 30px;
+      outline   : none;
+      width     : 100%;
     }
 
     .board_content {
-      border: 1px solid #dadada;
-      font-size: 14px;
-      height: 300px;
-      outline: none;
-      resize: none;
-      width: 100%;
+      border    : 1px solid #DADADA;
+      font-size : 14px;
+      height    : 300px;
+      outline   : none;
+      resize    : none;
+      width     : 100%;
     }
 
     .textarea_div {
-      align-items: flex-start;
-      padding: 20px 0;
+      align-items : flex-start;
+      padding     : 20px 0;
     }
 
     .form-group > label {
-      margin-top: 10px;
+      margin-top : 10px;
     }
 
     .form-group .board_div {
-      align-items: center;
-      border: 1.5px dashed #dadada;
-      color: #515151;
-      display: flex;
-      font-size: 15px;
-      height: 150px;
-      justify-content: center;
-      text-align: center;
+      align-items     : center;
+      border          : 1.5px dashed #DADADA;
+      color           : #515151;
+      display         : flex;
+      font-size       : 15px;
+      height          : 150px;
+      justify-content : center;
+      text-align      : center;
     }
 
     /* 등록/취소 버튼 */
     .btn_wrap {
-      border: 0;
-      border-radius: 0;
-      display: flex;
-      justify-content: space-between;
-      margin-top: 25px;
-      padding: 10px 15px 10px 15px;
+      border          : 0;
+      border-radius   : 0;
+      display         : flex;
+      justify-content : space-between;
+      margin-top      : 25px;
+      padding         : 10px 15px 10px 15px;
     }
 
     .insert_btn {
-      margin-right: -15px;
-      width: 80px;
+      margin-right : -15px;
+      width        : 80px;
     }
 
     .cancel_btn {
-      margin-left: -15px;
-      width: 80px;
+      margin-left : -15px;
+      width       : 80px;
     }
 
     .board_content_wrap {
-      height: 100%;
-      width: 100%;
+      height : 100%;
+      width  : 100%;
     }
 
     div#smart_editor2 {
-      width: 1040px !important;
+      width : 1040px !important;
     }
 
     .err_msg_wrap {
-      display: none;
-      text-align: left;
+      display    : none;
+      text-align : left;
     }
 
     .err_msg {
-      color: #d95339;
-      display: block;
-      font-size: 14px;
+      color     : #D95339;
+      display   : block;
+      font-size : 14px;
     }
 
     .board_div > label {
-      background-color: #eeeeee;
-      display: block;
-      font-size: 16px;
-      line-height: 30px;
-      padding: 9px 15px 9px 25px;
-      padding-left: 30px;
-      position: relative;
-      width: 150px;
+      background-color : #EEEEEE;
+      display          : block;
+      font-size        : 16px;
+      line-height      : 30px;
+      padding          : 9px 15px 9px 25px;
+      padding-left     : 30px;
+      position         : relative;
+      width            : 150px;
     }
 
     .board_div > label > span {
-      color: #d95339;
-      font-size: 20px;
-      left: 10px;
-      position: absolute;
-      top: 9px;
+      color     : #D95339;
+      font-size : 20px;
+      left      : 10px;
+      position  : absolute;
+      top       : 9px;
     }
 
     #board_writer {
-      width: 150px;
+      width : 150px;
     }
 
     .size_limit_msg {
-      color: #999999;
+      color : #999999;
     }
 
     .file_wrap {
-      border: 1px solid #dadada;
+      border : 1px solid #DADADA;
     }
 
     .file_item > label {
-      display: block;
-      text-align: center;
-      width: 100px;
+      display    : block;
+      text-align : center;
+      width      : 100px;
     }
 
     .file_item > div {
-      align-items: center;
-      background-color: #ffffff;
-      display: flex;
-      flex: 7;
-      padding: 9px 10px;
+      align-items      : center;
+      background-color : #FFFFFF;
+      display          : flex;
+      flex             : 7;
+      padding          : 9px 10px;
     }
 
     .file_item {
-      align-items: center;
-      background-color: #eeeeee;
-      display: flex;
-      justify-content: flex-start;
+      align-items      : center;
+      background-color : #EEEEEE;
+      display          : flex;
+      justify-content  : flex-start;
     }
 
     .btn-add,
     .btn-remove {
-      cursor: pointer;
-      margin-right: 5px;
-      outline: none;
-      padding: 5px 7px;
-      width: 60px;
+      cursor       : pointer;
+      margin-right : 5px;
+      outline      : none;
+      padding      : 5px 7px;
+      width        : 60px;
     }
 
     .btn-remove {
-      background-color: #ffffff;
-      border: 1px solid tomato;
-      color: tomato;
+      background-color : #FFFFFF;
+      border           : 1px solid tomato;
+      color            : tomato;
     }
 
     .other_file_item {
-      border-top: 1px solid #dadada;
+      border-top : 1px solid #DADADA;
     }
 
     .board_select {
-      cursor: pointer;
-      width: 150px;
+      cursor : pointer;
+      width  : 150px;
     }
 
     .board_file {
-      cursor: pointer;
+      cursor : pointer;
     }
 
     /*게시글 조회 파트*/
     .left_content {
-      flex: 1.5;
+      flex : 1.5;
     }
 
     .right_content {
-      flex: 8.5;
+      flex : 8.5;
     }
 
     .left_content > label {
-      background: url("img/etc/icon_required_input.png") right center no-repeat;
-      cursor: pointer;
-      font-weight: bold;
-      line-height: 18px;
-      overflow: hidden;
-      padding: 0 15px;
+      background  : url("img/etc/icon_required_input.png") right center no-repeat;
+      cursor      : pointer;
+      font-weight : bold;
+      line-height : 18px;
+      overflow    : hidden;
+      padding     : 0 15px;
     }
 
     .right_content > input {
-      border: 1px solid #dddddd;
-      color: #333333;
-      font-size: 14px;
-      height: 32px;
-      line-height: 32px;
-      margin: 0 3px;
-      outline: none;
-      width: 300px;
+      border      : 1px solid #DDDDDD;
+      color       : #333333;
+      font-size   : 14px;
+      height      : 32px;
+      line-height : 32px;
+      margin      : 0 3px;
+      outline     : none;
+      width       : 300px;
     }
 
     .right_content > select {
-      border: 1px solid #dddddd;
-      color: #333333;
-      display: inline-block;
-      font-size: 14px;
-      height: 32px;
-      line-height: 32px;
-      margin: 0 3px;
-      outline: none;
-      text-align: center;
-      text-align-last: center;
-      width: 200px;
+      border          : 1px solid #DDDDDD;
+      color           : #333333;
+      display         : inline-block;
+      font-size       : 14px;
+      height          : 32px;
+      line-height     : 32px;
+      margin          : 0 3px;
+      outline         : none;
+      text-align      : center;
+      text-align-last : center;
+      width           : 200px;
     }
   </style>
 </th:block>
@@ -294,28 +294,18 @@
                 <label for="board_title"><span>*</span>게시판</label>
                 <span class="board_span">
                   <select
-                    class="board_input focus_input board_select"
-                    name="btype"
-                    id="board_type"
-                    th:field="*{postType}"
-                    required
+                      class="board_input focus_input board_select"
+                      name="post_type"
+                      id="post_type"
+                      th:field="*{postType}"
+                      required
                   >
-                    <optgroup
-                      sec:authorize="hasAuthority('ADMIN')"
-                      label="분류 선택"
-                    >
-                      <option value="NOTICE" selected>공지사항</option>
-                      <option value="INSIGHT">INSIGHT</option>
-                    </optgroup>
-                    <optgroup
-                      sec:authorize="hasAnyAuthority('USER', 'PANEL', 'BEST')"
-                      label="분류 선택"
-                    >
-                      <option value="QNA" selected>QNA</option>
-                    </optgroup>
+                      <option sec:authorize="hasAuthority('ADMIN')" value="NOTICE" selected>공지사항</option>
+                      <option sec:authorize="hasAuthority('ADMIN')" value="INSIGHT">INSIGHT</option>
+                      <option sec:authorize="hasAnyAuthority('USER', 'PANEL', 'BEST')" value="QNA" selected>QNA</option>
                   </select>
                   <span class="size_limit_msg"
-                    ><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후
+                  ><i class="fas fa-exclamation-circle"></i>(게시판은 저장 후
                     변경이 불가능합니다.)</span
                   >
                   <div class="err_msg_wrap err_title">
@@ -327,12 +317,12 @@
                 <label for="board_title"><span>*</span>제목</label>
                 <span class="board_span">
                   <input
-                    type="text"
-                    class="board_input focus_input"
-                    name="title"
-                    id="board_title"
-                    th:field="*{title}"
-                    required
+                      type="text"
+                      class="board_input focus_input"
+                      name="title"
+                      id="board_title"
+                      th:field="*{title}"
+                      required
                   />
                   <div class="err_msg_wrap err_title">
                     <span class="err_msg">제목을 입력해주세요:(</span>
@@ -343,149 +333,171 @@
                 <label for="board_title"><span>*</span>작성자</label>
                 <span class="board_span">
                   <input
-                    type="text"
-                    class="board_input board_writer"
-                    name="writer"
-                    id="board_writer"
-                    th:value="${user.name}"
-                    readonly
+                      type="text"
+                      class="board_input board_writer"
+                      name="writer"
+                      id="board_writer"
+                      th:value="${user.name}"
+                      readonly
                   />
                 </span>
               </div>
-
-            <!-- 게시글 내용 등록(스마트에디터) -->
-            <div class="input_wrap textarea_div">
-              <div class="board_content_wrap">
+              <div class="board_div" id="thumbnail_div" style="display: none">
+                <label for="board_title"><span>*</span>썸네일</label>
+                <span class="board_span">
+                  <input
+                      type="file"
+                      id="thumbnail"
+                      class="board_input"
+                      th:field="*{thumbnailImg}"
+                      accept="image/*"
+                  />
+                </span>
+              </div>
+              <!-- 게시글 내용 등록(스마트에디터) -->
+              <div class="input_wrap textarea_div">
+                <div class="board_content_wrap">
                 <textarea
-                  id="board_content"
-                  name="viewcontent"
-                  class="board_content focus_input"
-                  th:field="*{content}"
-                  style="width: 100%"
+                    id="board_content"
+                    name="viewcontent"
+                    class="board_content focus_input"
+                    th:field="*{content}"
+                    style="width: 100%"
                 ></textarea>
-                <div class="err_msg_wrap err_info">
-                  <span class="err_msg">내용을 입력해주세요:(</span>
+                  <div class="err_msg_wrap err_info">
+                    <span class="err_msg">내용을 입력해주세요:(</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- 게시글 첨부파일 등록 -->
-            <div class="input_wrap register_bottom_wrap">
-              <div class="board_div">
-                <label for="board_title">파일첨부</label>
-                <div class="board_span">
-                  <div class="file_wrap">
-                    <div class="file_item">
-                      <label>첨부파일#1</label>
-                      <div>
-                        <input type="file" class="board_file" name="file" />
-                        <button type="button" class="btn-add btn-basic">
-                          + 추가
-                        </button>
-                        <span class="size_limit_msg"
+              <!-- 게시글 첨부파일 등록 -->
+              <div class="input_wrap register_bottom_wrap">
+                <div class="board_div">
+                  <label for="board_title">파일첨부</label>
+                  <div class="board_span">
+                    <div class="file_wrap">
+                      <div class="file_item">
+                        <label>첨부파일#1</label>
+                        <div>
+                          <input type="file" class="board_file" name="file" />
+                          <button type="button" class="btn-add btn-basic">
+                            + 추가
+                          </button>
+                          <span class="size_limit_msg"
                           ><i class="fas fa-exclamation-circle"></i>(업로드
                           허용용량은 100MB입니다)</span
-                        >
+                          >
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- 취소 & 등록 버튼 -->
-            <div class="input_wrap">
-              <div class="board_div btn_wrap">
+              <!-- 취소 & 등록 버튼 -->
+              <div class="input_wrap">
+                <div class="board_div btn_wrap">
                 <span>
                   <button
-                    type="button"
-                    class="btn btn-basic cancel_btn"
-                    onclick="history.back()"
+                      type="button"
+                      class="btn btn-basic cancel_btn"
+                      onclick="history.back()"
                   >
                     취소
                   </button>
                 </span>
-                <span>
+                  <span>
                   <button
-                    type="button"
-                    class="btn btn-green insert_btn"
-                    id="submit-btn"
-                    name="submit-btn"
+                      type="button"
+                      class="btn btn-green insert_btn"
+                      id="submit-btn"
+                      name="submit-btn"
                   >
                     등록
                   </button>
                 </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </section>
 </th:block>
 <th:block>
   <script>
     $(document)
-      .on("click", ".btn-remove", function () {
-        let num = $(this).attr("data-num");
-        $(".file_item")
-          .eq(num - 1)
-          .css("border", "none")
-          .remove();
-      })
-      .on("change", ".board_file", function () {
-        const file = $(this).val().toString();
-        if (file.includes("[") || file.includes("]")) {
-          alert("파일명에 대괄호는 포함할 수 없습니다.");
-          $(".board_file").val("");
-        }
-      })
-      .on("click", "button[name=submit-btn]", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        // 등록 버튼 눌렀을 때 입력값 검증 로직
-        let post_title = $("input[name=title]");
-        let post_content = $("#board_content");
+        .on("click", ".btn-remove", function () {
+          let num = $(this).attr("data-num");
+          $(".file_item")
+              .eq(num - 1)
+              .css("border", "none")
+              .remove();
+        })
+        .on("change", ".board_file", function () {
+          const file = $(this).val().toString();
+          if (file.includes("[") || file.includes("]")) {
+            alert("파일명에 대괄호는 포함할 수 없습니다.");
+            $(".board_file").val("");
+          }
+        })
+        .on("click", "button[name=submit-btn]", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          // 등록 버튼 눌렀을 때 입력값 검증 로직
+          let post_title = $("input[name=title]");
+          let post_content = $("#board_content");
 
-        if (!post_title.val()) {
-          post_title.focus();
-          alert("제목을 입력해주세요");
-          return;
-        }
+          if (!post_title.val()) {
+            post_title.focus();
+            alert("제목을 입력해주세요");
+            return;
+          }
 
-        if (!post_content.val()) {
-          post_content.focus();
-          alert("내용을 입력해주세요");
-          return;
-        }
-        document.getElementById("frm_board").submit();
-      })
-      .on("click", ".btn-add", function () {
-        let filecnt = $(".file_item").length;
-        let html =
-          '<div class="file_item other_file_item">' +
-          '<label for="">첨부파일#' +
-          (filecnt + 1) +
-          "</label>" +
-          '<div class="">' +
-          '<input type="file" class="board_file" name="file" />' +
-          '<button type="button" class="btn-remove" data-num="' +
-          (filecnt + 1) +
-          '">- 제거</button>' +
-          '<span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(업로드 허용용량은 100MB입니다)</span>' +
-          "</div>" +
-          "</div>";
-        $(".file_wrap").append(html);
-      })
-      .on("click", ".nav_action", function () {
-        let value = $(this).find(".arrow").attr("class");
-        if (value === "fas fa-caret-down arrow") {
-          $(this).next("div").css("height", "100%");
-          $(this).find(".arrow").attr("class", "fas fa-caret-up arrow");
-        } else if (value === "fas fa-caret-up arrow") {
-          $(this).next("div").css("height", "0");
-          $(this).find(".arrow").attr("class", "fas fa-caret-down arrow");
-        }
-      });
+          if (!post_content.val()) {
+            post_content.focus();
+            alert("내용을 입력해주세요");
+            return;
+          }
+          document.getElementById("frm_board").submit();
+        })
+        .on("click", ".btn-add", function () {
+          let filecnt = $(".file_item").length;
+          let html =
+              '<div class="file_item other_file_item">' +
+              '<label for="">첨부파일#' +
+              (filecnt + 1) +
+              "</label>" +
+              '<div class="">' +
+              '<input type="file" class="board_file" name="file" />' +
+              '<button type="button" class="btn-remove" data-num="' +
+              (filecnt + 1) +
+              '">- 제거</button>' +
+              '<span class="size_limit_msg"><i class="fas fa-exclamation-circle"></i>(업로드 허용용량은 100MB입니다)</span>' +
+              "</div>" +
+              "</div>";
+          $(".file_wrap").append(html);
+        })
+        .on("click", ".nav_action", function () {
+          let value = $(this).find(".arrow").attr("class");
+          if (value === "fas fa-caret-down arrow") {
+            $(this).next("div").css("height", "100%");
+            $(this).find(".arrow").attr("class", "fas fa-caret-up arrow");
+          } else if (value === "fas fa-caret-up arrow") {
+            $(this).next("div").css("height", "0");
+            $(this).find(".arrow").attr("class", "fas fa-caret-down arrow");
+          }
+        })
+        .on('change', '#post_type', function (e) {
+          let thumbnail_div = $('#thumbnail_div')
+          if ($(this).val() === 'INSIGHT') {
+            thumbnail_div.css('display', 'block')
+            thumbnail_div.find('input').prop('disabled', false)
+          } else {
+            thumbnail_div.css('display', 'none')
+            thumbnail_div.find('input').prop('disabled', true)
+          }
+        })
+
   </script>
 </th:block>

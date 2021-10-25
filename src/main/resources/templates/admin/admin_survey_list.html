@@ -296,6 +296,33 @@
       justify-content : center;
       width           : 100%;
     }
+
+    input[name=thumbnail_name]:hover {
+      cursor : default;
+    }
+
+    .modal_thumbnail_wrapper > label {
+      background-color   : #5CB85C;
+      border             : 1px solid #4CAE4C;
+      border-radius      : .25em;
+      color              : #FFFFFF;
+      cursor             : pointer;
+      display            : inline-flex;
+      font-size          : inherit;
+      line-height        : normal;
+      padding            : .5em .75em;
+      -webkit-transition : background-color 0.2s;
+      transition         : background-color 0.2s;
+      vertical-align     : middle;
+    }
+
+    .modal_thumbnail_wrapper > label:hover {
+      cursor : pointer;
+    }
+
+    .modal_thumbnail_wrapper > img {
+      justify-content : flex-end;
+    }
   </style>
   <div class="modal_wrap">
     <div class="modal_contents_box">
@@ -345,12 +372,16 @@
                   </div>
                 </div>
               </div>
-
+              <!-- TODO 2021-10-25, 월, 12:1 : 파일이 올라가있으면 보여주기-->
               <div class="user_basic_wrap">
                 <div class="user_info_box">
                   <span class="info_article">썸네일 업로드</span>
-                  <div>
-                    <input name="thumbnail" type="file">
+                  <div name="modal_thumbnail_wrapper" class="modal_thumbnail_wrapper">
+                    <label>업로드
+                      <input name="thumbnail" type="file" style="width: 1px; height: 1px; margin: -1px; position: absolute; overflow: hidden; border: 0">
+                    </label>
+                    <input type="text" readonly name="thumbnail_name" style="border: 0">
+                    <img style="width: 50px; height: 50px;" name="thumbnail_image" />
                   </div>
                 </div>
               </div>
@@ -434,12 +465,25 @@
   <script th:src="@{/js/PostUtils.js}"></script>
   <script th:src="@{/js/Validator.js}"></script>
   <script>
+
+    const thumbnail_info_template = (isView, originName, imgSrc) => {
+      let thumb_wrapper = $('div.modal_thumbnail_wrapper')
+      if (isView) {
+        thumb_wrapper.find('input[name=thumbnail_name]').val(originName).css('display', 'flex')
+        thumb_wrapper.find(`img[name=thumbnail_image]`).prop('src', imgSrc).css('display', 'flex')
+      } else {
+        thumb_wrapper.find('input[name=thumbnail_name]').val(originName).css('display', 'none')
+        thumb_wrapper.find(`img[name=thumbnail_image]`).prop('src', '').css('display', 'none')
+      }
+    }
     const setDataInModal = e => {
       e.returnValue = false
       e.stopPropagation()
       e.preventDefault()
+      let location = "[[${@environment.getProperty('file.upload.address')}]]"
       $('.modal_wrap').css('display', 'flex')
       let survey = e.data.survey;
+      console.log(survey)
       $('#survey_id').find('p').text(survey.id);
       $('input[name=id]').val(survey.id)
       $('#survey_title').find('p').text(survey.title);
@@ -448,6 +492,12 @@
       $('select[name=progress]').val(survey.progress);
       $('input[name=create]').val(survey.createdAt)
       $('input[name=end]').val(survey.endAt);
+      if (!!survey.thumbnail) {
+        thumbnail_info_template(true, survey.originalName, location + survey.thumbnail)
+      } else {
+        thumbnail_info_template(false, survey.originalName, location + survey.thumbnail)
+      }
+
       $('button[name=update]').off().on('click', {survey: survey}, surveyUpdate)
       $('button[name=delete]').off().on('click', {survey: survey}, surveyDelete);
     };
@@ -466,7 +516,7 @@
     async function uploadSurveyThumbnail(thubmnail, surveyId) {
       let frmData = new FormData()
       frmData.append('thumbnail', thubmnail)
-      let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
+      let response = await http.post(` / api / survey / thumbnail /${surveyId}`, frmData, {
         headers: {'Content-Type': 'multipart/form-data'}
       })
 
@@ -476,6 +526,8 @@
     const surveyUpdate = e => {
       e.stopPropagation()
       e.preventDefault()
+      let thumbnailFile = $('input[name=thumbnail]').prop('files')[0]
+
       let info = {
         id: $('input[name=id]').val(),
         point: $('input[name=point]').val(),
@@ -491,12 +543,13 @@
           String(beforeSurvey.progress) === String(info.progress) &&
           String(beforeSurvey.title) === String(info.title) &&
           String(beforeSurvey.createdAt) === String(info.createdAt) &&
-          String(beforeSurvey.endAt) === String(info.endAt)) {
+          String(beforeSurvey.endAt) === String(info.endAt) &&
+          beforeSurvey.originalName === thumbnailFile.name
+      ) {
         $('.modal_wrap').fadeOut(100)
         return;
       }
 
-      let thumbnailFile = $('input[name=thumbnail]').prop('files')[0]
 
       if (!!thumbnailFile) {
         uploadSurveyThumbnail(thumbnailFile, info.id)
@@ -520,6 +573,7 @@
             })
             .finally(() => {
               $('.modal_wrap').fadeOut(100)
+              location.reload()
             })
       }
     }
@@ -528,7 +582,12 @@
       e.preventDefault()
       let survey = e.data.survey
       // 검증 후 삭제
-      if (confirm(`정말\n${survey.title}\n설문을 삭제하시겠습니까?`)) {
+      if (confirm(`
+        정말\n$
+        {
+          survey.title
+        }\n설문을
+        삭제하시겠습니까 ? `)) {
         http
             .delete('/api/survey', survey)
             .then(res => {
@@ -561,7 +620,11 @@
             table.append(makeSurveyTemplate(survey));
           });
         } else {
-          table.append(`<div class="post-row"><h1>설문이 존재하지 않습니다.</h1></div>`);
+          table.append(` < div class = "post-row" > < h1 > 설문이
+        존재하지
+        않습니다.
+      </h1></div>
+        `);
         }
       })
     }
@@ -657,6 +720,18 @@
         e.stopPropagation()
         $('.modal_wrap').css('display', 'none');
       })
+      $('input[name=thumbnail]').on('change', function () {
+        let upload_file = this.files[0]
+        if (!upload_file) {
+          thumbnail_info_template(false, upload_file.name, "")
+        } else {
+          let reader = new FileReader()
+          reader.onload = e => {
+            thumbnail_info_template(true, upload_file.name, e.target.result)
+          }
+          reader.readAsDataURL(upload_file)
+        }
+      })
     })
 
     /* 동적 웹디자인 및 유효성 체크 */
@@ -664,11 +739,11 @@
 
     let makeSurveyTemplate = (survey) => {
       let loc = "[[${@environment.getProperty('file.upload.address')}]]"
-      let template = $(`<div></div>`)
+      let template = $(`<div></div >`)
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");
       template.append(`<div>${survey.id}</div>`); // 번호
-      template.append(`<div>${!!survey.thumbnail ? `<img src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
+      template.append(`<div>${!!survey.thumbnail ? `<img" style="width: 50px; height: 50px;" src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
       template.append(
           `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
       ); // 설문 이름
@@ -699,7 +774,8 @@
       template.append(`<div>${!survey.count ? 0 : survey.count}</div>`); // 참여자 수
       template.append(`<div>${survey.surveyId}</div>`); // 서베이 아이디
       return template;
-    };
+    }
+
 
     const isValidSurveyUpdateInfo = (survey_info) => {
       if (

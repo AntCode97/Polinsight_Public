@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,7 +45,10 @@ public class SurveyDto {
   @Enumerated(EnumType.STRING)
   private ProgressType progress;
 
-  private MultipartFile thumbnail;
+
+  private String originalName;
+
+  private String thumbnail;
 
   public SurveyDto(Survey survey) {
     this.id = survey.getId();
@@ -60,6 +62,7 @@ public class SurveyDto {
     this.participateUrl = survey.getCollector().getParticipateUrl();
     this.status = survey.getCollector().getStatus();
     this.title = survey.getTitle();
+    this.originalName = survey.getOriginalName();
   }
 
   public static SurveyDto of(SurveyMapping mapping) {
@@ -74,6 +77,8 @@ public class SurveyDto {
                     .endAt(mapping.getEndAt())
                     .participateUrl(mapping.getParticipateUrl())
                     .title(mapping.getTitle())
+                    .originalName(mapping.getOriginalName())
+                    .thumbnail(mapping.getThumbnail())
                     .build();
   }
 

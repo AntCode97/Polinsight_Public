@@ -1,16 +1,16 @@
 <th:block>
   <style>
     .main_item {
-      border-bottom : 1px dashed #DADADA;
-      color         : #000000;
-      font-size     : 2rem;
-      font-weight   : bold;
-      padding       : 10px 0 20px;
+      border-bottom: 1px dashed #dadada;
+      color: #000000;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 10px 0 20px;
     }
 
     #metop_container {
-      align-items     : center;
-      justify-content : center;
+      align-items: center;
+      justify-content: center;
     }
 
     .input_wrap {
@@ -18,14 +18,14 @@
     }
 
     .metop_board_card {
-      background    : white;
-      border-radius : 2px;
-      border-top    : 3px solid mediumseagreen;
-      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-      margin        : 30px 0;
-      padding       : 40px 30px 20px 30px;
-      position      : relative;
+      background: white;
+      border-radius: 2px;
+      border-top: 3px solid mediumseagreen;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin: 30px 0;
+      padding: 40px 30px 20px 30px;
+      position: relative;
     }
 
     .board_div2 {
@@ -39,260 +39,260 @@
 
     /* 카드 제목 */
     .register_top_wrap {
-      border-top : 2px solid #7C7C7C;
+      border-top: 2px solid #7c7c7c;
     }
 
     .register_bottom_wrap {
-      border-top : 1px solid #DADADA;
+      border-top: 1px solid #dadada;
     }
 
     .uploadedList {
-      display : flex;
-      padding : 15px 0px 0px 0px;
+      display: flex;
+      padding: 15px 0px 0px 0px;
     }
 
     .uploadedList > li {
-      border-radius : 2px;
-      box-shadow    : 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-      margin-right  : 5px;
+      border-radius: 2px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      margin-right: 5px;
     }
 
     .board_div {
-      align-items     : center;
-      border-bottom   : 1px solid #DADADA;
-      display         : flex;
-      height          : 100%;
-      justify-content : flex-start;
-      width           : 100%;
+      align-items: center;
+      border-bottom: 1px solid #dadada;
+      display: flex;
+      height: 100%;
+      justify-content: flex-start;
+      width: 100%;
     }
 
     /* 작성자 */
 
     .board_div b {
-      font-size : 16px;
+      font-size: 16px;
     }
 
     .board_div > span {
-      font-size : 14px;
+      font-size: 14px;
     }
 
     .board_span {
-      background-color : #FFFFFF;
-      display          : block;
-      flex             : 7;
-      overflow         : hidden;
-      padding          : 9px 20px;
+      background-color: #ffffff;
+      display: block;
+      flex: 7;
+      overflow: hidden;
+      padding: 9px 20px;
     }
 
     .board_writer {
-      display     : inline-block;
-      font-size   : 16px;
-      line-height : 30px;
+      display: inline-block;
+      font-size: 16px;
+      line-height: 30px;
     }
 
     .board_type > option {
-      cursor : pointer;
+      cursor: pointer;
     }
 
     .board_input {
-      border    : 1px solid #DADADA;
-      font-size : 15px;
-      height    : 30px;
-      outline   : none;
-      width     : 100%;
+      border: 1px solid #dadada;
+      font-size: 15px;
+      height: 30px;
+      outline: none;
+      width: 100%;
     }
 
     .board_content {
-      border    : 1px solid #DADADA;
-      font-size : 14px;
-      height    : 300px;
-      outline   : none;
-      resize    : none;
-      width     : 100%;
+      border: 1px solid #dadada;
+      font-size: 14px;
+      height: 300px;
+      outline: none;
+      resize: none;
+      width: 100%;
     }
 
     .textarea_div {
-      align-items : flex-start;
-      padding     : 20px 0;
+      align-items: flex-start;
+      padding: 20px 0;
     }
 
     .form-group > label {
-      margin-top : 10px;
+      margin-top: 10px;
     }
 
     .form-group .board_div {
-      align-items     : center;
-      border          : 1.5px dashed #DADADA;
-      color           : #515151;
-      display         : flex;
-      font-size       : 15px;
-      height          : 150px;
-      justify-content : center;
-      text-align      : center;
+      align-items: center;
+      border: 1.5px dashed #dadada;
+      color: #515151;
+      display: flex;
+      font-size: 15px;
+      height: 150px;
+      justify-content: center;
+      text-align: center;
     }
 
     /* 등록/취소 버튼 */
     .btn_wrap {
-      border          : 0;
-      border-radius   : 0;
-      display         : flex;
-      justify-content : space-between;
-      margin-top      : 25px;
-      padding         : 10px 15px 10px 15px;
+      border: 0;
+      border-radius: 0;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      padding: 10px 15px 10px 15px;
     }
 
     .insert_btn {
-      margin-right : -15px;
-      width        : 80px;
+      margin-right: -15px;
+      width: 80px;
     }
 
     .cancel_btn {
-      margin-left : -15px;
-      width       : 80px;
+      margin-left: -15px;
+      width: 80px;
     }
 
     .board_content_wrap {
-      height : 100%;
-      width  : 100%;
+      height: 100%;
+      width: 100%;
     }
 
     div#smart_editor2 {
-      width : 1040px !important;
+      width: 1040px !important;
     }
 
     .err_msg_wrap {
-      display    : none;
-      text-align : left;
+      display: none;
+      text-align: left;
     }
 
     .err_msg {
-      color     : #D95339;
-      display   : block;
-      font-size : 14px;
+      color: #d95339;
+      display: block;
+      font-size: 14px;
     }
 
     .board_div > label {
-      background-color : #EEEEEE;
-      display          : block;
-      font-size        : 16px;
-      line-height      : 30px;
-      padding          : 9px 15px 9px 25px;
-      padding-left     : 30px;
-      position         : relative;
-      width            : 150px;
+      background-color: #eeeeee;
+      display: block;
+      font-size: 16px;
+      line-height: 30px;
+      padding: 9px 15px 9px 25px;
+      padding-left: 30px;
+      position: relative;
+      width: 150px;
     }
 
     .board_div > label > span {
-      color     : #D95339;
-      font-size : 20px;
-      left      : 10px;
-      position  : absolute;
-      top       : 9px;
+      color: #d95339;
+      font-size: 20px;
+      left: 10px;
+      position: absolute;
+      top: 9px;
     }
 
     #board_writer {
-      width : 150px;
+      width: 150px;
     }
 
     .size_limit_msg {
-      color : #999999;
+      color: #999999;
     }
 
     .file_wrap {
-      border : 1px solid #DADADA;
+      border: 1px solid #dadada;
     }
 
     .file_item > label {
-      display    : block;
-      text-align : center;
-      width      : 100px;
+      display: block;
+      text-align: center;
+      width: 100px;
     }
 
     .file_item > div {
-      align-items      : center;
-      background-color : #FFFFFF;
-      display          : flex;
-      flex             : 7;
-      padding          : 9px 10px;
+      align-items: center;
+      background-color: #ffffff;
+      display: flex;
+      flex: 7;
+      padding: 9px 10px;
     }
 
     .file_item {
-      align-items      : center;
-      background-color : #EEEEEE;
-      display          : flex;
-      justify-content  : flex-start;
+      align-items: center;
+      background-color: #eeeeee;
+      display: flex;
+      justify-content: flex-start;
     }
 
     .btn-add,
     .btn-remove {
-      cursor       : pointer;
-      margin-right : 5px;
-      outline      : none;
-      padding      : 5px 7px;
-      width        : 60px;
+      cursor: pointer;
+      margin-right: 5px;
+      outline: none;
+      padding: 5px 7px;
+      width: 60px;
     }
 
     .btn-remove {
-      background-color : #FFFFFF;
-      border           : 1px solid tomato;
-      color            : tomato;
+      background-color: #ffffff;
+      border: 1px solid tomato;
+      color: tomato;
     }
 
     .other_file_item {
-      border-top : 1px solid #DADADA;
+      border-top: 1px solid #dadada;
     }
 
     .board_select {
-      cursor : pointer;
-      width  : 150px;
+      cursor: pointer;
+      width: 150px;
     }
 
     .board_file {
-      cursor : pointer;
+      cursor: pointer;
     }
 
     /*게시글 조회 파트*/
     .left_content {
-      flex : 1.5;
+      flex: 1.5;
     }
 
     .right_content {
-      flex : 8.5;
+      flex: 8.5;
     }
 
     .left_content > label {
-      background  : url("img/etc/icon_required_input.png") right center no-repeat;
-      cursor      : pointer;
-      font-weight : bold;
-      line-height : 18px;
-      overflow    : hidden;
-      padding     : 0 15px;
+      background: url("img/etc/icon_required_input.png") right center no-repeat;
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 18px;
+      overflow: hidden;
+      padding: 0 15px;
     }
 
     .right_content > input {
-      border      : 1px solid #DDDDDD;
-      color       : #333333;
-      font-size   : 14px;
-      height      : 32px;
-      line-height : 32px;
-      margin      : 0 3px;
-      outline     : none;
-      width       : 300px;
+      border: 1px solid #dddddd;
+      color: #333333;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+      width: 300px;
     }
 
     .right_content > select {
-      border          : 1px solid #DDDDDD;
-      color           : #333333;
-      display         : inline-block;
-      font-size       : 14px;
-      height          : 32px;
-      line-height     : 32px;
-      margin          : 0 3px;
-      outline         : none;
-      text-align      : center;
-      text-align-last : center;
-      width           : 200px;
+      border: 1px solid #dddddd;
+      color: #333333;
+      display: inline-block;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 3px;
+      outline: none;
+      text-align: center;
+      text-align-last: center;
+      width: 200px;
     }
   </style>
 </th:block>
@@ -302,13 +302,16 @@
       <div class="metop_inner">
         <!-- 상세 게시글 창 -->
         <div class="metop_board_wrap" th:object="${post}">
-          <div class="metop_board_card" style="border-top: 3px solid #4C99CF;">
+          <div class="metop_board_card" style="border-top: 3px solid #4c99cf">
             <form name="" action="" method="POST">
               <div class="input_wrap title_div">
                 <div class="board_div2">
                   <div class="tile_info_wrap">
                     <div>
-                      <span class="post_no" th:text="'['+${post.id}+']번째 글'"></span>
+                      <span
+                        class="post_no"
+                        th:text="'['+${post.id}+']번째 글'"
+                      ></span>
                     </div>
                   </div>
                   <div class="title_text">
@@ -326,7 +329,11 @@
               <div class="input_wrap">
                 <div class="board_div2">
                   <label>작성일</label>
-                  <span class="regdate" th:if="${post.registeredAt == post.registeredAt}" th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"></span>
+                  <span
+                    class="regdate"
+                    th:if="${post.registeredAt == post.registeredAt}"
+                    th:text="${#temporals.format(post.registeredAt, 'yyyy-MM-dd HH:mm')}"
+                  ></span>
 
                   <label class="label_padding">조회</label>
                   <span th:text="${post.viewcnt}">12</span>
@@ -335,36 +342,61 @@
               <div th:each="file : ${post.attaches}" class="input_wrap">
                 <div class="board_div2">
                   <label class="file_item2" th:text="'첨부파일#'"></label>
-                  <a class="file_download" th:href="@{/posts/upload-dir/{fileName} (fileName=${file.fileName})}" th:text="${file.originalName}"></a>
-<!--                  <a class="file_download" th:href="${@environment.getProperty('file.upload.address')}+${file.fileName}" th:text="${file.originalName}"></a>-->
+                  <a
+                    class="file_download"
+                    th:href="@{/posts/upload-dir/{fileName} (fileName=${file.fileName})}"
+                    th:text="${file.originalName}"
+                  ></a>
                 </div>
               </div>
               <div th:each="file : ${post.attaches}" class="input_wrap">
-                <img th:src="${@environment.getProperty('file.upload.address')}+${file.fileName}">
+                <img
+                  th:if="${#strings.endsWith(file.fileName, '.png') || #strings.endsWith(file.fileName, '.jpg') || #strings.endsWith(file.fileName, '.jpeg') || #strings.endsWith(file.fileName, '.bmp') || #strings.endsWith(file.fileName, '.webp') || #strings.endsWith(file.fileName, '.tif') || #strings.endsWith(file.fileName, '.gif')}"
+                  th:src="${@environment.getProperty('file.upload.address')}+${file.fileName}"
+                  th:alt="${file.originalName}"
+                />
               </div>
               <div class="input_wrap textarea_div">
-                <div class="board_div2" th:text="${post.viewcontent}" style="white-space: pre;">
-                </div>
+                <div
+                  class="board_div2"
+                  th:text="${post.viewcontent}"
+                  style="white-space: pre"
+                ></div>
               </div>
 
               <!-- 취소 & 등록 버튼 -->
               <div class="last_wrap">
                 <div class="board_div2 btn_wrap">
                   <div class="btn_wrap1">
-                      <span>
-                        <a onclick="goList()" class="board_btn list_btn"> <i class="far fa-file-alt"></i>목록</a>
-                      </span>
+                    <span>
+                      <a onclick="goList()" class="board_btn list_btn">
+                        <i class="far fa-file-alt"></i>목록</a
+                      >
+                    </span>
                   </div>
                   <th:block>
                     <div class="btn_wrap2">
-                        <span>
-                          <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i class="fas fa-edit"></i>수정</a>
-                          <a th:if="${post.isWriter}" sec:authorize="hasAnyAuthority('USER','PANEL','BEST')" th:href="@{/posts/{id}/edit (id=${post.id})}" class="board_btn update_btn"><i
-                              class="fas fa-edit"></i>수정
-                          </a>
-                        </span>
-                      <span th:if="${post.isWriter}" class="board_btn delete_btn" onclick="onDeletePost()">
-                      <i class="far fa-trash-alt"></i>삭제
+                      <span>
+                        <a
+                          sec:authorize="hasAuthority('ADMIN')"
+                          th:href="@{/admin/posts/{id}/edit (id=${post.id})}"
+                          class="board_btn update_btn"
+                          ><i class="fas fa-edit"></i>수정</a
+                        >
+                        <a
+                          th:if="${post.isWriter}"
+                          sec:authorize="hasAnyAuthority('USER','PANEL','BEST')"
+                          th:href="@{/posts/{id}/edit (id=${post.id})}"
+                          class="board_btn update_btn"
+                          ><i class="fas fa-edit"></i>수정
+                        </a>
+                      </span>
+                      <span
+                        th:if="${post.isWriter}"
+                        class="board_btn delete_btn"
+                        onclick="onDeletePost()"
+                      >
+                        <i class="far fa-trash-alt"></i>삭제
                       </span>
                     </div>
                   </th:block>
@@ -374,8 +406,16 @@
           </div>
         </div>
       </div>
-      <span id="current_username" style="display: none;" sec:authentication="principal.username"></span>
-      <span id="current_userrole" style="display: none;" sec:authentication="principal.authorities"></span>
+      <span
+        id="current_username"
+        style="display: none"
+        sec:authentication="principal.username"
+      ></span>
+      <span
+        id="current_userrole"
+        style="display: none"
+        sec:authentication="principal.authorities"
+      ></span>
     </div>
     <th:block th:replace="fragments/post_delete_popup" />
   </section>

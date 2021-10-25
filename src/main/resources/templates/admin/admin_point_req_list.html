@@ -168,45 +168,68 @@
       template.append(`<span>${req.bank}은행</span>`);
       template.append(`<span>${req.account}</span>`);
       // template.append(`<span>${req.progress}</span>`); // 진행 상황
-      // const modify_btn = $(`<button class="btn_udel btn-support">상태 변경</button>`).on('click', {id: req.id, progress: req.progress}, progressUpdate);
-      // const delete_btn = $(`<button class="btn_udel btn-warn">삭제</button>`).on('click', {id: req.id}, deleteRequest);
       if (req.progress === "FINISHED") {
         template.append(`<span>지급 완료</span>`);
       } else {
-        const tmp_cell = $(`<span></span>`);
-        tmp_cell.append(
-          `<label><input type="checkbox" name="WAIT"/>보류</label>`
-        );
-        tmp_cell.append(
-          `<label><input type="checkbox" name="FINISHED"/>완료</label>`
-        );
-        tmp_cell.append(
-          `<label><input type="checkbox" name="ERROR"/>오류</label>`
-        );
-        tmp_cell.find("input[type=checkbox]").each(function () {
-          $(this).prop("name") === req.progress
-            ? $(this).prop("checked", true)
-            : $(this).prop("name") === "FINISHED"
-            ? $(this).prop("checked", false)
-            : $(this).prop("checked", false).prop("disabled", true);
-        });
+        let tmp_cell = $(`<span></span>`);
+        if (req.progress === "REQUESTED") {
+          tmp_cell.append(
+            `<label><input type="checkbox" name="WAIT"/>보류</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" name="FINISHED"/>완료</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" name="ERROR"/>오류</label>`
+          );
+        } else if (req.progress === "ONGOING") {
+          tmp_cell.append(
+            `<label><input type="checkbox" disabled name="WAIT"/>보류</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" name="FINISHED"/>완료</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" disabled name="ERROR"/>오류</label>`
+          );
+        } else if (req.progress === "ERROR") {
+          tmp_cell.append(
+            `<label><input type="checkbox" disabled name="WAIT"/>보류</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" name="FINISHED"/>완료</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" checked name="ERROR"/>오류</label>`
+          );
+        } else if (req.progress === "WAIT") {
+          tmp_cell.append(
+            `<label><input type="checkbox" checked name="WAIT"/>보류</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" name="FINISHED"/>완료</label>`
+          );
+          tmp_cell.append(
+            `<label><input type="checkbox" disabled name="ERROR"/>오류</label>`
+          );
+        }
         template.append(tmp_cell);
       }
       return template;
     };
 
-    const progressUpdate = (e) => {
-      if (confirm("요청의 상태를 변경하시겠습니까?")) {
-        http
-          .put(`/api/points/${e.data.id}`, { progress: e.data.progress })
-          .then((res) => {
-            if (res.data.success) {
-              init();
-            }
-          })
-          .catch(console.error);
-      }
-    };
+    // const progressUpdate = (e) => {
+    //   if (confirm("요청의 상태를 변경하시겠습니까?")) {
+    //     http
+    //       .put(`/api/points/${e.data.id}`, { progress: e.data.progress })
+    //       .then((res) => {
+    //         if (res.data.success) {
+    //           init();
+    //         }
+    //       })
+    //       .catch(console.error);
+    //   }
+    // };
 
     async function getPointRequestData(e) {
       let type = $("input[name=sort_group]:checked").val();

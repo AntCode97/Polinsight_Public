@@ -54,6 +54,9 @@ public class Survey implements Serializable {
   @Setter
   private String thumbnail;
 
+  @Setter
+  private String originalName;
+
   @JsonManagedReference
   @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Collector collector;
@@ -69,6 +72,7 @@ public class Survey implements Serializable {
                                      .build())
                  .createdAt(dto.getCreatedAt())
                  .endAt(dto.getEndAt())
+                 .thumbnail(dto.getThumbnail())
                  .build();
   }
 

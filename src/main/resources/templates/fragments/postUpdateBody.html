@@ -284,25 +284,22 @@
   </style>
 </th:block>
 <th:block>
-
-  <input type="hidden" name="_method" value="PUT"/>
+  <input type="hidden" name="_method" value="PUT" />
   <div class="input_wrap register_top_wrap">
     <div class="board_div">
       <label for="board_title"><span>*</span>게시판</label>
       <span class="board_span">
         <select
           class="board_input focus_input board_select"
-          name="btype"
-          id="board_type"
+          name="post_type"
+          id="post_type"
           th:field="*{postType}"
           disabled
           required
         >
-          <optgroup label="분류 선택">
-            <option value="NOTICE">공지사항</option>
-            <option value="EVENT">이벤트</option>
-            <option value="INSIGHT">INSIGHT</option>
-          </optgroup>
+          <option value="NOTICE">공지사항</option>
+          <option value="EVENT">이벤트</option>
+          <option value="INSIGHT">INSIGHT</option>
         </select>
 
         <span class="size_limit_msg"
@@ -323,6 +320,7 @@
           name="title"
           id="board_title"
           th:field="*{title}"
+          th:value="${postDTO.thumbnail}"
           required
         />
         <div class="err_msg_wrap err_title">
@@ -343,7 +341,23 @@
         />
       </span>
     </div>
-
+    <div class="board_div" id="thumbnail_div" style="display: none">
+      <label for="board_title"><span>*</span>썸네일</label>
+      <span class="board_span">
+        <img
+          style="width: 80px; height: 54px"
+          th:if="*{thumbnail}"
+          th:src="${@environment.getProperty('file.upload.address')}+ *{thumbnail}"
+        />
+        <input
+          type="file"
+          id="thumbnail"
+          class="board_input"
+          th:field="*{thumbnailImg}"
+          accept="image/*"
+        />
+      </span>
+    </div>
   </div>
   <!-- 게시글 내용 등록(스마트에디터) -->
   <div class="input_wrap textarea_div">
@@ -442,16 +456,29 @@
       }
       let updateBtn = document.querySelector(".btn.btn-support.insert_btn");
       updateBtn.addEventListener("click", async function () {
-        let data = new FormData(document.querySelector('#frm_board'));
+        let data = new FormData(document.querySelector("#frm_board"));
         let id = updateBtn.getAttribute("postNo");
-        data.append('deleteFileList', deleteFileList)
-        await http.post(`/admin/posts/${id}/edit`, data,
-                { headers: { 'Content-Type': 'multipart/form-data'}}).then((response) => {
-                  window.location.href=`/admin/posts/${id}`;
-        });
+        data.append("deleteFileList", deleteFileList);
+        await http
+          .post(`/admin/posts/${id}/edit`, data, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then((response) => {
+            location.assign(`/admin/posts/${id}`);
+          });
+      });
 
-      })
-
+      if ($("#post_type").val() === "INSIGHT") {
+        $("#thumbnail_div")
+          .css("display", "block")
+          .find("input")
+          .prop("disabled", false);
+      } else {
+        $("#thumbnail_div")
+          .css("display", "none")
+          .find("input")
+          .prop("disabled", true);
+      }
     });
 
     $(document)
@@ -470,8 +497,6 @@
           .eq(num - 1)
           .css("border", "none")
           .remove();
-
-
       })
       .on("change", ".board_file", function () {
         const file = $(this).val().toString();

@@ -30,6 +30,14 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
   @Query("select pr from PointRequest pr where pr.progress = :type and (pr.email = :regex or pr.account like :regex or pr.bank = :regex)")
   Page<PointRequestMapping> findAllByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
 
+  @Query("select pr from PointRequest pr where pr.progress = 'REQUESTED' or pr.progress = 'WAIT' or pr.progress = 'ERROR'")
+  Page<PointRequestMapping> findAllOngoingRequest(Pageable pageable);
+
+  @Query("select pr from PointRequest pr " +
+      "where (pr.progress = 'REQUESTED' or pr.progress = 'WAIT' or pr.progress = 'ERROR') " +
+      "and (pr.email = :regex or pr.account like %:regex% or pr.bank = :regex)")
+  Page<PointRequestMapping> findAllOngoingRequestByRegex(Pageable pageable, String regex);
+
   long countPointRequestsByUid(Long userId);
 
 }
