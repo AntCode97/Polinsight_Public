@@ -4,7 +4,6 @@ import com.dns.polinsight.config.resolver.CurrentUser;
 import com.dns.polinsight.domain.*;
 import com.dns.polinsight.domain.dto.*;
 import com.dns.polinsight.exception.*;
-import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.*;
 import com.dns.polinsight.storage.StorageService;
@@ -293,10 +292,9 @@ public class ApiController {
 
 
   @GetMapping("/points")
-  public ApiUtils.ApiResult<Page<PointRequestMapping>> getAllPointRequests(@PageableDefault Pageable pageable,
-                                                                           @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
-                                                                           @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
-    // TODO 2021-10-24, 일, 23:18 : 검색이 안됨 --> DB 쿼리 바꿔야 할듯
+  public ApiUtils.ApiResult<Page<PointRequest>> getAllPointRequests(@PageableDefault Pageable pageable,
+                                                                    @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
+                                                                    @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     try {
       if (regex.isBlank()) {
         if (type.equalsIgnoreCase("ALL")) {

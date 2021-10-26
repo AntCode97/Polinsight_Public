@@ -1,7 +1,6 @@
 package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.types.PointRequestProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,17 +19,17 @@ public interface PointRequestService {
 
   Optional<PointRequest> findPointRequestById(long id);
 
-  Page<PointRequestMapping> findAllPointRequests(Pageable pageable);
+  Page<PointRequest> findAllPointRequests(Pageable pageable);
 
-  Page<PointRequestMapping> findAllPointRequestsByRegex(Pageable pageable, String regex);
+  Page<PointRequest> findAllPointRequestsByRegex(Pageable pageable, String regex);
 
-  Page<PointRequestMapping> findAllPointRequestsAndType(Pageable pageable, PointRequestProgressType type);
+  Page<PointRequest> findAllPointRequestsAndType(Pageable pageable, PointRequestProgressType type);
 
-  Page<PointRequestMapping> findAllPointRequestsByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
+  Page<PointRequest> findAllPointRequestsByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
 
-  Page<PointRequestMapping> findAllOngoingRequest(Pageable pageable);
+  Page<PointRequest> findAllOngoingRequest(Pageable pageable);
 
-  Page<PointRequestMapping> findAllOngoingRequestByRegex(Pageable pageable, String regex);
+  Page<PointRequest> findAllOngoingRequestByRegex(Pageable pageable, String regex);
 
   void deletePointRequestById(long id);
 

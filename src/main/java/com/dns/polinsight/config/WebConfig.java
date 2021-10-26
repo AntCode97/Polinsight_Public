@@ -1,11 +1,9 @@
 package com.dns.polinsight.config;
 
 import com.dns.polinsight.config.resolver.CurrentUserResolver;
-import com.dns.polinsight.types.convereter.EmailConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -42,11 +40,11 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
 
-  @Override
-  public void addFormatters(FormatterRegistry registry) {
-    registry.addConverter(new EmailConverter.StringToEmailConverter());
-    registry.addConverter(new EmailConverter.EmailToStringConverter());
-  }
+  //  @Override
+  //  public void addFormatters(FormatterRegistry registry) {
+  //    registry.addConverter(new EmailConverter.StringToEmailConverter());
+  //    registry.addConverter(new EmailConverter.EmailToStringConverter());
+  //  }
 
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

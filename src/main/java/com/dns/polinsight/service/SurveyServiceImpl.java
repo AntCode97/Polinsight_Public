@@ -2,9 +2,8 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.SurveyStatus;
+import com.dns.polinsight.domain.dto.SurveyDto;
 import com.dns.polinsight.exception.SurveyNotFoundException;
-import com.dns.polinsight.exception.TooManyRequestException;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyRepository;
@@ -27,8 +26,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -148,34 +149,38 @@ public class SurveyServiceImpl implements SurveyService {
   @Scheduled(cron = "0 0 0 * * ?")
   public void getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
-    Set<Long> surveySet = new HashSet<>(surveyRepository.findAll().stream().parallel().map(Survey::getSurveyId).collect(Collectors.toSet()));
-    try {
-      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
-      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-      List<Survey> surveyList = tmplist.parallelStream()
-                                       .filter(objMap -> !surveySet.contains(objMap.get("id")))
-                                       .map(objmap -> Survey.builder()
-                                                            .surveyId(Long.valueOf(objmap.get("id")))
-                                                            .title(objmap.get("title"))
-                                                            .createdAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
-                                                            .endAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
-                                                            .href(objmap.get("href")).point(0L)
-                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
-                                                            .build())
-                                       .filter(survey -> survey.getSurveyId() == 308896250)
-                                       .map(survey -> this.getSurveyDetails(survey, httpEntity))
-                                       .collect(Collectors.toList());
-      log.info("Survey and Detail Info save success");
-
-      surveyList = surveyRepository.saveAllAndFlush(surveyList);
-      for (Survey survey : surveyList) {
-        getCollectorBySurveyId(survey);
-      }
-    } catch (TooManyRequestException e) {
-      e.printStackTrace();
-      log.error(e.getMessage());
-      throw new TooManyRequestException(e.getMessage());
-    }
+    // NOTE 2021-10-27 : findAll()이 access error가 발생함
+    List<SurveyMapping> list = surveyRepository.findAllSurveyMapping();
+    list.stream().map(SurveyDto::of).forEach(System.out::println);
+    return;
+    //    Set<Long> surveySet = null;
+    //    try {
+    //      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
+    //      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
+    //      List<Survey> surveyList = tmplist.parallelStream()
+    //                                       .filter(objMap -> !surveySet.contains(objMap.get("id")))
+    //                                       .map(objmap -> Survey.builder()
+    //                                                            .surveyId(Long.valueOf(objmap.get("id")))
+    //                                                            .title(objmap.get("title"))
+    //                                                            .createdAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+    //                                                            .endAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
+    //                                                            .href(objmap.get("href")).point(0L)
+    //                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
+    //                                                            .build())
+    //                                       .filter(survey -> survey.getSurveyId() == 308896250)
+    //                                       .map(survey -> this.getSurveyDetails(survey, httpEntity))
+    //                                       .collect(Collectors.toList());
+    //      log.info("Survey and Detail Info save success");
+    //
+    //      surveyList = surveyRepository.saveAllAndFlush(surveyList);
+    //      for (Survey survey : surveyList) {
+    //        getCollectorBySurveyId(survey);
+    //      }
+    //    } catch (TooManyRequestException e) {
+    //      e.printStackTrace();
+    //      log.error(e.getMessage());
+    //      throw new TooManyRequestException(e.getMessage());
+    //    }
   }
 
   /**

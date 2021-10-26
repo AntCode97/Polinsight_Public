@@ -18,10 +18,9 @@ import java.util.List;
 @Entity
 @ToString
 @Getter
-//@Builder(builderMethodName = "PostBuilder")
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Post implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
