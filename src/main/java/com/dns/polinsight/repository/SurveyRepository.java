@@ -14,17 +14,16 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-  final String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt as " +
+  String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt as " +
       "createdAt, s.endAt as endAt, s.thumbnail as thumbnail, s.questionCount as questionCount, c.participateUrl as participateUrl, s.originalName as originalName";
 
   Page<Survey> findAllByTitleLikeOrderById(Pageable pageable, String title);
 
-  List<Survey> findSurveysByTitleLike(String title, Pageable pageable);
-
-  Survey findSurveyBySurveyId(Long surveyId);
-
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId=c.survey.surveyId where s.id = :id")
   SurveyMapping findSurveyMappingById(long id);
+
+  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId")
+  List<SurveyMapping> findAllSurveyMapping();
 
   @Query(nativeQuery = true, value = "SELECT * FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
   List<Survey> findSurveysByRegex(String regex, Pageable pageable);
@@ -51,5 +50,6 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type ")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
+
 
 }

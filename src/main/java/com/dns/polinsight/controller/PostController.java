@@ -232,13 +232,12 @@ public class PostController {
       long current_time = System.currentTimeMillis();
       if (current_time - update_time > 24 * 60 * 601000) {
         postService.upViewCnt(postId);
-        log.info("Post No.{} view count up", postId);
+        log.info("Post No.{} view count increase", postId);
         session.setAttribute("update_time" + postId, current_time);
       }
 
     } catch (Exception e) {
-      // NOTE 2021-10-13 : try-catch 사용 이유??? / 어떤 에러가 발생하는지??
-      e.printStackTrace();
+      throw new IllegalStateException("There is illegal value in session");
     }
     PostDTO dto = PostDTO.of(postService.findOne(postId));
     dto.setIsWriter(dto.getUser().getEmail().toString().equals(currUser.getEmail().toString()));
@@ -406,7 +405,6 @@ public class PostController {
     return "fragments/postList :: #postCount";
   }
 
-  // TODO 2021-10-25, 월, 10:18 : upload-dir이 아님
   //파일 클릭했을 때, 다운로드할 수 있게 함
   @GetMapping("/posts/upload-dir/{fileType}/{filename}")
   @ResponseBody

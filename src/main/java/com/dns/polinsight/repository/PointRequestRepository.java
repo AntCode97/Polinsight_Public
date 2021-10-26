@@ -1,7 +1,6 @@
 package com.dns.polinsight.repository;
 
 import com.dns.polinsight.domain.PointRequest;
-import com.dns.polinsight.projection.PointRequestMapping;
 import com.dns.polinsight.types.PointRequestProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,30 +12,34 @@ import java.util.Optional;
 
 public interface PointRequestRepository extends JpaRepository<PointRequest, Long> {
 
-  @Query(nativeQuery = true)
   List<PointRequest> findPointRequestsByUid(long uid);
 
   Optional<PointRequest> findPointRequestByUidAndRequestPoint(long uid, long requestPoint);
 
-  @Query("select pr from PointRequest pr")
-  Page<PointRequestMapping> findAllPointRequest(Pageable pageable);
+  @Query(nativeQuery = true,
+      value = "SELECT * FROM (SELECT * FROM point_request WHERE progress = 'REQUESTED') AS pr " +
+          "WHERE pr.email LIKE %:regex% OR pr.account LIKE %:regex% OR pr.bank LIKE %:regex%")
+  Page<PointRequest> findAllByRegex(Pageable pageable, String regex);
 
-  @Query("select pr from PointRequest pr where pr.progress = 'REQUESTED' and (pr.email = :regex or pr.account like %:regex% or pr.bank = :regex)")
-  Page<PointRequestMapping> findAllByRegex(Pageable pageable, String regex);
 
-  @Query("select pr from PointRequest pr where pr.progress =:type")
-  Page<PointRequestMapping> findAllPointRequestAndType(Pageable pageable, PointRequestProgressType type);
+  @Query(nativeQuery = true,
+      value = "SELECT * FROM point_request WHERE progress = :type")
+  Page<PointRequest> findAllPointRequestAndType(Pageable pageable, PointRequestProgressType type);
 
-  @Query("select pr from PointRequest pr where pr.progress = :type and (pr.email = :regex or pr.account like :regex or pr.bank = :regex)")
-  Page<PointRequestMapping> findAllByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
+  @Query(nativeQuery = true,
+      value = "SELECT * FROM (SELECT * FROM point_request WHERE progress = :type) AS pr " +
+          "WHERE pr.email LIKE %:regex% OR pr.account LIKE %:regex% OR pr.bank LIKE %:regex%)")
+  Page<PointRequest> findAllByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
 
-  @Query("select pr from PointRequest pr where pr.progress = 'REQUESTED' or pr.progress = 'WAIT' or pr.progress = 'ERROR'")
-  Page<PointRequestMapping> findAllOngoingRequest(Pageable pageable);
+  @Query(nativeQuery = true,
+      value = "SELECT * FROM point_request WHERE progress = 'REQUESTED' OR progress = 'WAIT' OR progress = 'ERROR'")
+  Page<PointRequest> findAllOngoingRequest(Pageable pageable);
 
-  @Query("select pr from PointRequest pr " +
-      "where (pr.progress = 'REQUESTED' or pr.progress = 'WAIT' or pr.progress = 'ERROR') " +
-      "and (pr.email = :regex or pr.account like %:regex% or pr.bank = :regex)")
-  Page<PointRequestMapping> findAllOngoingRequestByRegex(Pageable pageable, String regex);
+  @Query(nativeQuery = true,
+      value = "SELECT * FROM " +
+          "(SELECT * FROM point_request WHERE progress = 'REQUESTED' OR progress = 'WAIT' OR progress = 'ERROR') AS pr " +
+          "WHERE pr.email LIKE %:regex% OR pr.account LIKE %:regex% OR pr.bank LIKE %:regex%")
+  Page<PointRequest> findAllOngoingRequestByRegex(Pageable pageable, String regex);
 
   long countPointRequestsByUid(Long userId);
 

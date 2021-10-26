@@ -26,7 +26,7 @@ import java.util.List;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email"})

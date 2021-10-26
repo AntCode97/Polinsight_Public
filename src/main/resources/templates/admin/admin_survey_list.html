@@ -6,6 +6,11 @@
       width  : 100%;
     }
 
+    tbody > .post-row > img {
+      max-width  : 50px;
+      max-height : 50px;
+    }
+
     .post-row > *:nth-child(1) {
       width : 50px;
     }
@@ -18,7 +23,7 @@
       width : 500px;
     }
 
-    tbody > .post-row > td:nth-child(2) {
+    tbody > .post-row > td:nth-child(3) {
       text-align : left;
     }
 
@@ -516,10 +521,9 @@
     async function uploadSurveyThumbnail(thubmnail, surveyId) {
       let frmData = new FormData()
       frmData.append('thumbnail', thubmnail)
-      let response = await http.post(` / api / survey / thumbnail /${surveyId}`, frmData, {
+      let response = await http.post(`/api/survey/thumbnail/${surveyId}`, frmData, {
         headers: {'Content-Type': 'multipart/form-data'}
       })
-
       return response.data.success
     }
 
@@ -612,7 +616,7 @@
       getSurveyData(e).then(obj => {
         $('#total_count').text(obj.total);
         let table = $('.scroll-table > tbody');
-        table.children('.post-row:not(:first-child)').remove();
+        table.children('.post-row').remove();
         if (obj.total > 0) {
           makePagination(obj.current, obj.totalPage);
           searchMessage(obj.keyword, obj.total, '설문이')
@@ -620,11 +624,7 @@
             table.append(makeSurveyTemplate(survey));
           });
         } else {
-          table.append(` < div class = "post-row" > < h1 > 설문이
-        존재하지
-        않습니다.
-      </h1></div>
-        `);
+          table.append(`<div class = "post-row"><h1>설문이 존재하지 않습니다.</h1></div>`);
         }
       })
     }
@@ -721,6 +721,7 @@
         $('.modal_wrap').css('display', 'none');
       })
       $('input[name=thumbnail]').on('change', function () {
+        // 썸네일 업로드 버튼 로직
         let upload_file = this.files[0]
         if (!upload_file) {
           thumbnail_info_template(false, upload_file.name, "")
@@ -743,32 +744,26 @@
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");
       template.append(`<div>${survey.id}</div>`); // 번호
-      template.append(`<div>${!!survey.thumbnail ? `<img" style="width: 50px; height: 50px;" src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
+      template.append(`<div style="width: 50px; height: 50px;">${!!survey.thumbnail ? `<img"  src="${loc}${survey.thumbnail}" />` : `<img src="/img/icons/kakao-talk.svg"/>`} </div>`)
       template.append(
           `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${survey.title}</div>`
       ); // 설문 이름
       template.append(`<div>${!survey.point ? "지정 안됨" : survey.point.toLocaleString()}</div>`); // 지급 포인트
       template.append(
           `<div>${
-              !survey.createdAt
-                  ? "N/A"
-                  : survey.createdAt
+              !survey.createdAt ? "N/A" : survey.createdAt
           }</div>`
       ); // 설문 기간
       template.append(
           `<div>${
-              !survey.endAt
-                  ? "N/A"
-                  : survey.endAt
+              !survey.endAt ? "N/A" : survey.endAt
           }</div>`
       );
       template.append(
           `<div>${
               survey.progress === "BEFORE"
-                  ? "등록"
-                  : survey.progress === "ONGOING"
-                      ? "진행"
-                      : "종료"
+                  ? "등록" : survey.progress === "ONGOING"
+                      ? "진행" : "종료"
           }</div>`
       ); // 진행 상태
       template.append(`<div>${!survey.count ? 0 : survey.count}</div>`); // 참여자 수
