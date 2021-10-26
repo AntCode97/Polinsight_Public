@@ -112,11 +112,8 @@
     </div>
   </div>
   <script>
-    // 팝업 관련 설정
-
 
     const asyncFindBoard = () => {
-      //e.preventDefault();
       const keyword = $('#searchinput').val();
       $.ajax({
         url: '/api/admin/posts/search?type=NOTICE&keyword=' + keyword,
@@ -129,8 +126,6 @@
         closeBtn.classList.remove("disabled");
         if (keyword === "")
           closeBtn.className = "disabled";
-        // makeDeleteBtn();
-
 
         $.ajax({
           url: '/api/admin/posts/search/count?type=NOTICE&keyword=' + keyword,
@@ -165,7 +160,6 @@
       let overlay = $(".popup_overlay");
       overlay.fadeIn(100);
       overlay.find(".popup_delete_btn").on("click", () => {
-        // 게시물 삭제
         http
             .delete(`/admin/posts/${postId}/delete`)
             .then(() => location.replace("/admin/posts"))

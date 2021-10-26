@@ -1,5 +1,4 @@
 <th:block th:include="admin/admin_sidebar" />
-<th:block th:include="module/common" />
 <th:block>
   <style>
     .admin_main_contents {
@@ -222,7 +221,6 @@
     <div class="admin_main_contents_category">
       <div class="admin_main_contents_item">
         <p class="main_item">공지사항</p>
-        <!--        <span data-th-text="${post.isWriter}"></span>-->
       </div>
     </div>
 
@@ -242,10 +240,17 @@
       let value = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
       return value ? value[2] : null;
     };
+    const setCookie = function (name, value, exp) {
+      const date = new Date();
+      date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+      document.cookie =
+              name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
+    };
 
     function goList() {
       const listBtnUrl = getCookie("listBtnUrl");
       if (listBtnUrl != null) {
+        setCookie("listBtnUrl", "", -1);
         location.href = listBtnUrl;
       } else {
         location.href = "/admin/posts";
@@ -263,7 +268,6 @@
         let overlay = $(".popup_overlay");
         overlay.fadeIn(100);
         overlay.find(".popup_delete_btn").on("click", () => {
-          // 게시물 삭제
           http
               .delete(`/admin/posts/${postId}/delete`)
               .then(() => location.replace("/admin/posts"))
