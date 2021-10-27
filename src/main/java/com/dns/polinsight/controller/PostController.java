@@ -301,7 +301,6 @@ public class PostController {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @ResponseBody
-  @CrossOrigin(origins = "http://dnslab.iptime.org")
   @PostMapping("admin/posts/{postId}/edit")
   public ApiUtils.ApiResult<Boolean> adminUpdatePost(@PathVariable("postId") Long postId,
                                             @ModelAttribute("postDTO") PostDTO postDTO,
@@ -341,7 +340,6 @@ public class PostController {
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @ResponseBody
-  @CrossOrigin(origins = "http://dnslab.iptime.org")
   @Transactional
   @DeleteMapping("/admin/posts/{postId}/delete")
   public String adminDelete(@PathVariable("postId") Long postId) throws FileNotFoundException {
