@@ -461,7 +461,7 @@
         let id = updateBtn.getAttribute("postNo");
         data.append("deleteFileList", deleteFileList);
         await http
-          .post(`/admin/posts/${id}/edit`, data, {
+          .put(`/admin/posts/${id}/edit`, data, {
             headers: { "Content-Type": "multipart/form-data" },
           })
           .then((response) => {
