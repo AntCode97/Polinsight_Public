@@ -434,17 +434,9 @@
               .css("border", "none")
               .remove();
         })
-        .on("change", ".board_file", function () {
-          const file = $(this).val().toString();
-          if (file.includes("[") || file.includes("]")) {
-            alert("파일명에 대괄호는 포함할 수 없습니다.");
-            $(".board_file").val("");
-          }
-        })
         .on("click", "button[name=submit-btn]", function (e) {
           e.preventDefault();
           e.stopPropagation();
-          // 등록 버튼 눌렀을 때 입력값 검증 로직
           let post_title = $("input[name=title]");
           let post_content = $("#board_content");
 
