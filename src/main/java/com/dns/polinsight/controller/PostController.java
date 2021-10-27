@@ -13,6 +13,7 @@ import com.dns.polinsight.service.UserService;
 import com.dns.polinsight.storage.StorageService;
 import com.dns.polinsight.types.PostType;
 import com.dns.polinsight.types.SearchType;
+import com.dns.polinsight.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -41,6 +42,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.dns.polinsight.utils.ApiUtils.success;
 
 
 @Slf4j
@@ -240,7 +243,8 @@ public class PostController {
       throw new IllegalStateException("There is illegal value in session");
     }
     PostDTO dto = PostDTO.of(postService.findOne(postId));
-    dto.setIsWriter(dto.getUser().getEmail().toString().equals(currUser.getEmail().toString()));
+    if(currUser!=null)  dto.setIsWriter(dto.getUser().getEmail().toString().equals(currUser.getEmail().toString()));
+
     model.addAttribute("post", dto);
     model.addAttribute("files", attachService.findFiles(postId));
 
@@ -296,11 +300,12 @@ public class PostController {
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
-  @PutMapping("admin/posts/{postId}/edit")
-  public String adminUpdatePost(@PathVariable("postId") Long postId,
-                                @ModelAttribute("postDTO") PostDTO postDTO,
-                                @CurrentUser User user,
-                                MultipartFile[] file, String[] deleteFileList) throws IOException, ImageResizeException {
+  @ResponseBody
+  @PostMapping("admin/posts/{postId}/edit")
+  public ApiUtils.ApiResult<Boolean> adminUpdatePost(@PathVariable("postId") Long postId,
+                                            @ModelAttribute("postDTO") PostDTO postDTO,
+                                            @CurrentUser User user,
+                                            MultipartFile[] file, String[] deleteFileList) throws IOException, ImageResizeException {
     postDTO.transViewcontent();
     postDTO.setUser(userService.findUserByEmail(user.getEmail()));
     postDTO.setId(postId);
@@ -326,26 +331,10 @@ public class PostController {
 
     Post editPost = postService.findOne(postId);
 
-    //    //썸네일 추가
-    //    MultipartFile thumbnailImg = postDTO.getThumbnailImg();
-    //    //새로운 썸네일 이미지가 있는데
-    //    if (thumbnailImg != null && !thumbnailImg.isEmpty()) {
-    //      //기존의 게시글도 썸네일이 있을 때
-    //      if (editPost.getThumbnail() != null) {
-    //        storageService.delete(editPost.getThumbnail());
-    //      }
-    //      UUID uuid = UUID.randomUUID();
-    //      postDTO.setThumbnail(storageService.saveThumbnail(uuid.toString(), thumbnailImg));
-    //      storageService.store(uuid.toString(), thumbnailImg);
-    //      log.info("Success add thumbnail");
-    //    } else {
-    //      //원래 썸네일 유지
-    //      postDTO.setThumbnail(editPost.getThumbnail());
-    //    }
-
 
     postService.addPost(postDTO);
-    return "redirect:/admin/posts/{postId}";
+
+    return success(true);
   }
 
 
@@ -455,7 +444,7 @@ public class PostController {
   }
 
 
-  //  //현재 일반 유저는 글을 쓸 수 없기 떄문에 주석처리
+
   @GetMapping("posts/new")
   @PreAuthorize("hasAnyAuthority('USER','PANEL','BEST')")
   public String createForm(Model model, @CurrentUser User user) throws IOException {
@@ -464,28 +453,11 @@ public class PostController {
     return "posts/createPostForm";
   }
 
-  //  @PostMapping("posts/new")
-  //  @PreAuthorize("isAuthenticated()")
-  //  public String create(PostDTO postDTO, BindingResult result, RedirectAttributes redirectAttributes, @CurrentUser User user, MultipartFile[] file) {
-  //    postDTO.setFiles(Arrays.asList(file));
-  //    log.info("Result: " + result + ", data: " + postDTO);
-  //    if (result.hasErrors()) {
-  //      return "/posts/createPostForm";
-  //    }
-  //    postDTO.transViewcontent();
-  //    User admin = userService.findUserByEmail(user.getEmail());
-  //    postDTO.setUser(admin);
-  //    postDTO.setRegisteredAt(LocalDateTime.now());
-  //    Post post = postService.addPost(postDTO);
-  //    postDTO.setId(post.getId());
-  //    attachService.addAttach(postDTO);
-  //    redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + postDTO.getFiles() + "!");
-  //    return "redirect:/posts";
-  //  }
-  //
+
   @PreAuthorize("isAuthenticated()")
+  @ResponseBody
   @GetMapping("posts/{postId}/edit")
-  public String updatePost(@PathVariable("postId") Long postId, Model model) {
+  public ApiUtils.ApiResult<Boolean> updatePost(@PathVariable("postId") Long postId, Model model) {
     Post post = postService.findOne(postId);
     PostDTO postDTO = new PostDTO();
     postDTO.setId(post.getId());
@@ -498,50 +470,10 @@ public class PostController {
     postDTO.setRegisteredAt(registeredAt);
     model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
-    return "/posts/updatePostForm";
+      return success(true);
 
   }
 
-  //    @PreAuthorize("isAuthenticated()")
-  //    @PostMapping("posts/{postId}/edit")
-  //    public String updatePost(@PathVariable("postId") Long postId, @ModelAttribute("postDTO") PostDTO postDTO, @CurrentUser User user, MultipartFile[] file) {
-  //
-  //      User admin = userService.findUserByEmail(user.getEmail());
-  //      postDTO.setUser(admin);
-  //      postDTO.setId(postId);
-  //      postDTO.setRegisteredAt(LocalDateTime.now());
-  //      postDTO.transViewcontent();
-  //      postDTO.setViewcnt(postService.findOne(postId).getViewcnt());
-  //      List<MultipartFile> mFiles = postDTO.getFiles();
-  //      if (mFiles != null) {
-  //        for (MultipartFile m : file) {
-  //          mFiles.add(m);
-  //
-  //        }
-  //        postDTO.setFiles(mFiles);
-  //      } else {
-  //        if (file != null) {
-  //          mFiles = Arrays.asList(file);
-  //          postDTO.setFiles(mFiles);
-  //        }
-  //      }
-  //
-  //    postService.addPost(postDTO);
-  //    attachService.addAttach(postDTO);
-  //
-  //    return "redirect:/posts/{postId}";
-  //  }
-  //
-  //  @PreAuthorize("isAuthenticated()")
-  //  @GetMapping("/posts/{postId}/delete")
-  //  public String delete(@PathVariable("postId") Long postId, Model model) {
-  //    Post post = postService.findOne(postId);
-  //    attachService.deleteAttaches(postId);
-  //    if (post.getThumbnail() != null) {
-  //      attachService.deleteThumbnail(post.getThumbnail());
-  //    }
-  //    postService.delete(post);
-  //    return "redirect:/posts";
-  //  }
+
 
 }

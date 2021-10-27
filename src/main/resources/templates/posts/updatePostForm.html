@@ -1,27 +1,49 @@
-<th:block th:include="posts/postCommon" />
+<th:block th:include="posts/postCommon"/>
 <th:block>
-  <div class="PC">
-    <div class="web">
-      <div class="sub-main-name"><b>공지사항</b></div>
-      <div class="writeBoard">공지사항 수정</div>
-      <div class="post">
-        <section>
-          <div id="metop_container">
-            <div class="metop_inner">
-              <div class="metop_board_wrap">
-                <div class="metop_board_card">
-                  <form id="frm_board" class="information" enctype="multipart/form-data" method="post" th:action="@{/posts/{id}/edit (id=${postDTO.id})}" th:object="${postDTO}">
-                    <th:block th:include="fragments/postUpdateBody" />
-                  </form>
-                </div>
-              </div>
+    <div class="PC">
+        <div class="web">
+            <div class="sub-main-name"><b>공지사항</b></div>
+            <div class="writeBoard">공지사항 수정</div>
+            <div class="post">
+                <section>
+                    <div id="metop_container">
+                        <div class="metop_inner">
+                            <div class="metop_board_wrap">
+                                <div class="metop_board_card">
+                                    <form id="frm_board" class="information" enctype="multipart/form-data" method="post"
+                                          th:action="@{/posts/{id}/edit (id=${postDTO.id})}" th:object="${postDTO}">
+                                        <th:block th:include="fragments/postUpdateBody"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
-          </div>
-        </section>
-      </div>
-    </div>
-    <div>
-      <th:block th:include="layout/footer" />
-    </div>
+        </div>
+        <div>
+            <th:block th:include="layout/footer"/>
+        </div>
 
 </th:block>
+<script>
+    let deleteFileList = [];
+
+    let updateBtn = document.querySelector(".btn.btn-support.insert_btn");
+    updateBtn.addEventListener("click", async function () {
+        let data = new FormData(document.querySelector("#frm_board"));
+        let id = updateBtn.getAttribute("postNo");
+        data.append("deleteFileList", deleteFileList);
+        await http
+            .post(`/admin/posts/${id}/edit`, data, {
+                headers: {"Content-Type": "multipart/form-data"},
+            })
+            .then((response) => {
+                if (response.data.success) {
+
+                    location.replace(`/admin/posts/${id}`);
+                    return;
+                }
+            });
+    });
+</script>

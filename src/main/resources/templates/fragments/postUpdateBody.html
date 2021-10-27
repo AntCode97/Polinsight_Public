@@ -284,7 +284,7 @@
   </style>
 </th:block>
 <th:block>
-  <input type="hidden" name="_method" value="PUT" />
+<!--  <input type="hidden" name="_method" value="PUT" />-->
   <div class="input_wrap register_top_wrap">
     <div class="board_div">
       <label for="board_title"><span>*</span>게시판</label>
@@ -442,8 +442,8 @@
 </th:block>
 <th:block>
   <script>
-    let deleteFileList = [];
-    let deleteCount = 0;
+
+
     $(function () {
       let fileCount = $(".file_item").length;
       let file_item = document.getElementsByClassName("file_item_label");
@@ -455,19 +455,7 @@
           file_remove[i - 1].setAttribute("data-num", i);
         }
       }
-      let updateBtn = document.querySelector(".btn.btn-support.insert_btn");
-      updateBtn.addEventListener("click", async function () {
-        let data = new FormData(document.querySelector("#frm_board"));
-        let id = updateBtn.getAttribute("postNo");
-        data.append("deleteFileList", deleteFileList);
-        await http
-          .post(`/admin/posts/${id}/edit`, data, {
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-          .then((response) => {
-            location.assign(`/admin/posts/${id}`);
-          });
-      });
+
 
       if ($("#post_type").val() === "INSIGHT") {
         $("#thumbnail_div")
@@ -492,13 +480,6 @@
 
         $(this.parentNode.parentNode).css("border", "none").remove();
 
-      })
-      .on("change", ".board_file", function () {
-        const file = $(this).val().toString();
-        if (file.includes("[") || file.includes("]")) {
-          alert("파일명에 대괄호는 포함할 수 없습니다.");
-          $(".board_file").val("");
-        }
       })
       .on("change", "#thumbnail", function () {
         const file = $(this).val().toString();

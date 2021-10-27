@@ -22,7 +22,7 @@
     <div class="scroll-table" id="boardTable">
       <div class="post-th post-row">
         <span>번호</span>
-        <a href="#">제목</a>
+        <span>제목</span>
         <span>작성자</span>
         <span>작성일</span>
         <span>조회수</span>
@@ -161,7 +161,7 @@
       overlay.fadeIn(100);
       overlay.find(".popup_delete_btn").on("click", () => {
         http
-            .delete(`/admin/posts/${postId}/delete`)
+            .delete(`/admin/posts/${postId}/delete`, {withCredentials: true})
             .then(() => location.replace("/admin/posts"))
             .catch()
             .finally(() => {
