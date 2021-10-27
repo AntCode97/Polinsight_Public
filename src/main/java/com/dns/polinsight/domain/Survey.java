@@ -1,10 +1,8 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.SurveyDto;
-import com.dns.polinsight.projection.SurveyMapping;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,7 +24,6 @@ public class Survey implements Serializable {
   @Setter
   @Embedded
   @OrderBy("progress ASC")
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
   private SurveyStatus status;
 
   @Id
@@ -59,7 +56,7 @@ public class Survey implements Serializable {
   private String originalName;
 
   @JsonManagedReference
-  @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Collector collector;
 
   public static Survey of(SurveyDto dto) {
@@ -76,25 +73,6 @@ public class Survey implements Serializable {
                  .thumbnail(dto.getThumbnail())
                  .build();
   }
-
-  // TODO 2021-10-27, 수, 1:32 :
-  public static Survey of(SurveyMapping mapping) {
-    return Survey.builder()
-                 //    .status()
-                 .id(mapping.getId())
-                 .surveyId(mapping.getSurveyId())
-                 //        .href(g)
-                 .title(mapping.getTitle())
-                 .createdAt(mapping.getCreatedAt())
-                 .endAt(mapping.getEndAt())
-                 .point(mapping.getPoint())
-                 .questionCount(mapping.getQuestionCount())
-                 .thumbnail(mapping.getThumbnail())
-                 .originalName(mapping.getOriginalName())
-                 //        .collector()
-                 .build();
-  }
-
 
   public void setCreatedAt(LocalDate createdAt) {
     this.createdAt = createdAt;

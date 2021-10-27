@@ -10,9 +10,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/*
- * 사용자가 포인트를 현금화 시키고자 할 때, 사용할 테이블
- * */
 @Entity
 @Builder
 @Getter

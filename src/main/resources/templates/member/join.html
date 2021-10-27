@@ -74,10 +74,10 @@
     }
 
     .right_content {
-      flex : 8.5;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      align-items     : center;
+      display         : flex;
+      flex            : 8.5;
+      justify-content : flex-start;
     }
 
     .left_content > label {
@@ -96,20 +96,20 @@
       line-height : 32px;
       margin      : 0 3px;
       outline     : none;
+      padding     : 0 5px;
       width       : 300px;
-      padding: 0 5px;
     }
 
     .right_content > select {
-      border          : 1px solid #DDDDDD;
-      color           : #333333;
-      display         : inline-block;
-      font-size       : 14px;
-      height          : 32px;
-      line-height     : 32px;
-      margin          : 0 3px;
-      outline         : none;
-      width           : 200px;
+      border      : 1px solid #DDDDDD;
+      color       : #333333;
+      display     : inline-block;
+      font-size   : 14px;
+      height      : 32px;
+      line-height : 32px;
+      margin      : 0 3px;
+      outline     : none;
+      width       : 200px;
     }
 
     .info_msg, .err_msg {
@@ -353,13 +353,14 @@
     }
 
     input[name='domain'], select[name='domain'] {
-      width: 170px;
+      width : 170px;
     }
+
     .admin_msg {
-      font-size: 12px;
-      color: tomato;
-      padding-left: 5px;
-      font-weight: normal;
+      color        : tomato;
+      font-size    : 12px;
+      font-weight  : normal;
+      padding-left : 5px;
     }
   </style>
   <!--  기본 -->
@@ -957,7 +958,7 @@
       http.get("/api/user/email/" + email)
           .then(res => callback(res.data.response))
           .catch(err => {
-            console.log("error", err)
+            console.error("error", err)
             callback(false)
           })
     }, 200)
@@ -968,7 +969,7 @@
             callback(res.data.response)
           })
           .catch(err => {
-            console.log("error", err)
+            console.error("error", err)
             callback(false)
           })
     }, 200)

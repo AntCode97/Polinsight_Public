@@ -10,10 +10,9 @@
   </div>
   <script th:src="@{/js/PostUtils.js}"></script>
   <script>
-    const syncSurveyList = () => {
-      http.get('/api/surveys/sync')
-          .then(console.log)
-          .catch(console.log)
+    const syncSurveyList = async () => {
+      let res = await http.get('/api/surveys/sync')
+      console.log(res)
     }
 
 

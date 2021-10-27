@@ -7,8 +7,8 @@
     }
 
     tbody > .post-row > img {
-      max-width  : 50px;
       max-height : 50px;
+      max-width  : 50px;
     }
 
     .post-row > *:nth-child(1) {
@@ -488,7 +488,6 @@
       let location = "[[${@environment.getProperty('file.upload.address')}]]"
       $('.modal_wrap').css('display', 'flex')
       let survey = e.data.survey;
-      console.log(survey)
       $('#survey_id').find('p').text(survey.id);
       $('input[name=id]').val(survey.id)
       $('#survey_title').find('p').text(survey.title);

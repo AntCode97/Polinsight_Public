@@ -41,7 +41,7 @@ public class SurveyController {
    */
   @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER')")
   @GetMapping("/api/surveys/sync")
-  public void surveySyncWithSurveyMonkey() {
+  public void surveySyncWithSurveyMonkey() throws InterruptedException {
     surveyService.getSurveyListAndSyncPerHour();
   }
 

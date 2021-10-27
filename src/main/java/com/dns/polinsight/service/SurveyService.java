@@ -41,7 +41,7 @@ public interface SurveyService {
 
   @Transactional
   @Scheduled(cron = "0 0 0 * * ?")
-  void getSurveyListAndSyncPerHour();
+  void getSurveyListAndSyncPerHour() throws InterruptedException;
 
   void deleteSurveyById(long surveyId);
 

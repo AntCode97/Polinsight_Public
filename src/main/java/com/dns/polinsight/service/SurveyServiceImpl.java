@@ -2,8 +2,9 @@ package com.dns.polinsight.service;
 
 import com.dns.polinsight.domain.Collector;
 import com.dns.polinsight.domain.Survey;
-import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.domain.SurveyStatus;
 import com.dns.polinsight.exception.SurveyNotFoundException;
+import com.dns.polinsight.exception.TooManyRequestException;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyRepository;
@@ -26,10 +27,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -57,13 +56,6 @@ public class SurveyServiceImpl implements SurveyService {
     header.setBearerAuth(accessToken);
     httpEntity = new HttpEntity<>(header);
   }
-
-  //  TODO
-  //  @Override
-  //  public List<Object> findAllInIndex(Pageable pageable, User user) {
-  //surveyRepository.findAllSurveys(pageable);
-  //user.getParticipateSurvey()
-  //  }
 
   @Override
   public Optional<Survey> findById(Long id) {
@@ -149,38 +141,38 @@ public class SurveyServiceImpl implements SurveyService {
   @Scheduled(cron = "0 0 0 * * ?")
   public void getSurveyListAndSyncPerHour() {
     final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
-    // NOTE 2021-10-27 : findAll()이 access error가 발생함
-    List<SurveyMapping> list = surveyRepository.findAllSurveyMapping();
-    list.stream().map(SurveyDto::of).forEach(System.out::println);
-    return;
-    //    Set<Long> surveySet = null;
-    //    try {
-    //      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
-    //      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-    //      List<Survey> surveyList = tmplist.parallelStream()
-    //                                       .filter(objMap -> !surveySet.contains(objMap.get("id")))
-    //                                       .map(objmap -> Survey.builder()
-    //                                                            .surveyId(Long.valueOf(objmap.get("id")))
-    //                                                            .title(objmap.get("title"))
-    //                                                            .createdAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
-    //                                                            .endAt(LocalDate.parse(objmap.get("date_created").split("T")[0]))
-    //                                                            .href(objmap.get("href")).point(0L)
-    //                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
-    //                                                            .build())
-    //                                       .filter(survey -> survey.getSurveyId() == 308896250)
-    //                                       .map(survey -> this.getSurveyDetails(survey, httpEntity))
-    //                                       .collect(Collectors.toList());
-    //      log.info("Survey and Detail Info save success");
-    //
-    //      surveyList = surveyRepository.saveAllAndFlush(surveyList);
-    //      for (Survey survey : surveyList) {
-    //        getCollectorBySurveyId(survey);
-    //      }
-    //    } catch (TooManyRequestException e) {
-    //      e.printStackTrace();
-    //      log.error(e.getMessage());
-    //      throw new TooManyRequestException(e.getMessage());
-    //    }
+
+    Set<Long> surveySet = surveyRepository.findAll().parallelStream().map(Survey::getSurveyId).collect(Collectors.toUnmodifiableSet());
+    try {
+      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
+      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
+      List<Survey> surveyList = tmplist.parallelStream()
+                                       .filter(objMap -> !surveySet.contains(Long.parseLong(objMap.get("id"))))
+                                       .map(objMap -> Survey.builder()
+                                                            .surveyId(Long.valueOf(objMap.get("id")))
+                                                            .title(objMap.get("title"))
+                                                            .createdAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
+                                                            .endAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
+                                                            .href(objMap.get("href")).point(0L)
+                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
+                                                            .build())
+                                       //                                       .map(survey -> this.getSurveyDetails(survey, httpEntity))
+                                       .collect(Collectors.toList());
+      log.info("Survey and Detail Info save success");
+      Thread.sleep(10 * 1000);
+      log.info("Sync Survey save start");
+      surveyList = surveyRepository.saveAllAndFlush(surveyList);
+      log.info("Sync Survey save end");
+      log.warn("" + surveyList.size());
+      Thread.sleep(10 * 1000);
+      log.info("Get Collector for Survey Info start");
+      for (Survey survey : surveyList) {
+        getCollectorBySurveyId(survey);
+      }
+      log.info("Get Collector for Survey Info end");
+    } catch (TooManyRequestException | InterruptedException e) {
+      log.error(e.getMessage());
+    }
   }
 
   /**
@@ -193,7 +185,7 @@ public class SurveyServiceImpl implements SurveyService {
     Map<String, Object> map = res.getBody();
     Map<String, String> vars = (Map<String, String>) map.get("custom_variables");
 
-    if (!(vars.keySet().contains("hash") && vars.keySet().contains("email"))) {
+    if (!(vars.containsKey("hash") && vars.containsKey("email"))) {
       survey = getSurveyCustomVariablesOrUpdate(survey);
     }
     survey.setQuestionCount(Long.valueOf(map.get("question_count") + "")); //--> 질문 갯수
@@ -245,7 +237,7 @@ public class SurveyServiceImpl implements SurveyService {
     }
     String url = baseURL + "surveys/" + survey.getSurveyId();
     Map<String, String> custom_variables = new HashMap<>();
-    custom_variables.put("email", "id");
+    custom_variables.put("email", "user_id");
     custom_variables.put("hash", "hash");
     Map<String, Object> map = new HashMap<>();
     map.put("custom_variables", custom_variables);

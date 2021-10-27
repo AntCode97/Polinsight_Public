@@ -1518,7 +1518,6 @@
               const table = $('div.point_table')
               table.children('.data_line:not(:first-child)').remove()
               res.data.response.forEach(history => {
-                console.log(history)
                 let template = $(`<div class="data_line"></div>`)
                 template.append($(`<span>${history.content}</span>`))
                 template.append($(`<span>${history.sign ? '+' : '-' + history.amount.toLocaleString()}</span>`))
