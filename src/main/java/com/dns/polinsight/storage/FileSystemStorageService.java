@@ -47,7 +47,6 @@ public class FileSystemStorageService implements StorageService {
     this.imageUtil = imageUtil;
   }
 
-  // TODO: 2021-10-15 비동기 처리 필요
   @Override
   public void store(String uuid, MultipartFile file) throws IOException {
     if (file.isEmpty()) {
