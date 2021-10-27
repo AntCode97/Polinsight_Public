@@ -40,12 +40,6 @@ public class WebConfig implements WebMvcConfigurer {
   }
 
 
-  //  @Override
-  //  public void addFormatters(FormatterRegistry registry) {
-  //    registry.addConverter(new EmailConverter.StringToEmailConverter());
-  //    registry.addConverter(new EmailConverter.EmailToStringConverter());
-  //  }
-
   @Override
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
     resolvers.add(currentUserResolver);

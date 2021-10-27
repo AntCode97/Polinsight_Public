@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.types.ProgressType;
 import lombok.*;
 
@@ -37,6 +38,14 @@ public class SurveyStatus implements Serializable {
   @Builder.Default
   private Integer minimumTime = 30;
 
+  public static SurveyStatus of(SurveyMapping mapping) {
+    return SurveyStatus.builder()
+                       .variables(mapping.getVariables())
+                       .count(mapping.getCount())
+                       .progress(mapping.getProgress())
+                       .minimumTime(mapping.getMinimumTime())
+                       .build();
+  }
 
   public void setProgressByDate(LocalDateTime endDateTime) {
     try {

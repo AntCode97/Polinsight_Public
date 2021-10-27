@@ -244,7 +244,7 @@
       const date = new Date();
       date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
       document.cookie =
-              name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
+          name + "=" + value + ";expires=" + date.toUTCString() + ";path=/";
     };
 
     function goList() {
@@ -262,8 +262,6 @@
       let curUserName = $("#current_username").text();
       let curUserRole = $("#current_userrole").text();
       let postWriter = "[[${post.userId}]]";
-      console.log(curUserName)
-      console.log(curUserRole)
       if (curUserRole.includes("ADMIN") || postWriter === curUserName) {
         let overlay = $(".popup_overlay");
         overlay.fadeIn(100);

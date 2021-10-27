@@ -424,4 +424,9 @@ public class ApiController {
     return success(PostDTO.of(post));
   }
 
+  @GetMapping("/test")
+  public void testMethods() throws InterruptedException {
+    surveyService.getSurveyListAndSyncPerHour();
+  }
+
 }

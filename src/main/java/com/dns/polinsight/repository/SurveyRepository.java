@@ -5,6 +5,7 @@ import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.types.ProgressType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
-  String surveyJoinData = "select s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt as " +
+  String surveyJoinData = "SELECT s.id as id, s.title as title, s.point as point, s.surveyId as surveyId, s.status.progress as progress, s.status.minimumTime as minimumTime, s.createdAt as " +
       "createdAt, s.endAt as endAt, s.thumbnail as thumbnail, s.questionCount as questionCount, c.participateUrl as participateUrl, s.originalName as originalName";
 
   Page<Survey> findAllByTitleLikeOrderById(Pageable pageable, String title);
@@ -22,7 +23,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId=c.survey.surveyId where s.id = :id")
   SurveyMapping findSurveyMappingById(long id);
 
-  @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId")
+  @Query(nativeQuery = true, value = "SELECT s.*, c.* FROM survey s LEFT OUTER JOIN collector c ON s.id = c.survey_id")
   List<SurveyMapping> findAllSurveyMapping();
 
   @Query(nativeQuery = true, value = "SELECT * FROM survey WHERE survey_id LIKE %?1% OR progress_type LIKE %?1% OR point LIKE %?1% OR title LIKE %?1%")
@@ -51,5 +52,9 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Query(surveyJoinData + " from Survey s left join fetch Collector c on s.surveyId = c.survey.surveyId where s.status.progress <> :type ")
   Page<SurveyMapping> findByProgressTypeNotLike(ProgressType type, Pageable pageable);
 
+
+  @Override
+  @EntityGraph(attributePaths = {"collector"})
+  List<Survey> findAll();
 
 }
