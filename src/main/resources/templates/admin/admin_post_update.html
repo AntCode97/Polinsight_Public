@@ -15,9 +15,7 @@
             <div class="metop_board_card" style="border-top: 3px solid #eba444">
               <form
                 id="frm_board"
-                th:action="@{/admin/posts/{id}/edit (id=${postDTO.id})}"
                 th:object="${postDTO}"
-                method="POST"
                 enctype="multipart/form-data"
               >
                 <th:block th:include="fragments/postUpdateBody" />
@@ -29,3 +27,25 @@
     </section>
   </div>
 </th:block>
+<script>
+  let deleteFileList = [];
+
+  let updateBtn = document.querySelector(".btn.btn-support.insert_btn");
+  updateBtn.addEventListener("click", async function () {
+    let data = new FormData(document.querySelector("#frm_board"));
+    let id = updateBtn.getAttribute("postNo");
+    data.append("deleteFileList", deleteFileList);
+    await http
+            .post(`/admin/posts/${id}/edit`, data, {
+              headers: { "Content-Type": "multipart/form-data" },
+            })
+            .then((response) => {
+              if(response.data.success){
+                location.replace(`/admin/posts/${id}`);
+                return;
+              }
+
+            });
+  });
+
+</script>
