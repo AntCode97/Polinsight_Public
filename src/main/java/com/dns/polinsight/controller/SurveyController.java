@@ -23,8 +23,7 @@ public class SurveyController {
 
   private final SurveyService surveyService;
 
-  private final ParticipateSurveyService participateSurveyService;
-
+  @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
   @PutMapping("/survey")
   @Transactional
   public ApiUtils.ApiResult<Survey> surveyInfoUpdate(@RequestBody Survey survey) throws Exception {
@@ -36,13 +35,15 @@ public class SurveyController {
   }
 
 
-  /**
-   * 서베이 몽키 수동 동기화
-   */
-  @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER')")
+  @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
   @GetMapping("/api/surveys/sync")
-  public void surveySyncWithSurveyMonkey() throws InterruptedException {
-    surveyService.getSurveyListAndSyncPerHour();
+  public ApiUtils.ApiResult<Boolean> surveySyncWithSurveyMonkey() throws InterruptedException {
+    try {
+      surveyService.getSurveyListAndSyncPerHour();
+      return success(Boolean.TRUE);
+    } catch (InterruptedException e) {
+      throw new InterruptedException(e.getMessage());
+    }
   }
 
 }

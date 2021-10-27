@@ -30,8 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   /* 인증 실패 처리 */
   private final AuthenticationEntryPoint entryPoint;
 
-  private final PathPermission permission;
-
   private final CustomSuccessHandler successHandler;
 
   @Override
@@ -41,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .authorizeRequests()
         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-        .antMatchers(permission.getResources()).permitAll()
         .and()
         .formLogin()
         .loginPage("/login")

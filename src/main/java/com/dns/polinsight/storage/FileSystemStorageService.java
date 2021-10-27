@@ -67,33 +67,33 @@ public class FileSystemStorageService implements StorageService {
         typeCheckUtil.getImageFileExt(thumbnail.getOriginalFilename()));
   }
 
-    @Override
-    public Path load(String filename) {
+  @Override
+  public Path load(String filename) {
 
-      if (typeCheckUtil.isImageFile(filename))
-        return rootLocation.resolve(Paths.get(imageLocation + filename));
-      else
-        return rootLocation.resolve(Paths.get(fileLocation + filename));
-    }
+    if (typeCheckUtil.isImageFile(filename))
+      return rootLocation.resolve(Paths.get(imageLocation + filename));
+    else
+      return rootLocation.resolve(Paths.get(fileLocation + filename));
+  }
 
 
-    @Override
-    public Resource loadAsResource(String filename) {
-      try {
-        Path file = load(filename);
-        Resource resource = new UrlResource(file.toUri());
+  @Override
+  public Resource loadAsResource(String filename) {
+    try {
+      Path file = load(filename);
+      Resource resource = new UrlResource(file.toUri());
 
-        if (resource.exists() || resource.isReadable()) {
-          return resource;
-        } else {
-          throw new StorageFileNotFoundException(
-              "Could not read file: " + filename);
+      if (resource.exists() || resource.isReadable()) {
+        return resource;
+      } else {
+        throw new StorageFileNotFoundException(
+            "Could not read file: " + filename);
 
-        }
-      } catch (MalformedURLException e) {
-        throw new StorageFileNotFoundException("Could not read file: " + filename, e);
       }
+    } catch (MalformedURLException e) {
+      throw new StorageFileNotFoundException("Could not read file: " + filename, e);
     }
+  }
 
   @Override
   public void delete(String filepath) throws FileNotFoundException {
