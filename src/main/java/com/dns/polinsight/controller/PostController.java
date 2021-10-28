@@ -128,7 +128,7 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     Post post = postService.addPost(postDTO);
     postDTO.setId(post.getId());
-    log.warn("{}", postDTO.toString());
+    log.warn("{}", postDTO);
     //썸네일 추가
     MultipartFile originalThumbnail = postDTO.getThumbnailImg();
     if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
@@ -243,7 +243,8 @@ public class PostController {
       throw new IllegalStateException("There is illegal value in session");
     }
     PostDTO dto = PostDTO.of(postService.findOne(postId));
-    if(currUser!=null)  dto.setIsWriter(dto.getUser().getEmail().toString().equals(currUser.getEmail().toString()));
+    if (currUser != null)
+      dto.setIsWriter(dto.getUser().getEmail().toString().equals(currUser.getEmail().toString()));
 
     model.addAttribute("post", dto);
     model.addAttribute("files", attachService.findFiles(postId));
@@ -303,9 +304,9 @@ public class PostController {
   @ResponseBody
   @PostMapping("admin/posts/{postId}/edit")
   public ApiUtils.ApiResult<Boolean> adminUpdatePost(@PathVariable("postId") Long postId,
-                                            @ModelAttribute("postDTO") PostDTO postDTO,
-                                            @CurrentUser User user,
-                                            MultipartFile[] file, String[] deleteFileList) throws IOException, ImageResizeException {
+                                                     @ModelAttribute("postDTO") PostDTO postDTO,
+                                                     @CurrentUser User user,
+                                                     MultipartFile[] file, String[] deleteFileList) throws IOException, ImageResizeException {
     postDTO.transViewcontent();
     postDTO.setUser(userService.findUserByEmail(user.getEmail()));
     postDTO.setId(postId);
@@ -436,13 +437,12 @@ public class PostController {
       try {
         storageService.delete(attach.getFilePath());
       } catch (FileNotFoundException e) {
-        e.printStackTrace();
+        log.error(e.getMessage());
       }
       attachService.delete(attach);
     });
 
   }
-
 
 
   @GetMapping("posts/new")
@@ -470,10 +470,9 @@ public class PostController {
     postDTO.setRegisteredAt(registeredAt);
     model.addAttribute("files", attachService.findFiles(postId));
     model.addAttribute("postDTO", postDTO);
-      return success(true);
+    return success(true);
 
   }
-
 
 
 }

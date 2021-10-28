@@ -24,28 +24,26 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.4'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.4'
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.4'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.4'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.4'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.4'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
     implementation 'org.springframework.session:spring-session-data-redis:2.5.2'
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     /* Mail*/
-    implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-mail:2.5.5'
     /* Cache */
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.5.4'
-    /* OAuth2 */
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.5.5'
 
     /* actuator */
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.5'
     /* Batch */
-    implementation 'org.springframework.boot:spring-boot-starter-batch:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-batch:2.5.5'
 
     /* file upload */
     implementation 'commons-io:commons-io:2.11.0'
@@ -55,19 +53,19 @@ dependencies {
     implementation 'org.apache.poi:poi:5.0.0'
     implementation 'org.apache.poi:poi-ooxml:5.0.0'
 
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.4'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.5'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.5.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.5.5'
 
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
     // test
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'
     testImplementation 'org.springframework.security:spring-security-test:5.5.1'
-    developmentOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:10.0.8'
+    developmentOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:10.0.12'
 }
 
 test {

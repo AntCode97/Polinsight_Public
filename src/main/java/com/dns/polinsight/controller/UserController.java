@@ -19,9 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -148,7 +146,7 @@ public class UserController {
 
       return success(new UserDto(userService.saveOrUpdate(user)));
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
@@ -183,14 +181,14 @@ public class UserController {
       mv.addObject("user", dto);
       return mv;
     } catch (UsernameNotFoundException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
 
   @PostMapping("/update")
   @PreAuthorize("hasAnyAuthority('USER','PANEL', 'BEST')")
-  public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestBody User user, HttpSession session) {
+  public ResponseEntity<Map<String, Object>> updateUserInfo(@RequestBody User user, HttpSession session) throws Exception {
     Map<String, Object> map = new HashMap<>();
     try {
       String password = passwordEncoder.encode(user.getPassword());
@@ -201,9 +199,10 @@ public class UserController {
       session.invalidate();
       session.setAttribute("user", new UserDto(user));
       log.info("User '{}' has requested change password", user.getEmail());
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (InvalidValueException e) {
+      log.error(e.getMessage());
       map.put("error", "there is something wrong");
+      throw new Exception(e.getMessage());
     }
     return ResponseEntity.ok(map);
   }
@@ -228,7 +227,7 @@ public class UserController {
       userService.saveOrUpdate(user); // DB 업데이트할 유저 객체 넣기
       return success(Boolean.TRUE);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
@@ -249,8 +248,8 @@ public class UserController {
       User user = userService.findUserByEmail(Email.of(email));
       session.setAttribute("uid", user.getId());
       return new ModelAndView("redirect:/changepwd");
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      log.error(e.getMessage());
       ModelAndView errMav = new ModelAndView("redirect:/denied");
       errMav.addObject("msg", e.getCause());
       return errMav;
@@ -381,7 +380,7 @@ public class UserController {
         return success(Boolean.TRUE);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }

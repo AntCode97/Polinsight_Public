@@ -20,18 +20,21 @@ public class AuthExceptionController {
 
   @ExceptionHandler({BadCredentialsException.class, UnAuthorizedException.class})
   public ApiUtils.ApiResult<?> handleBadCredential(BadCredentialsException e) {
-    return error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
+    log.error(e.getMessage());
+    return error("Authorized Error", HttpStatus.UNAUTHORIZED.value());
   }
 
   @ExceptionHandler(UsernameNotFoundException.class)
   public ApiUtils.ApiResult<?> handleUserNameNotFoundException(UsernameNotFoundException e) {
-    return error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
+    log.error(e.getMessage());
+    return error("Authorized Error", HttpStatus.UNAUTHORIZED.value());
   }
 
   @ExceptionHandler({AccessDeniedException.class, WrongAccessException.class})
   public ApiUtils.ApiResult<?> handleAccessDeniedException(AccessDeniedException e, HttpServletResponse response) throws IOException {
     response.sendRedirect("/denied");
-    return error(e.getMessage(), HttpStatus.UNAUTHORIZED.value());
+    log.error(e.getMessage());
+    return error("Authorized Error", HttpStatus.UNAUTHORIZED.value());
   }
 
 }

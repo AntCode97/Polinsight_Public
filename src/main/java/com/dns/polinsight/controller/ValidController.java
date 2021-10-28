@@ -28,7 +28,7 @@ public class ValidController {
     try {
       return success(!userService.isExistEmail(email));
     } catch (RuntimeException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new NotFoundException("Email Number Not Found " + e.getMessage());
     }
   }

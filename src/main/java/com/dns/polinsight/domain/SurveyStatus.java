@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.dns.polinsight.exception.InvalidValueException;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.types.ProgressType;
 import lombok.*;
@@ -55,7 +56,7 @@ public class SurveyStatus implements Serializable {
       } else {
         this.progress = ProgressType.END;
       }
-    } catch (Exception e) {
+    } catch (InvalidValueException e) {
       this.progress = ProgressType.BEFORE;
     }
   }

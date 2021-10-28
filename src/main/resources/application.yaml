@@ -102,7 +102,7 @@ spring :
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :
       pool-name :         Test DBCP Pool
-      maximum-pool-size : 5
+      maximum-pool-size : 10
 
   redis :
     host : localhost
@@ -151,14 +151,14 @@ custom :
     base : "http://localhost:8080"
 file :
   upload :
-    baseLocation: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/"
-    image: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/images/"
-    thumbnail: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/thumbnails/"
-    file: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/files/"
-#    baseLocation : "C:\\upload_test\\"
-#    image :        "C:\\upload_test\\images\\"
-#    thumbnail :    "C:\\upload_test\\thumbnails\\"
-#    file :         "C:\\upload_test\\files\\"
+    #    baseLocation: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/"
+    #    image: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/images/"
+    #    thumbnail: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/thumbnails/"
+    #    file: "/Users/yunjun/IntelliJProjects/polinsight/upload-dir/files/"
+    baseLocation : "C:\\upload_test\\"
+    image :        "C:\\upload_test\\images\\"
+    thumbnail :    "C:\\upload_test\\thumbnails\\"
+    file :         "C:\\upload_test\\files\\"
     address :      "http://localhost:8080/uploads/"
 ---
 spring :
@@ -168,7 +168,7 @@ spring :
     url :               jdbc:mariadb://pol-mariadb:3306/polinsight?useSSL=false
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :
-      maximum-pool-size : 300
+      maximum-pool-size : 200
       pool-name :         Polinsight DBCP Pool
 
   redis :

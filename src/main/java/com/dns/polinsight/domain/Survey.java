@@ -3,6 +3,8 @@ package com.dns.polinsight.domain;
 import com.dns.polinsight.domain.dto.SurveyDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,7 +17,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@ToString
 @DynamicUpdate
 public class Survey implements Serializable {
 
@@ -24,7 +25,8 @@ public class Survey implements Serializable {
   @Setter
   @Embedded
   @OrderBy("progress ASC")
-  private SurveyStatus status;
+  @Builder.Default
+  private SurveyStatus status = new SurveyStatus();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +57,7 @@ public class Survey implements Serializable {
   @Setter
   private String originalName;
 
+  @Setter
   @JsonManagedReference
   @OneToOne(mappedBy = "survey", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Collector collector;
@@ -88,6 +91,11 @@ public class Survey implements Serializable {
     this.endAt = dto.getEndAt();
     this.createdAt = dto.getCreatedAt();
     this.status.setProgress(dto.getProgress());
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }
