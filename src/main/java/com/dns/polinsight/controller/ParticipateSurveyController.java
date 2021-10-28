@@ -80,7 +80,7 @@ public class ParticipateSurveyController {
       throw new Exception();
     } catch (Exception | WrongAccessException e) {
       log.error(e.getMessage());
-      e.printStackTrace();
+      log.error(e.getMessage());
       return new ModelAndView("redirect:/accumulate_error");
     }
   }
@@ -174,10 +174,10 @@ public class ParticipateSurveyController {
                                                                       .build());
       return success(sb);
     } catch (SurveyNotFoundException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new SurveyNotFoundException(e.getMessage());
     } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new NoSuchAlgorithmException(e.getMessage());
     }
   }

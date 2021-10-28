@@ -69,7 +69,6 @@ public class FileSystemStorageService implements StorageService {
 
   @Override
   public Path load(String filename) {
-
     if (typeCheckUtil.isImageFile(filename))
       return rootLocation.resolve(Paths.get(imageLocation + filename));
     else

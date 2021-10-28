@@ -182,7 +182,7 @@ public class SurveyServiceImpl implements SurveyService {
                try {
                  return getCollectorBySurveyId(survey);
                } catch (Exception e) {
-                 e.printStackTrace();
+                 log.error(e.getMessage());
                }
                return null;
              })

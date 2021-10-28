@@ -23,7 +23,6 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -88,7 +87,7 @@ public class ApiController {
       } else
         return success(adminService.adminSerchUserByRegex(regex, pageable));
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
@@ -123,7 +122,7 @@ public class ApiController {
 
       return success(new PageImpl<>(surveyList.getContent().stream().map(SurveyDto::of).collect(Collectors.toList()), pageable, surveyList.getTotalElements()));
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception();
     }
   }
@@ -148,7 +147,6 @@ public class ApiController {
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
       throw new Exception();
     }
   }
@@ -342,20 +340,6 @@ public class ApiController {
     }
   }
 
-  @PutMapping("/admin/survey")
-  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
-    try {
-      surveyService.adminSurveyUpdate(
-          Long.parseLong(map.get("id")),
-          Long.parseLong(map.get("point")),
-          map.get("create"),
-          map.get("end"),
-          map.get("progress"));
-      return success(true);
-    } catch (Exception e) {
-      throw new Exception(e.getMessage());
-    }
-  }
 
   @PermitAll
   @PostMapping("/find/email")
@@ -372,7 +356,7 @@ public class ApiController {
     try {
       return success(pointHistoryService.findAllPointHistoryByUserId(userId, pageable));
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
@@ -399,10 +383,8 @@ public class ApiController {
     return success(participateSurveyService.isExistParticipates(surveyId));
   }
 
-  /*
-   * 업르도 된 이미지 파일 저장 처리 후 결과반환
-   * */
   @Transactional
+  @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("/insight/thumbnail/{postId}")
   public ApiUtils.ApiResult<Boolean> uploadPolsinsightImageThumbnail(MultipartFile thumbnail,
                                                                      @PathVariable("postId") Long postId) throws Exception {
@@ -424,15 +406,18 @@ public class ApiController {
     return success(PostDTO.of(post));
   }
 
-  @GetMapping("/test")
-  public ApiUtils.ApiResult<Boolean> surveySyncProcess() throws InterruptedException {
-    try {
-      surveyService.getSurveyListAndSyncPerHour();
-      return success(Boolean.TRUE);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      throw new InterruptedException(e.getMessage());
-    }
-  }
-
+  //  @PutMapping("/admin/survey")
+  //  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
+  //    try {
+  //      surveyService.adminSurveyUpdate(
+  //          Long.parseLong(map.get("id")),
+  //          Long.parseLong(map.get("point")),
+  //          map.get("create"),
+  //          map.get("end"),
+  //          map.get("progress"));
+  //      return success(true);
+  //    } catch (Exception e) {
+  //      throw new Exception(e.getMessage());
+  //    }
+  //  }
 }

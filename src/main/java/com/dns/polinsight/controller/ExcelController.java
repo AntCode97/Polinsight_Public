@@ -13,6 +13,7 @@ import com.dns.polinsight.utils.ApiUtils;
 import com.dns.polinsight.utils.ExcelUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import static com.dns.polinsight.utils.ApiUtils.success;
 
 @Slf4j
 @RestController
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class ExcelController {
@@ -55,8 +57,7 @@ public class ExcelController {
         excelUtil.createPointRequestExcel(pointRequestService.getUserPointRequests(userId), response, String.format("%s-%s", "point_request", LocalDate.now()));
       }
     } catch (IllegalAccessException | IOException e) {
-      e.printStackTrace();
-      log.error("포인트 전환 내역 다운로드 오류");
+      log.error("{} :: {}", e.getMessage(), "포인트 전환 내역 다운로드 오류");
       throw new Exception(e.getMessage());
     }
   }
@@ -70,7 +71,7 @@ public class ExcelController {
       Long count = pointRequestService.countExistsPointRequests();
       return success(count);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage());
       throw new Exception(e.getMessage());
     }
   }
@@ -131,7 +132,7 @@ public class ExcelController {
         excelUtil.createParticipateSurveyExcel(participateSurveyService.findAllByUserId(userId), response, String.format("%s-%s", "participate_survey", LocalDate.now()));
       }
     } catch (IOException e) {
-      log.error("참여한 설문 다운로드 오류 : {}", e.getCause());
+      log.error("참여 설문 다운로드 오류 : {}", e.getCause());
       throw new InvalidValueException(e.getMessage());
     }
   }
