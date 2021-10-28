@@ -6,7 +6,6 @@ import com.dns.polinsight.domain.SurveyStatus;
 import com.dns.polinsight.exception.SurveyNotFoundException;
 import com.dns.polinsight.exception.TooManyRequestException;
 import com.dns.polinsight.projection.SurveyMapping;
-import com.dns.polinsight.repository.CollectorRepository;
 import com.dns.polinsight.repository.SurveyRepository;
 import com.dns.polinsight.types.CollectorStatusType;
 import com.dns.polinsight.types.ProgressType;
@@ -28,6 +27,8 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,10 +38,6 @@ import java.util.stream.Collectors;
 public class SurveyServiceImpl implements SurveyService {
 
   private final SurveyRepository surveyRepository;
-
-  private final CollectorRepository collectorRepository;
-
-  private final ParticipateSurveyService participateSurveyService;
 
   @Value("${custom.api.accessToken}")
   private String accessToken;
@@ -137,91 +134,6 @@ public class SurveyServiceImpl implements SurveyService {
 
 
   @Override
-  @Transactional
-  @Scheduled(cron = "0 0 0 * * ?")
-  public void getSurveyListAndSyncPerHour() {
-    final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
-
-    Set<Long> surveySet = surveyRepository.findAll().parallelStream().map(Survey::getSurveyId).collect(Collectors.toUnmodifiableSet());
-    try {
-      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
-      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
-      List<Survey> surveyList = tmplist.parallelStream()
-                                       .filter(objMap -> !surveySet.contains(Long.parseLong(objMap.get("id"))))
-                                       .map(objMap -> Survey.builder()
-                                                            .surveyId(Long.valueOf(objMap.get("id")))
-                                                            .title(objMap.get("title"))
-                                                            .createdAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
-                                                            .endAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
-                                                            .href(objMap.get("href")).point(0L)
-                                                            .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
-                                                            .build())
-                                       //                                       .map(survey -> this.getSurveyDetails(survey, httpEntity))
-                                       .collect(Collectors.toList());
-      log.info("Survey and Detail Info save success");
-      Thread.sleep(10 * 1000);
-      log.info("Sync Survey save start");
-      surveyList = surveyRepository.saveAllAndFlush(surveyList);
-      log.info("Sync Survey save end");
-      log.warn("" + surveyList.size());
-      Thread.sleep(10 * 1000);
-      log.info("Get Collector for Survey Info start");
-      for (Survey survey : surveyList) {
-        getCollectorBySurveyId(survey);
-      }
-      log.info("Get Collector for Survey Info end");
-    } catch (TooManyRequestException | InterruptedException e) {
-      log.error(e.getMessage());
-    }
-  }
-
-  /**
-   * CustomVariables, End Date 추가
-   *
-   * @return Custom Variable이 추가된 Survey 객체
-   */
-  private Survey getSurveyDetails(Survey survey, HttpEntity<Object> header) {
-    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
-    Map<String, Object> map = res.getBody();
-    Map<String, String> vars = (Map<String, String>) map.get("custom_variables");
-
-    if (!(vars.containsKey("hash") && vars.containsKey("email"))) {
-      survey = getSurveyCustomVariablesOrUpdate(survey);
-    }
-    survey.setQuestionCount(Long.valueOf(map.get("question_count") + "")); //--> 질문 갯수
-    return survey;
-  }
-
-  public List<Collector> getCollectorBySurveyId(Survey survey) {
-    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "surveys/" + survey.getSurveyId() + "/collectors", HttpMethod.GET, httpEntity, Map.class);
-    List<Map<String, String>> mapList = (List<Map<String, String>>) res.getBody().get("data");
-    List<Collector> collectors = mapList.parallelStream().map(obj -> Collector.builder()
-                                                                              .collectorId(Long.parseLong(obj.get("id")))
-                                                                              .name(obj.get("name"))
-                                                                              .href(obj.get("href"))
-                                                                              .survey(survey)
-                                                                              .build())
-                                        .collect(Collectors.toList());
-
-    return collectorRepository.saveAllAndFlush(this.getParticipateUrl(collectors, survey));
-
-  }
-
-  private List<Collector> getParticipateUrl(List<Collector> collectorsList, Survey survey) {
-    return collectorsList.parallelStream().map(collector -> {
-      ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "collectors/" + collector.getCollectorId(), HttpMethod.GET, httpEntity, Map.class);
-      Map<String, String> map = res.getBody();
-      return Collector.builder()
-                      .participateUrl(String.valueOf(map.get("url")))
-                      .responseCount(Long.valueOf(String.valueOf(map.get("response_count"))))
-                      .status(CollectorStatusType.valueOf(String.valueOf(map.get("status"))))
-                      .collectorId(Long.parseLong(map.get("id")))
-                      .survey(survey)
-                      .build();
-    }).collect(Collectors.toList());
-  }
-
-  @Override
   public void deleteSurveyById(long surveyId) {
     surveyRepository.deleteById(surveyId);
   }
@@ -231,28 +143,122 @@ public class SurveyServiceImpl implements SurveyService {
     return surveyRepository.adminSurveyUpdate(id, point, create, end, progressType);
   }
 
-  private Survey getSurveyCustomVariablesOrUpdate(Survey survey) {
+  @Override
+  @Transactional
+  @Scheduled(cron = "0 0 0 * * ?")
+  public void getSurveyListAndSyncPerHour() {
+    log.info("Sync Survey save start At {}", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+
+    // https://developer.surveymonkey.com/api/v3/#api-endpoints-get-surveys
+    final String additionalUrl = "/surveys?include=date_created,date_modified,preview";
+    Set<Long> surveySet = surveyRepository.findAll().parallelStream().map(Survey::getSurveyId).collect(Collectors.toUnmodifiableSet());
+    try {
+      ResponseEntity<Map> map = new RestTemplate().exchange(baseURL + additionalUrl, HttpMethod.GET, httpEntity, Map.class);
+      List<Map<String, String>> tmplist = (List<Map<String, String>>) map.getBody().get("data");
+      tmplist.stream()
+             .filter(objMap -> !surveySet.contains(Long.parseLong(objMap.get("id"))))
+             .map(objMap -> Survey.builder()
+                                  .surveyId(Long.valueOf(objMap.get("id")))
+                                  .title(objMap.get("title"))
+                                  .createdAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
+                                  .endAt(LocalDate.parse(objMap.get("date_created").split("T")[0]))
+                                  .href(objMap.get("href")).point(0L)
+                                  .status(SurveyStatus.builder().count(0L).variables(new HashSet<>()).build())
+                                  .build())
+             .map(survey -> {
+               try {
+                 log.info("survey : {} / {} will update", survey.getTitle(), survey.getSurveyId());
+                 Thread.sleep(500);
+                 Survey tmp = this.getSurveyDetails(survey, httpEntity);
+                 log.info("survey : {} / {} has updated", survey.getTitle(), survey.getSurveyId());
+                 return tmp;
+               } catch (InterruptedException e) {
+                 log.error(e.getMessage());
+               }
+               return null;
+             })
+             .filter(Objects::nonNull)
+             .map(survey -> {
+               try {
+                 return getCollectorBySurveyId(survey);
+               } catch (Exception e) {
+                 e.printStackTrace();
+               }
+               return null;
+             })
+             .filter(Objects::nonNull)
+             .forEach(surveyRepository::save);
+
+      log.info("Success to save survey and detail info");
+
+      log.info("Survey sync and Save Success At {}", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    } catch (TooManyRequestException e) {
+      log.error(e.getMessage());
+    }
+  }
+
+  private Survey getSurveyDetails(Survey survey, HttpEntity<Object> header) throws InterruptedException {
+    Thread.sleep(1000);
+    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "/surveys/" + survey.getSurveyId() + "/details", HttpMethod.GET, header, Map.class);
+    Map<String, Object> map = res.getBody();
+    Map<String, String> vars = (Map<String, String>) map.get("custom_variables");
+    if (!vars.containsKey("hash") || !vars.containsKey("email")) {
+      survey = updateSurveyCustomVariablesOrUpdate(survey);
+    }
+    survey.setQuestionCount(Long.valueOf(map.get("question_count") + ""));
+    return survey;
+  }
+
+  private Survey updateSurveyCustomVariablesOrUpdate(Survey survey) throws InterruptedException {
     if (!survey.getStatus().getVariables().isEmpty()) {
       return survey;
     }
-    String url = baseURL + "surveys/" + survey.getSurveyId();
+    Thread.sleep(500);
     Map<String, String> custom_variables = new HashMap<>();
     custom_variables.put("email", "user_id");
     custom_variables.put("hash", "hash");
     Map<String, Object> map = new HashMap<>();
     map.put("custom_variables", custom_variables);
-    // 응답으로 서베이 디테일이 날라옴
 
     HttpHeaders headers = new HttpHeaders();
     headers.setBearerAuth(accessToken);
     HttpEntity<Map> entity = new HttpEntity<>(map, headers);
     ClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
     RestTemplate restTemplate = new RestTemplate(factory);
-    ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.PATCH, entity, Map.class);
+    ResponseEntity<Map> response = restTemplate.exchange(baseURL + "surveys/" + survey.getSurveyId(), HttpMethod.PATCH, entity, Map.class);
     Map<String, Object> responseData = response.getBody();
     Map<String, String> var = (Map) responseData.get("custom_variables");
     survey.getStatus().setVariables(var.keySet());
     log.info("Survey {} variables updated, Title: {}", survey.getId(), survey.getTitle());
+    return survey;
+  }
+
+  private Survey getCollectorBySurveyId(Survey survey) throws InterruptedException {
+    Thread.sleep(1000);
+    ResponseEntity<Map> res = new RestTemplate().exchange(baseURL + "surveys/" + survey.getSurveyId() + "/collectors", HttpMethod.GET, httpEntity, Map.class);
+    List<Map<String, String>> mapList = (List<Map<String, String>>) res.getBody().get("data");
+    List<Collector> collectors = mapList.parallelStream()
+                                        .map(obj -> Collector.builder()
+                                                             .collectorId(Long.parseLong(obj.get("id")))
+                                                             .name(obj.get("name"))
+                                                             .href(obj.get("href"))
+                                                             .survey(survey)
+                                                             .build())
+                                        .map(collector -> {
+                                          // get participate url
+                                          ResponseEntity<Map> collectorResponse = new RestTemplate().exchange(baseURL + "collectors/" + collector.getCollectorId(), HttpMethod.GET, httpEntity, Map.class);
+                                          Map<String, String> map = collectorResponse.getBody();
+                                          return Collector.builder()
+                                                          .participateUrl(String.valueOf(map.get("url")))
+                                                          .responseCount(Long.valueOf(String.valueOf(map.get("response_count"))))
+                                                          .status(CollectorStatusType.valueOf(String.valueOf(map.get("status"))))
+                                                          .collectorId(Long.parseLong(map.get("id")))
+                                                          .survey(survey)
+                                                          .build();
+                                        })
+                                        .collect(Collectors.toList());
+    if (collectors.size() > 0)
+      survey.setCollector(collectors.get(0));
     return survey;
   }
 

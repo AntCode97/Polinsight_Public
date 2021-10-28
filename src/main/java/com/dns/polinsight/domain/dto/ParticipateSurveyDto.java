@@ -3,11 +3,9 @@ package com.dns.polinsight.domain.dto;
 import com.dns.polinsight.domain.ParticipateSurvey;
 import lombok.*;
 
-import java.beans.ConstructorProperties;
-
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(onConstructor_ = {@ConstructorProperties({"email", "title", "participateAt", "point", "finished"})})
+@AllArgsConstructor
 @Setter
 @Getter
 @ToString

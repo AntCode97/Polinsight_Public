@@ -424,4 +424,15 @@ public class ApiController {
     return success(PostDTO.of(post));
   }
 
+  @GetMapping("/test")
+  public ApiUtils.ApiResult<Boolean> surveySyncProcess() throws InterruptedException {
+    try {
+      surveyService.getSurveyListAndSyncPerHour();
+      return success(Boolean.TRUE);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      throw new InterruptedException(e.getMessage());
+    }
+  }
+
 }
