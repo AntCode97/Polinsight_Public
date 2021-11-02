@@ -21,11 +21,12 @@
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>${LOG_PATH}/polinsight_rolling_log}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
-      <timeBasedFileNamingTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>20MB</maxFileSize>
-      </timeBasedFileNamingTriggeringPolicy>
+      </timeBasedFileNamingAndTriggeringPolicy>
     </rollingPolicy>
   </appender>
+
 
   <!-- Error log appender -->
   <appender name="ERROR_ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -41,9 +42,9 @@
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>${LOG_PATH}/polinsight_Error_log.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
-      <timeBasedFileNamingTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>20MB</maxFileSize>
-      </timeBasedFileNamingTriggeringPolicy>
+      </timeBasedFileNamingAndTriggeringPolicy>
       <maxHistory>110</maxHistory>
     </rollingPolicy>
   </appender>
