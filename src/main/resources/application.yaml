@@ -199,9 +199,16 @@ server :
     session :
       timeout : 15m
 
-logging :
-  file :
-    name : ./polinsight_logs.log
+#logging :
+#  file :
+#    name : /app/logs/polinsight_logs.log
+#  level :
+#    root : info
+#    com :
+#      dns :
+#        polinsight :
+#          service : info
+
 
 custom :
   callback :
