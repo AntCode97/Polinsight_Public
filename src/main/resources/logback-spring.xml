@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <property name="LOGS_PATH" value="/app/logs"/>
+  <property name="LOG_PATH" value="/app/logs"/>
   <property name="LOG_PATTERN" value="%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
 
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
