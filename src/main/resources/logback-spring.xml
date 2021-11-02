@@ -1,11 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+  <property name="LOGS_PATH" value="/app/logs"/>
+  <property name="LOG_PATTERN" value="%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
+
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-  <root level="INFO">
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/polinsight_logs.log</file>
+
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/polinsight_rolling_log}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+      <timeBasedFileNamingTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>20MB</maxFileSize>
+      </timeBasedFileNamingTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <!-- Error log appender -->
+  <appender name="ERROR_ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>error</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <file>${LOG_PATH}/polinsight_ERROR_log.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/polinsight_Error_log.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+      <timeBasedFileNamingTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>20MB</maxFileSize>
+      </timeBasedFileNamingTriggeringPolicy>
+      <maxHistory>110</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <root level="info">
     <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+    <appender-ref ref="ERROR_ROLLING"/>
   </root>
-  <logger name="org.springframework.web" level="INFO"/>
-  <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
-  <logger name="com.zaxxer.hikari" level="TRACE"/>
+  <logger name="com.zaxxer.hikari" level="DEBUG"/>
 </configuration>
