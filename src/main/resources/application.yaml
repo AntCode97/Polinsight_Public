@@ -199,17 +199,6 @@ server :
     session :
       timeout : 15m
 
-#logging :
-#  file :
-#    name : /app/logs/polinsight_logs.log
-#  level :
-#    root : info
-#    com :
-#      dns :
-#        polinsight :
-#          service : info
-
-
 custom :
   callback :
     base : "http://dnslab.iptime.org"
