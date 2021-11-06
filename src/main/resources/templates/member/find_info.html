@@ -168,16 +168,6 @@
   </div>
   <script th:src="@{/js/Validator.js}"></script>
   <script>
-    $(document).on('focus', '.user_info_input', function () {
-      $(this).css('border-bottom', '1px solid #4C99CF');
-      $(this).prev('.info_article').css('color', '#4C99CF')
-      $(this).parent('.user_info_box').css('border', '1px solid #4C99CF');
-    });
-    $(document).on('blur', '.user_info_input', function () {
-      $(this).css('border-bottom', '1px solid #c5c7d0');
-      $(this).prev('.info_article').css('color', '#69666D')
-      $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
-    });
     $(document)
         .on('click', '.header_box > input', function () {
           if ($(this).is(':checked')) {
@@ -203,6 +193,16 @@
           let msg = $(this).closest('form').find('.err_msg')
           nameValidateMessage(nameValue, msg);
         })
+        .on('blur', '.user_info_input', function () {
+          $(this).css('border-bottom', '1px solid #c5c7d0');
+          $(this).prev('.info_article').css('color', '#69666D')
+          $(this).parent('.user_info_box').css('border', '1px solid #c5c7d0');
+        })
+        .on('focus', '.user_info_input', function () {
+          $(this).css('border-bottom', '1px solid #4C99CF');
+          $(this).prev('.info_article').css('color', '#4C99CF')
+          $(this).parent('.user_info_box').css('border', '1px solid #4C99CF');
+        });
 
     const clickFindBtn = e => {
       e.preventDefault()
@@ -214,9 +214,10 @@
       let findpwd_name = $('input[name=findpwd_name]')
       let findpwd_phone = $('input[name=findpwd_phone]')
       let email = $('input[name=email]')
+
       if (type === 'email') {
-        if (!isValidEmail(email.val())) {
-          alert('입력하신 이메일을 확인해주세요')
+        if (!isValidPhone(phone.val())) {
+          alert('입력하신 휴대전화를 확인해주세요')
           email.focus()
           return;
         }
@@ -225,20 +226,20 @@
           finduser_name.focus()
           return
         }
-      }
-      if (type === 'password') {
-        if (!isValidName(findpwd_name.val())) {
-          alert('입력하신 이름을 확인해주세요')
-          findpwd_name.focus()
-          return;
-        }
+
+      } else if (type === 'password') {
         if (!isValidEmail(email.val())) {
           alert('입력하신 이메일을 확인해주세요')
           email.focus()
           return;
         }
+        if (!isValidName(findpwd_name.val())) {
+          alert('입력하신 이름을 확인해주세요')
+          findpwd_name.focus()
+          return;
+        }
         if (!isValidPhone(findpwd_phone.val())) {
-          alert('입력하신 이메일을 확인해주세요')
+          alert('입력하신 핸드폰 번호를 확인해주세요')
           findpwd_phone.focus()
           return;
         }
@@ -275,6 +276,7 @@
 
     $(function () {
       $('button').on('click', clickFindBtn)
+
       $('input[name=find_tab]').on('click', () => {
         $('.tab_box').find('input').val('')
       })

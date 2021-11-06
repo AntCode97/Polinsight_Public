@@ -32,6 +32,7 @@ public interface UserService extends UserDetailsService {
 
   void deleteUserById(long userId);
 
+
   User findUserByEmail(Email email) throws UsernameNotFoundException;
 
   long countAllUser();

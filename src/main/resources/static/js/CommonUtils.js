@@ -20,13 +20,13 @@ const setDay = (e) => {
       day.append($("<option></option>").attr("value", i).text(i));
     }
   } else if (
-    month === 1 ||
-    month === 3 ||
-    month === 5 ||
-    month === 7 ||
-    month === 8 ||
-    month === 10 ||
-    month === 12
+      month === 1 ||
+      month === 3 ||
+      month === 5 ||
+      month === 7 ||
+      month === 8 ||
+      month === 10 ||
+      month === 12
   ) {
     for (let i = 1; i <= 31; i++) {
       day.append($("<option></option>").attr("value", i).text(i));
@@ -40,7 +40,7 @@ const setDay = (e) => {
 
 const passwordInputValidator = (pwd) => {
   return !!pwd.match(
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,16}$/
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,16}$/
   );
 };
 const phoneNumberChecker = (phone) => {
@@ -49,7 +49,7 @@ const phoneNumberChecker = (phone) => {
 };
 const emailInputValidator = (email) => {
   return !!email.match(
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]){5,20}@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
   );
 };
 
@@ -64,15 +64,15 @@ const phoneToStringConverter = (phone) => {
 
 const phoneAddHypen = (e) => {
   e.target.value = e.target.value.replace(
-    /([0-9]{3})([0-9]{4})([0-9]{4})/,
-    "$1-$2-$3"
+      /([0-9]{3})([0-9]{4})([0-9]{4})/,
+      "$1-$2-$3"
   );
 };
 
 const phoneDelHypen = (e) => {
   e.target.value = e.target.value.replace(
-    /^([0-9]{3})-([0-9]{4})-([0-9]{4})$/,
-    "$1$2$3"
+      /^([0-9]{3})-([0-9]{4})-([0-9]{4})$/,
+      "$1$2$3"
   );
 };
 
@@ -94,7 +94,7 @@ function stringToPhone() {
   } else if (arguments.length === 1 && !!arguments[0]) {
     let phone = String(arguments[0]).replaceAll("-", "");
     return `${phone.substring(0, 3)}-${phone.substring(3, 7)}-${phone.substring(
-      7
+        7
     )}`;
   }
 }
@@ -106,7 +106,7 @@ function addressParser() {
 function dateParser() {
   let year = arguments[0];
   let month =
-    String(arguments[1]).length < 2 ? "0" + arguments[1] : arguments[1];
+      String(arguments[1]).length < 2 ? "0" + arguments[1] : arguments[1];
   let day = String(arguments[2]).length < 2 ? "0" + arguments[2] : arguments[2];
   return `${year}-${month}-${day}`;
 }
@@ -123,7 +123,7 @@ async function saveByExcel(e) {
   let url = e.data.url;
   let params = !e.data.param ? {} : e.data.param;
 
-  const response = await http.get(url + "/count", { params: params });
+  const response = await http.get(url + "/count", {params: params});
   if (response.data.success) {
     if (response.data.response > 0) {
       const frm = $(`<form action="${url}" method="get"></form>`);
@@ -152,9 +152,9 @@ const panelInfoChecker = (info) => {
   for (let idx in arr) {
     let key = arr[idx];
     if (
-      !info[key] ||
-      info[key].includes("선택") ||
-      info[key].includes("undefined")
+        !info[key] ||
+        info[key].includes("선택") ||
+        info[key].includes("undefined")
     ) {
       return false;
     }
@@ -180,9 +180,9 @@ const adminPanelInfoChecker = (info) => {
   for (let idx in arr) {
     let key = arr[idx];
     if (
-      !info[key] ||
-      info[key].includes("선택") ||
-      info[key].includes("undefined")
+        !info[key] ||
+        info[key].includes("선택") ||
+        info[key].includes("undefined")
     ) {
       return false;
     }
@@ -194,26 +194,26 @@ const adminPanelInfoChecker = (info) => {
 };
 
 const userDtoParser = (beforeInfo) => {
-  let returnInfo = { ...beforeInfo };
+  let returnInfo = {...beforeInfo};
   if (!!beforeInfo["state"] && !!beforeInfo["city"])
     returnInfo["address"] = addressParser(
-      beforeInfo["state"],
-      beforeInfo["city"]
+        beforeInfo["state"],
+        beforeInfo["city"]
     );
   if (!!beforeInfo["year"] && !!beforeInfo["month"] && !!beforeInfo["day"])
     returnInfo["birth"] = dateParser(
-      beforeInfo["year"],
-      beforeInfo["month"],
-      beforeInfo["day"]
+        beforeInfo["year"],
+        beforeInfo["month"],
+        beforeInfo["day"]
     );
   returnInfo["phone"] = returnInfo["phone"].replace(
-    /([0-9]{3})([0-9]{4})([0-9]{4})/,
-    "$1-$2-$3"
+      /([0-9]{3})([0-9]{4})([0-9]{4})/,
+      "$1-$2-$3"
   );
   if (!!beforeInfo["recommend"])
     returnInfo["recommend"] = returnInfo["recommend"].replace(
-      /([0-9]{3})([0-9]{4})([0-9]{4})/,
-      "$1-$2-$3"
+        /([0-9]{3})([0-9]{4})([0-9]{4})/,
+        "$1-$2-$3"
     );
   return returnInfo;
 };
@@ -250,7 +250,8 @@ const getPanelDataFromInputToJson = () => {
   let job = $("select[name=job]");
   let industry = $("select[name=industry]");
   let favorite = $("input:checkbox[name=favorite]:checked");
-
+  let isSmsReceive = $('input:radio[name=isSmsReceive]:checked')
+  let isEmailReceive = $('input:radio[name=isEmailReceive]:checked')
   let favList = [];
   favorite.each((index, value) => {
     favList.push(value.value);
@@ -266,6 +267,8 @@ const getPanelDataFromInputToJson = () => {
     job: job.val(),
     industry: industry.val(),
     favorite: favList,
+    isSmsReceive: isSmsReceive.val(),
+    isEmailReceive: isEmailReceive.val()
   };
 };
 

@@ -923,7 +923,7 @@
       }
 
       if (isPanel === 'true') {
-        signupInfo = {...signupInfo, ...getPanelDataFromInputToJson()}
+        signupInfo = {isPanel, ...signupInfo, ...getPanelDataFromInputToJson()}
         if (!isValidPanelInfo(signupInfo)) {
           alert('입력하신 패널 정보를 다시 한번 확인해주세요.')
           $('input[name=gender]').focus()

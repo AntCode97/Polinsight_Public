@@ -28,7 +28,7 @@ public class SignupDTO {
 
   private String recommend;
 
-  private boolean ispanel;
+  private Boolean isPanel;
 
   private List<String> favorite;
 
@@ -47,5 +47,9 @@ public class SignupDTO {
   private String industry;
 
   private String address;
+
+  private Boolean isEmailReceive;
+
+  private Boolean isSmsReceive;
 
 }
