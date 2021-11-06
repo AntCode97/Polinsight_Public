@@ -19,7 +19,7 @@ public interface AdminService {
 
   void requestPointPayment(User user, Long reqestPoint);
 
-  Page<UserDto> adminSerchUserByRegex(String regex, Pageable pageable);
+  Page<UserDto> adminSearchUserByRegex(String regex, Pageable pageable);
 
   List<Survey> adminSerchSurveyByRegex(String regex, Pageable pageable);
 

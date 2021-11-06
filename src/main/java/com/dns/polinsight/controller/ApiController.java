@@ -85,7 +85,7 @@ public class ApiController {
       if (regex.isBlank()) {
         return success(userService.findAllNotInAdmin(pageable));
       } else
-        return success(adminService.adminSerchUserByRegex(regex, pageable));
+        return success(adminService.adminSearchUserByRegex(regex, pageable));
     } catch (Exception e) {
       log.error(e.getMessage());
       throw new Exception(e.getMessage());
