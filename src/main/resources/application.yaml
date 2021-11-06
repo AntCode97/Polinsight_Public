@@ -106,7 +106,7 @@ spring :
 
   redis :
     host : localhost
-    port : 6379
+    port : 9000
 
   config :
     activate :
@@ -124,7 +124,7 @@ spring :
         ddl-auto :   validate
         format_sql : true
     generate-ddl : true
-    show-sql :     true
+    show-sql :     false
 
 
   banner :
@@ -170,6 +170,7 @@ spring :
     hikari :
       maximum-pool-size : 200
       pool-name :         Polinsight DBCP Pool
+      max-lifetime :      58000
 
   redis :
     host : pol-redis

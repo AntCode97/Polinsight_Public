@@ -1281,9 +1281,19 @@
     });
 
     const userDelete = e => {
-      if (canDelete) {
+      e.preventDefault()
+      e.returnValue = false
+      let chkBox = $('input#exit_checked:checked').val()
+      if (!!chkBox) {
         if (confirm('정말 회원 탈퇴 하시겠습니까?')) {
-          http.post('/user/delete')
+          http
+              .post('/user/delete')
+              .then(res => {
+                console.log(res)
+                if (res.data.success) {
+                  location.replace('/')
+                }
+              })
         }
       } else {
         alert('안내사항에 동의해주세요')

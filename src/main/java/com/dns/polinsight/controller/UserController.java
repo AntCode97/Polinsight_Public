@@ -20,6 +20,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,11 +67,11 @@ public class UserController {
                                                 ModelAndView mv) {
     try {
       log.info("{} sing up" + signupDTO.getEmail());
-      //      String inputPassword = signupDTO.getPassword();
+
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
       User user = userService.saveOrUpdate(new User(signupDTO));
-      //      UserDetails userDetails = userService.loadUserByUsername(user.getEmail().toString());
-      if (signupDTO.isIspanel()) {
+      log.warn(user.toString());
+      if (signupDTO.getIsPanel()) {
         mv.setViewName("redirect:/panel");
       } else {
         mv.addObject("name", user.getName());
@@ -102,16 +103,19 @@ public class UserController {
   @PreAuthorize("isAuthenticated()")
   @Transactional
   @PostMapping("/user/delete")
-  public void deleteUser(@CurrentUser User user,
-                         HttpServletRequest request,
-                         HttpServletResponse response) throws Exception {
+  public ApiUtils.ApiResult<Boolean> deleteUser(@CurrentUser User user,
+                                                HttpServletRequest request,
+                                                HttpServletResponse response) throws Exception {
     try {
-      Long userId = user.getId();
+      log.warn("delete user id : {}, email: {}", user.getId(), user.getEmail());
       String email = user.getEmail().toString();
       userService.deleteUserById(user.getId());
-      new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+      SecurityContext context = SecurityContextHolder.getContext();
+      new SecurityContextLogoutHandler().logout(request, response, context.getAuthentication());
+      context.setAuthentication((Authentication) null);
       SecurityContextHolder.clearContext();
       log.info("ID : {} has deleted", email);
+      return success(Boolean.TRUE);
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
@@ -155,7 +159,6 @@ public class UserController {
   @Transactional
   @PutMapping("/admin/user")
   public ApiUtils.ApiResult<Boolean> adminUpdateUser(@RequestBody UserDto dto) throws Exception {
-    log.warn("Update User info : {}", dto.toString());
     try {
       User tuser = userService.findById(dto.getId()).get();
       User user = new User(dto);
@@ -220,7 +223,6 @@ public class UserController {
 
   @PostMapping("/api/password/change")
   public ApiUtils.ApiResult<Boolean> changePwd(@RequestBody ChangeRequest changeRequest) throws Exception {
-    log.warn(changeRequest.toString());
     try {
       User user = userService.findById(changeRequest.getId()).orElseThrow();
       user.setPassword(passwordEncoder.encode(changeRequest.getPassword()));
@@ -239,7 +241,7 @@ public class UserController {
                                      @PathVariable(name = "email") String email,
                                      @PathVariable(name = "name") String name) {
     try {
-      log.warn("changePassword() in UserController email : {}, name : {}, hash: {}", email, name, hash);
+      log.info("changePassword() in UserController email : {}, name : {}, hash: {}", email, name, hash);
       if (!hash.equals(changePasswordService.findChangePwdDtoByEmail(Email.of(email)).getHash())) {
         // 받은 해시와 저장된 해시가 다르면 접근 거부
         log.error("해시값이 일치하지 않습니다");
@@ -388,11 +390,13 @@ public class UserController {
   @PermitAll
   @Transactional
   @PostMapping("/user_join")
-  public ApiUtils.ApiResult<Boolean> signup(@RequestBody SignupDTO signupDTO, HttpSession session) throws Exception {
-    log.warn(signupDTO.toString());
+  public ApiUtils.ApiResult<Boolean> signup(
+      @RequestBody SignupDTO signupDTO,
+      HttpSession session) throws Exception {
     try {
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
-      User user = userService.saveOrUpdate(new User(signupDTO));
+      User tUser = new User(signupDTO);
+      User user = userService.saveOrUpdate(tUser);
       session.setMaxInactiveInterval(60);
       session.setAttribute("name", user.getName());
       session.setAttribute("email", user.getEmail().toString());
@@ -413,8 +417,8 @@ public class UserController {
     if (!user.getRole().equals(UserRoleType.USER)) {
       throw new UnAuthorizedException("일반 유저만 사용 가능합니다.");
     }
-    log.warn("{} has requested to change role", user.getEmail().toString());
-    log.warn(dto.toString());
+    log.info("{} has requested to change role", user.getEmail().toString());
+
 
     try {
       user.getPanel().update(Panel.of(dto));
@@ -422,7 +426,6 @@ public class UserController {
       userService.saveOrUpdate(user);
       // Spring security에 인증되어있는 객체를 업데이트
       Authentication before = SecurityContextHolder.getContext().getAuthentication();
-      log.warn(before.toString());
       SecurityContextHolder.clearContext();
       return success(Boolean.TRUE);
     } catch (Exception e) {

@@ -102,9 +102,11 @@ public class User implements UserDetails {
     this.name = dto.getName();
     this.phone = Phone.of(dto.getPhone());
     this.recommend = dto.getRecommend() != null ? Phone.of(dto.getRecommend()) : null;
-    this.role = UserRoleType.USER;
+    this.role = dto.getIsPanel() ? UserRoleType.PANEL : UserRoleType.USER;
     this.point = 0L;
-    if (dto.isIspanel()) {
+    this.isEmailReceive = dto.getIsEmailReceive();
+    this.isSmsReceive = dto.getIsSmsReceive();
+    if (dto.getIsPanel()) {
       this.panel = Panel.builder()
                         .gender(dto.getGender())
                         .education(dto.getEducation())
