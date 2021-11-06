@@ -46,9 +46,9 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  public Page<UserDto> adminSerchUserByRegex(String regex, Pageable pageable) {
+  public Page<UserDto> adminSearchUserByRegex(String regex, Pageable pageable) {
     Page<User> page = userRepository.findUsersByRegex(regex, pageable);
-    List<UserDto> list = page.getContent().parallelStream().map(UserDto::new).collect(Collectors.toList());
+    List<UserDto> list = page.getContent().stream().map(UserDto::new).collect(Collectors.toList());
     return new PageImpl<>(list, pageable, page.getTotalElements());
   }
 
