@@ -12,11 +12,11 @@
       <div id="metop_container">
         <div class="metop_inner">
           <div class="metop_board_wrap">
-            <div class="metop_board_card" style="border-top: 3px solid #eba444">
+            <div class="metop_board_card" style="border-top: 3px solid #EBA444">
               <form
-                id="frm_board"
-                th:object="${postDTO}"
-                enctype="multipart/form-data"
+                  id="frm_board"
+                  th:object="${postDTO}"
+                  enctype="multipart/form-data"
               >
                 <th:block th:include="fragments/postUpdateBody" />
               </form>
@@ -36,16 +36,16 @@
     let id = updateBtn.getAttribute("postNo");
     data.append("deleteFileList", deleteFileList);
     await http
-            .post(`/admin/posts/${id}/edit`, data, {
-              headers: { "Content-Type": "multipart/form-data" },
-            })
-            .then((response) => {
-              if(response.data.success){
-                location.replace(`/admin/posts/${id}`);
-                return;
-              }
+        .post(`/admin/posts/${id}/edit`, data, {
+          headers: {"Content-Type": "multipart/form-data"},
+        })
+        .then((response) => {
+          if (response.data.success) {
+            location.replace(`/admin/posts/${id}`);
 
-            });
+          }
+
+        });
   });
 
 </script>

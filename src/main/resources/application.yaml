@@ -200,10 +200,6 @@ server :
     session :
       timeout : 15m
 
-logging :
-  file :
-    name : ./polinsight_logs.log
-
 custom :
   callback :
     base : "http://dnslab.iptime.org"
