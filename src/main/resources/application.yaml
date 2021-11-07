@@ -106,7 +106,7 @@ spring :
 
   redis :
     host : localhost
-    port : 9000
+    port : 6379
 
   config :
     activate :
