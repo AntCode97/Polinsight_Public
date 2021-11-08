@@ -1,50 +1,49 @@
-<th:block th:include='admin/admin_sidebar' />
-<th:block th:include='module/common' />
+<th:block th:include="admin/admin_sidebar" />
 <th:block>
-  <link th:href='@{/css/table.css}' rel='stylesheet'>
+  <link th:href="@{/css/table.css}" rel="stylesheet">
   <style>
     .post-row > *:nth-child(1) {
-      width: 70px;
+      width : 70px;
     }
 
     .post-row > *:nth-child(2) {
-      width: 600px;
+      width : 600px;
     }
 
     .post-row > *:nth-child(3) {
-      width: 100px;
+      width : 100px;
     }
 
     .post-row > *:nth-child(4) {
-      width: 130px;
+      width : 130px;
     }
 
     .post-row > *:nth-child(5) {
-      width: 80px;
+      width : 80px;
     }
 
     .post-row > *:nth-child(6) {
-      width: 95px;
+      width : 95px;
     }
 
     .post-row > *:nth-child(7) {
-      width: 120px;
+      width : 120px;
     }
   </style>
   <div>
 
-    <div class='admin_main_contents'>
-      <div class='admin_main_contents_category'>
-        <div class='admin_main_contents_item'>
-          <p class='main_item'>공지사항</p>
+    <div class="admin_main_contents">
+      <div class="admin_main_contents_category">
+        <div class="admin_main_contents_item">
+          <p class="main_item">공지사항</p>
         </div>
       </div>
       <!-- 게시글 전체 조회 출력 -->
-      <div th:replace='fragments/postList'>
+      <div th:replace="fragments/postList">
       </div>
     </div>
   </div>
-  <div th:replace='fragments/post_delete_popup'>
+  <div th:replace="fragments/post_delete_popup">
   </div>
 
 </th:block>

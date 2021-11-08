@@ -294,6 +294,7 @@ public class ApiController {
                                                                     @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                     @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     try {
+      log.warn("regex: {}, type: {}", regex, type);
       if (regex.isBlank()) {
         if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequests(pageable));

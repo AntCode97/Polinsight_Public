@@ -98,7 +98,7 @@ spring :
   datasource :
     username :          root
     password :          root
-    url :               jdbc:mariadb://localhost:3306/polinsight
+    url :               jdbc:mariadb://localhost:3306/polinsight?characterEncoding=utf8&characterSetResult=utf8
     driver-class-name : org.mariadb.jdbc.Driver
     hikari :
       pool-name :         Test DBCP Pool
