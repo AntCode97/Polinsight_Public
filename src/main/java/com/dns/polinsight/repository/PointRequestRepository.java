@@ -24,12 +24,12 @@ public interface PointRequestRepository extends JpaRepository<PointRequest, Long
 
   @Query(nativeQuery = true,
       value = "SELECT * FROM point_request WHERE progress = :type")
-  Page<PointRequest> findAllPointRequestAndType(Pageable pageable, PointRequestProgressType type);
+  Page<PointRequest> findAllPointRequestAndType(Pageable pageable, String type);
 
   @Query(nativeQuery = true,
       value = "SELECT * FROM (SELECT * FROM point_request WHERE progress = :type) AS pr " +
           "WHERE pr.email LIKE %:regex% OR pr.account LIKE %:regex% OR pr.bank LIKE %:regex%)")
-  Page<PointRequest> findAllByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type);
+  Page<PointRequest> findAllByRegexAndType(Pageable pageable, String regex, String type);
 
   @Query(nativeQuery = true,
       value = "SELECT * FROM point_request WHERE progress = 'REQUESTED' OR progress = 'WAIT' OR progress = 'ERROR'")

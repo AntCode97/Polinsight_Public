@@ -92,7 +92,6 @@ public class PostController {
                                      BindingResult result,
                                      RedirectAttributes redirectAttributes,
                                      @CurrentUser User user) {
-    log.info("Result: " + result + ", data: " + postDTO);
     if (result.hasErrors()) {
       return "/posts/createPostForm";
     }
@@ -128,7 +127,6 @@ public class PostController {
     postDTO.setRegisteredAt(LocalDateTime.now());
     Post post = postService.addPost(postDTO);
     postDTO.setId(post.getId());
-    log.warn("{}", postDTO);
     //썸네일 추가
     MultipartFile originalThumbnail = postDTO.getThumbnailImg();
     if (originalThumbnail != null && !originalThumbnail.isEmpty()) {
@@ -248,6 +246,7 @@ public class PostController {
 
     model.addAttribute("post", dto);
     model.addAttribute("files", attachService.findFiles(postId));
+    model.addAttribute("name", currUser != null ? currUser.getName() : "Anonymous");
 
     List<Post> allPosts = postService.findPostsByPostType(dto.getPostType());
     for (int i = 0; i < allPosts.size(); i++) {

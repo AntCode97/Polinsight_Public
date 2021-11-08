@@ -52,12 +52,12 @@ public class PointRequestServiceImpl implements PointRequestService {
 
   @Override
   public Page<PointRequest> findAllPointRequestsAndType(Pageable pageable, PointRequestProgressType type) {
-    return pointRequestRepository.findAllPointRequestAndType(pageable, type);
+    return pointRequestRepository.findAllPointRequestAndType(pageable, type.name());
   }
 
   @Override
   public Page<PointRequest> findAllPointRequestsByRegexAndType(Pageable pageable, String regex, PointRequestProgressType type) {
-    return pointRequestRepository.findAllByRegexAndType(pageable, regex, type);
+    return pointRequestRepository.findAllByRegexAndType(pageable, regex, type.name());
   }
 
   @Override

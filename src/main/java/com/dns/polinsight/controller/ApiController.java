@@ -298,7 +298,6 @@ public class ApiController {
         if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequests(pageable));
         } else if (type.equalsIgnoreCase("REQUESTED")) {
-          // ERROR, Requested, Ongoing, Wait 모두 출력
           return success(pointRequestService.findAllOngoingRequest(pageable));
         } else {
           return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase())));

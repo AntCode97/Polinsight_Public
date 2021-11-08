@@ -70,7 +70,6 @@ public class UserController {
 
       signupDTO.setPassword(passwordEncoder.encode(signupDTO.getPassword()));
       User user = userService.saveOrUpdate(new User(signupDTO));
-      log.warn(user.toString());
       if (signupDTO.getIsPanel()) {
         mv.setViewName("redirect:/panel");
       } else {
@@ -107,7 +106,6 @@ public class UserController {
                                                 HttpServletRequest request,
                                                 HttpServletResponse response) throws Exception {
     try {
-      log.warn("delete user id : {}, email: {}", user.getId(), user.getEmail());
       String email = user.getEmail().toString();
       userService.deleteUserById(user.getId());
       SecurityContext context = SecurityContextHolder.getContext();
