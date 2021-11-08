@@ -67,6 +67,7 @@ public class ParticipateSurveyController {
       throw new InvalidParameterException();
     }
     try {
+      // TODO 2021-11-9, 화, 1:15 : property access exception 발생 중
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
       // 설문 종료 표시
       participateSurvey.setFinished(true);
