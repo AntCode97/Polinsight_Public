@@ -19,7 +19,7 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     request.getSession().invalidate();
     response.setStatus(HttpStatus.OK.value());
-    log.warn("Login failed");
+    log.info("Login failed");
     response.sendRedirect("/login?error=true");
   }
 

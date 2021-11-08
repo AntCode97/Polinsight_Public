@@ -294,12 +294,10 @@ public class ApiController {
                                                                     @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                     @RequestParam(value = "type", required = false, defaultValue = "ALL") String type) throws Exception {
     try {
-      log.warn("regex: {}, type: {}", regex, type);
       if (regex.isBlank()) {
         if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequests(pageable));
         } else if (type.equalsIgnoreCase("REQUESTED")) {
-          // ERROR, Requested, Ongoing, Wait 모두 출력
           return success(pointRequestService.findAllOngoingRequest(pageable));
         } else {
           return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase())));
