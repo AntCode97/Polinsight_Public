@@ -69,7 +69,9 @@ public class ParticipateSurveyController {
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
       // 설문 종료 표시
-      participateSurveyService.updateParticipateSurveyById(participateSurvey.getId());
+      participateSurvey.setFinished(true);
+      //      participateSurveyService.updateParticipateSurveyById(participateSurvey.getId());
+      participateSurvey = participateSurveyService.saveAndUpdate(participateSurvey);
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
       if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
@@ -95,7 +97,7 @@ public class ParticipateSurveyController {
       participateSurvey.addUser(user);
       participateSurveyService.saveAndUpdate(participateSurvey);
     } catch (Exception e) {
-      throw new Exception("SurveyHistory write Exception");
+      throw new Exception("SurveyHistory write Error");
     }
     try {
       Survey survey = participateSurvey.getSurvey();
