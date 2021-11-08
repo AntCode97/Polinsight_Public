@@ -70,6 +70,12 @@
     .post-row:not(:first-child):hover {
       cursor : pointer;
     }
+    .btn-input-wrap {
+      padding: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
   </style>
   <div class="container">
     <div class="board_contents_wrap">
@@ -103,12 +109,12 @@
           </div>
         </div>
         <!--        인증된 유저 글쓰기 가능-->
-        <div sec:authorize="hasAnyAuthority('USER','PANEL', 'BEST')">
-          <button class="btn_udel btn-primary" name="add_question_btn">질문 등록</button>
+        <div sec:authorize="hasAnyAuthority('USER','PANEL', 'BEST')" class="btn-input-wrap">
+          <button class="btn-input btn-green" name="add_question_btn">질문하기</button>
         </div>
         <!--        미 인증 유저 로그인 유도-->
-        <div sec:authorize="isAnonymous()">
-          <button class="btn_udel btn-primary" name="anonymous_add_question_btn">질문 등록</button>
+        <div sec:authorize="isAnonymous()" class="btn-input-wrap">
+          <button class="btn-input btn-green" name="anonymous_add_question_btn">질문하기</button>
         </div>
         <div class="page-button" id="pagination"></div>
       </div>
