@@ -7,18 +7,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSurvey, Long> {
-
-  List<ParticipateSurvey> findParticipateSurveysByUserIdOrderByParticipatedAtDesc(long userId);
-
-  List<ParticipateSurvey> findParticipateSurveyByUserIdAndParticipatedAt(long userId, LocalDateTime participateAt);
-
-  List<ParticipateSurvey> findParticipateSurveyByUserIdAndSurveyPoint(long userId, long surveyPoint);
 
   @Query(nativeQuery = true, value = "SELECT ps.id              AS id,\n" +
       "       ps.user_id         AS USER,\n" +
