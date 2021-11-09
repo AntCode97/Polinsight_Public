@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Getter
@@ -48,13 +50,13 @@ public class PostDTO {
   @CreatedDate
   private LocalDateTime registeredAt;
 
-  private List<Attach> attaches;
+  private Set<Attach> attaches;
 
   private List<MultipartFile> files;
 
   private MultipartFile thumbnailImg;
 
-  private List<CommentDto> comments;
+  private Set<CommentDto> comments;
 
   private String thumbnail;
 
@@ -73,7 +75,7 @@ public class PostDTO {
     this.registeredAt = post.getRegisteredAt();
     this.attaches = post.getAttaches();
     this.viewcnt = post.getViewcnt();
-    this.comments = post.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
+    this.comments = post.getComments().stream().map(CommentDto::new).collect(Collectors.toSet());
     this.thumbnail = post.getThumbnail();
   }
 
@@ -90,7 +92,7 @@ public class PostDTO {
                   .userId(String.valueOf(post.getUser().getEmail()))
                   .registeredAt(post.getRegisteredAt())
                   .viewcontent(post.getViewcontent())
-                  .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .comments(post.getComments().stream().map(CommentDto::new).collect(Collectors.toSet()))
                   .build();
   }
 
@@ -104,10 +106,10 @@ public class PostDTO {
                   .userId(String.valueOf(mapping.getUser().getEmail()))
                   .userName(mapping.getUser().getName())
                   .registeredAt(mapping.getRegisteredAt())
-                  .attaches(mapping.getAttaches())
+                  .attaches(new TreeSet<>(mapping.getAttaches()))
                   .viewcnt(mapping.getViewCount())
                   .viewcontent(mapping.getViewcontent())
-                  .comments(mapping.getComments().stream().map(CommentDto::new).collect(Collectors.toList()))
+                  .comments(mapping.getComments().stream().map(CommentDto::new).collect(Collectors.toSet()))
                   .build();
   }
 

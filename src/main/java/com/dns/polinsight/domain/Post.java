@@ -14,7 +14,9 @@ import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Table(name = "Post")
 @Entity
@@ -29,7 +31,7 @@ public class Post implements Serializable {
   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Attach.class)
   @Builder.Default
   @JsonManagedReference
-  private final List<Attach> attaches = new ArrayList<>();
+  private final Set<Attach> attaches = new HashSet<>();
 
   @Setter
   private String thumbnail;
@@ -69,7 +71,7 @@ public class Post implements Serializable {
 
   @JsonManagedReference
   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Comment.class)
-  private List<Comment> comments;
+  private Set<Comment> comments;
 
   public static Post of(PostDTO postDTO) {
     return Post.builder()
