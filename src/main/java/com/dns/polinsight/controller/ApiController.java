@@ -368,6 +368,7 @@ public class ApiController {
     }
   }
 
+
   @GetMapping("posts")
   public ApiUtils.ApiResult<Page<com.dns.polinsight.projection.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
                                                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
