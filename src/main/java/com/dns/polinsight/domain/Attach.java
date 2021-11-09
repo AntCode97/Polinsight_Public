@@ -22,7 +22,7 @@ public class Attach {
 
 
   @JsonBackReference
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity = Post.class)
   @JoinColumn(name = "pno")
   @NotNull
   private Post post;

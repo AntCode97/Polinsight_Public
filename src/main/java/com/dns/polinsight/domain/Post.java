@@ -25,7 +25,7 @@ public class Post implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "post")
   @Builder.Default
   @JsonManagedReference
   private final List<Attach> attaches = new ArrayList<>();
@@ -67,7 +67,7 @@ public class Post implements Serializable {
 
 
   @JsonManagedReference
-  @OneToMany(mappedBy = "post", targetEntity = Comment.class, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "post", targetEntity = Comment.class)
   private List<Comment> comments;
 
   public static Post of(PostDTO postDTO) {
@@ -84,4 +84,5 @@ public class Post implements Serializable {
                .thumbnail(postDTO.getThumbnail())
                .build();
   }
+
 }
