@@ -68,7 +68,7 @@ public class Post implements Serializable {
 
 
   @JsonManagedReference
-  @OneToMany(mappedBy = "post", targetEntity = Comment.class)
+  @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, targetEntity = Comment.class)
   private List<Comment> comments;
 
   public static Post of(PostDTO postDTO) {
