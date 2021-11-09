@@ -27,8 +27,7 @@ public class ParticipateSurvey implements Serializable {
   @ManyToOne(targetEntity = User.class)
   private User user;
 
-  @OneToOne(targetEntity = Survey.class)
-  private Survey survey;
+  private Long surveyId;
 
   private LocalDateTime participatedAt;
 

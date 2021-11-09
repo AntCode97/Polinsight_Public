@@ -23,16 +23,16 @@ public class Survey implements Serializable {
 
   private static final long serialVersionUID = -9103994299951345908L;
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
+  public Long id;
+
   @Setter
   @Embedded
   @OrderBy("progress ASC")
   @Builder.Default
   private SurveyStatus status = new SurveyStatus();
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", unique = true)
-  private Long id;
 
   @Column(name = "survey_id", unique = true)
   private Long surveyId;
@@ -90,6 +90,7 @@ public class Survey implements Serializable {
                  .endAt(mapping.getEndAt())
                  .id(mapping.getId())
                  .collector(Collector.of(mapping))
+
                  .build();
   }
 
