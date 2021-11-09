@@ -369,17 +369,18 @@ public class ApiController {
   }
 
 
-  @org.springframework.transaction.annotation.Transactional(readOnly = true)
+  @Transactional
   @GetMapping("posts")
   public ApiUtils.ApiResult<Page<com.dns.polinsight.projection.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
                                                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
                                                                                              @PageableDefault Pageable pageable) throws Exception {
 
     try {
-      if (regex.isBlank())
+      if (regex.isBlank()) {
         return success(postService.apiFindPostsByType(PostType.valueOf(type.toUpperCase(Locale.ROOT)), pageable));
-      else
+      } else {
         return success(postService.findAllByTypesAndRegex(PostType.valueOf(type.toUpperCase(Locale.ROOT)), regex, pageable));
+      }
     } catch (Exception e) {
       throw new Exception(e.getMessage());
     }
