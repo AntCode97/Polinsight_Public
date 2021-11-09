@@ -8,6 +8,7 @@ import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.types.convereter.EmailAttrConverter;
 import com.dns.polinsight.types.convereter.PhoneAttrConverter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -35,9 +36,9 @@ import java.util.List;
 @DynamicUpdate
 public class User implements UserDetails {
 
-  @ToString.Exclude
+  @JsonBackReference
   @JsonIgnore
-  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
+  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
   private List<ParticipateSurvey> participateSurvey;
 
 
@@ -45,11 +46,11 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private UserRoleType role = UserRoleType.USER;
 
-//  @JsonIgnore
-//  @OneToMany(mappedBy = "user")
-//  @Builder.Default
-//  @ToString.Exclude
-//  private List<Post> posts = new ArrayList<>();
+  @JsonIgnore
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  @Builder.Default
+  @ToString.Exclude
+  private List<Post> posts = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -146,9 +147,9 @@ public class User implements UserDetails {
   }
 
 
-//  public void setPosts(List<Post> posts) {
-//    this.posts = posts;
-//  }
+  public void setPosts(List<Post> posts) {
+    this.posts = posts;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

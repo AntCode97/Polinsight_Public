@@ -26,7 +26,7 @@ public class Post implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
 
-  @OneToMany(mappedBy = "post")
+  @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
   @Builder.Default
   @JsonManagedReference
   private final List<Attach> attaches = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Post implements Serializable {
   @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
