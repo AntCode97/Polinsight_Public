@@ -32,7 +32,7 @@ public class DBCPConfig {
     config.setPoolName(poolName);
     config.setUsername(username);
     config.setPassword(password);
-    config.setLeakDetectionThreshold(30000);
+    config.setLeakDetectionThreshold(60000);
     config.setMaximumPoolSize(maximumPoolSize);
     config.setJdbcUrl(mariadb_URL);
     return new HikariDataSource(config);
