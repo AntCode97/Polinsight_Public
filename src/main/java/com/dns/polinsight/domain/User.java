@@ -47,7 +47,7 @@ public class User implements UserDetails {
   private UserRoleType role = UserRoleType.USER;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   @Builder.Default
   @ToString.Exclude
   private List<Post> posts = new ArrayList<>();

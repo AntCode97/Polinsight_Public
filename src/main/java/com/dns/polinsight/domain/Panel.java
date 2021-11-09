@@ -26,7 +26,7 @@ public class Panel implements Serializable {
 
   @Setter
   @Fetch(FetchMode.SELECT)
-  @ElementCollection(fetch = FetchType.EAGER)
+  @ElementCollection(fetch = FetchType.LAZY)
   @Builder.Default
   private List<String> favorite = new ArrayList<>();
 

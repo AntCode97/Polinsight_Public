@@ -40,6 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query(value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId")
   void upViewCnt(Long postId);
 
+
   Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
   Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
