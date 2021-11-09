@@ -5,10 +5,7 @@ import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.exception.AlreadyParticipateSurveyException;
-import com.dns.polinsight.exception.SurveyNotFoundException;
-import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.exception.WrongAccessException;
+import com.dns.polinsight.exception.*;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
@@ -25,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.security.PermitAll;
-import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -58,20 +53,17 @@ public class ParticipateSurveyController {
     return success(participateSurveyService.findAllByUserId(user.getId()));
   }
 
-  //  @PreAuthorize("isAuthenticated()")
-  @PermitAll
+  @PreAuthorize("isAuthenticated()")
   @Transactional
   @GetMapping("/callback")
   public ModelAndView callback(
       @RequestParam("hash") String hash,
-      @RequestParam("email") String name) {
+      @RequestParam("email") String name) throws BadRequestException {
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
-      throw new InvalidParameterException();
+      throw new BadRequestException();
     }
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
-
-      participateSurvey = participateSurveyService.saveAndUpdate(participateSurvey);
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
       if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
@@ -124,7 +116,6 @@ public class ParticipateSurveyController {
                                                    .sign(true)
                                                    .content("설문 참여 보상")
                                                    .requestedAt(LocalDateTime.now())
-                                                   //                                                   .userId(user.getId())
                                                    .user(user)
                                                    .build());
       log.info("{} 설문 참여 {} 포인트 업데이트", user.getEmail().toString(), participateSurvey.getSurveyPoint());
