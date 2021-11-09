@@ -28,7 +28,7 @@ public class ParticipateSurvey implements Serializable {
   private User user;
 
   @JoinColumn(name = "survey_id", referencedColumnName = "id")
-  @ManyToOne(targetEntity = Survey.class)
+  @OneToOne(targetEntity = Survey.class)
   private Survey survey;
 
   private LocalDateTime participatedAt;
