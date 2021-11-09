@@ -8,8 +8,8 @@ import com.dns.polinsight.types.Phone;
 import com.dns.polinsight.types.UserRoleType;
 import com.dns.polinsight.types.convereter.EmailAttrConverter;
 import com.dns.polinsight.types.convereter.PhoneAttrConverter;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,7 +36,7 @@ import java.util.List;
 @DynamicUpdate
 public class User implements UserDetails {
 
-  @JsonBackReference
+  @JsonManagedReference
   @JsonIgnore
   @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
   private List<ParticipateSurvey> participateSurvey;

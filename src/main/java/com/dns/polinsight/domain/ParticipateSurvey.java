@@ -1,5 +1,6 @@
 package com.dns.polinsight.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class ParticipateSurvey implements Serializable {
   private Long id;
 
 
+  @JsonBackReference
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @ManyToOne(targetEntity = User.class)
   private User user;
