@@ -163,12 +163,7 @@ public class ParticipateSurveyController {
       String sb = survey.getParticipateUrl() + "?hash=" + hash + "&email=" + user.getEmail();
       log.info("hash : {}, email : {}", hash, user.getEmail().toString());
       participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
-                                                                      .survey(Survey.builder()
-                                                                                    .surveyId(survey.getSurveyId())
-                                                                                    .id(survey.getId())
-                                                                                    .title(survey.getTitle())
-                                                                                    .point(survey.getPoint())
-                                                                                    .build())
+                                                                      .survey(Survey.of(survey))
                                                                       .hash(hash)
                                                                       .user(user)
                                                                       .participatedAt(now)
