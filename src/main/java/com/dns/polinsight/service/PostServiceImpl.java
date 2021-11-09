@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -55,6 +56,7 @@ public class PostServiceImpl implements PostService {
     return repository.findAllByPostType(type, pageable);
   }
 
+  @Transactional
   @Override
   public Page<PostMapping> apiFindPostsByType(PostType type, Pageable pageable) {
     pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
@@ -123,11 +125,10 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public void upViewCnt(Long postId) {
-    //post.setViewcnt(post.getViewcnt() +1);
     repository.upViewCnt(postId);
-    return;
   }
 
+  @Transactional
   @Override
   public Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable) {
     pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
@@ -135,12 +136,13 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public List<Post> findPostsByPostType(PostType postType){
+  public List<Post> findPostsByPostType(PostType postType) {
     return repository.findAllByPostType(postType);
   }
 
   @Override
-  public Post updatePost(Post post){
-    return  repository.saveAndFlush(post);
+  public Post updatePost(Post post) {
+    return repository.saveAndFlush(post);
   }
+
 }
