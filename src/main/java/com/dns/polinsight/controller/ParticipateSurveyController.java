@@ -64,10 +64,15 @@ public class ParticipateSurveyController {
     }
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
+      log.info("1");
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
-      if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
-        // 적립 처리
+      log.info("2");
+      if (hash.equals(participateSurvey.getHash()) &&
+          name.equals(user.getEmail().toString()) &&
+          user.getEmail().equals(participateSurvey.getUser().getEmail())) {
+        log.info("3");
         this.processingPointSurveyHistory(user, participateSurvey);
+        log.info("4");
         log.info("user {} - finished survey {}", name, participateSurvey.getSurveyId());
         return new ModelAndView("redirect:/");
       }
@@ -84,7 +89,6 @@ public class ParticipateSurveyController {
       throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
     }
     try {
-      // 설문 종료 표시
       participateSurvey.setFinished(true);
       participateSurvey.addUser(user);
       participateSurveyService.saveAndUpdate(participateSurvey);
