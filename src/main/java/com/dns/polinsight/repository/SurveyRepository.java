@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
@@ -56,5 +57,9 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
   @Override
   @EntityGraph(attributePaths = {"collector"})
   List<Survey> findAll();
+
+  @Override
+  @EntityGraph(attributePaths = {"collector"})
+  Optional<Survey> findById(Long id);
 
 }

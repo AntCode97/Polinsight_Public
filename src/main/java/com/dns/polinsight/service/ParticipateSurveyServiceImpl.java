@@ -3,12 +3,14 @@ package com.dns.polinsight.service;
 import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.repository.ParticipateSurveyRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
@@ -33,7 +35,9 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
 
   @Override
   public Optional<ParticipateSurvey> findBySurveyUserPairHash(String hash) {
-    return participateSurveyRepository.findParticipateSurveyByHash(hash);
+    var result = participateSurveyRepository.findParticipateSurveyByHash(hash);
+    log.warn(String.valueOf(result.get()));
+    return result;
   }
 
   @Override
@@ -64,7 +68,8 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
   }
 
   @Override
-  public Boolean isExistParticipates(Long surveyId){
+  public Boolean isExistParticipates(Long surveyId) {
     return participateSurveyRepository.existsParticipateSurveyBySurveyId(surveyId);
   }
+
 }

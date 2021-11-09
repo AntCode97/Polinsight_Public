@@ -21,6 +21,7 @@ import javax.annotation.security.PermitAll;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -208,7 +209,15 @@ public class ApiController {
   @GetMapping("participatelist")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
-      return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
+      HashMap<Long, String> map = new HashMap<>();
+      for (var sv : surveyService.findAll())
+        map.put(sv.getId(), sv.getTitle());
+      return success(participateSurveyService.findAllByUserId(user.getId())
+                                             .parallelStream()
+                                             .map(ps ->
+                                                 ParticipateSurveyDto.of(ps, map.get(ps.getSurveyId()))
+                                             )
+                                             .collect(Collectors.toList()));
     } catch (Exception e) {
       throw new WrongAccessException(e.getMessage());
     }

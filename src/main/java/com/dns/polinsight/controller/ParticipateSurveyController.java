@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.security.PermitAll;
 import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -57,7 +58,8 @@ public class ParticipateSurveyController {
     return success(participateSurveyService.findAllByUserId(user.getId()));
   }
 
-  @PreAuthorize("isAuthenticated()")
+  //  @PreAuthorize("isAuthenticated()")
+  @PermitAll
   @Transactional
   @GetMapping("/callback")
   public ModelAndView callback(
@@ -67,23 +69,14 @@ public class ParticipateSurveyController {
       throw new InvalidParameterException();
     }
     try {
-      log.info("1");
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
-      // 설문 종료 표시
-      log.info("2");
-      participateSurvey.setFinished(true);
-      log.info("3");
+
       participateSurvey = participateSurveyService.saveAndUpdate(participateSurvey);
-      log.info("4");
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
-      log.info("5");
       if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
-        log.info("6");
         this.processingPointSurveyHistory(user, participateSurvey);
-        log.info("7");
-        log.info("user {} - finished survey {}", name, participateSurvey.getSurvey().getSurveyId());
-        log.info("8");
+        log.info("user {} - finished survey {}", name, participateSurvey.getSurveyId());
         return new ModelAndView("redirect:/");
       }
       throw new Exception();
@@ -99,6 +92,7 @@ public class ParticipateSurveyController {
       throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
     }
     try {
+      // 설문 종료 표시
       participateSurvey.setFinished(true);
       participateSurvey.addUser(user);
       participateSurveyService.saveAndUpdate(participateSurvey);
@@ -106,10 +100,12 @@ public class ParticipateSurveyController {
       throw new Exception("SurveyHistory write Error");
     }
     try {
-      Survey survey = participateSurvey.getSurvey();
+
+      Survey survey = surveyService.findById(participateSurvey.getSurveyId()).orElseThrow(SurveyNotFoundException::new);
       survey.updateCount();
       log.info("설문 참여 횟수 업데이트");
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception("설문 카운트 갱신 오류");
     }
     try {
@@ -153,7 +149,7 @@ public class ParticipateSurveyController {
     try {
       List<ParticipateSurvey> list = participateSurveyService.findAllByUserId(user.getId()).stream()
                                                              .filter(ParticipateSurvey::getFinished)
-                                                             .filter(ps -> ps.getSurvey().getId().equals(id))
+                                                             .filter(ps -> ps.getSurveyId().equals(id))
                                                              .collect(Collectors.toList());
       if (list.size() > 0) {
         throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
@@ -168,7 +164,7 @@ public class ParticipateSurveyController {
       String sb = survey.getParticipateUrl() + "?hash=" + hash + "&email=" + user.getEmail();
       log.info("hash : {}, email : {}", hash, user.getEmail().toString());
       participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
-                                                                      .survey(Survey.of(survey))
+                                                                      .surveyId(survey.getId())
                                                                       .hash(hash)
                                                                       .user(user)
                                                                       .participatedAt(now)

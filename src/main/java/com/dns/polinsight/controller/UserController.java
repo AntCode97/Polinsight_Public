@@ -59,6 +59,7 @@ public class UserController {
 
   private final ChangePasswordService changePasswordService;
 
+  private final SurveyService surveyService;
 
   @PreAuthorize("isAnonymous()")
   @Transactional
@@ -110,7 +111,7 @@ public class UserController {
       userService.deleteUserById(user.getId());
       SecurityContext context = SecurityContextHolder.getContext();
       new SecurityContextLogoutHandler().logout(request, response, context.getAuthentication());
-      context.setAuthentication((Authentication) null);
+      context.setAuthentication(null);
       SecurityContextHolder.clearContext();
       log.info("ID : {} has deleted", email);
       return success(Boolean.TRUE);
@@ -118,7 +119,6 @@ public class UserController {
       throw new Exception(e.getMessage());
     }
   }
-
 
   @PreAuthorize("isAuthenticated()")
   @Transactional
@@ -208,7 +208,6 @@ public class UserController {
     return ResponseEntity.ok(map);
   }
 
-
   @PreAuthorize("isAnonymous()")
   @GetMapping("/changepwd")
   public ModelAndView changePwd(HttpSession session) {
@@ -284,8 +283,12 @@ public class UserController {
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getParticipateSurveyList(@PathVariable("userid") long userId, @PageableDefault Pageable pageable) throws Exception {
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("participatedAt"));
     try {
+      HashMap<Long, String> map = new HashMap<>();
+      for (var sv : surveyService.findAll())
+        map.put(sv.getId(), sv.getTitle());
       return success(participateSurveyService.findAllByUserId(userId, pageable).parallelStream()
-                                             .map(ParticipateSurveyDto::new)
+                                             .map(ps ->
+                                                 ParticipateSurveyDto.of(ps, map.get(ps.getSurveyId())))
                                              .sorted()
                                              .collect(Collectors.toList()));
     } catch (Exception e) {
@@ -297,7 +300,7 @@ public class UserController {
   @PostMapping("/api/survey/participate")
   public ApiUtils.ApiResult<Boolean> participateSurvey(@CurrentUser User user, Survey survey) throws Exception {
     try {
-      user.getParticipateSurvey().add(ParticipateSurvey.builder().survey(survey).build());
+      user.getParticipateSurvey().add(ParticipateSurvey.builder().surveyId(survey.getId()).build());
       userService.saveOrUpdate(user);
       return success(Boolean.TRUE);
     } catch (Exception e) {

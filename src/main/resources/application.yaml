@@ -117,14 +117,13 @@ spring :
     activate :
       on-profile : dev
 
-
   jpa :
     properties :
       hibernate :
         ddl-auto :   validate
         format_sql : true
     generate-ddl : true
-    show-sql :     false
+    show-sql :     true
 
   banner :
     location : banner-dev.txt
@@ -186,7 +185,9 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto : validate
+      globally_quoted_identifiers : true
+      ddl-auto :                    validate
+      generate_statistics :         true
     generate-ddl : false
     open-in-view : false
 
