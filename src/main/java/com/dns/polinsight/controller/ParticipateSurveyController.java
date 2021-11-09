@@ -67,22 +67,27 @@ public class ParticipateSurveyController {
       throw new InvalidParameterException();
     }
     try {
-      // TODO 2021-11-9, 화, 1:15 : property access exception 발생 중
+      log.info("1");
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
       // 설문 종료 표시
+      log.info("2");
       participateSurvey.setFinished(true);
-      //      participateSurveyService.updateParticipateSurveyById(participateSurvey.getId());
+      log.info("3");
       participateSurvey = participateSurveyService.saveAndUpdate(participateSurvey);
+      log.info("4");
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
+      log.info("5");
       if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         // 적립 처리
+        log.info("6");
         this.processingPointSurveyHistory(user, participateSurvey);
+        log.info("7");
         log.info("user {} - finished survey {}", name, participateSurvey.getSurvey().getSurveyId());
+        log.info("8");
         return new ModelAndView("redirect:/");
       }
       throw new Exception();
     } catch (Exception | WrongAccessException e) {
-      log.error(e.getMessage());
       log.error(e.getMessage());
       return new ModelAndView("redirect:/accumulate_error");
     }
