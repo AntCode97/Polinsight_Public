@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,6 @@ import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.springframework.transaction.annotation.Transactional;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -156,7 +156,7 @@ public class PostController {
   }
 
   private void saveAttaches(PostDTO postDTO, List<MultipartFile> files) throws IOException {
-    List<Attach> attaches = new ArrayList<>();
+    Set<Attach> attaches = new LinkedHashSet<>();
     for (MultipartFile mf : files) {
       if (!mf.isEmpty()) {
         UUID uuid = UUID.randomUUID();
