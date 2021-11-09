@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter(AccessLevel.PROTECTED)
 @DynamicUpdate
 public class Survey implements Serializable {
 
@@ -30,6 +30,7 @@ public class Survey implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
   private Long id;
 
   @Column(name = "survey_id", unique = true)
