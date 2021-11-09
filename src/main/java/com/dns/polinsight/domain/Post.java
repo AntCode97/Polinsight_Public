@@ -51,7 +51,7 @@ public class Post implements Serializable {
   @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
