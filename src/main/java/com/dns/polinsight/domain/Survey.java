@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -75,6 +76,20 @@ public class Survey implements Serializable {
                  .createdAt(dto.getCreatedAt())
                  .endAt(dto.getEndAt())
                  .thumbnail(dto.getThumbnail())
+                 .build();
+  }
+
+  public static Survey of(SurveyMapping mapping) {
+    return Survey.builder()
+                 .surveyId(mapping.getSurveyId())
+                 .title(mapping.getTitle())
+                 .thumbnail(mapping.getThumbnail())
+                 .point(mapping.getPoint())
+                 .createdAt(mapping.getCreatedAt())
+                 .originalName(mapping.getOriginalName())
+                 .endAt(mapping.getEndAt())
+                 .id(mapping.getId())
+                 .collector(Collector.of(mapping))
                  .build();
   }
 

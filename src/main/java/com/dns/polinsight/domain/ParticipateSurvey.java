@@ -27,7 +27,6 @@ public class ParticipateSurvey implements Serializable {
   @ManyToOne(targetEntity = User.class)
   private User user;
 
-  @JoinColumn(name = "id")
   @OneToOne(targetEntity = Survey.class)
   private Survey survey;
 
