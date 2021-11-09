@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
   @JsonBackReference
   @JsonIgnore
-  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
+  @OneToMany(targetEntity = ParticipateSurvey.class, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "user")
   private List<ParticipateSurvey> participateSurvey;
 
 
