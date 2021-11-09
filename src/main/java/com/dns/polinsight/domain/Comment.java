@@ -25,7 +25,7 @@ public class Comment {
   private String content;
 
   @JsonBackReference
-  @ManyToOne
+  @ManyToOne(targetEntity = Post.class)
   @JoinColumn(name = "pno")
   private Post post;
 

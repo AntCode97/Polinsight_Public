@@ -189,6 +189,7 @@ public class PostController {
     return "admin/admin_post_list";
   }
 
+
   @GetMapping("posts")
   public String noticeList(@ModelAttribute("postSearch") PostSearch postSearch,
                            @PageableDefault Pageable pageable,
