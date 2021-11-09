@@ -110,8 +110,7 @@ public class ApiController {
           surveyList = surveyService.findAllAndRegex(pageable, regex);
         }
       } else if (type.equals("INDEX")) {
-        Page<SurveyMapping> page = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
-        surveyList = page;
+        surveyList = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
       } else {
         type = type.toUpperCase();
         if (regex.isBlank()) {
@@ -414,18 +413,4 @@ public class ApiController {
     return success(PostDTO.of(post));
   }
 
-  //  @PutMapping("/admin/survey")
-  //  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
-  //    try {
-  //      surveyService.adminSurveyUpdate(
-  //          Long.parseLong(map.get("id")),
-  //          Long.parseLong(map.get("point")),
-  //          map.get("create"),
-  //          map.get("end"),
-  //          map.get("progress"));
-  //      return success(true);
-  //    } catch (Exception e) {
-  //      throw new Exception(e.getMessage());
-  //    }
-  //  }
 }
