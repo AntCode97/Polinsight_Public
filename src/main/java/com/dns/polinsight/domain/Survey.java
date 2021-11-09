@@ -90,7 +90,6 @@ public class Survey implements Serializable {
                  .endAt(mapping.getEndAt())
                  .id(mapping.getId())
                  .collector(Collector.of(mapping))
-
                  .build();
   }
 

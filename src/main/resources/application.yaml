@@ -185,9 +185,7 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      globally_quoted_identifiers : true
       ddl-auto :                    validate
-      generate_statistics :         true
     generate-ddl : false
     open-in-view : false
 

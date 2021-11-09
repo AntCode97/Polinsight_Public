@@ -197,7 +197,9 @@ public class PostController {
       model.addAttribute("postSearch", postSearch);
     } else {
       Page<com.dns.polinsight.projection.PostMapping> mappingList = postService.findPostsByType(PostType.NOTICE, pageable);
-      List<PostDTO> postDTOList = mappingList.getContent().stream().map(PostDTO::of).collect(Collectors.toList());
+      List<PostDTO> postDTOList = mappingList.getContent().stream()
+                                             .map(PostDTO::of)
+                                             .collect(Collectors.toList());
       model.addAttribute("posts", new PageImpl<>(postDTOList, pageable, mappingList.getTotalElements()));
     }
     return "posts/notice";
