@@ -83,7 +83,6 @@ public class ExcelController {
       throw new UnAuthorizedException("로그인하지 않으면 사용할 수 없습니다.");
     }
     Long count = pointRequestService.countExistsPointRequestsByUserId(userId);
-    log.warn("카운트 결과 : {}", count);
     return success(count);
   }
 

@@ -4,6 +4,30 @@
     .header_wrap {
       background-color: rgb(24, 40, 56) !important;
     }
+    .post-row > *:nth-child(1) {
+      width : 60px
+    }
+
+    .post-row > *:nth-child(2) {
+      width     : 230px;
+      flex-grow : 1;
+    }
+
+    .post-row > *:nth-child(3) {
+      width : 80px
+    }
+
+    .post-row > *:nth-child(4) {
+      width : 110px
+    }
+
+    .post-row > *:nth-child(5) {
+      width : 80px
+    }
+
+    .post-row > *:nth-child(6) {
+      width : 100px
+    }
   </style>
   <div class="admin_main_contents">
     <div class="board_contents_wrap">
@@ -40,8 +64,8 @@
               <span>첨부파일</span>
             </div>
           </div>
-          <div>
-            <button name="btn_add_post" class="btn btn-primary">
+          <div style="display:flex; justify-content: flex-end; padding: 10px;">
+            <button name="btn_add_post" class="btn-input btn-green">
               게시물 작성
             </button>
           </div>
