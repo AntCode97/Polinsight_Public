@@ -35,9 +35,7 @@ public class ParticipateSurveyServiceImpl implements ParticipateSurveyService {
 
   @Override
   public Optional<ParticipateSurvey> findBySurveyUserPairHash(String hash) {
-    var result = participateSurveyRepository.findParticipateSurveyByHash(hash);
-    log.warn(String.valueOf(result.get()));
-    return result;
+    return participateSurveyRepository.findParticipateSurveyByHash(hash);
   }
 
   @Override
