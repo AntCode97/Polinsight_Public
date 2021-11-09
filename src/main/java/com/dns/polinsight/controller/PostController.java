@@ -215,7 +215,7 @@ public class PostController {
     if (postSearch.getSearchType() == SearchType.TITLE) {
       posts = postService.findPostsByTitle(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     } else {
-      posts = postService.findPostsBySearchcontent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
+      posts = postService.findPostsBySearchContent(postSearch.getSearchValue(), postSearch.getPostType(), pageable);
     }
     model.addAttribute("posts", posts);
 
