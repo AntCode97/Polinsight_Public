@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter(AccessLevel.PROTECTED)
+@Getter
 @DynamicUpdate
 public class Survey implements Serializable {
 
