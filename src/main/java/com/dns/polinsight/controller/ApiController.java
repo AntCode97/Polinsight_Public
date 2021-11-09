@@ -21,6 +21,7 @@ import javax.annotation.security.PermitAll;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -109,8 +110,7 @@ public class ApiController {
           surveyList = surveyService.findAllAndRegex(pageable, regex);
         }
       } else if (type.equals("INDEX")) {
-        Page<SurveyMapping> page = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
-        surveyList = page;
+        surveyList = surveyService.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("progress").descending().and((Sort.by("endAt").ascending().and(Sort.by("id"))))));
       } else {
         type = type.toUpperCase();
         if (regex.isBlank()) {
@@ -208,7 +208,15 @@ public class ApiController {
   @GetMapping("participatelist")
   public ApiUtils.ApiResult<List<ParticipateSurveyDto>> getUserParticipateSurvey(@CurrentUser User user) throws Exception, WrongAccessException {
     try {
-      return success(participateSurveyService.findAllByUserId(user.getId()).parallelStream().map(ParticipateSurveyDto::new).collect(Collectors.toList()));
+      HashMap<Long, String> map = new HashMap<>();
+      for (var sv : surveyService.findAll())
+        map.put(sv.getId(), sv.getTitle());
+      return success(participateSurveyService.findAllByUserId(user.getId())
+                                             .parallelStream()
+                                             .map(ps ->
+                                                 ParticipateSurveyDto.of(ps, map.get(ps.getSurveyId()))
+                                             )
+                                             .collect(Collectors.toList()));
     } catch (Exception e) {
       throw new WrongAccessException(e.getMessage());
     }
@@ -298,7 +306,6 @@ public class ApiController {
         if (type.equalsIgnoreCase("ALL")) {
           return success(pointRequestService.findAllPointRequests(pageable));
         } else if (type.equalsIgnoreCase("REQUESTED")) {
-          // ERROR, Requested, Ongoing, Wait 모두 출력
           return success(pointRequestService.findAllOngoingRequest(pageable));
         } else {
           return success(pointRequestService.findAllPointRequestsAndType(pageable, PointRequestProgressType.valueOf(type.toUpperCase())));
@@ -406,18 +413,4 @@ public class ApiController {
     return success(PostDTO.of(post));
   }
 
-  //  @PutMapping("/admin/survey")
-  //  public ApiUtils.ApiResult<Boolean> adminUpdateSurvey(@RequestBody Map<String, String> map) throws Exception {
-  //    try {
-  //      surveyService.adminSurveyUpdate(
-  //          Long.parseLong(map.get("id")),
-  //          Long.parseLong(map.get("point")),
-  //          map.get("create"),
-  //          map.get("end"),
-  //          map.get("progress"));
-  //      return success(true);
-  //    } catch (Exception e) {
-  //      throw new Exception(e.getMessage());
-  //    }
-  //  }
 }

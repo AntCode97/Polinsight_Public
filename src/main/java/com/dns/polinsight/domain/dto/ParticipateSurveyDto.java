@@ -21,12 +21,22 @@ public class ParticipateSurveyDto {
 
   private Boolean finished;
 
-  public ParticipateSurveyDto(ParticipateSurvey participateSurvey) {
-    this.title = participateSurvey.getSurvey().getTitle();
-    this.email = participateSurvey.getUser().getEmail().toString();
-    this.point = participateSurvey.getSurveyPoint();
-    this.participatedAt = String.valueOf(participateSurvey.getParticipatedAt());
-    this.finished = participateSurvey.getFinished();
+  //  public ParticipateSurveyDto(ParticipateSurvey participateSurvey) {
+  //    this.title = participateSurvey.getSurvey().getTitle();
+  //    this.email = participateSurvey.getUser().getEmail().toString();
+  //    this.point = participateSurvey.getSurveyPoint();
+  //    this.participatedAt = String.valueOf(participateSurvey.getParticipatedAt());
+  //    this.finished = participateSurvey.getFinished();
+  //  }
+
+  public static ParticipateSurveyDto of(ParticipateSurvey ps, String title) {
+    return ParticipateSurveyDto.builder()
+                               .title(title)
+                               .email(ps.getUser().getEmail().toString())
+                               .point(ps.getSurveyPoint())
+                               .participatedAt(ps.getParticipatedAt().toString())
+                               .finished(ps.getFinished())
+                               .build();
   }
 
 }

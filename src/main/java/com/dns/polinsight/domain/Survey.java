@@ -1,6 +1,7 @@
 package com.dns.polinsight.domain;
 
 import com.dns.polinsight.domain.dto.SurveyDto;
+import com.dns.polinsight.projection.SurveyMapping;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -22,15 +23,16 @@ public class Survey implements Serializable {
 
   private static final long serialVersionUID = -9103994299951345908L;
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
+  public Long id;
+
   @Setter
   @Embedded
   @OrderBy("progress ASC")
   @Builder.Default
   private SurveyStatus status = new SurveyStatus();
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
   @Column(name = "survey_id", unique = true)
   private Long surveyId;
@@ -74,6 +76,21 @@ public class Survey implements Serializable {
                  .createdAt(dto.getCreatedAt())
                  .endAt(dto.getEndAt())
                  .thumbnail(dto.getThumbnail())
+                 .build();
+  }
+
+  public static Survey of(SurveyMapping mapping) {
+    return Survey.builder()
+                 .surveyId(mapping.getSurveyId())
+                 .title(mapping.getTitle())
+                 .thumbnail(mapping.getThumbnail())
+                 .point(mapping.getPoint())
+                 .createdAt(mapping.getCreatedAt())
+                 .originalName(mapping.getOriginalName())
+                 .endAt(mapping.getEndAt())
+                 .id(mapping.getId())
+                 .collector(Collector.of(mapping))
+
                  .build();
   }
 

@@ -45,9 +45,6 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private UserRoleType role = UserRoleType.USER;
 
-  /*
-   * 유저 기본정보 클래스
-   * */
   @JsonIgnore
   @OneToMany(mappedBy = "user")
   @Builder.Default

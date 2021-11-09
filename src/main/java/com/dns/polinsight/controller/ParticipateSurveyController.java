@@ -5,10 +5,7 @@ import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.Survey;
 import com.dns.polinsight.domain.User;
-import com.dns.polinsight.exception.AlreadyParticipateSurveyException;
-import com.dns.polinsight.exception.SurveyNotFoundException;
-import com.dns.polinsight.exception.UserNotFoundException;
-import com.dns.polinsight.exception.WrongAccessException;
+import com.dns.polinsight.exception.*;
 import com.dns.polinsight.projection.SurveyMapping;
 import com.dns.polinsight.service.ParticipateSurveyService;
 import com.dns.polinsight.service.PointHistoryService;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -62,24 +58,22 @@ public class ParticipateSurveyController {
   @GetMapping("/callback")
   public ModelAndView callback(
       @RequestParam("hash") String hash,
-      @RequestParam("email") String name) {
+      @RequestParam("email") String name) throws BadRequestException {
     if (hash.isBlank() || hash.isEmpty() || hash.equals("null")) {
-      throw new InvalidParameterException();
+      throw new BadRequestException();
     }
     try {
       ParticipateSurvey participateSurvey = participateSurveyService.findBySurveyUserPairHash(hash).orElseThrow(SurveyNotFoundException::new);
-      // 설문 종료 표시
-      participateSurveyService.updateParticipateSurveyById(participateSurvey.getId());
       User user = userService.findById(participateSurvey.getUser().getId()).orElseThrow(UserNotFoundException::new);
-      if (hash.equals(participateSurvey.getHash()) && name.equals(user.getEmail().toString()) && user.getEmail().equals(participateSurvey.getUser().getEmail())) {
-        // 적립 처리
+      if (hash.equals(participateSurvey.getHash()) &&
+          name.equals(user.getEmail().toString()) &&
+          user.getEmail().equals(participateSurvey.getUser().getEmail())) {
         this.processingPointSurveyHistory(user, participateSurvey);
-        log.info("user {} - finished survey {}", name, participateSurvey.getSurvey().getSurveyId());
+        log.info("user {} - finished survey {}", name, participateSurvey.getSurveyId());
         return new ModelAndView("redirect:/");
       }
       throw new Exception();
     } catch (Exception | WrongAccessException e) {
-      log.error(e.getMessage());
       log.error(e.getMessage());
       return new ModelAndView("redirect:/accumulate_error");
     }
@@ -95,13 +89,15 @@ public class ParticipateSurveyController {
       participateSurvey.addUser(user);
       participateSurveyService.saveAndUpdate(participateSurvey);
     } catch (Exception e) {
-      throw new Exception("SurveyHistory write Exception");
+      throw new Exception("SurveyHistory write Error");
     }
     try {
-      Survey survey = participateSurvey.getSurvey();
+
+      Survey survey = surveyService.findById(participateSurvey.getSurveyId()).orElseThrow(SurveyNotFoundException::new);
       survey.updateCount();
       log.info("설문 참여 횟수 업데이트");
     } catch (Exception e) {
+      e.printStackTrace();
       throw new Exception("설문 카운트 갱신 오류");
     }
     try {
@@ -120,7 +116,6 @@ public class ParticipateSurveyController {
                                                    .sign(true)
                                                    .content("설문 참여 보상")
                                                    .requestedAt(LocalDateTime.now())
-                                                   //                                                   .userId(user.getId())
                                                    .user(user)
                                                    .build());
       log.info("{} 설문 참여 {} 포인트 업데이트", user.getEmail().toString(), participateSurvey.getSurveyPoint());
@@ -145,7 +140,7 @@ public class ParticipateSurveyController {
     try {
       List<ParticipateSurvey> list = participateSurveyService.findAllByUserId(user.getId()).stream()
                                                              .filter(ParticipateSurvey::getFinished)
-                                                             .filter(ps -> ps.getSurvey().getId().equals(id))
+                                                             .filter(ps -> ps.getSurveyId().equals(id))
                                                              .collect(Collectors.toList());
       if (list.size() > 0) {
         throw new AlreadyParticipateSurveyException("이미 참여한 설문입니다.");
@@ -160,12 +155,7 @@ public class ParticipateSurveyController {
       String sb = survey.getParticipateUrl() + "?hash=" + hash + "&email=" + user.getEmail();
       log.info("hash : {}, email : {}", hash, user.getEmail().toString());
       participateSurveyService.saveParticipateSurvey(ParticipateSurvey.builder()
-                                                                      .survey(Survey.builder()
-                                                                                    .surveyId(survey.getSurveyId())
-                                                                                    .id(survey.getId())
-                                                                                    .title(survey.getTitle())
-                                                                                    .point(survey.getPoint())
-                                                                                    .build())
+                                                                      .surveyId(survey.getId())
                                                                       .hash(hash)
                                                                       .user(user)
                                                                       .participatedAt(now)

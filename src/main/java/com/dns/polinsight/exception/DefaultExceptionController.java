@@ -65,4 +65,9 @@ public class DefaultExceptionController {
     return error("이미 참여한 설문입니다.", 6789);
   }
 
+  @ExceptionHandler(BadRequestException.class)
+  public ApiUtils.ApiResult<?> handleBadRequestException() {
+    return error("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value());
+  }
+
 }

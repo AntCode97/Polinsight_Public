@@ -4,7 +4,9 @@ import com.dns.polinsight.domain.ParticipateSurvey;
 import com.dns.polinsight.domain.PointHistory;
 import com.dns.polinsight.domain.PointRequest;
 import com.dns.polinsight.domain.User;
+import com.dns.polinsight.service.SurveyService;
 import com.dns.polinsight.types.UserRoleType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
@@ -15,10 +17,12 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ExcelUtil {
 
   private static final String[] participateSurveyField = {"참여자", "설문 제목", "참여일", "포인트", "종료 여부"};
@@ -28,6 +32,8 @@ public class ExcelUtil {
   private static final String[] pointHistoryField = {"내용", "이메일", "이름", "변동 포인트", "전체 포인트", "요청일"};
 
   private static final String[] pointRequestField = {"이메일", "이름", "요청 포인트", "은행", "계좌번호", "요청일", "상태"};
+
+  private final SurveyService surveyService;
 
   private int rowNum = 0, cellNum = 0;
 
@@ -107,6 +113,10 @@ public class ExcelUtil {
     if (list.size() <= 0) {
       return;
     }
+    HashMap<Long, String> map = new HashMap<>();
+    for (var sv : surveyService.findAll())
+      map.put(sv.getId(), sv.getTitle());
+
     SXSSFSheet sheet = makeSheet();
     rowNum = 0;
     SXSSFRow row = sheet.createRow(rowNum++);
@@ -117,7 +127,7 @@ public class ExcelUtil {
       cellNum = 0;
 
       makeCell(row, ps.getUser().getEmail().toString());
-      makeCell(row, ps.getSurvey().getTitle());
+      makeCell(row, map.get(ps.getSurveyId()));
       String[] tmp = ps.getParticipatedAt().toString().split("T");
       makeCell(row, tmp[0] + " " + tmp[1]);
       makeCell(row, String.valueOf(ps.getSurveyPoint()));
