@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class PostServiceImpl implements PostService {
     return repository.save(Post.of(postDTO));
   }
 
+  @Transactional
   @Override
   public Page<PostMapping> findPostsByType(PostType type, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
@@ -55,7 +57,7 @@ public class PostServiceImpl implements PostService {
     return repository.findAllByPostType(type, pageable);
   }
 
-
+  @Transactional
   @Override
   public Page<PostMapping> apiFindPostsByType(PostType type, Pageable pageable) {
     pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
@@ -69,6 +71,7 @@ public class PostServiceImpl implements PostService {
     return repository.findPostMappingByTitleContainingAndPostType(title, type, pageable);
   }
 
+  @Transactional
   @Override
   public Page<PostMapping> findPostsBySearchContent(String searchcontent, PostType type, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
@@ -76,6 +79,7 @@ public class PostServiceImpl implements PostService {
     return repository.findPostMappingBySearchcontentContainingAndPostType(searchcontent, type, pageable);
   }
 
+  @Transactional
   @Override
   public Page<PostMapping> findBySearchKeyword(String keyword, PostType postType, Pageable pageable) {
     int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
@@ -128,6 +132,7 @@ public class PostServiceImpl implements PostService {
   }
 
 
+  @Transactional
   @Override
   public Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable) {
     pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.Direction.DESC, "id");
