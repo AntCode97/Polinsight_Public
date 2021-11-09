@@ -5,6 +5,7 @@ import com.dns.polinsight.projection.PostMapping;
 import com.dns.polinsight.types.PostType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,6 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query(value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId")
   void upViewCnt(Long postId);
 
+  @EntityGraph(attributePaths = {"attaches"})
   Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
   Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
