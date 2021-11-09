@@ -185,7 +185,7 @@ spring :
       on-profile : prod
   jpa :
     hibernate :
-      ddl-auto :                    validate
+      ddl-auto : validate
     generate-ddl : false
     open-in-view : false
 

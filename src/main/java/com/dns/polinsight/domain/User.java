@@ -45,11 +45,11 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private UserRoleType role = UserRoleType.USER;
 
-  @JsonIgnore
-  @OneToMany(mappedBy = "user")
-  @Builder.Default
-  @ToString.Exclude
-  private List<Post> posts = new ArrayList<>();
+//  @JsonIgnore
+//  @OneToMany(mappedBy = "user")
+//  @Builder.Default
+//  @ToString.Exclude
+//  private List<Post> posts = new ArrayList<>();
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -146,9 +146,9 @@ public class User implements UserDetails {
   }
 
 
-  public void setPosts(List<Post> posts) {
-    this.posts = posts;
-  }
+//  public void setPosts(List<Post> posts) {
+//    this.posts = posts;
+//  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

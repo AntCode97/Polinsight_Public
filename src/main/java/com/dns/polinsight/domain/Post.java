@@ -4,6 +4,8 @@ import com.dns.polinsight.domain.dto.PostDTO;
 import com.dns.polinsight.types.PostType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -16,7 +18,6 @@ import java.util.List;
 
 @Table(name = "Post")
 @Entity
-@ToString
 @Getter
 @Builder
 @AllArgsConstructor
@@ -50,7 +51,7 @@ public class Post implements Serializable {
   @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
@@ -83,6 +84,11 @@ public class Post implements Serializable {
                .viewcnt(postDTO.getViewcnt())
                .thumbnail(postDTO.getThumbnail())
                .build();
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 
 }
