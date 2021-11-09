@@ -29,7 +29,7 @@ public interface ParticipateSurveyRepository extends JpaRepository<ParticipateSu
       "       ps.finished        AS finished\n" +
       "FROM (SELECT * FROM survey) AS s,\n" +
       "     participate_survey AS ps\n" +
-      "WHERE ps.hash LIKE 'hashtest'\n" +
+      "WHERE ps.hash LIKE :hash \n" +
       "  AND ps.survey_id = s.id")
   Optional<ParticipateSurvey> findParticipateSurveyByHash(String hash);
 
