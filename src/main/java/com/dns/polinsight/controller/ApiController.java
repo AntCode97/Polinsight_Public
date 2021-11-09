@@ -369,7 +369,7 @@ public class ApiController {
   }
 
 
-  @Transactional
+  @org.springframework.transaction.annotation.Transactional(readOnly = true)
   @GetMapping("posts")
   public ApiUtils.ApiResult<Page<com.dns.polinsight.projection.PostMapping>> findPostByTypes(@RequestParam(value = "type") String type,
                                                                                              @RequestParam(value = "regex", required = false, defaultValue = "") String regex,
