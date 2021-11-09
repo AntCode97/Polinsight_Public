@@ -28,7 +28,7 @@ public class Post implements Serializable {
 
   private static final long serialVersionUID = 5170758413872517587L;
 
-  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Attach.class)
+  @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, targetEntity = Attach.class)
   @Builder.Default
   @JsonManagedReference
   private final Set<Attach> attaches = new HashSet<>();
@@ -53,7 +53,7 @@ public class Post implements Serializable {
   @Column(name = "view_content", length = 3000)
   private String viewcontent;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   @NotNull
   private User user;
@@ -70,7 +70,7 @@ public class Post implements Serializable {
 
 
   @JsonManagedReference
-  @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, targetEntity = Comment.class)
+  @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, targetEntity = Comment.class)
   private Set<Comment> comments;
 
   public static Post of(PostDTO postDTO) {

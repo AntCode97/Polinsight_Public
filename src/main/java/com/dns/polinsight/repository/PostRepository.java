@@ -29,7 +29,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
   Page<Post> findPostsBySearchcontentAndPostType(String searchcontent, PostType postType, Pageable pageable);
 
-  @EntityGraph(attributePaths = {"user", "attaches", "comments"})
+
   @Query(
       value = "SELECT b FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword% ",
       countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.searchcontent LIKE %:keyword% OR b.title LIKE %:keyword%"
@@ -41,25 +41,25 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query(value = "UPDATE Post b SET b.viewcnt = b.viewcnt+1 WHERE b.id = :postId")
   void upViewCnt(Long postId);
 
-  @EntityGraph(attributePaths = {"user", "attaches", "comments"})
+
   Page<PostMapping> findAllByPostType(PostType postType, Pageable pageable);
 
   Page<PostMapping> findPostMappingBySearchcontentContainingAndPostType(String searchcontent, PostType postType, Pageable pageable);
 
   Page<PostMapping> findPostMappingByTitleContainingAndPostType(String title, PostType postType, Pageable pageable);
 
-  @EntityGraph(attributePaths = {"user", "attaches", "comments"})
+
   @Query(
       value = "SELECT b FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)",
       countQuery = "SELECT COUNT(b.id) FROM Post b WHERE b.postType = :postType AND (b.searchcontent LIKE %:searchcontent% OR b.title LIKE %:title%)"
   )
   Page<PostMapping> findPostMappingBySearchcontentContainingOrTitleContainingAndPostType(String title, String searchcontent, PostType postType, Pageable pageable);
 
-  @EntityGraph(attributePaths = {"user", "attaches", "comments"})
+
   @Query("select p from Post p where p.postType = :type and ( p.searchcontent like %:regex% or p.title like %:regex% or p.user.name like %:regex% )")
   Page<PostMapping> findAllByTypesAndRegex(PostType type, String regex, Pageable pageable);
 
-  @EntityGraph(attributePaths = {"user", "attaches", "comments"})
+
   List<Post> findAllByPostType(PostType type);
 
 }
