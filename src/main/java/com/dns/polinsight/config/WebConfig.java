@@ -3,13 +3,16 @@ package com.dns.polinsight.config;
 import com.dns.polinsight.config.resolver.CurrentUserResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
             .allowedOrigins("*")
-            .allowedMethods("GET","POST","DELETE","PUT")
+            .allowedMethods("GET", "POST", "DELETE", "PUT")
             .maxAge(60 * 60);
   }
 
@@ -46,5 +49,10 @@ public class WebConfig implements WebMvcConfigurer {
     resolvers.add(currentUserResolver);
   }
 
+
+  @Bean
+  public Executor executor() {
+    return new ThreadPoolTaskExecutor();
+  }
 
 }

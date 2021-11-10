@@ -12,13 +12,6 @@
   <script>
     const syncSurveyList = async () => {
       let res = await http.get('/api/surveys/sync')
-      if (res.data.response) {
-        // 동기화 성공
-        alert('동기화 성공!')
-      } else {
-        // 동기화 실패
-        alert('동기화 실패')
-      }
     }
 
 
