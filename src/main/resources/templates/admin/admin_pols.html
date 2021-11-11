@@ -2,20 +2,20 @@
 <th:block>
   <style>
     .insight_card_wrapper {
-      display: flex;
-      flex-grow: 1;
-      flex-wrap: wrap;
+      display         : flex;
+      flex-grow       : 1;
+      flex-wrap       : wrap;
       /*align-items: center;*/
-      justify-content: space-evenly;
+      justify-content : space-evenly;
     }
 
     .card-box {
-      width: 600px;
+      width : 600px;
     }
 
     .card-box > img {
-      object-fit: contain;
-      object-position: 50% 50%;
+      object-fit      : contain;
+      object-position : 50% 50%;
     }
   </style>
 </th:block>
@@ -67,15 +67,15 @@
 
     const makeInsightTemplate = (insight) => {
       let template = $('<div class="card-box"></div>').on(
-        "click",
-        function (e) {
-          location.assign(`/insight/${insight.id}`.trim());
-        }
+          "click",
+          function (e) {
+            location.assign(`/insight/${insight.id}`.trim());
+          }
       );
       if (!!insight.thumbnail)
         template.append(
-          `<img src="` +
-            "[[${@environment.getProperty('file.upload.address')}]]" +
+            `<img src="` +
+            "[[${@environment.getProperty('custom.callback.base')}]]" + 'uploads/' +
             `${insight.thumbnail}" alt="">`
         );
       else {
@@ -83,13 +83,13 @@
       }
       template.append(`<div class="card-title">${insight.title}</div>`);
       let update_btn = $(`<button class="btn_udel btn-support">수정</button>`)
-        .off()
-        .on("click", { id: insight.id }, admin_polsItem_update);
+          .off()
+          .on("click", {id: insight.id}, admin_polsItem_update);
       let delete_btn = $(
-        `<button class="btn_udel btn-warn delete_btn">삭제</button>`
+          `<button class="btn_udel btn-warn delete_btn">삭제</button>`
       )
-        .off()
-        .on("click", { id: insight.id }, admin_polsItem_remove);
+          .off()
+          .on("click", {id: insight.id}, admin_polsItem_remove);
       let btn_wrap = $("<div></div>");
       btn_wrap.append(update_btn);
       btn_wrap.append(delete_btn);
@@ -110,13 +110,13 @@
       if (confirm("게시글을 삭제하시겠습니까?")) {
         let insight_id = e.data.id;
         http
-          .delete(`/admin/posts/${insight_id}/delete`)
-          .then(() => location.replace("/admin/posts"))
-          .catch()
-          .finally(() => {
-            overlay.fadeOut(100);
-            overlay.children().off("click");
-          });
+            .delete(`/admin/posts/${insight_id}/delete`)
+            .then(() => location.replace("/admin/posts"))
+            .catch()
+            .finally(() => {
+              overlay.fadeOut(100);
+              overlay.children().off("click");
+            });
       }
     };
 

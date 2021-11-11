@@ -23,34 +23,34 @@
     }
 
     .image-wrapper {
-      max-width  : 1200px;
       max-height : 600px;
+      max-width  : 1200px;
     }
 
     .image-wrapper img {
-      object-fit : scale-down;
-      max-width  : inherit;
       max-height : inherit;
+      max-width  : inherit;
+      object-fit : scale-down;
     }
 
     .post-header {
-      margin      : auto;
-      white-space : pre;
       border      : 2px black solid;
+      margin      : auto;
       max-width   : 800px;
+      white-space : pre;
     }
 
     .post-body {
-      margin      : auto;
-      white-space : pre;
       border      : 2px black solid;
+      margin      : auto;
       max-width   : 800px;
       min-height  : 600px;
+      white-space : pre;
     }
 
     .post-wrapper {
-      max-width : 1200px;
       margin    : auto;
+      max-width : 1200px;
     }
 
     .post-content-header {
@@ -58,8 +58,8 @@
     }
 
     .comment-wrapper {
-      max-width : 1200px;
       margin    : auto;
+      max-width : 1200px;
 
     }
 
@@ -111,7 +111,7 @@
         imageWrapper.addClass('image-wrapper')
         let img = $('<img/>')
         if (isImageFile(attach.fileName)) {
-          img.prop('src', "[[${@environment.getProperty('file.upload.address')}]]" + attach.fileName)
+          img.prop('src', "[[${@environment.getProperty('custom.callback.base')}]]" + 'uploads/' + attach.fileName)
           img.prop('alt', `${attach.originalName}`)
           imageWrapper.append(img);
         }

@@ -11,14 +11,18 @@ services :
       SPRING_DATASOURCE_URL :      jdbc:mariadb://pol-mariadb:3306/polinsight?useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME : polinsight
       SPRING_DATASOURCE_PASSWORD : polinsight
+      CUSTOM_CALLBACK_BASE :       "http://localhost:8080"
+      SPRING_MAIL_USERNAME :       ${EMAIL_USER}
+      SPRING_MAIL_PASSWORD :       ${EMAIL_PASSWORD}
     volumes :
-      - /app/data:/app/data
-      - /app/logs:/app/logs
+      - ${BACKUP_DIRECTORY}/data:/app/data
+      - ${BACKUP_DIRECTORY}/logs:/app/logs
     depends_on :
       - "pol-mariadb"
+    restart : always
 
   pol-mariadb :
-    image :   mariadb
+    image :   mariadb:10.7.1
     environment :
       MYSQL_ROOT_PASSWORD : "root"
       MYSQL_DATABASE :      "polinsight"
@@ -32,11 +36,11 @@ services :
     ports :
       - 3306:3306
     volumes :
-      - /app/data/database:/var/lib/mysql
+      - ${BACKUP_DIRECTORY}/data/database:/var/lib/mysql
     restart : always
 
   pol-redis :
-    image :   redis
+    image :   redis:6.2.6
     command : redis-server --port 6379
     ports :
       - 6379:6379

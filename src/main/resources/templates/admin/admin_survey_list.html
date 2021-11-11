@@ -485,7 +485,7 @@
       e.returnValue = false
       e.stopPropagation()
       e.preventDefault()
-      let location = "[[${@environment.getProperty('file.upload.address')}]]"
+      let location = "[[${@environment.getProperty('custom.callback.base')}]]" + 'uploads/'
       $('.modal_wrap').css('display', 'flex')
       let survey = e.data.survey;
       $('#survey_id').find('p').text(survey.id);
@@ -733,7 +733,7 @@
 
 
     let makeSurveyTemplate = (survey) => {
-      let loc = "[[${@environment.getProperty('file.upload.address')}]]"
+      let loc = "[[${@environment.getProperty('custom.callback.base')}]]" + 'uploads/'
       let template = $(`<div></div >`)
           .on("click", {survey: survey}, setDataInModal)
           .addClass("post-row");

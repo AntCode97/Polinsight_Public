@@ -52,16 +52,12 @@
           new
       </span>
         </a>
-        <!--        <img th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" th:src="''+${@environment.getProperty('file.upload.address')}+${list.thumbnail}">-->
-
         <span th:text="${list.user.name}"></span>
         <span th:text="${#temporals.format(list.registeredAt, 'yyyy-MM-dd')}"></span>
         <span th:text="${list.viewcnt}"></span>
         <span>
           <i th:if="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_no"></i>
           <i th:unless="${list.attaches.size() == 0}" class="fas fa-paperclip file_icon_yes"></i>
-          <!--          <i th:if="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_no"></i>-->
-          <!--          <i th:unless="${list.thumbnail == null || #strings.equals(list.thumbnail, '')}" class="fas fa-file-image file_icon_yes"></i>-->
         </span>
         <span>
           <span class="btn_multi_wrap">
