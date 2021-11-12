@@ -11,7 +11,7 @@ services :
       SPRING_DATASOURCE_URL :      jdbc:mariadb://pol-mariadb:3306/polinsight?useSSL=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME : polinsight
       SPRING_DATASOURCE_PASSWORD : polinsight
-      CUSTOM_CALLBACK_BASE :       "http://localhost:8080"
+      CUSTOM_CALLBACK_BASE :       ${BASE_ADDRESS}
       SPRING_MAIL_USERNAME :       ${EMAIL_USER}
       SPRING_MAIL_PASSWORD :       ${EMAIL_PASSWORD}
     volumes :
